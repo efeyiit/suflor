@@ -42,7 +42,7 @@ görünür. Oyun oynayan birinin ekranına modal dialog atmak affedilemez.
 | **1** | Yerel NMT (CTranslate2, int8) — hızlı, Mod 2 varsayılanı | v1 |
 | **2** | Yerel küçük LLM (4B, vision) — bağlamlı, Mod 1 varsayılanı | v1 |
 | **3** | Oyun diyaloguna ince ayarlanmış kendi modeli (QLoRA) | yol haritası |
-| — | Bulut sağlayıcılar (Claude / Gemini / DeepL) | v1, opsiyonel |
+| — | Bulut sağlayıcılar (Gemini / DeepL / diğer) | v1, opsiyonel |
 
 Katman 0 en yüksek getiriyi veren katman: vasat bir motoru bile o oyuna özel
 hissettiren şey oyun başına sözlük ve çeviri hafızasıdır, ve maliyeti sadece koddur.
@@ -70,6 +70,8 @@ oyun FPS düşüşü ≤ %3.
 |---|---|
 | **Tasarım dokümanı (Markdown)** | [`docs/superpowers/specs/2026-09-09-suflor-design.md`](docs/superpowers/specs/2026-09-09-suflor-design.md) |
 | **Tasarım dokümanı (PDF, 28 sayfa)** | [`docs/superpowers/specs/2026-09-09-suflor-design.pdf`](docs/superpowers/specs/2026-09-09-suflor-design.pdf) |
+| **Ajan iletişim ağı — karşılaştırma (Markdown)** | [`docs/superpowers/specs/2026-09-09-ajan-iletisim-agi-karsilastirma.md`](docs/superpowers/specs/2026-09-09-ajan-iletisim-agi-karsilastirma.md) |
+| **Ajan iletişim ağı — karşılaştırma (PDF, 8 sayfa)** | [`docs/superpowers/specs/2026-09-09-ajan-iletisim-agi-karsilastirma.pdf`](docs/superpowers/specs/2026-09-09-ajan-iletisim-agi-karsilastirma.pdf) |
 
 Doküman 12 bölüm: ürün ve iki mod, oyun-özel detaylar, dört katmanlı çeviri zekâsı,
 runtime mimari (bileşenler, sözleşmeler, eşzamanlılık, hata yönetimi, performans

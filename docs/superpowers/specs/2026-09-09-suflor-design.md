@@ -254,7 +254,7 @@ Maliyet: Unsloth ile 8 GB VRAM'de 4B QLoRA döner; ya da bulut GPU birkaç saat 
 
 Ayarlardan açılır. Kullanıcı kendi API anahtarını girer; anahtar Windows DPAPI ile şifreli saklanır, log'a asla yazılmaz.
 
-Desteklenecekler: Claude (vision), Gemini (vision), DeepL (metin). Hepsi aynı arayüz.
+Desteklenecekler: Gemini (vision), DeepL (metin) ve vision destekli diğer LLM sağlayıcıları. Hepsi aynı arayüzü uygular; sağlayıcı eklemek yeni bir sınıf yazmaktır.
 
 Kota/ağ hatasında otomatik olarak yerel motora düşülür ve kullanıcı durum çubuğunda bilgilendirilir.
 
@@ -537,7 +537,7 @@ Gizlilik duruşu:
 
 ## 8. Geliştirme Ajanları
 
-Bu bölüm, uygulamayı **inşa edecek** yapay zekâ ajanlarını tanımlar. Bunlar uygulamanın içinde çalışan bileşenler değildir; geliştirme sürecinde çalışan Claude Code alt-ajanlarıdır (subagent).
+Bu bölüm, uygulamayı **inşa edecek** yapay zekâ ajanlarını tanımlar. Bunlar uygulamanın içinde çalışan bileşenler değildir; geliştirme sürecinde çalışan yapay zekâ alt-ajanlarıdır (subagent).
 
 ### 8.1 Temel ilkeler
 
@@ -553,7 +553,7 @@ Dört ilke, çok ajanlı geliştirmenin işe yarayıp yaramayacağını belirler
 | | |
 |---|---|
 | **Rol** | Teknik lider / orkestratör |
-| **Model** | **Opus 5** |
+| **Model** | **Seviye A** |
 | **Nerede çalışır** | Ana oturum (subagent değil) |
 | **Sahiplik** | Plan, dalga sıralaması, sözleşme değişiklik kararları, entegrasyon, birleştirme |
 | **Yazmadığı şey** | Modül kodu. Yalnızca sözleşme değişikliklerini ve entegrasyon yapıştırmasını yazar. |
@@ -566,23 +566,23 @@ Sorumlulukları:
 - Sözleşme değişikliği taleplerini tek elden değerlendirir — bir sözleşme değişikliği, ona bağlı tüm ajanları etkilediği için asla bir worker tarafından tek başına yapılamaz
 - Dalga sonunda entegrasyon testini **kendisi** çalıştırır; hiçbir worker'ın "bende çalışıyor" iddiasına dayanmaz
 
-Neden Opus 5: bu rolde verilen her karar ondan sonraki bütün işi şekillendiriyor. Yanlış bir sözleşme kararı beş ajanın işini çöpe atar.
+Neden Seviye A: bu rolde verilen her karar ondan sonraki bütün işi şekillendiriyor. Yanlış bir sözleşme kararı beş ajanın işini çöpe atar.
 
 ### 8.3 Ajan kadrosu
 
 | Kod | Ajan | Model | Sahip olduğu dizin | Bağımlı olduğu |
 |---|---|---|---|---|
-| **A1** | Sözleşme ve Çekirdek Tipler | Opus 5 | `src/contracts/` | — |
-| **A2** | Yakalama ve Ekran | Sonnet 5 | `src/capture/` | A1 |
-| **A3** | OCR ve Normalizasyon | Sonnet 5 | `src/ocr/` | A1 |
-| **A4** | Çeviri Motorları | Sonnet 5 | `src/translate/` | A1, A5 |
-| **A5** | Kalıcılık ve Hafıza | Sonnet 5 | `src/store/` | A1 |
-| **A6** | Pipeline ve Eşzamanlılık | Opus 5 | `src/pipeline/` | A1, A2, A3, A5 + A4'ün *sözleşmesi* |
-| **A7** | UI ve Overlay | Sonnet 5 | `src/ui/` | A1, A6 |
-| **A8** | Paketleme ve Model Dağıtımı | Sonnet 5 | `src/models_mgr/`, `packaging/` | A1 |
-| **A9** | Test Altyapısı ve Fixture | Sonnet 5 / Haiku 4.5 | `tests/` | A1 |
-| **A10** | İnceleme (Reviewer) | Opus 5 | *(yazmaz — salt okuma)* | tümü |
-| **A11** | Dokümantasyon ve Yerelleştirme | Haiku 4.5 | `docs/`, `src/ui/i18n/` | tümü |
+| **A1** | Sözleşme ve Çekirdek Tipler | Seviye A | `src/contracts/` | — |
+| **A2** | Yakalama ve Ekran | Seviye B | `src/capture/` | A1 |
+| **A3** | OCR ve Normalizasyon | Seviye B | `src/ocr/` | A1 |
+| **A4** | Çeviri Motorları | Seviye B | `src/translate/` | A1, A5 |
+| **A5** | Kalıcılık ve Hafıza | Seviye B | `src/store/` | A1 |
+| **A6** | Pipeline ve Eşzamanlılık | Seviye A | `src/pipeline/` | A1, A2, A3, A5 + A4'ün *sözleşmesi* |
+| **A7** | UI ve Overlay | Seviye B | `src/ui/` | A1, A6 |
+| **A8** | Paketleme ve Model Dağıtımı | Seviye B | `src/models_mgr/`, `packaging/` | A1 |
+| **A9** | Test Altyapısı ve Fixture | Seviye B / Seviye C | `tests/` | A1 |
+| **A10** | İnceleme (Reviewer) | Seviye A | *(yazmaz — salt okuma)* | tümü |
+| **A11** | Dokümantasyon ve Yerelleştirme | Seviye C | `docs/`, `src/ui/i18n/` | tümü |
 
 ---
 
@@ -590,7 +590,7 @@ Neden Opus 5: bu rolde verilen her karar ondan sonraki bütün işi şekillendir
 
 | | |
 |---|---|
-| **Model** | Opus 5 |
+| **Model** | Seviye A |
 | **Dizin** | `src/contracts/` |
 | **Ne zaman** | Dalga 0, **tek başına**, kimse paralel değil |
 
@@ -608,7 +608,7 @@ Neden Opus 5: bu rolde verilen her karar ondan sonraki bütün işi şekillendir
 
 | | |
 |---|---|
-| **Model** | Sonnet 5 |
+| **Model** | Seviye B |
 | **Dizin** | `src/capture/` |
 
 **Rol:** `CaptureService`, monitör listeleme, DPI ölçekleme dönüşümleri, bölge doğrulama, `ChangeDetector` (perceptual hash + kararlılık).
@@ -623,7 +623,7 @@ Neden Opus 5: bu rolde verilen her karar ondan sonraki bütün işi şekillendir
 
 | | |
 |---|---|
-| **Model** | Sonnet 5 |
+| **Model** | Seviye B |
 | **Dizin** | `src/ocr/` |
 
 **Rol:** `RapidOcrEngine` (ONNX Runtime), ön işleme (ölçekleme, kontrast), `TextNormalizer`, ön ayarlar (`dialogue`/`menu`/`tooltip`/`subtitle`).
@@ -640,7 +640,7 @@ Neden Opus 5: bu rolde verilen her karar ondan sonraki bütün işi şekillendir
 
 | | |
 |---|---|
-| **Model** | Sonnet 5 |
+| **Model** | Seviye B |
 | **Dizin** | `src/translate/` |
 
 **Rol:** `LocalNmtProvider` (CTranslate2), `LocalLlmProvider` (llama.cpp, vision + streaming), `CloudProvider`, prompt şablonları, sözlük/TM enjeksiyonu, düşüş zinciri (fallback chain).
@@ -655,7 +655,7 @@ Neden Opus 5: bu rolde verilen her karar ondan sonraki bütün işi şekillendir
 
 | | |
 |---|---|
-| **Model** | Sonnet 5 |
+| **Model** | Seviye B |
 | **Dizin** | `src/store/` |
 
 **Rol:** SQLite şeması ve migration'lar, `TranslationCache` (bellek LRU + kalıcı), `TranslationMemory` (rapidfuzz), `GlossaryStore`, `ProfileStore` (JSON içe/dışa aktarma), `SecretStore` (DPAPI).
@@ -670,7 +670,7 @@ Neden Opus 5: bu rolde verilen her karar ondan sonraki bütün işi şekillendir
 
 | | |
 |---|---|
-| **Model** | **Opus 5** |
+| **Model** | **Seviye A** |
 | **Dizin** | `src/pipeline/` |
 
 **Rol:** `PipelineOrchestrator`, aşama tanımları, `maxsize=1` kuyruklar, backpressure, debounce, `seq` tabanlı eskimiş sonuç eleme, iptal token'ları, `QThreadPool` yönetimi, aşama metrikleri.
@@ -679,7 +679,7 @@ Neden Opus 5: bu rolde verilen her karar ondan sonraki bütün işi şekillendir
 
 **Kabul kriterleri:** Backpressure testi (frame düşüyor, kuyruk büyümüyor) · debounce testi (yarı yazılmış metin çevrilmiyor) · eskimiş sonuç testi (geç gelen küçük `seq` yok sayılıyor) · iptal testi (izleme durduğunda uçuştaki iş temiz iptal ediliyor) · 1000 tick'lik stres testinde bellek büyümüyor · **UI thread'inde hiçbir bloklayıcı çağrı olmadığını doğrulayan test.**
 
-**Neden Opus 5:** Eşzamanlılık hataları sessizdir, testte görünmez, kullanıcıda rastgele donma olarak ortaya çıkar. Sistemin en pahalı hata yüzeyi burası.
+**Neden Seviye A:** Eşzamanlılık hataları sessizdir, testte görünmez, kullanıcıda rastgele donma olarak ortaya çıkar. Sistemin en pahalı hata yüzeyi burası.
 
 **A4 ile paralel çalışır.** A6, A4'ün gerçek kodunu beklemez; `FakeProvider` ile geliştirir ve test eder. Sözleşme-öncelikli yaklaşımın karşılığı tam olarak budur — pipeline'ın doğruluğu hangi çeviri motorunun takılı olduğuna bağlı değildir.
 
@@ -689,7 +689,7 @@ Neden Opus 5: bu rolde verilen her karar ondan sonraki bütün işi şekillendir
 
 | | |
 |---|---|
-| **Model** | Sonnet 5 |
+| **Model** | Seviye B |
 | **Dizin** | `src/ui/` |
 
 **Rol:** `SnapshotWindow` (donmuş görüntü + seçim etkileşimi), `RegionSelector`, `OverlayStrip` (yapışık + koparılabilir), ayarlar diyaloğu, tepsi (tray) ikonu, `HotkeyService`.
@@ -704,7 +704,7 @@ Neden Opus 5: bu rolde verilen her karar ondan sonraki bütün işi şekillendir
 
 | | |
 |---|---|
-| **Model** | Sonnet 5 |
+| **Model** | Seviye B |
 | **Dizin** | `src/models_mgr/`, `packaging/` |
 
 **Rol:** `ModelManager` (indirme, SHA-256 doğrulama, sürüm, devam ettirilebilir indirme), model kayıt defteri (registry), ilk açılış sihirbazı akışı, PyInstaller spec, derleme betiği, üçüncü taraf lisans dosyaları.
@@ -719,7 +719,7 @@ Neden Opus 5: bu rolde verilen her karar ondan sonraki bütün işi şekillendir
 
 | | |
 |---|---|
-| **Model** | Sonnet 5 (koşum), Haiku 4.5 (fixture üretimi) |
+| **Model** | Seviye B (koşum), Seviye C (fixture üretimi) |
 | **Dizin** | `tests/` |
 
 **Rol:** Altın görüntü seti (gerçek oyun ekran görüntüleri + beklenen çıktı), `FakeProvider` / `FakeOcrEngine`, performans bütçesi koşumu (`pytest-benchmark`), entegrasyon test iskeleti, CI yapılandırması.
@@ -736,7 +736,7 @@ Neden Opus 5: bu rolde verilen her karar ondan sonraki bütün işi şekillendir
 
 | | |
 |---|---|
-| **Model** | **Opus 5** |
+| **Model** | **Seviye A** |
 | **Dizin** | *(hiçbiri — salt okuma, yalnızca rapor yazar)* |
 
 **Rol:** Her tamamlanmış modülü sözleşmelere, kabul kriterlerine ve performans bütçesine karşı düşmanca (adversarial) inceler. Kod yazmaz, düzeltmez.
@@ -753,7 +753,7 @@ Neden Opus 5: bu rolde verilen her karar ondan sonraki bütün işi şekillendir
 
 **Çıktı:** Her bulgu için dosya + satır + neden bozuk olduğu + hangi girdiyle patlayacağı. Karar: **kabul** veya **düzeltme gerekli**.
 
-**Neden Opus 5 ve neden yazmıyor:** Kodu yazan ajan kendi kodunu doğru göremez. İnceleme ayrı bir ajan ve daha güçlü bir modelde olmalı. Yazmamasının sebebi de aynı: düzeltmeyi orijinal ajan yapar, çünkü bağlamı onda.
+**Neden Seviye A ve neden yazmıyor:** Kodu yazan ajan kendi kodunu doğru göremez. İnceleme ayrı bir ajan ve daha güçlü bir modelde olmalı. Yazmamasının sebebi de aynı: düzeltmeyi orijinal ajan yapar, çünkü bağlamı onda.
 
 ---
 
@@ -761,7 +761,7 @@ Neden Opus 5: bu rolde verilen her karar ondan sonraki bütün işi şekillendir
 
 | | |
 |---|---|
-| **Model** | Haiku 4.5 |
+| **Model** | Seviye C |
 | **Dizin** | `docs/`, `src/ui/i18n/` |
 
 **Rol:** README, kullanıcı kılavuzu (bölge seçme, profil oluşturma, exclusive fullscreen sorun giderme), CHANGELOG, uygulama arayüzü metinleri (TR + EN), sözlük hazırlama rehberi.
@@ -774,11 +774,20 @@ Neden Opus 5: bu rolde verilen her karar ondan sonraki bütün işi şekillendir
 
 ### 8.4 Model atama gerekçesi
 
+Modeller marka adıyla değil **yetenek seviyesiyle** anılır; böylece sağlayıcı değiştiğinde doküman geçerliliğini korur.
+
+| Seviye | Tanım |
+|---|---|
+| **A** | Sınıfının en güçlü akıl yürütme modeli. Uzun bağlam, derin muhakeme. En pahalı. |
+| **B** | Dengeli üretim modeli. Sınırları net implementasyon işini hızlı ve doğru yapar. |
+| **C** | Hafif ve hızlı model. Mekanik, düşük muhakeme gerektiren yüksek hacimli iş. |
+
+
 | Model | Nereye | Neden |
 |---|---|---|
-| **Opus 5** | Orkestratör, A1 (sözleşme), A6 (pipeline), A10 (inceleme) | Hatanın geri dönüşü pahalı. Yanlış sözleşme beş ajanın işini çöpe atar; eşzamanlılık hatası testte görünmez; inceleme zayıfsa tüm kalite kapısı çöker. |
-| **Sonnet 5** | A2, A3, A4, A5, A7, A8, A9 | Sınırları net, kabul kriterleri testlerle yazılı, hacimli implementasyon işi. Doğru maliyet/kalite noktası. |
-| **Haiku 4.5** | A11, A9'un fixture üretimi | Mekanik, düşük muhakeme, yüksek hacim: metin dosyaları, changelog, fixture çoğaltma. |
+| **Seviye A** | Orkestratör, A1 (sözleşme), A6 (pipeline), A10 (inceleme) | Hatanın geri dönüşü pahalı. Yanlış sözleşme beş ajanın işini çöpe atar; eşzamanlılık hatası testte görünmez; inceleme zayıfsa tüm kalite kapısı çöker. |
+| **Seviye B** | A2, A3, A4, A5, A7, A8, A9 | Sınırları net, kabul kriterleri testlerle yazılı, hacimli implementasyon işi. Doğru maliyet/kalite noktası. |
+| **Seviye C** | A11, A9'un fixture üretimi | Mekanik, düşük muhakeme, yüksek hacim: metin dosyaları, changelog, fixture çoğaltma. |
 
 Kural: **bir ajan bütçe yüzünden zayıf modele indirilmez.** Zayıf modelde yapılan hata, incelemede yakalanır ve tekrar yapılır — bu daha pahalıdır.
 
@@ -787,7 +796,7 @@ Kural: **bir ajan bütçe yüzünden zayıf modele indirilmez.** Zayıf modelde 
 Ajanlar birbirleriyle **doğrudan konuşmaz.** Tüm iletişim orkestratör üzerinden, iki yapılandırılmış belge ile yürür: görev paketi (aşağı doğru) ve teslim raporu (yukarı doğru).
 
 ```
-                    ORKESTRATOR (Opus 5)
+                    ORKESTRATOR (Seviye A)
                     plan, siralama, sozlesme karari, entegrasyon
                             |
         gorev paketi        |        teslim raporu
@@ -798,7 +807,7 @@ Ajanlar birbirleriyle **doğrudan konuşmaz.** Tüm iletişim orkestratör üzer
    +--------+--------+--------+--------+--------+    izole, git worktree)
                             |
                             v
-                    A10 REVIEWER (Opus 5)
+                    A10 REVIEWER (Seviye A)
                     salt okuma, kabul / duzeltme karari
                             |
                             v
@@ -820,7 +829,7 @@ Her ajana verilen brief bu yapıda olur. Eksik bir alan, ajanın kendi varsayım
 ```
 GOREV PAKETI - <Ajan kodu> <Ajan adi>
 =====================================
-MODEL      : <Opus 5 | Sonnet 5 | Haiku 4.5>
+MODEL      : <Seviye A | Seviye B | Seviye C>
 DALGA      : <0-4>
 
 AMAC       : Tek paragrafta ne insa edilecek.
@@ -927,7 +936,7 @@ Değişmez kural: **performans bütçesi aşımı testi kırar.** Bütçe bir g�
 | Türkçe çeviri kalitesi yetersiz | Yüksek | Katman 0 (sözlük + TM) baştan var; Katman 3 yol haritasında; motor seçimi altın set ölçümüyle yapılır |
 | PyInstaller + ONNX/llama.cpp paketleme sorunları | Orta | A8 Dalga 1'de bir "duman testi" paketi üretir; sona bırakılmaz |
 | Exclusive fullscreen kullanıcıyı hayal kırıklığına uğratır | Orta | Tespit + net yönlendirme + koparılabilir şerit çıkış yolu |
-| Python GIL nedeniyle UI takılması | Orta | A6 Opus 5'te; UI thread'inde bloklayıcı çağrı olmadığını doğrulayan test |
+| Python GIL nedeniyle UI takılması | Orta | A6 Seviye A'te; UI thread'inde bloklayıcı çağrı olmadığını doğrulayan test |
 | Model indirmeleri büyük, ilk deneyim yavaş | Orta | Aşamalı indirme: önce OCR + NMT (~1 GB) ile çalışır hale gel, LLM sonra |
 | Çok ajanlı geliştirmede sözleşme kayması | Orta | Sözleşme dondurma + tek elden değişiklik + A10 sahiplik ihlali kontrolü |
 | Topluluk profilleri lisans/telif sorunu | Düşük | Profiller yalnızca ayar ve terim içerir; oyun metni veya varlığı içermez |

@@ -45,7 +45,7 @@ status bar. Throwing a modal dialog at someone who is mid-game is unforgivable.
 | **1** | Local NMT (CTranslate2, int8) — fast, default for Mode 2 | v1 |
 | **2** | Local small LLM (4B, vision) — context-aware, default for Mode 1 | v1 |
 | **3** | Own model fine-tuned on game dialogue (QLoRA) | roadmap |
-| — | Cloud providers (Claude / Gemini / DeepL) | v1, optional |
+| — | Cloud providers (Gemini / DeepL / others) | v1, optional |
 
 Layer 0 is the highest-return layer: what makes even a mediocre engine feel specific
 to *that* game is the per-game glossary and translation memory — and it costs nothing
@@ -76,6 +76,8 @@ Targets: end-to-end ≤ 160 ms on cache hit / ≤ 320 ms on cache miss in Mode 2
 |---|---|
 | **Design document (Markdown)** | [`docs/superpowers/specs/2026-09-09-suflor-design.md`](docs/superpowers/specs/2026-09-09-suflor-design.md) |
 | **Design document (PDF, 28 pages)** | [`docs/superpowers/specs/2026-09-09-suflor-design.pdf`](docs/superpowers/specs/2026-09-09-suflor-design.pdf) |
+| **Agent communication network — comparison (Markdown, Turkish)** | [`docs/superpowers/specs/2026-09-09-ajan-iletisim-agi-karsilastirma.md`](docs/superpowers/specs/2026-09-09-ajan-iletisim-agi-karsilastirma.md) |
+| **Agent communication network — comparison (PDF, 8 pages, Turkish)** | [`docs/superpowers/specs/2026-09-09-ajan-iletisim-agi-karsilastirma.pdf`](docs/superpowers/specs/2026-09-09-ajan-iletisim-agi-karsilastirma.pdf) |
 
 Twelve sections: the product and its two modes, game-specific details, the four-layer
 translation intelligence, runtime architecture (components, contracts, concurrency,
