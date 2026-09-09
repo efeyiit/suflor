@@ -1,0 +1,94 @@
+============================= test session starts =============================
+platform win32 -- Python 3.12.10, pytest-9.1.1, pluggy-1.6.0 -- C:\Users\pc\AppData\Local\Programs\Python\Python312\python.exe
+cachedir: .pytest_cache
+rootdir: C:\Users\pc\Desktop\efe\çeviri uygulamasý
+collecting ... collected 50 items
+
+.agents/tasks/T-003/tester_tests/test_dpi_adversarial.py::test_module_imports_only_allowlisted_names PASSED [  2%]
+.agents/tasks/T-003/tester_tests/test_dpi_adversarial.py::test_module_defines_no_class_and_no_mutable_module_state PASSED [  4%]
+.agents/tasks/T-003/tester_tests/test_dpi_adversarial.py::test_functions_are_deterministic_same_input_same_output PASSED [  6%]
+.agents/tasks/T-003/tester_tests/test_dpi_adversarial.py::test_input_rect_is_never_mutated_and_functions_return_new_objects PASSED [  8%]
+.agents/tasks/T-003/tester_tests/test_dpi_adversarial.py::test_rounding_is_symmetric_across_wide_random_sample PASSED [ 10%]
+.agents/tasks/T-003/tester_tests/test_dpi_adversarial.py::test_rounding_half_integer_boundaries_go_away_from_zero PASSED [ 12%]
+.agents/tasks/T-003/tester_tests/test_dpi_adversarial.py::test_rounding_matches_python_round_away_reference_impl PASSED [ 14%]
+.agents/tasks/T-003/tester_tests/test_dpi_adversarial.py::test_round_trip_logical_physical_logical_random_fuzz_in_domain PASSED [ 16%]
+.agents/tasks/T-003/tester_tests/test_dpi_adversarial.py::test_round_trip_holds_for_odd_widths_and_negative_coords[1.0] PASSED [ 18%]
+.agents/tasks/T-003/tester_tests/test_dpi_adversarial.py::test_round_trip_holds_for_odd_widths_and_negative_coords[1.02] PASSED [ 20%]
+.agents/tasks/T-003/tester_tests/test_dpi_adversarial.py::test_round_trip_holds_for_odd_widths_and_negative_coords[1.1] PASSED [ 22%]
+.agents/tasks/T-003/tester_tests/test_dpi_adversarial.py::test_round_trip_holds_for_odd_widths_and_negative_coords[1.2] PASSED [ 24%]
+.agents/tasks/T-003/tester_tests/test_dpi_adversarial.py::test_round_trip_holds_for_odd_widths_and_negative_coords[1.25] PASSED [ 26%]
+.agents/tasks/T-003/tester_tests/test_dpi_adversarial.py::test_round_trip_holds_for_odd_widths_and_negative_coords[1.33] PASSED [ 28%]
+.agents/tasks/T-003/tester_tests/test_dpi_adversarial.py::test_round_trip_holds_for_odd_widths_and_negative_coords[1.5] PASSED [ 30%]
+.agents/tasks/T-003/tester_tests/test_dpi_adversarial.py::test_round_trip_holds_for_odd_widths_and_negative_coords[1.6] PASSED [ 32%]
+.agents/tasks/T-003/tester_tests/test_dpi_adversarial.py::test_round_trip_holds_for_odd_widths_and_negative_coords[1.75] PASSED [ 34%]
+.agents/tasks/T-003/tester_tests/test_dpi_adversarial.py::test_round_trip_holds_for_odd_widths_and_negative_coords[1.8] PASSED [ 36%]
+.agents/tasks/T-003/tester_tests/test_dpi_adversarial.py::test_round_trip_holds_for_odd_widths_and_negative_coords[1.9] PASSED [ 38%]
+.agents/tasks/T-003/tester_tests/test_dpi_adversarial.py::test_round_trip_holds_for_odd_widths_and_negative_coords[2.0] PASSED [ 40%]
+.agents/tasks/T-003/tester_tests/test_dpi_adversarial.py::test_round_trip_holds_for_odd_widths_and_negative_coords[2.25] PASSED [ 42%]
+.agents/tasks/T-003/tester_tests/test_dpi_adversarial.py::test_round_trip_holds_for_odd_widths_and_negative_coords[2.5] PASSED [ 44%]
+.agents/tasks/T-003/tester_tests/test_dpi_adversarial.py::test_round_trip_holds_for_odd_widths_and_negative_coords[3.0] PASSED [ 46%]
+.agents/tasks/T-003/tester_tests/test_dpi_adversarial.py::test_round_trip_holds_for_odd_widths_and_negative_coords[4.0] PASSED [ 48%]
+.agents/tasks/T-003/tester_tests/test_dpi_adversarial.py::test_round_trip_claim_as_documented_is_scale_ge_1_only_KNOWN_GAP FAILED [ 50%]
+.agents/tasks/T-003/tester_tests/test_dpi_adversarial.py::test_round_trip_fails_broadly_for_scale_below_one_quantified PASSED [ 52%]
+.agents/tasks/T-003/tester_tests/test_dpi_adversarial.py::test_reverse_round_trip_physical_logical_physical_can_drift_when_inexact PASSED [ 54%]
+.agents/tasks/T-003/tester_tests/test_dpi_adversarial.py::test_reverse_round_trip_holds_when_physical_exactly_divisible PASSED [ 56%]
+.agents/tasks/T-003/tester_tests/test_dpi_adversarial.py::test_relative_virtual_round_trip_negative_left_and_above_and_corner PASSED [ 58%]
+.agents/tasks/T-003/tester_tests/test_dpi_adversarial.py::test_to_monitor_relative_negative_monitor_produces_correct_offset PASSED [ 60%]
+.agents/tasks/T-003/tester_tests/test_dpi_adversarial.py::test_negative_monitor_metadata_carried_correctly_not_swapped PASSED [ 62%]
+.agents/tasks/T-003/tester_tests/test_dpi_adversarial.py::test_mixed_dpi_three_monitors_scale_never_crosses_over PASSED [ 64%]
+.agents/tasks/T-003/tester_tests/test_dpi_adversarial.py::test_clamp_to_monitor_uses_monitor_dpi_scale_not_rects_own PASSED [ 66%]
+.agents/tasks/T-003/tester_tests/test_dpi_adversarial.py::test_intersect_boundary_matrix[fully_outside] PASSED [ 68%]
+.agents/tasks/T-003/tester_tests/test_dpi_adversarial.py::test_intersect_boundary_matrix[exact_boundary_match] PASSED [ 70%]
+.agents/tasks/T-003/tester_tests/test_dpi_adversarial.py::test_intersect_boundary_matrix[touches_right_of_monitor_start] PASSED [ 72%]
+.agents/tasks/T-003/tester_tests/test_dpi_adversarial.py::test_intersect_boundary_matrix[touches_monitor_right_edge] PASSED [ 74%]
+.agents/tasks/T-003/tester_tests/test_dpi_adversarial.py::test_intersect_boundary_matrix[zero_width] PASSED [ 76%]
+.agents/tasks/T-003/tester_tests/test_dpi_adversarial.py::test_intersect_boundary_matrix[zero_height] PASSED [ 78%]
+.agents/tasks/T-003/tester_tests/test_dpi_adversarial.py::test_intersect_boundary_matrix[one_pixel_corner_overlap] PASSED [ 80%]
+.agents/tasks/T-003/tester_tests/test_dpi_adversarial.py::test_intersect_one_pixel_corner_overlap_has_exact_size PASSED [ 82%]
+.agents/tasks/T-003/tester_tests/test_dpi_adversarial.py::test_negative_width_height_does_not_crash_anywhere PASSED [ 84%]
+.agents/tasks/T-003/tester_tests/test_dpi_adversarial.py::test_negative_width_height_is_treated_as_no_area_not_silently_valid PASSED [ 86%]
+.agents/tasks/T-003/tester_tests/test_dpi_adversarial.py::test_classify_region_touching_two_monitors_exactly_at_seam_is_inside PASSED [ 88%]
+.agents/tasks/T-003/tester_tests/test_dpi_adversarial.py::test_classify_region_gap_between_non_adjacent_monitors_is_partial PASSED [ 90%]
+.agents/tasks/T-003/tester_tests/test_dpi_adversarial.py::test_classify_region_single_pixel_rect_inside PASSED [ 92%]
+.agents/tasks/T-003/tester_tests/test_dpi_adversarial.py::test_classify_region_single_pixel_rect_just_outside PASSED [ 94%]
+.agents/tasks/T-003/tester_tests/test_dpi_adversarial.py::test_clamp_zero_area_after_clip_returns_none_not_zero_rect PASSED [ 96%]
+.agents/tasks/T-003/tester_tests/test_dpi_adversarial.py::test_region_validity_enum_covers_the_three_states_design_doc_needs PASSED [ 98%]
+.agents/tasks/T-003/tester_tests/test_dpi_adversarial.py::test_classify_region_empty_monitor_list_is_outside_not_crash PASSED [100%]
+
+================================== FAILURES ===================================
+______ test_round_trip_claim_as_documented_is_scale_ge_1_only_KNOWN_GAP _______
+
+    def test_round_trip_claim_as_documented_is_scale_ge_1_only_KNOWN_GAP() -> None:
+        """BULGU: modul dokumantasyonu round-trip'i KOSULSUZ 'HER ZAMAN dogru'
+        diye tanimliyor (bkz. dpi.py modul docstring'i, 'Round-trip
+        kararliligi' basligi). Fakat kodun TEK girdi denetimi
+        `dpi_scale <= 0` -- yani `dpi_scale` (0, 1) araligindaki degerleri
+        GECERLI kabul ediyor. Bu araliktaki bir deger icin iddia YANLIS
+        olur. Bu test, kodun kendi validasyonunun kabul ettigi (hata
+        firlatmayan) bir girdiyle iddiayi dogrudan sinar ve baslamasi
+        BEKLENIR (implementasyonun mevcut hali icin FAILS) -- bu, verdict.md
+        / feedback.md'deki bulgunun canli kaniti."""
+        original = Rect(x=3, y=3, w=3, h=3, dpi_scale=0.5)  # dpi_scale=0.5 -> ValueError FIRLATMIYOR
+        physical = logical_to_physical(original)  # kod bunu reddetmiyor: gecerli sayiyor
+        recovered = physical_to_logical(physical)
+>       assert recovered == original, (
+            "round-trip dokumante edildigi gibi 'HER ZAMAN dogru' DEGIL: "
+            f"dpi_scale=0.5, orijinal={original}, geri-donen={recovered}"
+        )
+E       AssertionError: round-trip dokumante edildigi gibi 'HER ZAMAN dogru' DEGIL: dpi_scale=0.5, orijinal=Rect(x=3, y=3, w=3, h=3, monitor_index=0, dpi_scale=0.5), geri-donen=Rect(x=4, y=4, w=4, h=4, monitor_index=0, dpi_scale=0.5)
+E       assert Rect(x=4, y=4...dpi_scale=0.5) == Rect(x=3, y=3...dpi_scale=0.5)
+E         
+E         Omitting 2 identical items, use -vv to show
+E         Differing attributes:
+E         ['x', 'y', 'w', 'h']
+E         
+E         Drill down into differing attribute x:
+E           x: 4 != 3...
+E         
+E         ...Full output truncated (9 lines hidden), use '-vv' to show
+
+.agents\tasks\T-003\tester_tests\test_dpi_adversarial.py:210: AssertionError
+=========================== short test summary info ===========================
+FAILED .agents/tasks/T-003/tester_tests/test_dpi_adversarial.py::test_round_trip_claim_as_documented_is_scale_ge_1_only_KNOWN_GAP
+======================== 1 failed, 49 passed in 0.47s =========================
+EXIT=1

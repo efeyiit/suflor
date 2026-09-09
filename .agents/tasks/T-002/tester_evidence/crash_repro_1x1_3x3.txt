@@ -1,0 +1,29 @@
+=== 1x1 bolge (env.md madde 6) -- python -c ile dogrudan crash ===
+Traceback (most recent call last):
+  File "<string>", line 7, in <module>
+  File "C:\Users\pc\Desktop\efe\çeviri uygulamasý\src\capture\change_detector.py", line 185, in has_changed
+    current = _dhash(frame.image, self._hash_size)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\pc\Desktop\efe\çeviri uygulamasý\src\capture\change_detector.py", line 112, in _dhash
+    thumb = _block_mean_resize(gray, hash_size, hash_size + 1)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\pc\Desktop\efe\çeviri uygulamasý\src\capture\change_detector.py", line 91, in _block_mean_resize
+    row_sums: npt.NDArray[np.float32] = np.add.reduceat(
+                                        ^^^^^^^^^^^^^^^^
+IndexError: index 1 out-of-bounds in add.reduceat [0, 1)
+EXIT_1x1:1
+
+=== 3x3 bolge (env.md madde 6) -- python -c ile dogrudan crash ===
+Traceback (most recent call last):
+  File "<string>", line 7, in <module>
+  File "C:\Users\pc\Desktop\efe\çeviri uygulamasý\src\capture\change_detector.py", line 185, in has_changed
+    current = _dhash(frame.image, self._hash_size)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\pc\Desktop\efe\çeviri uygulamasý\src\capture\change_detector.py", line 112, in _dhash
+    thumb = _block_mean_resize(gray, hash_size, hash_size + 1)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\pc\Desktop\efe\çeviri uygulamasý\src\capture\change_detector.py", line 91, in _block_mean_resize
+    row_sums: npt.NDArray[np.float32] = np.add.reduceat(
+                                        ^^^^^^^^^^^^^^^^
+IndexError: index 3 out-of-bounds in add.reduceat [0, 3)
+EXIT_3x3:1

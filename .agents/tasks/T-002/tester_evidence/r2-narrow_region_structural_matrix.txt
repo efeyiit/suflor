@@ -1,0 +1,23 @@
+Yapisal algilanabilirlik matrisi (varsayilan hash_size=8, threshold=4)
+Y = eff_out_h*(eff_out_w-1) > threshold (algilanabilir, uygun icerikle)
+n = ayni formul <= threshold (BU BOYUTTA, HICBIR ICERIKLE asla algilanamaz)
+
+h\w   1   2   3   4   5   8   9  20  40
+  1   n   n   n   n   n   Y   Y   Y   Y
+  2   n   n   n   Y   Y   Y   Y   Y   Y
+  3   n   n   Y   Y   Y   Y   Y   Y   Y
+  4   n   n   Y   Y   Y   Y   Y   Y   Y
+  5   n   Y   Y   Y   Y   Y   Y   Y   Y
+  8   n   Y   Y   Y   Y   Y   Y   Y   Y
+  9   n   Y   Y   Y   Y   Y   Y   Y   Y
+ 20   n   Y   Y   Y   Y   Y   Y   Y   Y
+ 40   n   Y   Y   Y   Y   Y   Y   Y   Y
+
+Sonuc: w=1 -> HER h icin n (0 bit, yapisal olarak sifir -- docstring'in
+iddia ettigi 'w==1 ozel durumu, 0 bit' birebir dogrulandi).
+Ek bulgu (docstring'de acikca sayilmayan ama yanlis da denmeyen bir
+incelik): varsayilan threshold=4 ile, h<=4 VE w<=4 bolgesinde (orn.
+h=1,w=2..5 veya h=2,w=2..3) w>1 olsa bile mevcut bit sayisi threshold'u
+hicbir icerikle asamiyor -- yani algilama orada da YAPISAL olarak
+imkansiz, sadece w=1'e ozgu degil. Pratikte onem dusuk: bu denli kisa
+(h<=4px) bir yakalama bolgesi zaten OCR icin kullanilamaz.

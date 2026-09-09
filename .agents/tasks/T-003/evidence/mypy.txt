@@ -1,0 +1,5 @@
+$ python -m mypy --strict src/capture/dpi.py
+
+Success: no issues found in 1 source file
+
+exit_code: 0

@@ -1,0 +1,9 @@
+orijinal: Rect(x=3, y=3, w=3, h=3, monitor_index=0, dpi_scale=0.5)
+logical_to_physical -> ValueError: dpi_scale >= 1.0 olmali (Windows olcekleri %100'un altina inmez ve s < 1 icin round-trip garantisi tutmaz), gelen: 0.5
+physical_to_logical -> ValueError: dpi_scale >= 1.0 olmali (Windows olcekleri %100'un altina inmez ve s < 1 icin round-trip garantisi tutmaz), gelen: 0.5
+
+Karsilastirma: dpi_scale=1.5 (gecerli) icin round-trip hala kararli:
+orijinal: Rect(x=3, y=3, w=3, h=3, monitor_index=0, dpi_scale=1.5)
+fiziksel: Rect(x=5, y=5, w=5, h=5, monitor_index=0, dpi_scale=1.5)
+geri-don: Rect(x=3, y=3, w=3, h=3, monitor_index=0, dpi_scale=1.5)
+esit mi : True

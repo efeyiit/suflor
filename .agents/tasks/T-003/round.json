@@ -1,0 +1,7 @@
+{
+  "task": "T-003",
+  "round": 2,
+  "onceki_karar": "ret",
+  "gerekce": "round-trip garantisi kosulsuz iddia edilmis ama 0<scale<1 icin tutmuyor; dogrulama yalnizca <=0 reddediyor",
+  "sef_dogrulamasi": "hata bagimsiz olarak yeniden uretildi, (0,1) araliginda %68.6 basarisizlik"
+}

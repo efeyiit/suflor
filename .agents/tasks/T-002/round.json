@@ -1,0 +1,7 @@
+{
+  "task": "T-002",
+  "round": 2,
+  "onceki_karar": "ret",
+  "gerekce": "kucuk bolgelerde IndexError ile cokme; 5-8 bandinda sessiz divide-by-zero",
+  "sef_dogrulamasi": "bagimsiz uretildi: 1x1/3x3/4x4 COKUYOR, 5x5-8x8 divide-by-zero uyarisi, 16x16+ saglam"
+}

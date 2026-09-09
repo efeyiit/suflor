@@ -1,0 +1,37 @@
+============================= test session starts =============================
+platform win32 -- Python 3.12.10, pytest-9.1.1, pluggy-1.6.0 -- C:\Users\pc\AppData\Local\Programs\Python\Python312\python.exe
+cachedir: .pytest_cache
+rootdir: C:\Users\pc\Desktop\efe\çeviri uygulamasý
+collecting ... collected 28 items
+
+.agents/tasks/T-002/tester_tests/test_change_detector_tester.py::test_first_frame_always_changed PASSED [  3%]
+.agents/tasks/T-002/tester_tests/test_change_detector_tester.py::test_identical_content_reports_no_change PASSED [  7%]
+.agents/tasks/T-002/tester_tests/test_change_detector_tester.py::test_region_change_forces_true_even_with_identical_pixels PASSED [ 10%]
+.agents/tasks/T-002/tester_tests/test_change_detector_tester.py::test_region_change_clears_pending_debounce_counter PASSED [ 14%]
+.agents/tasks/T-002/tester_tests/test_change_detector_tester.py::test_single_differing_frame_not_yet_confirmed PASSED [ 17%]
+.agents/tasks/T-002/tester_tests/test_change_detector_tester.py::test_typing_letter_by_letter_never_confirms_mid_stream PASSED [ 21%]
+.agents/tasks/T-002/tester_tests/test_change_detector_tester.py::test_reverting_to_stable_baseline_does_not_falsely_confirm PASSED [ 25%]
+.agents/tasks/T-002/tester_tests/test_change_detector_tester.py::test_stable_frames_parameter_is_respected PASSED [ 28%]
+.agents/tasks/T-002/tester_tests/test_change_detector_tester.py::test_continuous_realistic_motion_eventually_confirms_change PASSED [ 32%]
+.agents/tasks/T-002/tester_tests/test_change_detector_tester.py::test_continuously_jittery_but_stationary_source_settles_as_unchanged PASSED [ 35%]
+.agents/tasks/T-002/tester_tests/test_change_detector_tester.py::test_periodic_tiled_content_is_a_documented_blind_spot_not_bug PASSED [ 39%]
+.agents/tasks/T-002/tester_tests/test_change_detector_tester.py::test_threshold_boundary_at_exact_value_is_not_changed PASSED [ 42%]
+.agents/tasks/T-002/tester_tests/test_change_detector_tester.py::test_threshold_boundary_just_above_starts_a_candidate PASSED [ 46%]
+.agents/tasks/T-002/tester_tests/test_change_detector_tester.py::test_1x1_region_does_not_crash PASSED [ 50%]
+.agents/tasks/T-002/tester_tests/test_change_detector_tester.py::test_3x3_region_does_not_crash PASSED [ 53%]
+.agents/tasks/T-002/tester_tests/test_change_detector_tester.py::test_small_region_below_hash_grid_does_not_silently_corrupt PASSED [ 57%]
+.agents/tasks/T-002/tester_tests/test_change_detector_tester.py::test_solid_color_full_screen_transition_is_a_documented_blind_spot PASSED [ 60%]
+.agents/tasks/T-002/tester_tests/test_change_detector_tester.py::test_extreme_aspect_ratio_does_not_crash PASSED [ 64%]
+.agents/tasks/T-002/tester_tests/test_change_detector_tester.py::test_read_only_image_array_is_not_mutated_or_written PASSED [ 67%]
+.agents/tasks/T-002/tester_tests/test_change_detector_tester.py::test_determinism_same_sequence_twice_yields_same_results PASSED [ 71%]
+.agents/tasks/T-002/tester_tests/test_change_detector_tester.py::test_return_type_is_plain_python_bool_not_numpy_bool PASSED [ 75%]
+.agents/tasks/T-002/tester_tests/test_change_detector_tester.py::test_budget_measured_independently_stays_within_5ms PASSED [ 78%]
+.agents/tasks/T-002/tester_tests/test_change_detector_tester.py::test_budget_assertion_mechanism_is_real_not_decorative PASSED [ 82%]
+.agents/tasks/T-002/tester_tests/test_change_detector_tester.py::test_invalid_constructor_parameters_raise_value_error[kwargs0] PASSED [ 85%]
+.agents/tasks/T-002/tester_tests/test_change_detector_tester.py::test_invalid_constructor_parameters_raise_value_error[kwargs1] PASSED [ 89%]
+.agents/tasks/T-002/tester_tests/test_change_detector_tester.py::test_invalid_constructor_parameters_raise_value_error[kwargs2] PASSED [ 92%]
+.agents/tasks/T-002/tester_tests/test_change_detector_tester.py::test_invalid_constructor_parameters_raise_value_error[kwargs3] PASSED [ 96%]
+.agents/tasks/T-002/tester_tests/test_change_detector_tester.py::test_invalid_constructor_parameters_raise_value_error[kwargs4] PASSED [100%]
+
+============================= 28 passed in 1.18s ==============================
+EXIT:0

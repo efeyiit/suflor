@@ -1,0 +1,43 @@
+============================= test session starts =============================
+platform win32 -- Python 3.12.10, pytest-9.1.1, pluggy-1.6.0 -- C:\Users\pc\AppData\Local\Programs\Python\Python312\python.exe
+cachedir: .pytest_cache
+rootdir: C:\Users\pc\Desktop\efe\çeviri uygulamasý
+collecting ... collected 434 items / 433 deselected / 1 selected
+
+tests/unit/capture/test_change_detector.py::test_has_changed_stays_within_5ms_budget_for_realistic_region 
+[budget] has_changed() 600x200 bolge, n=30 olcum
+[budget]   call[00] = 0.4060 ms
+[budget]   call[01] = 0.4076 ms
+[budget]   call[02] = 0.4085 ms
+[budget]   call[03] = 0.4090 ms
+[budget]   call[04] = 0.4141 ms
+[budget]   call[05] = 0.4198 ms
+[budget]   call[06] = 0.4203 ms
+[budget]   call[07] = 0.4406 ms
+[budget]   call[08] = 0.4410 ms
+[budget]   call[09] = 0.4452 ms
+[budget]   call[10] = 0.4457 ms
+[budget]   call[11] = 0.4459 ms
+[budget]   call[12] = 0.4495 ms
+[budget]   call[13] = 0.4514 ms
+[budget]   call[14] = 0.4534 ms
+[budget]   call[15] = 0.4569 ms
+[budget]   call[16] = 0.4636 ms
+[budget]   call[17] = 0.4680 ms
+[budget]   call[18] = 0.4770 ms
+[budget]   call[19] = 0.4777 ms
+[budget]   call[20] = 0.4860 ms
+[budget]   call[21] = 0.4889 ms
+[budget]   call[22] = 0.4948 ms
+[budget]   call[23] = 0.5050 ms
+[budget]   call[24] = 0.5143 ms
+[budget]   call[25] = 0.5143 ms
+[budget]   call[26] = 0.5640 ms
+[budget]   call[27] = 0.5996 ms
+[budget]   call[28] = 0.7638 ms
+[budget]   call[29] = 0.8301 ms
+[budget] min=0.4060ms max=0.8301ms mean=0.4854ms p95=0.7638ms budget=5.0ms
+PASSED
+
+====================== 1 passed, 433 deselected in 0.16s ======================
+EXIT_CODE=0

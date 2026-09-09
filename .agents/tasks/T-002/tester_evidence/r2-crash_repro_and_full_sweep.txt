@@ -1,0 +1,9 @@
+--- feedback.md birebir tekrar uretimi: 1x1 ---
+has_changed(1x1) = True <class 'bool'>
+--- feedback.md birebir tekrar uretimi: 3x3 ---
+has_changed(3x3) = True <class 'bool'>
+
+--- gorevin zorunlu tam tarama: 1x1..24x24 + 1x50,50x1,3x80,80x3,600x200 ---
+toplam boyut sayisi: 581
+cokme/uyari/bool-olmayan sayisi: 0
+SONUC: HICBIR boyutta cokme, uyari veya bool-olmayan donus yok.

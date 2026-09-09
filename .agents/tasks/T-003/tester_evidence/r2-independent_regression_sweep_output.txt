@@ -1,0 +1,42 @@
+== 0. (0,1) araliginda sessiz kabul kaldi mi? ==
+  sonuc: 0 sessiz kabul / 40000 deneme (0 beklenir)
+
+== 0b. Sinir degeri: dpi_scale == 1.0 ve komsulari ==
+  dpi_scale=1.0 KABUL edildi (dogru): Rect(x=5, y=5, w=5, h=5, monitor_index=0, dpi_scale=1.0) -> Rect(x=5, y=5, w=5, h=5, monitor_index=0, dpi_scale=1.0) -> Rect(x=5, y=5, w=5, h=5, monitor_index=0, dpi_scale=1.0)
+  dpi_scale=0.999999 REDDEDILDI (dogru)
+  dpi_scale=0.9999999999 REDDEDILDI (dogru)
+  dpi_scale=0.999999999 REDDEDILDI (dogru)
+  dpi_scale=1.0000001 KABUL edildi (dogru)
+
+== 0c. ValueError mesaji aciklayici mi? ==
+  mesaj: "dpi_scale >= 1.0 olmali (Windows olcekleri %100'un altina inmez ve s < 1 icin round-trip garantisi tutmaz), gelen: 0.5"
+
+== 1. Round-trip (dpi_scale >= 1.0), genis rastgele ornekleme ==
+  sonuc: 0 basarisizlik / 300000 deneme
+
+== 2. Yuvarlama simetrisi ==
+  sonuc: 0 asimetri / 100000 deneme
+
+== 3. Negatif koordinatli monitor round-trip ==
+  sonuc: 0 basarisizlik / 6000 deneme
+
+== 4. Karisik DPI izolasyonu ==
+  boyutlar: {'a': (333, 71), 'b': (583, 124), 'c': (749, 160)} (hepsi farkli olmali)
+  clamp metadata: Rect(x=1050, y=50, w=100, h=100, monitor_index=1, dpi_scale=1.75)
+
+== 5. classify_region sinir matrisi ==
+  [tek monitor icinde] Rect(x=100, y=100, w=100, h=100, monitor_index=0, dpi_scale=1.0) -> inside (beklenen inside) OK
+  [dikey dikisi asan, bitisik -> INSIDE] Rect(x=100, y=550, w=100, h=100, monitor_index=0, dpi_scale=1.0) -> inside (beklenen inside) OK
+  [bosluga tasan -> PARTIAL] Rect(x=700, y=100, w=600, h=100, monitor_index=0, dpi_scale=1.0) -> partial (beklenen partial) OK
+  [tamamen disarida] Rect(x=5000, y=5000, w=10, h=10, monitor_index=0, dpi_scale=1.0) -> outside (beklenen outside) OK
+  [top'un sagina deger ama kesismez] Rect(x=800, y=0, w=10, h=10, monitor_index=0, dpi_scale=1.0) -> outside (beklenen outside) OK
+  [sifir alan] Rect(x=0, y=0, w=0, h=0, monitor_index=0, dpi_scale=1.0) -> outside (beklenen outside) OK
+
+== 6. Determinizm ==
+  determinizm: OK
+
+== 7. Sozlesme degismezligi ==
+  mutasyon engellendi: True, yeni nesne: True, girdi degismedi: OK
+
+======================================================================
+TUM BAGIMSIZ REGRESYON KONTROLLERI GECTI (0 basarisizlik).

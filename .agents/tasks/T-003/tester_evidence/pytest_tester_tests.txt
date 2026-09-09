@@ -1,0 +1,38 @@
+........................F.........................                       [100%]
+================================== FAILURES ===================================
+______ test_round_trip_claim_as_documented_is_scale_ge_1_only_KNOWN_GAP _______
+
+    def test_round_trip_claim_as_documented_is_scale_ge_1_only_KNOWN_GAP() -> None:
+        """BULGU: modul dokumantasyonu round-trip'i KOSULSUZ 'HER ZAMAN dogru'
+        diye tanimliyor (bkz. dpi.py modul docstring'i, 'Round-trip
+        kararliligi' basligi). Fakat kodun TEK girdi denetimi
+        `dpi_scale <= 0` -- yani `dpi_scale` (0, 1) araligindaki degerleri
+        GECERLI kabul ediyor. Bu araliktaki bir deger icin iddia YANLIS
+        olur. Bu test, kodun kendi validasyonunun kabul ettigi (hata
+        firlatmayan) bir girdiyle iddiayi dogrudan sinar ve baslamasi
+        BEKLENIR (implementasyonun mevcut hali icin FAILS) -- bu, verdict.md
+        / feedback.md'deki bulgunun canli kaniti."""
+        original = Rect(x=3, y=3, w=3, h=3, dpi_scale=0.5)  # dpi_scale=0.5 -> ValueError FIRLATMIYOR
+        physical = logical_to_physical(original)  # kod bunu reddetmiyor: gecerli sayiyor
+        recovered = physical_to_logical(physical)
+>       assert recovered == original, (
+            "round-trip dokumante edildigi gibi 'HER ZAMAN dogru' DEGIL: "
+            f"dpi_scale=0.5, orijinal={original}, geri-donen={recovered}"
+        )
+E       AssertionError: round-trip dokumante edildigi gibi 'HER ZAMAN dogru' DEGIL: dpi_scale=0.5, orijinal=Rect(x=3, y=3, w=3, h=3, monitor_index=0, dpi_scale=0.5), geri-donen=Rect(x=4, y=4, w=4, h=4, monitor_index=0, dpi_scale=0.5)
+E       assert Rect(x=4, y=4...dpi_scale=0.5) == Rect(x=3, y=3...dpi_scale=0.5)
+E         
+E         Omitting 2 identical items, use -vv to show
+E         Differing attributes:
+E         ['x', 'y', 'w', 'h']
+E         
+E         Drill down into differing attribute x:
+E           x: 4 != 3...
+E         
+E         ...Full output truncated (9 lines hidden), use '-vv' to show
+
+.agents\tasks\T-003\tester_tests\test_dpi_adversarial.py:210: AssertionError
+=========================== short test summary info ===========================
+FAILED .agents/tasks/T-003/tester_tests/test_dpi_adversarial.py::test_round_trip_claim_as_documented_is_scale_ge_1_only_KNOWN_GAP
+1 failed, 49 passed in 0.50s
+EXIT=1

@@ -1,0 +1,7 @@
+orijinal : Rect(x=3, y=3, w=3, h=3, monitor_index=0, dpi_scale=0.5)
+fiziksel : Rect(x=2, y=2, w=2, h=2, monitor_index=0, dpi_scale=0.5)
+geri-don : Rect(x=4, y=4, w=4, h=4, monitor_index=0, dpi_scale=0.5)
+round-trip tutuyor mu: False
+
+(0,1) araliginda sistematik basarisizlik: 960/1919 (50.0%)
+EXIT=0

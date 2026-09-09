@@ -1,0 +1,8 @@
+
+[r2-budget] n=30 min=0.4495ms max=1.6129ms mean=0.6014ms
+..
+[r2-narrow] h=20 icin ALGILANMAYAN genislikler: [18, 36]
+[r2-narrow] h=20 icin ALGILANAN genislik araligi: 2..40
+.
+3 passed, 598 deselected in 0.23s
+EXIT:0

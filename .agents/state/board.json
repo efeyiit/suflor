@@ -31,8 +31,8 @@
       "depends_on": [
         "T-001"
       ],
-      "durum": "hazir",
-      "tur": 0
+      "durum": "kabul",
+      "tur": 2
     },
     {
       "id": "T-003",
@@ -46,9 +46,19 @@
       "depends_on": [
         "T-001"
       ],
-      "durum": "hazir",
-      "tur": 0
+      "durum": "kabul",
+      "tur": 2
     }
   ],
-  "sozlesmeler_donduruldu": true
+  "sozlesmeler_donduruldu": true,
+  "pilot_sonucu": {
+    "gorev": 3,
+    "ajan": 10,
+    "tur_toplami": 5,
+    "ilk_turda_ret": 2,
+    "gercek_hata_bulundu": 2,
+    "sahiplik_ihlali": 0,
+    "toplam_test": 697,
+    "korluk_ortusmesi_max_yuzde": 5.0
+  }
 }

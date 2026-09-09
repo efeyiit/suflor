@@ -189,6 +189,12 @@ Her görev paketine kopyalanır.
 
 `round.json` her turda artar. 3. turda tester hâlâ ret veriyorsa şef **Hakem**'i çağırır.
 
+> **Pilot düzeltmesi (2026-09-09).** Bu bölüm önce "düzeltme paketi *aynı ajana* gider, böylece bağlam korunur" diyordu. **Bu ortamda mümkün değil:** alt-ajanlara mesaj gönderip devam ettirme aracı mevcut değil. Gerçek işleyiş: her düzeltme turu **taze bir ajanla** başlar ve bağlamı `feedback.md` üzerinden alır.
+>
+> Sonucu: `feedback.md` protokolün en kritik dosyası. Yeniden üretim komutu, ham hata çıktısı ve neyin beklendiği eksiksiz yazılmalı — düzeltme ajanının elinde bundan başka bir şey yok.
+>
+> Maliyet etkisi: her ret turu bağlamı sıfırdan kurduğu için ucuz değil. Pilotta T-003'ün 2. turu 107k, T-002'nin 2. turu 116k token'a mal oldu.
+
 Hakem: `packet.md` + kod + tüm `evidence/` + implementer ile tester'ın gerekçelerini okur. `ruling.md` yazar: kim haklı, neden, ne yapılacak. Kararı bağlayıcıdır ve tur sayacı sıfırlanır.
 
 Hakem "görev tanımı hatalı" derse görev şefe geri döner ve `packet.md` yeniden yazılır.

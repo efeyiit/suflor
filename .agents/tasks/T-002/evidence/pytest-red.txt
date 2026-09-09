@@ -1,0 +1,18 @@
+
+=================================== ERRORS ====================================
+_________ ERROR collecting tests/unit/capture/test_change_detector.py _________
+ImportError while importing test module 'C:\Users\pc\Desktop\efe\çeviri uygulamasý\tests\unit\capture\test_change_detector.py'.
+Hint: make sure your test modules/packages have valid Python names.
+Traceback:
+..\..\..\AppData\Local\Programs\Python\Python312\Lib\importlib\__init__.py:90: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests\unit\capture\test_change_detector.py:35: in <module>
+    from src.capture.change_detector import ChangeDetector  # noqa: E402
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   ModuleNotFoundError: No module named 'src.capture.change_detector'
+=========================== short test summary info ===========================
+ERROR tests/unit/capture/test_change_detector.py
+!!!!!!!!!!!!!!!!!!! Interrupted: 1 error during collection !!!!!!!!!!!!!!!!!!!!
+1 error in 0.23s
+EXIT_CODE=2
