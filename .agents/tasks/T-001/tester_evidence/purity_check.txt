@@ -1,0 +1,8 @@
+denetlenen dosya: 4
+  - src\contracts\__init__.py
+  - src\contracts\errors.py
+  - src\contracts\interfaces.py
+  - src\contracts\models.py
+
+TEMIZ: sozlesmeler hicbir somut kutuphaneye bagli degil
+EXIT_CODE=0

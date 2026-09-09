@@ -1,0 +1,5 @@
+$ python -m mypy --strict src/contracts
+
+Success: no issues found in 4 source files
+
+exit_code: 0

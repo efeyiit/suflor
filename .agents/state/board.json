@@ -1,0 +1,54 @@
+{
+  "faz": "pilot",
+  "guncelleme": "2026-09-09",
+  "paralellik_tavani": 4,
+  "kilitlenme_esigi": 3,
+  "tasima": "alt-ajan",
+  "gorevler": [
+    {
+      "id": "T-001",
+      "baslik": "Cekirdek sozlesmeler: veri modelleri, arayuzler, hata taksonomisi",
+      "dalga": 0,
+      "seviye": "A",
+      "owns": [
+        "src/contracts/**",
+        "tests/unit/contracts/**"
+      ],
+      "depends_on": [],
+      "durum": "kabul",
+      "tur": 1,
+      "donduruldu": true
+    },
+    {
+      "id": "T-002",
+      "baslik": "ChangeDetector: algisal hash + kararlilik (debounce)",
+      "dalga": 1,
+      "seviye": "B",
+      "owns": [
+        "src/capture/change_detector.py",
+        "tests/unit/capture/test_change_detector.py"
+      ],
+      "depends_on": [
+        "T-001"
+      ],
+      "durum": "hazir",
+      "tur": 0
+    },
+    {
+      "id": "T-003",
+      "baslik": "DPI ve monitor koordinat donusumleri (saf matematik)",
+      "dalga": 1,
+      "seviye": "B",
+      "owns": [
+        "src/capture/dpi.py",
+        "tests/unit/capture/test_dpi.py"
+      ],
+      "depends_on": [
+        "T-001"
+      ],
+      "durum": "hazir",
+      "tur": 0
+    }
+  ],
+  "sozlesmeler_donduruldu": true
+}

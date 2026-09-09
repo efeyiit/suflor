@@ -1,0 +1,11 @@
+$ python .agents/tasks/T-001/purity_check.py
+
+denetlenen dosya: 4
+  - src\contracts\__init__.py
+  - src\contracts\errors.py
+  - src\contracts\interfaces.py
+  - src\contracts\models.py
+
+TEMIZ: sozlesmeler hicbir somut kutuphaneye bagli degil
+
+exit_code: 0

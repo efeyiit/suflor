@@ -1,0 +1,24 @@
+$ python -c "import src.contracts as c; print(len(c.__all__))"   (depo kokunden, PYTHONPATH yok)
+
+src.contracts import OK, __all__ = 22
+
+$ PYTHONPATH=. python <scratchpad>/selfcheck.py   (env.md "Neye bakilacak" listesi)
+
+[GECTI] 1. frozen Rect -> FrozenInstanceError
+[GECTI] 1. frozen Frame -> FrozenInstanceError
+[GECTI] 1. frozen TextBlock -> FrozenInstanceError
+[GECTI] 1. frozen Segment -> FrozenInstanceError
+[GECTI] 1. frozen TermHit -> FrozenInstanceError
+[GECTI] 1. frozen Pair -> FrozenInstanceError
+[GECTI] 1. frozen TranslationRequest -> FrozenInstanceError
+[GECTI] 1. frozen TranslationResult -> FrozenInstanceError
+[GECTI] 2. FakeProvider hizalama n=1 -> segments=1 translations=1
+[GECTI] 2. FakeProvider hizalama n=3 -> segments=3 translations=3
+[GECTI] 2. FakeProvider hizalama n=0 -> segments=0 translations=0
+[GECTI] 3. image_crops alani
+[GECTI] 4. hata hiyerarsisi -> 6 alt sinif
+[GECTI] 5. dinamik import yok -> temiz
+
+SONUC: HEPSI GECTI
+
+exit_code: 0
