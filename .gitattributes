@@ -1,0 +1,14 @@
+# Depoda LF, calisma kopyasinda platformun kendi satir sonu.
+* text=auto eol=lf
+
+# Ikili dosyalar - asla donusturulmesin, diff alinmasin.
+*.pdf   binary
+*.png   binary
+*.jpg   binary
+*.ico   binary
+*.onnx  binary
+*.gguf  binary
+*.ttf   binary
+
+# GitHub dil istatistiklerinde dokumantasyonu sayma.
+docs/** linguist-documentation

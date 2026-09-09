@@ -1,0 +1,85 @@
+# --- Python ---
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+dist/
+develop-eggs/
+downloads/
+eggs/
+.eggs/
+sdist/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# --- Sanal ortamlar ---
+.venv/
+venv/
+env/
+ENV/
+
+# --- Test ve tip denetimi onbellekleri ---
+.pytest_cache/
+.mypy_cache/
+.dmypy.json
+.ruff_cache/
+.coverage
+.coverage.*
+htmlcov/
+.benchmarks/
+
+# --- Suflor: yerel calisma verisi (asla commit edilmez) ---
+# Indirilen model agirliklari - buyuk, ModelManager tarafindan cekilir
+models/
+*.onnx
+*.gguf
+*.bin
+*.safetensors
+
+# Kullanici verisi ve sirlar
+*.sqlite
+*.sqlite-wal
+*.sqlite-shm
+*.db
+secrets.dat
+settings.json
+logs/
+*.log
+
+# Yakalanan ekran goruntuleri (gizlilik: diske yazilmamali,
+# yanlislikla olusanlar da depoya girmesin)
+captures/
+snapshots/
+*.screenshot.png
+
+# --- Paketleme ---
+*.spec.bak
+packaging/out/
+packaging/work/
+
+# NOT: tests/fixtures/golden/ BILEREK izlenir - test korpusudur.
+
+# --- Editor / IDE ---
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# --- Windows ---
+Thumbs.db
+Thumbs.db:encryptable
+ehthumbs.db
+ehthumbs_vista.db
+desktop.ini
+$RECYCLE.BIN/
+*.lnk
+
+# --- Gecici ---
+*.tmp
+*.bak
+.scratch/
