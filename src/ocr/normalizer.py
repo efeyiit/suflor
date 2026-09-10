@@ -91,6 +91,21 @@ K28 KOD degisikligidir; K29-K32 davranisi DEGISTIRMEZ.
 
 ## K28 (tur 6) -- miras-uygunluk sorgusunun IKI tarafi da OZGUN bloktan
 
+DEVRALINDI (K24 bolumunden, tur 5): miras-uygunluk sorgusunun BUGUNKU
+tanimi BU bolumdedir. K24 "SOL TARAF, kapanan grubun KUYRUGUDUR"
+diyordu; K28 bir adim daha ileri gider -- sorgunun IKI tarafinin da
+GEOMETRISI `_Item`lardan DEGIL, OZGUN `TextBlock` listesinden okunur
+(gerekce: K24'un `tail`i, adim 3 uzerinden COK BLOKLU/BIRLESIK
+gelebiliyordu; asagidaki K24 bolumunun "NEDEN CURUDU" paragrafi tam
+olcumu tasir). K24 bolumu TARIHCE olarak durur; CAGRI BICIMI icin
+BURASI gecerlidir.
+
+NOT (BASLIK DISIPLINI, tur 7): K24 bolumunun BASLIK METNI bu
+docstring'de TEK KEZ gecer. Bolumu anan metinler (bu paragraf dahil)
+basligi AYNEN TEKRARLAMAZ -- garanti alani denetimleri bolum sinirlarini
+BASLIK METNIYLE bulur (`docstring.split(<baslik>)`), ikinci bir gecis o
+denetimlerin dilimini SESSIZCE kaydirir (tur 7'de olctum).
+
 DEGISMEZ: bir grup kapanirken miras-uygunluk sorgusuna (`_group_
 rejection_reason(..., ignore_length=True)` cagrisi) verilen IKI geometri
 de `normalize`'a verilen OZGUN `TextBlock` listesinden gelir --
@@ -806,6 +821,15 @@ DUSMEZ.
 
 ### K24 -- K21'in TEK gecerli ifadesi (esdegerlik IPTAL)
 
+> **DEVREDILDI (tur 6, K28).** Bu bolum TUR 5'in kaydidir ve TARIHCE
+> olarak KORUNUR -- miras-uygunluk sorgusunun BUGUNKU tanimi yukaridaki
+> "## K28" bolumundedir. K24'un HANGI OGE sorulur sorusuna verdigi yon
+> (grubun KUYRUGU, birikmis `current`'in BIRLESIK kutusu DEGIL) AYAKTA;
+> CURUYEN sey asagidaki "Uygulama" paragrafinin `tail`in HAM bir oge
+> OLDUGU VARSAYIMI ve onun anlattigi CAGRI BICIMIDIR (bkz. "NEDEN
+> CURUDU"). Bugunku cagri: `_group_rejection_reason(*_raw_query_pair(
+> tail, nxt, blocks), params, ignore_length=True)`.
+
 Tur 4'teki "denk ve daha kolay uygulanabilir ifade" cumlesi **IPTAL**.
 Kirmizi takim OLCTU: iki ifade denk DEGIL, 4000 rastgele girdi/11.656
 ardisik segment ciftinde ~%2 AYRISIYOR. Sebep: "bu cift" TANIMSIZDI --
@@ -824,16 +848,37 @@ oysa grubun GERCEK KUYRUGU ile aday arasinda BUYUK bir bosluk olabilir).
 > Bu degerlendirmede **SOL TARAF, kapanan grubun okuma sirasindaki SON
 > KAYNAK OGESIDIR** -- birikmis grubun birlesik `bbox`'i **DEGIL**.
 
-**Uygulama:** `_group` artik `current` (birikmis/birlesik `_Item`) ile
-PARALEL bir `tail: _Item` degiskeni TUTAR -- her BASARILI birlesimde
-(`current` GUNCELLENDIGINDE) `tail = nxt` (birlesime KATILAN, HAM,
-BIREYSEL oge) ATANIR; her YENI grup basladiginda `tail = nxt` (yeni
-grubun TEK ogesi) ile SIFIRLANIR. K21'in `ignore_length=True` IKINCI
-cagrisi ARTIK `_group_rejection_reason(current, nxt, ...)` DEGIL,
-`_group_rejection_reason(tail, nxt, ...)` KULLANIR -- yani SOL TARAF
-DAIMA grubun okuma-sirasindaki EN SON (birlesime en son KATILAN) HAM
-ogesidir, `current`'in (birden fazla oge ICEREBILEN) BIRLESIK `bbox`'i
-DEGIL.
+(K28, tur 6: "SON KAYNAK OGESI" ifadesi BUGUN "kapanan grubun kaynak
+BLOKLARI arasinda okuma sirasinda SON gelen OZGUN blok" olarak okunur --
+`tail` ogesinin KENDI `bbox`'i DEGIL. SAG taraf icin de simetrigi
+gecerlidir. Bkz. "## K28".)
+
+**Uygulama (TUR 5, K28 ONCESI -- TARIHCE):** `_group`, `current`
+(birikmis/birlesik `_Item`) ile PARALEL bir `tail: _Item` degiskeni
+TUTAR -- her BASARILI birlesimde
+(`current` GUNCELLENDIGINDE) `tail = nxt` (birlesime KATILAN BIREYSEL
+oge) ATANIR; her YENI grup basladiginda `tail = nxt` (yeni grubun TEK
+ogesi) ile SIFIRLANIR. Bu iki cumle BUGUN DE gecerlidir: `tail`
+degiskeni yerinde DURUYOR. CURUYEN kisim su: tur 5'te K21'in
+`ignore_length=True` IKINCI cagrisi `_group_rejection_reason(current,
+nxt, ...)` YERINE `_group_rejection_reason(tail, nxt, ...)` BICIMINE
+gecirilmisti ve bolum bunu "SOL TARAF DAIMA grubun okuma-sirasindaki
+EN SON (birlesime en son KATILAN) **HAM** ogesidir" diye ozetliyordu.
+Cagri bicimi TUR 6'da (K28) yeniden degisti, ozetteki "HAM" iddiasi ise
+zaten YANLISTI:
+
+**NEDEN CURUDU (bulgu R5-1, Tester-A + kirmizi takim; sef ikisini de
+kendi eliyle yeniden uretti):** `tail` grubun KUYRUGUDUR ama HAM olmak
+ZORUNDA DEGILDIR. ADIM 3 (`_merge_hyphenated`, K5) hyphen'li satirlari
+TEK bir `_Item`'a birlestirir ve o `_Item`'in `bbox`'i BIRLESIK
+kutudur; kuyruk boyle COK BLOKLU bir ogeyse K24'un KALDIRDIGI ARTIFAKT
+(birlesik kutunun GERCEK satir-arasi kopusu GIZLEMESI) ADIM 3
+UZERINDEN GERI GELIR -- bir katman asagida, ama AYNI artifakt. AYNI
+sey ADAY (`nxt`) tarafi icin de gecerlidir. K28 TAM BU YUZDEN yazildi:
+sorgunun IKI tarafinin geometrisi de artik `_raw_query_pair(tail, nxt,
+blocks)` ile OZGUN `TextBlock` listesinden okunur; `tail`in/`nxt`in
+KENDI `bbox`'i sorguya HIC GIRMEZ. Olcum (A'nin derlemi): 30.174
+sinirin %5,2'si; sag tarafta birlesik aday iceren 2065 sinirin 242'si.
 
 **Kapsam:** bu degisiklik SADECE K19/K21/K23'un miras UYGUNLUK kontrolu
 icindir -- `_group`'un ANA (`current` ile `nxt` arasindaki) BIRLESTIRME
@@ -843,7 +888,12 @@ gruplama SEMANTIGI (ör. `test_k10_bbox_birlesimi_kapsayici`) DEGISMEDI
 -- YALNIZ K21'in IKINCI (miras-uygunluk) sorgusu icin SOL TARAFIN HANGI
 oge OLDUGU degisti.
 
-**Zorunlu test:** `test_k24_kuyruk_ile_birlesik_bbox_farkli_sonuc_verir`
+**Zorunlu test** (IKISI DE BUGUN DE YESIL, K28'den SONRA da: birincisi
+`_group_rejection_reason`'i DOGRUDAN cagirir, yani `_raw_query_pair`
+YOLUNA HIC girmez; ikincisinde kuyruk TEK bloklu (`source_blocks=(2,)`)
+oldugu icin ham ikame OZDESLIKTIR -- sef sondasi gibi olctum, sorgunun
+SOL `bbox`'i ham blogunkiyle BIREBIR ayni):
+`test_k24_kuyruk_ile_birlesik_bbox_farkli_sonuc_verir`
 -- en az BIR ogesi SONRAKILERDEN daha AŞAĞI uzanan (yani grubun
 BIRLESIK `bbox`'inin `bottom`'unu TASIYAN oge grubun BASINDA, KUYRUKTA
 DEGIL) COK bloklu bir grubun KUYRUGUNDA bu ayrimi SABITLER: `current`

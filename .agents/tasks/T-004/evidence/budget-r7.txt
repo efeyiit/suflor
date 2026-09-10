@@ -1,0 +1,4 @@
+$ python -m pytest tests/unit/ocr/test_normalizer.py -q -k k14
+.                                                                        [100%]
+1 passed, 124 deselected in 0.11s
+exit=0

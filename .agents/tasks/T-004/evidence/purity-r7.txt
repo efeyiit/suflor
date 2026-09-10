@@ -1,0 +1,5 @@
+$ python .agents/tasks/T-004/purity_check.py
+denetlenen: normalizer.py, presets.py
+
+TEMIZ: saf, mutable global yok, surecler arasi deterministik
+exit=0

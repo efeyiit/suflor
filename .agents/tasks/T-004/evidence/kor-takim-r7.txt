@@ -1,0 +1,18 @@
+$ python -m pytest .agents/tasks/T-004/tester_A .agents/tasks/T-004/tester_B .agents/tasks/T-004/tester_C -q
+(KOR TESTER TAKIMI -- benim sahipligimde DEGIL, yalniz gozlem)
+........................................................................ [ 11%]
+.........................F.............................................. [ 23%]
+........................................................................ [ 34%]
+........................................................................ [ 46%]
+........................................................................ [ 57%]
+........................................................................ [ 69%]
+........................................................................ [ 80%]
+........................................................................ [ 92%]
+................................................                         [100%]
+================================== FAILURES ===================================
+____ test_modul_docstringinin_K24_bolumu_bugunku_cagri_bicimini_anlatiyor _____
+[XPASS(strict)] BAYAT DOKUMANTASYON (tester_A, tur 6): modul docstring'inin '### K24' bolumu (normalizer.py:832-836) K28 ONCESI cagri bicimini KOSULSUZ ve SIMDIKI ZAMANDA anlatiyor; K28'e ileri referans YOK. Davranis DOGRU, iddia BAYAT -- bkz. verdict-A.md (tur 6) notlar.
+=========================== short test summary info ===========================
+FAILED .agents/tasks/T-004/tester_A/test_r6_garanti_alani.py::test_modul_docstringinin_K24_bolumu_bugunku_cagri_bicimini_anlatiyor
+1 failed, 623 passed in 74.00s (0:01:13)
+exit=1

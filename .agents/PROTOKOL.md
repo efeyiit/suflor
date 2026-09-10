@@ -214,7 +214,7 @@ Azaltma yalnızca şefin yetkisindedir ve varsayılan her zaman üçtür. Gerek�
 
 ## 4.6 Şef kararlarının biçimi — değişmez + ölçü + olgu kanıtı
 
-T-004 ve T-005'te ölçülen şef hataları, sekiz kuralı zorunlu kıldı:
+T-004 ve T-005'te ölçülen şef hataları, dokuz kuralı zorunlu kıldı:
 
 **1 · Karar bir değişmezdir, mekanizma değil.** "Şu koşulda şunu yap" yerine "şu her zaman doğru olmalı". Mekanizmanın etkileşimleri görünmez; değişmezin ihlali ölçülebilir. (T-004 K9/K19/K21: üçü de mekanizmaydı, üçü de etkileşimde battı.)
 
@@ -232,7 +232,13 @@ T-004 ve T-005'te ölçülen şef hataları, sekiz kuralı zorunlu kıldı:
 
 **8 · Bir ölçü, denetlediği uygulamanın ürettiği veriden referans türetemez.** Referans **bağımsız** bir kanaldan gelmelidir; aksi hâlde ölçü yalnızca "verdiğin şey kendi içinde tutarlı mı" diye sorar, "doğru şeyi mi verdin" diye sormaz. (T-004 K28 ölçü kiti sürüm 1: referans, sorgunun taşıdığı `source_blocks`'tan türetiliyordu; 26 mutantın 13'ü üç ön ayarda da temiz geçti, yedisi 478 kör testte de görünmezdi. Sürüm 2 girdiden bağımsız bir kimlik kanalı ekledi. Aynı sınıf T-005'te de çıktı: `headless_check` §3 `grab` dönüşünü `np.asarray` ile ölçüyordu — yani K7'nin yasakladığı dönüşümü denetleyicinin içinde yaparak ham `ScreenShot` döndüren bir uygulamayı aklıyordu.)
 
-Kırmızı takım bu sekizini ayrıca denetler.
+**9 · Kapı üç turdan uzun sürerse iş implementer'a gider; kalan bulgular tester yükümlülüğüne yazılır.** Kırmızı takım bir **ön süzgeçtir**, kör tester sisteminin yerine geçmez. Bir paket ya da karar üçüncü turdan sonra hâlâ bulgu veriyorsa sorun artık işte değil **kapıdadır**: şef kendi ölçüsünü mükemmelleştirmeye çalışıyordur ve bu yakınsamaz. Dördüncü tura geçmek için şefin **yazılı gerekçesi** gerekir: hangi bulgu sınıfı ürünü bozar ve neden tester merceklerinden hiçbiri onu göremez.
+
+Kapıyı kapatırken kaçan her sınıf **adlandırılmış tester yükümlülüğü** olarak karara yazılır ve `env.md`'de mercek başına dağıtılır — gizlenmez, "ölçülmüyor" damgası taşır (kural 2).
+
+(T-004 K28: değişmez üçüncü sürümden sonra hiç değişmedi; yedi geçişte kırılan hep **ölçü** oldu. Kapı yedinci turda kapandı, iş iki saatte bitti ve üç kör tester onay verdi — ama dokuz bulgu daha bildirdiler, **dördü şefin kendi hatasıydı**. Yani tester'lar kapının kaçırdığını gerçekten yakalıyor. T-002 ve T-003 aynı sistemle **1 saat 44 dakikada** kabul edilmişti; fark işin zorluğu değil, kapıda geçen turdu.)
+
+Kırmızı takım bu dokuzunu ayrıca denetler.
 
 ## 5. Görev paketi zorunlu alanları
 

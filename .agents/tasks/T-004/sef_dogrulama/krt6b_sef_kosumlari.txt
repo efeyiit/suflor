@@ -285,3 +285,20 @@ ve A/N1'in isaret ettigi bayat K24 bolumu bir belge borcu).
 TUR 7 (kapanis turu) acildi: T7-1 bayat K24 docstring'i, T7-2 M15 kapisi.
 Karar kirmizi takimina GITMIYOR -- yeni degismez/olcu kurgusu yok; tek tester (B) kosacak.
 Alti kalem bilinclu olarak ERTELENDI ve known_gaps'e yazilacak.
+
+==== TUR 7 (KAPANIS) IMPLEMENTER -- SEF SONDASI ====
+SAHIPLIK: yalniz normalizer.py, test_normalizer.py, delivery.md, evidence/ -- yasak dosyalar temiz.
+DORT KABUL: mypy 0 | pytest tests/unit/ocr 125 passed | purity 0 | olcu_kiti 0 (KIT SAGLIGI TEMIZ)
+T7-1 DOGRULANDI: ### K24 bolumunde artik K28 8 kez, _raw_query_pair 3 kez geciyor (tur basinda 0/0);
+  bolum "DEVREDILDI (tur 6, K28)" blogu ile aciliyor, silinmemis.
+  SALT DOKUMANTASYON oldugu makineyle dogrulandi: docstring'siz AST, HEAD ile BIREBIR AYNI (True).
+T7-2 DOGRULANDI: test_k28_miras_sorgusu_ayni_params_ile_sorulur var ve geciyor.
+  IMPLEMENTER SEFIN OLCUSUNDE BOSLUK BULDU: kararin M15 tarifiyle birebir ortusen mutant
+  (sabit get_params(DIALOGUE)) yalniz-dialogue bir testte AYIRT EDILEMEZ. Test iki yonlu
+  yapildi (dialogue + tooltip); mutant tablosu evidence/mutant-r7.txt.
+KOR TAKIM: 1 failed, 623 passed -- tek kirik tester_A'nin strict xfail'i, XPASS ile kirildi.
+  BEKLENEN: T7-1 duzeltilince kendini duyurmasi icin oyle kurulmustu. A yesile cevirecek.
+NOT (sefin orkestrasyon hatasi): `pytest tests` ayni anda 1 error verdi -- sebep T-005 implementer'inin
+  o sirada tests/unit/capture/test_monitors.py'yi TDD kirmizi fazinda yaziyor olmasi. Gecici, kusur degil.
+  Ders: bir implementer bir dizinde kirmizi fazdayken tam-takim regresyonu guvenilir degil; kapsam daralt.
+  T-004 kapsaminda regresyon temiz.

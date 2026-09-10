@@ -1,0 +1,66 @@
+
+==============================================================================
+KONTROL: MUTASYONSUZ kopya (hepsi exit 0 olmali)
+==============================================================================
+  KABUL 1  mypy --strict                                         exit=0
+      | Success: no issues found in 2 source files
+  KABUL 2  urun testleri, T7-2 HARIC  (= kapinin OLMADIGI tur 6 durumu) exit=0
+      | 124 passed, 1 deselected in 2.60s
+  KABUL 3  purity_check                                          exit=0
+      | TEMIZ: saf, mutable global yok, surecler arasi deterministik
+  KABUL 4  olcu kiti (bes kanal)                                 exit=0
+      |   (not: `ayrisma` K28 uygulanana kadar >0 BEKLENIR -- R5-1 acik; kimlik/kapsam/sira/sayi ihlalleri ise bugun de 0 olmalidir)
+  T7-2     YENI KAPI                                             exit=0
+      | 1 passed, 124 deselected in 0.10s
+
+==============================================================================
+MUTANT M15-a  sorgu SABIT `tooltip` params'i ile soruluyor
+==============================================================================
+  KABUL 1  mypy --strict                                         exit=0
+      | Success: no issues found in 2 source files
+  KABUL 2  urun testleri, T7-2 HARIC  (= kapinin OLMADIGI tur 6 durumu) exit=1
+      | 1 failed, 123 passed, 1 deselected in 2.58s
+  KABUL 3  purity_check                                          exit=0
+      | TEMIZ: saf, mutable global yok, surecler arasi deterministik
+  KABUL 4  olcu kiti (bes kanal)                                 exit=0
+      |   (not: `ayrisma` K28 uygulanana kadar >0 BEKLENIR -- R5-1 acik; kimlik/kapsam/sira/sayi ihlalleri ise bugun de 0 olmalidir)
+  T7-2     YENI KAPI                                             exit=1
+      | 1 failed, 124 deselected in 0.22s
+
+==============================================================================
+MUTANT M15-b  sorgu ICINDE on ayar esigi ikame ediliyor (replace, 0.3)
+==============================================================================
+  KABUL 1  mypy --strict                                         exit=0
+      | Success: no issues found in 2 source files
+  KABUL 2  urun testleri, T7-2 HARIC  (= kapinin OLMADIGI tur 6 durumu) exit=1
+      | 1 failed, 123 passed, 1 deselected in 2.65s
+  KABUL 3  purity_check                                          exit=0
+      | TEMIZ: saf, mutable global yok, surecler arasi deterministik
+  KABUL 4  olcu kiti (bes kanal)                                 exit=0
+      |   (not: `ayrisma` K28 uygulanana kadar >0 BEKLENIR -- R5-1 acik; kimlik/kapsam/sira/sayi ihlalleri ise bugun de 0 olmalidir)
+  T7-2     YENI KAPI                                             exit=1
+      | 1 failed, 124 deselected in 0.21s
+
+==============================================================================
+MUTANT M15-c  sorgu SABIT `dialogue` params'i ile soruluyor (KARARIN M15'i)
+==============================================================================
+  KABUL 1  mypy --strict                                         exit=0
+      | Success: no issues found in 2 source files
+  KABUL 2  urun testleri, T7-2 HARIC  (= kapinin OLMADIGI tur 6 durumu) exit=0
+      | 124 passed, 1 deselected in 2.49s
+  KABUL 3  purity_check                                          exit=0
+      | TEMIZ: saf, mutable global yok, surecler arasi deterministik
+  KABUL 4  olcu kiti (bes kanal)                                 exit=0
+      |   (not: `ayrisma` K28 uygulanana kadar >0 BEKLENIR -- R5-1 acik; kimlik/kapsam/sira/sayi ihlalleri ise bugun de 0 olmalidir)
+  T7-2     YENI KAPI                                             exit=1
+      | 1 failed, 124 deselected in 0.21s
+
+==============================================================================
+SONUC
+==============================================================================
+  YAKALANDI  <- T7-2  |  M15-a  sorgu SABIT `tooltip` params'i ile soruluyor
+  YAKALANDI  <- T7-2  |  M15-b  sorgu ICINDE on ayar esigi ikame ediliyor (replace, 0.3)
+  YAKALANDI  <- T7-2  |  M15-c  sorgu SABIT `dialogue` params'i ile soruluyor (KARARIN M15'i)
+
+T7-2 UC MUTANTI DA YAKALIYOR -- test DISLIDIR.
+(gecici kopya silindi; depo dosyalarina dokunulmadi)

@@ -1,0 +1,248 @@
+==============================================================================
+MUTANT M15-a  sorgu SABIT `tooltip` params'i ile soruluyor
+  kurulan cagri: _group_rejection_reason(*_raw_query_pair(tail, nxt, blocks), get_params(OcrPreset.TOOLTIP), ignore_length=True)
+==============================================================================
+F                                                                        [100%]
+================================== FAILURES ===================================
+_______________ test_k28_miras_sorgusu_ayni_params_ile_sorulur ________________
+
+    def test_k28_miras_sorgusu_ayni_params_ile_sorulur() -> None:
+        """T7-2 (sef_karari-tur7.md; olcuyu Tester-B/N3 olcup verdi): miras-
+        uygunluk sorgusu, `_group`'a verilen AYNI `params` nesnesiyle sorulur --
+        on ayar esigi sorgu ICINDE degistirilemez.
+    
+        TEK GEOMETRI, SINIRDA SECILDI -- `h=18`, `gap=12`:
+    
+            dialogue esigi  0.8 * 18 = 14.4  > 12  -> miras UYGULANIR
+            tooltip  esigi  0.3 * 18 =  5.4  < 12  -> miras UYGULANMAZ
+    
+        ve AYNI bloklar IKI on ayarda da kosulur (`max_group_chars` ikisinde de
+        asilir: 301 > 280 ve 301 > 200, yani sinir IKISINDE de dogar).
+    
+        IKI YON DE ZORUNLUDUR -- olctum (bkz. `evidence/mutant-r7.txt`):
+        yalnizca `dialogue` yonu yazilsaydi, sorguyu SABIT `get_params(DIALOGUE)`
+        ile soran mutant (M15-c) 125 testin HEPSINI + dort kabul komutunu +
+        kitin bes kanalini TEMIZ gecerdi -- `dialogue` kosumunda mutantla dogru
+        uygulama AYIRT EDILEMEZ. Ayirt eden kosum `tooltip` kosumudur: orada
+        mutant mirasi YANLISLIKLA uygular. Simetrik olarak `dialogue` kosumu
+        SABIT `tooltip`/`menu` params'ini (M15-a) ve sorgu icindeki esik
+        IKAMESINI (M15-b, `replace(params, max_vertical_gap_ratio=...)`) yakalar.
+    
+        Her on ayarda UC assert ailesi:
+          1. `normalize` ciktisinda mirasin uygulanip uygulanmadigi -- davranis
+             kapisi (`dialogue` -> tasinir, `tooltip` -> tasinmaz);
+          2. `olcu_kiti.sorgu_kaydi()` ile sorgu TEK ve geometrisi HAM
+             bloklarin (K28) -- sorgunun DOGRU YERDE soruldugu;
+          3. sorgunun gordugu `params` TEK NESNE ve o on ayarin
+             `get_params(...)` NESNESIYLE AYNI (`is`) -- degismezin KENDISI.
+    
+        (3) `is` ile yazilir cunku degismez "AYNI `params` NESNESI" der: bir
+        esik ikamesi (`dataclasses.replace(params, ...)`) degeri tesadufen ayni
+        kalsa bile sorgu icinde on ayar esigini degistirmenin ta kendisidir."""
+        dialogue = get_params(OcrPreset.DIALOGUE)
+        tooltip = get_params(OcrPreset.TOOLTIP)
+        # Esik carpimlari YORUMDA degil ASSERT'te: on ayar tablosu kayarsa bu
+        # test totolojiye dusmek yerine KIRILIR (kitin `_esik_alti_conf` ilkesi).
+        assert dialogue.max_vertical_gap_ratio * 18 == pytest.approx(14.4)
+        assert tooltip.max_vertical_gap_ratio * 18 == pytest.approx(5.4)
+        assert tooltip.max_vertical_gap_ratio * 18 < 12 < dialogue.max_vertical_gap_ratio * 18
+        # Sinir IKI on ayarda da YALNIZ-UZUNLUK sinir olmali (K19/K21).
+        assert 150 + 1 + 150 > dialogue.max_group_chars
+        assert 150 + 1 + 150 > tooltip.max_group_chars
+    
+        def bloklar() -> list[TextBlock]:
+            return [
+                blk("Ada: " + "X" * 150, 0, 0, w=240, h=18),
+                blk("Y" * 150, 0, 30, w=240, h=18),  # gap = 30 - (0 + 18) = 12
+            ]
+    
+        for preset, params, beklenen_speaker, beklenen_sebep in (
+            (OcrPreset.DIALOGUE, dialogue, ["Ada", "Ada"], None),
+            (OcrPreset.TOOLTIP, tooltip, ["Ada", None], "gap"),
+        ):
+            blocks = bloklar()
+            out, miras, gorulen_params = _t72_params_sondasi(blocks, preset)
+            etiket = preset.name
+    
+            # 1. Miras davranisi -- SADECE bu on ayarin esigiyle acikla(n)abilir.
+            assert [s.source_blocks for s in out] == [(0,), (1,)], etiket
+>           assert [s.speaker for s in out] == beklenen_speaker, etiket
+E           AssertionError: DIALOGUE
+E           assert ['Ada', None] == ['Ada', 'Ada']
+E             
+E             At index 1 diff: None != 'Ada'
+E             Use -v to get more diff
+
+tests\unit\ocr\test_normalizer.py:1957: AssertionError
+=========================== short test summary info ===========================
+FAILED tests/unit/ocr/test_normalizer.py::test_k28_miras_sorgusu_ayni_params_ile_sorulur
+1 failed, 124 deselected in 0.31s
+
+--> exit=1  (KIRMIZI bekleniyor: 1)
+
+==============================================================================
+MUTANT M15-b  sorgu ICINDE on ayar esigi ikame ediliyor (replace, 0.3)
+  kurulan cagri: _group_rejection_reason(*_raw_query_pair(tail, nxt, blocks), replace(params, max_vertical_gap_ratio=0.3), ignore_length=True)
+==============================================================================
+F                                                                        [100%]
+================================== FAILURES ===================================
+_______________ test_k28_miras_sorgusu_ayni_params_ile_sorulur ________________
+
+    def test_k28_miras_sorgusu_ayni_params_ile_sorulur() -> None:
+        """T7-2 (sef_karari-tur7.md; olcuyu Tester-B/N3 olcup verdi): miras-
+        uygunluk sorgusu, `_group`'a verilen AYNI `params` nesnesiyle sorulur --
+        on ayar esigi sorgu ICINDE degistirilemez.
+    
+        TEK GEOMETRI, SINIRDA SECILDI -- `h=18`, `gap=12`:
+    
+            dialogue esigi  0.8 * 18 = 14.4  > 12  -> miras UYGULANIR
+            tooltip  esigi  0.3 * 18 =  5.4  < 12  -> miras UYGULANMAZ
+    
+        ve AYNI bloklar IKI on ayarda da kosulur (`max_group_chars` ikisinde de
+        asilir: 301 > 280 ve 301 > 200, yani sinir IKISINDE de dogar).
+    
+        IKI YON DE ZORUNLUDUR -- olctum (bkz. `evidence/mutant-r7.txt`):
+        yalnizca `dialogue` yonu yazilsaydi, sorguyu SABIT `get_params(DIALOGUE)`
+        ile soran mutant (M15-c) 125 testin HEPSINI + dort kabul komutunu +
+        kitin bes kanalini TEMIZ gecerdi -- `dialogue` kosumunda mutantla dogru
+        uygulama AYIRT EDILEMEZ. Ayirt eden kosum `tooltip` kosumudur: orada
+        mutant mirasi YANLISLIKLA uygular. Simetrik olarak `dialogue` kosumu
+        SABIT `tooltip`/`menu` params'ini (M15-a) ve sorgu icindeki esik
+        IKAMESINI (M15-b, `replace(params, max_vertical_gap_ratio=...)`) yakalar.
+    
+        Her on ayarda UC assert ailesi:
+          1. `normalize` ciktisinda mirasin uygulanip uygulanmadigi -- davranis
+             kapisi (`dialogue` -> tasinir, `tooltip` -> tasinmaz);
+          2. `olcu_kiti.sorgu_kaydi()` ile sorgu TEK ve geometrisi HAM
+             bloklarin (K28) -- sorgunun DOGRU YERDE soruldugu;
+          3. sorgunun gordugu `params` TEK NESNE ve o on ayarin
+             `get_params(...)` NESNESIYLE AYNI (`is`) -- degismezin KENDISI.
+    
+        (3) `is` ile yazilir cunku degismez "AYNI `params` NESNESI" der: bir
+        esik ikamesi (`dataclasses.replace(params, ...)`) degeri tesadufen ayni
+        kalsa bile sorgu icinde on ayar esigini degistirmenin ta kendisidir."""
+        dialogue = get_params(OcrPreset.DIALOGUE)
+        tooltip = get_params(OcrPreset.TOOLTIP)
+        # Esik carpimlari YORUMDA degil ASSERT'te: on ayar tablosu kayarsa bu
+        # test totolojiye dusmek yerine KIRILIR (kitin `_esik_alti_conf` ilkesi).
+        assert dialogue.max_vertical_gap_ratio * 18 == pytest.approx(14.4)
+        assert tooltip.max_vertical_gap_ratio * 18 == pytest.approx(5.4)
+        assert tooltip.max_vertical_gap_ratio * 18 < 12 < dialogue.max_vertical_gap_ratio * 18
+        # Sinir IKI on ayarda da YALNIZ-UZUNLUK sinir olmali (K19/K21).
+        assert 150 + 1 + 150 > dialogue.max_group_chars
+        assert 150 + 1 + 150 > tooltip.max_group_chars
+    
+        def bloklar() -> list[TextBlock]:
+            return [
+                blk("Ada: " + "X" * 150, 0, 0, w=240, h=18),
+                blk("Y" * 150, 0, 30, w=240, h=18),  # gap = 30 - (0 + 18) = 12
+            ]
+    
+        for preset, params, beklenen_speaker, beklenen_sebep in (
+            (OcrPreset.DIALOGUE, dialogue, ["Ada", "Ada"], None),
+            (OcrPreset.TOOLTIP, tooltip, ["Ada", None], "gap"),
+        ):
+            blocks = bloklar()
+            out, miras, gorulen_params = _t72_params_sondasi(blocks, preset)
+            etiket = preset.name
+    
+            # 1. Miras davranisi -- SADECE bu on ayarin esigiyle acikla(n)abilir.
+            assert [s.source_blocks for s in out] == [(0,), (1,)], etiket
+>           assert [s.speaker for s in out] == beklenen_speaker, etiket
+E           AssertionError: DIALOGUE
+E           assert ['Ada', None] == ['Ada', 'Ada']
+E             
+E             At index 1 diff: None != 'Ada'
+E             Use -v to get more diff
+
+tests\unit\ocr\test_normalizer.py:1957: AssertionError
+=========================== short test summary info ===========================
+FAILED tests/unit/ocr/test_normalizer.py::test_k28_miras_sorgusu_ayni_params_ile_sorulur
+1 failed, 124 deselected in 0.23s
+
+--> exit=1  (KIRMIZI bekleniyor: 1)
+
+==============================================================================
+MUTANT M15-c  sorgu SABIT `dialogue` params'i ile soruluyor (KARARIN M15'i)
+  kurulan cagri: _group_rejection_reason(*_raw_query_pair(tail, nxt, blocks), get_params(OcrPreset.DIALOGUE), ignore_length=True)
+==============================================================================
+F                                                                        [100%]
+================================== FAILURES ===================================
+_______________ test_k28_miras_sorgusu_ayni_params_ile_sorulur ________________
+
+    def test_k28_miras_sorgusu_ayni_params_ile_sorulur() -> None:
+        """T7-2 (sef_karari-tur7.md; olcuyu Tester-B/N3 olcup verdi): miras-
+        uygunluk sorgusu, `_group`'a verilen AYNI `params` nesnesiyle sorulur --
+        on ayar esigi sorgu ICINDE degistirilemez.
+    
+        TEK GEOMETRI, SINIRDA SECILDI -- `h=18`, `gap=12`:
+    
+            dialogue esigi  0.8 * 18 = 14.4  > 12  -> miras UYGULANIR
+            tooltip  esigi  0.3 * 18 =  5.4  < 12  -> miras UYGULANMAZ
+    
+        ve AYNI bloklar IKI on ayarda da kosulur (`max_group_chars` ikisinde de
+        asilir: 301 > 280 ve 301 > 200, yani sinir IKISINDE de dogar).
+    
+        IKI YON DE ZORUNLUDUR -- olctum (bkz. `evidence/mutant-r7.txt`):
+        yalnizca `dialogue` yonu yazilsaydi, sorguyu SABIT `get_params(DIALOGUE)`
+        ile soran mutant (M15-c) 125 testin HEPSINI + dort kabul komutunu +
+        kitin bes kanalini TEMIZ gecerdi -- `dialogue` kosumunda mutantla dogru
+        uygulama AYIRT EDILEMEZ. Ayirt eden kosum `tooltip` kosumudur: orada
+        mutant mirasi YANLISLIKLA uygular. Simetrik olarak `dialogue` kosumu
+        SABIT `tooltip`/`menu` params'ini (M15-a) ve sorgu icindeki esik
+        IKAMESINI (M15-b, `replace(params, max_vertical_gap_ratio=...)`) yakalar.
+    
+        Her on ayarda UC assert ailesi:
+          1. `normalize` ciktisinda mirasin uygulanip uygulanmadigi -- davranis
+             kapisi (`dialogue` -> tasinir, `tooltip` -> tasinmaz);
+          2. `olcu_kiti.sorgu_kaydi()` ile sorgu TEK ve geometrisi HAM
+             bloklarin (K28) -- sorgunun DOGRU YERDE soruldugu;
+          3. sorgunun gordugu `params` TEK NESNE ve o on ayarin
+             `get_params(...)` NESNESIYLE AYNI (`is`) -- degismezin KENDISI.
+    
+        (3) `is` ile yazilir cunku degismez "AYNI `params` NESNESI" der: bir
+        esik ikamesi (`dataclasses.replace(params, ...)`) degeri tesadufen ayni
+        kalsa bile sorgu icinde on ayar esigini degistirmenin ta kendisidir."""
+        dialogue = get_params(OcrPreset.DIALOGUE)
+        tooltip = get_params(OcrPreset.TOOLTIP)
+        # Esik carpimlari YORUMDA degil ASSERT'te: on ayar tablosu kayarsa bu
+        # test totolojiye dusmek yerine KIRILIR (kitin `_esik_alti_conf` ilkesi).
+        assert dialogue.max_vertical_gap_ratio * 18 == pytest.approx(14.4)
+        assert tooltip.max_vertical_gap_ratio * 18 == pytest.approx(5.4)
+        assert tooltip.max_vertical_gap_ratio * 18 < 12 < dialogue.max_vertical_gap_ratio * 18
+        # Sinir IKI on ayarda da YALNIZ-UZUNLUK sinir olmali (K19/K21).
+        assert 150 + 1 + 150 > dialogue.max_group_chars
+        assert 150 + 1 + 150 > tooltip.max_group_chars
+    
+        def bloklar() -> list[TextBlock]:
+            return [
+                blk("Ada: " + "X" * 150, 0, 0, w=240, h=18),
+                blk("Y" * 150, 0, 30, w=240, h=18),  # gap = 30 - (0 + 18) = 12
+            ]
+    
+        for preset, params, beklenen_speaker, beklenen_sebep in (
+            (OcrPreset.DIALOGUE, dialogue, ["Ada", "Ada"], None),
+            (OcrPreset.TOOLTIP, tooltip, ["Ada", None], "gap"),
+        ):
+            blocks = bloklar()
+            out, miras, gorulen_params = _t72_params_sondasi(blocks, preset)
+            etiket = preset.name
+    
+            # 1. Miras davranisi -- SADECE bu on ayarin esigiyle acikla(n)abilir.
+            assert [s.source_blocks for s in out] == [(0,), (1,)], etiket
+>           assert [s.speaker for s in out] == beklenen_speaker, etiket
+E           AssertionError: TOOLTIP
+E           assert ['Ada', 'Ada'] == ['Ada', None]
+E             
+E             At index 1 diff: 'Ada' != None
+E             Use -v to get more diff
+
+tests\unit\ocr\test_normalizer.py:1957: AssertionError
+=========================== short test summary info ===========================
+FAILED tests/unit/ocr/test_normalizer.py::test_k28_miras_sorgusu_ayni_params_ile_sorulur
+1 failed, 124 deselected in 0.22s
+
+--> exit=1  (KIRMIZI bekleniyor: 1)
+
+KIRMIZI olan mutant sayisi: 3/3
+(gecici kopya silindi; depo dosyalarina dokunulmadi)

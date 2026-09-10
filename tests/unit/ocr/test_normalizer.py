@@ -29,6 +29,16 @@ blok. K28'in olculeri SEFE AIT `.agents/tasks/T-004/olcu_kiti.py`'den ICE
 AKTARILIR (yeniden yazilmaz): referans turetimi, derlem, alt sinirlar ve
 fixture'lar orada tek bir yerde ve mutantlara karsi dogrulanmis durur.
 Kitin `sys.path`'e girmesini sefe ait `tests/unit/ocr/conftest.py` saglar.
+
+TUR 7 (kapanis turu -- `.agents/tasks/T-004/sef_karari-tur7.md`): tur 6'da
+UCU DE onay verdi; bu tur yalniz IKI somut boslugu kapatir -- yeni degismez
+YOK, davranis degisikligi YOK. Buraya TEK test eklendi (T7-2): `# --- TUR 7
+---` basligindan sonraki `test_k28_miras_sorgusu_ayni_params_ile_sorulur`,
+miras-uygunluk sorgusunun `_group`'a verilen AYNI `params` nesnesiyle
+soruldugunu denetler (M15 sinifi -- tur 6'ya kadar HICBIR kapi bunu
+OLCMUYORDU). Turun ikinci kalemi (T7-1) SALT DOKUMANTASYONDUR: modul
+docstring'indeki bayat `### K24` bolumu K28'e DEVRETTIGINI soyleyecek
+bicimde duzeltildi; bu dosyada karsiligi YOKTUR (davranis DEGISMEDI).
 """
 from __future__ import annotations
 
@@ -45,8 +55,9 @@ from random import Random
 import pytest
 
 from src.contracts.models import OcrPreset, Rect, Segment, TextBlock
+from src.ocr import normalizer as normalizer_modulu
 from src.ocr.normalizer import _Item, _group_rejection_reason, _normalize_impl, _should_group, normalize
-from src.ocr.presets import SPEAKER_LABEL_SEPARATORS, get_params
+from src.ocr.presets import SPEAKER_LABEL_SEPARATORS, NormalizerParams, get_params
 
 
 def blk(
@@ -1361,6 +1372,7 @@ from olcu_kiti import (  # noqa: E402  -- sys.path'i sefe ait conftest.py kurar
     OLCU3_BEKLENEN,
     OLCU3B_BEKLENEN,
     ON_AYARLAR,
+    Sorgu,
     derlem,
     olcu3_fixture,
     olcu3b_fixture,
@@ -1835,3 +1847,128 @@ def test_k32_nfd_yalniz_etiket_segment_sayisini_degistirmez_ama_speakeri_dusurur
     assert nfc[0].text == "hola amigos"
     assert nfd[0].speaker is None
     assert nfd[0].text == unicodedata.normalize("NFD", "María: ") + "hola amigos"
+
+
+# ===========================================================================
+# --- TUR 7 (sef_karari-tur7.md) --------------------------------------------
+#
+# T7-2 -- M15 SINIFININ KAPISI. DEGISMEZ: miras-uygunluk sorgusu, `_group`'a
+#         verilen AYNI `params` NESNESIYLE sorulur; on ayar esigi sorgu
+#         ICINDE degistirilemez.
+#
+#         Bu degismezi tur 6'ya kadar HICBIR SEY olcmuyordu (sef dogruladi):
+#         miras sorgusunu YANLIS `params` ile soran bir uygulama dort kabul
+#         komutunu, 124 urun testini VE olcu kitinin bes kanalini TEMIZ
+#         geciyor. Sebep KITIN BILINEN SINIRIDIR: kancasi `(a, b, params)`
+#         uclusunu gorur ama `params` KIMLIGINI kaydetmez (kit sefe aittir,
+#         DEGISTIRILMEDI -- bu test kiti ICE AKTARIR ve uzerine KENDI
+#         `params` kancasini KATMANLAR).
+# ===========================================================================
+
+
+def _t72_params_sondasi(
+    blocks: list[TextBlock], preset: OcrPreset
+) -> tuple[list[Segment], list[Sorgu], list[NormalizerParams]]:
+    """T7-2 sondasi: `normalize`'i kosarken HEM kitin sorgu kaydini HEM de
+    sorgunun gordugu `params` NESNELERINI toplar.
+
+    Kit kancasi `params` KIMLIGINI kaydetmez (kitin bilinen siniri, karar
+    tur 6 'M15'). Kendi kancamizi kitin ALTINA katmanliyoruz: once biz,
+    sonra kit -- boylece kitin `orij`i bizim kancamiz olur ve cikista LIFO
+    sirayla geri alinir. KIT DEGISTIRILMEDI, yalnizca ICE AKTARILDI."""
+    gorulen_params: list[NormalizerParams] = []
+    gercek_sorgu = normalizer_modulu._group_rejection_reason
+
+    def params_kancasi(
+        a: _Item, b: _Item, params: NormalizerParams, *, ignore_length: bool = False
+    ) -> str | None:
+        gorulen_params.append(params)
+        return gercek_sorgu(a, b, params, ignore_length=ignore_length)
+
+    normalizer_modulu._group_rejection_reason = params_kancasi  # type: ignore[assignment]
+    try:
+        with sorgu_kaydi() as kayit:
+            out = normalize(blocks, preset)
+    finally:
+        normalizer_modulu._group_rejection_reason = gercek_sorgu  # type: ignore[assignment]
+    return out, [s for s in kayit if s.miras], gorulen_params
+
+
+def test_k28_miras_sorgusu_ayni_params_ile_sorulur() -> None:
+    """T7-2 (sef_karari-tur7.md; olcuyu Tester-B/N3 olcup verdi): miras-
+    uygunluk sorgusu, `_group`'a verilen AYNI `params` nesnesiyle sorulur --
+    on ayar esigi sorgu ICINDE degistirilemez.
+
+    TEK GEOMETRI, SINIRDA SECILDI -- `h=18`, `gap=12`:
+
+        dialogue esigi  0.8 * 18 = 14.4  > 12  -> miras UYGULANIR
+        tooltip  esigi  0.3 * 18 =  5.4  < 12  -> miras UYGULANMAZ
+
+    ve AYNI bloklar IKI on ayarda da kosulur (`max_group_chars` ikisinde de
+    asilir: 301 > 280 ve 301 > 200, yani sinir IKISINDE de dogar).
+
+    IKI YON DE ZORUNLUDUR -- olctum (bkz. `evidence/mutant-r7.txt`):
+    yalnizca `dialogue` yonu yazilsaydi, sorguyu SABIT `get_params(DIALOGUE)`
+    ile soran mutant (M15-c) 125 testin HEPSINI + dort kabul komutunu +
+    kitin bes kanalini TEMIZ gecerdi -- `dialogue` kosumunda mutantla dogru
+    uygulama AYIRT EDILEMEZ. Ayirt eden kosum `tooltip` kosumudur: orada
+    mutant mirasi YANLISLIKLA uygular. Simetrik olarak `dialogue` kosumu
+    SABIT `tooltip`/`menu` params'ini (M15-a) ve sorgu icindeki esik
+    IKAMESINI (M15-b, `replace(params, max_vertical_gap_ratio=...)`) yakalar.
+
+    Her on ayarda UC assert ailesi:
+      1. `normalize` ciktisinda mirasin uygulanip uygulanmadigi -- davranis
+         kapisi (`dialogue` -> tasinir, `tooltip` -> tasinmaz);
+      2. `olcu_kiti.sorgu_kaydi()` ile sorgu TEK ve geometrisi HAM
+         bloklarin (K28) -- sorgunun DOGRU YERDE soruldugu;
+      3. sorgunun gordugu `params` TEK NESNE ve o on ayarin
+         `get_params(...)` NESNESIYLE AYNI (`is`) -- degismezin KENDISI.
+
+    (3) `is` ile yazilir cunku degismez "AYNI `params` NESNESI" der: bir
+    esik ikamesi (`dataclasses.replace(params, ...)`) degeri tesadufen ayni
+    kalsa bile sorgu icinde on ayar esigini degistirmenin ta kendisidir."""
+    dialogue = get_params(OcrPreset.DIALOGUE)
+    tooltip = get_params(OcrPreset.TOOLTIP)
+    # Esik carpimlari YORUMDA degil ASSERT'te: on ayar tablosu kayarsa bu
+    # test totolojiye dusmek yerine KIRILIR (kitin `_esik_alti_conf` ilkesi).
+    assert dialogue.max_vertical_gap_ratio * 18 == pytest.approx(14.4)
+    assert tooltip.max_vertical_gap_ratio * 18 == pytest.approx(5.4)
+    assert tooltip.max_vertical_gap_ratio * 18 < 12 < dialogue.max_vertical_gap_ratio * 18
+    # Sinir IKI on ayarda da YALNIZ-UZUNLUK sinir olmali (K19/K21).
+    assert 150 + 1 + 150 > dialogue.max_group_chars
+    assert 150 + 1 + 150 > tooltip.max_group_chars
+
+    def bloklar() -> list[TextBlock]:
+        return [
+            blk("Ada: " + "X" * 150, 0, 0, w=240, h=18),
+            blk("Y" * 150, 0, 30, w=240, h=18),  # gap = 30 - (0 + 18) = 12
+        ]
+
+    for preset, params, beklenen_speaker, beklenen_sebep in (
+        (OcrPreset.DIALOGUE, dialogue, ["Ada", "Ada"], None),
+        (OcrPreset.TOOLTIP, tooltip, ["Ada", None], "gap"),
+    ):
+        blocks = bloklar()
+        out, miras, gorulen_params = _t72_params_sondasi(blocks, preset)
+        etiket = preset.name
+
+        # 1. Miras davranisi -- SADECE bu on ayarin esigiyle acikla(n)abilir.
+        assert [s.source_blocks for s in out] == [(0,), (1,)], etiket
+        assert [s.speaker for s in out] == beklenen_speaker, etiket
+
+        # 2. TEK miras sorgusu, geometrisi HAM bloklarin (K28).
+        assert len(miras) == 1, (etiket, [(s.sol_sb, s.sag_sb) for s in miras])
+        assert (miras[0].sol_sb, miras[0].sag_sb) == ((0,), (1,)), etiket
+        assert (miras[0].sol_bbox, miras[0].sag_bbox) == (blocks[0].bbox, blocks[1].bbox), etiket
+
+        # 3. DEGISMEZ: gozlenen HER cagri TEK ve AYNI `params` nesnesini gordu.
+        assert gorulen_params, f"{etiket}: hic sorgu gozlenmedi -- denetim totolojik olurdu"
+        assert all(p is params for p in gorulen_params), (
+            f"{etiket}: sorgu `_group`'a verilen params nesnesinden BASKASINI gordu -> "
+            f"{[(p.max_vertical_gap_ratio, p.max_group_chars) for p in gorulen_params]}"
+        )
+
+        # 4. Ayni cift, ayni geometri: cevabi YALNIZCA esik belirler.
+        sol = _Item(text="X" * 150, bbox=miras[0].sol_bbox, speaker="Ada", source_blocks=miras[0].sol_sb)
+        sag = _Item(text="Y" * 150, bbox=miras[0].sag_bbox, speaker=None, source_blocks=miras[0].sag_sb)
+        assert _group_rejection_reason(sol, sag, params, ignore_length=True) == beklenen_sebep, etiket

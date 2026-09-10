@@ -1,0 +1,7 @@
+$ python .agents/tasks/T-004/evidence/ast_esitlik_r7.py
+HEAD  kaynak uzunlugu: 86864
+SIMDI kaynak uzunlugu: 89770
+docstring'siz AST BIREBIR AYNI MI: True
+
+Docstring metinlerinde fark VAR MI (beklenen: VAR -- T7-1): True
+exit=0
