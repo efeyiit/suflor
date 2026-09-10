@@ -1,0 +1,229 @@
+.FFFF...............................................................F... [ 61%]
+.....F.......................................                            [100%]
+================================== FAILURES ===================================
+_____________ test_r5_mutant_m1_bolumlemeye_sizinti_k23u_kiriyor ______________
+
+tmp_path = WindowsPath('C:/Users/pc/AppData/Local/Temp/pytest-of-pc/pytest-204/test_r5_mutant_m1_bolumlemeye_0')
+
+    def test_r5_mutant_m1_bolumlemeye_sizinti_k23u_kiriyor(tmp_path: Path) -> None:
+        """K23 SONDASI: miras `nxt`e bolumleme gecisinde uygulanip bir sonraki
+        gruplama kararina GIRDI yapilirsa (tur 4'un gercek hatasi), K23
+        degismezi KIRILMALI -- hem kendi ureticimde COK sayida ihlal, hem B1
+        senaryosunda `(2, 3)` birlesmesi (sefin VARYANT A'si) geri gelmeli."""
+>       s = _olc(tmp_path, "M1_bolumlemeye_sizinti")
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.agents\tasks\T-004\tester_B\test_k23_mutant_sondasi_tur5.py:286: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+tmp_path = WindowsPath('C:/Users/pc/AppData/Local/Temp/pytest-of-pc/pytest-204/test_r5_mutant_m1_bolumlemeye_0')
+mutant = 'M1_bolumlemeye_sizinti'
+
+    def _olc(tmp_path: Path, mutant: str | None) -> dict[str, object]:
+        """`src/` agacini kopyala, (varsa) mutasyonu uygula, olcum betigini
+        AYRI bir surecte kostur ve JSON sonucunu dondur."""
+        hedef = tmp_path / (mutant or "kontrol")
+        hedef.mkdir(parents=True, exist_ok=True)
+        shutil.copytree(REPO_KOK / "src", hedef / "src")
+    
+        norm = hedef / "src" / "ocr" / "normalizer.py"
+        kaynak = norm.read_text(encoding="utf-8")
+        if mutant is not None:
+            aranan, yerine = MUTANTLAR[mutant]
+>           assert kaynak.count(aranan) == 1, (
+                f"{mutant}: mutasyon deseni kaynakta TEK KEZ bulunmali "
+                f"({kaynak.count(aranan)} bulundu) -- `_group` yeniden yazilmis, sonda BAYATLADI"
+            )
+E           AssertionError: M1_bolumlemeye_sizinti: mutasyon deseni kaynakta TEK KEZ bulunmali (0 bulundu) -- `_group` yeniden yazilmis, sonda BAYATLADI
+E           assert 0 == 1
+E            +  where 0 = <built-in method count of str object at 0x000001CB7145A420>('            pure_length_boundaries.append(\n                reason == "length"\n                and nxt.speaker is No...son(tail, nxt, params, ignore_length=True) is None\n            )\n            current = nxt\n            tail = nxt\n')
+E            +    where <built-in method count of str object at 0x000001CB7145A420> = 'r"""TextNormalizer -- OCR bloklarindan cevrilmeye hazir `Segment` uretimi.\n\nTasarim dokumani S5.2: "Ceviri kalitesi...ker is not None:\n                groups[i] = replace(groups[i], speaker=groups[i - 1].speaker)\n\n    return groups\n'.count
+
+.agents\tasks\T-004\tester_B\test_k23_mutant_sondasi_tur5.py:227: AssertionError
+_ test_r5_mutant_m2_m3_k24u_kiriyor_ama_k23u_kirmiyor[M2_k24_sorgusu_kaldirildi] _
+
+tmp_path = WindowsPath('C:/Users/pc/AppData/Local/Temp/pytest-of-pc/pytest-204/test_r5_mutant_m2_m3_k24u_kiri0')
+mutant = 'M2_k24_sorgusu_kaldirildi'
+
+    @pytest.mark.parametrize("mutant", ["M2_k24_sorgusu_kaldirildi", "M3_tail_yerine_current"])
+    def test_r5_mutant_m2_m3_k24u_kiriyor_ama_k23u_kirmiyor(tmp_path: Path, mutant: str) -> None:
+        """M2 (K21/K24 ikinci sorgusu YOK) ve M3 (`tail` yerine `current` --
+        K24'un TAM OLARAK yasakladigi sey) icin:
+          - K24'un zorunlu geometrisinde kuyruk segment YANLISLIKLA miras alir
+            (`"Ada"`), yani `test_r5_k24_*` testlerim DISLI,
+          - ama K23 degismezi ihlal EDILMEZ -- ikisi FARKLI hata siniflari."""
+>       s = _olc(tmp_path, mutant)
+            ^^^^^^^^^^^^^^^^^^^^^^
+
+.agents\tasks\T-004\tester_B\test_k23_mutant_sondasi_tur5.py:312: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+tmp_path = WindowsPath('C:/Users/pc/AppData/Local/Temp/pytest-of-pc/pytest-204/test_r5_mutant_m2_m3_k24u_kiri0')
+mutant = 'M2_k24_sorgusu_kaldirildi'
+
+    def _olc(tmp_path: Path, mutant: str | None) -> dict[str, object]:
+        """`src/` agacini kopyala, (varsa) mutasyonu uygula, olcum betigini
+        AYRI bir surecte kostur ve JSON sonucunu dondur."""
+        hedef = tmp_path / (mutant or "kontrol")
+        hedef.mkdir(parents=True, exist_ok=True)
+        shutil.copytree(REPO_KOK / "src", hedef / "src")
+    
+        norm = hedef / "src" / "ocr" / "normalizer.py"
+        kaynak = norm.read_text(encoding="utf-8")
+        if mutant is not None:
+            aranan, yerine = MUTANTLAR[mutant]
+>           assert kaynak.count(aranan) == 1, (
+                f"{mutant}: mutasyon deseni kaynakta TEK KEZ bulunmali "
+                f"({kaynak.count(aranan)} bulundu) -- `_group` yeniden yazilmis, sonda BAYATLADI"
+            )
+E           AssertionError: M2_k24_sorgusu_kaldirildi: mutasyon deseni kaynakta TEK KEZ bulunmali (0 bulundu) -- `_group` yeniden yazilmis, sonda BAYATLADI
+E           assert 0 == 1
+E            +  where 0 = <built-in method count of str object at 0x000001CB714C6010>('                and _group_rejection_reason(tail, nxt, params, ignore_length=True) is None\n')
+E            +    where <built-in method count of str object at 0x000001CB714C6010> = 'r"""TextNormalizer -- OCR bloklarindan cevrilmeye hazir `Segment` uretimi.\n\nTasarim dokumani S5.2: "Ceviri kalitesi...ker is not None:\n                groups[i] = replace(groups[i], speaker=groups[i - 1].speaker)\n\n    return groups\n'.count
+
+.agents\tasks\T-004\tester_B\test_k23_mutant_sondasi_tur5.py:227: AssertionError
+_ test_r5_mutant_m2_m3_k24u_kiriyor_ama_k23u_kirmiyor[M3_tail_yerine_current] _
+
+tmp_path = WindowsPath('C:/Users/pc/AppData/Local/Temp/pytest-of-pc/pytest-204/test_r5_mutant_m2_m3_k24u_kiri1')
+mutant = 'M3_tail_yerine_current'
+
+    @pytest.mark.parametrize("mutant", ["M2_k24_sorgusu_kaldirildi", "M3_tail_yerine_current"])
+    def test_r5_mutant_m2_m3_k24u_kiriyor_ama_k23u_kirmiyor(tmp_path: Path, mutant: str) -> None:
+        """M2 (K21/K24 ikinci sorgusu YOK) ve M3 (`tail` yerine `current` --
+        K24'un TAM OLARAK yasakladigi sey) icin:
+          - K24'un zorunlu geometrisinde kuyruk segment YANLISLIKLA miras alir
+            (`"Ada"`), yani `test_r5_k24_*` testlerim DISLI,
+          - ama K23 degismezi ihlal EDILMEZ -- ikisi FARKLI hata siniflari."""
+>       s = _olc(tmp_path, mutant)
+            ^^^^^^^^^^^^^^^^^^^^^^
+
+.agents\tasks\T-004\tester_B\test_k23_mutant_sondasi_tur5.py:312: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+tmp_path = WindowsPath('C:/Users/pc/AppData/Local/Temp/pytest-of-pc/pytest-204/test_r5_mutant_m2_m3_k24u_kiri1')
+mutant = 'M3_tail_yerine_current'
+
+    def _olc(tmp_path: Path, mutant: str | None) -> dict[str, object]:
+        """`src/` agacini kopyala, (varsa) mutasyonu uygula, olcum betigini
+        AYRI bir surecte kostur ve JSON sonucunu dondur."""
+        hedef = tmp_path / (mutant or "kontrol")
+        hedef.mkdir(parents=True, exist_ok=True)
+        shutil.copytree(REPO_KOK / "src", hedef / "src")
+    
+        norm = hedef / "src" / "ocr" / "normalizer.py"
+        kaynak = norm.read_text(encoding="utf-8")
+        if mutant is not None:
+            aranan, yerine = MUTANTLAR[mutant]
+>           assert kaynak.count(aranan) == 1, (
+                f"{mutant}: mutasyon deseni kaynakta TEK KEZ bulunmali "
+                f"({kaynak.count(aranan)} bulundu) -- `_group` yeniden yazilmis, sonda BAYATLADI"
+            )
+E           AssertionError: M3_tail_yerine_current: mutasyon deseni kaynakta TEK KEZ bulunmali (0 bulundu) -- `_group` yeniden yazilmis, sonda BAYATLADI
+E           assert 0 == 1
+E            +  where 0 = <built-in method count of str object at 0x000001CB714F0700>('_group_rejection_reason(tail, nxt, params, ignore_length=True)')
+E            +    where <built-in method count of str object at 0x000001CB714F0700> = 'r"""TextNormalizer -- OCR bloklarindan cevrilmeye hazir `Segment` uretimi.\n\nTasarim dokumani S5.2: "Ceviri kalitesi...ker is not None:\n                groups[i] = replace(groups[i], speaker=groups[i - 1].speaker)\n\n    return groups\n'.count
+
+.agents\tasks\T-004\tester_B\test_k23_mutant_sondasi_tur5.py:227: AssertionError
+__________________ test_r5_mutant_m2_k21_ayrimini_da_bozuyor __________________
+
+tmp_path = WindowsPath('C:/Users/pc/AppData/Local/Temp/pytest-of-pc/pytest-204/test_r5_mutant_m2_k21_ayrimini0')
+
+    def test_r5_mutant_m2_k21_ayrimini_da_bozuyor(tmp_path: Path) -> None:
+        """M2 ayrica K21'in KENDISINI (uzunluk TEK engel mi) kaldirdigi icin,
+        esik-alti orta blok fixture'inda kuyruk segment tur 3 davranisina
+        doner (`"Ada"`). Bu, `test_karar_uyumu_tur3.py::test_r3_k2_*`
+        testinin TUR 5'te duzeltilen assertion'inin (bkz. o testin docstring'i)
+        hangi mekanizmaya bagli oldugunu SABITLER: eski assertion tam olarak
+        bu mutantla yesil kalirdi."""
+>       s = _olc(tmp_path, "M2_k24_sorgusu_kaldirildi")
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.agents\tasks\T-004\tester_B\test_k23_mutant_sondasi_tur5.py:330: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+tmp_path = WindowsPath('C:/Users/pc/AppData/Local/Temp/pytest-of-pc/pytest-204/test_r5_mutant_m2_k21_ayrimini0')
+mutant = 'M2_k24_sorgusu_kaldirildi'
+
+    def _olc(tmp_path: Path, mutant: str | None) -> dict[str, object]:
+        """`src/` agacini kopyala, (varsa) mutasyonu uygula, olcum betigini
+        AYRI bir surecte kostur ve JSON sonucunu dondur."""
+        hedef = tmp_path / (mutant or "kontrol")
+        hedef.mkdir(parents=True, exist_ok=True)
+        shutil.copytree(REPO_KOK / "src", hedef / "src")
+    
+        norm = hedef / "src" / "ocr" / "normalizer.py"
+        kaynak = norm.read_text(encoding="utf-8")
+        if mutant is not None:
+            aranan, yerine = MUTANTLAR[mutant]
+>           assert kaynak.count(aranan) == 1, (
+                f"{mutant}: mutasyon deseni kaynakta TEK KEZ bulunmali "
+                f"({kaynak.count(aranan)} bulundu) -- `_group` yeniden yazilmis, sonda BAYATLADI"
+            )
+E           AssertionError: M2_k24_sorgusu_kaldirildi: mutasyon deseni kaynakta TEK KEZ bulunmali (0 bulundu) -- `_group` yeniden yazilmis, sonda BAYATLADI
+E           assert 0 == 1
+E            +  where 0 = <built-in method count of str object at 0x000001CB7151ADF0>('                and _group_rejection_reason(tail, nxt, params, ignore_length=True) is None\n')
+E            +    where <built-in method count of str object at 0x000001CB7151ADF0> = 'r"""TextNormalizer -- OCR bloklarindan cevrilmeye hazir `Segment` uretimi.\n\nTasarim dokumani S5.2: "Ceviri kalitesi...ker is not None:\n                groups[i] = replace(groups[i], speaker=groups[i - 1].speaker)\n\n    return groups\n'.count
+
+.agents\tasks\T-004\tester_B\test_k23_mutant_sondasi_tur5.py:227: AssertionError
+______ test_r5_k23_normalize_impl_bayragi_yalniz_group_cagrisina_iletir _______
+
+    def test_r5_k23_normalize_impl_bayragi_yalniz_group_cagrisina_iletir() -> None:
+        """`_normalize_impl` icinde `apply_inheritance` YALNIZCA `_group(...)`
+        cagrisina anahtar kelime olarak gecirilir -- boru hattinin diger BES
+        adiminin (esik, gurultu, birlestirme, konusmaci, yer tutucu) hicbiri
+        bayragi GORMEZ. Yani bayrak sadece adim 5'in GORUNUM passini acar."""
+        fn = _func_ast(normalizer_mod._normalize_impl)
+        reads = [n for n in ast.walk(fn) if isinstance(n, ast.Name) and n.id == "apply_inheritance"]
+        assert len(reads) == 1, [n.lineno for n in reads]
+    
+        group_calls = [
+            n
+            for n in ast.walk(fn)
+            if isinstance(n, ast.Call) and isinstance(n.func, ast.Name) and n.func.id == "_group"
+        ]
+        assert len(group_calls) == 1
+        kw = {k.arg: ast.unparse(k.value) for k in group_calls[0].keywords}
+>       assert kw == {"apply_inheritance": "apply_inheritance"}, kw
+E       AssertionError: {'blocks': 'blocks', 'apply_inheritance': 'apply_inheritance'}
+E       assert {'blocks': 'b..._inheritance'} == {'apply_inher..._inheritance'}
+E         
+E         Omitting 1 identical items, use -vv to show
+E         Left contains 1 more item:
+E         {'blocks': 'blocks'}
+E         Use -v to get more diff
+
+.agents\tasks\T-004\tester_B\test_karar_uyumu_tur5.py:276: AssertionError
+__________ test_r5_k24_ignore_length_sorgusu_tail_ile_cagriliyor_ast __________
+
+    def test_r5_k24_ignore_length_sorgusu_tail_ile_cagriliyor_ast() -> None:
+        """K24: `ignore_length=True` ile yapilan IKINCI (miras-uygunluk)
+        cagrinin ILK POZISYONEL argumani `tail` OLMALI -- `current` DEGIL.
+        Kod satiri AST ile gosterilir. Ana birlestirme kararinin HALA `current`
+        kullandigi da ayrica sabitlenir (K24 kapsam cumlesi)."""
+        fn = _func_ast(normalizer_mod._group)
+        cagrilar = [
+            n
+            for n in ast.walk(fn)
+            if isinstance(n, ast.Call) and isinstance(n.func, ast.Name) and n.func.id == "_group_rejection_reason"
+        ]
+        assert len(cagrilar) == 2, [ast.unparse(c) for c in cagrilar]
+    
+        ignore_true = [c for c in cagrilar if any(k.arg == "ignore_length" for k in c.keywords)]
+        assert len(ignore_true) == 1
+        miras_sorgusu = ignore_true[0]
+>       assert ast.unparse(miras_sorgusu.args[0]) == "tail", ast.unparse(miras_sorgusu)
+E       AssertionError: _group_rejection_reason(*_raw_query_pair(tail, nxt, blocks), params, ignore_length=True)
+E       assert '*_raw_query_... nxt, blocks)' == 'tail'
+E         
+E         - tail
+E         + *_raw_query_pair(tail, nxt, blocks)
+
+.agents\tasks\T-004\tester_B\test_karar_uyumu_tur5.py:567: AssertionError
+=========================== short test summary info ===========================
+FAILED .agents/tasks/T-004/tester_B/test_k23_mutant_sondasi_tur5.py::test_r5_mutant_m1_bolumlemeye_sizinti_k23u_kiriyor
+FAILED .agents/tasks/T-004/tester_B/test_k23_mutant_sondasi_tur5.py::test_r5_mutant_m2_m3_k24u_kiriyor_ama_k23u_kirmiyor[M2_k24_sorgusu_kaldirildi]
+FAILED .agents/tasks/T-004/tester_B/test_k23_mutant_sondasi_tur5.py::test_r5_mutant_m2_m3_k24u_kiriyor_ama_k23u_kirmiyor[M3_tail_yerine_current]
+FAILED .agents/tasks/T-004/tester_B/test_k23_mutant_sondasi_tur5.py::test_r5_mutant_m2_k21_ayrimini_da_bozuyor
+FAILED .agents/tasks/T-004/tester_B/test_karar_uyumu_tur5.py::test_r5_k23_normalize_impl_bayragi_yalniz_group_cagrisina_iletir
+FAILED .agents/tasks/T-004/tester_B/test_karar_uyumu_tur5.py::test_r5_k24_ignore_length_sorgusu_tail_ile_cagriliyor_ast
+6 failed, 111 passed in 1.50s

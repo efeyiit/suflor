@@ -179,11 +179,26 @@ print(json.dumps(sonuc, ensure_ascii=False))
 # ---------------------------------------------------------------------------
 # Mutasyonlar -- her biri (ad, ARANAN, YERINE) ucluse.
 # ---------------------------------------------------------------------------
+# TUR 6'DA YENIDEN NISANLANDI (sef_karari-tur6.md, K28). Miras-sorgusu satiri
+# `_group_rejection_reason(tail, nxt, params, ignore_length=True)` olmaktan cikip
+# `_group_rejection_reason(*_raw_query_pair(tail, nxt, blocks), params,
+# ignore_length=True)` bicimine gecti. M1'in aradigi `_ANA_BLOK` deseni bu satiri
+# ICERDIGI icin M1 ve M2 desenleri KACINILMAZ olarak bayatladi -- sefin §4.6/5
+# listesinde ONCEDEN adlandirilmisti. Desenler yeni satira nisanlandi; `_olc`
+# icindeki "TEK KEZ bulunmali" assertion'i bayatlamayi GURULTULU kirmaya devam eder.
+_MIRAS_SORGUSU = """                and _group_rejection_reason(
+                    *_raw_query_pair(tail, nxt, blocks), params, ignore_length=True
+                )
+                is None
+"""
+
 _ANA_BLOK = """            pure_length_boundaries.append(
                 reason == "length"
                 and nxt.speaker is None
-                and _group_rejection_reason(tail, nxt, params, ignore_length=True) is None
-            )
+                # K28 (TUR 6): sorgunun IKI tarafi da OZGUN bloklardan --
+                # ikame `_raw_query_pair`'in ICINDEDIR, bu dongude DEGIL
+                # (bolumleme gecisi hicbir `replace(...)` yazmaz).
+""" + _MIRAS_SORGUSU + """            )
             current = nxt
             tail = nxt
 """
@@ -191,8 +206,7 @@ _ANA_BLOK = """            pure_length_boundaries.append(
 _M1_YERINE = """            _sizinti = (
                 reason == "length"
                 and nxt.speaker is None
-                and _group_rejection_reason(tail, nxt, params, ignore_length=True) is None
-            )
+""" + _MIRAS_SORGUSU + """            )
             pure_length_boundaries.append(_sizinti)
             if apply_inheritance and _sizinti and current.speaker is not None:
                 nxt = replace(nxt, speaker=current.speaker)  # MUTANT M1: sizinti
@@ -200,15 +214,18 @@ _M1_YERINE = """            _sizinti = (
             tail = nxt
 """
 
+# M3 (`tail` -> `current`) BU DOSYADAN KALDIRILDI. Sef (sef_karari-tur6.md) K28
+# bicimi altinda onu "esdeger mutant" sayip cikarilmasini istedi. Iddiayi KOR
+# KABUL ETMEDIM: `test_k28_mutant_sondasi_tur6.py::test_r6_m3_tail_yerine_current_
+# davranissal_esdeger_ama_yapisal_yakalaniyor` icinde KENDIM olctum -- 21.000
+# kosumda 0 DAVRANISSAL ayrisma (sefin "esdeger" nitelemesi DOGRU), ama kitin
+# KIMLIK kanali ve 10 urun olcusu onu YINE DE kiriyor (sefin "yeniden nisanlanirsa
+# OLU mutant olur" nitelemesi EKSIK). Olcum orada, ham cikti evidence altinda.
 MUTANTLAR: dict[str, tuple[str, str]] = {
     "M1_bolumlemeye_sizinti": (_ANA_BLOK, _M1_YERINE),
     "M2_k24_sorgusu_kaldirildi": (
-        "                and _group_rejection_reason(tail, nxt, params, ignore_length=True) is None\n",
-        "                and True  # MUTANT M2: K21/K24 ikinci sorgusu YOK\n",
-    ),
-    "M3_tail_yerine_current": (
-        "_group_rejection_reason(tail, nxt, params, ignore_length=True)",
-        "_group_rejection_reason(current, nxt, params, ignore_length=True)",
+        _MIRAS_SORGUSU,
+        "                and True  # MUTANT M2: K21/K24/K28 ikinci sorgusu YOK\n",
     ),
 }
 
@@ -302,10 +319,11 @@ def test_r5_mutant_m1_bolumlemeye_sizinti_k23u_kiriyor(tmp_path: Path) -> None:
 # ---------------------------------------------------------------------------
 
 
-@pytest.mark.parametrize("mutant", ["M2_k24_sorgusu_kaldirildi", "M3_tail_yerine_current"])
+@pytest.mark.parametrize("mutant", ["M2_k24_sorgusu_kaldirildi"])
 def test_r5_mutant_m2_m3_k24u_kiriyor_ama_k23u_kirmiyor(tmp_path: Path, mutant: str) -> None:
-    """M2 (K21/K24 ikinci sorgusu YOK) ve M3 (`tail` yerine `current` --
-    K24'un TAM OLARAK yasakladigi sey) icin:
+    """M2 (K21/K24/K28 ikinci sorgusu YOK) icin -- M3 TUR 6'da bu dosyadan
+    KALDIRILDI (bkz. `MUTANTLAR` sozlugunun ustundeki not; olcum tur 6
+    sondasinda):
       - K24'un zorunlu geometrisinde kuyruk segment YANLISLIKLA miras alir
         (`"Ada"`), yani `test_r5_k24_*` testlerim DISLI,
       - ama K23 degismezi ihlal EDILMEZ -- ikisi FARKLI hata siniflari."""

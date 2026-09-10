@@ -1,6 +1,6 @@
 {
   "faz": "pilot",
-  "guncelleme": "2026-09-09",
+  "guncelleme": "tur 6: implementer tamam + sef dogrulamasi tamam; testerlar yarim (verdict yok)",
   "paralellik_tavani": 4,
   "kilitlenme_esigi": 3,
   "tasima": "alt-ajan",
@@ -62,9 +62,9 @@
       "depends_on": [
         "T-001"
       ],
-      "durum": "tur6-implementer",
+      "durum": "tur6-testerlar-YARIM",
       "tur": 6,
-      "not": "Karar KT yedi gecis. 7. gecis kit v2'yi curuttu: kapsam kanali DOGRU uygulamayi reddediyordu (iki sebep), kimlik/sira istisnada sessizce kapaniyordu, kabul komutu dort sayaci assert etmiyordu. Kit SURUM 3 ucunu de kapatti + SAYI kanali ekledi (M10 artik olculuyor). Sef dogruladi: dogru uygulamada uc yanlis pozitif gitti, n63/n58/n18 yakalandi. KAPI KAPANDI: K28 implementer'a gidiyor; kitin bilinen sinirlari (n23, adim1_4 bagimsizligi, MENU/apply_inheritance=False, bes girdi sinifi, params kimligi) M11-M15 olarak tester yukumlulugune yazildi. 8. KT gecisi kit uzerinde PARALEL kosacak, bulgulari TESTER turuna girdi olacak."
+      "not": "TUR 6 UYGULANDI VE SEF DOGRULADI: K28 kodda, R5-1 kapandi, dort kabul komutu exit 0, ayrisma 3677/6119/7249 -> 0/0/0, pytest tests 821 passed. UC TESTER BASLATILDI AMA YARIDA KESILDI (kullanici molasi). A ve B bayat kapi aletlerini yeniden nisanlamayi BITIRDI -- tester takimi artik 388 passed, 0 kirik (oncesi 370+9). EKSIK: verdict-A/B/C.md yok; C yeni testlerini yazmamis (kitin olcmedigi bes girdi sinifi: emoji/ZWJ, monitor_index, dpi_scale, >=40 blok, ASCII-disi konusmaci adi). DEVAM: uc testeri yeniden baslat, ODAK verdict yazmak + C'nin bes girdi sinifi + B'nin bes mutanti (M4/M5/M11/M12/M13/M15)."
     },
     {
       "id": "T-005",

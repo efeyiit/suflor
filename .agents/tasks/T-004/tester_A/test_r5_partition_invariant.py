@@ -23,25 +23,49 @@ A · Garanti alani"):
 Regresyon (K5/K6/K7/K15/K16/K17/K18) ayni dizindeki `test_warranty_domain.py`
 (tur 2) dosyasinda durur ve tur 5'te de kosar.
 
-**BULGU R5-1 (BLOKE EDICI, bkz. `feedback-A.md`):** `tail`, docstring'in
-KOSULSUZ iddia ettigi gibi HER ZAMAN "grubun son HAM ogesi" DEGIL -- adim
-3'un (hyphen birlesimi, `_merge_hyphenated`) urettigi COK BLOKLU bir oge de
-`tail` olabiliyor ve onun BIRLESIK bbox'i, K24'un tam olarak kaldirmayi vaat
-ettigi artifakti GERI GETIRIYOR. 5. bolum bunu UC ayri geometrik yolla ve bir
-MAKINE denetimiyle sabitler; dordu de `xfail(strict=True)` -- kod duzelirse
-XPASS testi KIRAR, yani bulgu sessizce kapatilamaz. Uc yoldan IKISI
-MONOTONIK'tir (dikey uzanim okuma sirasina UYGUN, "egzotik" geometri
-GEREKMEZ): hyphen-birlesik kutunun `h`/`w`'sini SISIRMESI tek basina yeter.
+**BULGU R5-1 (tur 5'te BLOKE EDICI) -- TUR 6'DA KAPANDI.** `tail`, tur 5'te
+docstring'in KOSULSUZ iddia ettigi gibi HER ZAMAN "grubun son HAM ogesi"
+DEGILDI -- adim 3'un (hyphen birlesimi, `_merge_hyphenated`) urettigi COK
+BLOKLU bir oge de `tail` olabiliyordu ve onun BIRLESIK bbox'i, K24'un tam
+olarak kaldirmayi vaat ettigi artifakti GERI GETIRIYORDU. Sef K28'i (tur 6)
+verdi: sorgunun IKI tarafi da OZGUN blok listesinden turetiliyor
+(`_raw_query_pair`).
+
+TUR 6'DA BU DOSYADA YAPILANLAR (sef_karari-tur6.md, mercek A/1):
+  * 5. bolumun UC parametreli `xfail(strict=True)` testi XPASS verdi ve
+    DUZELTILMIS davranisi dogrulayan YESIL testlere cevrildi; yanlarina
+    (a) duzeltmenin MEKANIZMASINI (sorgu cifti) dogrulayan ve (b) ayni
+    fixture'in TUR 5 biciminde HALA yanlis sonuc verdigini gosteren birer
+    test eklendi.
+  * DORDUNCU xfail (`test_r51_makine_denetimi_*`) `_group`'u/`normalize`'i
+    HIC cagirmiyordu (gruplama dongusunu test icinde kuruyordu), bu yuzden
+    hicbir duzeltme onu XPASS yapamazdi. KALDIRILDI; yerine 6. bolumdeki
+    yeni makine denetimi geldi: `normalize` uzerinden, SIRASIZ girdiyle ve
+    >=3 BLOKLU kuyruklarla, sef kitinin `sorgu_kaydi()` kancasiyla.
+  * `:401`'in kor sondasi KIRILMIYORDU ama SESSIZCE BAYATLAMISTI (kendi
+    yerel `_group_tur4` kopyasini olcuyordu, urunun yeni sorgu bicimini
+    hic gormuyordu). Yerel kopya urunun TUR 6 yapisiyla esitlendi
+    (`_group_tur4_yeni_sorgu_bicimiyle`) ve bir daha sessizce bayatlamasin
+    diye AST kapisi eklendi.
+Uc geometrik yolun IKISI MONOTONIK'tir (dikey uzanim okuma sirasina UYGUN,
+"egzotik" geometri GEREKMEZ): hyphen-birlesik kutunun `h`/`w`'sini SISIRMESI
+tek basina yetiyordu.
 """
 from __future__ import annotations
 
+import ast
 import inspect
 import random
+import sys
+import textwrap
+from collections.abc import Sequence
 from dataclasses import replace
 
 import pytest
 
+from olcu_kiti import okuma_sirasi, sorgu_kaydi
 from src.contracts.models import OcrPreset, Rect, Segment, TextBlock
+from src.ocr import normalizer as normalizer_modulu
 from src.ocr.normalizer import (
     _PLACEHOLDER_PATTERN,
     _collapse_intraline,
@@ -52,6 +76,7 @@ from src.ocr.normalizer import (
     _Item,
     _merge_hyphenated,
     _normalize_impl,
+    _raw_query_pair,
     _union_rect,
     _validate_confidences,
     normalize,
@@ -299,15 +324,39 @@ def test_k23_denetim_totoloji_degil_miras_gercekten_speaker_degistiriyor(seed: i
     assert etkilenen > 100, f"miras derlemde neredeyse hic tetiklenmemis ({etkilenen}) -- denetim totoloji"
 
 
-def _group_tur4(items: list[_Item], params: NormalizerParams, *, apply_inheritance: bool = True) -> list[_Item]:
-    """TUR 4'un mekanizmasi: miras, mute edilmis `speaker`'i BIR SONRAKI
-    gruplama kararina GIRDI yapar (kirmizi takimin B1 bulgusu). Bu dosyanin
-    K23 karsilastiricisinin DISLERI oldugunu ispatlamak icin yeniden kuruldu
-    -- `src/` altindaki koda DOKUNULMAZ."""
+def _group_tur4_yeni_sorgu_bicimiyle(
+    items: list[_Item],
+    params: NormalizerParams,
+    *,
+    blocks: Sequence[TextBlock] = (),
+    apply_inheritance: bool = True,
+) -> list[_Item]:
+    """TUR 4'un HATASI, TUR 6'nin SORGU BICIMIYLE (bu ajan, tur 6 --
+    `:401`'in yeniden NISANLANMASI).
+
+    ESKI HALI BAYATTI (sef_karari-tur6.md, "A `:401`'i yeni sorgu bicimine
+    nisanlar"): bu yardimci tur 4'un TEK GECISLI govdesini tasiyordu ve
+    miras-uygunluk sorgusunu `_group_rejection_reason(current, nxt, ...)`
+    ile -- yani K28 ONCESI bicimle -- soruyordu. Sonda KIRILMIYORDU ama
+    urun kodunun ARTIK KOSTUGU sorgu yolundan (`_raw_query_pair(tail,
+    nxt, blocks)`) hic gecmiyordu: "karsilastiricinin disleri var"
+    iddiasi K28 sonrasi hicbir sey ispatlamiyordu.
+
+    YENI HALI: govde, urun `_group`'unun TUR 6 yapisinin birebir
+    kopyasidir -- IKI GECIS, `blocks` keyword-only parametresi ve
+    `_raw_query_pair(tail, nxt, blocks)` ile ham sorgu cifti. Tek fark
+    TUR 4'un HATASIDIR: miras edilen `speaker` bolumleme dongusune GERI
+    BESLENIR (`current = replace(nxt, speaker=...)`), yani bir sonraki
+    gruplama karari mute edilmis `speaker` ile verilir. `src/` altindaki
+    koda DOKUNULMAZ; yapinin urunle ESLESTIGI ayrica
+    `test_r6_401_sondasi_urun_sorgu_bicimiyle_esitlenmis_ast` ile
+    makineyle sabitlenir."""
     if not items:
         return []
     groups: list[_Item] = []
+    pure_length_boundaries: list[bool] = []
     current = items[0]
+    tail = items[0]
     for nxt in items[1:]:
         reason = _group_rejection_reason(current, nxt, params)
         if reason is None:
@@ -317,23 +366,33 @@ def _group_tur4(items: list[_Item], params: NormalizerParams, *, apply_inheritan
                 speaker=current.speaker,
                 source_blocks=tuple(sorted((*current.source_blocks, *nxt.source_blocks))),
             )
+            tail = nxt
         else:
             groups.append(current)
-            if (
-                apply_inheritance
-                and reason == "length"
-                and current.speaker is not None
+            miras_uygun = (
+                reason == "length"
                 and nxt.speaker is None
-                and _group_rejection_reason(current, nxt, params, ignore_length=True) is None
-            ):
+                and _group_rejection_reason(
+                    *_raw_query_pair(tail, nxt, blocks), params, ignore_length=True
+                )
+                is None
+            )
+            pure_length_boundaries.append(miras_uygun)
+            # TUR 4'UN HATASI: miras BOLUMLEMEYE geri beslenir.
+            if apply_inheritance and miras_uygun and current.speaker is not None:
                 nxt = replace(nxt, speaker=current.speaker)
             current = nxt
+            tail = nxt
     groups.append(current)
     return groups
 
 
-def _group_mirassiz(items: list[_Item], params: NormalizerParams) -> list[_Item]:
-    """"MIRAS MEKANIZMASI HIC VAR OLMASAYDI" -- miras kodu SIFIR."""
+def _group_mirassiz(
+    items: list[_Item], params: NormalizerParams, *, blocks: Sequence[TextBlock] = ()
+) -> list[_Item]:
+    """"MIRAS MEKANIZMASI HIC VAR OLMASAYDI" -- miras kodu SIFIR.
+    (`blocks` yalnizca cagri BICIMI urunle ayni kalsin diye kabul edilir;
+    miras sorgusu HIC yapilmadigi icin OKUNMAZ.)"""
     if not items:
         return []
     groups: list[_Item] = []
@@ -355,7 +414,8 @@ def _group_mirassiz(items: list[_Item], params: NormalizerParams) -> list[_Item]
 
 def _normalize_with(blocks, preset, grouper, **kw) -> list[Segment]:
     """`_normalize_impl`'in adimlarini AYNEN kullanir; YALNIZ adim 5'in
-    grupleyicisi degistirilebilir."""
+    grupleyicisi degistirilebilir. TUR 6: urun gibi `blocks=blocks`
+    GECIRIR -- K28'in ham sorgu cifti bu yoldan da kosulur."""
     _validate_confidences(blocks)
     params = get_params(preset)
     ordered = sorted(enumerate(blocks), key=lambda p: (p[1].bbox.y, p[1].bbox.x))
@@ -368,7 +428,7 @@ def _normalize_with(blocks, preset, grouper, **kw) -> list[Segment]:
     items = [replace(it, text=_collapse_intraline(it.text)) for it in items]
     items = _merge_hyphenated(items)
     items = _extract_speakers(items)
-    grouped = grouper(items, params, **kw) if params.should_group else items
+    grouped = grouper(items, params, blocks=blocks, **kw) if params.should_group else items
     segments = [
         Segment(
             text=g.text,
@@ -386,19 +446,82 @@ def _normalize_with(blocks, preset, grouper, **kw) -> list[Segment]:
 def test_k23_karsilastiricinin_disleri_var_tur4_mekanizmasi_yakalaniyor() -> None:
     """SONDA KONTROLU (PROTOKOL S3 kapi 6): ayni derlem + ayni
     karsilastirici, TUR 4'un mekanizmasinda BOLUMLEME FARKI bulmali.
-    Bulamazsa yukaridaki "0 fark" sonucu hicbir sey ispatlamaz."""
+    Bulamazsa yukaridaki "0 fark" sonucu hicbir sey ispatlamaz.
+
+    TUR 6 (`:401`'in yeniden nisanlanmasi): sonda artik URUNUN sorgu
+    bicimini (`_raw_query_pair(tail, nxt, blocks)`) kosan bir mutant
+    kullanir -- bkz. `_group_tur4_yeni_sorgu_bicimiyle`. Sondanin
+    GERCEKTEN o yoldan gectigi (yani `_raw_query_pair` cagrildigi)
+    ayrica SAYILARAK sabitlenir; sifirsa sonda yine korlesmis demektir."""
     farklar = 0
-    for seed in SEEDS:
-        for blocks in _corpus(seed):
-            for preset in PRESETS:
-                try:
-                    a = _normalize_with(blocks, preset, _group_tur4, apply_inheritance=True)
-                    b = _normalize_with(blocks, preset, _group_tur4, apply_inheritance=False)
-                except (ValueError, TypeError):
-                    continue
-                if _partition(a) != _partition(b):
-                    farklar += 1
+    ham_sorgu_sayisi = 0
+    bu_modul = sys.modules[__name__]
+    orij = _raw_query_pair
+
+    def sayan(tail: _Item, nxt: _Item, blocks: Sequence[TextBlock]):  # type: ignore[no-untyped-def]
+        nonlocal ham_sorgu_sayisi
+        ham_sorgu_sayisi += 1
+        return orij(tail, nxt, blocks)
+
+    # Yerel mutant `_raw_query_pair`'i BU MODULUN globalinden cozer; sayaci
+    # buraya takmak, sondanin GERCEKTEN ham sorgu yolundan gectigini olcer
+    # (urun modulu DEGISTIRILMEZ).
+    bu_modul._raw_query_pair = sayan  # type: ignore[attr-defined]
+    try:
+        for seed in SEEDS:
+            for blocks in _corpus(seed):
+                for preset in PRESETS:
+                    try:
+                        a = _normalize_with(
+                            blocks, preset, _group_tur4_yeni_sorgu_bicimiyle, apply_inheritance=True
+                        )
+                        b = _normalize_with(
+                            blocks, preset, _group_tur4_yeni_sorgu_bicimiyle, apply_inheritance=False
+                        )
+                    except (ValueError, TypeError):
+                        continue
+                    if _partition(a) != _partition(b):
+                        farklar += 1
+    finally:
+        bu_modul._raw_query_pair = orij  # type: ignore[attr-defined]
+    assert ham_sorgu_sayisi > 1000, (
+        f"sonda urunun ham sorgu yolundan gecmiyor ({ham_sorgu_sayisi} cagri) -- "
+        "`:401` yine bayat"
+    )
     assert farklar > 0, "karsilastirici tur 4'un bilinen B1 hatasini bile yakalamiyor -- sonda kor"
+
+
+def test_r6_401_sondasi_urun_sorgu_bicimiyle_esitlenmis_ast() -> None:
+    """`:401`'in SESSIZ BAYATLAMASINA karsi YAPISAL kapi (tur 6).
+
+    Sondanin yerel kopyasi kirilmadan bayatlayabilir -- tur 5'te tam
+    olarak bu oldu. Bu test iki tarafi da AST ile okuyup ayni SORGU
+    BICIMINI aradigini sabitler: hem urunun `_group`'u hem yerel
+    mutant, miras sorgusunu `_group_rejection_reason(*_raw_query_pair(
+    tail, nxt, blocks), ..., ignore_length=True)` seklinde yapmali.
+    Urun bicimini degistirirse bu test KIRILIR -- sonda sessizce
+    bayatlayamaz."""
+
+    def miras_sorgusu_bicimi(fn) -> list[str]:  # type: ignore[no-untyped-def]
+        agac = ast.parse(textwrap.dedent(inspect.getsource(fn)))
+        bulunan: list[str] = []
+        for dugum in ast.walk(agac):
+            if not isinstance(dugum, ast.Call):
+                continue
+            if not (isinstance(dugum.func, ast.Name) and dugum.func.id == "_group_rejection_reason"):
+                continue
+            if not any(k.arg == "ignore_length" for k in dugum.keywords):
+                continue
+            bulunan.append(", ".join(ast.unparse(a) for a in dugum.args))
+        return bulunan
+
+    urun = miras_sorgusu_bicimi(_group)
+    yerel = miras_sorgusu_bicimi(_group_tur4_yeni_sorgu_bicimiyle)
+    assert urun == ["*_raw_query_pair(tail, nxt, blocks), params"], (
+        f"urunun miras sorgusunun BICIMI degismis: {urun} -- `:401` sondasi ve bu "
+        "dosyadaki yerel kopya yeniden nisanlanmali"
+    )
+    assert yerel == urun, f"yerel sonda urunle ayni sorgu bicimini kosmuyor: {yerel} != {urun}"
 
 
 def test_k23_b1_senaryosu_kendi_etiketiyle_gelen_replik_kuyruga_yapismaz() -> None:
@@ -764,45 +887,285 @@ def test_r51_mekanizma_hyphen_birlesik_tail_ham_son_satirdan_ayrisiyor(
 
 
 @pytest.mark.parametrize(("ad", "blocks", "ham_sebep", "monotonik"), _R51_YOLLAR)
-@pytest.mark.xfail(
-    reason="BULGU R5-1 (BLOKE EDICI, feedback-A.md): `tail` her zaman 'grubun son HAM "
-    "ogesi' DEGIL -- adim 3'un hyphen birlesimi COK BLOKLU bir oge uretebilir ve onun "
-    "BIRLESIK bbox'i, K24'un step-5 icin kaldirdigi artifakti step-3 uzerinden GERI "
-    "GETIRIR; `speaker` GERCEK bir geometrik kopusun OTESINE atfediliyor (K19 tablosu: "
-    "'geometrik bosluk -> None KALIR'). Uc yolun IKISI monotoniktir.",
-    strict=True,
-)
 def test_r51_kuyruk_gercek_geometrik_kopusun_otesine_speaker_atfetmiyor(
     ad: str, blocks: list[TextBlock], ham_sebep: str, monotonik: bool
 ) -> None:
-    """BULGU (bu test KIRMIZI -- `xfail(strict=True)`, kod duzelirse XPASS
-    ile KIRILIR): K19 tablosu "geometrik bosluk -> `None` KALIR" diyor.
-    Aday blok ile grubun GERCEK son metin satiri arasinda gercek bir kopus
-    var (yukaridaki mekanizma testi bunu sabitliyor), ama kod mirasi
-    UYGULUYOR."""
+    """TUR 6 -- BULGU R5-1 KAPANDI, test YESILE CEVRILDI.
+
+    Tur 5'te bu test `xfail(strict=True)` idi; K28 uygulandiktan sonra
+    UCU DE XPASS verdi (tur 6 taban koşumu: 3 failed = 3 XPASS(strict)).
+    Artik DUZELTILMIS davranisi DOGRULAR: K19 tablosu "geometrik bosluk
+    -> `None` KALIR" diyor; aday blok ile grubun GERCEK son metin satiri
+    arasinda gercek bir kopus var (ustteki mekanizma testi bunu hala
+    sabitliyor) ve kod ARTIK mirasi UYGULAMIYOR."""
     segs = normalize(blocks, OcrPreset.DIALOGUE)
     assert [(s.source_blocks, s.speaker) for s in segs] == [((0, 1, 2), "Ada"), ((3,), None)], ad
 
 
-@pytest.mark.xfail(
-    reason="BULGU R5-1 (BLOKE EDICI) -- MAKINE DENETIMI: derlemde K24'un ifadesinin "
-    "birebir okunusuyla (grubun okuma sirasindaki SON HAM BLOGU) kodun item-duzeyi "
-    "`tail`'i binlerce sinirda ayrisiyor.",
-    strict=True,
-)
-def test_r51_makine_denetimi_ham_son_blok_kuralinda_sifir_ayrisma() -> None:
-    """R5-1'in TEK bir elle kurulmus nokta OLMADIGINI makineyle gosterir:
-    tek tohumlu derlem (630 girdi) x uc gruplayan on ayar taranir; her
-    uzunluk-sinirinda kodun `tail` sorgusu ile HAM son blok sorgusu
-    karsilastirilir. Tek fark bile K24'un ifadesinin kodda tutmadigini
-    gosterir; sayilar `verdict-A.md`/`feedback-A.md`'de raporlanir."""
-    kod_evet_ham_hayir = 0
-    kod_hayir_ham_evet = 0
+@pytest.mark.parametrize(("ad", "blocks", "ham_sebep", "monotonik"), _R51_YOLLAR)
+def test_r6_duzeltmenin_MEKANIZMASI_sorgu_ham_blok_ciftiyle_yapiliyor(
+    ad: str, blocks: list[TextBlock], ham_sebep: str, monotonik: bool
+) -> None:
+    """Ustteki test yalnizca SONUCU (segment listesi) dogrular; bu test
+    duzeltmenin MEKANIZMASINI dogrular -- dogru sonucu YANLIS sebeple
+    ureten bir uygulama buradan gecemez.
+
+    `sorgu_kaydi()` (sef kiti) miras sorgusunu yakalar; sorgunun IKI
+    tarafinin da OZGUN bloklardan geldigi (sol = kuyrugun okuma
+    sirasindaki SON ham blogu, sag = adayin okuma sirasindaki ILK ham
+    blogu) VE sorgunun ARTIK bir red sebebi dondurdugu sabitlenir."""
+    with sorgu_kaydi() as kayit:
+        normalize(blocks, OcrPreset.DIALOGUE)
+    miras = [sg for sg in kayit if sg.miras]
+    assert len(miras) == 1, f"{ad}: beklenen tek miras sorgusu, gozlenen {len(miras)}"
+    sg = miras[0]
+    assert sg.sol_sb == (1, 2) and sg.sag_sb == (3,), ad
+    assert sg.sol_bbox == blocks[okuma_sirasi(blocks, sg.sol_sb)[-1]].bbox, (
+        f"{ad}: sol taraf ham blogun bbox'i degil -- olculen {sg.sol_bbox}"
+    )
+    assert sg.sag_bbox == blocks[okuma_sirasi(blocks, sg.sag_sb)[0]].bbox, (
+        f"{ad}: sag taraf ham blogun bbox'i degil -- olculen {sg.sag_bbox}"
+    )
+    # ... ve bu ciftle sorulan sorgu GERCEK sebebi doner (miras UYGULANMAZ).
+    sol = _Item(text="", bbox=sg.sol_bbox, speaker="Ada", source_blocks=sg.sol_sb)
+    sag = _Item(text="", bbox=sg.sag_bbox, speaker=None, source_blocks=sg.sag_sb)
+    assert _group_rejection_reason(sol, sag, _P, ignore_length=True) == ham_sebep, ad
+
+
+@pytest.mark.parametrize(("ad", "blocks", "ham_sebep", "monotonik"), _R51_YOLLAR)
+def test_r6_ayni_fixture_tur5_sorgu_bicimiyle_HALA_yanlis_sonuc_verir(
+    ad: str, blocks: list[TextBlock], ham_sebep: str, monotonik: bool
+) -> None:
+    """DISLERIN KANITI: ustteki iki test, K28 KALDIRILIRSA gercekten
+    kiriliyor mu? Ayni fixture, TUR 5'in sorgu bicimiyle (ham ikame YOK,
+    sorgu dogrudan `tail`/`nxt` ile) kosulur ve `speaker`'in gercek
+    kopusun OTESINE atfedildigi -- yani bulgunun geri geldigi --
+    gosterilir. Ayni girdi iki bicimde ZIT sonuc veriyorsa fixture
+    ayirt edicidir."""
+
+    def _group_tur5(
+        items: list[_Item],
+        params: NormalizerParams,
+        *,
+        blocks: Sequence[TextBlock] = (),
+        apply_inheritance: bool = True,
+    ) -> list[_Item]:
+        if not items:
+            return []
+        groups: list[_Item] = []
+        sinirlar: list[bool] = []
+        current = items[0]
+        tail = items[0]
+        for nxt in items[1:]:
+            reason = _group_rejection_reason(current, nxt, params)
+            if reason is None:
+                current = _Item(
+                    text=current.text + " " + nxt.text,
+                    bbox=_union_rect(current.bbox, nxt.bbox),
+                    speaker=current.speaker,
+                    source_blocks=tuple(sorted((*current.source_blocks, *nxt.source_blocks))),
+                )
+                tail = nxt
+            else:
+                groups.append(current)
+                sinirlar.append(
+                    reason == "length"
+                    and nxt.speaker is None
+                    # TUR 5: HAM IKAME YOK -- sorgu dogrudan `tail`/`nxt` ile.
+                    and _group_rejection_reason(tail, nxt, params, ignore_length=True) is None
+                )
+                current = nxt
+                tail = nxt
+        groups.append(current)
+        if apply_inheritance:
+            for i, tek_uzunluk in enumerate(sinirlar, start=1):
+                if tek_uzunluk and groups[i - 1].speaker is not None:
+                    groups[i] = replace(groups[i], speaker=groups[i - 1].speaker)
+        return groups
+
+    eski = _normalize_with(blocks, OcrPreset.DIALOGUE, _group_tur5)
+    assert [(s.source_blocks, s.speaker) for s in eski] == [((0, 1, 2), "Ada"), ((3,), "Ada")], (
+        f"{ad}: tur 5 bicimi bu fixture'da BULGUYU URETMIYOR -- fixture ayirt edici degil"
+    )
+    yeni = normalize(blocks, OcrPreset.DIALOGUE)
+    assert [(s.source_blocks, s.speaker) for s in yeni] != [
+        (s.source_blocks, s.speaker) for s in eski
+    ], ad
+
+
+# ===========================================================================
+# 6 · TUR 6 -- YENI MAKINE DENETIMI (eski `test_r51_makine_denetimi_*`
+#     YERINE; sef_karari-tur6.md, mercek A/1)
+# ===========================================================================
+#
+# ESKI DENETIM NEDEN DEGISTIRILDI: `test_r51_makine_denetimi_ham_son_blok_
+# kuralinda_sifir_ayrisma` `_group`'u ve `normalize`'i HIC CAGIRMIYORDU --
+# `_group_rejection_reason`'i dogrudan cagirip gruplama dongusunu TEST
+# ICINDE kuruyordu. Bu yuzden `_group`'taki HICBIR duzeltme onu XPASS
+# yapamazdi ve tur 6 tabaninda hala `xfailed` gorunuyordu (sef de bunu
+# dogruladi). Yerine gecen denetim:
+#   * URUNUN KENDI yolundan gecer -- `normalize` cagrilir, sorgular sef
+#     kitinin `sorgu_kaydi()` kancasiyla yakalanir (kanca DEGISMEZI
+#     kancalar: ikame nerede yapilirsa yapilsin cagri oradan gecer);
+#   * SIRASIZ girdi icerir (K3: girdi listesi okuma sirasinda OLMAK
+#     ZORUNDA DEGIL) ve indeks sirasi ile okuma sirasinin AYRISTIGI
+#     sinirlari AYRICA sayar -- `okuma_sirasi(...)[-1]` yerine
+#     `max(...)` yazan bir uygulama ancak orada gorunur;
+#   * >=3 BLOKLU KUYRUK icerir (iki elemanli bir kumede `sirali[-1]` ile
+#     `sirali[1]` AYNI seydir -- off-by-one gorunmez);
+#   * referansi KITTEN DEGIL, bu dosyanin KENDI okuma-sirasi
+#     uygulamasindan turetir (kit yalnizca kanca icin kullanilir).
+
+
+def _kendi_okuma_sirasi(blocks: list[TextBlock], idxs: tuple[int, ...]) -> list[int]:
+    """K28'in okuma sirasi -- BU DOSYANIN BAGIMSIZ uygulamasi.
+
+    Kitin `okuma_sirasi`'si ile ayni sonucu vermeli; referansi kitten
+    almamak icin ayri yazildi (kit hatali olsaydi denetim onunla birlikte
+    kayardi -- PROTOKOL S4.6/8)."""
+    return sorted(idxs, key=lambda i: (blocks[i].bbox.y, blocks[i].bbox.x, i))
+
+
+def _sirasiz_derlem() -> list[list[TextBlock]]:
+    """Tur 6 denetiminin derlemi: mevcut alti ureticinin dort tohumlu
+    ciktisi + HER girdinin ayrica KARISTIRILMIS bir kopyasi (K3).
+
+    Karistirma ayri bir `Random` ile yapilir; girdi indeksleri boylece
+    okuma sirasindan sistematik olarak AYRISIR."""
+    karistirici = random.Random(20260910)
+    out: list[list[TextBlock]] = []
+    for seed in SEEDS:
+        for blocks in _corpus(seed):
+            out.append(blocks)
+            kopya = list(blocks)
+            karistirici.shuffle(kopya)
+            out.append(kopya)
+    return out
+
+
+def _r6_denetim(derlem: list[list[TextBlock]] | None = None) -> dict[str, object]:
+    """TUR 6 makine denetiminin GOVDESI -- hem urun uzerinde hem de
+    (mutant sondasinda) yamalanmis bir `_raw_query_pair` uzerinde ayni
+    kodla kosulur ki "0 ayrisma" ile "mutantta >0 ayrisma" AYNI olcuden
+    gelsin."""
+    sinir = coklu_sol = uclu_sol = coklu_sag = ayirt_edici = 0
+    ayrisma = 0
+    ilk_fark = ""
+    for blocks in derlem if derlem is not None else _sirasiz_derlem():
+        for preset in PRESETS:
+            with sorgu_kaydi() as kayit:
+                try:
+                    normalize(blocks, preset)
+                except (ValueError, IndexError) as exc:  # K7/K10 -- girdi kaynakli
+                    assert isinstance(exc, ValueError), f"beklenmeyen IndexError: {exc}"
+                    continue
+            for sg in kayit:
+                if not sg.miras:
+                    continue
+                sinir += 1
+                if len(sg.sol_sb) > 1:
+                    coklu_sol += 1
+                if len(sg.sol_sb) >= 3:
+                    uclu_sol += 1
+                if len(sg.sag_sb) > 1:
+                    coklu_sag += 1
+                sol_i = _kendi_okuma_sirasi(blocks, sg.sol_sb)[-1]
+                sag_i = _kendi_okuma_sirasi(blocks, sg.sag_sb)[0]
+                if sol_i != max(sg.sol_sb) or sag_i != min(sg.sag_sb):
+                    ayirt_edici += 1
+                if sg.sol_bbox != blocks[sol_i].bbox or sg.sag_bbox != blocks[sag_i].bbox:
+                    ayrisma += 1
+                    if not ilk_fark:
+                        ilk_fark = (
+                            f"sol_sb={sg.sol_sb} beklenen={blocks[sol_i].bbox} "
+                            f"olculen={sg.sol_bbox} | sag_sb={sg.sag_sb} "
+                            f"beklenen={blocks[sag_i].bbox} olculen={sg.sag_bbox}"
+                        )
+    return {
+        "sinir": sinir,
+        "coklu_sol": coklu_sol,
+        "uclu_sol": uclu_sol,
+        "coklu_sag": coklu_sag,
+        "ayirt_edici": ayirt_edici,
+        "ayrisma": ayrisma,
+        "ilk_fark": ilk_fark,
+    }
+
+
+def test_r6_makine_denetimi_normalize_uzerinden_ham_sorgu_cifti() -> None:
+    """TUR 6 MAKINE DENETIMI (eski dorduncu xfail'in yerine).
+
+    `normalize` uzerinden gecen HER miras-uygunluk sorgusunun IKI
+    tarafinin da OZGUN `TextBlock` listesinden geldigi dogrulanir:
+    sol = kuyrugun okuma sirasindaki SON ham blogu, sag = adayin okuma
+    sirasindaki ILK ham blogu (K28). Referans bu dosyanin KENDI
+    uygulamasiyla hesaplanir.
+
+    Denetimin TOTOLOJI OLMADIGI alt sinirlarla sabitlenir: gozlenen
+    sinir sayisi, >=3 bloklu kuyruk, cok bloklu SAG taraf ve -- en
+    onemlisi -- indeks sirasinin okuma sirasindan AYRISTIGI sinirlar."""
+    r = _r6_denetim()
+    sinir = int(r["sinir"])  # type: ignore[arg-type]
+    coklu_sol = int(r["coklu_sol"])  # type: ignore[arg-type]
+    uclu_sol = int(r["uclu_sol"])  # type: ignore[arg-type]
+    coklu_sag = int(r["coklu_sag"])  # type: ignore[arg-type]
+    ayirt_edici = int(r["ayirt_edici"])  # type: ignore[arg-type]
+    ayrisma = int(r["ayrisma"])  # type: ignore[arg-type]
+    ilk_fark = r["ilk_fark"]
+    assert sinir > 1000, f"denetim totoloji: gozlenen miras sorgusu {sinir}"
+    assert coklu_sol > 200, f"cok bloklu kuyruk uretilmemis ({coklu_sol})"
+    assert uclu_sol > 50, f">=3 bloklu kuyruk uretilmemis ({uclu_sol}) -- off-by-one gorunmez"
+    assert coklu_sag > 50, f"cok bloklu SAG taraf uretilmemis ({coklu_sag})"
+    assert ayirt_edici > 20, (
+        f"indeks sirasi ile okuma sirasinin ayristigi sinir uretilmemis ({ayirt_edici}) -- "
+        "`max(sb)` yazan bir uygulama bu denetimden gecerdi"
+    )
+    assert ayrisma == 0, f"gozlenen sinir={sinir} ayrisma={ayrisma} | ilk fark: {ilk_fark}"
+
+
+def test_r6_makine_denetiminin_disleri_var_indeks_sirasi_mutanti_yakalaniyor() -> None:
+    """SONDA KONTROLU 1 -- AYNI DENETIM govdesi, `_raw_query_pair`
+    OKUMA SIRASI yerine INDEKS SIRASI kullanacak sekilde yamalanmis
+    urun uzerinde. Denetim burada ayrisma BULMAK ZORUNDA; bulmazsa
+    ustteki "0 ayrisma" hicbir sey ispatlamaz.
+
+    (Yama YALNIZCA test suresince urun MODULUNUN oznitelgindedir; `src/`
+    altindaki DOSYA degistirilmez -- PROTOKOL: tester urun kodunu
+    duzenlemez.)"""
+
+    def indeks_sirasi_mutanti(
+        tail: _Item, nxt: _Item, blocks: Sequence[TextBlock]
+    ) -> tuple[_Item, _Item]:
+        return (
+            replace(tail, bbox=blocks[max(tail.source_blocks)].bbox),
+            replace(nxt, bbox=blocks[min(nxt.source_blocks)].bbox),
+        )
+
+    orij = normalizer_modulu._raw_query_pair
+    normalizer_modulu._raw_query_pair = indeks_sirasi_mutanti  # type: ignore[assignment]
+    try:
+        r = _r6_denetim(_sirasiz_derlem()[:600])
+    finally:
+        normalizer_modulu._raw_query_pair = orij  # type: ignore[assignment]
+    assert int(r["sinir"]) > 100, f"sonda totoloji: sinir={r['sinir']}"  # type: ignore[arg-type]
+    assert int(r["ayrisma"]) > 0, (  # type: ignore[arg-type]
+        f"denetim INDEKS SIRASI mutantini yakalamiyor (sinir={r['sinir']}) -- dissiz"
+    )
+
+
+def test_r6_makine_denetiminin_disleri_var_tur5_bicimi_ayrisiyor() -> None:
+    """SONDA KONTROLU: ustteki denetim "0 ayrisma" diyor -- ayni derlem ve
+    ayni referans, TUR 5'in sorgu bicimi (ham ikame YOK) uzerinde
+    AYRISMA BULMALI. Bulamazsa "0 ayrisma" hicbir sey ispatlamaz."""
+    ayrisma = 0
     sinir = 0
-    for blocks in _corpus(SEEDS[0]):
-        for preset in (OcrPreset.DIALOGUE, OcrPreset.TOOLTIP, OcrPreset.SUBTITLE):
+    for blocks in _sirasiz_derlem()[:400]:
+        for preset in PRESETS:
             params = get_params(preset)
-            items = _items_of(blocks, params)
+            try:
+                items = _items_of(blocks, params)
+            except ValueError:
+                continue
             if not items:
                 continue
             current = items[0]
@@ -820,17 +1183,15 @@ def test_r51_makine_denetimi_ham_son_blok_kuralinda_sifir_ayrisma() -> None:
                 else:
                     if reason == "length" and nxt.speaker is None:
                         sinir += 1
-                        kod = _group_rejection_reason(tail, nxt, params, ignore_length=True) is None
-                        ham_tail = replace(tail, bbox=_last_raw_rect(tail, blocks))
-                        ham = _group_rejection_reason(ham_tail, nxt, params, ignore_length=True) is None
-                        if kod and not ham:
-                            kod_evet_ham_hayir += 1
-                        elif ham and not kod:
-                            kod_hayir_ham_evet += 1
+                        sol_i = _kendi_okuma_sirasi(blocks, tail.source_blocks)[-1]
+                        sag_i = _kendi_okuma_sirasi(blocks, nxt.source_blocks)[0]
+                        # TUR 5: sorgu `tail`/`nxt`in KENDI (birlesik olabilen)
+                        # bbox'lariyla yapiliyordu.
+                        if tail.bbox != blocks[sol_i].bbox or nxt.bbox != blocks[sag_i].bbox:
+                            ayrisma += 1
                     current = nxt
                     tail = nxt
-    assert sinir > 1000, f"denetim totoloji: incelenen uzunluk-siniri {sinir}"
-    assert (kod_evet_ham_hayir, kod_hayir_ham_evet) == (0, 0), (
-        f"incelenen uzunluk-siniri={sinir} · kod MIRAS VER/ham MIRAS YOK={kod_evet_ham_hayir} · "
-        f"kod MIRAS YOK/ham MIRAS VER={kod_hayir_ham_evet}"
+    assert sinir > 100, f"sonda kontrolu totoloji: incelenen sinir {sinir}"
+    assert ayrisma > 0, (
+        f"tur 5 bicimi bu derlemde HIC ayrismiyor ({sinir} sinir) -- denetim dissiz"
     )

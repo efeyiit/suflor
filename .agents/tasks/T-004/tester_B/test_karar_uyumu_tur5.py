@@ -273,7 +273,12 @@ def test_r5_k23_normalize_impl_bayragi_yalniz_group_cagrisina_iletir() -> None:
     ]
     assert len(group_calls) == 1
     kw = {k.arg: ast.unparse(k.value) for k in group_calls[0].keywords}
-    assert kw == {"apply_inheritance": "apply_inheritance"}, kw
+    # TUR 6'DA YENIDEN NISANLANDI (K28): cagri artik `blocks=blocks` DE tasir.
+    # Tur 5 beklentisi (`kw == {"apply_inheritance": ...}`) sefin kararinda
+    # ONCEDEN adlandirilmis KACINILMAZ bayatlamadir (sef_karari-tur6.md,
+    # "Tester-B'ye ve Tester-A'ya not"). Beklenti GEVSETILMEDI, GENISLETILDI:
+    # iki anahtar kelimenin de ADI ve DEGERI birebir pinlenir.
+    assert kw == {"blocks": "blocks", "apply_inheritance": "apply_inheritance"}, kw
 
 
 def test_r5_k23_normalize_gercekten_miras_ACIK_yola_delege_ediyor() -> None:
@@ -549,10 +554,19 @@ def test_r5_k23_ayni_y_yanyana_ve_cok_kucuk_h_bolumleme_ayni() -> None:
 
 
 def test_r5_k24_ignore_length_sorgusu_tail_ile_cagriliyor_ast() -> None:
-    """K24: `ignore_length=True` ile yapilan IKINCI (miras-uygunluk)
-    cagrinin ILK POZISYONEL argumani `tail` OLMALI -- `current` DEGIL.
-    Kod satiri AST ile gosterilir. Ana birlestirme kararinin HALA `current`
-    kullandigi da ayrica sabitlenir (K24 kapsam cumlesi)."""
+    """K24 + K28: `ignore_length=True` ile yapilan IKINCI (miras-uygunluk)
+    cagrinin SOL tarafi `tail`den turemeli -- `current`den DEGIL. Ana
+    birlestirme kararinin HALA `current` kullandigi da ayrica sabitlenir
+    (K24/K28 kapsam cumlesi).
+
+    TUR 6'DA YENIDEN NISANLANDI (sef_karari-tur6.md, K28): sorgu artik
+    `_group_rejection_reason(*_raw_query_pair(tail, nxt, blocks), params,
+    ignore_length=True)` bicimindedir. Tur 5'in `args[0] == "tail"`
+    beklentisi sefin §4.6/5 listesinde ONCEDEN adlandirilmis KACINILMAZ bir
+    bayatlamaydi. Yeni beklenti daha SIKIDIR: yildizli cagrinin adi,
+    argumanlarinin SIRASI (`tail, nxt, blocks`) ve tam metin birlikte
+    pinlenir -- `current`, `nxt`/`tail` takasi ya da `blocks` yerine baska
+    bir ad yazan bir uygulama burada kirilir."""
     fn = _func_ast(normalizer_mod._group)
     cagrilar = [
         n
@@ -564,8 +578,21 @@ def test_r5_k24_ignore_length_sorgusu_tail_ile_cagriliyor_ast() -> None:
     ignore_true = [c for c in cagrilar if any(k.arg == "ignore_length" for k in c.keywords)]
     assert len(ignore_true) == 1
     miras_sorgusu = ignore_true[0]
-    assert ast.unparse(miras_sorgusu.args[0]) == "tail", ast.unparse(miras_sorgusu)
-    assert ast.unparse(miras_sorgusu) == "_group_rejection_reason(tail, nxt, params, ignore_length=True)"
+    # TUR 6'DA YENIDEN NISANLANDI (K28): sorgunun IKI tarafi da artik
+    # `_raw_query_pair(tail, nxt, blocks)` ile OZGUN bloklardan turetiliyor,
+    # yani ILK POZISYONEL arguman `tail` ADI DEGIL, YILDIZLI bir cagri.
+    # `tail` KIMLIGI KAYBOLMADI -- `_raw_query_pair`'in ILK argumani olarak
+    # AYNI SIKILIKTA pinlenir (`current` yazan bir uygulama burada kirilir).
+    assert isinstance(miras_sorgusu.args[0], ast.Starred), ast.unparse(miras_sorgusu)
+    yildizli = miras_sorgusu.args[0].value
+    assert isinstance(yildizli, ast.Call) and isinstance(yildizli.func, ast.Name)
+    assert yildizli.func.id == "_raw_query_pair"
+    assert [ast.unparse(a) for a in yildizli.args] == ["tail", "nxt", "blocks"], ast.unparse(yildizli)
+    assert not yildizli.keywords
+    assert len(miras_sorgusu.args) == 2 and ast.unparse(miras_sorgusu.args[1]) == "params"
+    assert ast.unparse(miras_sorgusu) == (
+        "_group_rejection_reason(*_raw_query_pair(tail, nxt, blocks), params, ignore_length=True)"
+    )
 
     ana_karar = [c for c in cagrilar if c is not miras_sorgusu][0]
     assert ast.unparse(ana_karar) == "_group_rejection_reason(current, nxt, params)"
