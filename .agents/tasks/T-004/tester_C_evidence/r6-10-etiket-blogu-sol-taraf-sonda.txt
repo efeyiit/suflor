@@ -1,0 +1,21 @@
+
+==============================================================================
+1. FUZZ -- SOL/SAG taraf hic YALNIZ-ETIKET blogu oluyor mu?
+==============================================================================
+  gozlenen miras sorgusu           : 2985
+  SOL taraf yalniz-etiket blogu    : 0
+  SAG taraf yalniz-etiket blogu    : 0
+  SOL: okuma-sirasi-son != max(idx): 199  (K28'in `[-1]` YASAGININ olculebilir etkisi)
+
+==============================================================================
+2. KURULU VAKA -- ASCII-disi yalniz-etiket, SIRASIZ, uzunluk siniri
+==============================================================================
+  cikti: [('勇者', (0, 2), 'ああああああああ'), ('勇者', (1,), 'いいいいいいいい')]
+  okuma-sirasi-son  = idx0 (govde, bottom=45) -> gap = 50-45 =  5 < 16 -> MIRAS
+  `[-1]` indeks-son = idx2 (etiket, bottom=20) -> gap = 50-20 = 30 > 16 -> MIRAS YOK
+  ==> gozlenen ikinci speaker = '勇者' (K28 okuma sirasi DOGRULANDI; `[-1]` uygulamasi burada AYRISIRDI)
+
+  -- ayni sekil, ETIKET bloğu indeks olarak ONDE (kontrol) --
+  cikti: [('勇者', (0, 1)), ('勇者', (2,))]
+
+SONDA BITTI.

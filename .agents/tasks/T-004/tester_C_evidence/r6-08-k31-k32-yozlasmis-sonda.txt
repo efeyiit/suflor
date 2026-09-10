@@ -1,0 +1,100 @@
+
+==============================================================================
+K32 -- NFC / NFD
+==============================================================================
+  govde NFC cp=80  NFD cp=92  gorunum ayni mi=True
+  govde: 'María dijo qué así canción María dijo qué así canción María dijo qué así canción'
+  [govde+etiket aksanli] NFC: 1 segment  speakers=['María']  source_blocks=[(0, 1, 2)]
+  [govde+etiket aksanli] NFD: 2 segment  speakers=[None, None]  source_blocks=[(0, 1), (2,)]
+
+  -- YALNIZ ETIKET aksanli, govde ASCII (segment sayisi AYNI kalmali) --
+    NFC: 1 segment  speaker='María'  text='hola hola hola hola hola hola hola hola '...
+    NFD: 1 segment  speaker=None  text='María: hola hola hola hola hola hola ho'...
+
+  -- YALNIZ ETIKET aksanli, COK BLOKLU govde (sefin '1/1' iddiasi) --
+    NFC: 1 segment  speakers=['María']
+    NFD: 1 segment  speakers=[None]
+
+  -- ayrac kumesi NFD'den ETKILENIYOR mu (K17)? --
+    ASCII :: NFC=':' NFD=':' esit=True
+    fullwidth ：: NFC='：' NFD='：' esit=True
+
+  -- _MAX_SPEAKER_NAME_LEN (40 cp) NFD ile asiliyor mu? --
+    NFC(30cp): len=30 -> speaker=VAR
+    NFD(60cp): len=60 -> speaker=None
+    NFC(40cp, tam sinir): len=40 -> speaker='ábbbbbbbbbbbbbbbbbb
+    NFD(41cp): len=41 -> speaker=None
+
+==============================================================================
+K31 (a) / (b)
+==============================================================================
+  (a) ayni ad, IKISI de etiketli
+      speaker='Ada'      text='merhaba nasilsin' source_blocks=(0, 1)
+  (b) ikinci etiket RAKAMLI
+      speaker='Ada'      text='merhaba Ada2: nasilsin' source_blocks=(0, 1)
+  (kontrol) IKI FARKLI taninan ad
+      speaker='Ada'      text='merhaba' source_blocks=(0,)
+      speaker='Bora'     text='nasilsin' source_blocks=(1,)
+  (b') ikinci etiket NFD ad
+      speaker='Ada'      text='merhaba Ádá: nasilsin' source_blocks=(0, 1)
+  (a-CJK) ayni CJK ad, ikisi de etiketli
+      speaker='勇者'       text='こんにちは げんきですか' source_blocks=(0, 1)
+  (b-CJK) ikinci CJK etiket rakamli
+      speaker='勇者'       text='こんにちは 勇者2：げんきですか' source_blocks=(0, 1)
+  (kontrol-CJK) iki FARKLI CJK ad
+      speaker='勇者'       text='こんにちは' source_blocks=(0,)
+      speaker='魔王'       text='ふふふ' source_blocks=(1,)
+
+  -- (b) ETIKET METINDE KALIYOR mu: tam metin dogrulamasi --
+    [('merhaba Ada2: nasilsin', 'Ada')]
+    'Ada2:' metinde mi -> True
+
+==============================================================================
+YOZLASMIS GEOMETRI
+==============================================================================
+  -- w<=0 / h<=0 blok GRUPLANMIYOR (K16) ama SEGMENT URETIYOR --
+    h=0      : 2 segment  [('bir', 'Ada', (0,)), ('iki', None, (1,))]
+    h=-5     : 2 segment  [('bir', 'Ada', (0,)), ('iki', None, (1,))]
+    w=0      : 2 segment  [('bir', 'Ada', (0,)), ('iki', None, (1,))]
+    w=-7     : 2 segment  [('bir', 'Ada', (0,)), ('iki', None, (1,))]
+    w=0,h=0  : 2 segment  [('bir', 'Ada', (0,)), ('iki', None, (1,))]
+
+  -- yozlasmis blok MIRASA engel mi (K21: yalniz-uzunluk degil)? --
+    aday h=0              : speakers=['Ada', None]
+    aday h=20 (kontrol)   : speakers=['Ada', 'Ada']
+
+  -- K28 sag taraf: BIRLESIK aday h=0'i gizliyor mu? (hyphen zinciri) --
+    [('aaaaaaaaaaaaaaaaaaaa', 'Ada', (0, 1, 2))]
+    (K16 geregi h=0 aday MIRAS ALMAMALI -> ikinci speaker None olmali)
+
+  -- AYNI (y,x) cifti tasiyan bloklar: okuma sirasi kararli mi? --
+    dialogue  [('ucuncu', None, (0,)), ('bir ikinci', 'Ada', (1, 2))]
+    tooltip   [('ucuncu', None, (0,)), ('bir ikinci', 'Ada', (1, 2))]
+    menu      [('ucuncu', None, (0,)), ('bir', 'Ada', (1,)), ('ikinci', None, (2,))]
+
+  -- AYNI (y,x): _raw_query_pair okuma sirasi ile adim-1 sirasi UYUSUYOR mu? --
+    500 sirasiz/esit-anahtarli girdi: uyusmazlik=0
+
+  -- TEK KARAKTERLI bloklar (K4) yozlasmis geometriyle birlikte --
+    '力'   kat=Lo w=0,h=0 -> ['力']
+    'a'   kat=Ll w=0,h=0 -> ['a']
+    '1'   kat=Nd w=0,h=0 -> ['1']
+    '?'   kat=Po w=0,h=0 -> ['?']
+    '？'   kat=Po w=0,h=0 -> ['？']
+    '。'   kat=Po w=0,h=0 -> []
+    '-'   kat=Pd w=0,h=0 -> []
+
+  -- _group([], params) DOGRUDAN cagri (blocks= verilmeden) --
+    _group([], get_params(DIALOGUE)) -> []
+    _group([tek], params)          -> ['tek']
+
+  -- _raw_query_pair sinir durumlari --
+    normal: sol.bbox=Rect(x=0, y=0, w=10, h=10, monitor_index=0, dpi_scale=1.0) sag.bbox=Rect(x=0, y=20, w=10, h=10, monitor_index=0, dpi_scale=1.0) speaker korundu='Ada'/None
+            source_blocks korundu=(0,)/(1,)
+    blocks=() -> IndexError: tuple index out of range
+    BOS source_blocks -> IndexError: list index out of range
+
+  -- YOZLASMIS GEOMETRI + >=40 blok + dort on ayar: cokme/K23 fuzz --
+    150 x 4 on ayar: K23 ihlali=0 cokme=0
+
+SONDA BITTI.

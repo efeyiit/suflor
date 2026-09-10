@@ -1,0 +1,31 @@
+=== BULGU N1 (bayat dokumantasyon) -- HAM YENIDEN URETIM ===
+
+--- (a) URUNUN GERCEK cagri bicimi (AST, src/ocr/normalizer.py::_group) ---
+    _group_rejection_reason(*_raw_query_pair(tail, nxt, blocks), params, ignore_length=True)
+
+--- (b) MODUL docstring'inin '### K24' bolumu, satir 827-836 ---
+**Uygulama:** `_group` artik `current` (birikmis/birlesik `_Item`) ile
+PARALEL bir `tail: _Item` degiskeni TUTAR -- her BASARILI birlesimde
+(`current` GUNCELLENDIGINDE) `tail = nxt` (birlesime KATILAN, HAM,
+BIREYSEL oge) ATANIR; her YENI grup basladiginda `tail = nxt` (yeni
+grubun TEK ogesi) ile SIFIRLANIR. K21'in `ignore_length=True` IKINCI
+cagrisi ARTIK `_group_rejection_reason(current, nxt, ...)` DEGIL,
+`_group_rejection_reason(tail, nxt, ...)` KULLANIR -- yani SOL TARAF
+DAIMA grubun okuma-sirasindaki EN SON (birlesime en son KATILAN) HAM
+ogesidir, `current`'in (birden fazla oge ICEREBILEN) BIRLESIK `bbox`'i
+DEGIL.
+
+--- (c) grep: bolum K28'e ileri referans tasiyor mu? ---
+    '### K24' bolumu uzunlugu: 2720 karakter
+    icinde 'K28' geciyor mu: False
+    icinde 'raw_query_pair' geciyor mu: False
+    icinde '_group_rejection_reason(tail, nxt, ...)` KULLANIR' geciyor mu: True
+
+--- (d) karsilastirma: modulun BAYAT iddialari nasil isaretliyor (## K10 / ## K16) ---
+457:TUR 1'DE bu docstring "ilgili kosul basitce 'gruplama yok' tarafina
+
+--- (e) testin durumu ---
+x                                                                        [100%]
+=========================== short test summary info ===========================
+XFAIL .agents/tasks/T-004/tester_A/test_r6_garanti_alani.py::test_modul_docstringinin_K24_bolumu_bugunku_cagri_bicimini_anlatiyor - BAYAT DOKUMANTASYON (tester_A, tur 6): modul docstring'inin '### K24' bolumu (normalizer.py:832-836) K28 ONCESI cagri bicimini KOSULSUZ ve SIMDIKI ZAMANDA anlatiyor; K28'e ileri referans YOK. Davranis DOGRU, iddia BAYAT -- bkz. verdict-A.md (tur 6) notlar.
+1 xfailed in 0.21s

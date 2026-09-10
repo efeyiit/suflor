@@ -1,0 +1,20 @@
+mutant agacinda `test_karar_uyumu_tur6.py` -- kirilan testler
+
+KONTROL                        43 passed, 12 skipped in 0.89s
+M3_tail_yerine_current         43 passed, 12 skipped in 0.88s
+M4_indeks_sirasi               2 failed, 41 passed, 12 skipped in 0.78s
+      - test_r6_k28_sol_okuma_sirasi_SON_sag_okuma_sirasi_ILK_fuzz
+      - test_r6_k28_source_blocks_indeksi_KULLANILMIYOR_ast
+M5_sag_taraf_nxt_kalir         5 failed, 38 passed, 12 skipped in 0.57s
+      - test_r6_k28_ikame_yalniz_bbox_a_dokunuyor_ast_ve_davranis
+      - test_r6_k28_okuma_sirasi_uclu_anahtar_GERCEKTEN_yazili
+      - test_r6_k28_sol_okuma_sirasi_SON_sag_okuma_sirasi_ILK_fuzz
+      - test_r6_k28_sorguya_giren_bbox_daima_bir_HAM_blogun_kutusu
+      - test_r6_k28_source_blocks_indeksi_KULLANILMIYOR_ast
+M11_goruntu_gecisi_ters_yon    1 failed, 42 passed, 12 skipped in 0.88s
+      - test_r6_k28_normalize_impl_OZGUN_listeyi_geciriyor_indeks_kaymasi_yok
+M12_adim3_yardimcisi           43 passed, 12 skipped in 0.86s
+M13a_yalniz_menu               43 passed, 12 skipped in 0.87s
+M13b_yalniz_miras_kapali       1 failed, 42 passed, 12 skipped in 0.87s
+      - test_r6_k28_group_icinde_TEK_replace_var_ve_goruntu_gecisinde
+M15_yanlis_params              43 passed, 12 skipped in 0.87s

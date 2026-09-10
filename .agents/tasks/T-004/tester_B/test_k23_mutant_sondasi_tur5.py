@@ -217,10 +217,11 @@ _M1_YERINE = """            _sizinti = (
 # M3 (`tail` -> `current`) BU DOSYADAN KALDIRILDI. Sef (sef_karari-tur6.md) K28
 # bicimi altinda onu "esdeger mutant" sayip cikarilmasini istedi. Iddiayi KOR
 # KABUL ETMEDIM: `test_k28_mutant_sondasi_tur6.py::test_r6_m3_tail_yerine_current_
-# davranissal_esdeger_ama_yapisal_yakalaniyor` icinde KENDIM olctum -- 21.000
-# kosumda 0 DAVRANISSAL ayrisma (sefin "esdeger" nitelemesi DOGRU), ama kitin
-# KIMLIK kanali ve 10 urun olcusu onu YINE DE kiriyor (sefin "yeniden nisanlanirsa
-# OLU mutant olur" nitelemesi EKSIK). Olcum orada, ham cikti evidence altinda.
+# davranissal_esdeger_ama_yapisal_yakalaniyor` icinde KENDIM olctum -- 3000 girdi
+# x 4 on ayar x 2 kip = 24.000 kosumda 0 DAVRANISSAL ayrisma (sefin "esdeger"
+# nitelemesi DOGRU), ama kitin KIMLIK kanali (2387/1350/826) ve 10 urun olcusu
+# onu YINE DE kiriyor (sefin "yeniden nisanlanirsa OLU mutant olur" nitelemesi
+# EKSIK). Ham cikti: `tester_B_evidence/r6-mutant-sondasi.txt`.
 MUTANTLAR: dict[str, tuple[str, str]] = {
     "M1_bolumlemeye_sizinti": (_ANA_BLOK, _M1_YERINE),
     "M2_k24_sorgusu_kaldirildi": (

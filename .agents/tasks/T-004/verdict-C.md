@@ -1,418 +1,564 @@
 ---
 task: T-004
 role: tester
-round: 5
+round: 6
 decision: onay
 checks:
-  - name: "mypy --strict temiz (resmi kabul komutu)"
+  - name: "mypy --strict temiz"
     cmd: "python -m mypy --strict src/ocr/normalizer.py src/ocr/presets.py"
     exit_code: 0
     result: gecti
-    evidence: tester_C_evidence/r5-mypy.txt
-  - name: "pytest resmi kabul suiti (98 test -- tur 4'te 72'ydi, TUR 5'te K23-K27 testleriyle buyudu)"
+    evidence: tester_C_evidence/r6-01-mypy.txt
+  - name: "urun testleri (tests/unit/ocr) yesil"
     cmd: "python -m pytest tests/unit/ocr/test_normalizer.py -q"
     exit_code: 0
     result: gecti
-    evidence: tester_C_evidence/r5-pytest.txt
-  - name: "purity_check.py (saflik + surecler-arasi determinizm) -- DIKKAT: harness TUR 5 ORTASINDA degisti, YENI K29 kontrolu (sef_karari-tur6.md) 1 IHLAL bildiriyor; ayrinti verdict govdesi S5.3"
+    evidence: tester_C_evidence/r6-02-pytest-urun.txt
+  - name: "K29 kapisi (purity_check) exit 0"
     cmd: "python .agents/tasks/T-004/purity_check.py"
-    exit_code: 1
-    result: kaldi
-    evidence: tester_C_evidence/r5-purity_check.txt
-  - name: "K29 ihlalinin BAGIMSIZ dogrulamasi (iddia DOGRU: normalizer.py:92 bayat test atfi) + harness degisiklik zamani"
-    cmd: "grep -n test_k2_esik_alti src/ocr/normalizer.py tests/unit/ocr/test_normalizer.py"
     exit_code: 0
     result: gecti
-    evidence: tester_C_evidence/r5-purity_check-K29-dogrulama.txt
-  - name: "Tester-C kendi saldiri suiti TUR 5 (125 test: 82 korunan/guncellenen tur 1-4 testi + 43 yeni TUR 5 testi) -- TAMAMEN YESIL"
+    evidence: tester_C_evidence/r6-03-purity.txt
+  - name: "olcu kitinin kendi sagligi exit 0"
+    cmd: "python .agents/tasks/T-004/olcu_kiti.py"
+    exit_code: 0
+    result: gecti
+    evidence: tester_C_evidence/r6-04-olcu_kiti.txt
+  - name: "Tester-C takimi (tur 5'ten 125 + tur 6'dan 143 = 268)"
     cmd: "python -m pytest .agents/tasks/T-004/tester_C -q"
     exit_code: 0
     result: gecti
-    evidence: tester_C_evidence/r5-tester_c_pytest.txt
-  - name: "Ayni suit -v (hangi testin gectigi tek tek gorulebilsin)"
-    cmd: "python -m pytest .agents/tasks/T-004/tester_C -v"
+    evidence: tester_C_evidence/r6-14-tester_C.txt
+  - name: "tests/ tamami -- sefin tabani 821 passed"
+    cmd: "python -m pytest tests -q"
     exit_code: 0
     result: gecti
-    evidence: tester_C_evidence/r5-tester_c_pytest_verbose.txt
-  - name: "B1'in JAPONCA yuzeyi -- kendi 勇者： etiketli YENI replik AYRI kaliyor mu (cap GERCEKTEN asiliyor) + uc konusmaculu zincir + menu"
-    cmd: "python .agents/tasks/T-004/tester_C_evidence/r5-b1-japonca-repro.py"
+    evidence: tester_C_evidence/r6-15-tests-tam.txt
+  - name: "kor tester takimi -- ONUNCU (gercek) kirik var mi"
+    cmd: "python -m pytest .agents/tasks/T-004/tester_A .agents/tasks/T-004/tester_B .agents/tasks/T-004/tester_C -q"
     exit_code: 0
     result: gecti
-    evidence: tester_C_evidence/r5-b1-japonca-repro-output.txt
-  - name: "Gorunum gecisinin CJK yuzeyi -- speaker Unicode BIREBIRLIGI (halfwidth katakana/fullwidth latin dahil), bosluk artigi, karisik script, _normalize_impl sizinti taramasi"
-    cmd: "python .agents/tasks/T-004/tester_C_evidence/r5-cjk-speaker-unicode.py"
+    evidence: tester_C_evidence/r6-16-kor-takim.txt
+  - name: "M14 -- kitin uretmedigi BES girdi sinifinin sondasi"
+    cmd: "python .agents/tasks/T-004/tester_C_evidence/r6-07-bes-girdi-sinifi-sonda.py"
     exit_code: 0
     result: gecti
-    evidence: tester_C_evidence/r5-cjk-speaker-unicode-output.txt
-  - name: "K24 tail-vs-birlesik-bbox ayrismasi (CJK) + K26 decomposition etiket dagilimi + K23 fuzz (Tester-C tohumu 20250910, 2600 girdi, 0 ihlal)"
-    cmd: "python .agents/tasks/T-004/tester_C_evidence/r5-k24-k26-fuzz.py"
+    evidence: tester_C_evidence/r6-07-bes-girdi-sinifi-sonda.txt
+  - name: "K32 (NFC/NFD), K31 (a)/(b), yozlasmis geometri sondasi"
+    cmd: "python .agents/tasks/T-004/tester_C_evidence/r6-08-k31-k32-yozlasmis-sonda.py"
     exit_code: 0
     result: gecti
-    evidence: tester_C_evidence/r5-k24-k26-fuzz-output.txt
-  - name: "MUTASYON DENETIMI -- TUR 5 testlerim TUR 4'un HATALI _group'unda GERCEKTEN kiriliyor mu (src/ degistirilmeden, monkeypatch)"
-    cmd: "python .agents/tasks/T-004/tester_C_evidence/r5-mutation-check.py"
+    evidence: tester_C_evidence/r6-08-k31-k32-yozlasmis-sonda.txt
+  - name: "kotu kullanim yuzeyi + K16'nin K28 sag taraf regresyonu"
+    cmd: "python .agents/tasks/T-004/tester_C_evidence/r6-09-kotu-kullanim-sonda.py"
     exit_code: 0
     result: gecti
-    evidence: tester_C_evidence/r5-mutation-check.txt
-  - name: "Olcek n=500/1000/2000 -- TUR 2/3/4 ile AYNI yontem, TUR 4 tabaniyla (2.744/7.032/20.138 ms) karsilastirma + CJK gruplama yolu"
-    cmd: "gomulu olcum scripti -- bkz. tester_C_evidence/r5-scale_timing.txt"
+    evidence: tester_C_evidence/r6-09-kotu-kullanim-sonda.txt
+  - name: "K28 SOL taraf -- sefin adlandirdigi 'yalniz-etiket blogu' ek yuzeyi"
+    cmd: "python .agents/tasks/T-004/tester_C_evidence/r6-10-etiket-blogu-sol-taraf-sonda.py"
     exit_code: 0
     result: gecti
-    evidence: tester_C_evidence/r5-scale_timing.txt
-  - name: "Olcum GURULTUSU -- ayni olcum 6 kez (TUR 4 tabaniyla farkin makine gurultusu oldugunun ayirt edilmesi)"
-    cmd: "gomulu olcum scripti -- bkz. tester_C_evidence/r5-scale_noise.txt"
+    evidence: tester_C_evidence/r6-10-etiket-blogu-sol-taraf-sonda.txt
+  - name: "K32'nin kapsam olcumu -- NFC olan adlar da reddediliyor mu"
+    cmd: "python .agents/tasks/T-004/tester_C_evidence/r6-11-nfc-yetmez-taramasi.py"
     exit_code: 0
     result: gecti
-    evidence: tester_C_evidence/r5-scale_noise.txt
+    evidence: tester_C_evidence/r6-11-nfc-yetmez-taramasi.txt
+  - name: "bes sinifin uzerinde degismez fuzz'i (1600 kosum, 0 ihlal)"
+    cmd: "python .agents/tasks/T-004/tester_C_evidence/r6-12-bes-sinif-degismez-fuzz.py"
+    exit_code: 0
+    result: gecti
+    evidence: tester_C_evidence/r6-12-bes-sinif-degismez-fuzz.txt
+  - name: "mutasyon denetimi -- yeni 143 test totoloji mi (7/7 mutant kirildi)"
+    cmd: "python .agents/tasks/T-004/tester_C_evidence/r6-13-mutasyon-denetimi.py"
+    exit_code: 0
+    result: gecti
+    evidence: tester_C_evidence/r6-13-mutasyon-denetimi.txt
+  - name: "olcek n=500/1000/2000 -- TEK BASINA kosuldu (sefin O3 uyarisi)"
+    cmd: "python .agents/tasks/T-004/tester_C_evidence/r6-06-olcek-tek-basina.py"
+    exit_code: 0
+    result: gecti
+    evidence: tester_C_evidence/r6-06-olcek-tek-basina.txt
 blocking_issues: []
+notes:
+  - "K28 dogru uygulanmis: miras sorgusunun IKI tarafi da OZGUN bloktan, OKUMA sirasiyla. Yedi mutantin yedisi de yeni testlerimce kirildi."
+  - "BLOKE ETMEYEN 1 (en onemlisi): K32'nin BELGELEDIGI KAPSAM, olculen olgudan DAR. Devanagari/Tayca/harekeli Arapca/nikudlu Ibranice adlar ZATEN NFC-normaldir (NFC == NFD) ve yine de konusmaci sayilmiyor; T-006'nin NFC uretmesi bu sinifi KAPATMAZ. Onerilen cumle asagida."
+  - "BLOKE ETMEYEN 2: miras, `monitor_index`/`dpi_scale` SINIRINI asiyor. AYNI iki blok metin KISA ise K10 ValueError'u veriyor, UZUN ise (yalniz-uzunluk siniri) sessizce miras veriyor. Sonuc YALNIZCA metin uzunluguna bagli."
+  - "BLOKE ETMEYEN 3: `NaN` bir `dpi_scale` kendisiyle esit olmadigi icin 'degerler uyusmuyor: (0, nan) != (0, nan)' gibi kendi icinde celiskili bir tani mesaji uretiyor; K7'nin `confidence` icin yaptigi on denetim burada yok."
+  - "BLOKE ETMEYEN 4: ZWJ/emoji dizileri `max_group_chars`'i grapheme basina 5 codepoint sisiriyor -- K32'nin 'codepoint sayar' mekanizmasinin NFC/NFD DISINDAKI ikinci yuzeyi."
+  - "Olcek KOTULESMEDI: n=500/1000/2000 -> 2.53-2.70 / 6.62-6.95 / 20.33-20.63 ms (tur 5: 3.199/8.429/24.866). K28'in en agir yolu (her sinirda cok bloklu tail) n=4000'de 18.3 ms, dogrusal."
+  - "Kor takim: 623 passed, 1 xfailed, 0 kirik -- ONUNCU bir kirik YOK, gercek regresyon bulunamadi."
 ---
 
-# Tester-C değerlendirmesi — T-004, TUR 5 (Mercek: sınır, kötü kullanım ve dil)
+# Tester-C · T-004 · TUR 6 · MERCEK C — sınır, kötü kullanım ve dil
 
-**Karar: ONAY.** K23–K27'nin beşi de bağımsız doğrulamamda kodda var ve
-merceğimin baktığı yerlerde doğru çalışıyor. En önemlisi: **B1'in Japonca
-yüzeyi gerçekten düzelmiş** — `勇者：` etiketli, uzunluk sınırını aşan bir
-repliğin ardından kendi `勇者：` etiketiyle gelen yeni replik **ayrı bir
-`Segment` olarak kalıyor**, ve bölümleme miras açık/kapalı **birebir aynı**.
+**Karar: ONAY.** Bloke edici bulgu yok. Dört bloke etmeyen bulgu var; dördü de
+ölçüldü, ham çıktıları `tester_C_evidence/` altında, ikisi belgeleyen testle
+sabitlendi.
 
-Kendi suitim **125 test, tamamen yeşil** — tur 1–4'ten korunan 82 test +
-tur 5'e özgü 43 yeni test.
+Bu tur `tester_C/test_tur6_sinir_dil.py` (**143 yeni test**) eklendi. Tur 5
+dosyası (`test_cjk_misuse_scale.py`, 125 test) **değiştirilmedi** — regresyon
+avı olarak olduğu gibi koşuyor. Toplam **268 passed**.
 
-**Kabul komutları:** `mypy --strict` temiz, resmî suit 98/98, kendi suitim
-125/125. **`purity_check.py` çıkış 1 veriyor** — ama koşumumun *ortasında*
-başka bir ajan harness'ı değiştirdi ve **K29** diye yeni bir kontrol ekledi
-(kaynak `sef_karari-tur6.md`, yani benim tur 5 görevimden *sonraki* bir tur).
-İhlali kendim doğruladım — **gerçek**, ama bir docstring *atıf* hatası, davranış
-değil. Ayrıntı ve gerekçe **§5.3**; bloke edici saymıyorum.
+`src/` ve `tests/unit/ocr/` altında **hiçbir şey değiştirilmedi**.
 
-**Üç bloke etmeyen gözlem** kayda geçiyor (§5) — üçü de şefin kendi
-kararlarının *lafzına* uygun, ama biri şefin B1 için yazdığı **ürün etkisi
-cümlesinin** K23'ten sonra da başka bir yoldan üretilebildiğini gösteriyor.
+---
 
-> **Bir önceki turumun devamıyım.** Devraldığım dosyada `tester_C/`
-> docstring'i "yeni bölüm 16" ve "**YENİ BLOKE EDİCİ BULGU (C1)**" vaat
-> ediyordu ama **bölüm 16 dosyada yoktu** (dosya bölüm 15'te bitiyordu) ve
-> C1 için ne test ne kanıt vardı. Bölüm 16'yı yazdım, C1 iddiasını kendim
-> yeniden ürettim ve **bloke edici saymadım** — gerekçe §5.1'de. Docstring'in
-> yanlış vaadini düzelttim.
-
-## 1. B1 Japonca'da düzeldi mi? — **Evet, kesin olarak**
-
-Merceğimin birinci sorusu: *`勇者：` etiketli, uzunluk sınırını aşan replik +
-hemen ardından **yeni** `勇者：` etiketli replik → iki ayrı sözce mi?*
-
-`dialogue` için `max_group_chars=280`. Japonca'da karakter başına anlam
-yoğunluğu yüksek olduğu için ilk denememde (5×31 karakter) **cap hiç
-aşılmıyordu** — senaryo kurulmamış oluyordu. 10 bloklu gövdeyle (~310
-karakter) cap'i gerçekten aştırdım:
+## 0. Kabul komutları ve taban
 
 ```
-b0  '勇者：'                              (yalnız etiket)
-b1..b10  31 karakterlik JP gövde blokları  (sıkı aralıklı, y adımı 22)
-b11 '勇者：これは全く新しい台詞です。'      (KENDİ etiketiyle YENİ replik)
-
-miras ACIK   -> speaker='勇者' src=(0..8) | speaker='勇者' src=(9,10) | speaker='勇者' src=(11,)
-miras KAPALI -> speaker='勇者' src=(0..8) | speaker=None   src=(9,10) | speaker='勇者' src=(11,)
-                                                                        ^^^^^^^^^^^^^^^^^^^^^^
-K23 bölümleme (src+text+bbox+placeholders+sayı) BİREBİR AYNI: True
+mypy --strict                       exit 0   Success: no issues found in 2 source files
+pytest tests/unit/ocr/...           exit 0   124 passed
+purity_check.py                     exit 0   TEMIZ
+olcu_kiti.py                        exit 0   KIT SAGLIGI: TEMIZ
+pytest tests                        exit 0   821 passed          <- sefin tabani, birebir
+pytest tester_A tester_B tester_C   exit 0   623 passed, 1 xfailed, 0 failed
+pytest tester_C                     exit 0   268 passed
 ```
 
-b11 **ayrı kaldı** (`src=(11,)`). Mekanizma doğru: b10'un *özgün* speaker'ı
-`None`, b11'in kendi etiketi `勇者` → K15 satırı `None/Y → hayır`. Tur 4'te
-b10 mirasla `勇者`'ya **mutasyona uğruyor** ve satır `X/X → evet`e dönüşüyordu.
+Şefin haber verdiği dokuz bayat kırık **kapanmış** (kör takımda 0 kırık).
+**Onuncu bir kırık görmedim** — bu turda gerçek regresyon yok. Kendi
+`test_olcek_tur2/tur4` testlerim bu koşumda da yeşil geçti; yine de ölçeği
+şefin O3 uyarısına uyarak **tek başına** ölçtüm (aşağıda §6).
 
-**Bunu mutasyon denetimiyle kanıtladım** (`r5-mutation-check.txt`): `src/`'ye
-hiç dokunmadan, tur 4'ün hatalı `_group`'unu monkeypatch ile kurdum ve
-**kendi testlerimi** o kodun üzerinde çalıştırdım:
+---
 
-| | mevcut kod (tur 5) | mutant (tur 4 mekanizması) |
-|---|---|---|
-| B1/JP: son segment `src` | `(11,)` ✔ | `(9,10,11)` ✘ **yapıştı** |
-| K23 bölümleme birebir mi | `True` | `False` |
-| B1 testim | GEÇTİ | **KIRILDI** |
-| K23 fuzz testim | GEÇTİ | **KIRILDI (48/2600 ihlal)** |
+## 1. Asıl iş — kitin ÜRETMEDİĞİ beş girdi sınıfı (M14)
 
-Yani testlerim **totoloji değil**: bilinen hatayı gerçekten yakalıyorlar.
+Şefin "bilinen sınırlar" tablosu bu beş sınıfı bana verdi. Beşini de kurdum;
+ham çıktı `r6-07-bes-girdi-sinifi-sonda.txt`.
 
-**Ek senaryolar (hepsi doğru):**
-- Son blok **etiketsiz** → kuyruk `勇者`'yı **miras alır**, bölümleme yine birebir aynı.
-- Son blok **`魔王：`** → miras yok, `src=(11,)`, metinler karışmıyor.
-- **Üç konuşmacılı zincir** (`勇者`/`魔王`/`村人`), her biri çok satırlı **ve
-  her birinin gövdesi cap'i aşıyor** → 6 segment: `勇者,勇者,魔王,魔王,村人,村人`.
-  Her konuşmacının içinde miras zincirleniyor, konuşmacılar arası sınır
-  **hiç** geçilmiyor, atfedilemez (`None`) segment kalmıyor. Miras kapalıyken
-  aynı 6 segment ama üç kuyruk `None` — bölümleme birebir aynı.
-- Kısa repliklerle aynı zincir → 3 segment, `src=(0,1,2)/(3,4,5)/(6,7,8)`,
-  metin sızıntısı yok.
-
-## 2. `speaker` Unicode **birebir** mi? — **Evet, codepoint düzeyinde**
-
-Merceğimin ikinci sorusu: görünüm geçişi `speaker` alanına özgün string'i mi
-kopyalıyor, normalize edilmiş bir kopyasını mı? Bu modülde **NFKC gerçekten
-kullanılıyor** (K18'in tek-karakter istisnası) — yani sızma riski teorik değil.
-
-On isim/ayraç kombinasyonunu codepoint düzeyinde sınadım. Kritik iki vaka,
-NFKC formu **kendisinden farklı** olanlar:
-
-| girdi | `speaker` | codepoint | NFKC olsaydı |
-|---|---|---|---|
-| `ｱｲｳ:` (halfwidth katakana) | `ｱｲｳ` | `ff71 ff72 ff73` ✔ | `アイウ` |
-| `ＡＢＣ:` (fullwidth latin) | `ＡＢＣ` | `ff21 ff22 ff23` ✔ | `ABC` |
-
-İkisi de **birebir korunuyor** → görünüm geçişi ve `_split_speaker_label`
-NFKC uygulamıyor. Kanji (`勇者`), hiragana (`あい`), hangul (`김철수`,
-`이영희`), Kiril (`Пётр`), Türkçe (`Ayşe`), precomposed aksanlı Latin
-(`María`) — hepsi birebir. **Miras yoluyla** gelen değer de birebir
-(`test_k23_MIRAS_ALINAN_speaker_de_UNICODE_BIREBIR`).
-
-**Boşluk artığı / karakter kaybı yok.** Fullwidth `：` ile ayrılmış etikette
-altı biçim sınandım — `勇者：`, `勇者 ：`, ` 勇者： `, `勇者　：`, `勇者：　`
-(U+3000 IDEOGRAPHIC SPACE, CJK metinlerinde sık) — hepsinde `speaker='勇者'`,
-artık boşluk yok, ayraç karakteri `speaker`'a sızmıyor. `勇 者：` → `勇 者`:
-**iç** boşluk korunuyor (K9 bunu açıkça izinli sayıyor, doğru).
-
-**Karışık script zinciri** (4 kombinasyon: JP etiket + Latin gövde; KR etiket
-+ JP gövde; Latin etiket + fullwidth ayraç + karışık gövde; JP etiket +
-Kiril/JP gövde) — hepsinde tek segment, doğru konuşmacı, gövde metni birebir,
-bölümleme K23'e uygun. Karışık script + uzunluk bölünmesi birlikte de
-çalışıyor (JP etiket, Latin gövde, cap aşılıyor → kuyruk `勇者`'yı miras alıyor).
-
-## 3. Kötü kullanım — API sızdırmıyor, güvenli yönde bozuluyor
-
-| Soru | Bulgu |
-|---|---|
-| `_normalize_impl` `__all__`'da mı? | **Hayır.** `__all__ == ("normalize",)`, tuple |
-| PEP8 private mı? | Evet, `_` ile başlıyor → `import *` almaz |
-| `normalize` imzası değişti mi? | **Hayır.** `(blocks, preset)`, keyword-only parametre yok; `normalize(..., apply_inheritance=False)` **`TypeError`** |
-| Bayrak yanlışlıkla konumsal geçilebilir mi? | **Hayır** — keyword-only, varsayılan `True`; `_normalize_impl([], p, False)` → `TypeError` |
-| "Yalnızca test/denetim için" işaretli mi? | **Evet** — docstring'de *"SADECE K23'un MAKINE DENETIMI icin vardir"*, *"DISARIYA hicbir sekilde ACMAZ"*, *"GENEL API'YE SIZMAZ"*, ve **meşru çağıran adıyla yazılı**: `tests/unit/ocr/test_normalizer.py` |
-| `normalize`'ın kendi docstring'i uyarıyor mu? | Evet — bir sonraki ajanın okuyacağı yer, kancanın nerede olduğunu ve buraya sızmadığını söylüyor |
-| `_group`'un iki geçişi belgeli mi? | Evet — "Bölümleme geçişi" / "Görüntü geçişi" ayrı ayrı |
-
-**Kötü kullanımın sonucu güvenli.** Bir sonraki ajan yanlışlıkla
-`apply_inheritance=False` ile çağırsa ne olur? Kayıp **yalnızca `speaker`
-alanında**: bazı segmentler `None` kalır; `text`/`bbox`/`source_blocks`/
-`placeholders`/segment sayısı **değişmez**. Yani sessizce **yanlış** değil,
-**daha az bilgi taşıyan ama doğru** bir sonuç — API bu yönde bozuluyor.
-
-**K24 `tail` alanı** (CJK gövdede, `_group_rejection_reason` düzeyinde):
+### 1.1 Emoji / astral karakterler / ZWJ dizileri
 
 ```
-grubun BAŞINDAKİ öge çok aşağı uzanıyor (h=400) -> birleşik bottom=400
-kuyruk (birleşime en son katılan HAM öge) bottom=30, aday y=200
-
-reason(birleşik, aday)                     -> 'length'
-reason(birleşik, aday, ignore_length=True) -> None    <- YANLIŞ (tur 4): kopuş GÖRÜNMEZ
-reason(kuyruk,   aday, ignore_length=True) -> 'gap'   <- DOĞRU (K24): kopuş GÖRÜLÜR
+  tek emoji U+1F44D                  len=1 kat=[So                  ] -> SILINDI
+  ZWJ aile (5 cp)                    len=5 kat=[So Cf So Cf So      ] -> KORUNDU
+  bayrak TR (2 cp)                   len=2 kat=[So So               ] -> KORUNDU
+  varyasyon secici gunes (2 cp)      len=2 kat=[So Mn               ] -> KORUNDU
+  varyasyon secicisiz gunes (1 cp)   len=1 kat=[So                  ] -> SILINDI
+  astral CJK ext-B (1 cp)            len=1 kat=[Lo                  ] -> KORUNDU
+  astral matematiksel bold A (1 cp)  len=1 kat=[Lu                  ] -> KORUNDU
+  ten tonlu el (2 cp)                len=2 kat=[So Sk               ] -> KORUNDU
+  keycap 1 (3 cp)                    len=3 kat=[Nd Mn Me            ] -> KORUNDU
 ```
 
-İki sorgu **zıt** sonuç veriyor; kod `tail` kullanıyor. `tail` **her zaman
-tanımlı**: boş liste → `[]`, tek ögeli grup → dönüş `items[0]`'ın kendisi,
-her yeni grupta sıfırlanıyor (üç durumu da iki bayrak değeriyle sınadım).
+**Doğru.** K4'ün tek-karakter kuralı `len(stripped) != 1` ile korunuyor; çok
+kod noktalı dizilerin hiçbiri kurala girmiyor, astral **harfler** (`Lo`/`Lu`)
+tek kod noktalı olsalar da `L*` dalından geçiyor. Karar **sınıf tabanlı**,
+beyaz liste yok — K4'ün lafzı.
 
-## 4. Ölçek — kötüleşmedi
-
-TUR 2/3/4 ile **aynı yöntem** (üst üste binen bloklar, `kelime{i}-`,
-DIALOGUE, medyan-of-7):
-
-| n | TUR 2 | TUR 3 | TUR 4 | **TUR 5** |
-|---|---|---|---|---|
-| 500 | 3.443 | 3.673 | 2.744 | **3.199** |
-| 1000 | 9.271 | 9.234 | 7.032 | **8.429** |
-| 2000 | 27.069 | 26.461 | 20.138 | **24.866** |
-
-TUR 4 tabanına göre +17…+24%. **Bunu iki-geçişli `_group`'a atfetmiyorum**,
-iki nedenle:
-
-1. Bu veri şeklinde hyphen kuralı (K5, adım 3) **2000 bloğun hepsini tek
-   ögeye indiriyor** — `normalize` 1 segment döndürüyor, yani `_group` tek
-   ögeyle çağrılıyor ve iki-geçişli yapının katkısı **yapı gereği ~0**.
-2. Aynı ölçümü 6 kez tekrarladım: 24.054–25.577 ms, yayılım %6.3
-   (`r5-scale_noise.txt`). TUR 5 değerleri **TUR 3 tabanının altında**,
-   TUR 4 tabanının üstünde — TUR 4 bu makinedeki dağılımın alt ucundan bir
-   koşu.
-
-`_group`'u **gerçekten yükleyen** ikinci bir ölçüm ekledim (CJK, hyphen'siz,
-her 4. blok etiketli → miras sorgusu tetiklenir): n=500→3.330, n=1000→6.420,
-n=2000→13.418 ms; 4× blok için **4.03×** süre. Kuadratik davranış yok.
-
-## 5. Bloke etmeyen üç gözlem
-
-### 5.1 B1'in ürün etkisi, miras hiç devreye girmeden de üretilebiliyor
-
-Şef B1'i şu ürün etkisiyle tarif etti: *"kendi `Ada:` etiketi olan yeni bir
-replik, önceki repliğin kuyruğuna yapışıyor. İki ayrı sözce tek `Segment`
-oluyor."* K23 bu etkinin **miras yoluyla** oluşan biçimini kesin olarak
-kapatıyor (§1). Ama **aynı ürün etkisi**, miras hiç devreye girmeden de
-oluşabiliyor:
+Konuşmacı adı yüzeyinde de aynı sınıf kuralı:
 
 ```
-b0 '勇者：こんにちは、村人さん。'   (kendi etiketi -> speaker='勇者')
-b1 '勇者：今日はいい天気ですね。'   (kendi etiketi -> speaker='勇者')
-
--> 1 segment, src=(0,1), speaker='勇者',
-   text='こんにちは、村人さん。 今日はいい天気ですね。'
+    '👨: merhaba'      -> speaker=None      (So, isalpha() False)
+    '𝐀𝐁: merhaba'      -> speaker='𝐀𝐁'      (astral Lu)
+    '𠀋: merhaba'      -> speaker='𠀋'       (astral Lo)
+    'Ada👍: merhaba'    -> speaker=None      (ad icinde emoji -> tum etiket duser)
 ```
 
-Çift `X/X` olduğu için **K15 matrisinin birinci satırı** (`X/X → EVET`)
-ikisini birleştiriyor. b1'in **kendi etiketi taşıması** — yani yeni bir sözce
-başlangıcının kanıtı — bu kararda hiç kullanılmıyor; utterance sınırı
-yalnızca isim *farklı* olduğunda korunuyor.
+Yalnız vekil (lone surrogate — UTF-16 tabanlı bir motorun sızdırabileceği)
+girdide **çökme yok**.
 
-**Bloke etmiyorum, üç gerekçeyle:**
+Mirasta `speaker` kod noktası düzeyinde korunuyor (`['0x52c7','0x8005']` iki
+segmentte de aynı) — `_raw_query_pair`'in `replace(...)` ikamesi gerçekten
+yalnız `bbox`'a dokunuyor.
 
-1. **K23 ihlali değil.** Bölümleme miras açık/kapalı birebir aynı; miras bu
-   yolda hiç çalışmıyor (birleşmeyi K15 yapıyor). Mutasyon denetiminde bu
-   test mutant kodda da geçiyor — yani gerçekten mirastan bağımsız.
-2. **Karar–kod sapması değil.** K15 satır 1 şefin kendi kararı, tur 2'den
-   beri değişmemiş, kod onu birebir uyguluyor. Tur 2/3/4'te üç tester ve
-   şefin kendi sondası bu satırı onayladı.
-3. **Geçerlilik alanı dar ve çoğunlukla istenen davranış.** Kontrol
-   assertion'ım: gerçek bir dikey boşluk (ayrı diyalog kutuları) varsa iki
-   replik **ayrı kalıyor** (`src=(0,) / (1,)`). Yani birleşme yalnız iki
-   repliğin geometrik olarak komşu olduğu durumda görülür — ki şefin kendi
-   gerekçesi (*"JP/KR oyunlarında her replik **satırı** konuşmacı adıyla
-   yeniden etiketlenir"*) o durumda birleşmenin **doğru** olduğunu söylüyor:
-   §5.2'nin modülün varlık sebebi olarak verdiği çok satırlı replik senaryosu
-   tam olarak bu.
+**Bloke etmeyen bulgu 4** aşağıda §7.4: ZWJ dizileri `max_group_chars`'ı
+grapheme başına 5 kod noktası şişiriyor.
 
-**Kayda geçirmemin sebebi:** K23'ün değişmezi bu yolu **kapsamıyor**. Yani
-B1'in ürün semptomu K23'ten sonra tamamen ortadan kalkmıyor — sadece
-uydurma bir değerle oluşan biçimi kalkıyor. Şef B1'i mekanizmayla değil ürün
-etkisiyle tarif ettiği için bu ayrımı açıkça yazıyorum. Karar şefin: K15
-satır 1'in "b'nin kendi etiketi varsa yine de yeni sözce" diye daraltılıp
-daraltılmayacağı bir **karar** sorusu, uygulama hatası değil. Davranış
-`test_GOZLEM_iki_AYRI_kendi_etiketli_replik_K15_satir1_ile_BIRLESIR` ile
-pin edildi (kırık kırmızı test bırakmıyorum).
+### 1.2 `monitor_index ≠ 0`
 
-### 5.2 NFD (kombine aksanlı) isimler konuşmacı olarak tanınmıyor
+Dört ön ayar × `monitor_index ∈ {0, 1, 7, -3}`: **bölümleme ve `speaker`
+dizisi birebir aynı** — alan gerçekten atıl, geometriye karışmıyor.
+Birleşmiş segment `monitor_index`'i **taşıyor** (varsayılan `0`'a düşmüyor).
+Karışık monitör + birleşme → `ValueError` (K10 regresyonu ayakta).
 
-`_split_speaker_label` isim karakterleri için `ch.isalpha() or ch in " '-"`
-şartı koyuyor. Unicode **kombine** aksan (U+0301, kategori `Mn`)
-`isalpha()`'yı geçmiyor:
+**Bloke etmeyen bulgu 2** aşağıda §7.2.
+
+### 1.3 `dpi_scale ≠ 1.0`
+
+Dört ön ayar × `dpi_scale ∈ {1.0, 1.25, 1.5, 2.0, 0.5}`: **ayrışma yok**.
+Ayrıca DPI'nin *gerçek* yüzeyini de ölçtüm — tüm koordinatları `k ∈ {2,3,4}`
+ile ölçekleyince bölümleme **değişmiyor**, çünkü bütün eşikler çarpma ile ve
+oran olarak yazılmış (`gap < oran * min(h)`). Bölmeye ya da mutlak piksel
+eşiğine kayan bir uygulama burada ayrışırdı.
+
+**Bloke etmeyen bulgu 3** aşağıda §7.3 (`NaN` `dpi_scale`).
+
+### 1.4 ≥40 bloklu girdi
+
+`n ∈ {40, 63, 120, 250}` × dört ön ayar: K8 (artan/tekrarsız/**ayrık**/aralık
+içinde), K3 (çıktı sırası) ve K23 (miras açık/kapalı bölümleme birebir) hepsi
+**TEMİZ**. 60 bloklu zincirde miras **sonuna kadar** taşınıyor:
 
 ```
-'María:'  (NFC, U+00ED)          -> speaker='María', text='body line one.'
-'María:'  (NFD, 'i'+U+0301)      -> speaker=None,   text='María: body line one.'
+    segment sayisi=60  farkli speaker degerleri=['Ada']
+    None sayisi=0  'Ada' sayisi=60
 ```
 
-Aynı isim, aynı görüntü, iki farklı sonuç. OCR motorlarının hangi
-normalizasyon biçimini ürettiği **motora bağlıdır**.
+Sırasız + CJK + yozlaşmış geometrili 40–70 bloklu 200 girdide K23 ihlali
+**0/600**.
 
-**Bloke etmiyorum:** K9'un lafzı ("kalan karakterler yalnız
-harf/boşluk/kesme/tire") birebir uygulanmış, sapma yok; kayıp güvenli yönde
-(sessiz **uydurma** değil, sessiz **kayıp** — ve etiket metinde kaldığı için
-bilgi tamamen yok olmuyor).
+### 1.5 ASCII-dışı konuşmacı adı
 
-**Önerim (şefe):** bu daraltma `normalizer.py` K9 bölümünde **belgelensin** —
-K5'te Unicode tire varyantları için açıkça yapıldığı gibi bir "kapsam dışı"
-notu. Alternatif olarak isim karakteri testi `unicodedata.category(ch)[0] in
-("L","M")` ile genişletilebilir; bu bir **karar** olduğu için şefe bırakıyorum.
-Davranış `test_GOZLEM_k9_KOMBINE_AKSANLI_isim_konusmaci_SAYILMAZ` ile pin edildi.
+On bir yazı sisteminde etiket doğru ayıklanıyor (kanji, hiragana, hangul,
+Çince, Kiril, Yunanca, harekesiz Arapça, nikudsuz İbranice, halfwidth
+katakana, Vietnamca NFC, fullwidth ayraç). `speaker` kod noktası düzeyinde
+birebir; `ｶﾞﾝ` halfwidth katakana **NFKC ile açılmıyor** (ad süzgeci
+normalizasyon yapmıyor — doğru).
 
-### 5.3 `purity_check.py` koşumumun ortasında değişti — yeni K29 gate'i 1 ihlal buluyor
+ASCII-dışı adla üç segmentlik miras zinciri `勇者`/`魔王`/`Ада`/`مرحبا` için
+çalışıyor. Yalnız-etiketli CJK blok (`勇者：`) 180px uzaktaki bloğa bile
+taşınıyor (K9).
 
-**Kronoloji (dosya zaman damgalarıyla):** dört kabul komutunu **05:27**'de
-koştum, dördü de temizdi (`purity_check` dâhil, çıkış 0). **05:29:30**'da
-`purity_check.py` başka bir ajan tarafından değiştirildi ve **K29** diye yeni
-bir kontrol eklendi — *"docstring'lerde anılan her `test_*` adı test dosyasında
-gerçekten var olmalı"*. Kaynağı `sef_karari-tur6.md`, yani **benim tur 5
-görevimden sonraki** bir tur. Komutu yeniden koştuğumda:
+**Bloke etmeyen bulgu 1** aşağıda §7.1 — bu maddenin asıl bulgusu.
 
-```
-IHLAL (1):
-  normalizer.py:1  docstring HAYALI test aniyor (AD) -> test_k2_esik_alti_blok_ortada
-                   [K29: test_normalizer.py'de yok]
-exit=1
-```
+---
 
-**İddiayı kendim doğruladım — gerçek** (`r5-purity_check-K29-dogrulama.txt`):
+## 2. K32 — NFC / NFD
+
+Ham çıktı: `r6-08-k31-k32-yozlasmis-sonda.txt`.
+
+**Gövde de aksanlıysa segment sayısı değişiyor** (kendi bağımsız gövdemle —
+doğal İspanyolca cümle, 80 cp NFC / 92 cp NFD):
 
 ```
-normalizer.py:92  (bkz. `...::test_k2_esik_alti_blok_ortada`)   <- anılan ad
-test_normalizer.py:93  def test_k2_esik_alti_orta_blok_komsulari_birlestirir()   <- gerçek ad
+  [govde+etiket aksanli] NFC: 1 segment  speakers=['María']  source_blocks=[(0, 1, 2)]
+  [govde+etiket aksanli] NFD: 2 segment  speakers=[None, None]  source_blocks=[(0, 1), (2,)]
 ```
 
-Atıf bayat: o **adla** bir test yok. Davranış etkisi yok.
+Şefin ölçümü 1/3 idi; benimki 1/2. **Çelişki değil** — fark gövdenin kod
+noktası uzunluğuna bağlı ve şef gövdesini kararda açıkça pinlemiş. Olgu
+(bölümlemenin NFD'de değiştiği) bağımsız bir gövdeyle **yeniden üretildi**.
 
-**Bloke edici saymıyorum, üç gerekçeyle:**
+**Yalnız etiket aksanlıysa segment sayısı aynı, `speaker` `None`'a düşüyor**:
 
-1. **Gate, denetlediğim teslimden sonra yaratıldı.** K29 benim görev
-   listemdeki kararlar (K23–K27) arasında değil. Tur 5 teslimini tur 6'nın
-   gate'iyle yargılamak, `env.md`'nin *"Şefin notu — tur 1 harness hatası"*
-   bölümünde zaten kayda geçmiş durumun aynısı: harness'taki değişiklik
-   implementer'ın kodunun kusuru değildir.
-2. **Sınıfı dokümantasyon.** Bu, K20/K22/K26 ile **aynı** sınıf bir olgusal
-   atıf hatası — şef üç kez bu sınıfı "salt dokümantasyon, davranış değişmedi"
-   diye ele aldı. Tek satırlık bir ad düzeltmesiyle giderilir.
-3. **Merceğimin dışında.** Sınır/kötü kullanım/dil merceği docstring atıf
-   tutarlılığına bakmaz; bayat docstring atıfları karar-uyumu merceğinin işi.
+```
+    NFC: 1 segment  speaker='María'  text='hola hola hola ...'
+    NFD: 1 segment  speaker=None     text='María: hola hola ...'   <- etiket metinde
+```
 
-**Kaydı dürüst tutuyorum:** eski harness sürümü git'te yok (dizin untracked),
-bu yüzden **05:27'deki temiz koşumun kanıt dosyası kurtarılamıyor** —
-`r5-purity_check.txt` şu an **başarısız** ham çıktıyı tutuyor, ve verdict ön
-bilgisinde o kontrol `exit_code: 1 / result: kaldi` olarak duruyor. Ajanın
-sözü delil değildir; temiz koşumu iddia etmiyorum, yalnızca şu an
-ölçülebileni raporluyorum.
+Çok bloklu gövdeyle de aynı (`1/1`, `speaker` `'María'` → `None`). Şefin
+cümlesi birebir doğru.
 
-## 6. Regresyon — bulunmadı
+Ayraç kümesi NFD'den **etkilenmiyor** (`:` ve `：` NFD altında değişmiyor);
+düşen şey adın kendisi, ayraç değil.
 
-Tur 1–4'ten **82 test değiştirilmeden yeniden koşuldu**, hepsi yeşil:
+`_MAX_SPEAKER_NAME_LEN` de kod noktası sayıyor: 40 cp tam sınırda kabul edilen
+bir ad NFD'de 41 cp olup **reddediliyor**.
 
-- **K4 sınıf tabanlı tek karakter** — 11 yazı sistemi (kanji `力`/`火`/`東`,
-  hangul, hiragana, Kiril, Devanagari, Arapça, İbranice, Yunanca, Tayca,
-  Gürcüce, Ermenice), fullwidth rakam, `menu`'de tek kanjilik blok
-- **Karışık script / RTL / emoji-ZWJ / kombine aksan** — çökme yok, metin korunuyor
-- **K10** — farklı `monitor_index`/`dpi_scale` → `ValueError` (CJK metinde,
-  hyphen birleşiminde, üç bloklu zincirde üçüncüde)
-- **K16** — `h==0` / negatif `h` / `w==0` koşulsuz red; `_should_group` doğrudan
-- **K15 matrisinin beş satırı** — hem `_should_group` düzeyinde hem uçtan uca
-- **K17** — ayraç kümesi, metin ortasındaki ayraç, diğer CJK ayraç
-  varyantlarının kapsam dışı kalması, fullwidth rakamlı saat metni
-- **K18/K20** — NFKC istisnası, tam Unicode taraması (0x0–0x10FFFF), altı
-  karakterin listesi **tam olarak** eşleşiyor (ne eksik ne fazla)
-- **K19/K21** — üç+ parçaya bölünen gövdede her kuyruk, zincir kopması,
-  Japonca'da bölünmenin **her zaman blok sınırında** olması, bileşik sınırda
-  (uzunluk + geometri **aynı anda**) mirasın **olmaması**
-- **`presets.py` genişletilebilirliği** — dört ön ayar aynı dataclass türünü
-  kullanıyor, yeni alan eklemek mevcut örnekleri bozmuyor, bilinmeyen preset
-  `ValueError`
-- **Takma ad / determinizm** — girdi listesi yan etkiyle değişmiyor, aynı
-  girdiyle iki çağrı bit-bit aynı, önbellek yok
+Bunların hepsi `test_k32_*` (dört test) ile sabitlendi.
 
-**K26 bağımsız doğrulama:** `unicodedata.decomposition` ile altı karakterin
-**altısı da** uyumluluk formu; etiket dağılımı **2×`<wide>`, 2×`<small>`,
-2×`<vertical>`** — K26'nın tablosuyla birebir. `unidata_version == 15.0.0`
-testte sabitlendi, sürüm değişirse test kırılıp listeyi yeniden doğrulatacak.
+---
 
-**K27 dört ön ayar:** aynı JP fixture (etiket + sıkı gövde1 + etiketsiz
-gövde2) dört ön ayarla koşuldu — `dialogue`/`tooltip`/`subtitle` tek segment
-(`src=(0,1,2)`, `speaker='勇者'`); `menu` iki segment, ikincisi
-`src=(2,)`/`speaker=None`. K27'nin tarif ettiği kapsam dışı birebir gözlendi
-ve K23 değişmezi dördünde de tutuyor.
+## 3. K31 (a) / (b)
 
-**K23 kendi fuzz'ım:** tohum 20250910 (implementer'ınkinden farklı), CJK/KR
-ağırlıklı metin, dört yazı sisteminden isim, yozlaşmış geometri (sıfır/negatif
-`w`/`h`), y adımları 1–900 arası sıçramalarla, dört ön ayar, **2600 girdi →
-0 ihlal**. Üreticinin duyarlılığı ölçüldü: ilk hali mutant kodda **sıfır**
-ihlal buluyordu (yanlış güvence!) — B1 desenini kasıtlı kuran "sahne" modu
-eklenerek **48/2600**'e çıkarıldı.
+```
+  (a) ayni ad, IKISI de etiketli
+      speaker='Ada'  text='merhaba nasilsin'          source_blocks=(0, 1)
+  (b) ikinci etiket RAKAMLI
+      speaker='Ada'  text='merhaba Ada2: nasilsin'    source_blocks=(0, 1)
+  (kontrol) IKI FARKLI taninan ad
+      speaker='Ada'  text='merhaba'   / speaker='Bora' text='nasilsin'
+  (b') ikinci etiket NFD ad
+      speaker='Ada'  text='merhaba Ádá: nasilsin'
+```
 
-## Özet
+Üçü de kararın yazdığı gibi. **CJK yüzeyinde de aynı** (kararın örnekleri
+ASCII):
 
-| Soru | Cevap |
-|---|---|
-| B1 Japonca'da düzeldi mi? | **Evet** — kendi `勇者：` etiketli yeni replik `src=(11,)` olarak ayrı kalıyor; mutant kodda `(9,10,11)` oluyordu |
-| Üç konuşmacılı zincir (cap aşan, çok satırlı)? | **Doğru** — 6 segment, miras her konuşmacı içinde zincirleniyor, konuşmacı sınırı hiç geçilmiyor |
-| `speaker` Unicode birebir mi? | **Evet, codepoint düzeyinde** — halfwidth katakana ve fullwidth latin dahil NFKC uygulanmıyor; U+3000 dahil boşluk artığı yok |
-| K23 değişmezi tutuyor mu? | **Evet** — kendi fuzz'ımda 2600 girdi / 0 ihlal; mutant kodda 48 ihlal (test totoloji değil) |
-| K24 `tail` gerçekten kullanılıyor mu? | **Evet** — CJK gövdede iki sorgu zıt sonuç veriyor, kod `tail` alıyor; `tail` her zaman tanımlı |
-| `_normalize_impl` sızmış mı? | **Hayır** — `__all__` temiz, `normalize` imzası değişmemiş, bayrak keyword-only, "yalnızca denetim için" işaretli |
-| Ölçek kötüleşti mi? | **Hayır** — TUR 3'ün altında; TUR 4 farkı ölçüm gürültüsü (yayılım %6.3) ve o veri şeklinde `_group` zaten tek ögeyle çağrılıyor |
-| Regresyon var mı? | **Hayır** — 82 tur 1–4 testi + 98 testlik resmî suit temiz |
-| Kabul komutları | `mypy` ✔ · resmî suit 98/98 ✔ · kendi suitim 125/125 ✔ · `purity_check` **çıkış 1** (tur 6'nın K29 gate'i, koşumumun ortasında eklendi — §5.3) |
-| Bloke edici bulgu? | **Yok.** Üç bloke etmeyen gözlem (§5.1 K15 satır-1 utterance sınırı, §5.2 NFD isimler, §5.3 K29 bayat docstring atfı) |
+```
+  (a-CJK)  勇者：/勇者：  -> tek segment 'こんにちは げんきですか', speaker='勇者'
+  (b-CJK)  勇者：/勇者2： -> tek segment 'こんにちは 勇者2：げんきですか', speaker='勇者'
+  (kontrol) 勇者：/魔王： -> IKI ayri segment
+```
 
-`feedback-C.md` **tur 3 tarihlidir ve güncellenmemiştir** — tur 5 kararı
-onaydır, PROTOKOL §4 gereği feedback yalnızca ret hâlinde yazılır. §5'teki iki
-gözlem şefin kararına bırakılmıştır.
+`test_k31a_*`, `test_k31b_*`, `test_k31_iki_farkli_TANINAN_ad_birlesmez_cjk_dahil`,
+`test_k31_a_ve_b_cjk_yuzeyinde_de_ayni_davraniyor`, `test_k31b_nfd_ad_*`.
+
+---
+
+## 4. Yozlaşmış geometri
+
+`w<=0`, `h<=0`, aynı `(y,x)` çiftli bloklar, tek karakterli bloklar:
+
+- Beş yozlaşmış varyantın beşinde de gruplama **yok** ama blok **yok
+  edilmiyor** — kendi segmentini üretiyor, `speaker` `None` kalıyor (K16).
+- **K28'in sağ tarafı K16'yı gizlemiyor** — bunu şefin `tests/` altındaki
+  testinden bağımsız olarak, kendi kurduğum uzunluk sınırıyla yeniden ürettim:
+
+```
+  aday adim 3'te hyphen ile birlesmis; BIRLESIK kutu h=25 -> gap=5 < 16 -> MIRAS (yanlis)
+  HAM ilk satir h=0                   -> ref_height=0     -> 'height' -> MIRAS YOK (dogru)
+  gozlenen: speakers=['Ada', None]                         <- DOGRU
+  kontrol (ham ilk satir h=20): speakers=['Ada', 'Ada']    <- test totoloji degil
+```
+
+- Aynı `(y,x)` çiftli bloklarda okuma sırası **kararlı**: adım 1'in kararlı
+  `(y,x)` sıralaması ile `_raw_query_pair`'in `(y,x,indeks)` sıralaması 500
+  eşit-anahtarlı girdide **0 uyuşmazlık**.
+- Tek karakterli bloklarda karar `w=0,h=0` ile de salt sözlüksel kalıyor
+  (`力`/`a`/`1`/`?`/`？` korunur; `。`/`-` atılır).
+- `_group([], params)` ve `_group([tek], params)` doğrudan çağrıları
+  **kırılmıyor** (K28'in keyword-only + varsayılanlı imza seçimi tuttu).
+- `_raw_query_pair`: `blocks=()` ve boş `source_blocks` → `IndexError`
+  (bilinçli, gürültülü); `speaker`/`text`/`source_blocks` **aynen korunuyor**.
+
+40–60 bloklu, negatif koordinatlı, yozlaşmış kutulu, eşik-altı bloklu 150
+girdide dört ön ayarda **0 çökme, 0 K23 ihlali**.
+
+---
+
+## 5. Kötü kullanım yüzeyi + K28'in SOL tarafı
+
+Ham çıktı: `r6-09-kotu-kullanim-sonda.txt`, `r6-10-etiket-blogu-sol-taraf-sonda.txt`.
+
+- `blocks=` **geçirilmezse**: uzunluk sınırı doğduğunda `IndexError`, doğmadığında
+  çalışıyor. Süzülmüş `blocks` (bir sonraki ajanın klasik hatası) da
+  `IndexError` — **sessiz yanlış üretmiyor**. Kararın "gecikmeli ama gürültülü"
+  takası birebir bu.
+- Genel API **sızmamış**: `__all__ == ('normalize',)`, `normalize` imzası iki
+  parametreli, iki yeni parametre de `_` önekli fonksiyonlarda ve
+  **keyword-only + varsayılanlı**.
+- `apply_inheritance=False` docstring'de "SADECE K23 … MAKINE DENETIMI …
+  DISARIYA … SIZMAZ" ile işaretli ve davranışsal olarak da yalnız `speaker`'ı
+  değiştiriyor (`source_blocks`/`text`/`bbox` birebir aynı).
+- **Şefin adlandırdığı "ek yüzey" kapandı.** Şef, `source_blocks[-1]`'in
+  sırasız girdide **yalnız-etiket bloğunu** gösterebileceğini yazmıştı.
+  Ölçtüm — 2985 miras sorgusunda:
+
+```
+  SOL taraf yalniz-etiket blogu    : 0
+  SAG taraf yalniz-etiket blogu    : 0
+  SOL: okuma-sirasi-son != max(idx): 199   <- derlem `[-1]` uygulamasini AYIRT EDIYOR
+```
+
+  199 sayısı totolojiyi dışlıyor: derlem gerçekten `[-1]` ile okuma sırasını
+  ayrıştırıyor ve okuma sırası kuralı her seferinde etiket kutusundan
+  kaçınıyor. Ayrıca kurulu bir vaka (ASCII-dışı etiket + sırasız girdi +
+  uzunluk sınırı) `[-1]` uygulamasının **yanlış** karar vereceğini gösteriyor:
+
+```
+  idx0 = govde (y=25, bottom=45) · idx1 = devam (y=50) · idx2 = ETIKET 勇者： (y=0)
+  `[-1]` indeks-son = idx2 -> gap = 50-20 = 30 > 16 -> MIRAS YOK   (yanlis)
+  okuma-sirasi-son  = idx0 -> gap = 50-45 =  5 < 16 -> MIRAS       (dogru)
+  gozlenen: ['勇者', '勇者']
+```
+
+---
+
+## 6. Ölçek — TEK BAŞINA koşuldu
+
+Şefin O3 uyarısına uydum: ölçüm tam takım yükü altında değil, **tek başına**
+yapıldı. Yeni test dosyasına **zamanlama testi eklemedim** — kararsız bir
+ölçüyü çoğaltmak kapıyı gürültülendirmekten başka bir şey yapmaz.
+
+```
+A) tur 2-5 ile AYNI veri sekli   (TUR5: 3.199 / 8.429 / 24.866 ms)
+   kosum 1: 2.697 / 6.951 / 20.627 ms
+   kosum 2: 2.581 / 6.707 / 20.329 ms
+   kosum 3: 2.533 / 6.617 / 20.477 ms
+
+B) `_group`'u gercekten yukleyen yol (CJK)   (TUR5: 3.330 / 6.420 / 13.418 ms)
+   kosum 1: 2.783 / 5.672 / 11.691 ms
+   kosum 2: 2.818 / 5.703 / 11.339 ms
+   kosum 3: 2.739 / 5.651 / 11.516 ms
+
+C) K28'in EN AGIR yolu (her sinirda cok bloklu tail):
+   n=500 2.190 · n=1000 4.487 · n=2000 8.936 · n=4000 18.281 ms
+```
+
+**Kötüleşme yok** — üç boyda da tur 5'in altında. C sütunu `n` iki katına
+çıktığında süre de ~iki katına çıkıyor: `_raw_query_pair` sınır başına
+`O(k log k)` sıralama yapmasına rağmen **kuadratik davranış yok**.
+
+*Dürüstlük notu:* C yolunu bu turda iki kez ölçtüm (mola öncesi
+1.828/3.761/7.694, şimdi 2.190/4.487/8.936). Fark makine gürültüsü; ikisi de
+doğrusal ve ikisi de kanıt dosyasında. Mutlak sayı değil **oran** okunmalı.
+
+---
+
+## 7. Bloke etmeyen bulgular
+
+### 7.1 K32'nin belgelediği kapsam, ölçülen olgudan DAR
+
+**Bu turun en önemli bulgusu.** K32 şöyle diyor: *"NFD adlar (birleşik aksan)
+konuşmacı SAYILMAZ"* ve *"NFC normalizasyonu T-006 ÇIKIŞ SÖZLEŞMESİNE
+adaydır."* Bu ikisi birlikte okununca çıkarım şu oluyor: **motor NFC üretirse
+konuşmacı ayıklama çalışır.** Ölçtüm — bu çıkarım bir yazı sistemi ailesi için
+**yanlış** (`r6-11-nfc-yetmez-taramasi.txt`):
+
+```
+ad                           NFC-normal?  NFC==NFD?  NFC ile taniniyor?
+devanagari राम               True         True       False
+devanagari नमस्ते            True         True       False
+tayca สวัสดี                 True         True       False
+arapca+hareke مَرحبا         True         True       False
+ibranice+nikud שָלוֹם        True         True       False
+korece 용사                    True         False      True
+japonca 勇者                   True         True       True
+vietnamca Đức                True         False      True
+```
+
+Devanagari matra/virama, Tayca vokal işareti, Arapça hareke ve İbranice nikud
+**NFC ile taşıyıcı harfe birleşmez** — bu adlar zaten NFC-normaldir
+(`is_normalized("NFC") is True`, NFC == NFD) ve `isalpha()` bu `Mn`/`Mc`
+işaretlerini reddettiği için etiket ayıklanmıyor, metinde kalıyor (K31/b
+yolu). Aynı sınıf görünmez yön işaretleri (`U+200F`/`U+200E`, `Cf`) için de
+geçerli — RTL metinde bunlar sık.
+
+**Neden bloke etmiyor:** kod K9'un lafzına **uygun**; metin kaybolmuyor,
+çökme yok, bölümleme bozulmuyor — yalnız `speaker` `None` kalıyor ve bu
+davranış K31/b ile aynı **belgeli** yol. Eksik olan tek şey K32'nin **kapsam
+cümlesi**. Ama şef T-006 paketine "çıktı NFC" maddesi eklemeyi planlıyor ve o
+madde bu sınıfı **kapatmayacak** — kararın buna dayanmaması için yazıyorum.
+
+**Önerilen ek (K32'ye ve `known_gaps`'e):** *"Kapsam NFD ile sınırlı değildir:
+Devanagari matra/virama, Tayca vokal işaretleri, Arapça hareke, İbranice nikud
+ve yön işaretleri (`U+200E`/`U+200F`) NFC altında da ayrı kod noktası olarak
+kalır (`Mn`/`Mc`/`Cf`) ve `isalpha()` süzgecinden geçmez; bu adlar **NFC girdide
+de** konuşmacı sayılmaz. T-006'nın NFC üretmesi bu sınıfı kapatmaz — kapatmak
+K9'un ad süzgecini `Mn`/`Mc` kabul edecek şekilde genişletmeyi gerektirir ve o
+ayrı bir kapı turudur."*
+
+Davranış `test_BULGU_BLOKE_ETMEYEN_nfc_olan_indic_tayca_ve_harekeli_adlar_taninmiyor`
+(5 parametre) ve `test_BULGU_BLOKE_ETMEYEN_yonelim_isaretleri_adi_dusuruyor`
+(2 parametre) ile sabitlendi — **belgeleyen** testler, düzelten değil.
+
+### 7.2 Miras `monitor_index` / `dpi_scale` sınırını aşıyor
+
+```
+  monitor 0 -> 1   UZUN metin (uzunluk siniri): speakers=['Ada', 'Ada'] bbox=[(0,1.0),(1,1.0)]
+  monitor 0 -> 1   KISA metin (birlesme denenir): ValueError
+  dpi 1.0 -> 2.0   UZUN metin: speakers=['Ada', 'Ada'] bbox=[(0,1.0),(0,2.0)]
+  dpi 1.0 -> 2.0   KISA metin: ValueError
+```
+
+**Aynı iki blok**, metin kısaysa `ValueError` veriyor, uzunsa (reason
+`"length"`) sessizce geçiyor **ve** ikinci segment birincinin `speaker`'ını
+miras alıyor. Miras-uygunluk sorgusu iki farklı ekrandaki kutular arasında
+`gap`/`overlap` hesaplıyor; o geometri kıyaslanabilir değil.
+
+**Neden bloke etmiyor:** K10'un lafzı **birleşim** içindir ("iki öğe
+BIRLESTIGINDE … `ValueError`") ve burada birleşim yok — segmentler kendi
+`bbox`'larıyla ayrı kalıyor, sessiz bir kutu kopyalaması olmuyor. Gerçekçi
+boru hattında da tek `Frame` tek monitördendir.
+
+**Önerilen `known_gaps` maddesi:** *"Miras-uygunluk sorgusu `monitor_index`/
+`dpi_scale` eşitliğini denetlemez; farklı ekrandaki iki blok arasında
+yalnız-uzunluk sınırı doğarsa `speaker` ekran sınırını aşabilir. K10'un
+birleşim yasağı bu yola girmez — sonuç yalnızca metin uzunluğuna bağlıdır."*
+
+Sabitleyen test: `test_BULGU_BLOKE_ETMEYEN_miras_monitor_sinirini_asiyor`.
+
+### 7.3 `NaN` `dpi_scale` kendi kendine eşit değil — yanıltıcı tanı
+
+```
+    ValueError: birlesecek bloklarin monitor_index/dpi_scale degerleri uyusmuyor: (0, nan) != (0, nan)
+    (K7'nin confidence NaN mesaji ile karsilastir:)
+      TextBlock[0].confidence gecersiz: nan (NaN olamaz, [0.0, 1.0] araliginda olmali)
+```
+
+`Rect.dpi_scale`, K7'nin `confidence` için yaptığı gibi bir ön denetimden
+geçmiyor. **Aynı** `NaN` değerini taşıyan iki blok birleşemiyor ve mesaj iki
+tarafı da `nan` yazarak kendi içinde çelişkili görünüyor.
+
+**Neden bloke etmiyor:** sonuç sessiz değil (patlıyor) ve K10'un lafzını
+ihlal etmiyor; yalnızca tanı kalitesi düşük. `math.isnan` ile bir ön denetim
+(K7'nin deseni) bunu düzeltirdi. Sabitleyen test:
+`test_BULGU_BLOKE_ETMEYEN_nan_dpi_scale_kendi_kendine_esit_degil`.
+
+*Not:* `1` vs `1.0` ve `-0.0` vs `0.0` doğru şekilde **eşit** sayılıyor
+(`!=` kullanılmış, `is`/`repr` değil) — ayrı bir testle pinlendi.
+
+### 7.4 ZWJ / emoji kod noktası şişmesi — K32'nin ikinci yüzeyi
+
+```
+    tekrar= 20  ZWJ(cp=100): 2 segment  |  ASCII(cp= 20, AYNI grapheme): 1 segment
+    tekrar= 45  ZWJ(cp=225): 2 segment  |  ASCII(cp= 45, AYNI grapheme): 1 segment
+```
+
+`max_group_chars` `len()` ile ölçülüyor ve `len()` **kod noktası** sayıyor,
+grapheme değil. Aynı sayıda görünür karakter içeren iki gövde, biri ZWJ
+dizilerinden kurulunca farklı bölümleniyor. K32 mekanizmayı doğru anlatıyor
+("codepoint sayar") ama örnekleri yalnız NFC/NFD; emoji yüzeyi anılmıyor.
+
+**Önerilen ek (K32'ye, tek cümle):** *"Aynı mekanizma NFD dışında da işler:
+ZWJ/bayrak/varyasyon dizileri grapheme başına 2–5 kod noktası taşır ve
+`max_group_chars`'ı aynı oranda şişirir."*
+
+Sabitleyen test: `test_m14_zwj_dizisi_codepoint_sayisi_max_group_chars_i_sisiriyor`.
+
+---
+
+## 8. Testlerimin dişli olduğunun kanıtı
+
+Yeni 143 testin totoloji olmadığını `src/` hiç değiştirmeden, modül
+globallerini monkeypatch ile mutasyona uğratarak ölçtüm
+(`r6-13-mutasyon-denetimi.txt`):
+
+```
+TABAN (mutasyonsuz):                        exit=0  143 passed
+
+  MC1 indeks sirasi (M4 sinifi)             exit=1  KIRILDI   2 failed
+  MC2 ham ikame YOK (K28 oncesi)            exit=1  KIRILDI   3 failed
+  MC3 sag taraf `nxt` kalir (M5)            exit=1  KIRILDI   1 failed
+  MC4 ikame monitor_index==0'a kapili       exit=1  KIRILDI   6 failed
+  MC5 ikame dpi_scale==1.0'a kapili         exit=1  KIRILDI   8 failed
+  MC6 gorunum gecisi TERS yon (M11)         exit=1  KIRILDI   5 failed
+  MC7 ad suzgeci ASCII'ye kapili            exit=1  KIRILDI  12 failed
+```
+
+**Kendi hatam, kayda geçer:** MC4 ve MC5 ilk sürümde **geçiyordu** (dişsiz).
+Sebep: derlemim hyphen zinciri üretmiyordu, dolayısıyla her öğenin
+`source_blocks`'u tek elemanlıydı ve `_raw_query_pair`'in ham ikamesi **no-op**
+oluyordu — ikameyi bir koşula kapılayan mutant hiçbir şeyi değiştirmiyordu.
+Derleme 2–4 bloklu, yükseklikleri kasıtlı farklı hyphen zincirleri ekleyip
+kalibre ettim (ayırt ediciliği ayrıca ölçtüm), sonra ikisi de kırıldı. Bu, tam
+olarak şefin §4.6/4'te tarif ettiği hata sınıfı: **ölçü, mekanizmanın
+değişmezden ayrıştığı girdiyi içermiyordu.**
+
+Ayrıca `test_k28_miras_sorgusunun_hicbir_tarafi_yalniz_etiket_blogu_olmuyor`
+kendi totolojik olmadığını **test içinde** assert ediyor (`ayrisma > 0`).
+
+---
+
+## 9. Bes sınıfın kesişimindeki değişmez fuzz'ı
+
+1600 koşum (400 girdi × 4 ön ayar), her girdide beş sınıf birlikte
+(emoji/ZWJ/astral + `monitor_index ≠ 0` + `dpi_scale ≠ 1.0` + ≥40 blok +
+ASCII-dışı etiket + yalnız-etiket + sırasız + eşik-altı + yozlaşmış kutu):
+
+```
+  D1 cokme                  0 ihlal
+  D2 K8 (artan/ayrik/aralik) 0 ihlal
+  D3 K3 (cikti sirasi)       0 ihlal
+  D4 K23 (miras acik/kapali) 0 ihlal
+  D5 speaker kaynak-tutarli  0 ihlal
+  D6 bbox monitor/dpi        0 ihlal
+  D7 bos metinli segment yok 0 ihlal
+  TOPLAM IHLAL = 0
+```
+
+Aynı fuzz test dosyasında da (60 girdi × 4 ön ayar) koşuyor.
+
+---
+
+## 10. Karar
+
+**ONAY.**
+
+- K28 doğru uygulanmış: sorgunun iki tarafı da özgün bloktan, **okuma
+  sırasıyla**; `source_blocks[-1]` kullanılmıyor ve bu benim derlemimde
+  199 sınırda **ölçülebilir** fark yaratıyor.
+- K16 K28'in sağ tarafında gizlenmiyor; K23 beş sınıfın kesişiminde de tutuyor.
+- K30/K31/K32 belgelenen davranışlar birebir yeniden üretildi (K31 CJK
+  yüzeyinde de).
+- Kötü kullanım yüzeyi kapalı: genel API sızmamış, `blocks=` hatası gürültülü.
+- Ölçek kötüleşmedi.
+- Kör takımda **onuncu bir kırık yok** — gerçek regresyon bulamadım.
+
+Dört bloke etmeyen bulgunun tamamı belgeleme/kapsam kalemidir; hiçbiri kodun
+K1–K32'den sapması değildir. **7.1 numaralı bulgu bir sonraki tur kararına
+girmeli** — çünkü şefin T-006 için planladığı "çıktı NFC" maddesi, o bulgu
+düzeltilmezse kapatmadığı bir sınıfı kapattığı varsayılarak yazılacak.

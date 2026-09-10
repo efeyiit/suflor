@@ -1,0 +1,25 @@
+=== KENDI BAGIMSIZ TARAMAM (tester_B) ===
+F                                                                        [100%]
+================================== FAILURES ===================================
+E   AssertionError: ['normalizer.py: `test_k12_bu_test_hic_yok` urun test dosyasinda YOK', 'normalizer.py: `test_k12_sarmali_bayat_ad_da_yok` urun test dosyasinda YOK', 'normalizer.py: `test_k12_ciplak_onek_` urun test dosyasinda YOK']
+    assert ['normalizer....syasinda YOK'] == []
+      
+      Left contains 3 more items, first extra item: 'normalizer.py: `test_k12_bu_test_hic_yok` urun test dosyasinda YOK'
+      Use -v to get more diff
+C:\Users\pc\AppData\Local\Temp\tb6_k29_7h0fsfb8\.agents\tasks\T-004\tester_B\test_karar_uyumu_tur6.py:587: AssertionError: ['normalizer.py: `test_k12_bu_test_hic_yok` urun test dosyasinda YOK', 'normalizer.py: `test_k12_sarmali_bayat_ad_da_yok` urun test dosyasinda YOK', 'normalizer.py: `test_k12_ciplak_onek_` urun test dosyasinda YOK']
+=========================== short test summary info ===========================
+FAILED .agents/tasks/T-004/tester_B/test_karar_uyumu_tur6.py::test_r6_k29_docstring_test_atiflari_BAGIMSIZ_taramada_da_temiz
+1 failed, 54 deselected in 0.18s
+
+=== SEFIN KAPISI (purity_check.py) ===
+exit 1
+denetlenen: normalizer.py, presets.py
+
+IHLAL (3):
+  normalizer.py:859  docstring HAYALI test aniyor (AD) -> test_k12_bu_test_hic_yok [K29: test_normalizer.py'de yok]
+  normalizer.py:859  docstring HAYALI test aniyor (AD) -> test_k12_sarmali_bayat_ad_da_yok [K29: test_normalizer.py'de yok]
+  normalizer.py:860  docstring HAYALI test aniyor (CIPLAK-ONEK) -> test_k12_ciplak_onek_ [K29: '_' ile biten ad: ya tam ad yaz ya '*' ekle]
+
+
+=== SONUC ===
+BASARILI: iki kapi da uc ihlalin ucunu de gordu

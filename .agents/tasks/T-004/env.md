@@ -203,7 +203,7 @@ Dokuz kırığın dokuzu da kararın §4.6/5 listesinde **önceden adlandırılm
 
 ### MERCEK B — Karar uyumu
 1. **Bayatlayan dört kapı aletini yeniden nişanla** (AST beklentisi, M1/M2/M3 desenleri) ve **beş yeni mutant** ekle:
-   - **M4** `_raw_query_pair`'de okuma sırası yerine indeks sırası → ölçü 3/3b ve kit `geo` kırılmalı
+   - **M4** `_raw_query_pair`'de okuma sırası yerine indeks sırası → **ölçü 3** ve kit `geo` kırılmalı *(ölçü **3b değil**: `olcu3b_fixture()` okuma sırasında dizili, orada M4 ayrışmaz — şef doğruladı)*
    - **M5** sağ tarafı `nxt` bırakan → ölçü 2 kırılmalı
    - **M11** görünüm geçişini **ters yönde** işleyen → **kit bunu görmez** (KRT ölçtü: 1322 ayrışma, kit `TEMİZ`); davranışsal diferansiyelle yakala
    - **M12** `_merge_hyphenated`/`_extract_speakers`/`_is_noise`/`_collapse_intraline`'dan birini değiştiren → **kitin `adim1_4`'ü mutantla birlikte kayar**, kimlik kanalı boşalır (KRT: n27 → 3672 ayrışma, kit `TEMİZ`)

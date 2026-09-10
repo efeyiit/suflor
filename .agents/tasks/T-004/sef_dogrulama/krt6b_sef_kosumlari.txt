@@ -235,3 +235,53 @@ KOR TESTER TAKIMI: uc ardisik kosum -> 9 failed, 370 passed, 1 xfailed (KARARLI)
     3x test_r51_kuyruk_* (XPASS -- hata duzeldi), M1, M2, M3, m2_k21,
     normalize_impl_bayragi, k24_tail_ast
   (Daha once gorulen "10", bilinen kararsiz tester_C olcek testiydi.)
+
+==== TUR 6 TESTER DOGRULAMASI -- SEF SONDASI ====
+[A onay] verdict-A.md: rol=tester, tur=6, 13 kontrol, kaniti tam -> KABUL EDILEBILIR
+  tester_A tek basina 174 passed, 1 xfailed | kor takim 623 passed, 1 xfailed, 0 kirik
+  urun 821 passed -- onuncu kirik YOK
+[A/N1 DOGRULANDI] modul docstring "### K24" bolumu (satir ~828-840) K28 ONCESI cagri
+  bicimini SIMDIKI ZAMANDA anlatiyor: "_group_rejection_reason(tail, nxt, ...) KULLANIR"
+  ve "SOL TARAF DAIMA ... EN SON HAM ogesidir" -- ikincisi R5-1'in curuttugu cumle.
+  O bolumde K28 / _raw_query_pair gecen satir sayisi: 0. Davranis dogru, BELGE bayat.
+
+[C onay] tester_C 268 passed; bes girdi sinifi (M14) temiz.
+[C/1 DOGRULANDI -- SEFIN K32 VARSAYIMI YANLIS]  _split_speaker_label, sef kosumu:
+  Devanagari  U+0930 U+093E U+092E   NFC-normal=True  NFC==NFD=True  kat={Lo,Mc}  -> speaker=None
+  Ibranice+nikud                     NFC-normal=True  NFC==NFD=True  kat={Lo,Mn}  -> speaker=None
+  Arapca+hareke                      NFC-normal=False NFC==NFD=True  kat={Lo,Mn}  -> speaker=None
+  Tayca                              NFC-normal=True  kat={Lo}                    -> TANINIYOR
+  CJK                                NFC-normal=True  kat={Lo}                    -> TANINIYOR
+  Latin NFC (Maria)                  kat={Ll,Lu}                                  -> TANINIYOR
+  Neden: isalpha() Mn/Mc'ye False diyor --  U+093E(Mc)=False, U+064F(Mn)=False,
+         U+05B8(Mn)=False, U+0301(Mn)=False; U+0E32 Tayca'da Lo oldugu icin True.
+  SONUC: K32'nin "NFC normalizasyonu T-006 cikis sozlesmesine adaydir" cumlesi bu
+  sinifi KAPATMAZ. Bu adlar ZATEN NFC. Sorun NFD degil, BIRLESTIRICI ISARET (M*)
+  tasiyan her yazi sistemi. Sefin T-006 icin planladigi madde yeniden yazilmali.
+
+[B onay] verdict-B.md: rol=tester, tur=6, 12 kontrol, kaniti tam -> KABUL EDILEBILIR
+  tester_B 181 passed; sekiz mutant x uc bagimsiz olcum (kendi diferansiyeli 24.000 kosum,
+  sefin kiti, urun olculeri). Sefin dort "kit gormez" iddiasinin DORDU DE dogrulandi;
+  besinin besi de B'nin diferansiyelinde kiriliyor -> B'nin sondasi disli.
+[B/N1 DOGRULANDI -- SEFIN KARARINDA HATA] olcu5_fixture'in IKI sinirinda da aday TEK BLOKLU:
+    sinir 1: sol_sb=(0,2) len=2   sag_sb=(3,) len=1
+    sinir 2: sol_sb=(4,5) len=2   sag_sb=(6,) len=1
+  Tek bloklu tarafta ham ikame NO-OP -> olcu 5, M5'i (sag taraf ikamesi) YAPI GEREGI olcemez.
+  Kararin "M5 -> olcu 2, 5 ve 6 kirilmali" cumlesi YANLIS; duzeltildi.
+[B/N2 DOGRULANDI -- SEFIN env.md'SINDE HATA] olcu3b_fixture'da sol_sb=(1,2,3),
+  okuma sirasi=[1,2,3] == indeks sirasi=[1,2,3] -> M4 orada AYRISMAZ.
+  env.md'nin "M4 -> olcu 3/3b" cumlesi yanlis; kararin kendi metni ("olcu 3 ve 6") dogru.
+  Iki belge celisiyordu; env.md duzeltildi.
+[B/N3] M15 (yanlis params ile sorgu): dort kabul komutu + 124 urun testi + kitin BES kanali
+  temiz geciyor; tests/ altinda hicbir kapisi yok. B'nin diferansiyelinde 1844 ayrisma.
+  -> TUR 7'ye alindi (T7-2).
+[C/3-4 olculdu] NaN dpi_scale: o girdi ile istisna yok (tani mesaji kozmetik).
+  ZWJ emoji ailesi: 1 grapheme = 5 codepoint -> max_group_chars 5x sisiyor.
+
+==== TUR 6 SONUCU ====
+UC TESTER DE ONAY. Gorev 4.5 geregi kabul edilebilir. Uc tester dokuz bulgu bildirdi,
+dordu SEFIN KENDI HATASIYDI (K32'nin NFC varsayimi, M5->olcu 5, env.md M4->3b,
+ve A/N1'in isaret ettigi bayat K24 bolumu bir belge borcu).
+TUR 7 (kapanis turu) acildi: T7-1 bayat K24 docstring'i, T7-2 M15 kapisi.
+Karar kirmizi takimina GITMIYOR -- yeni degismez/olcu kurgusu yok; tek tester (B) kosacak.
+Alti kalem bilinclu olarak ERTELENDI ve known_gaps'e yazilacak.

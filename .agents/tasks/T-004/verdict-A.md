@@ -1,283 +1,309 @@
 ---
 task: T-004
 role: tester
-round: 5
-decision: ret
+round: 6
+decision: onay
 checks:
-  - name: "mypy --strict temiz (kabul komutu)"
+  - name: "mypy --strict temiz (normalizer.py + presets.py)"
     cmd: "python -m mypy --strict src/ocr/normalizer.py src/ocr/presets.py"
     exit_code: 0
     result: gecti
-    evidence: tester_A_evidence/r5-mypy.txt
-  - name: "implementer pytest paketi (kabul komutu, 98 test)"
+    evidence: tester_A_evidence/r6-mypy.txt
+  - name: "implementer test dosyasi yesil"
     cmd: "python -m pytest tests/unit/ocr/test_normalizer.py -q"
     exit_code: 0
     result: gecti
-    evidence: tester_A_evidence/r5-pytest_implementer.txt
-  - name: "purity_check.py (kabul komutu)"
+    evidence: tester_A_evidence/r6-pytest_implementer.txt
+  - name: "saflik kapisi (K29 dahil) exit 0"
     cmd: "python .agents/tasks/T-004/purity_check.py"
     exit_code: 0
     result: gecti
-    evidence: tester_A_evidence/r5-purity_check.txt
-  - name: "tester_A bagimsiz saldiri paketi -- garanti alani (134 gecti, 4 xfail(strict) = BULGU R5-1)"
-    cmd: "python -m pytest .agents/tasks/T-004/tester_A -q -rxX"
+    evidence: tester_A_evidence/r6-purity_check.txt
+  - name: "olcu kitinin kendi sagligi exit 0"
+    cmd: "python .agents/tasks/T-004/olcu_kiti.py"
     exit_code: 0
     result: gecti
-    evidence: tester_A_evidence/r5-pytest_tester_A.txt
-  - name: "K23 bolumleme degismezi -- KENDI hyphen-yogun ureticimle, 3200 girdi x 4 on ayar, 0 fark"
-    cmd: "python .agents/tasks/T-004/tester_A/sonda_r5_bulgu.py"
+    evidence: tester_A_evidence/r6-olcu_kiti.txt
+  - name: "tur 6 taban: tests/ tamami (sefin olctugu 821)"
+    cmd: "python -m pytest tests -q"
     exit_code: 0
     result: gecti
-    evidence: tester_A_evidence/r5-bulgu-R5-1-sonda.txt
-  - name: "BULGU R5-1: hyphen-birlesik `tail` K24 artifaktini geri getiriyor (uc geometrik yol + makine denetimi)"
-    cmd: "python .agents/tasks/T-004/tester_A/sonda_r5_bulgu.py"
+    evidence: tester_A_evidence/r6-pytest_tests_tamami.txt
+  - name: "tester_A tur 6 oncesi taban (yeni dosya EKLENMEDEN)"
+    cmd: "python -m pytest .agents/tasks/T-004/tester_A -q"
+    exit_code: 0
+    result: gecti
+    evidence: tester_A_evidence/r6-pytest_tester_A-baslangic.txt
+  - name: "tester_A tur 6 sonrasi (yeni garanti-alani dosyasi dahil)"
+    cmd: "python -m pytest .agents/tasks/T-004/tester_A -q"
+    exit_code: 0
+    result: gecti
+    evidence: tester_A_evidence/r6-pytest_tester_A.txt
+  - name: "kor tester takimi -- onuncu bir kirik var mi (sefin tabani 388)"
+    cmd: "python -m pytest .agents/tasks/T-004/tester_A .agents/tasks/T-004/tester_B .agents/tasks/T-004/tester_C -q"
+    exit_code: 0
+    result: gecti
+    evidence: tester_A_evidence/r6-pytest_kor_takim.txt
+  - name: "mercek A/2 -- `_group`/`_raw_query_pair` sinir alani ham sondasi"
+    cmd: "python - (sinir alani sondasi; ham cikti dosyada)"
+    exit_code: 0
+    result: gecti
+    evidence: tester_A_evidence/r6-sinir-alani-sondasi.txt
+  - name: "yeni testlerin DISLERI -- dort mutant sondasi"
+    cmd: "python scratchpad/dis_kontrolu.py (mutantlar monkeypatch; src/ DEGISTIRILMEDI)"
+    exit_code: 0
+    result: gecti
+    evidence: tester_A_evidence/r6-dis_kontrolu-mutantlar.txt
+  - name: "gozlem G2 -- M-c mutanti kitin dort kanalina gorunuyor mu"
+    cmd: "python - (olcu6_kos x 3 on ayar, taban vs M-c)"
+    exit_code: 0
+    result: gecti
+    evidence: tester_A_evidence/r6-gozlem-G2-kit-vs-Mc.txt
+  - name: "yeni testlerin sayaclari -- alt sinirlar totoloji degil"
+    cmd: "python - (derlem/segment/sinir/oge sayaclari)"
+    exit_code: 0
+    result: gecti
+    evidence: tester_A_evidence/r6-sayaclar.txt
+  - name: "BULGU N1 -- modul docstring '### K24' bolumu bayat (BLOKE ETMEZ)"
+    cmd: "python - (AST: urunun cagri bicimi vs docstring iddiasi) + pytest -rx"
     exit_code: 0
     result: kaldi
-    evidence: tester_A_evidence/r5-bulgu-R5-1-sonda.txt
-  - name: "BULGU R5-1 ham assertion cikitisi (xfail maskesi kapali)"
-    cmd: "python -m pytest .agents/tasks/T-004/tester_A -q --runxfail -k 'makine_denetimi or kuyruk_gercek'"
-    exit_code: 1
-    result: kaldi
-    evidence: tester_A_evidence/r5-bulgu-R5-1-runxfail.txt
-blocking_issues:
-  - id: R5-1
-    severity: yuksek
-    karar: "K24 (+ K19 tablosu)"
-    ozet: >-
-      `tail` her zaman "grubun okuma sirasindaki SON HAM ogesi" DEGIL: adim 3
-      (`_merge_hyphenated`, K5) COK BLOKLU bir `_Item` uretebilir ve o oge
-      grubun `tail`'i olabilir. Onun BIRLESIK bbox'i, K24'un step-5 icin
-      kaldirdigi artifakti step-3 uzerinden GERI GETIRIYOR -- `speaker`
-      GERCEK bir geometrik kopusun otesine atfediliyor (K19 tablosu:
-      "geometrik bosluk -> `None` KALIR"). Uc bagimsiz geometrik yol; IKISI
-      MONOTONIK (egzotik/non-monotonik geometri GEREKMEZ). Olcum: 3200 girdi,
-      30.174 uzunluk-siniri, 1561 ihlal (%5,2; 1473'u monotonik); uctan uca
-      1004 segmentin `speaker`'i yanlis, 383/3200 girdi etkileniyor.
-      K23 bolumleme degismezi IHLAL EDILMIYOR (bolumleme farki 0).
-    repro: "python .agents/tasks/T-004/tester_A/sonda_r5_bulgu.py"
-    testler: >-
-      tester_A/test_r5_partition_invariant.py::test_r51_mekanizma_hyphen_birlesik_tail_ham_son_satirdan_ayrisiyor
-      (YESIL, mekanizmayi sabitler) ·
-      test_r51_kuyruk_gercek_geometrik_kopusun_otesine_speaker_atfetmiyor[A/B/C]
-      ve test_r51_makine_denetimi_ham_son_blok_kuralinda_sifir_ayrisma
-      (xfail strict=True -- kod duzelirse XPASS ile KIRILIR)
-    evidence: tester_A_evidence/r5-bulgu-R5-1-sonda.txt
+    evidence: tester_A_evidence/r6-bulgu-N1-K24-bayat-docstring.txt
+blocking_issues: []
+notes:
+  - "N1 (bloke etmez, dokumantasyon): `normalizer.py` modul docstring'inin `### K24` bolumu (satir 827-836) K28 ONCESI cagri bicimini SIMDIKI ZAMANDA ve KOSULSUZ anlatiyor; bolumde K28'e/`_raw_query_pair`'e ileri referans YOK. Davranis DOGRU. `.agents/tasks/T-004/tester_A/test_r6_garanti_alani.py::test_modul_docstringinin_K24_bolumu_bugunku_cagri_bicimini_anlatiyor` `xfail(strict=True)` olarak duruyor -- duzeltilince XPASS ile kendini duyurur."
+  - "G1 (gozlem): `_group(..., blocks=())` uzunluk-tek sinirda `apply_inheritance=False` ILE DE `IndexError` yukseltiyor (olculdu). Dogru davranis -- K23'un 'bayrak bolumleme gecisinde HIC OKUNMAZ' degismezinin dogrudan sonucu -- ama `_group` docstring'inin `blocks=()` cumlesi bayragi anmiyor."
+  - "G2 (gozlem): K28'in KARAR METNI sol tarafi 'kapanan GRUBUN kaynak bloklari' diye tanimliyor, UYGULAMA ise `tail` OGESININ kaynak bloklarindan seciyor. 4063 sinirda 0 ayrisma olctum, ama denklik adim 1-4'un BELGELENMEMIS bir yapisal ozelligine dayaniyor (ogeler okuma sirasinda BITISIK kosulara boluyor). O ozelligi bozan mutant kitin DORT kanalina da gorunmuyor (uc on ayarda `temiz=True`, hepsi 0)."
+  - "Tur 6'da tester_A'ya dusen yeniden nisanlama isinin tamami kapandi: uc `strict=True` xfail yesil teste cevrildi, dorduncu xfail'in yerine `normalize` uzerinden gecen SIRASIZ girdili + >=3 bloklu kuyruklu makine denetimi kondu, `:401`'in kor sondasi urunun yeni sorgu bicimine esitlenip AST kapisiyla korundu."
+  - "Yeni dosya: `.agents/tasks/T-004/tester_A/test_r6_garanti_alani.py` (27 gecen + 1 strict xfail). `src/` ve `tests/unit/ocr/` DEGISTIRILMEDI; olcu kiti ice aktarildi, DEGISTIRILMEDI."
 ---
 
-# T-004 — Tester A raporu (Mercek: **Garanti alanı**) — TUR 5
+# Tester-A · Tur 6 · Mercek: Garanti alanı
 
-## Karar
+**Karar: ONAY.** Bloke edici bulgu yok. Bir dokümantasyon bulgusu (N1) ve iki
+gözlem (G1, G2) bloke etmeyen olarak aşağıda; N1 için kalıcı bir `strict=True`
+xfail işareti bıraktım.
 
-**RET.** Bir bloke edici bulgu: **R5-1**.
+Merceğin sorusu: *"Docstring/tip ne söz veriyor ve bu söz, fonksiyonun kabul
+ettiği **her** girdi için tutuyor mu?"* — K28 ile açılan yeni yüzeyde
+(`_raw_query_pair`, `_group(..., blocks=)`) bu soruyu sınır alanı taramasıyla
+sordum.
 
-Tur 5'in **ana** merceği olan **K23 bölümleme değişmezi kusursuz** — kendi
-üreticimle 3200 girdi × 4 ön ayar (12.800 koşum) ve önceki ajanın 2520
-girdilik derlemiyle **tek bir bölümleme farkı yok**, ve miras gerçekten
-tetikleniyor (8117 segmentin `speaker`'ı değişiyor), yani denetim totoloji
-değil. İki-geçişli yapı değişmezi **yapı gereği** sağlıyor.
+## 0 · Taban — şefin ölçtüğü sayıların yeniden üretimi
 
-Ret, K23'ten değil **K24'ten** geliyor: K24'ün *"sol taraf grubun okuma
-sırasındaki son kaynak öğesidir — birleşik bbox değil"* kuralı **step-5 için**
-uygulandı, ama **step-3'ün** ürettiği birleşik bbox için uygulanmadı. Aynı
-artifakt, aynı sonuç, farklı kapıdan.
-
-## Yöntem
-
-Kör çalıştım. Okuduklarım: `env.md` (TUR 5 + MERCEK A), `sef_karari-tur5.md`
-(K23–K27), `sef_karari-tur4.md`, `sef_karari-tur3.md`, `sef_karari-tur2.md`,
-`packet.md` (K1–K14), `PROTOKOL.md` §1–§4.5, `src/ocr/normalizer.py`,
-`src/ocr/presets.py`, `src/contracts/models.py`,
-`tests/unit/ocr/test_normalizer.py`, ve bu rolde bir önceki ajanın bıraktığı
-`tester_A/test_r5_partition_invariant.py` + `tester_A/test_warranty_domain.py`
-+ kendi tur 2 raporum (`verdict-A.md`), `feedback-A.md`.
-**Okumadım:** `delivery.md`, `evidence/`, `iptal-tur0/`, `tester_B*`,
-`tester_C*`.
-
-Devraldığım dosyayı **kabul ettim ve genişlettim** (silmedim):
-
-| Ne | Nasıl |
-|---|---|
-| Üretici seti | 5 → **6**; kendi dağılımımı (`_gen_hyphen_dense`) ekledim: blokların ~%35'i tire ile biter, devam satırları `h∈{3,5,8}` veya yatay kaydırılmış. Bu dağıtım önceki sette **yoktu** ve bulguyu ortaya çıkaran dağılımdır |
-| Derlem boyutu | 1200 → **2520** ayrı girdi (şefin ≥2000 tabanı artık makineyle sabitli: `test_derlem_sefin_2000_girdi_tabanini_asiyor`) |
-| Önceki `xfail` | `strict=False` → **`strict=True`**, ve tek elle kurulmuş noktadan **üç geometrik yol + bir makine denetimine** çıkarıldı |
-| Bayrağın alanı | K15'in **grup içi** yayılımının bayrakla kapanmadığını sabitleyen yeni test |
-
-Ayrıca `pytest` dışı, elle koşulabilir bir sonda yazdım:
-`tester_A/sonda_r5_bulgu.py` — şefin kendi eliyle yeniden üretmesi için.
-`src/` ve `tests/` altına hiçbir şey yazmadım.
-
----
-
-## 1 · K23 bölümleme değişmezi — **geçti**
-
-Implementer'ın 2500 girdilik denetimine güvenmedim; **kendi** üreticimle
-sınadım (farklı tohum **ve** farklı dağılım).
-
-| | |
-|---|---|
-| Kendi üreticim (hyphen-yoğun, `sonda_r5_bulgu.py`) | 3200 girdi × 4 ön ayar = **12.800 koşum** |
-| Devraldığım altı üreticili derlem (`test_k23_bolumleme_miras_acik_kapali_birebir_ayni`) | **2520** girdi × 4 ön ayar = **10.080 koşum** |
-| **Bölümleme farkı (`source_blocks` dizisi + `text` + `bbox` + `placeholders` + segment sayısı)** | **0** |
-| Miras gerçekten tetiklendi mi | **8117** segmentin `speaker`'ı `True`/`False` arasında değişiyor |
-
-Kapsanan dağılımlar: 3+ konuşmacı zinciri (ASCII **ve** `勇者`/`魔王`/`村人`,
-`:` ve `：` karışık), iç içe uzunluk+geometri bölünmeleri, aynı `y`'de yan
-yana bloklar (sütunlar), `h ∈ {0, ±1, 2, 3, 5, 8, −5, 400}`, `w ∈ {0, 8,
-−3, −4, 300}`, karışık/karıştırılmış giriş sırası, `_merge_hyphenated`'ı
-yoğun tetikleyen tire dağılımı.
-
-**Sondanın dişleri var (PROTOKOL §3 kapı 6).** "0 fark" totoloji olmasın diye
-tur 4'ün mekanizmasını test dosyasında yeniden kurdum (`_group_tur4`) ve
-**aynı** karşılaştırıcıyı ona uyguladım: bölümleme farkı **buluyor**
-(`test_k23_karsilastiricinin_disleri_var_tur4_mekanizmasi_yakalaniyor`).
-Yanlış kurulmuş bir sonda hatanın yokluğunu kanıtlamaz — bu sonda kurulmuş.
-
-Kod tarafında değişmez **yapı gereği** sağlanıyor: `apply_inheritance`
-bayrağı bölümleme geçişinin **içinde hiç okunmuyor**; görünüm geçişi yalnızca
-`replace(..., speaker=...)` yapıyor ve döngü bittikten sonra çalışıyor.
-
-## 2 · `apply_inheritance=False`'ın alanı — **geçti**, ama alanı **tam olarak** şu
-
-Soru: "son adımı mı atlıyor, yoksa miras hiç olmasaydı üretilecek çıktıyı mı
-veriyor?" Cevap: **ikisi de doğru, çünkü bu iki şey burada aynı şey** — ama
-yalnızca K19/K21/K23 mirası için.
-
-- Miras kodu **sıfır** olan bağımsız bir referans boru hattı (`_group_mirassiz`)
-  ile `speaker` **dâhil** tam `Segment` eşitliği: 2520 girdi × 4 ön ayar, fark
-  yok (`test_apply_inheritance_false_miras_hic_olmasaydi_ciktisiyla_birebir`).
-- Tek yönlü daralma sabitlendi: kapalıyken `None` olmayan bir `speaker` açık
-  haldekinden farklı **olamaz**, açıkken `None` olan bir segment kapalıyken
-  dolu **olamaz**.
-- **Bayrağın kapatmadığı şey:** K15'in **grup içi** `speaker` yayılımı
-  (`_group`'ta `speaker=current.speaker`). Bu **doğru** — o yayılım K15
-  matrisinin `X/None → evet` satırının kendisidir, yani **bölümleme
-  kuralının parçası**; kapatılsa K23'ün koruması gereken bölümlemenin
-  kendisi değişirdi. Yeni test:
-  `test_bayragin_alani_k15_ici_grup_yayilimini_KAPATMAZ`.
-- `menu`'de bayrak **hiçbir** şeyi değiştirmiyor (K27 kapsam dışı doğrulandı).
-
-**Sızıntı yok:** `__all__ == ("normalize",)`, `from ... import *` yalnız
-`normalize` getiriyor, `src.ocr` paketinde `_normalize_impl` yok,
-`normalize`'ın imzası `(blocks, preset)` ve `apply_inheritance` **reddediyor**
-(`TypeError`); `_normalize_impl`/`_group`'ta parametre keyword-only ve
-varsayılanı `True`.
-
-## 3 · K24 `tail` — **tanımlılık geçti, alan iddiası KALDI (BULGU R5-1)**
-
-**Tanımlılık:** `tail` her durumda tanımlı. `items[0]` ile başlatılıyor, her
-başarılı birleşimde ve her yeni grupta yeniden atanıyor; boş liste erken
-dönüyor. Tek öğeli grupta `tail is current` (ayrışma yok); ilk grupta,
-gruplar arka arkaya kapanırken ve yozlaşmış tek öğeli grupta `IndexError`/
-`UnboundLocalError` yok. **Yapısal olgu** (40.000 çiftlik ızgarayla
-sabitledim): K16 birleşmeye ancak `min(h) > 0` **ve** `min(w) > 0` iken izin
-verdiği için gruba **sonradan** katılan her öğe pozitif `w`/`h` taşır —
-yozlaşmış `tail` yalnızca **tek öğeli** grupta mümkündür, orada da
-`tail is current`.
-
-**`tail` ile `current` hangi geometrilerde ayrışıyor:** `speaker` kontrolü
-**hiç** ayrışmaz — miras sorgusu zaten `nxt.speaker is None` koşuluna bağlı
-ve o durumda `speaker` dalı her iki tarafta da reddetmez. Ayrışma **tamamen
-geometrik**, ve `current` **sistematik olarak daha gevşek**: birleşik kutu
-`bottom = max(bottom)` taşır (→ `gap` küçük/negatif), `h`/`w` her iki bileşenden
-büyüktür (→ `min(h)`/`min(w)` eşikleri şişer), `x`/`right` daha geniştir (→
-`overlap` şişer). İki yönü de sabitledim: (1) birleşik kutu kopuşu gizler,
-`tail` görür → **miras yok** (K24'ün zorunlu testinin yönü); (2) birleşik kutu
-`"overlap"` reddederken `tail` izin verir → **miras var**. İkinci yön K24'ün
-zorunlu testinde **yoktu**; onsuz `current` kullanan bir kod da testi geçerdi.
-
-**Ama:** `tail` docstring'in koşulsuz iddia ettiği gibi *"grubun okuma
-sırasındaki SON **HAM** öğesi"* **değil.** Ayrıntı ve ölçüm için
-`feedback-A.md`; özet:
-
-```
-tail (adim 3'te birlesmis oge) : src=(1, 2)  bbox=(y=0, h=35)   <- BIRLESIK
-grubun HAM son metin satiri    :             bbox=(y=30, h=5)
-KODUN sorgusu (tail, nxt)      : None        <- "kopus YOK" (artifakt)
-K24 IFADESI   (ham son satir)  : 'gap'       <- GERCEK kopus
-normalize()                    : [((0,1,2),'Ada'), ((3,),'Ada')]   <- K19 tablosu ihlali
-beklenen                       : [((0,1,2),'Ada'), ((3,),None)]
-```
-
-Üç bağımsız geometrik yol var, **ikisi monotonik** (dikey uzanım okuma
-sırasına tamamen uygun — "egzotik geometri" savunması kapalı):
-
-| Yol | Mekanizma | Monotonik? |
+| Komut | Şefin ölçtüğü | Benim ölçtüğüm |
 |---|---|---|
-| A | birleşik kutunun `bottom`'u (non-monotonik uzanım) | hayır |
-| B | `min(h)` şişmesi — devam satırı kısa (`h=5`) | **evet** |
-| C | `overlap` + `min(w)` şişmesi — devam satırı kaydırılmış/dar | **evet** |
+| `mypy --strict` | exit 0 | exit 0 |
+| `pytest tests/unit/ocr/test_normalizer.py` | 124 passed | **124 passed** |
+| `purity_check.py` | exit 0 | exit 0, `TEMIZ` |
+| `olcu_kiti.py` | exit 0, ayrışma 0/0/0 | exit 0, `KIT SAGLIGI: TEMIZ`, üç ön ayarda `ayrisma=0 kimlik=0 kapsam_ihlali=0 sira=0 sayi=0 patlama=0` |
+| `pytest tests` | 821 passed | **821 passed** |
+| kör takım (A+B+C), tur 6 başlangıcı | 388 passed, 0 kırık | **388 passed, 0 kırık** |
+| kör takım, benim yeni dosyamla | — | **425 passed, 1 xfailed, 0 kırık** |
 
-Makine denetimi (3200 girdi, üç gruplayan ön ayar): **30.174** uzunluk
-sınırının **1561'inde** (%5,2) kod miras veriyor ama K24'ün ifadesinin
-birebir okunuşu (grubun okuma sırasındaki **son ham bloğu**) vermiyor;
-bunların **1473'ü monotonik**. Ters yön 27. Uçtan uca **1004 segmentin**
-`speaker`'ı yanlış, **383/3200 girdi** etkileniyor.
+**Onuncu bir kırık yok.** Dördüncü xfail dahil, şefin §4.6/5 listesindeki
+dokuz bayatlama tur 6 tabanında zaten kapanmış durumda.
 
-**K23 ihlal edilmiyor** — bölümleme farkı 0. Bulgu yalnızca `speaker`'ı
-bozuyor; ama bozduğu şey tam olarak K19'un *"geometrik boşluğa konuşmacı
-atfetmek uydurmadır"* yasağıdır ve aynı semptom tur 3→4'te şef tarafından
-**bloke edici** sayılmıştı.
+## 1 · Bu turda tester_A'ya düşen yeniden nişanlama (tamamlandı)
 
-## 4 · Regresyon — **hepsi geçti**
+`test_r5_partition_invariant.py`:
 
-`tester_A/test_warranty_domain.py` (tur 2'de kurduğum paket) tur 5'te de
-koşuyor, **tamamı yeşil**:
+* Üç `strict=True` xfail → düzeltilmiş davranışı doğrulayan yeşil testler;
+  yanlarında (a) mekanizmayı (sorgu çifti) doğrulayan, (b) aynı fixture'ın
+  tur 5 biçiminde **hâlâ** yanlış sonuç verdiğini gösteren birer test.
+* Dördüncü xfail (`test_r51_makine_denetimi_*`) `_group`/`normalize`
+  çağırmadığı için **kaldırıldı**; yerine `normalize` üzerinden geçen,
+  **sırasız girdi** (her girdinin karıştırılmış bir kopyası) ve **≥3 bloklu
+  kuyruk** içeren yeni makine denetimi geldi. Alt sınırları makineyle
+  sabitlendi: `sinir > 1000`, `coklu_sol > 200`, `uclu_sol > 50`,
+  `coklu_sag > 50`, **`ayirt_edici > 20`** (indeks sırası ile okuma
+  sırasının ayrıştığı sınır — `max(sb)` yazan bir uygulama ancak orada
+  görünür). İki ayrı sonda kontrolü dişlerini kanıtlıyor (indeks-sırası
+  mutantı ve tur 5 biçimi ikisi de ayrışma buluyor).
+* `:401`'in kör sondası ürünün tur 6 yapısına eşitlendi
+  (`_group_tur4_yeni_sorgu_bicimiyle`) ve bir daha **sessizce**
+  bayatlamasın diye AST kapısı eklendi: ürünün miras sorgusu biçimi
+  `*_raw_query_pair(tail, nxt, blocks), params` olarak pinli, yerel kopya
+  onunla eşit olmak zorunda. Ayrıca sondanın gerçekten o yoldan geçtiği
+  `_raw_query_pair` çağrı sayısıyla (>1000) ölçülüyor.
 
-- **K7** — tam eşik dört ön ayarda korunuyor, eşiğin hemen altı düşüyor,
-  `NaN`/`inf`/alan dışı → `ValueError`, `NaN` sessizce hayatta kalmıyor, ilk
-  bozuk `confidence` **orijinal** sırada raporlanıyor
-- **K6** — `"%s ve %s"` tekrar/sıra, `"50%"` vs `"50%s"`, bitişik yer
-  tutucular, sayılar `placeholders`'a girmiyor, blok sınırına bölünmüş yer
-  tutucunun belgelenmiş bozuk davranışı
-- **K5** — `well-known` korunuyor, blok-arası `keli-`/`me` birleşiyor,
-  sonraki satır **büyük** harfle başlarsa tire **düşmüyor**, Unicode tire
-  varyantları ASCII kuralından dışlanıyor
-- **K16** — `h==0`/negatif `h`/`w==0` ızgaraları (`ref_height <= 0` ve
-  `ref_width <= 0` için tam ızgara) + tohumlu yozlaşmış fuzz: **hiçbirinde**
-  gruplama yok, çökme yok
-- **K17/K18** — ayraç kümesi (`:`, `：`), metin ortasında ayraç, birden çok
-  ayraçta en sol kazanır, ayraçla başlayan blok etiket değil, rakam/uzunluk
-  koruması fullwidth'e de uzanıyor; NFKC istisnası `？`/`！`/`﹖`/`﹗`/dikey
-  formlarda tutuyor, `？？`/`⁉`/`：`/`。`/`．`/`¿`/`❓` **genişletmiyor**
-- **Saflık** — art arda çağrılar değer-eşit, dönen listeyi mutasyona uğratmak
-  sonraki çağrıyı kirletmiyor, modül düzeyi önbellek yok
+## 2 · Sınır alanı taraması — `source_blocks` her durumda tanımlı mı
 
-Ayrıca üç kabul komutu da temiz: `mypy --strict` **Success**, implementer
-paketi **98 geçti**, `purity_check.py` **TEMIZ**.
-
-## 5 · `tester_A/` durumu
-
-`134 passed, 4 xfailed` — **tamamen yeşil.** Dört `xfail`'in **hepsi**
-`strict=True` ve **hepsi** BULGU R5-1'dir: gerekçe bu raporun 3. bölümünde ve
-`feedback-A.md`'de. `strict=True` seçtim ki kod düzeltildiğinde bu testler
-**XPASS ile kırılsın** — bulgu sessizce kapatılamaz, işaretin kaldırılması
-zorunlu olur. Bulgunun **mekanizması** ayrıca `xfail` olmayan yeşil bir
-testle sabitlendi (`test_r51_mekanizma_...`), yani xfail'ler boşa düşse bile
-sebep kayda geçmiş olur.
-
-## 6 · Bloke etmeyen gözlemler
-
-1. **K24'ün zorunlu testi tek yönlü.** `test_k24_kuyruk_ile_birlesik_bbox_
-   farkli_sonuc_verir` yalnızca "birleşik kutu izin verir / `tail` reddeder"
-   yönünü sınıyor. Ters yön (`tail` izin verir / birleşik kutu reddeder)
-   sınanmadığı için `current` kullanan bir kod bile o testi geçebilirdi.
-   Kendi paketimde ikinci yönü ekledim; kalıcı olması iyi olur.
-2. **Zincirleme miras hiçbir testle bağlı değil.** `_group` docstring'i
-   soldan sağa geçişin zincirleme mirası **kasıtlı** olarak mümkün kıldığını
-   söylüyor ve "hiçbir mevcut test bunun tersini beklemiyor" diyor — ama
-   **lehine** de bir test yok. Kendi paketimde dört öğeli monologda
-   sabitledim (`test_k24_tail_ilk_grupta_...`); `tests/` altında da bir test
-   hak ediyor, aksi halde ileride sessizce kaybolabilir.
-3. **`_merge_hyphenated` hiçbir geometrik kontrol yapmıyor** (K5 salt
-   tipografik). Bu belgeli ve bu turda karar konusu değil, ama R5-1'in
-   **kökü** burada: birbirinden 400 px uzaktaki iki blok da, biri tire ile
-   bitip diğeri küçük harfle başlıyorsa tek öğe oluyor ve o öğenin birleşik
-   kutusu grup kararlarına giriyor.
-
----
-
-## Doğrulama
+Ham çıktı: `tester_A_evidence/r6-sinir-alani-sondasi.txt`.
 
 ```
-python .agents/validate.py .agents/tasks/T-004/verdict-A.md
+_group([], params)                     [tester_C bicimi]   -> []
+_group([], params, blocks=())                              -> []
+_group([], params, apply_inheritance=False)                -> []
+_group([tek_oge], params)              [blocks YOK]        -> [(0,)]
+_raw_query_pair(source_blocks=())                          -> IndexError
+_raw_query_pair(blocks=())                                 -> IndexError
+_raw_query_pair(source_blocks=(5,), len(blocks)=1)         -> IndexError
+_raw_query_pair tek elemanli sb -> ikame yapiliyor mu      -> Rect(x=0,y=0,w=10,h=10,...)  [HAM blogun kutusu]
+_group(uzunluk-tek sinir, blocks=())  [apply_inh=True]     -> IndexError
+_group(uzunluk-tek sinir, blocks=())  [apply_inh=False]    -> IndexError
+_group('gap' siniri, blocks=())        [kisa devre]        -> [(0,), (1,)]
 ```
+
+Dördü de docstring'in söz verdiği gibi: **sessiz yanlış değil, gürültülü
+`IndexError`**. Patlamanın gecikmeli olduğu (`reason == "length" and
+nxt.speaker is None` sınırı dışında doğmadığı) ayrıca sabitlendi — `"gap"`
+sınırında `and` kısa devre yapıyor ve `blocks=()` sorun çıkarmıyor.
+
+Segment düzeyinde K8'in koşulsuz iddiaları, **1800 girdilik düşman derlem ×
+dört ön ayar** üzerinde (yalnız-etiket blokları, tam eşit `(y,x)` çiftleri,
+yozlaşmış kutular, karıştırılmış girdi sırası):
+
+```
+segment = 25384   bos=0  artan/tekrarsiz=0  aralik=0  ayriklik=0
+```
+
+Ayrıca **`normalize` belgelenmemiş istisna atmıyor**: 7200 koşumda
+`ValueError` dışında hiçbir istisna yok. Bu, K28'in koda açtığı `IndexError`
+yolunun genel API'den erişilemediğinin ölçüsü — ve dişi var: `blocks`'u
+kaydıran bir mutantta test `{'IndexError': 1188}` ile kırılıyor.
+
+## 3 · K28'in KARAR METNİ ile UYGULAMASI aynı bloğu mu seçiyor
+
+Bu, başka hiçbir yerde ölçülmüyor. Karar metni sol tarafı *"kapanan
+**grubun** kaynak blokları arasında okuma sırasında son gelen blok"* diye
+tanımlıyor; uygulama ise `tail` **öğesinin** kaynak bloklarından seçiyor.
+Kitin kancası (`sorgu_kaydi`) hem bölümleme (`ignore_length=False`, sol
+taraf = `current` = **kapanan grup**) hem miras (`ignore_length=True`, sol
+taraf = `tail`) sorgularını kaydettiği için ikisi karşılaştırılabiliyor:
+
+```
+4063 miras siniri, 199 tanesinde `tail` grubun TAMAMINDAN kucuk (cok ogeli grup)
+grup-son  !=  tail-son   ->   0
+```
+
+Denkliği mümkün kılan yapısal özelliği ayrıca ve doğrudan sabitledim: **adım
+1–4, hayatta kalan blokları okuma sırasında bitişik ve artan koşulara
+bölüyor** (adım 3'ün hyphen zinciri ve adım 4'ün etiket taşıması bu özelliği
+bozmuyor) — 23859 öğede (8874'ü çok bloklu) `bitisiklik ihlali=0`, `sira ihlali=0`.
+
+Şefin K28 gerekçesinde adlandırdığı **ek yüzey** (*"sırasız girdide `[-1]`
+segment üretmeyen bir ETİKET bloğunu bile gösterebilir"*) de kapalı: 4063
+miras sorgusunun hiçbirinde sorguya giren ham blok yalnız-etiket değil, ve
+ürünün sorguya soktuğu `bbox` her seferinde K28'in tanımladığı bloğun
+kutusu.
+
+## 4 · Zincirleme miras — `tests/` altında pinli mi
+
+**Pinli.** `tests/unit/ocr/test_normalizer.py::test_k28_olcu8_zincirleme_miras_uc_segmentte_korunur`
+(AST ile bulundu, ad sabit kodlanmadı — `normalize` çağırıp `speaker`
+listesini üç kez `Ada`'ya eşitleyen test aranıyor).
+
+Pinin **kapsamını** kendi geometrimle genişlettim:
+
+```
+bes bloklu monolog  -> [((0,),'Ada'), ((1,),'Ada'), ((2,),'Ada'), ((3,),'Ada'), ((4,),'Ada')]
+ortada gercek kopus -> [((0,),'Ada'), ((1,),'Ada'), ((2,),None),  ((3,),None)]
+```
+
+Zincirin uzunluğa bağlı bir tavanı yok; ve zincir "her segmente Ada yaz"
+değil — gerçek geometrik kopuşta kesiliyor ve **bir daha başlamıyor**.
+
+## 5 · Yeni testlerin dişleri — dört mutant sondası
+
+`src/` değiştirilmeden, ürün modülünün öznitelikleri geçici olarak
+yamalandı. Ham çıktı: `tester_A_evidence/r6-dis_kontrolu-mutantlar.txt`.
+
+| Mutant | Ne yapıyor | Hangi yeni test kırılıyor |
+|---|---|---|
+| **M-a** | iki segment aynı bloğu paylaşıyor (K8 ayrıklık) | k8 alan taraması, bitişik koşular, yerel==ürün, etiket bloğu, zincir ×2 |
+| **M-b** | `blocks` süzülmüş/kaydırılmış (M9 sınıfı) | **istisna sözleşmesi** (`{'IndexError': 1188}`) + hepsi |
+| **M-c** | bitişik **olmayan** öğeler birleştiriliyor | **grup-vs-tail (88/3047)**, bitişik koşular, yerel==ürün, zincir ×2 |
+| **M-d** | sol taraf okuma-sırası **ilk** blok | **etiket bloğu (98/4063)** |
+
+Taban koşumda dördü de `GECTI` — yani sondalar totoloji değil.
+
+**Bir bayatlama tuzağını kendi dosyamda kapattım.** İlk sürümde yapısal test
+kendi yeniden uygulamamı ölçüyordu ve M-c'yi **göremiyordu** (`:401`'in tur
+5'te düştüğü tuzağın aynısı). Düzeltildi: yapısal test artık ürünün
+`_group`'a gerçekten geçirdiği öğe listesini ölçüyor, ve ayrıca
+`test_yerel_turetim_urunun_group_girdisiyle_ESIT` iki tarafı makineyle
+eşitleyerek bir daha sessizce ayrışmalarını engelliyor.
+
+## 6 · Bulgu N1 — bloke etmez · modül docstring'inin `### K24` bölümü bayat
+
+**Yeniden üretim:** `tester_A_evidence/r6-bulgu-N1-K24-bayat-docstring.txt`.
+
+Ürünün gerçek çağrı biçimi (AST):
+
+```
+_group_rejection_reason(*_raw_query_pair(tail, nxt, blocks), params, ignore_length=True)
+```
+
+`normalizer.py:832-836` (modül docstring, `### K24` bölümü):
+
+```
+K21'in `ignore_length=True` IKINCI cagrisi ARTIK `_group_rejection_reason(current,
+nxt, ...)` DEGIL, `_group_rejection_reason(tail, nxt, ...)` KULLANIR -- yani SOL
+TARAF DAIMA grubun okuma-sirasindaki EN SON (birlesime en son KATILAN) HAM
+ogesidir, `current`'in (birden fazla oge ICEREBILEN) BIRLESIK `bbox`'i DEGIL.
+```
+
+İki ayrı sorun:
+
+1. **Çağrı biçimi artık bu değil.** İddia şimdiki zamanda ve koşulsuz;
+   bölümde `K28` de `raw_query_pair` de **hiç geçmiyor** (ölçüldü: bölüm
+   2720 karakter, ikisinin de sayısı 0).
+2. *"`tail` … HAM öğesidir"* cümlesi, **bulgu R5-1'in tam olarak çürüttüğü
+   cümledir** — `tail` adım 3'ten birleşik gelebilir. Bugün doğru olmasının
+   sebebi `tail` değil, `_raw_query_pair`'in ham blok ikamesi.
+
+**Neden bloke etmiyor:** (a) hiçbir girdi için davranışsal bir garanti
+ihlal edilmiyor — merceğimin bloke etme ölçütü bu; (b) modül docstring'inin
+**daha yeni ve daha önce gelen** `## K28` bölümü (satır 92–120) kuralı
+eksiksiz ve doğru veriyor; (c) bir sonraki ajanın okuyacağı iki fonksiyonun
+(`_group`, `_raw_query_pair`) docstring'leri K28'e açıkça referans veriyor
+ve doğru.
+
+**Neden yine de bir bulgu:** modül başka yerlerde bayatlayan iddiaları açık
+kalıpla işaretliyor (`## K10`, satır 457: *"TUR 1'DE bu docstring … diyordu;
+… düzeltir"*); `### K24` bölümü bu kalıbı kullanmıyor. Şef bunu bloke edici
+saymak isterse gerekçesi hazır — ölçüm ve satır numaraları yukarıda.
+
+## 7 · Gözlem G1 — `apply_inheritance=False` `blocks=()` patlamasını engellemiyor
+
+Ölçüldü (bkz. sınır alanı sondası): uzunluk-tek sınırda `blocks=()` ile
+`IndexError`, **iki bayrak değerinde de**. Bu **doğru** davranış ve K23'ün
+"bayrak bölümleme geçişinde hiç okunmaz" değişmezinin doğrudan sonucu
+(`pure_length_boundaries` bölümleme döngüsünde hesaplanıyor). Ancak
+`_group` docstring'inin `blocks=()` cümlesi (*"varsayılan YALNIZCA `items`
+boşken ya da uzunluk-tek sınır doğmayan doğrudan çağrılar içindir"*)
+bayrağı anmıyor; doğrudan çağıran bir sonraki ajan
+`apply_inheritance=False`'ın kalkan olduğunu sanabilir. Bir cümle yeterdi.
+Testle sabitledim (`test_group_uzunluk_tek_sinirda_blocks_yoksa_GURULTULU_kirilir`,
+iki bayrakla parametrize).
+
+## 8 · Gözlem G2 — K28'in karar-metni uyumu belgelenmemiş bir yapıya dayanıyor
+
+§3'teki denklik (grup-son == tail-son) adım 1–4'ün **bitişik koşu**
+özelliğine dayanıyor ve bu özellik hiçbir yerde yazılı değil. Kırılırsa
+K28 sessizce karar metninden ayrışır. Ölçtüm — o özelliği bozan M-c mutantı
+**kitin dört kanalına da görünmüyor**:
+
+```
+taban  DIALOGUE/TOOLTIP/SUBTITLE  temiz=True  (hepsi 0)
+M-c    DIALOGUE/TOOLTIP/SUBTITLE  temiz=True  ayrisma=0 kimlik=0 kapsam=0 sira=0 sayi=0 patlama=0
+```
+
+(Kararın "bilinen sınırlar" tablosundaki **M12** sınıfı: kitin `adim1_4`'ü
+mutantla birlikte kayıyor.) Benim iki yeni testim onu 88/3047 ve
+4743 ihlalle yakalıyor — yani bu sınıfın bir dilimi artık ölçülüyor.
+
+**Öneri (bloke etmez):** bitişik-koşu özelliği `_raw_query_pair` ya da
+`_group` docstring'ine bir cümleyle yazılsın, veya `known_gaps`'e girsin.
+
+## 9 · Yazdığım dosyalar
+
+* `.agents/tasks/T-004/tester_A/test_r6_garanti_alani.py` — **yeni**
+  (27 geçen + 1 `strict=True` xfail).
+* `.agents/tasks/T-004/tester_A_evidence/r6-*.txt` — ham çıktılar.
+
+`src/`, `tests/unit/ocr/`, `olcu_kiti.py`, `conftest.py` ve diğer tester
+dizinleri **değiştirilmedi**. Ölçü kiti yalnızca `sorgu_kaydi` /
+`okuma_sirasi` için içe aktarıldı; referanslar bu dosyanın kendi
+türetiminden geliyor (PROTOKOL §4.6/8).

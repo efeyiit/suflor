@@ -1,0 +1,144 @@
+
+==============================================================================
+1. EMOJI / ASTRAL / ZWJ
+==============================================================================
+  tek emoji U+1F44D                  len=1 kat=[So                  ] -> SILINDI  []
+  ZWJ aile (5 cp)                    len=5 kat=[So Cf So Cf So      ] -> KORUNDU  ['👨\u200d👩\u200d👧']
+  bayrak TR (2 cp)                   len=2 kat=[So So               ] -> KORUNDU  ['🇹🇷']
+  varyasyon secici gunes (2 cp)      len=2 kat=[So Mn               ] -> KORUNDU  ['☀️']
+  varyasyon secicisiz gunes (1 cp)   len=1 kat=[So                  ] -> SILINDI  []
+  astral CJK ext-B (1 cp)            len=1 kat=[Lo                  ] -> KORUNDU  ['𠀋']
+  astral matematiksel bold A (1 cp)  len=1 kat=[Lu                  ] -> KORUNDU  ['𝐀']
+  ten tonlu el (2 cp)                len=2 kat=[So Sk               ] -> KORUNDU  ['👋🏻']
+  keycap 1 (3 cp)                    len=3 kat=[Nd Mn Me            ] -> KORUNDU  ['1️⃣']
+
+  -- ZWJ dizisi codepoint SAYISI max_group_chars'i sisiriyor mu? --
+    tekrar= 20  ZWJ(cp=100): 2 segment  |  ASCII(cp= 20, AYNI grapheme): 1 segment
+    tekrar= 45  ZWJ(cp=225): 2 segment  |  ASCII(cp= 45, AYNI grapheme): 1 segment
+
+  -- emoji/astral KONUSMACI ADI olarak --
+    '👨: merhaba'                       -> speaker=None kalan='👨: merhaba'
+    '𝐀𝐁: merhaba'                      -> speaker='𝐀𝐁' kalan='merhaba'
+    '𠀋: merhaba'                       -> speaker='𠀋' kalan='merhaba'
+    'Ada👍: merhaba'                    -> speaker=None kalan='Ada👍: merhaba'
+
+  -- yalniz vekil (lone surrogate) -- UTF-16 tabanli motorun uretebilecegi --
+    cokme YOK; cikti=['\ud83dabc']
+
+  -- emoji ile MIRAS: speaker codepoint duzeyinde korunuyor mu? --
+    segment sayisi=2 speaker'lar=['勇者', '勇者']
+    codepoint'ler: [['0x52c7', '0x8005'], ['0x52c7', '0x8005']]
+
+==============================================================================
+2. monitor_index != 0
+==============================================================================
+  -- monitor_index BLOK BASINA SABIT: bolumleme monitor 0 ile AYNI mi? --
+    dort on ayar x mon in (0,1,7,-3): AYRISMA YOK (monitor_index atil)
+
+  -- Segment.bbox monitor_index'i TASIYOR mu (birlesmis segmentte)? --
+    text='bir iki' bbox.monitor_index=4 dpi=1.0
+
+  -- KARISIK monitor: BIRLESEN cift -> ValueError bekleniyor (K10) --
+    ValueError: birlesecek bloklarin monitor_index/dpi_scale degerleri uyusmuyor: (0, 1.0) != (1, 1.0)
+
+  -- KARISIK monitor: BIRLESMEYEN ama UZUNLUK sinirinda kalan cift --
+    ValueError YOK; segment sayisi=2
+      speaker='Ada' monitor=0 source_blocks=(0,)
+      speaker='Ada' monitor=1 source_blocks=(1,)
+    (AYNI cift, metin KISA -> birlesme denenir):
+      ValueError: birlesecek bloklarin monitor_index/dpi_scale degerleri uyusmuyor: (0, 1.0) != (1, 1.0)
+
+==============================================================================
+3. dpi_scale != 1.0
+==============================================================================
+  -- dpi_scale BLOK BASINA SABIT: bolumleme dpi=1.0 ile AYNI mi? --
+    ayrisan (dpi, preset) ciftleri: YOK (dpi_scale atil)
+
+  -- GEOMETRI dpi ile OLCEKLENIRSE bolumleme degisiyor mu? (oran tabanli olmali) --
+    k=2: bolumleme farkli olan on ayarlar -> YOK
+    k=3: bolumleme farkli olan on ayarlar -> YOK
+    k=4: bolumleme farkli olan on ayarlar -> YOK
+
+  -- NaN dpi_scale: IKI blok da AYNI NaN tasiyor --
+    ValueError: birlesecek bloklarin monitor_index/dpi_scale degerleri uyusmuyor: (0, nan) != (0, nan)
+    (K7'nin confidence NaN mesaji ile karsilastir:)
+      TextBlock[0].confidence gecersiz: nan (NaN olamaz, [0.0, 1.0] araliginda olmali)
+
+  -- dpi_scale int 1 vs float 1.0 / -0.0 vs 0.0 --
+    dpi 1 vs 1.0: birlesti (esit sayildi)
+    dpi -0.0 vs 0.0: birlesti (esit sayildi)
+
+==============================================================================
+4. >=40 BLOKLU GIRDI
+==============================================================================
+  n= 40 dialogue  segment= 11  TEMIZ
+  n= 40 tooltip   segment= 27  TEMIZ
+  n= 40 subtitle  segment= 17  TEMIZ
+  n= 40 menu      segment= 40  TEMIZ
+  n= 63 dialogue  segment= 28  TEMIZ
+  n= 63 tooltip   segment= 43  TEMIZ
+  n= 63 subtitle  segment= 32  TEMIZ
+  n= 63 menu      segment= 63  TEMIZ
+  n=120 dialogue  segment= 45  TEMIZ
+  n=120 tooltip   segment= 74  TEMIZ
+  n=120 subtitle  segment= 53  TEMIZ
+  n=120 menu      segment=120  TEMIZ
+  n=250 dialogue  segment=100  TEMIZ
+  n=250 tooltip   segment=166  TEMIZ
+  n=250 subtitle  segment=121  TEMIZ
+  n=250 menu      segment=250  TEMIZ
+
+  -- >=40 blokta ZINCIRLEME miras (tek etiket + 60 devam blogu) --
+    segment sayisi=60  farkli speaker degerleri=['Ada']
+    None sayisi=0  'Ada' sayisi=60
+
+  -- >=40 blok + SIRASIZ girdi + K23 fuzz (200 koşum) --
+    K23 ihlali: 0 / 600
+
+==============================================================================
+5. ASCII-DISI KONUSMACI ADI
+==============================================================================
+  ornek                              speaker          kalan
+  japonca kanji + fullwidth ayrac    勇者               'こんにちは'
+  japonca kanji + ASCII ayrac        魔王               'こんにちは'
+  japonca hiragana                   むらびと             'やあ'
+  korece hangul                      용사               '안녕'
+  cince                              王小明              '你好'
+  kiril                              Ада              'привет'
+  yunanca                            Αδα              'γεια'
+  arapca (harekesiz)                 مرحبا            'أهلا'
+!!arapca + hareke (fatha)            None             'مَرحبا: أهلا'
+  ibranice                           שלום             'היי'
+!!ibranice + nikud                   None             'שָלוֹם: היי'
+!!devanagari (namaste)               None             'नमस्ते: नमस्ते'
+!!devanagari (sadece basit harf)     None             'राम: नमस्ते'
+!!tayca                              None             'สวัสดี: สวัสดี'
+  turkce aksanli (NFC)               Şeyma            'merhaba'
+!!turkce aksanli (NFD)               None             'Şeyma: merhaba'
+!!RTL isaretli (U+200F)              None             'مرحبا\u200f: أهلا'
+  vietnamca (NFC)                    Đức              'xin chào'
+!!vietnamca (NFD)                    None             'Đức: xin chào'
+  halfwidth katakana                 ｶﾞﾝ              'やあ'
+
+  -- KOMBINE ISARETLERIN kategorileri (neden reddediliyorlar) --
+    devanagari virama U+094D     kategori=Mn isalpha=False
+    devanagari e-matra U+0947    kategori=Mn isalpha=False
+    tayca sara-i U+0e34          kategori=Mn isalpha=False
+    arapca fatha U+064E          kategori=Mn isalpha=False
+    ibranice kamats U+05B8       kategori=Mn isalpha=False
+    birlesen akut U+0301         kategori=Mn isalpha=False
+    RTL isareti U+200F           kategori=Cf isalpha=False
+
+  -- ASCII-DISI ad ile MIRAS ZINCIRI (uzunluk bolunmesi) --
+    '勇者'      : 3 segment speakers=['勇者', '勇者', '勇者']
+    '魔王'      : 3 segment speakers=['魔王', '魔王', '魔王']
+    'Ада'     : 3 segment speakers=['Ада', 'Ада', 'Ада']
+
+  -- YALNIZ-ETIKET blok (ASCII-disi) bir sonrakine tasiniyor mu? --
+    [('こんにちは', '勇者', (0, 1))]
+
+  -- ASCII-disi ad + SIRASIZ girdi: yalniz-etiket blok ASAGIDA --
+    dialogue  [(None, (0,)), ('勇者', (1, 2))]
+    tooltip   [(None, (0,)), ('勇者', (1, 2))]
+
+SONDA BITTI.

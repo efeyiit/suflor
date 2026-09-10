@@ -1,0 +1,7 @@
+=== GOZLEM G2 -- M-c (bitisik OLMAYAN oge birlesimi) kite gorunuyor mu? ===
+  taban        DIALOGUE  temiz=True ayrisma=0 kimlik=0 kapsam=0 sira=0 sayi=0 patlama=0 eksik=[]
+  taban        TOOLTIP   temiz=True ayrisma=0 kimlik=0 kapsam=0 sira=0 sayi=0 patlama=0 eksik=[]
+  taban        SUBTITLE  temiz=True ayrisma=0 kimlik=0 kapsam=0 sira=0 sayi=0 patlama=0 eksik=[]
+  M-c          DIALOGUE  temiz=True ayrisma=0 kimlik=0 kapsam=0 sira=0 sayi=0 patlama=0 eksik=[]
+  M-c          TOOLTIP   temiz=True ayrisma=0 kimlik=0 kapsam=0 sira=0 sayi=0 patlama=0 eksik=[]
+  M-c          SUBTITLE  temiz=True ayrisma=0 kimlik=0 kapsam=0 sira=0 sayi=0 patlama=0 eksik=[]

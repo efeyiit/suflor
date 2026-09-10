@@ -1,0 +1,17 @@
+=== MERCEK A/2 -- SINIR ALANI SONDASI (ham) ===
+  _group([], params)                     [tester_C bicimi]   -> []
+  _group([], params, blocks=())                              -> []
+  _group([], params, apply_inheritance=False)                -> []
+  _group([tek_oge], params)              [blocks YOK]        -> [(0,)]
+  _raw_query_pair(source_blocks=())                          -> IndexError: list index out of range
+  _raw_query_pair(blocks=())                                 -> IndexError: tuple index out of range
+  _raw_query_pair(source_blocks=(5,), len(blocks)=1)         -> IndexError: list index out of range
+  _raw_query_pair tek elemanli sb -> ikame yapiliyor mu      -> Rect(x=0, y=0, w=10, h=10, monitor_index=0, dpi_scale=1.0)
+  _group(uzunluk-tek sinir, blocks=())  [apply_inh=True]     -> IndexError: tuple index out of range
+  _group(uzunluk-tek sinir, blocks=())  [apply_inh=False]    -> IndexError: tuple index out of range
+  _group('gap' siniri, blocks=())        [kisa devre]        -> [(0,), (1,)]
+
+=== MERCEK A/3 -- ZINCIRLEME MIRAS (ham) ===
+  bes bloklu monolog  -> [((0,), 'Ada'), ((1,), 'Ada'), ((2,), 'Ada'), ((3,), 'Ada'), ((4,), 'Ada')]
+  ortada gercek kopus -> [((0,), 'Ada'), ((1,), 'Ada'), ((2,), None), ((3,), None)]
+  tests/unit/ocr altindaki PIN(ler): ['test_k28_olcu8_zincirleme_miras_uc_segmentte_korunur']

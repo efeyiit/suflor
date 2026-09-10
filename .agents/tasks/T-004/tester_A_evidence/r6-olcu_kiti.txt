@@ -1,3 +1,4 @@
+$ python .agents/tasks/T-004/olcu_kiti.py
 --- olcu 6 alt sinirlari (kitin sagligi) ---
   DIALOGUE  sinir= 3802 coklu= 3013 uclu= 2532 derin= 278 sag= 2292 ascii_disi= 451 yoz=2031 neg= 142 buyuk= 786 ikikon= 145 kapsam= 9078 esik_alti=1241
             | ayrisma=0 kimlik=0 kapsam_ihlali=0 sira=0 sayi=0 kimlik_kosulamadi=0 patlama=0
@@ -17,4 +18,4 @@
                   bek =[((0, 1, 2, 3), 'Ada'), ((4,), None)]  (zaten saglaniyor)
 KIT SAGLIGI: TEMIZ
   (not: `ayrisma` K28 uygulanana kadar >0 BEKLENIR -- R5-1 acik; kimlik/kapsam/sira/sayi ihlalleri ise bugun de 0 olmalidir)
-exit=0
+exit_code=0

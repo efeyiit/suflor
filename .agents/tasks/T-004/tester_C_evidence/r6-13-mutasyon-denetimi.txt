@@ -1,0 +1,12 @@
+TABAN (mutasyonsuz):
+  exit=0  143 passed in 0.47s
+
+  MC1 indeks sirasi (M4 sinifi)          exit=1  KIRILDI (iyi)   2 failed, 141 passed in 0.57s
+  MC2 ham ikame YOK (K28 oncesi)         exit=1  KIRILDI (iyi)   3 failed, 140 passed in 0.50s
+  MC3 sag taraf `nxt` kalir (M5)         exit=1  KIRILDI (iyi)   1 failed, 142 passed in 0.48s
+  MC4 ikame monitor_index==0'a kapili    exit=1  KIRILDI (iyi)   6 failed, 137 passed in 0.54s
+  MC5 ikame dpi_scale==1.0'a kapili      exit=1  KIRILDI (iyi)   8 failed, 135 passed in 0.56s
+  MC6 gorunum gecisi TERS yon (M11)      exit=1  KIRILDI (iyi)   5 failed, 138 passed in 0.52s
+  MC7 ad suzgeci ASCII'ye kapili         exit=1  KIRILDI (iyi)   12 failed, 131 passed in 0.62s
+
+MUTASYON DENETIMI BITTI.

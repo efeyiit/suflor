@@ -1,0 +1,54 @@
+
+[KONTROL]
+  davranis: DIALOGUE.acik=0 DIALOGUE.kapali=0 MENU.acik=0 MENU.kapali=0 TOOLTIP.acik=0 TOOLTIP.kapali=0 SUBTITLE.acik=0 SUBTITLE.kapali=0 TOPLAM=0
+  kit     : DIAL[geo=0,kim=0,kap=0,sir=0,say=0] TOOL[geo=0,kim=0,kap=0,sir=0,say=0] SUBT[geo=0,kim=0,kap=0,sir=0,say=0]  temiz=[True, True, True]
+  urun    : 0 kirik []
+.
+[M3_tail_yerine_current]
+  davranis: DIALOGUE.acik=0 DIALOGUE.kapali=0 MENU.acik=0 MENU.kapali=0 TOOLTIP.acik=0 TOOLTIP.kapali=0 SUBTITLE.acik=0 SUBTITLE.kapali=0 TOPLAM=0
+  kit     : DIAL[geo=0,kim=2387,kap=0,sir=0,say=0] TOOL[geo=0,kim=1350,kap=0,sir=0,say=0] SUBT[geo=0,kim=826,kap=0,sir=0,say=0]  temiz=[False, False, False]
+  urun    : 10 kirik ['test_k28_olcu1_sol_taraf_birlesik_kuyruk_gercek_kopusu_gizlemez[_olcu1_sol_varyant_a-gap]', 'test_k28_olcu1_sol_taraf_birlesik_kuyruk_gercek_kopusu_gizlemez[_olcu1_sol_varyant_b-gap]', 'test_k28_olcu1_sol_taraf_birlesik_kuyruk_gercek_kopusu_gizlemez[_olcu1_sol_varyant_c-overlap]', 'test_k28_olcu2_sag_taraf_birlesik_aday_gercek_kopusu_gizlemez[_olcu2_sag_varyant_a2-height]', 'test_k28_olcu2_sag_taraf_birlesik_aday_gercek_kopusu_gizlemez[_olcu2_sag_varyant_b-gap]', 'test_k28_olcu2_sag_taraf_birlesik_aday_gercek_kopusu_gizlemez[_olcu2_sag_varyant_c-overlap]']
+.
+[M4_indeks_sirasi]
+  davranis: DIALOGUE.acik=73 DIALOGUE.kapali=0 MENU.acik=0 MENU.kapali=0 TOOLTIP.acik=64 TOOLTIP.kapali=0 SUBTITLE.acik=205 SUBTITLE.kapali=0 TOPLAM=342
+  kit     : DIAL[geo=1668,kim=0,kap=0,sir=0,say=0] TOOL[geo=2672,kim=0,kap=0,sir=0,say=0] SUBT[geo=3163,kim=0,kap=0,sir=0,say=0]  temiz=[False, False, False]
+  urun    : 6 kirik ['test_k28_olcu3_sirasiz_girdi_cift_bloklu_kuyruk[dialogue]', 'test_k28_olcu3_sirasiz_girdi_cift_bloklu_kuyruk[tooltip]', 'test_k28_olcu5_yapisal_sorguyu_ham_bloklar_belirler', 'test_k28_olcu6_makine_denetimi[dialogue]', 'test_k28_olcu6_makine_denetimi[subtitle]', 'test_k28_olcu6_makine_denetimi[tooltip]']
+.
+[M5_sag_taraf_nxt_kalir]
+  davranis: DIALOGUE.acik=40 DIALOGUE.kapali=0 MENU.acik=0 MENU.kapali=0 TOOLTIP.acik=52 TOOLTIP.kapali=0 SUBTITLE.acik=167 SUBTITLE.kapali=0 TOPLAM=259
+  kit     : DIAL[geo=2208,kim=0,kap=0,sir=0,say=0] TOOL[geo=3957,kim=0,kap=0,sir=0,say=0] SUBT[geo=4721,kim=0,kap=0,sir=0,say=0]  temiz=[False, False, False]
+  urun    : 6 kirik ['test_k28_olcu2_sag_taraf_birlesik_aday_gercek_kopusu_gizlemez[_olcu2_sag_varyant_a2-height]', 'test_k28_olcu2_sag_taraf_birlesik_aday_gercek_kopusu_gizlemez[_olcu2_sag_varyant_b-gap]', 'test_k28_olcu2_sag_taraf_birlesik_aday_gercek_kopusu_gizlemez[_olcu2_sag_varyant_c-overlap]', 'test_k28_olcu6_makine_denetimi[dialogue]', 'test_k28_olcu6_makine_denetimi[subtitle]', 'test_k28_olcu6_makine_denetimi[tooltip]']
+.
+[M11_goruntu_gecisi_ters_yon]
+  davranis: DIALOGUE.acik=150 DIALOGUE.kapali=0 MENU.acik=0 MENU.kapali=0 TOOLTIP.acik=139 TOOLTIP.kapali=0 SUBTITLE.acik=915 SUBTITLE.kapali=0 TOPLAM=1204
+  kit     : DIAL[geo=0,kim=0,kap=0,sir=0,say=0] TOOL[geo=0,kim=0,kap=0,sir=0,say=0] SUBT[geo=0,kim=0,kap=0,sir=0,say=0]  temiz=[True, True, True]
+  urun    : 1 kirik ['test_k28_olcu8_zincirleme_miras_uc_segmentte_korunur']
+.
+[M12_adim3_yardimcisi]
+  davranis: DIALOGUE.acik=1636 DIALOGUE.kapali=1636 MENU.acik=1636 MENU.kapali=1636 TOOLTIP.acik=1636 TOOLTIP.kapali=1636 SUBTITLE.acik=1636 SUBTITLE.kapali=1636 TOPLAM=13088
+  kit     : DIAL[geo=0,kim=0,kap=0,sir=0,say=0] TOOL[geo=0,kim=0,kap=0,sir=0,say=0] SUBT[geo=0,kim=0,kap=0,sir=0,say=0]  temiz=[True, True, True]
+  urun    : 1 kirik ['test_k5_buyuk_harfle_baslayan_sonraki_satir_birlesmez']
+.
+[M13a_yalniz_menu]
+  davranis: DIALOGUE.acik=0 DIALOGUE.kapali=0 MENU.acik=3000 MENU.kapali=3000 TOOLTIP.acik=0 TOOLTIP.kapali=0 SUBTITLE.acik=0 SUBTITLE.kapali=0 TOPLAM=6000
+  kit     : DIAL[geo=0,kim=0,kap=0,sir=0,say=0] TOOL[geo=0,kim=0,kap=0,sir=0,say=0] SUBT[geo=0,kim=0,kap=0,sir=0,say=0]  temiz=[True, True, True]
+  urun    : 1 kirik ['test_k27_menu_gruplama_yok_miras_kavrami_yok']
+.
+[M13b_yalniz_miras_kapali]
+  davranis: DIALOGUE.acik=0 DIALOGUE.kapali=686 MENU.acik=0 MENU.kapali=0 TOOLTIP.acik=0 TOOLTIP.kapali=585 SUBTITLE.acik=0 SUBTITLE.kapali=1717 TOPLAM=2988
+  kit     : DIAL[geo=0,kim=0,kap=0,sir=0,say=0] TOOL[geo=0,kim=0,kap=0,sir=0,say=0] SUBT[geo=0,kim=0,kap=0,sir=0,say=0]  temiz=[True, True, True]
+  urun    : 1 kirik ['test_k23_invariant_b1_senaryosunda_bolumleme_ayni_speaker_farkli']
+.
+[M15_yanlis_params]
+  davranis: DIALOGUE.acik=270 DIALOGUE.kapali=0 MENU.acik=0 MENU.kapali=0 TOOLTIP.acik=543 TOOLTIP.kapali=0 SUBTITLE.acik=1031 SUBTITLE.kapali=0 TOPLAM=1844
+  kit     : DIAL[geo=0,kim=0,kap=0,sir=0,say=0] TOOL[geo=0,kim=0,kap=0,sir=0,say=0] SUBT[geo=0,kim=0,kap=0,sir=0,say=0]  temiz=[True, True, True]
+  urun    : 0 kirik []
+.
+--- kitin GORMEDIGI bes sinif ---
+  M11_goruntu_gecisi_ters_yon      davranis=  1204  kit_temiz=True   urun_kirik=1 ['test_k28_olcu8_zincirleme_miras_uc_segmentte_korunur']
+  M12_adim3_yardimcisi             davranis= 13088  kit_temiz=True   urun_kirik=1 ['test_k5_buyuk_harfle_baslayan_sonraki_satir_birlesmez']
+  M13a_yalniz_menu                 davranis=  6000  kit_temiz=True   urun_kirik=1 ['test_k27_menu_gruplama_yok_miras_kavrami_yok']
+  M13b_yalniz_miras_kapali         davranis=  2988  kit_temiz=True   urun_kirik=1 ['test_k23_invariant_b1_senaryosunda_bolumleme_ayni_speaker_farkli']
+  M15_yanlis_params                davranis=  1844  kit_temiz=True   urun_kirik=0 []
+.
+10 passed in 51.98s

@@ -62,9 +62,9 @@
       "depends_on": [
         "T-001"
       ],
-      "durum": "tur6-testerlar-YARIM",
-      "tur": 6,
-      "not": "TUR 6 UYGULANDI VE SEF DOGRULADI: K28 kodda, R5-1 kapandi, dort kabul komutu exit 0, ayrisma 3677/6119/7249 -> 0/0/0, pytest tests 821 passed. UC TESTER BASLATILDI AMA YARIDA KESILDI (kullanici molasi). A ve B bayat kapi aletlerini yeniden nisanlamayi BITIRDI -- tester takimi artik 388 passed, 0 kirik (oncesi 370+9). EKSIK: verdict-A/B/C.md yok; C yeni testlerini yazmamis (kitin olcmedigi bes girdi sinifi: emoji/ZWJ, monitor_index, dpi_scale, >=40 blok, ASCII-disi konusmaci adi). DEVAM: uc testeri yeniden baslat, ODAK verdict yazmak + C'nin bes girdi sinifi + B'nin bes mutanti (M4/M5/M11/M12/M13/M15)."
+      "durum": "tur7-implementer",
+      "tur": 7,
+      "not": "TUR 6: UC TESTER DE ONAY (A 13, B 12, C 15 kontrol; sef hepsini yeniden uretti). K28 kodda, R5-1 kapandi, kit ayrismasi 0/0/0, tests 821 passed, kor takim 623 passed 1 xfailed 0 kirik. Dokuz bulgu bildirildi, DORDU SEFIN HATASIYDI: K32'nin NFC varsayimi (Devanagari/Ibranice/Arapca adlar ZATEN NFC ama Mn/Mc yuzunden taninmiyor -- NFC normalizasyonu bu sinifi KAPATMAZ), M5->olcu 5 (olcu5 fixture'inin sag taraflari tek bloklu), env.md M4->3b, bayat K24 docstring bolumu. Ilk ucu duzeltildi. TUR 7 acildi (kapanis): T7-1 K24 docstring, T7-2 M15 kapisi. Kirmizi takima gitmiyor (yeni degismez yok), tek tester (B) kosacak. Alti kalem bilincli ertelendi."
     },
     {
       "id": "T-005",

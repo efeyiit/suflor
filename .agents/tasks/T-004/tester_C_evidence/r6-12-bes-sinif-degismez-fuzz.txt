@@ -1,0 +1,12 @@
+koşum = 1600  (400 girdi x 4 on ayar)
+K10 ValueError (karisik monitor/dpi -- KASITLI, ihlal degil) = 0
+
+  D1:     0 ihlal   
+  D2:     0 ihlal   
+  D3:     0 ihlal   
+  D4:     0 ihlal   
+  D5:     0 ihlal   
+  D6:     0 ihlal   
+  D7:     0 ihlal   
+
+TOPLAM IHLAL = 0

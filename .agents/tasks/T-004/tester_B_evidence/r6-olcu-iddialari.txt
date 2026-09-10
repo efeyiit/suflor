@@ -1,0 +1,29 @@
+KARARIN OLCU IDDIALARININ FIXTURE TABANI (tester_B, tur 6)
+soru: 'M4 -> olcu 3b kirilmali' ve 'M5 -> olcu 5 kirilmali' cumleleri tutuyor mu?
+
+olcu3  DIALOGUE  miras_sinir=1
+    sol_sb=(0, 2) okuma_son=0 indeks_son=2  AYRISIR (M4 gorunur)
+    sag_sb=(3,) okuma_ilk=3 indeks_ilk=3  TEK BLOKLU (M5 GORUNMEZ)
+
+olcu3  TOOLTIP   miras_sinir=2
+    sol_sb=(1,) okuma_son=1 indeks_son=1  AYNI  (M4 GORUNMEZ)
+    sag_sb=(0, 2) okuma_ilk=2 indeks_ilk=0  COK BLOKLU (M5 gorunur)
+    sol_sb=(0, 2) okuma_son=0 indeks_son=2  AYRISIR (M4 gorunur)
+    sag_sb=(3,) okuma_ilk=3 indeks_ilk=3  TEK BLOKLU (M5 GORUNMEZ)
+
+olcu3b DIALOGUE  miras_sinir=1
+    sol_sb=(1, 2, 3) okuma_son=3 indeks_son=3  AYNI  (M4 GORUNMEZ)
+    sag_sb=(4,) okuma_ilk=4 indeks_ilk=4  TEK BLOKLU (M5 GORUNMEZ)
+
+olcu5  DIALOGUE  miras_sinir=2
+    sol_sb=(0, 2) okuma_son=0 indeks_son=2  AYRISIR (M4 gorunur)
+    sag_sb=(3,) okuma_ilk=3 indeks_ilk=3  TEK BLOKLU (M5 GORUNMEZ)
+    sol_sb=(4, 5) okuma_son=4 indeks_son=5  AYRISIR (M4 gorunur)
+    sag_sb=(6,) okuma_ilk=6 indeks_ilk=6  TEK BLOKLU (M5 GORUNMEZ)
+
+olcu3b bloklarinin okuma sirasi: [0, 1, 2, 3, 4]
+kitin derlem alt sinirlari arasinda coklu_sag VAR: 500
+olcu5 fixture'inda coklu_sag: 0  -> olcu 5'in SAG TARAF yarisi ayirt edici DEGIL
+
+=== SONUC ===
+BASARILI: N1 ve N2 bulgulari HALA gecerli (fixture'lar degismemis)

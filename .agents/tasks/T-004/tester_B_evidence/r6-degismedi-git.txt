@@ -1,0 +1,25 @@
+K28 ONCESI (74256d8) ile SIMDIKI src/ocr/normalizer.py karsilastirmasi
+govde = docstring'siz, ast.unparse ile normalize edilmis
+
+YENI tanim: ['_raw_query_pair']
+SILINEN   : [] 
+
+_Item                      govde=AYNI     docstring=ayni
+normalize                  govde=AYNI     docstring=buyudu +118 chr
+_normalize_impl            govde=DEGISTI  docstring=buyudu +320 chr
+_validate_confidences      govde=AYNI     docstring=ayni
+_is_noise                  govde=AYNI     docstring=ayni
+_is_single_char_noise      govde=AYNI     docstring=ayni
+_join_line                 govde=AYNI     docstring=ayni
+_collapse_intraline        govde=AYNI     docstring=ayni
+_union_rect                govde=AYNI     docstring=ayni
+_merge_hyphenated          govde=AYNI     docstring=buyudu +788 chr
+_find_speaker_separator    govde=AYNI     docstring=ayni
+_split_speaker_label       govde=AYNI     docstring=buyudu +576 chr
+_extract_speakers          govde=AYNI     docstring=ayni
+_group_rejection_reason    govde=AYNI     docstring=ayni
+_should_group              govde=AYNI     docstring=buyudu +137 chr
+_group                     govde=DEGISTI  docstring=buyudu +3487 chr
+
+=== SONUC ===
+BASARILI: tur 6'nin kod degisikligi K28'in ilan ettigi UC noktayla sinirli

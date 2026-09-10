@@ -1,0 +1,7 @@
+=== TESTLERIN URETTIGI SAYACLAR (taban) ===
+  dusman derlem girdi sayisi        : 1800
+  toplam blok                       : 12340
+  K8 taramasindaki segment          : 25384   (test alt siniri 5000)
+  istisna taramasindaki kosum       : 7200  (test alt siniri 6000)
+  miras sorgusu (grup-vs-tail)      : 4063  cok ogeli grup: 199  (alt sinirlar 300 / 50)
+  yapisal testteki oge              : 23859  cok bloklu: 8874  (alt sinirlar 5000 / 500)

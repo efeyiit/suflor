@@ -1,0 +1,50 @@
+
+=== MUTANT: YOK (taban -- hepsi GECTI olmali) ===
+   k8_alan_taramasi       GECTI
+   istisna_sozlesmesi     GECTI
+   grup_vs_tail           GECTI
+   bitisik_kosular        GECTI
+   yerel==urun            GECTI
+   etiket_blogu           GECTI
+   zincir_5               GECTI
+   zincir_kesilir         GECTI
+
+=== MUTANT: M-a: iki segment ayni blogu paylasiyor (K8 ayriklik) ===
+   k8_alan_taramasi       KIRILDI: K8 ihlali -- bos=0 artan=1908 aralik=0 ayriklik=4964
+   istisna_sozlesmesi     GECTI
+   grup_vs_tail           GECTI
+   bitisik_kosular        KIRILDI: oge kosulari bitisik/artan degil -- bitisiklik ihlali=0 sira ihlali=5154
+   yerel==urun            KIRILDI: 1500 karsilastirmanin 1458 tanesi ayrisiyor: yerel=[(0, 1), (2,), (3,), (4, 5), (6, 7)] urun=[(0, 1), (0, 1, 2), (3,), (4, 5), (6,
+   etiket_blogu           KIRILDI: 4063 miras sorgusunun 16 tanesinde K28'in tanimladigi ham blok YALNIZ-ETIKET blogu -- sorgu gercek satir-arasi boslugu olcmuyor
+   zincir_5               KIRILDI: <mesajsiz assert>
+   zincir_kesilir         KIRILDI: <mesajsiz assert>
+
+=== MUTANT: M-b: `blocks` suzulmus/kaydirilmis (indeks kaymasi) ===
+   k8_alan_taramasi       IndexError: list index out of range
+   istisna_sozlesmesi     KIRILDI: `normalize` belgelenmemis istisna atiyor: {'IndexError': 1188}
+   grup_vs_tail           IndexError: list index out of range
+   bitisik_kosular        IndexError: list index out of range
+   yerel==urun            IndexError: list index out of range
+   etiket_blogu           IndexError: list index out of range
+   zincir_5               IndexError: list index out of range
+   zincir_kesilir         IndexError: list index out of range
+
+=== MUTANT: M-c: bitisik OLMAYAN ogeler birlestiriliyor (kosu bitisikligi) ===
+   k8_alan_taramasi       GECTI
+   istisna_sozlesmesi     GECTI
+   grup_vs_tail           KIRILDI: K28'in KARAR METNI ile UYGULAMASI 3047 sinirin 88 tanesinde farkli blok seciyor: grup_sb=(0, 1, 2, 3, 4, 5, 6, 7, 8) -> 8 | tail_s
+   bitisik_kosular        KIRILDI: oge kosulari bitisik/artan degil -- bitisiklik ihlali=4743 sira ihlali=4743
+   yerel==urun            KIRILDI: 1500 karsilastirmanin 1347 tanesi ayrisiyor: yerel=[(0, 1), (2,), (3,), (4, 5), (6, 7)] urun=[(0, 2), (1,), (3,), (4, 5), (6, 7)]
+   etiket_blogu           GECTI
+   zincir_5               KIRILDI: <mesajsiz assert>
+   zincir_kesilir         KIRILDI: <mesajsiz assert>
+
+=== MUTANT: M-d: sol taraf okuma-sirasi ILK blok (etiket blogu sizabilir) ===
+   k8_alan_taramasi       GECTI
+   istisna_sozlesmesi     GECTI
+   grup_vs_tail           GECTI
+   bitisik_kosular        GECTI
+   yerel==urun            GECTI
+   etiket_blogu           KIRILDI: 4063 miras sorgusunun 98 tanesinde urunun kullandigi `bbox` K28'in tanimladigi ham blogun kutusu DEGIL
+   zincir_5               GECTI
+   zincir_kesilir         GECTI

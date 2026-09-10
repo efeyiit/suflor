@@ -1,0 +1,64 @@
+
+==============================================================================
+A. K28 SAG TARAF -- birlesik aday, HAM ilk satir h=0 (K16 sinifi)
+==============================================================================
+  segment sayisi=2
+    speaker='Ada'    text='aaaaaaaaaaaaaaaaaaaaaaaa' source_blocks=(0,) bbox.h=20
+    speaker=None     text='kelime devam' source_blocks=(1, 2) bbox.h=25
+  BEKLENTI (K16): birlesik aday bbox'i h=0'i GIZLEMEMELI -> ikinci speaker None
+
+  -- kontrol: ayni sekil ama HAM ilk satir h=20 -> miras UYGULANMALI --
+    speakers=['Ada', 'Ada'] source_blocks=[(0,), (1, 2)]
+
+  -- kontrol: birlesik kutu ile bakilsaydi ne olurdu? --
+     birlesik aday bbox: y=25, h=min(0..)=?  -> union(y25 h0, y30 h20) = y25 h25
+     gap = 25 - 20 = 5 ; 0.8*min(20,25)=16 -> 5<16 -> MIRAS (YANLIS)
+     ham ilk satir h=0 -> ref_height=0 -> 'height' -> MIRAS YOK (DOGRU)
+
+==============================================================================
+B. `blocks=` GECIRILMEZSE: sessiz yanlis mi, gurultulu kirilma mi?
+==============================================================================
+  1) UZUNLUK siniri DOGAN dogrudan cagri, blocks= VERILMEDEN:
+     IndexError: tuple index out of range   (BILINCLI: gurultulu kirilir)
+  2) UZUNLUK siniri DOGMAYAN dogrudan cagri, blocks= VERILMEDEN:
+     calisti: [('kisa', 'Ada'), ('metin', None)]
+  3) SUZULMUS blocks (indeks kaymasi) -- bir sonraki ajanin klasik hatasi:
+     DOGRU (blocks=tam)      -> speakers=['Ada', 'Ada']
+     YANLIS (blocks=suzulmus)-> IndexError: list index out of range
+
+==============================================================================
+C. `_normalize_impl` / `apply_inheritance=False` KOTU KULLANIM yuzeyi
+==============================================================================
+  __all__ = ('normalize',)
+  'normalize' imzasi genel API'de mi degisti: (blocks: 'Sequence[TextBlock]', preset: 'OcrPreset') -> 'list[Segment]'
+  _normalize_impl imzasi: (blocks: 'Sequence[TextBlock]', preset: 'OcrPreset', *, apply_inheritance: 'bool' = True) -> 'list[Segment]'
+  _group imzasi:          (items: 'list[_Item]', params: 'NormalizerParams', *, blocks: 'Sequence[TextBlock]' = (), apply_inheritance: 'bool' = True) -> 'list[_Item]'
+    docstring 'SADECE K23' iceriyor mu: True
+    docstring 'MAKINE DENETIMI' iceriyor mu: True
+    docstring 'DISARIYA' iceriyor mu: True
+    docstring 'SIZMAZ' iceriyor mu: True
+
+  -- apply_inheritance=False URUNDE kullanilirsa ne kaybedilir? --
+    True : speakers=['Ada', 'Ada'] source_blocks=[(0,), (1,)]
+    False: speakers=['Ada', None] source_blocks=[(0,), (1,)]
+    bolumleme BIREBIR ayni mi: True
+
+==============================================================================
+D. YALNIZ-ETIKET blogu OKUMA SIRASINDA SON olan sol taraf
+==============================================================================
+  dialogue  [(None, (1,), 'aaaaaaaaaaaa'), ('勇者', (0, 2), 'bbbbbbbbbbbb')]
+  tooltip   [(None, (1,), 'aaaaaaaaaaaa'), ('勇者', (0, 2), 'bbbbbbbbbbbb')]
+  (idx0 etiket kutusu bottom=300; govde idx1 bottom=20. SOL taraf hangisi?)
+  okuma sirasi (y,x,i): idx1(y=0) < idx0(y=100) -> SON = idx0 = ETIKET kutusu
+  etiket kutusuyla: gap = 305-300 = 5  < 0.8*20=16 -> MIRAS
+  govde kutusuyla : gap = 305-20  = 285 > 16       -> MIRAS YOK
+
+==============================================================================
+E. monitor_index / dpi_scale SINIRINI ASAN MIRAS
+==============================================================================
+  monitor 0 -> 1   UZUN metin (uzunluk siniri): speakers=['Ada', 'Ada'] bbox=[(0, 1.0), (1, 1.0)]
+  monitor 0 -> 1   KISA metin: ValueError -> birlesecek bloklarin monitor_index/dpi_scale degerleri uyusm...
+  dpi 1.0 -> 2.0   UZUN metin (uzunluk siniri): speakers=['Ada', 'Ada'] bbox=[(0, 1.0), (0, 2.0)]
+  dpi 1.0 -> 2.0   KISA metin: ValueError -> birlesecek bloklarin monitor_index/dpi_scale degerleri uyusm...
+
+SONDA BITTI.

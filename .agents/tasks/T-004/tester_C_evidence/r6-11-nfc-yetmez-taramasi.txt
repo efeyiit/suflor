@@ -1,0 +1,20 @@
+ad                           NFC-normal?  NFC==NFD?  NFC ile taniniyor?
+devanagari राम               True         True       False   NFC cp=3 NFD cp=3
+devanagari नमस्ते            True         True       False   NFC cp=6 NFD cp=6
+tayca สวัสดี                 True         True       False   NFC cp=6 NFD cp=6
+arapca+hareke مَرحبا         True         True       False   NFC cp=6 NFD cp=6
+ibranice+nikud שָלוֹם        True         True       False   NFC cp=6 NFD cp=6
+korece 용사                    True         False      True    NFC cp=2 NFD cp=5
+japonca 勇者                   True         True       True    NFC cp=2 NFD cp=2
+vietnamca Đức                True         False      True    NFC cp=3 NFD cp=5
+
+KOMBINE ISARETLERIN kategorileri (neden `isalpha()` reddediyor):
+  devanagari virama U+094D       kategori=Mn isalpha=False
+  devanagari matra AA U+093E     kategori=Mc isalpha=False
+  devanagari e-matra U+0947      kategori=Mn isalpha=False
+  tayca sara-i U+0E34            kategori=Mn isalpha=False
+  arapca fatha U+064E            kategori=Mn isalpha=False
+  ibranice kamats U+05B8         kategori=Mn isalpha=False
+  birlesen akut U+0301           kategori=Mn isalpha=False
+  RTL isareti U+200F             kategori=Cf isalpha=False
+  LTR isareti U+200E             kategori=Cf isalpha=False
