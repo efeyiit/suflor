@@ -1,0 +1,26 @@
+[SIMDIKI (tur 7, HEAD)]
+  bolum VAR MI          : EVET
+  baslik metni kac kez  : 1
+  bolum satir sayisi    : 85
+  bolumde 'K28'         : 8
+  bolumde '_raw_query_pair': 3
+  bolumde 'DEVREDILDI'  : 1
+  bolumde 'NEDEN CURUDU': 1
+  bolumde 'TARIHCE'     : 2
+  K28 bolumu satir      : 53
+  K28'de 'DEVRALINDI'   : 1
+  K28'de 'K24'          : 7
+
+[ONCEKI (tur 6, 0de4546)]
+  bolum VAR MI          : EVET
+  baslik metni kac kez  : 1
+  bolum satir sayisi    : 50
+  bolumde 'K28'         : 0
+  bolumde '_raw_query_pair': 0
+  bolumde 'DEVREDILDI'  : 0
+  bolumde 'NEDEN CURUDU': 0
+  bolumde 'TARIHCE'     : 0
+  K28 bolumu satir      : 38
+  K28'de 'DEVRALINDI'   : 0
+  K28'de 'K24'          : 1
+

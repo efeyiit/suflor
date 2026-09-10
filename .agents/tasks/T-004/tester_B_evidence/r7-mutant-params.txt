@@ -1,0 +1,9 @@
+TEMIZ    | test=GECTI  | yalniz-dialogue ablasyonu=GECTI  | (mutasyon YOK -- kontrol kosumu)
+M15-a    | test=DUSTU  | yalniz-dialogue ablasyonu=DUSTU  | sorgu SABIT tooltip params ile soruluyor
+         `-> DIALOGUE
+M15-b    | test=DUSTU  | yalniz-dialogue ablasyonu=DUSTU  | sorgu ICINDE esik IKAMESI (deger DEGISIR)
+         `-> DIALOGUE
+M15-c    | test=DUSTU  | yalniz-dialogue ablasyonu=GECTI  | sorgu SABIT dialogue params ile soruluyor (KARARIN M15 TARIFI birebir)
+         `-> TOOLTIP
+M15-d    | test=DUSTU  | yalniz-dialogue ablasyonu=DUSTU  | sorgu ICINDE `replace` -- DEGERLER AYNI, NESNE BASKA (salt-kimlik mutanti)
+         `-> DIALOGUE: sorgu `_group`'a verilen params nesnesinden BASKASINI gordu -> [(0.8, 280), (0.8, 280)]

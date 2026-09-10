@@ -1,0 +1,16 @@
+### olcu kiti DEGISTIRILMEDI mi (T7-2 sarti)
+
+$ git log --oneline -2 -- .agents/tasks/T-004/olcu_kiti.py
+74256d8 T-004: ölçü kiti sürüm 3; K28 implementer'a gidiyor
+a3492b9 Ajan sistemi: kırmızı takım kapıları, ölçü kiti ve protokol §4.6
+
+$ git rev-parse <rev>:.agents/tasks/T-004/olcu_kiti.py  (uc surum)
+  74256d8 (kit surum 3) : db0361af6d89d4aa13f3deb4a8b508a779d26a56
+  0de4546 (tur 6 sonu) : db0361af6d89d4aa13f3deb4a8b508a779d26a56
+  HEAD    (tur 7)      : db0361af6d89d4aa13f3deb4a8b508a779d26a56
+  calisma agaci        : db0361af6d89d4aa13f3deb4a8b508a779d26a56
+
+-> DORDU DE AYNI SHA: kit tur 7'de DEGISTIRILMEDI, yalnizca ICE AKTARILDI.
+
+### tests/unit/ocr/conftest.py (kit sys.path'i, sefe ait) da degismedi mi
+  (bos ciktı = degismedi)

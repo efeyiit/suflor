@@ -1,0 +1,32 @@
+### known_gaps: tur 6'dan devreden ALTI ertelenmis kalem
+### (kararin 'bu turda YAPILMAYACAKLAR' tablosuyla birebir esleme)
+
+NOT: delivery.md mercegime KAPALI. Sef bu turda known_gaps denetimini
+     acikca bana verdi; bu yuzden YALNIZ known_gaps alanindan 'DEVREDEN n/6'
+     isaretcilerini cektim, dosyanin geri kalanini OKUMADIM.
+
+$ grep -o "DEVREDEN [0-9]/6" ... | sort | uniq -c
+      1 DEVREDEN 1/6
+      1 DEVREDEN 2/6
+      1 DEVREDEN 3/6
+      1 DEVREDEN 4/6
+      1 DEVREDEN 5/6
+      1 DEVREDEN 6/6
+
+### baslik eslemesi
+  TUR 6'DAN DEVREDEN 1/6 (karar tur 7, 'bu turda YAPILMAYACAKLAR' tablosu) -- `olcu5_fixture`'a COK BLOKLU aday (B/N1):
+  TUR 6'DAN DEVREDEN 2/6 -- M12 sinifi yalniz `test_k5_*`'ye yaslaniyor (B/N4):
+  TUR 6'DAN DEVREDEN 3/6 -- `Mn`/`Mc` ad suzgeci genisletmesi (C/1):
+  TUR 6'DAN DEVREDEN 4/6 -- ZWJ/emoji grapheme sismesi (C/4):
+  TUR 6'DAN DEVREDEN 5/6 -- miras `monitor_index`/`dpi_scale` sinirini asiyor (C/2):
+  TUR 6'DAN DEVREDEN 6/6 -- `NaN` `dpi_scale` tani mesaji (C/3):
+
+### kararin tablosu (sef_karari-tur7.md, satir 56-61)
+  | `olcu5_fixture`'a çok bloklu aday (B/N1) | Kitin fixture'ını değiştirmek ölçü kurgusuna dokunur; kırmızı takım gerektirir. Ayrı tur. |
+  | M12 sınıfının yalnız `test_k5_*`'ye yaslanması (B/N4) | Aynı sınıf; kitin `adim1_4` bağımsızlığı sorunu (karar sürüm 8 "bilinen sınırlar"da yazılı). |
+  | `Mn`/`Mc` ad süzgeci genişletmesi (C/1) | **K9'un sözlüksel kuralını değiştirir** — davranış değişikliği, ayrı tur. Bu turda yalnız `known_gaps` cümlesi düzeltildi (karar sürüm 8'de yapıldı). |
+  | ZWJ/emoji grapheme şişmesi (C/4) | Aynı sınıf: `max_group_chars`'ın codepoint sayması K11'in kuralı. Ayrı tur. |
+  | Miras `monitor_index`/`dpi_scale` sınırını aşıyor (C/2) | Yeni değişmez gerektirir. Ayrı tur. |
+  | `NaN` `dpi_scale` tanı mesajı (C/3) | Kozmetik; K7'nin `confidence` ön denetiminin `dpi_scale` karşılığı yok. Ayrı tur. |
+
+-> 6/6 kalem YAZILMIS, her biri erteleme GEREKCESIYLE.

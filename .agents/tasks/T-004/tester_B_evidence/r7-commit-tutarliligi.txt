@@ -1,0 +1,23 @@
+### commit: f75d4d4  (TEMIZ CHECKOUT: C:/Users/pc/AppData/Local/Temp/scratch/C--Users-pc-Desktop-efe--eviri-uygulamas-/d52c967f-bd19-4db3-b5e9-77e6cd08b889/scratchpad/wt-chk)
+
+### HEAD'de takipli mi?
+  src/capture/service.py                     commit'te YOK
+  src/capture/monitors.py                    commit'te YOK
+  tests/unit/capture/test_service.py         TAKIPLI
+  tests/unit/capture/test_monitors.py        TAKIPLI
+
+### TEMIZ checkout'ta: python -m pytest tests -q
+tests\unit\capture\test_service.py:21: in <module>
+    from src.capture.service import (
+E   ModuleNotFoundError: No module named 'src.capture.service'
+=========================== short test summary info ===========================
+ERROR tests/unit/capture/test_monitors.py
+ERROR tests/unit/capture/test_service.py
+!!!!!!!!!!!!!!!!!!! Interrupted: 2 errors during collection !!!!!!!!!!!!!!!!!!!
+2 errors in 0.59s
+
+### TEMIZ checkout'ta: T-004'un DARALTILMIS kapsami
+..............................                                           [100%]
+822 passed in 3.00s
+
+### worktree temizlendi; calisma agaci degistirilmedi.

@@ -1,0 +1,8 @@
+KADEME 1  tum docstring'ler cikarilmis AST : AYNI
+          (dump uzunluklari 43033 / 43033)
+KADEME 2  modul docstring GERI konunca AST : AYNI
+          -> yani MODUL docstring'i DISINDA hicbir sey degismedi
+KADEME 3  yeni dosyada modul docstring satirlari: 1-947
+          docstring ARALIGI DISINDA degisen hunk: YOK
+
+SONUC: SALT DOKUMANTASYON (modul docstring'i)

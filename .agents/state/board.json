@@ -62,7 +62,7 @@
       "depends_on": [
         "T-001"
       ],
-      "durum": "tur7-implementer",
+      "durum": "tur7-tester-B",
       "tur": 7,
       "not": "TUR 6: UC TESTER DE ONAY (A 13, B 12, C 15 kontrol; sef hepsini yeniden uretti). K28 kodda, R5-1 kapandi, kit ayrismasi 0/0/0, tests 821 passed, kor takim 623 passed 1 xfailed 0 kirik. Dokuz bulgu bildirildi, DORDU SEFIN HATASIYDI: K32'nin NFC varsayimi (Devanagari/Ibranice/Arapca adlar ZATEN NFC ama Mn/Mc yuzunden taninmiyor -- NFC normalizasyonu bu sinifi KAPATMAZ), M5->olcu 5 (olcu5 fixture'inin sag taraflari tek bloklu), env.md M4->3b, bayat K24 docstring bolumu. Ilk ucu duzeltildi. TUR 7 acildi (kapanis): T7-1 K24 docstring, T7-2 M15 kapisi. Kirmizi takima gitmiyor (yeni degismez yok), tek tester (B) kosacak. Alti kalem bilincli ertelendi."
     },
@@ -81,9 +81,9 @@
         "T-001",
         "T-003"
       ],
-      "durum": "paket-v8-kirmizi-takim-bekliyor",
-      "tur": 0,
-      "not": "Paket KT yedi tur: 23+27+15+13+14+16 = 108+ bulgu, 18'i yuksek. v7'nin iki yuksegi: grab kutusunu kirpan uygulama bes kapidan geciyordu (§3 tek noktada olcuyordu -- artik negatif koordinatta ikinci nokta); ve sefin v7'de K10'a yazdigi OLCU cumlesi VAR OLMAYAN bir denetimi tarif ediyordu (4.6/2+/3) -- geri cekildi, kopyalama gercek mss'te gozlemlenemez oldugu icin kapi degil tercih olarak yazildi. Ayrica: girise kabul kapisi (int() sessiz kirpmayi onler), K7 tip duzeyine tasindi (dort ayrisma girdisi), capture_full bacagi [OLCULMUYOR], §5 elif zinciri ayrildi, §4 dekorator + calisma zamani protokol uyumu. env.md yazildi: DORT mercek (takma ad / sayisal / durum makinesi / test kalitesi), gerekce olculmus hata dagilimina dayali (4.5 artirmayi yasaklamiyor)."
+      "durum": "testerlar",
+      "tur": 1,
+      "not": "IMPLEMENTER TAMAM, SEF DOGRULADI. Bes kabul komutu exit 0; 159 yeni test; kapsam %98.83; pytest tests -> 981 passed. GERCEK EKRANDA CALISIYOR: iki monitor dogru, negatif koordinat (-2000,300)->mi=0, yayilan bolge mi=-1, tam ekran (1440,2560,3), bellek paylasimi False, numpy sizintisi yok, seq dogru artiyor. Implementer kendi olcumuyle iki kendi hatasini buldu (pragma yeri, docstring'de yanlis ms) ve paketin iki iddiasini bagimsiz yeniden uretti. Dort tester sirada."
     },
     {
       "id": "T-006",

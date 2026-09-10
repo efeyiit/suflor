@@ -1,0 +1,4 @@
+P-a | test=DUSTU  | dialogue esigi 0.8 -> 0.5 (miras artik UYGULANMAZ)
+     `-> kirildigi satir 1934: assert dialogue.max_vertical_gap_ratio * 18 == pytest.approx(14.4)
+P-b | test=DUSTU  | tooltip esigi 0.3 -> 0.8 (iki on ayar AYNI olur, ayirt gucu biter)
+     `-> kirildigi satir 1935: assert tooltip.max_vertical_gap_ratio * 18 == pytest.approx(5.4)

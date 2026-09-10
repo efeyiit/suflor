@@ -400,10 +400,18 @@ def test_k6_b_cagri_sayisi() -> None:
 
 
 def test_k6_b_seq() -> None:
-    servis, _ = _kur(image_factory=_patlayan())
+    sayac = [0]
+
+    def uretici(rect: Rect) -> Any:
+        sayac[0] += 1
+        if sayac[0] <= 3:
+            raise RuntimeError("backend coktu")
+        return np.zeros((rect.h, rect.w, 4), dtype=np.uint8)
+
+    servis, _ = _kur(image_factory=uretici)
     with pytest.raises(CaptureError):
         servis.capture_region(Rect(0, 0, 10, 10))
-    assert servis._seq == -1  # hicbir seq tuketilmedi
+    assert servis.capture_region(Rect(0, 0, 10, 10)).seq == 0  # hic seq tuketilmedi
 
 
 def test_k6_b_cause() -> None:
@@ -435,10 +443,18 @@ def test_k6_c_cagri_sayisi() -> None:
 
 
 def test_k6_c_seq() -> None:
-    servis, _ = _kur(image_factory=_gecersiz)
+    sayac = [0]
+
+    def uretici(rect: Rect) -> Any:
+        sayac[0] += 1
+        if sayac[0] == 1:
+            return np.zeros((3, 3, 3), dtype=np.uint8)
+        return np.zeros((rect.h, rect.w, 4), dtype=np.uint8)
+
+    servis, _ = _kur(image_factory=uretici)
     with pytest.raises(CaptureError):
         servis.capture_region(Rect(0, 0, 10, 10))
-    assert servis._seq == -1
+    assert servis.capture_region(Rect(0, 0, 10, 10)).seq == 0
 
 
 def test_k6_c_cause() -> None:
@@ -461,14 +477,16 @@ def test_k6_karisik_b_sonra_c() -> None:
         sayac[0] += 1
         if sayac[0] == 1:
             raise RuntimeError("once istisna")
-        return np.zeros((3, 3, 3), dtype=np.uint8)  # sonra gecersiz cikti
+        if sayac[0] == 2:
+            return np.zeros((3, 3, 3), dtype=np.uint8)  # sonra gecersiz cikti
+        return np.zeros((rect.h, rect.w, 4), dtype=np.uint8)
 
     servis, fb = _kur(image_factory=uretici)
     with pytest.raises(CaptureError) as ex:
         servis.capture_region(Rect(0, 0, 10, 10))
-    assert fb.grab_calls == 2
+    assert fb.grab_calls == 2  # (c)'den sonra yeniden DENENMEZ
     assert ex.value.__cause__ is None  # son olay (c)
-    assert servis._seq == -1
+    assert servis.capture_region(Rect(0, 0, 10, 10)).seq == 0  # seq tuketilmedi
 
 
 def test_k6_b_sonra_basari() -> None:
@@ -701,6 +719,26 @@ def test_k8_giris_tamsayi_olmayan_reddedilir(deger: Any) -> None:
     with pytest.raises(CaptureError):
         servis.capture_region(Rect(deger, 0, 100, 100))
     assert fb.grab_calls == 0
+
+
+@pytest.mark.parametrize(
+    "deger", ["1.5", True, None, object()], ids=["str", "bool", "none", "obj"]
+)
+def test_k8_giris_dpi_scale_sayi_olmayan_reddedilir(deger: Any) -> None:
+    """`float('1.5')` sessizce calisirdi; kabul kapisi bunu gurultulu yapar."""
+    servis, fb = _kur()
+    with pytest.raises(CaptureError):
+        servis.capture_region(Rect(0, 0, 100, 100, dpi_scale=deger))
+    assert fb.grab_calls == 0
+
+
+def test_k8_giris_dpi_scale_float32_duz_float_a_duzlesir() -> None:
+    """`np.float32` JSON'a serilesmez (sef olctu) -> duz `float`'a cevrilir."""
+    servis, _ = _kur()
+    kare = servis.capture_region(Rect(0, 0, 100, 100, dpi_scale=np.float32(1.5)))
+    assert type(kare.rect.dpi_scale) is float
+    assert kare.rect.dpi_scale == pytest.approx(1.5)
+    json.dumps(asdict(kare.rect))
 
 
 @pytest.mark.parametrize("deger", [10.0, np.float64(10.0)], ids=["float", "float64"])

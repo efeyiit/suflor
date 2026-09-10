@@ -199,3 +199,30 @@ uretilmemesi Y-C'yi dogurdu. Eksik kalemler simdi olculdu:
 [HC8-artik] refA kum havuzunda ve depoda _hc_probe* .py artigi: 0
             (NOT: __pycache__ altinda .pyc artigi KALIYOR -- v5'teki "artigi: 0" iddiasi bu yonuyle
              yanlisti, duzeltildi. Zararsiz, gitignore'lu.)
+
+==== T-005 IMPLEMENTER TESLIMI -- SEF SONDASI ====
+SAHIPLIK: yasak dosyalara dokunulmamis (contracts, dpi.py, change_detector.py, __init__.py,
+          ocr/, headless_check.py, dondurulmus testler -- git diff bos).
+BES KABUL KOMUTU (sef kendi kostu):
+  mypy --strict --explicit-package-bases   exit 0  "Success: no issues found in 2 source files"
+  pytest test_service + test_monitors      exit 0  159 passed
+  headless_check.py                        exit 0  TEMIZ (bes kontrol)
+  pytest --cov-fail-under=95               exit 0  TOTAL 171 stmt, 2 miss, %98.83
+  pytest tests/unit/capture                exit 0  742 passed (583 dondurulmus + 159, dusen YOK)
+TAM REGRESYON: pytest tests -> 981 passed
+headless_check --real: TEMIZ exit 0 (konum sadakati UYARI -- canli ekran, beklenen)
+
+SEFIN KENDI GERCEK-EKRAN SONDASI:
+  monitorler       (-2560,0,2560,1440,idx=0) ve (0,0,2560,1440,idx=1)   <- makinenin gercek duzeni
+  birlesim         Rect(-2560,0,5120,1440,mi=-1,ds=1.0)
+  INSIDE           capture_region(100,100,400,200) -> (200,400,3) uint8, 41 tekil renk,
+                   writeable=True, rect=(100,100,400,200), monitor_index=1
+  NEGATIF          capture_region(-2000,300,400,200) -> (200,400,3), monitor_index=0
+                   ^^ kapinin ikinci olcum noktasinin korudugu yol; calisiyor
+  YAYILAN          capture_region(-300,400,600,100) -> monitor_index=-1  (K8 dogru)
+  FULL(1)          capture_full(1) -> (1440,2560,3), monitor_index=1
+  SAHIPLIK         np.shares_memory(Frame.image, backend dizisi) = False  (K7 dogru)
+  TIPLER           x,y,w,h hepsi 'int'; dpi_scale 'float'  (numpy sizintisi YOK)
+  seq              0,1,2,3,4 -- her basarili yakalamada tam 1 artiyor (K2 dogru)
+GORSEL KANIT: birincil monitorden 900x300 bolge yakalanip PNG'ye yazildi (6629 bayt),
+              kullaniciya gonderildi. Projenin ilk gozle gorulur ciktisi.

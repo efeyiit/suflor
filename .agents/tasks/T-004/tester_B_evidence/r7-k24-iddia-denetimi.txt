@@ -1,0 +1,18 @@
+--- K29: atfedilen testler VAR MI ve YESIL MI ---
+  test_k24_kuyruk_ile_birlesik_bbox_farkli_sonuc_verir: VAR, YESIL
+  test_k24_normalize_uzerinden_kuyruk_temelli_kontrol_yanlis_mirasi_onler: VAR, YESIL
+
+--- IDDIA 1: birincisi `_raw_query_pair` YOLUNA hic girmez ---
+  `test_k24_kuyruk_ile_birlesik_bbox_farkli_sonuc_verir` kosumunda `_raw_query_pair` cagri sayisi = 0  -> iddia DOGRU
+
+--- IDDIA 2: ikincisinde kuyruk TEK bloklu (2,) ve ham ikame OZDESLIK ---
+  miras sorgusu sayisi = 1
+    sol_sb=(2,) sag_sb=(3,)  sol_bbox=Rect(x=10, y=10, w=300, h=20, monitor_index=0, dpi_scale=1.0)
+  sol_sb == (2,) olan sorgu var mi : EVET
+  TUM miras sorgularinda sol kuyruk TEK bloklu mu: EVET  -> 'ham ikame OZDESLIKTIR' iddiasi DOGRU
+
+--- T7-2 KANCA HIJYENI: sonda cikista GERI ALIYOR MU ---
+  sonda ONCESI is SONRASI            : True
+  sonda GERCEK fonksiyonu mu birakti : True
+  kit kaydi (miras) = 1   kendi kancasi (tum cagrilar) = 2
+  -> kancalar KATMANLI (LIFO): kit'inki bizimkinin USTUNE binmis, ikisi de KAYIT ALMIS: EVET
