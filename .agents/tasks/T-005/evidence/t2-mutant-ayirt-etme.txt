@@ -1,0 +1,42 @@
+============================================================================================
+TABAN (mutantsiz) -- ayna agaci
+============================================================================================
+  TUR1 testleri: exit=0  159 passed in 0.59s
+  TUR2 testleri: exit=0  163 passed in 0.57s
+
+============================================================================================
+MUTANT M12  __exit__ close() CAGIRMAZ
+  hedef degismez: K10 -- baglam yoneticisi tutamaci kapatir
+============================================================================================
+  TUR1 testleri (eklemelerden ONCE)    exit=0  [KACIRDI]  159 passed in 0.60s
+  TUR2 testleri (eklemelerden SONRA)   exit=1  [YAKALANDI]  1 failed, 162 passed in 0.68s
+            dusen: tests/unit/capture/test_service.py::test_k10_exit_uzun_omurlu_tutamaci_kapatir
+
+============================================================================================
+MUTANT M13  close() _tutamac'i SIFIRLAMAZ
+  hedef degismez: K10 -- close() idempotent + tutamaci sifirlar
+============================================================================================
+  TUR1 testleri (eklemelerden ONCE)    exit=0  [KACIRDI]  159 passed in 0.60s
+  TUR2 testleri (eklemelerden SONRA)   exit=1  [YAKALANDI]  2 failed, 161 passed in 0.67s
+            dusen: tests/unit/capture/test_service.py::test_k10_close_tutamaci_sifirlar_ve_idempotenttir, tests/unit/capture/test_service.py::test_k10_exit_uzun_omurlu_tutamaci_kapatir
+
+============================================================================================
+MUTANT MK-A backend kutusuna HAM rect gider (numpy sizintisi, M37 sinifi)
+  hedef degismez: K3/K8 -- backend kutusu duz int tasir
+============================================================================================
+  TUR1 testleri (eklemelerden ONCE)    exit=0  [KACIRDI]  159 passed in 0.58s
+  TUR2 testleri (eklemelerden SONRA)   exit=1  [YAKALANDI]  1 failed, 162 passed in 0.66s
+            dusen: tests/unit/capture/test_service.py::test_k3_backend_kutusu_duz_int_tasir
+
+============================================================================================
+MUTANT MK-B varsayilan image_factory (h, w, 3) dondurur (M44 sinifi)
+  hedef degismez: K1 -- FakeBackend varsayilan uretici bicimi
+============================================================================================
+  TUR1 testleri (eklemelerden ONCE)    exit=0  [KACIRDI]  159 passed in 0.30s
+  TUR2 testleri (eklemelerden SONRA)   exit=1  [YAKALANDI]  1 failed, 162 passed in 0.38s
+            dusen: tests/unit/capture/test_service.py::test_k1_fake_backend_varsayilan_ureticisi_bgra_sifir_dizi
+
+============================================================================================
+Ayna agaci geri alindi; depodaki src/ hic degistirilmedi.
+============================================================================================
+exit=0

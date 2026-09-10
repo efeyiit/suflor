@@ -95,6 +95,22 @@ def test_k1_varsayilan_saat_monotonic() -> None:
     assert once <= kare.captured_at <= time.monotonic()
 
 
+def test_k1_fake_backend_varsayilan_ureticisi_bgra_sifir_dizi() -> None:
+    """K1 bicim sozlesmesi: varsayilan `image_factory` -> `(rect.h, rect.w, 4)`.
+
+    Bu olcu tur 1'de YOKTU: sekli `(h, w, 3)` yapan bir varsayilan uretici bes
+    kabul komutundan da geciyordu (Tester-D olctu). `h != w` secildi ki
+    devrik (`(w, h, 4)`) bir uretici de dussun.
+    """
+    r = Rect(0, 0, 4, 3)
+    dizi = FakeBackend((r,)).grab(r)
+    assert dizi.shape == (3, 4, 4), (
+        f"varsayilan uretici (rect.h, rect.w, 4) dondurmeli, gelen {dizi.shape}"
+    )
+    assert dizi.dtype == np.uint8
+    assert not dizi.any(), "varsayilan uretici SIFIR dizi dondurmeli"
+
+
 # ==========================================================================
 # K2 -- kare sira numarasi
 # ==========================================================================
@@ -196,6 +212,32 @@ def test_k3_inside_kutusu_cagiranin_verdigiyle_birebir() -> None:
     assert [(g.x, g.y, g.w, g.h) for g in fb.grab_rects] == [
         (-2560, 0, 64, 16), (-1, 0, 2, 2), (0, 0, 2560, 1440),
     ]
+
+
+def test_k3_backend_kutusu_duz_int_tasir() -> None:
+    """Backend'e giden kutuda numpy skaleri OLMAZ -- TIP KIMLIGIYLE olculur.
+
+    Diger `test_k3_*` olculeri `==` ile yazilmistir ve bu sizintiyi
+    **goremez**: `Rect(np.int64(100), ...) == Rect(100, ...)` `True` doner,
+    hash'ler esittir, demet/kume karsilastirmasi da esittir (Tester-D olctu;
+    kutuya numpy sizdiran bir uygulama butun `==` tabanli K3 olculerini
+    geciyordu). Ayirt eden tek gozlem `type(x) is int`.
+
+    Dort tip birden kosuluyor (PROTOKOL §4.6/7): yalnizca `int64`'u
+    duzlestiren bir uygulama tek tipli bir olcuyu gecer.
+    """
+    for tip in (np.int64, np.int32, np.uint8, np.uint16):
+        servis, fb = _kur()
+        servis.capture_region(Rect(tip(100), tip(50), tip(120), tip(80)))
+        (giden,) = fb.grab_rects
+        assert (giden.x, giden.y, giden.w, giden.h) == (100, 50, 120, 80), tip.__name__
+        for ad in ("x", "y", "w", "h"):
+            deger = getattr(giden, ad)
+            assert type(deger) is int, (
+                f"{tip.__name__} girdisinde backend kutusunun `{ad}` alani "
+                f"{type(deger).__name__} -- duz `int` olmali; `==` bu sizintiyi "
+                f"goremez, `Rect` serilesirken `json.dumps` TypeError verir"
+            )
 
 
 # ==========================================================================
@@ -864,3 +906,55 @@ def test_k11_butce() -> None:
     )
     assert medyan <= 10.0, f"medyan {medyan:.4f} ms > 10 ms"
     assert p95 <= 10.0, f"p95 {p95:.4f} ms > 10 ms"
+
+
+# ==========================================================================
+# K10 -- MssBackend omru (baglam yoneticisi + close idempotensi)
+# ==========================================================================
+
+
+class _SahteTutamac:
+    """`mss.MSS` gibi davranan sahte tutamac -- gercek ekrana dokunmaz.
+
+    Gercek `mss.MSS.close()` KENDI ICINDE idempotenttir ("It is safe to call
+    this multiple times"); sahte de oyle davranir ki olcu `MssBackend`'in
+    KENDI idempotensini olcsun, alttaki nesneninkini degil. Ayirt eden
+    gozlem sayac degil, `_tutamac`'in sifirlanmasidir.
+    """
+
+    def __init__(self) -> None:
+        self.kapatma = 0
+        self._kapali = False
+
+    def close(self) -> None:
+        if not self._kapali:
+            self.kapatma += 1
+            self._kapali = True
+
+
+def test_k10_exit_uzun_omurlu_tutamaci_kapatir() -> None:
+    b = MssBackend()
+    t = _SahteTutamac()
+    b._tutamac = t  # type: ignore[assignment]
+    with b as ic:
+        assert ic is b
+        assert t.kapatma == 0
+    assert t.kapatma == 1, (
+        "__exit__ close() cagirmadi -> her `with` blogu bir window DC sizdirir "
+        "(K10: 5001. kapatilmamis ornekte GetWindowDC kalici olarak duser)"
+    )
+    assert b._tutamac is None
+
+
+def test_k10_close_tutamaci_sifirlar_ve_idempotenttir() -> None:
+    b = MssBackend()
+    t = _SahteTutamac()
+    b._tutamac = t  # type: ignore[assignment]
+    b.close()
+    assert t.kapatma == 1
+    assert b._tutamac is None, (
+        "close() tutamaci sifirlamadi -> sonraki grab KAPATILMIS MSS'i kullanir "
+        "(mss: 'Once the MSS object is closed, it may not be used again')"
+    )
+    b.close()
+    assert t.kapatma == 1, "ikinci close() sessiz olmali (idempotent)"

@@ -1,0 +1,77 @@
+============================================================================================
+A) NITEL -- classify_region(Rect(10,10,100,50), GERCEK_DUZEN), tip basina
+   (paketin ve docstring'in andigi tek nokta)
+============================================================================================
+  int     classify=inside   RuntimeWarning=0  []
+  uint8   classify=inside   RuntimeWarning=4  ['overflow encountered in scalar multiply', 'overflow encountered in scalar subtract']
+  uint16  classify=partial  RuntimeWarning=3  ['overflow encountered in scalar add', 'overflow encountered in scalar multiply', 'overflow encountered in scalar subtract']
+  uint32  classify=partial  RuntimeWarning=3  ['overflow encountered in scalar add', 'overflow encountered in scalar multiply', 'overflow encountered in scalar subtract']
+  uint64  classify=partial  RuntimeWarning=3  ['overflow encountered in scalar add', 'overflow encountered in scalar multiply', 'overflow encountered in scalar subtract']
+
+============================================================================================
+B) SEFIN GRIDI -- x,y in 0..260 adim 20 ; w,h in 1..260 adim 20 (GERCEK duzen)
+   Beklenen: her sinif 0 disinda AYNI. Cunku bu grid'in HER bolgesi
+   2560x1440'lik sag monitorun DERIN icinde -- PARTIAL/OUTSIDE hic dogmuyor.
+============================================================================================
+-- grid: sefin gridi
+  uint8   n=28561  ayni=28561  ok->HATA=0     HATA->ok=0     SESSIZ=0
+  uint16  n=33124  ayni=33124  ok->HATA=0     HATA->ok=0     SESSIZ=0
+  uint32  n=33124  ayni=33124  ok->HATA=0     HATA->ok=0     SESSIZ=0
+  uint64  n=33124  ayni=33124  ok->HATA=0     HATA->ok=0     SESSIZ=0
+
+============================================================================================
+C) KENAR GECEN GRID -- x in 0..2600 adim 100 ; y in 0..1400 adim 100 ;
+   w,h in {1,50,200,500} (GERCEK duzen). Bu grid PARTIAL ve OUTSIDE bolgeler
+   URETIR -- sefin gridinin ulasamadigi nokta tam olarak burasi.
+============================================================================================
+-- grid: kenar gecen grid
+  uint8   n=81     ayni=72     ok->HATA=9     HATA->ok=0     SESSIZ=0
+          ornek ok->CaptureError: x=200 y=0 w=200 h=1: duz=ok:(200, 0, 200, 1, 1) ham=CaptureError:bolge hicbir monitorle kesismiyor: x=200, y=0,
+  uint16  n=6480   ayni=5370   ok->HATA=120   HATA->ok=240   SESSIZ=750
+          ornek SESSIZ         : x=0 y=1200 w=200 h=500: duz=ok:(0, 1200, 200, 240, 1) ham=ok:(0, 1200, 200, 500, 1)
+          ornek ok->CaptureError: x=200 y=0 w=200 h=1: duz=ok:(200, 0, 200, 1, 1) ham=CaptureError:bolge hicbir monitorle kesismiyor: x=200, y=0,
+          ornek HATA->ok       : x=2600 y=0 w=1 h=1: duz=CaptureError:bolge hicbir monitorle kesismiyor: x=2600, y=0 ham=ok:(2600, 0, 1, 1, -1)
+  uint32  n=6480   ayni=5012   ok->HATA=120   HATA->ok=240   SESSIZ=1108
+          ornek SESSIZ         : x=100 y=1000 w=1 h=500: duz=ok:(100, 1000, 1, 440, 1) ham=ok:(100, 1000, 1, 500, 1)
+          ornek ok->CaptureError: x=200 y=0 w=200 h=1: duz=ok:(200, 0, 200, 1, 1) ham=CaptureError:bolge hicbir monitorle kesismiyor: x=200, y=0,
+          ornek HATA->ok       : x=2600 y=0 w=1 h=1: duz=CaptureError:bolge hicbir monitorle kesismiyor: x=2600, y=0 ham=ok:(2600, 0, 1, 1, -1)
+  uint64  n=6480   ayni=5012   ok->HATA=120   HATA->ok=240   SESSIZ=1108
+          ornek SESSIZ         : x=100 y=1000 w=1 h=500: duz=ok:(100, 1000, 1, 440, 1) ham=ok:(100, 1000, 1, 500, 1)
+          ornek ok->CaptureError: x=200 y=0 w=200 h=1: duz=ok:(200, 0, 200, 1, 1) ham=CaptureError:bolge hicbir monitorle kesismiyor: x=200, y=0,
+          ornek HATA->ok       : x=2600 y=0 w=1 h=1: duz=CaptureError:bolge hicbir monitorle kesismiyor: x=2600, y=0 ham=ok:(2600, 0, 1, 1, -1)
+
+============================================================================================
+D) DORT KANONIK VAKA -- GERCEK duzen, tek tek
+============================================================================================
+-- INSIDE  (100,100,100,100)
+   int     classify=inside   uyari=0   duz=ok:(100, 100, 100, 100, 1)  ham=ok:(100, 100, 100, 100, 1)
+   uint8   classify=outside  uyari=5   duz=ok:(100, 100, 100, 100, 1)  ham=CaptureError:bolge hicbir monitorle kesismiyor: x=100, y=10   <== GURULTULU: gecerli bolge REDDEDILDI
+   uint16  classify=outside  uyari=3   duz=ok:(100, 100, 100, 100, 1)  ham=CaptureError:bolge hicbir monitorle kesismiyor: x=100, y=10   <== GURULTULU: gecerli bolge REDDEDILDI
+   uint32  classify=outside  uyari=3   duz=ok:(100, 100, 100, 100, 1)  ham=CaptureError:bolge hicbir monitorle kesismiyor: x=100, y=10   <== GURULTULU: gecerli bolge REDDEDILDI
+   uint64  classify=outside  uyari=3   duz=ok:(100, 100, 100, 100, 1)  ham=CaptureError:bolge hicbir monitorle kesismiyor: x=100, y=10   <== GURULTULU: gecerli bolge REDDEDILDI
+-- PARTIAL sag kenar (2500,100,200,100)
+   int     classify=partial  uyari=0   duz=ok:(2500, 100, 60, 100, 1)  ham=ok:(2500, 100, 60, 100, 1)
+   uint8   (tipe sigmiyor)
+   uint16  classify=partial  uyari=2   duz=ok:(2500, 100, 60, 100, 1)  ham=ok:(2500, 100, 60, 100, 1)
+   uint32  classify=inside   uyari=2   duz=ok:(2500, 100, 60, 100, 1)  ham=ok:(2500, 100, 200, 100, 1)   <== SESSIZ FARKLI GEOMETRI
+   uint64  classify=inside   uyari=2   duz=ok:(2500, 100, 60, 100, 1)  ham=ok:(2500, 100, 200, 100, 1)   <== SESSIZ FARKLI GEOMETRI
+-- PARTIAL alt kenar (100,1400,100,200)
+   int     classify=partial  uyari=0   duz=ok:(100, 1400, 100, 40, 1)  ham=ok:(100, 1400, 100, 40, 1)
+   uint8   (tipe sigmiyor)
+   uint16  classify=outside  uyari=3   duz=ok:(100, 1400, 100, 40, 1)  ham=CaptureError:bolge hicbir monitorle kesismiyor: x=100, y=14   <== GURULTULU: gecerli bolge REDDEDILDI
+   uint32  classify=outside  uyari=3   duz=ok:(100, 1400, 100, 40, 1)  ham=CaptureError:bolge hicbir monitorle kesismiyor: x=100, y=14   <== GURULTULU: gecerli bolge REDDEDILDI
+   uint64  classify=outside  uyari=3   duz=ok:(100, 1400, 100, 40, 1)  ham=CaptureError:bolge hicbir monitorle kesismiyor: x=100, y=14   <== GURULTULU: gecerli bolge REDDEDILDI
+-- OUTSIDE (100,2000,100,100)
+   int     classify=outside  uyari=0   duz=CaptureError:bolge hicbir monitorle kesismiyor: x=100, y=20  ham=CaptureError:bolge hicbir monitorle kesismiyor: x=100, y=20
+   uint8   (tipe sigmiyor)
+   uint16  classify=outside  uyari=6   duz=CaptureError:bolge hicbir monitorle kesismiyor: x=100, y=20  ham=CaptureError:bolge hicbir monitorle kesismiyor: x=100, y=20
+   uint32  classify=outside  uyari=6   duz=CaptureError:bolge hicbir monitorle kesismiyor: x=100, y=20  ham=CaptureError:bolge hicbir monitorle kesismiyor: x=100, y=20
+   uint64  classify=outside  uyari=6   duz=CaptureError:bolge hicbir monitorle kesismiyor: x=100, y=20  ham=CaptureError:bolge hicbir monitorle kesismiyor: x=100, y=20
+
+============================================================================================
+E) UCUNCU KIP -- ciplak OverflowError (K6 taksonomisi DISI)
+   kucuk duzen A=(0,0,100,100) B=(100,100,100,100), uint8
+============================================================================================
+  uint8 x=0 y=0 w=201 h=201: duz=ok:(0, 0, 200, 200, -1)  ham=OverflowError:Python integer 10000 out of bounds for uint8
+  uint8 x=0 y=0 w=255 h=255: duz=ok:(0, 0, 200, 200, -1)  ham=OverflowError:Python integer 10000 out of bounds for uint8
+  uint8 x=50 y=50 w=200 h=200: duz=ok:(50, 50, 150, 150, -1)  ham=OverflowError:Python integer 10000 out of bounds for uint8

@@ -1,0 +1,13 @@
+$ python -m pytest tests/unit/capture/test_service.py::test_k11_butce -q -s
+
+
+[K11 butce] n=200 rect=600x200 backend=(200,600,4)
+  medyan = 0.5129 ms
+  p95    = 0.7802 ms
+  min    = 0.4904 ms
+  maks   = 1.0105 ms
+  butce  = 10 ms (paket budget_ms; mss.grab'in 13.5 ms'i HARIC)
+.
+1 passed in 0.21s
+
+exit_code=0

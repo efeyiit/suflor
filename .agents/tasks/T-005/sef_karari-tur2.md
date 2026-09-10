@@ -78,7 +78,34 @@ Docstring yalnız `uint16`/`uint32` sayıyor. `uint8` ve `uint64` de taşıyor.
 
 **Düzleştirme yine de GEREKLİ ve kural değişmiyor:** onsuz 2136 (uint8) / 1152 (diğerleri) **geçerli** bölge reddedilirdi. Değişen yalnız **gerekçe cümlesi**.
 
-**YAPILACAK:** docstring'in ilgili cümlesi ölçüme uygun biçimde düzeltilir — dört tip de sayılır, "sessizce yanlış çıkardı" yerine ölçülen kip yazılır (geçerli bölgeler `CaptureError` ile reddedilirdi; sayılar yukarıda). Aynı düzeltme `delivery.md` `known_gaps`'ine de girer (paketin "İKİ YERE yaz" kuralı).
+> ## ⚠ ÇÜRÜDÜ — T2-2 (b) maddesi ve yukarıdaki tablo geçersizdir
+>
+> **BULAN:** T-005 implementer'ı, tur 2. **ŞEF DOĞRULADI, kendi eliyle yeniden üretti.**
+>
+> Yukarıdaki "sessiz ayrışma sıfır" tablosu **yapısal olarak kördü.** Grid'im (`x,y` 0..260, `w,h` 1..260) `M1=(0,0,2560,1440)` monitörünün **derin içinde** kalıyor: hiçbir bölge PARTIAL ya da OUTSIDE olmuyor. Sessiz sınıf ise **yalnız kırpma gerektiren** PARTIAL bölgelerde doğabiliyor. Yani 1.136.328 örnek, sessiz sınıfın **doğamayacağı** tek bir noktayı ölçüyordu.
+>
+> **Şefin kenardan geçen grid ile kendi ölçümü** (`x` 2300..2740, `y` 1200..1480, `w,h` 20..380, 4704 kombinasyon/tip):
+>
+> | tip | aynı | ok→HATA | **HATA→ok** | **SESSİZ** |
+> |---|---|---|---|---|
+> | uint8 | — | — | — | — *(tipe sığmıyor)* |
+> | uint16 | 1639 | 0 | **2058** | **1007** |
+> | uint32 | 892 | 0 | **2058** | **1754** |
+> | uint64 | 892 | 0 | **2058** | **1754** |
+>
+> **Kanonik örnek (şef koştu):** `Rect(uint32(2500), uint32(100), uint32(200), uint32(100))` gerçekte PARTIAL, doğru cevap **`w=60`**. Düzleştirme olmasa `classify_region` `inside` diyor, kırpma atlanıyor, backend'e de `Frame.rect`'e de **`w=200`** gidiyor — **istisna yok**. Ürünün gerçek yolu doğru: `Frame.rect = (2500, 100, 60, 100)`.
+>
+> `HATA→ok` sınıfı daha da ağır: doğru kod `CaptureError` veriyor, taşan sürüm **geçersiz bölgeyi sessizce kabul ediyor**.
+>
+> **Üçüncü kip de doğrulandı:** L/köşegen düzende (`A=(0,0,100,100)`, `B=(100,100,100,100)`) `uint8` ile K6 taksonomisi **dışında** çıplak `OverflowError: Python integer 10000 out of bounds for uint8`. Şefin tek monitörlü taraması bunu üretmiyordu.
+>
+> **SONUÇ:** "sessizce yanlış" cümlesi **çürümedi — yeri değişti.** Tur 1 onu yanlış mekanizmaya (`monitor_index`) bağlamıştı; doğrusu **kırpmanın atlanması**. Karar, implementer'a **yanlış bir cümleyi belgeye yazdırmak** üzereydi; implementer ölçüp reddetti ve itirazını `known_gaps`'e yazdı. Doğru davranış.
+>
+> **Bu hata PROTOKOL §4.6'ya 10. kuralı doğurdu:** *"Sıfır ihlal" bir ölçüm değildir — ölçünün ateşleyebildiği gösterilmeden yazılamaz.*
+>
+> Şefin **2136 / 1152** sayıları da bu yüzden karara girmez: yalnız derin-INSIDE grid'de anlamlılar ve o grid iddianın sınıfını içermiyor.
+
+**YAPILACAK:** docstring'in ilgili cümlesi ölçüme uygun hale getirilir — dört tip de sayılır, "sessizce yanlış çıkardı" yerine ölçülen kip yazılır (geçerli bölgeler `CaptureError` ile reddedilirdi; sayılar yukarıda). Aynı düzeltme `delivery.md` `known_gaps`'ine de girer (paketin "İKİ YERE yaz" kuralı).
 
 **ÖLÇÜ:** davranış değişikliği yok → yeni test yok. Kapı: beş kabul komutu düşmemeli. Bu bir **belge** kalemi; sınıfı T-004'ün T7-1'i ile aynı.
 

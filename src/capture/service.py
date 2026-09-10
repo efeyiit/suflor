@@ -384,11 +384,33 @@ class CaptureService:
 
         Duzlestirme `capture_region`'in **girisinde** yapilir, `Frame.rect`
         kurulumunda degil: dondurulmus `dpi.py` isaretsiz numpy tamsayilarinda
-        **tasar** (`np.uint16`/`np.uint32` ile `classify_region` `inside`
-        yerine `partial` verir ve uc `RuntimeWarning: overflow` doğurur -- sef
-        olctu), yani `monitor_index` sessizce yanlis cikardi. `classify_region`,
-        `intersect` ve `monitor_index` hesabi **yalniz duzlestirilmis** `Rect`
-        gorur.
+        **tasar**, ve tasma **dort tipin dordunde de** vardir -- `np.uint8`,
+        `np.uint16`, `np.uint32`, `np.uint64`; her birinde `RuntimeWarning:
+        overflow encountered` doguyor (olculdu, ham cikti
+        `.agents/tasks/T-005/evidence/t2-2-tasma-olcumu.txt`).
+
+        Duzlestirme olmasaydi tasmanin **iki ayri zarar kipi** olurdu; ikisi de
+        bu makinenin gercek duzeninde (`M0=(-2560,0,2560,1440)`,
+        `M1=(0,0,2560,1440)`) yeniden uretildi:
+
+        * **gurultulu red** -- GECERLI bir bolge `CaptureError` alir:
+          `Rect(uint16(100), uint16(100), uint16(100), uint16(100))` INSIDE
+          olmasina ragmen `classify_region` `outside` verir.
+        * **sessiz yanlis** -- kirpma atlanir ve backend'e de `Frame.rect`'e de
+          KIRPILMAMIS dikdortgen gider: `Rect(uint32(2500), uint32(100),
+          uint32(200), uint32(100))` gercekte PARTIAL'dir (dogru cevap `w=60`),
+          ama `classify_region` onu `inside` sayar ve sonuc `w=200` cikar --
+          istisna yok, uyari disinda gorunur iz yok.
+
+        Kenar gecen bir grid'de (x 0..2600, y 0..1400, w/h in {1,50,200,500})
+        `uint32`/`uint64` icin 6480 kombinasyonun **1108'i** sessizce farkli
+        geometri, **240'i** sessizce kabul edilen GECERSIZ bolge veriyor;
+        `uint8` kucuk monitor duzenlerinde ayrica K6 taksonomisi disinda
+        **ciplak `OverflowError`** firlatiyor. Kenardan uzak (derin INSIDE)
+        bolgelerde ise dort tipte de ayrisma **sifirdir** -- tasma yalnizca
+        monitor sinirlarina yaklasan bolgelerde gozlemlenebilir hale gelir.
+        `classify_region`, `intersect` ve `monitor_index` hesabi bu yuzden
+        **yalniz duzlestirilmis** `Rect` gorur.
 
         Kirpma **her zaman** `union_bbox(monitors)`'a karsi yapilir, **asla**
         tek bir monitore karsi degil. (`dpi.intersect` ve `dpi.clamp_to_monitor`

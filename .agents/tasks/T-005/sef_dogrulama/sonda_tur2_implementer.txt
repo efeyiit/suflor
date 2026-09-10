@@ -1,0 +1,77 @@
+==== T-005 TUR 2 IMPLEMENTER TESLIMI -- SEF SONDASI ====
+
+SAHIPLIK  Degisen dosyalar: delivery.md, src/capture/service.py,
+          tests/unit/capture/test_service.py. YASAK listeden hicbiri degismedi
+          (headless_check.py, packet.md, tester_*/, src/contracts/, dpi.py,
+          change_detector.py, monitors.py, PROTOKOL.md, validate.py -> temiz).
+          Test dosyasi diff'i SAF EKLEME: 94 eklendi / 0 silindi. 159 -> 163.
+          service.py'de silinen 6 satirin hepsi DOCSTRING (diff okundu).
+          Commit atilmamis (dogru).
+
+BES KABUL KOMUTU (sef kendi kostu):
+  mypy --strict     Success: no issues found in 2 source files
+  sahipli iki dosya 163 passed
+  headless_check    exit 0 TEMIZ
+  kapsam            171 ifade, 2 eksik, %99  (esik 95) -- 746 passed
+  tam takim         985 passed
+  delivery.md       validate.py -> KABUL EDILEBILIR, rol=implementer, tur=2,
+                    5 komut, kanitlarin hepsi diskte ve dolu
+
+SEFIN KENDI KAPISI (implementer kosmadi -- tester dizini):
+  mutant_kiti.py M12 M13 M37 M44
+    M12 [.X.XX] YAKALANDI    M13 [.X.XX] YAKALANDI
+    M37 [.X.XX] YAKALANDI    M44 [.X.XX] YAKALANDI
+  Tur 1'de dorttu de [.....] idi. KAPI ARTIK DISLI.
+
+=========================================================================
+IMPLEMENTER SEFIN KARARINA OLCUYLE ITIRAZ ETTI -- ITIRAZ HAKLI
+=========================================================================
+Karar (T2-2 b) docstring'e "sessiz ayrisma sifir, tasmanin tek gorunur kipi
+CaptureError" yazilmasini istiyordu. Implementer bunu YAZMADI, olctu ve reddetti.
+
+SEF UCUNU DE KENDI ELIYLE YENIDEN URETTI:
+
+1) Sefin grid'i YAPISAL OLARAK KORDU.
+   x,y 0..260 / w,h 1..260 -> her bolge M1=(0,0,2560,1440)'in DERIN ICINDE.
+   PARTIAL ve OUTSIDE bolge grid'de HIC DOGMUYOR. Sessiz sinif ise yalniz
+   KIRPMA GEREKTIREN PARTIAL bolgelerde dogabiliyor. 1.136.328 ornek, iddianin
+   sinifinin DOGAMAYACAGI tek bir noktayi olcuyordu.
+
+2) KENARDAN GECEN GRID (sef kurdu: x 2300..2740, y 1200..1480, w/h 20..380,
+   4704 kombinasyon/tip, M0=(-2560,0,2560,1440) M1=(0,0,2560,1440)):
+     tip      ayni   ok->HATA   HATA->ok   SESSIZ
+     uint8      --      --         --        --    (tipe sigmiyor)
+     uint16   1639      0        2058      1007
+     uint32    892      0        2058      1754
+     uint64    892      0        2058      1754
+   KANONIK ORNEK (sef kostu):
+     Rect(uint32(2500), uint32(100), uint32(200), uint32(100))
+       duz int    classify = partial    dogru cevap w=60
+       uint32     classify = inside     kirpma ATLANIR -> w=200, ISTISNA YOK
+       urunun gercek yolu (duzlestirme var): Frame.rect = (2500,100,60,100)  DOGRU
+   HATA->ok sinifi daha agir: dogru kod CaptureError verirken tasan surum
+   GECERSIZ bolgeyi SESSIZCE KABUL ediyor.
+
+3) UCUNCU KIP -- ciplak OverflowError (K6 taksonomisi DISI):
+   L/kosegen duzen A=(0,0,100,100) B=(100,100,100,100), uint8:
+     (0,0,201,201)   duz=ok:(0,0,200,200,-1)    ham=OverflowError: Python integer
+                                                     10000 out of bounds for uint8
+     (0,0,255,255)   ayni      (50,50,200,200)  ayni
+   Sefin tek monitorlu taramasi bunu URETMIYORDU; L duzeni gerekiyor.
+
+4) DOCSTRING'IN KENDI IDDIALARI (sef dogruladi):
+   Rect(T(100),T(100),T(100),T(100)) M0/M1 duzeninde:
+     duz int -> inside     uint8/16/32/64 -> HEPSI outside   (gurultulu red kipi)
+
+SONUC: "sessizce yanlis" cumlesi CURUMEDI, YERI DEGISTI. Tur 1 onu yanlis
+mekanizmaya (monitor_index) bagliyordu; dogrusu KIRPMANIN ATLANMASI.
+Sefin 2136/1152 sayilari karara GIRMEZ (yalniz derin-INSIDE grid'de anlamli).
+
+BU HATA PROTOKOL 4.6'ya 10. KURALI DOGURDU:
+  "Sifir ihlal" bir olcum degildir -- olcunun ATESLEYEBILDIGI gosterilmeden
+  yazilamaz. Olumsuz iddia POZITIF KONTROL ister. Ornek sayisi bu kusuru
+  kapatmaz: dar bir sinifin milyonlarca ornegi hala tek bir siniftir.
+
+KARAR: Tur 2 teslimi KABUL EDILEBILIR. Implementer'in itirazi kabul edildi ve
+       sefin karar belgesi duzeltildi (curuk tablo silinmedi, "CURUDU" damgasiyla
+       birakildi -- T-004'un K24 ilkesi).
