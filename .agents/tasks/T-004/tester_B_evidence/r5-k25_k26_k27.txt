@@ -1,0 +1,30 @@
+# T-004 TUR 5 / TESTER-B
+# komut: python -m pytest .agents/tasks/T-004/tester_B -k 'k25 or k26 or k27' -v --no-header -p no:cacheprovider
+
+============================= test session starts =============================
+collecting ... collected 117 items / 97 deselected / 20 selected
+
+.agents/tasks/T-004/tester_B/test_karar_uyumu_tur5.py::test_r5_k25_secenek1_imza_ve_donus_tipi_korunmus PASSED [  5%]
+.agents/tasks/T-004/tester_B/test_karar_uyumu_tur5.py::test_r5_k25_tur3_string_karsilastirmali_assertionlar_hala_gecerli PASSED [ 10%]
+.agents/tasks/T-004/tester_B/test_karar_uyumu_tur5.py::test_r5_k26_bagimsiz_tarama_alti_karakteri_birebir_dogruluyor PASSED [ 15%]
+.agents/tasks/T-004/tester_B/test_karar_uyumu_tur5.py::test_r5_k26_altisi_da_uyumluluk_formu_ve_etiketi_dogru[65045] PASSED [ 20%]
+.agents/tasks/T-004/tester_B/test_karar_uyumu_tur5.py::test_r5_k26_altisi_da_uyumluluk_formu_ve_etiketi_dogru[65046] PASSED [ 25%]
+.agents/tasks/T-004/tester_B/test_karar_uyumu_tur5.py::test_r5_k26_altisi_da_uyumluluk_formu_ve_etiketi_dogru[65110] PASSED [ 30%]
+.agents/tasks/T-004/tester_B/test_karar_uyumu_tur5.py::test_r5_k26_altisi_da_uyumluluk_formu_ve_etiketi_dogru[65111] PASSED [ 35%]
+.agents/tasks/T-004/tester_B/test_karar_uyumu_tur5.py::test_r5_k26_altisi_da_uyumluluk_formu_ve_etiketi_dogru[65281] PASSED [ 40%]
+.agents/tasks/T-004/tester_B/test_karar_uyumu_tur5.py::test_r5_k26_altisi_da_uyumluluk_formu_ve_etiketi_dogru[65311] PASSED [ 45%]
+.agents/tasks/T-004/tester_B/test_karar_uyumu_tur5.py::test_r5_k26_etiket_dagilimi_iki_iki_iki PASSED [ 50%]
+.agents/tasks/T-004/tester_B/test_karar_uyumu_tur5.py::test_r5_k26_docstring_olgusal_ifadesi_olcumle_ortusuyor PASSED [ 55%]
+.agents/tasks/T-004/tester_B/test_karar_uyumu_tur5.py::test_r5_k26_kod_hala_nfkc_ile_karar_veriyor_beyaz_liste_yok PASSED [ 60%]
+.agents/tasks/T-004/tester_B/test_karar_uyumu_tur5.py::test_r5_k27_ayni_fixture_dort_on_ayarda_beklendigi_gibi_davraniyor PASSED [ 65%]
+.agents/tasks/T-004/tester_B/test_karar_uyumu_tur5.py::test_r5_k27_menu_de_group_gercekten_cagirilmiyor PASSED [ 70%]
+.agents/tasks/T-004/tester_B/test_karar_uyumu_tur5.py::test_r5_k27_group_cagrisi_yapisal_olarak_should_group_a_bagli PASSED [ 75%]
+.agents/tasks/T-004/tester_B/test_karar_uyumu_tur5.py::test_r5_k27_dort_on_ayarin_her_biri_icin_test_var PASSED [ 80%]
+.agents/tasks/T-004/tester_B/test_karar_uyumu_tur5.py::test_r5_tur5_kararlari_modul_docstringinde_belgeli[K25] PASSED [ 85%]
+.agents/tasks/T-004/tester_B/test_karar_uyumu_tur5.py::test_r5_tur5_kararlari_modul_docstringinde_belgeli[K26 (sef_karari-tur5.md] PASSED [ 90%]
+.agents/tasks/T-004/tester_B/test_karar_uyumu_tur5.py::test_r5_tur5_kararlari_modul_docstringinde_belgeli[K27 (tur 5)] PASSED [ 95%]
+.agents/tasks/T-004/tester_B/test_karar_uyumu_tur5.py::test_r5_k26_zorunlu_olcum_gercek_adlariyla_var_ve_yesil PASSED [100%]
+
+====================== 20 passed, 97 deselected in 0.23s ======================
+
+# exit_code: 0

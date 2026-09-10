@@ -1,0 +1,5 @@
+denetlenen: normalizer.py, presets.py
+
+IHLAL (1):
+  normalizer.py:1  docstring HAYALI test aniyor (AD) -> test_k2_esik_alti_blok_ortada [K29: test_normalizer.py'de yok]
+exit=1

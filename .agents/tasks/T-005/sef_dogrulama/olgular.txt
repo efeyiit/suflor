@@ -1,0 +1,201 @@
+SEF OLCUMLERI - T-005 paket v2 olgu iddialarinin ham kaniti (mss 10.2.0 )
+
+[K10] DPI awareness: MSS() oncesi=0 sonrasi=2  (0=unaware 2=per-monitor, GERI ALINAMAZ)
+[K5]  s.monitors ham liste: [{'left': -2560, 'top': 0, 'width': 5120, 'height': 1440}, {'left': -2560, 'top': 0, 'width': 2560, 'height': 1440, 'is_primary': False, 'name': 'Generic PnP Monitor', 'unique_id': '\\\\?\\DISPLAY#AUS27FE#7&282f24eb&0&UID260#{e6f07b5f-ee97-4a90-b076-33f57bf4eaa7}'}, {'left': 0, 'top': 0, 'width': 2560, 'height': 1440, 'is_primary': True, 'name': 'Generic PnP Monitor', 'unique_id': '\\\\?\\DISPLAY#AUS27FE#7&282f24eb&0&UID264#{e6f07b5f-ee97-4a90-b076-33f57bf4eaa7}'}]
+[K7]  ardisik grab bellek paylasiyor mu: False  (paket v1 EVET demisti - YANLISTI)
+[K7]  np.asarray(ScreenShot) raw'i takma adliyor: True  writeable=True
+[K7]  grab shape=(16, 64, 4) dtype=uint8  (BGRA, 4 kanal)
+[K10] yeni MSS()+monitors medyan ~1.09 ms
+[K11] gercek grab 600x200: medyan 13.41 ms  (tasarim 5.7 butce 10 ms - ASILIYOR)
+[K11] gercek grab 100x50: medyan 13.56 ms  (tasarim 5.7 butce 10 ms - ASILIYOR)
+[K10] mss.mss() -> ['DeprecationWarning']  (kullanimdan kalkmis)
+[K4]  clamp_to_monitor(rect: 'Rect', monitor: 'Monitor') -> 'Rect | None'  TEK monitor
+[K4]  classify_region(rect: 'Rect', monitors: 'Sequence[Monitor]') -> 'RegionValidity'  BIRLESIM
+
+
+==== KIRMIZI TAKIM v2 SONRASI SEF SONDASI (2026-09-10) — her satir sefin kendi kosumu ====
+[Y1]  --cov=src/capture/service.py (dosya yolu): CoverageWarning module-not-imported x2, "total of 0 is less than fail-under=95", exit=1
+      --cov=src.capture.service --cov=src.capture.monitors (modul adi): monitors.py 93% / service.py 96% / TOTAL 95.16%, exit=0
+[Y2]  src/__init__.py YOK. service.py `from src.capture import dpi` (mutlak) -> mypy --strict: "Source file found twice under different module names", exit=2
+      ayni dosya `from . import dpi` (relatif) -> exit=0.  mutlak + --explicit-package-bases -> exit=0
+[Y3]  mss 10.2.0: MSSBase ve windows.MSS'te __del__ YOK. Kapatilmayan mss.MSS() ornekleri: 5000 sorunsuz,
+      5001. ornekte ScreenShotError "GetWindowDC: Erisim engellendi". `with mss.MSS()` ile 12000 ornek sorunsuz.
+[Y4]  ham monitor sozluklerinde anahtarlar: left/top/width/height/is_primary/name/unique_id — dpi/scale anahtari YOK (bkz. [K5] satiri)
+[Y5]  Frame(img,r,1.0,0) == Frame(img,r,1.0,1) -> False (seq karsilastirmaya dahil; image compare=False). rect ve captured_at esit.
+[O7]  def f(d: Mapping[str, object]) -> int: return int(d["left"])  -> mypy --strict 2 hata (call-overload)
+[O10] ayni PARTIAL rect, monitor sirasi duz/ters: sinif=partial, union=(-2560,2560), kirpik=(-2560,0,5120,100) BIREBIR AYNI; degisen yok
+      (union_bbox sefin yerel yardimcisiyla; monitor_index ikinci argumandan geliyor -> O3 dogru)
+[O11] dpi.clamp_to_monitor govdesi: `return intersect(rect, monitor)` — iki fonksiyon AYNI; fark ikinci argumanda
+
+==== headless_check.py v3 DOGRULAMASI (sef, scratchpad/ref5 kum havuzunda; depoya dokunulmadi) ====
+[HC-ok]   dogru MssBackend (tembel, with-close, close()/__enter__/__exit__): §1-§4 TEMIZ exit=0; --real (gercek mss) §5 TEMIZ exit=0
+[HC-D]    monitors() kapatmayan varyant (`mss.MSS().monitors`): IHLAL m1_close 0/1, m2_close 0/2 -> exit=1
+[HC-E]    [0]'i kendi atan varyant (`s.monitors[1:]`): IHLAL m1_eq_raw False, m1_len 2/3 -> exit=1
+[HC-E2]   __init__'te MSS kuran (istekli) varyant: IHLAL init_MSS 1/0 -> exit=1
+[HC-A]    close()/__enter__ olmayan (kirmizi takim kum havuzu): §3 sondasi AttributeError -> exit=1
+[KABUL]   bes kabul komutu ref5'te: #1 mypy exit=0, #2 pytest exit=0, #3 headless exit=0, #5 pytest tests/unit/capture 602 passed exit=0,
+          #4 cov komutu CALISIYOR (TOTAL 93.75% -> fail-under kirildi: kum testleri __enter__/__exit__/close'u kapsamiyor; implementer testleriyle 95 asilir)
+
+==== KIRMIZI TAKIM v3 SONRASI SEF SONDASI ====
+[Y-A]  casus _Shot __array_interface__ 'data': (id(bytearray), False): id(raw) - veri adresi = 102480 bayt (nesne adresi!);
+       np.asarray ilk 8 bayt [1,0,0,0,0,0,0,0] (desen 1,2,3,255 DEGIL). 'data': raw (nesne) ile [1,2,3,255,1,2,3,255] DOGRU.
+       gercek mss.ScreenShot.__array_interface__ property; 'data' alani tampon nesnesi. v3 §3 icerik olcmuyordu (yalnizca shape/dtype).
+[Y-B]  intersect(Rect(-2600,0,100,100,0,1.5), union(-2560,0,5120,1440,-1,1.0)) -> Rect(-2560,0,60,100,monitor_index=-1,dpi_scale=1.0)
+       -> cagiranin 1.5'i ikinci argumandan gelen 1.0'a ezilir (PARTIAL yolunda dpi_scale kaybi)
+[O-A]  AST: `if TYPE_CHECKING: import mss.base / else: try: import mss` -> orelse icinde Import var; v3 §2 bunu muaf sayiyordu
+[D-1]  gercek mss 10.2.0: hasattr(mss,'windows')=False, hasattr(mss,'base')=True, hasattr(mss,'factory')=True -> 'windows' iddiasi bostu
+[O-C]  validate.py: files_written her dosyayi owns ile fnmatch'ler -> evidence/ owns disi kalirsa durust rapor reddedilir; v4 owns'a eklendi
+
+==== headless_check.py v4 DOGRULAMASI (sef, scratchpad/ref6 = kirmizi takimin v3-uyumlu kum havuzu) ====
+[HC4-ok]  dogru surum: TEMIZ exit=0; --real: len=3, (16,64,4) uint8, TEMIZ exit=0
+[HC4-V26] grab np.zeros donduruyor (ekrani okumuyor): §3 grab_content_ok False -> exit=1
+[HC4-V27] grab kanal sirasini ters ceviriyor: §3 grab_content_ok False -> exit=1
+[HC4-V15] grab np.frombuffer(shot.bgra) (mesru alternatif): TEMIZ exit=0 (yanlis pozitif yok)
+[HC4-V10] TYPE_CHECKING else dalinda try/except import mss: §2 AST + meta_path girisimi ['mss'] -> exit=1
+[HC4-V11] `from typing import TYPE_CHECKING as TC; if TC: import mss.base` (mesru): TEMIZ exit=0
+[HC4-V09] modul duzeyi try/except import mss: §2 iki ihlal -> exit=1
+[HC4-V13] conftest scope="function": §1 oturum kapsami testi -> exit=1
+[HC4-V33] engel modul gercek mss namespace'ini kopyaliyor: §1 base/factory testi -> exit=1
+
+==== ORTAM OLGULARI (sef, depo kokunde, T-005 env.md tabani) ====
+[ENV] python 3.12.10 · pytest 9.1.1 · mypy 2.3.1 · numpy 2.4.6 · mss 10.2.0 · coverage 7.16.0 · pytest-cov 7.1.0
+[ENV] kurulu TEK pytest eklentisi: pytest-cov. Sira karistiran eklenti (pytest-randomly / pytest-random-order) YOK
+      -> headless_check §1'in oturum-kapsami testi (test_a/test_b/test_c sirasi) bu ortamda guvenli
+[ENV] tests/unit/capture su an 583 test (test_dpi.py + test_change_detector.py, ikisi de T-005'e forbidden)
+      -> kabul komutu #5'in tabani 583; T-005'in kendi testleri bunun ustune eklenir
+[ENV] depo geneli: 795 test gecti (contracts + capture + ocr)
+
+==== O-H DUZELTMESI: v4'e islenip YENIDEN URETILMEMIS bes kalem (PROTOKOL 4.6/6 ihlali) ====
+Kirmizi takim v4 denetiminde hakli olarak isaret etti: v3'un O-B, D-3, D-5, D-6, D-8 bulgulari
+v4'e karar olarak islendi ama sefin kendi kosumu kayda gecmedi. Sonuc somut: D-5'in yeniden
+uretilmemesi Y-C'yi dogurdu. Eksik kalemler simdi olculdu:
+
+[D-5 / Y-C] numbers.Integral daraltmasi, mypy --strict (sef kosumu):
+    def al(d: Mapping[str, object], k: str) -> int:
+        v = d[k]
+        if not isinstance(v, numbers.Integral) or isinstance(v, bool): raise ValueError(k)
+        return v            -> Found 1 error in 1 file      (Integral, int DEGIL)
+        return cast(int, v) -> Success: no issues found     (ama numpy skaleri sizar)
+        return int(v)       -> Success: no issues found     (DOGRU)
+  Sizintinin gorunmezligi:
+    Rect(np.int64(10),np.int64(20),np.int64(30),np.int64(40)) == Rect(10,20,30,40) -> True
+    hash esit -> True | len({r_np, r_py}) -> 1 | r_np.right/bottom -> 40 60 (dogru)
+    type(r_np.x) -> int64
+    json.dumps(asdict(r_np)) -> TypeError: Object of type int64 is not JSON serializable
+    np.uint64(5) - np.int64(3) -> float64
+    isinstance(np.bool_(True), numbers.Integral) -> False   (np.bool_ zaten reddediliyor)
+
+[O-F] FakeBackend'in None donusu x CaptureBackend protokolu, mypy --strict (sef kosumu, 5 bicim):
+    A  grab -> np.ndarray, ignore yok                   -> Found 1 error   (kabul #1 KIRILIR)
+    B  grab -> np.ndarray + type: ignore[return-value]  -> Success
+    C  grab -> np.ndarray | None                        -> Success  (ama protokole UYMUYOR)
+    D  C + _uyum: CaptureBackend = FakeBackend(...)     -> Found 1 error   (C'nin uymadiginin KANITI)
+    E  B + _uyum: CaptureBackend = FakeBackend(...)     -> Success         (SECILEN bicim)
+
+[D-3 / kabul #5 sayisi] pytest tests/unit/capture --collect-only -> 583 tests collected
+    (paket "602 test" diyordu; 602 ref5 kum havuzunun sayisiydi -- olgu hatasi duzeltildi)
+
+[O-B] K8 monitor_index kurali, gercek negatif duzende (sef kosumu):
+    sol tasma Rect(-2600,0,100,100,ds=1.5) -> Frame.rect = Rect(-2560,0,60,100,idx=0,ds=1.5)
+    ust tasma Rect(100,-50,100,100)        -> kirpik (100,0,100,50), idx=1
+    L duzeni  Rect(90,50,20,20)            -> classify=partial, idx=0
+    (uc iddia da DOGRU; implementer yanlis beklentiyle test yazmaz)
+
+==== headless_check.py v5 DOGRULAMASI (sef, scratchpad/ref7) ====
+[HC5-ok]     dogru surum: TEMIZ exit=0
+[HC5-real]   --real: {'len':3,'shape':[16,64,4],'dtype':'uint8','writeable':True,
+                      'tumuyle_sifir':False,'tekil_deger':75}  TEMIZ exit=0   (icerik iddiasi artik var)
+[HC5-scope]  conftest scope= function / module / package / class -> DORDU DE exit=1
+             (v4 module ve package'i kaciriyordu; v5 AST + iki-dosyali sonda ile dordunu de yakaliyor)
+[HC5-artik]  kum havuzunda ve depoda _hc_probe* artigi: 0
+
+==== 5. TUR (paket v5) -- SEFIN KENDI KOSUMLARI ====
+[Y5-2] Frame.rect yolunda numpy sizintisi (sef kosumu):
+    cagiranin Rect'i Rect(np.int64(10), np.int64(20), np.int64(30), np.int64(40))
+      alan tipleri: ['int64','int64','int64','int64']
+      json.dumps(asdict(r)) -> TypeError: Object of type int64 is not JSON serializable
+    dpi.intersect(numpy_rect, union_bbox) alan tipleri: ['int','int64','int64','int64']  (KARISIK:
+      x duzlesiyor cunku max() Python int'ini seciyor)
+    np.uint64(5) - np.int64(3) -> float64
+    -> K5'in "hicbir zaman numpy skaleri yazilmaz" cumlesi yalniz monitor sozlugu yolunda olculuyordu.
+
+[Y5-3] headless_check v5 §1(d), conftest'e MESRU ikinci autouse fixture eklenince (numpy hata ayari):
+    "§1(d) conftest.py:32 autouse engel fixture'i scope=\"session\" degil: (yok -> varsayilan 'function')"
+    exit=1  -> YANLIS POZITIF (sefin kendi kapisinin hatasi). v6'da engel fixture'i govdesinden seciliyor.
+
+[Y5-4] K7'nin "np.ndarray degilse" degismezinin ayrisma girdisi (sef kosumu):
+    np.asarray(liste)      -> ndim=2 dtype=int64    (ndim!=3 -> zaten CaptureError)
+    np.asarray(memoryview) -> ndim=1 dtype=uint8    (ndim!=3 -> zaten CaptureError)
+    np.asarray(None)       -> ndim=0 dtype=object   (ndim!=3 -> zaten CaptureError)
+    np.asarray(__array_interface__ tasiyan nesne) -> ndim=3 shape=(20,30,4) dtype=uint8  SESSIZCE KABUL
+    -> sayilan uc girdi 'reddet' ile 'sessizce donustur'u AYIRT EDEMIYOR; ayrisan girdi bu.
+
+==== headless_check.py v6 DOGRULAMASI (sef, scratchpad/ref8) ====
+[HC6-Y5-1a] uyum satirlari YOKken: "§4 ... `_uyum_fake` satiri YOK" + "`_uyum_mss` satiri YOK" -> exit=1
+[HC6-Y5-1b] uyum satirlari eklenince: TEMIZ -> exit=0
+[HC6-Y5-1c] FakeBackend.grab -> np.ndarray | None: "§4 ... tam olarak `np.ndarray` olmali" -> exit=1
+[HC6-Y5-3]  conftest'e mesru ikinci autouse fixture: TEMIZ -> exit=0   (yanlis pozitif GITTI)
+[HC6-scope] engel fixture'i scope="module": "§1(d) engel fixture'i scope=\"session\" degil: 'module'" -> exit=1
+[HC6-Y5-5]  --real, icerik iddiasi BIRINCIL MONITORUN TAMAMINDA:
+            {'len':3,'shape':[16,64,4],'dtype':'uint8','writeable':True,'tumuyle_sifir':False,'tekil_bgr':256}
+            TEMIZ exit=0
+[HC6-not]   KRT'nin "64x16 bloklarin %68'i BGR'de tek renkli" sayisi SEFIN orneklemınde YENIDEN URETILEMEDI
+            (stride 120, 252 blok -> %0). Duzeltme yine de dogru: tam monitor (256 tekil deger) kesin olarak
+            daha saglam. O sayi hicbir yerde "sef olctu" diye isaretlenmedi.
+
+==== 6. TUR (paket v6) -- SEFIN KENDI KOSUMLARI ====
+[Y6-1] ast.parse('_uyum_fake: CaptureBackend' / '_uyum_mss: CaptureBackend = MssBackend()'):
+       _uyum_fake  annotation=CaptureBackend  value=None      <- eski kapi bunu KABUL EDIYORDU
+       _uyum_mss   annotation=CaptureBackend  value=MssBackend()
+[Y6-2] headless_check v6 §3'te 'arr = np.asarray(a1)' (satir 353) -- K7'nin yasakladigi sessiz
+       donusum denetleyicinin ICINDE. v7'de once 'type(a1) is np.ndarray'.
+[Y6-6] Isaretsiz numpy, DONDURULMUS dpi.py'de tasiyor (sef kosumu):
+       int      classify=inside   uyari=[]
+       int64    classify=inside   uyari=[]
+       uint16   classify=partial  uyari=['overflow encountered in scalar subtract', ...x3]
+       uint32   classify=partial  uyari=['overflow encountered in scalar subtract', ...x3]
+       -> monitor_index sessizce yanlis cikiyor; duzlestirme capture_region GIRISINDE olmali.
+[Y6-7] dpi_scale=float   -> tip float    json OK
+       dpi_scale=float64 -> tip float64  json OK      (float ALT SINIFI)
+       dpi_scale=float32 -> tip float32  json TypeError
+[Y6-9] __array__ metodu tasiyan nesne: isinstance(ndarray)=False, np.asarray -> (20,30,4) uint8
+       -> ikinci ayrisma girdisi; tek girdi anahtar deligi.
+
+==== D1'IN UC EKSIK OLGUSU -- SEF SIMDI OLCTU ====
+[K4]  yayilan 5300w bolge, tek monitore kirpma -> [2560, 2560] ; birlesime kirpma -> 5120 (dogru)
+[K7]  np.ascontiguousarray(a[:,:,:3]) shares_memory: 4 kanal=False, 3 kanal=True
+[K10] mss.MSS() ornegi: s.monitors is s.monitors -> True (ornek uzerinde memoize)
+
+==== headless_check.py v7 DOGRULAMASI (sef, scratchpad/ref9) ====
+[HC7-ok]     dogru surum: TEMIZ exit=0 ; --real: TEMIZ exit=0 (konum sadakati UYARI)
+[HC7-Y6-1a]  ciplak '_uyum_fake: CaptureBackend' (deger yok): iki §4 ihlali -> exit=1
+[HC7-Y6-1b]  '_uyum_fake = _uyum_mss' (yeniden baglama): "FakeBackend(...) cagrisi degil" -> exit=1
+[HC7-Y6-2]   MssBackend.grab ham ScreenShot: "§3 grab np.ndarray DONDURMEDI" -> exit=1
+[HC7-Y6-3]   '_uyum_fake: "CaptureBackend" = ...' (tirnakli, MESRU): TEMIZ exit=0
+[HC7-Y6-4]   'from sys import modules; modules["mss"] = engel' (MESRU): TEMIZ exit=0
+[HC7-Y6-8]   §5 konum sadakati canli ekranda esitlik vermiyor -> SEFIN KENDI YANLIS POZITIFI;
+             iki grab arasinda masaustu degisiyor. UYARI'ya indirildi; deterministik konum
+             kapisi §3'un grab_args denetimi.
+
+==== 7. TUR (paket v7) -- SEFIN KENDI KOSUMLARI ====
+[Y7-1] headless_check v7 §3, grab_args'i TEK noktada olcuyordu: Rect(10,20,64,16) (satir 403-404).
+       Kutuyu 0'a kirpan bir grab bu noktada gorunmez. Bu makinenin duzeninde sol monitor x=-2560.
+[Y7-2] Paketin v7'de K10'a yazdigi "OLCU: §3 casusu donen listeyi bozar" denetimi headless_check'te
+       YOK: `m1` yalnizca okunuyor (satir 396-398), mutasyon sayisi 0.
+       Gercek mss'te kopyalamamak GOZLEMLENEMEZ (sef kosumu):
+         ayni ornekte s.monitors is s.monitors -> True (memoize)
+         a=MSS(); b=MSS(); a.monitors[0]['left']=999999 -> b.monitors[0]['left']==999999 ? False
+       -> K10 "her cagrida yeni MSS()" dedigi icin degismez ihlal edilemez. Cumle geri cekildi.
+[Y7-3] Ciplak int() (sef kosumu):
+         int(10.9)=10   int('10')=10   int(True)=1
+         int(inf) -> OverflowError    int(nan) -> ValueError
+       -> gurultulu hata sessiz yanlisa donusuyordu; K6 taksonomisi disina cikiyordu.
+
+==== headless_check.py v8 DOGRULAMASI (sef, scratchpad/refA) ====
+[HC8-ok]    dogru surum: TEMIZ exit=0
+[HC8-Y7-1]  grab kutuyu max(0,...) ile kirpiyor: "§3 grab() 2. cagrida kutuyu degistirdi:
+            beklenen {'left': -2600, 'top': -50, ...} olculen {'left': 0, 'top': 0, ...}" -> exit=1
+[HC8-Y7-5]  FakeBackend.grab dekoratorlu: "§4 FakeBackend.grab DEKORATORLU" -> exit=1
+[HC8-artik] refA kum havuzunda ve depoda _hc_probe* .py artigi: 0
+            (NOT: __pycache__ altinda .pyc artigi KALIYOR -- v5'teki "artigi: 0" iddiasi bu yonuyle
+             yanlisti, duzeltildi. Zararsiz, gitignore'lu.)

@@ -1,0 +1,20 @@
+TUR 3 -- ust-uste binen bloklarda olcek zaman olcumu (K19 sonrasi)
+Karsilastirma (TUR 2, tester_C_evidence/r2-scale_timing.txt): n=500->3.443ms n=1000->9.271ms n=2000->27.069ms
+Yontem AYNI: ust-uste-binen bloklar (hepsi bbox.x=100,y=100,w=50,h=20), text='kelime{i}-' (hyphen sonek), DIALOGUE preset, 7 tekrar, medyan.
+
+n=500 -> medyan 3.673 ms (7 tekrar) -- tumu: [3.306, 3.67, 3.67, 3.673, 3.721, 3.989, 4.388]
+n=1000 -> medyan 9.234 ms (7 tekrar) -- tumu: [8.617, 8.68, 8.699, 9.234, 9.914, 10.377, 10.598]
+n=2000 -> medyan 26.461 ms (7 tekrar) -- tumu: [25.447, 25.911, 26.409, 26.461, 26.868, 26.909, 28.107]
+
+SONUC: n=500/1000/2000 hepsi TUR 2 degerlerine cok yakin (fark %1-3, olcum
+gurultusu sinirlari icinde) -- K19'un gruplama yoluna ekledigi ekstra
+fonksiyon cagrisi (_group_rejection_reason -- ki _should_group zaten onu
+cagiriyordu, K19 sadece _group'un da bir kez daha cagirmasini + bazi
+red durumlarinda O(1) bir dataclasses.replace ekliyor) OLCULEBILIR bir
+kotulesmeye yol ACMAMIS. Uc kosumda da (bkz. asagida farkli/ilave kosumlar)
+tutarli. Buyume orani (n=500->n=2000, 4x blok) TUR 2 ile ayni mertebede
+(~7x sure) -- known_gap'te belirtilen "O(n)'den kotu ama hedef aralikta
+(<=500 blok) sorun degil" durumu DEGISMEDI.
+
+--- Ek dogrulama kosumlari (ayni yontem, farkli veri sekli/ayrintilar icin
+    bkz. bu dizindeki k19_probe*.py betikleri ve tester_C testleri) ---

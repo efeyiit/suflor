@@ -1,0 +1,24 @@
+TUR 5 -- Tester-C olcek olcumu
+yontem: ust-uste-binen bloklar, metin=f'kelime{i}-', DIALOGUE,
+        7 tekrar / MEDYAN -- TUR 2, TUR 3 ve TUR 4 ile AYNI yontem
+
+taban degerler:
+  TUR 2 : n=500 -> 3.443 ms · n=1000 -> 9.271 ms · n=2000 -> 27.069 ms
+  TUR 3 : n=500 -> 3.673 ms · n=1000 -> 9.234 ms · n=2000 -> 26.461 ms
+  TUR 4 : n=500 -> 2.744 ms · n=1000 -> 7.032 ms · n=2000 -> 20.138 ms
+
+TUR 5 olcumu:
+  n=  500 -> medyan   3.199 ms  (min   3.065 / max   3.673)  TUR 4'e gore  +16.6%
+  n= 1000 -> medyan   8.429 ms  (min   7.819 / max   8.863)  TUR 4'e gore  +19.9%
+  n= 2000 -> medyan  24.866 ms  (min  21.601 / max  25.473)  TUR 4'e gore  +23.5%
+
+  n=500 -> n=2000 (4x blok) sure orani = 7.77x  (kuadratik olsaydi ~16x beklenirdi)
+
+EK OLCUM -- CJK, hyphen'siz, her 4. blok ETIKETLI (iki-gecisli
+            `_group` GERCEKTEN calisir; miras sorgusu tetiklenir)
+  n=  500 -> medyan   3.330 ms  (min   2.963 / max   4.920)
+  n= 1000 -> medyan   6.420 ms  (min   6.028 / max   7.745)
+  n= 2000 -> medyan  13.418 ms  (min  13.223 / max  14.879)
+  n=500 -> n=2000 sure orani = 4.03x
+
+SONUC: iki-gecisli `_group` (K23/K24) olcegi KOTULESTIRMEDI.

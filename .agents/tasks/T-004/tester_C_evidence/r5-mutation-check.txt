@@ -1,0 +1,36 @@
+==========================================================================
+MEVCUT KOD (tur 5, iki-gecisli `_group`) -- hepsi GECMELI
+--------------------------------------------------------------------------
+  GECTI     test_k23_B1_JAPONCA_kendi_etiketiyle_gelen_YENI_replik_AYRI_KALIR
+  GECTI     test_k23_B1_JAPONCA_etiketsiz_kuyruk_MIRAS_ALIR_ama_bolumleme_AYNI
+  GECTI     test_k23_B1_JAPONCA_FARKLI_konusmaci_etiketi_miras_ALMAZ
+  GECTI     test_k23_UC_KONUSMACULU_zincir_her_biri_COK_SATIRLI_ve_cap_ASIYOR
+  GECTI     test_k23_UC_KONUSMACULU_zincir_KISA_replikler_konusmaci_SIZMAZ
+  GECTI     test_GOZLEM_iki_AYRI_kendi_etiketli_replik_K15_satir1_ile_BIRLESIR
+  GECTI     test_karisik_script_UZUNLUK_bolunmesinde_de_miras_calisir
+  GECTI     test_kotu_kullanim_apply_inheritance_False_SESSIZCE_YANLIS_sonuc_VERMEZ
+  GECTI     test_k23_DEGISMEZ_tester_C_KENDI_fuzzi_CJK_agirlikli_2600_girdi
+
+==========================================================================
+MUTANT (tur 4 mekanizmasi, B1'in koku) -- K23/B1 testleri KIRILMALI
+--------------------------------------------------------------------------
+  KIRILDI   test_k23_B1_JAPONCA_kendi_etiketiyle_gelen_YENI_replik_AYRI_KALIR
+            -> K23 IHLALI -- segment SAYISI miras karariyla degisti: 2 (acik) != 3 (kapali)
+  GECTI     test_k23_B1_JAPONCA_etiketsiz_kuyruk_MIRAS_ALIR_ama_bolumleme_AYNI
+  GECTI     test_k23_B1_JAPONCA_FARKLI_konusmaci_etiketi_miras_ALMAZ
+  GECTI     test_k23_UC_KONUSMACULU_zincir_her_biri_COK_SATIRLI_ve_cap_ASIYOR
+  GECTI     test_k23_UC_KONUSMACULU_zincir_KISA_replikler_konusmaci_SIZMAZ
+  GECTI     test_GOZLEM_iki_AYRI_kendi_etiketli_replik_K15_satir1_ile_BIRLESIR
+  GECTI     test_karisik_script_UZUNLUK_bolunmesinde_de_miras_calisir
+  GECTI     test_kotu_kullanim_apply_inheritance_False_SESSIZCE_YANLIS_sonuc_VERMEZ
+  KIRILDI   test_k23_DEGISMEZ_tester_C_KENDI_fuzzi_CJK_agirlikli_2600_girdi
+            -> K23 DEGISMEZI IHLAL EDILDI (48 ihlal) -- ilk uc: ['case=13 preset=tooltip SEGMENT SAYISI 13!=14', 'case=38 pre
+
+==========================================================================
+SONUC
+--------------------------------------------------------------------------
+Tester-C'nin TUR 5 testleri TOTOLOJI DEGIL: B1'in japonca senaryosu
+ve K23 degismez fuzz'i, TUR 4'un hatali mekanizmasinda KIRILIYOR;
+mevcut kodda ikisi de temiz. (Ureticinin ILK hali mutantta 0 ihlal
+buluyordu -- SAHNE modu eklenerek 48/2600'e cikarildi, bkz. testin
+docstring'i.)

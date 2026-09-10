@@ -1,0 +1,166 @@
+$ python -m pytest .agents/tasks/T-004/tester_A -q --runxfail -k 'makine_denetimi or kuyruk_gercek'
+# --runxfail: xfail maskesi KAPALI -- bulgunun HAM assertion cikitisi
+FFFF                                                                     [100%]
+================================== FAILURES ===================================
+_ test_r51_kuyruk_gercek_geometrik_kopusun_otesine_speaker_atfetmiyor[A/non-monotonik: bottom artifakti-blocks0-gap-False] _
+
+ad = 'A/non-monotonik: bottom artifakti'
+blocks = [TextBlock(text='Ada: XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX...ZZZZZZZZZZZZZZZZZZ', bbox=Rect(x=0, y=60, w=240, h=18, monitor_index=0, dpi_scale=1.0), confidence=0.9, line_boxes=())]
+ham_sebep = 'gap', monotonik = False
+
+    @pytest.mark.parametrize(("ad", "blocks", "ham_sebep", "monotonik"), _R51_YOLLAR)
+    @pytest.mark.xfail(
+        reason="BULGU R5-1 (BLOKE EDICI, feedback-A.md): `tail` her zaman 'grubun son HAM "
+        "ogesi' DEGIL -- adim 3'un hyphen birlesimi COK BLOKLU bir oge uretebilir ve onun "
+        "BIRLESIK bbox'i, K24'un step-5 icin kaldirdigi artifakti step-3 uzerinden GERI "
+        "GETIRIR; `speaker` GERCEK bir geometrik kopusun OTESINE atfediliyor (K19 tablosu: "
+        "'geometrik bosluk -> None KALIR'). Uc yolun IKISI monotoniktir.",
+        strict=True,
+    )
+    def test_r51_kuyruk_gercek_geometrik_kopusun_otesine_speaker_atfetmiyor(
+        ad: str, blocks: list[TextBlock], ham_sebep: str, monotonik: bool
+    ) -> None:
+        """BULGU (bu test KIRMIZI -- `xfail(strict=True)`, kod duzelirse XPASS
+        ile KIRILIR): K19 tablosu "geometrik bosluk -> `None` KALIR" diyor.
+        Aday blok ile grubun GERCEK son metin satiri arasinda gercek bir kopus
+        var (yukaridaki mekanizma testi bunu sabitliyor), ama kod mirasi
+        UYGULUYOR."""
+        segs = normalize(blocks, OcrPreset.DIALOGUE)
+>       assert [(s.source_blocks, s.speaker) for s in segs] == [((0, 1, 2), "Ada"), ((3,), None)], ad
+E       AssertionError: A/non-monotonik: bottom artifakti
+E       assert [((0, 1, 2), ...((3,), 'Ada')] == [((0, 1, 2), ... ((3,), None)]
+E         
+E         At index 1 diff: ((3,), 'Ada') != ((3,), None)
+E         Use -v to get more diff
+
+.agents\tasks\T-004\tester_A\test_r5_partition_invariant.py:784: AssertionError
+_ test_r51_kuyruk_gercek_geometrik_kopusun_otesine_speaker_atfetmiyor[B/MONOTONIK: min(h) sismesi-blocks1-gap-True] _
+
+ad = 'B/MONOTONIK: min(h) sismesi'
+blocks = [TextBlock(text='Ada: XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX...ZZZZZZZZZZZZZZZZZZ', bbox=Rect(x=0, y=40, w=240, h=18, monitor_index=0, dpi_scale=1.0), confidence=0.9, line_boxes=())]
+ham_sebep = 'gap', monotonik = True
+
+    @pytest.mark.parametrize(("ad", "blocks", "ham_sebep", "monotonik"), _R51_YOLLAR)
+    @pytest.mark.xfail(
+        reason="BULGU R5-1 (BLOKE EDICI, feedback-A.md): `tail` her zaman 'grubun son HAM "
+        "ogesi' DEGIL -- adim 3'un hyphen birlesimi COK BLOKLU bir oge uretebilir ve onun "
+        "BIRLESIK bbox'i, K24'un step-5 icin kaldirdigi artifakti step-3 uzerinden GERI "
+        "GETIRIR; `speaker` GERCEK bir geometrik kopusun OTESINE atfediliyor (K19 tablosu: "
+        "'geometrik bosluk -> None KALIR'). Uc yolun IKISI monotoniktir.",
+        strict=True,
+    )
+    def test_r51_kuyruk_gercek_geometrik_kopusun_otesine_speaker_atfetmiyor(
+        ad: str, blocks: list[TextBlock], ham_sebep: str, monotonik: bool
+    ) -> None:
+        """BULGU (bu test KIRMIZI -- `xfail(strict=True)`, kod duzelirse XPASS
+        ile KIRILIR): K19 tablosu "geometrik bosluk -> `None` KALIR" diyor.
+        Aday blok ile grubun GERCEK son metin satiri arasinda gercek bir kopus
+        var (yukaridaki mekanizma testi bunu sabitliyor), ama kod mirasi
+        UYGULUYOR."""
+        segs = normalize(blocks, OcrPreset.DIALOGUE)
+>       assert [(s.source_blocks, s.speaker) for s in segs] == [((0, 1, 2), "Ada"), ((3,), None)], ad
+E       AssertionError: B/MONOTONIK: min(h) sismesi
+E       assert [((0, 1, 2), ...((3,), 'Ada')] == [((0, 1, 2), ... ((3,), None)]
+E         
+E         At index 1 diff: ((3,), 'Ada') != ((3,), None)
+E         Use -v to get more diff
+
+.agents\tasks\T-004\tester_A\test_r5_partition_invariant.py:784: AssertionError
+_ test_r51_kuyruk_gercek_geometrik_kopusun_otesine_speaker_atfetmiyor[C/MONOTONIK: overlap+min(w) sismesi-blocks2-overlap-True] _
+
+ad = 'C/MONOTONIK: overlap+min(w) sismesi'
+blocks = [TextBlock(text='Ada: XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX...ZZZZZZZZZZZZZZZZZZ', bbox=Rect(x=0, y=40, w=240, h=18, monitor_index=0, dpi_scale=1.0), confidence=0.9, line_boxes=())]
+ham_sebep = 'overlap', monotonik = True
+
+    @pytest.mark.parametrize(("ad", "blocks", "ham_sebep", "monotonik"), _R51_YOLLAR)
+    @pytest.mark.xfail(
+        reason="BULGU R5-1 (BLOKE EDICI, feedback-A.md): `tail` her zaman 'grubun son HAM "
+        "ogesi' DEGIL -- adim 3'un hyphen birlesimi COK BLOKLU bir oge uretebilir ve onun "
+        "BIRLESIK bbox'i, K24'un step-5 icin kaldirdigi artifakti step-3 uzerinden GERI "
+        "GETIRIR; `speaker` GERCEK bir geometrik kopusun OTESINE atfediliyor (K19 tablosu: "
+        "'geometrik bosluk -> None KALIR'). Uc yolun IKISI monotoniktir.",
+        strict=True,
+    )
+    def test_r51_kuyruk_gercek_geometrik_kopusun_otesine_speaker_atfetmiyor(
+        ad: str, blocks: list[TextBlock], ham_sebep: str, monotonik: bool
+    ) -> None:
+        """BULGU (bu test KIRMIZI -- `xfail(strict=True)`, kod duzelirse XPASS
+        ile KIRILIR): K19 tablosu "geometrik bosluk -> `None` KALIR" diyor.
+        Aday blok ile grubun GERCEK son metin satiri arasinda gercek bir kopus
+        var (yukaridaki mekanizma testi bunu sabitliyor), ama kod mirasi
+        UYGULUYOR."""
+        segs = normalize(blocks, OcrPreset.DIALOGUE)
+>       assert [(s.source_blocks, s.speaker) for s in segs] == [((0, 1, 2), "Ada"), ((3,), None)], ad
+E       AssertionError: C/MONOTONIK: overlap+min(w) sismesi
+E       assert [((0, 1, 2), ...((3,), 'Ada')] == [((0, 1, 2), ... ((3,), None)]
+E         
+E         At index 1 diff: ((3,), 'Ada') != ((3,), None)
+E         Use -v to get more diff
+
+.agents\tasks\T-004\tester_A\test_r5_partition_invariant.py:784: AssertionError
+________ test_r51_makine_denetimi_ham_son_blok_kuralinda_sifir_ayrisma ________
+
+    @pytest.mark.xfail(
+        reason="BULGU R5-1 (BLOKE EDICI) -- MAKINE DENETIMI: derlemde K24'un ifadesinin "
+        "birebir okunusuyla (grubun okuma sirasindaki SON HAM BLOGU) kodun item-duzeyi "
+        "`tail`'i binlerce sinirda ayrisiyor.",
+        strict=True,
+    )
+    def test_r51_makine_denetimi_ham_son_blok_kuralinda_sifir_ayrisma() -> None:
+        """R5-1'in TEK bir elle kurulmus nokta OLMADIGINI makineyle gosterir:
+        tek tohumlu derlem (630 girdi) x uc gruplayan on ayar taranir; her
+        uzunluk-sinirinda kodun `tail` sorgusu ile HAM son blok sorgusu
+        karsilastirilir. Tek fark bile K24'un ifadesinin kodda tutmadigini
+        gosterir; sayilar `verdict-A.md`/`feedback-A.md`'de raporlanir."""
+        kod_evet_ham_hayir = 0
+        kod_hayir_ham_evet = 0
+        sinir = 0
+        for blocks in _corpus(SEEDS[0]):
+            for preset in (OcrPreset.DIALOGUE, OcrPreset.TOOLTIP, OcrPreset.SUBTITLE):
+                params = get_params(preset)
+                items = _items_of(blocks, params)
+                if not items:
+                    continue
+                current = items[0]
+                tail = items[0]
+                for nxt in items[1:]:
+                    reason = _group_rejection_reason(current, nxt, params)
+                    if reason is None:
+                        current = _Item(
+                            text=current.text + " " + nxt.text,
+                            bbox=_union_rect(current.bbox, nxt.bbox),
+                            speaker=current.speaker,
+                            source_blocks=tuple(sorted((*current.source_blocks, *nxt.source_blocks))),
+                        )
+                        tail = nxt
+                    else:
+                        if reason == "length" and nxt.speaker is None:
+                            sinir += 1
+                            kod = _group_rejection_reason(tail, nxt, params, ignore_length=True) is None
+                            ham_tail = replace(tail, bbox=_last_raw_rect(tail, blocks))
+                            ham = _group_rejection_reason(ham_tail, nxt, params, ignore_length=True) is None
+                            if kod and not ham:
+                                kod_evet_ham_hayir += 1
+                            elif ham and not kod:
+                                kod_hayir_ham_evet += 1
+                        current = nxt
+                        tail = nxt
+        assert sinir > 1000, f"denetim totoloji: incelenen uzunluk-siniri {sinir}"
+>       assert (kod_evet_ham_hayir, kod_hayir_ham_evet) == (0, 0), (
+            f"incelenen uzunluk-siniri={sinir} · kod MIRAS VER/ham MIRAS YOK={kod_evet_ham_hayir} · "
+            f"kod MIRAS YOK/ham MIRAS VER={kod_hayir_ham_evet}"
+        )
+E       AssertionError: incelenen uzunluk-siniri=6552 · kod MIRAS VER/ham MIRAS YOK=79 · kod MIRAS YOK/ham MIRAS VER=0
+E       assert (79, 0) == (0, 0)
+E         
+E         At index 0 diff: 79 != 0
+E         Use -v to get more diff
+
+.agents\tasks\T-004\tester_A\test_r5_partition_invariant.py:833: AssertionError
+=========================== short test summary info ===========================
+FAILED .agents/tasks/T-004/tester_A/test_r5_partition_invariant.py::test_r51_kuyruk_gercek_geometrik_kopusun_otesine_speaker_atfetmiyor[A/non-monotonik: bottom artifakti-blocks0-gap-False]
+FAILED .agents/tasks/T-004/tester_A/test_r5_partition_invariant.py::test_r51_kuyruk_gercek_geometrik_kopusun_otesine_speaker_atfetmiyor[B/MONOTONIK: min(h) sismesi-blocks1-gap-True]
+FAILED .agents/tasks/T-004/tester_A/test_r5_partition_invariant.py::test_r51_kuyruk_gercek_geometrik_kopusun_otesine_speaker_atfetmiyor[C/MONOTONIK: overlap+min(w) sismesi-blocks2-overlap-True]
+FAILED .agents/tasks/T-004/tester_A/test_r5_partition_invariant.py::test_r51_makine_denetimi_ham_son_blok_kuralinda_sifir_ayrisma
+4 failed, 134 deselected in 0.46s
+exit_code=1

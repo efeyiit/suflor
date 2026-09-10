@@ -1,0 +1,29 @@
+==========================================================================
+K24 -- `tail` ile `current` (birlesik bbox) CJK govdede ayrisiyor mu?
+--------------------------------------------------------------------------
+  cur.bbox.bottom=400  tail.bbox.bottom=30  nxt.y=200
+  reason(cur, nxt)                 = 'length'
+  reason(cur, nxt, ignore_length=T) = None
+  reason(tail, nxt, ignore_length=T)= 'gap'
+  -> K24: tail GERCEK kopusu goruyor, current GIZLIYOR
+
+==========================================================================
+K26 -- alti karakterin decomposition ETIKET dagilimi
+--------------------------------------------------------------------------
+  U+FE15  decomposition='<vertical> 0021'  etiket=<vertical>
+  U+FE16  decomposition='<vertical> 003F'  etiket=<vertical>
+  U+FE56  decomposition='<small> 003F'     etiket=<small>
+  U+FE57  decomposition='<small> 0021'     etiket=<small>
+  U+FF01  decomposition='<wide> 0021'      etiket=<wide>
+  U+FF1F  decomposition='<wide> 003F'      etiket=<wide>
+  dagilim = {'<vertical>': 2, '<small>': 2, '<wide>': 2}
+  hepsi uyumluluk formu mu: True
+  unidata_version = 15.0.0
+
+==========================================================================
+K23 DEGISMEZ FUZZ -- Tester-C tohumu 20250910, CJK agirlikli, n=2600
+--------------------------------------------------------------------------
+  denetlenen girdi = 2600, etiketli blok ~2533, yozlasmis geometri ~1130
+  K23 BOLUMLEME IHLALI = 0
+  miras YALNIZCA None -> deger yonunde degisti: dogrulandi (assert)
+

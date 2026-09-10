@@ -1,0 +1,7 @@
+tekrar sayisi: 50
+medyan: 0.1807 ms
+ortalama: 0.1917 ms
+min: 0.1710 ms
+max: 0.3427 ms
+butce (K14): 5.0 ms
+SONUC: GECTI (medyan <= 5ms)

@@ -1,0 +1,34 @@
+=== BULGU 1: etiket + COK BLOKLU govde ===
+  ASCII
+    girdi : ['Ada:', 'Bu uzun bir', 'cumledir.']
+    -> speaker='Ada'  text='Bu uzun bir'
+    -> speaker=None  text='cumledir.'
+    (2 segment)
+
+  Japonca
+    girdi : ['勇者:', 'この町はとても', '大きいですね。']
+    -> speaker='勇者'  text='この町はとても'
+    -> speaker=None  text='大きいですね。'
+    (2 segment)
+
+  KONTROL - etiket + TEK bloklu govde
+    girdi : ['Ada:', 'Bu tek satirlik.']
+    -> speaker='Ada'  text='Bu tek satirlik.'
+    (1 segment)
+
+=== BULGU 2: fullwidth iki nokta ===
+  ASCII iki nokta
+    girdi : ['Ada: Merhaba']
+    -> speaker='Ada'  text='Merhaba'
+    (1 segment)
+
+  Fullwidth iki nokta
+    girdi : ['勇者：こんにちは']
+    -> speaker=None  text='勇者：こんにちは'
+    (1 segment)
+
+=== BULGU 3: fullwidth noktalama tek karakter ===
+  ASCII ?          korundu mu: True
+  ASCII !          korundu mu: True
+  fullwidth ？      korundu mu: False
+  fullwidth ！      korundu mu: False

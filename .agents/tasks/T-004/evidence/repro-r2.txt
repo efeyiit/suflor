@@ -1,0 +1,35 @@
+T-004 TUR 2 -- dort bulgunun DUZELTILMIS davranisi (repro-r2)
+======================================================================
+
+--- Bulgu 1 / K15 -- ['Ada:', 'Bu uzun bir', 'cumledir.'] (ASCII) ---
+girdi : ['Ada:', 'Bu uzun bir', 'cumledir.']
+cikti : 1 segment
+        speaker='Ada'  text='Bu uzun bir cumledir.'  source_blocks=(0, 1, 2)
+SONUC: 1 segment, speaker='Ada', metin birlesik -- DOGRU (K15)
+
+--- Bulgu 1 / K15 -- ['勇者:', 'この町はとても', '大きいですね。'] (Japonca) ---
+cikti : 1 segment
+        speaker='勇者'  text='この町はとても 大きいですね。'  source_blocks=(0, 1, 2)
+SONUC: 1 segment, konusmaci + cumle butunlugu korundu -- DOGRU (K15, Japonca da ASCII ile BIREBIR ayni)
+
+--- Bulgu 2 / K16 -- h=0 ve gap=0 iki blok ---
+cikti : 2 segment -- ['Merhaba', 'dunya']
+SONUC: 2 segment -- DOGRU (K16, TUR 1'de 1 segmente birlesiyordu)
+
+--- Bulgu 2 / K16 -- a: y=-15 h=20, b: y=0 h=-10 ---
+cikti : 2 segment -- ['Merhaba', 'dunya']
+SONUC: 2 segment -- DOGRU (K16, negatif yukseklik de kapsandi)
+
+--- Bulgu 3 / K17 -- '勇者：こんにちは' (fullwidth ：) ---
+cikti : speaker='勇者'  text='こんにちは'
+SONUC: speaker='勇者' -- DOGRU (K17, TUR 1'de speaker=None kaliyordu)
+
+--- Bulgu 4 / K18 -- tek-karakterli fullwidth ？ ve ！ ---
+ASCII ?       korundu: True
+ASCII !       korundu: True
+fullwidth ？     korundu: True
+fullwidth ！     korundu: True
+SONUC: fullwidth ？/！ de korunuyor -- DOGRU (K18, TUR 1'de sessizce siliniyordu)
+
+======================================================================
+HEPSI DOGRULANDI -- dort bulgunun dordu de duzeltildi (K15-K18).

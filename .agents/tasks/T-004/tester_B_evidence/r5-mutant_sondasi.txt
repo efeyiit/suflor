@@ -1,0 +1,40 @@
+# T-004 TUR 5 / TESTER-B -- K23/K24 MUTANT SONDASI (dislilik ispati)
+# harness: .agents/tasks/T-004/tester_B/test_k23_mutant_sondasi_tur5.py
+# src/ agaci tmp'ye KOPYALANIR, kopyaya mutasyon uygulanir, olcum AYRI surecte kosar.
+# src/ ALTINA HICBIR SEY YAZILMAZ.
+
+=== KONTROL (mutasyon yok) ===
+  kosum (400 girdi x 4 on ayar) : 1600
+  K23 ihlali                    : 0
+  B1 bolumlemesi                : [[0, 1], [2], [3]]  speakers=['Ada', 'Ada', 'Ada']
+  K24 geometrisi src            : [[0, 1, 2], [3]]
+  K24 kuyruk speaker            : None  (K24: None olmali)
+  K2/K21 fixture speakers       : ['Ada', None]  (K21: ['Ada', None] olmali)
+
+=== M1_bolumlemeye_sizinti ===
+  kosum (400 girdi x 4 on ayar) : 1600
+  K23 ihlali                    : 7
+    ilk ihlal preset=subtitle
+      miras ACIK  src: [[0, 1], [2], [3], [4, 5], [6], [7, 8], [9], [10], [11], [12]]
+      miras KAPALI src: [[0, 1], [2], [3], [4, 5], [6], [7], [8], [9], [10], [11], [12]]
+  B1 bolumlemesi                : [[0, 1], [2, 3]]  speakers=['Ada', 'Ada']
+  K24 geometrisi src            : [[0, 1, 2], [3]]
+  K24 kuyruk speaker            : None  (K24: None olmali)
+  K2/K21 fixture speakers       : ['Ada', None]  (K21: ['Ada', None] olmali)
+
+=== M2_k24_sorgusu_kaldirildi ===
+  kosum (400 girdi x 4 on ayar) : 1600
+  K23 ihlali                    : 0
+  B1 bolumlemesi                : [[0, 1], [2], [3]]  speakers=['Ada', 'Ada', 'Ada']
+  K24 geometrisi src            : [[0, 1, 2], [3]]
+  K24 kuyruk speaker            : 'Ada'  (K24: None olmali)
+  K2/K21 fixture speakers       : ['Ada', 'Ada']  (K21: ['Ada', None] olmali)
+
+=== M3_tail_yerine_current ===
+  kosum (400 girdi x 4 on ayar) : 1600
+  K23 ihlali                    : 0
+  B1 bolumlemesi                : [[0, 1], [2], [3]]  speakers=['Ada', 'Ada', 'Ada']
+  K24 geometrisi src            : [[0, 1, 2], [3]]
+  K24 kuyruk speaker            : 'Ada'  (K24: None olmali)
+  K2/K21 fixture speakers       : ['Ada', None]  (K21: ['Ada', None] olmali)
+

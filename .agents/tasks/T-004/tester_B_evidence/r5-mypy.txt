@@ -1,0 +1,6 @@
+# T-004 TUR 5 / TESTER-B
+# komut: python -m mypy --strict src/ocr/normalizer.py src/ocr/presets.py
+
+Success: no issues found in 2 source files
+
+# exit_code: 0

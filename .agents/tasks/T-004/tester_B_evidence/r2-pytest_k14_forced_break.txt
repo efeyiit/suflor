@@ -1,0 +1,9 @@
+============================= test session starts =============================
+platform win32 -- Python 3.12.10, pytest-9.1.1, pluggy-1.6.0 -- C:\Users\pc\AppData\Local\Programs\Python\Python312\python.exe
+cachedir: .pytest_cache
+rootdir: C:\Users\pc\Desktop\efe\çeviri uygulamasý
+collecting ... collected 34 items / 33 deselected / 1 selected
+
+.agents/tasks/T-004/tester_B/test_karar_uyumu.py::test_k14_assertion_imkansiz_esikle_gercekten_kiriliyor PASSED [100%]
+
+====================== 1 passed, 33 deselected in 0.19s =======================

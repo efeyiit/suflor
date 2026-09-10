@@ -1,0 +1,9 @@
+============================= test session starts =============================
+platform win32 -- Python 3.12.10, pytest-9.1.1, pluggy-1.6.0 -- C:\Users\pc\AppData\Local\Programs\Python\Python312\python.exe
+cachedir: .pytest_cache
+rootdir: C:\Users\pc\Desktop\efe\çeviri uygulamasý
+collecting ... collected 61 items / 60 deselected / 1 selected
+
+tests/unit/ocr/test_normalizer.py::test_k14_normalizasyon_butcesi_5ms_medyan PASSED [100%]
+
+====================== 1 passed, 60 deselected in 0.16s =======================

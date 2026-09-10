@@ -1,0 +1,19 @@
+=== SEF DOGRULAMASI - T-004 tur 1 ===
+Not: implementer status=kismi bildirdi cunku purity_check.py cikis 1 veriyordu.
+Sebep implementer'in kodu DEGIL, sefin yazdigi harness dosyasindaki hataydi:
+  purity_check.py satir 76 -> OcrPreset.dialogue (uye adi aslinda DIALOGUE)
+Implementer o dosyaya dokunmasi YASAK oldugu icin duzeltemezdi ve dogru davranip
+sahte gecis iddia etmedi. Sef harness'i duzeltti; asagisi duzeltme SONRASI kosum.
+
+--- mypy --strict ---
+Success: no issues found in 2 source files
+--- pytest ---
+.................................................                        [100%]
+49 passed in 0.17s
+--- purity_check ---
+denetlenen: normalizer.py, presets.py
+
+TEMIZ: saf, mutable global yok, surecler arasi deterministik
+--- tum depo ---
+..........................                                               [100%]
+746 passed in 0.98s

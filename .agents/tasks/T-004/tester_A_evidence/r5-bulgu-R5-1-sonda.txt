@@ -1,0 +1,55 @@
+$ python .agents/tasks/T-004/tester_A/sonda_r5_bulgu.py
+==============================================================================
+1. BULGU R5-1 -- hyphen-birlesik `tail`, GERCEK geometrik kopusu gizliyor
+==============================================================================
+
+A non-monotonik (bottom artifakti)
+  tail (adim 3'te birlesmis oge)   : src=(1, 2) bbox=Rect(x=0, y=20, w=240, h=50, monitor_index=0, dpi_scale=1.0)
+  grubun HAM son metin satiri      : bbox=Rect(x=0, y=26, w=240, h=18, monitor_index=0, dpi_scale=1.0)
+  monotonik mi (bottom AYNI mi)    : False
+  sinir sebebi (current, nxt)      : 'length'
+  KODUN sorgusu   (tail, nxt, ignore_length=True) : None   <- 'kopus YOK' (artifakt)
+  K24 IFADESI (HAM son satir, nxt, ignore_length) : 'gap'  <- GERCEK kopus
+  normalize()  src/speaker         : [((0, 1, 2), 'Ada'), ((3,), 'Ada')]
+  apply_inheritance=False          : [((0, 1, 2), 'Ada'), ((3,), None)]
+  K19 tablosu 'geometrik bosluk -> None KALIR' ihlal edildi mi: True
+
+B MONOTONIK (min(h) sismesi)
+  tail (adim 3'te birlesmis oge)   : src=(1, 2) bbox=Rect(x=0, y=0, w=240, h=35, monitor_index=0, dpi_scale=1.0)
+  grubun HAM son metin satiri      : bbox=Rect(x=0, y=30, w=240, h=5, monitor_index=0, dpi_scale=1.0)
+  monotonik mi (bottom AYNI mi)    : True
+  sinir sebebi (current, nxt)      : 'length'
+  KODUN sorgusu   (tail, nxt, ignore_length=True) : None   <- 'kopus YOK' (artifakt)
+  K24 IFADESI (HAM son satir, nxt, ignore_length) : 'gap'  <- GERCEK kopus
+  normalize()  src/speaker         : [((0, 1, 2), 'Ada'), ((3,), 'Ada')]
+  apply_inheritance=False          : [((0, 1, 2), 'Ada'), ((3,), None)]
+  K19 tablosu 'geometrik bosluk -> None KALIR' ihlal edildi mi: True
+
+C MONOTONIK (overlap+min(w) sismesi)
+  tail (adim 3'te birlesmis oge)   : src=(1, 2) bbox=Rect(x=0, y=0, w=308, h=38, monitor_index=0, dpi_scale=1.0)
+  grubun HAM son metin satiri      : bbox=Rect(x=300, y=20, w=8, h=18, monitor_index=0, dpi_scale=1.0)
+  monotonik mi (bottom AYNI mi)    : True
+  sinir sebebi (current, nxt)      : 'length'
+  KODUN sorgusu   (tail, nxt, ignore_length=True) : None   <- 'kopus YOK' (artifakt)
+  K24 IFADESI (HAM son satir, nxt, ignore_length) : 'overlap'  <- GERCEK kopus
+  normalize()  src/speaker         : [((0, 1, 2), 'Ada'), ((3,), 'Ada')]
+  apply_inheritance=False          : [((0, 1, 2), 'Ada'), ((3,), None)]
+  K19 tablosu 'geometrik bosluk -> None KALIR' ihlal edildi mi: True
+
+==============================================================================
+2. K23 DEGISMEZI -- KENDI (hyphen-yogun) ureticimle, 3200 girdi x 4 on ayar
+==============================================================================
+  girdi=3200  kosum=12800
+  BOLUMLEME FARKI (source_blocks/text/bbox/placeholders/sayi) = 0   <- 0 olmali
+  miras GERCEKTEN tetiklendi mi (speaker'i degisen segment)   = 8117   <- totoloji degil
+
+==============================================================================
+3. K24'un ifadesi HAM BLOK duzeyinde tutuyor mu (makine denetimi + e2e)
+==============================================================================
+  girdi=3200  incelenen uzunluk-siniri=30174
+  kod MIRAS VER / HAM son satir MIRAS YOK = 1561  (5.2%)   <- K19 tablosu ihlali
+    bunlardan MONOTONIK (bottom artifakti YOK, egzotik geometri GEREKMEZ) = 1473
+  kod MIRAS YOK / HAM son satir MIRAS VER = 27
+  UCTAN UCA: speaker'i FARKLI cikan segment = 1004, etkilenen girdi = 383/3200
+  UCTAN UCA: bolumleme farki = 0   <- 0: bulgu K23'u IHLAL ETMIYOR, yalniz `speaker`i bozuyor
+exit_code=0

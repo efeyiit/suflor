@@ -1,0 +1,24 @@
+# T-004 TUR 5 / TESTER-B
+# komut: python -m pytest .agents/tasks/T-004/tester_B -k 'docstring or ofset' -v --no-header -p no:cacheprovider
+
+============================= test session starts =============================
+collecting ... collected 117 items / 103 deselected / 14 selected
+
+.agents/tasks/T-004/tester_B/test_karar_uyumu.py::test_k2_docstring_sirayi_dogru_iddia_ediyor PASSED [  7%]
+.agents/tasks/T-004/tester_B/test_karar_uyumu_tur3.py::test_r3_k20_bagimsiz_tam_unicode_taramasi_docstringle_birebir_eslesir PASSED [ 14%]
+.agents/tasks/T-004/tester_B/test_karar_uyumu_tur3.py::test_r3_k20_docstring_listesi_koddan_ayri_bir_beyaz_liste_DEGIL PASSED [ 21%]
+.agents/tasks/T-004/tester_B/test_karar_uyumu_tur3.py::test_r3_k20_docstring_beyaz_liste_degil_ibaresini_tasir PASSED [ 28%]
+.agents/tasks/T-004/tester_B/test_karar_uyumu_tur3.py::test_r3_k2_docstring_sirasi_k19_sonrasi_hala_dogru PASSED [ 35%]
+.agents/tasks/T-004/tester_B/test_karar_uyumu_tur5.py::test_r5_k26_docstring_olgusal_ifadesi_olcumle_ortusuyor PASSED [ 42%]
+.agents/tasks/T-004/tester_B/test_karar_uyumu_tur5.py::test_r5_tur5_kararlari_modul_docstringinde_belgeli[## K23/K24] PASSED [ 50%]
+.agents/tasks/T-004/tester_B/test_karar_uyumu_tur5.py::test_r5_tur5_kararlari_modul_docstringinde_belgeli[K23 -- DEGISMEZ] PASSED [ 57%]
+.agents/tasks/T-004/tester_B/test_karar_uyumu_tur5.py::test_r5_tur5_kararlari_modul_docstringinde_belgeli[K24 -- K21'in TEK gecerli ifadesi] PASSED [ 64%]
+.agents/tasks/T-004/tester_B/test_karar_uyumu_tur5.py::test_r5_tur5_kararlari_modul_docstringinde_belgeli[K25] PASSED [ 71%]
+.agents/tasks/T-004/tester_B/test_karar_uyumu_tur5.py::test_r5_tur5_kararlari_modul_docstringinde_belgeli[K26 (sef_karari-tur5.md] PASSED [ 78%]
+.agents/tasks/T-004/tester_B/test_karar_uyumu_tur5.py::test_r5_tur5_kararlari_modul_docstringinde_belgeli[K27 (tur 5)] PASSED [ 85%]
+.agents/tasks/T-004/tester_B/test_karar_uyumu_tur5.py::test_r5_docstring_ofset_bolumleri_buyume_sonrasi_hala_bulunabiliyor PASSED [ 92%]
+.agents/tasks/T-004/tester_B/test_karar_uyumu_tur5.py::test_r5_docstring_atifta_bulunan_test_adlari_gercekten_var PASSED [100%]
+
+===================== 14 passed, 103 deselected in 0.20s ======================
+
+# exit_code: 0

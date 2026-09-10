@@ -48,6 +48,78 @@
       ],
       "durum": "kabul",
       "tur": 2
+    },
+    {
+      "id": "T-004",
+      "baslik": "TextNormalizer: satir birlestirme, gurultu eleme, gruplama, yer tutucu koruma",
+      "dalga": 2,
+      "seviye": "B",
+      "owns": [
+        "src/ocr/normalizer.py",
+        "src/ocr/presets.py",
+        "tests/unit/ocr/test_normalizer.py"
+      ],
+      "depends_on": [
+        "T-001"
+      ],
+      "durum": "tur6-karar-kirmizi-takimi-7.gecis",
+      "tur": 6,
+      "not": "Karar KT alti gecis. 6. gecis KITI KIRDI: 26 mutantin 13'u temiz geciyordu; kok sebep referansin MUTANTIN KENDI source_blocks'undan turemesiydi. Kit SURUM 2: bagimsiz kimlik kanali (adim 1-4 yeniden turetimi), kapsam denetimi (ignore_length=False cagrilari), alti yeni girdi sinifi (ASCII-disi/yozlasmis/negatif/buyuk/iki-konusmaci/derin zincir), sira denetimi. Sef dogruladi: 11 mutant yakalandi, 2 esdeger dogru sekilde isaretlenmedi, 2 mutant (n18/n23) kacti -> Tester-B'nin M10/M11 yukumlulugune cevrildi ve kararda 'olculmuyor' diye isaretlendi. 7. gecis kit surum 2'yi curutecek. Kit ice aktarimi cozuldu: sefe ait iki conftest.py (tests/unit/ocr ve .agents/tasks/T-004); tester_B artik tek basina kosuyor."
+    },
+    {
+      "id": "T-005",
+      "baslik": "CaptureService: ekran/bolge yakalama, monitor listeleme, backend enjeksiyonu",
+      "dalga": 1,
+      "seviye": "B",
+      "owns": [
+        "src/capture/service.py",
+        "src/capture/monitors.py",
+        "tests/unit/capture/test_service.py",
+        "tests/unit/capture/test_monitors.py"
+      ],
+      "depends_on": [
+        "T-001",
+        "T-003"
+      ],
+      "durum": "paket-v8-kirmizi-takim-bekliyor",
+      "tur": 0,
+      "not": "Paket KT yedi tur: 23+27+15+13+14+16 = 108+ bulgu, 18'i yuksek. v7'nin iki yuksegi: grab kutusunu kirpan uygulama bes kapidan geciyordu (§3 tek noktada olcuyordu -- artik negatif koordinatta ikinci nokta); ve sefin v7'de K10'a yazdigi OLCU cumlesi VAR OLMAYAN bir denetimi tarif ediyordu (4.6/2+/3) -- geri cekildi, kopyalama gercek mss'te gozlemlenemez oldugu icin kapi degil tercih olarak yazildi. Ayrica: girise kabul kapisi (int() sessiz kirpmayi onler), K7 tip duzeyine tasindi (dort ayrisma girdisi), capture_full bacagi [OLCULMUYOR], §5 elif zinciri ayrildi, §4 dekorator + calisma zamani protokol uyumu."
+    },
+    {
+      "id": "T-006",
+      "baslik": "OCR motoru: ONNX model sarmalayici, TextBlock uretimi",
+      "dalga": 1,
+      "seviye": "B",
+      "owns": [
+        "src/ocr/engine.py",
+        "tests/unit/ocr/test_engine.py"
+      ],
+      "depends_on": [
+        "T-001",
+        "T-004",
+        "T-005"
+      ],
+      "durum": "acildi-paket-yok",
+      "tur": 0,
+      "donduruldu": false,
+      "not": "ZORUNLU cikis sozlesmesi maddesi (T-004 K32'den): motorun urettigi her TextBlock.text NFC normalize edilmis olacak. Gerekce (sef olcumu): normalize() codepoint sayan iki esik tasiyor (max_group_chars, _MAX_SPEAKER_NAME_LEN) ve isalpha() tabanli ad suzgeci; ayni gorunen metin NFD geldiginde bolumleme degisiyor (3 blokluk govde NFC'de 1 segment, NFD'de 3) ve NFD adlar konusmaci sayilmiyor. Paket yazilirken bu madde ve olcusu (NFC==NFD ayniyeti testi) eklenecek."
+    },
+    {
+      "id": "T-010",
+      "baslik": "DXGI Desktop Duplication backend: mss.grab'in 13.5 ms sabit maliyetinin yerine",
+      "dalga": 2,
+      "seviye": "B",
+      "owns": [
+        "src/capture/dxgi_backend.py",
+        "tests/unit/capture/test_dxgi_backend.py"
+      ],
+      "depends_on": [
+        "T-005"
+      ],
+      "durum": "acildi-paket-yok",
+      "tur": 0,
+      "donduruldu": false,
+      "not": "Sef olcumu (T-005 olgular.txt): gercek mss.grab medyani 13.5 ms, bolge boyutundan BAGIMSIZ; tasarim S5.7'nin 'Capture <= 10 ms' butcesi mss ile simdiden asiliyor. T-005'in CaptureBackend protokolune uyan ikinci bir backend olarak yazilacak; T-005 kapanmadan paket yazilmaz."
     }
   ],
   "sozlesmeler_donduruldu": true,

@@ -1,0 +1,46 @@
+TUR 5 / Tester-C -- purity_check.py HARNESS DEGISIKLIGI ve K29 iddiasinin
+BAGIMSIZ DOGRULAMASI
+
+OLAY: dort kabul komutumu 05:27'de kostum, ucu de temizdi (purity_check
+DAHIL). 05:29:30'da purity_check.py BASKA bir ajan tarafindan DEGISTIRILDI
+-- K29 diye YENI bir kontrol eklendi (kaynak: sef_karari-tur6.md, yani
+benim TUR 5 gorevimden SONRAKI bir tur). Komutu yeniden kostugumda exit 1
+verdi. Eski harness surumu git'te YOK (dizin untracked), bu yuzden temiz
+kosumun kanit dosyasi kurtarilamiyor -- ASAGIDA YALNIZ SU AN OLCULEBILEN
+seyi raporluyorum.
+
+purety_check.py degisiklik zamani:
+  2026-09-10 05:29:30.300200000 +0300  .agents/tasks/T-004/purity_check.py
+
+----------------------------------------------------------------------
+K29 IDDIASI: normalizer.py docstring'i var olmayan bir test adi aniyor
+----------------------------------------------------------------------
+
+purity_check.py'nin K29 kontrolu (satir 99, 130-131):
+    """K29: docstring'lerde anilan her `test_*` adi test dosyasinda gercekten var olmali.
+
+    Var olmayan teste atif, PROTOKOL 4.6/2'nin yasakladigi 'olculuyor hissi'dir
+                    seen.add((path.name, name))
+                    ln = getattr(node, "lineno", 1)
+                    errs.append(f"{path.name}:{ln}  docstring HAYALI test aniyor ({kind}) -> {name}{star} "
+                                f"[K29: test_normalizer.py'de yok]")
+
+
+IDDIA: normalizer.py:92 -> test_k2_esik_alti_blok_ortada
+
+src/ocr/normalizer.py satir 92 (anma):
+(bkz. `tests/unit/ocr/test_normalizer.py::test_k2_esik_alti_blok_ortada`).
+
+tests/unit/ocr/test_normalizer.py icinde 'test_k2_esik_alti' ARAMASI:
+93:def test_k2_esik_alti_orta_blok_komsulari_birlestirir() -> None:
+
+SONUC (bagimsiz dogrulama): IDDIA DOGRU. Docstring
+  'test_k2_esik_alti_blok_ortada'
+diyor; test dosyasindaki GERCEK ad
+  'test_k2_esik_alti_orta_blok_komsulari_birlestirir'  (satir 93)
+Yani bir ATIF (cross-reference) BAYAT -- anilan ADLA bir test YOK.
+Davranis etkisi YOK; bu bir DOKUMANTASYON atif hatasidir (K20/K22/K26
+ile ayni sinif). MERCEK C'nin (sinir/kotu kullanim/dil) kapsaminda
+DEGILDIR ve K29 benim gorev listemdeki kararlar (K23-K27) arasinda YOK.
+Tester-C bunu BLOKE EDICI SAYMIYOR; ham cikti ve dogrulama sefin karari
+icin burada kayda geciyor (PROTOKOL S3 kapi 1).

@@ -1,0 +1,112 @@
+==========================================================================
+S4 -- JP cap=280 GERCEKTEN asiliyor; son blok KENDI 勇者： etiketli
+--------------------------------------------------------------------------
+  b0: y=    0 len=  3 '勇者：'
+  b1: y=   22 len= 31 'これは非常に長い台詞であり物語の核心に触れる重要な部分である。'
+  b2: y=   44 len= 31 'これは非常に長い台詞であり物語の核心に触れる重要な部分である。'
+  b3: y=   66 len= 31 'これは非常に長い台詞であり物語の核心に触れる重要な部分である。'
+  b4: y=   88 len= 31 'これは非常に長い台詞であり物語の核心に触れる重要な部分である。'
+  b5: y=  110 len= 31 'これは非常に長い台詞であり物語の核心に触れる重要な部分である。'
+  b6: y=  132 len= 16 '勇者：これは全く新しい台詞です。'
+  --- apply_inheritance=True -> 1 segment
+      speaker='勇者'       src=(0, 1, 2, 3, 4, 5, 6) len=173 text='これは非常に長い台詞であり物語の核心に触れる重要な部分である。 これは非常に長い台詞であり物'
+  --- apply_inheritance=False -> 1 segment
+      speaker='勇者'       src=(0, 1, 2, 3, 4, 5, 6) len=173 text='これは非常に長い台詞であり物語の核心に触れる重要な部分である。 これは非常に長い台詞であり物'
+  K23 (bolumleme+text+bbox+placeholders) BIREBIR: True
+
+==========================================================================
+S5 -- ayni ama son blok ETIKETSIZ (miras BEKLENIR)
+--------------------------------------------------------------------------
+  b0: y=    0 len=  3 '勇者：'
+  b1: y=   22 len= 31 'これは非常に長い台詞であり物語の核心に触れる重要な部分である。'
+  b2: y=   44 len= 31 'これは非常に長い台詞であり物語の核心に触れる重要な部分である。'
+  b3: y=   66 len= 31 'これは非常に長い台詞であり物語の核心に触れる重要な部分である。'
+  b4: y=   88 len= 31 'これは非常に長い台詞であり物語の核心に触れる重要な部分である。'
+  b5: y=  110 len= 31 'これは非常に長い台詞であり物語の核心に触れる重要な部分である。'
+  b6: y=  132 len= 14 'これは未ラベルの続き行です。'
+  --- apply_inheritance=True -> 1 segment
+      speaker='勇者'       src=(0, 1, 2, 3, 4, 5, 6) len=174 text='これは非常に長い台詞であり物語の核心に触れる重要な部分である。 これは非常に長い台詞であり物'
+  --- apply_inheritance=False -> 1 segment
+      speaker='勇者'       src=(0, 1, 2, 3, 4, 5, 6) len=174 text='これは非常に長い台詞であり物語の核心に触れる重要な部分である。 これは非常に長い台詞であり物'
+  K23 (bolumleme+text+bbox+placeholders) BIREBIR: True
+
+==========================================================================
+S6 -- son blok FARKLI (魔王：) etiketli -> ASLA birlesmemeli
+--------------------------------------------------------------------------
+  b0: y=    0 len=  3 '勇者：'
+  b1: y=   22 len= 31 'これは非常に長い台詞であり物語の核心に触れる重要な部分である。'
+  b2: y=   44 len= 31 'これは非常に長い台詞であり物語の核心に触れる重要な部分である。'
+  b3: y=   66 len= 31 'これは非常に長い台詞であり物語の核心に触れる重要な部分である。'
+  b4: y=   88 len= 31 'これは非常に長い台詞であり物語の核心に触れる重要な部分である。'
+  b5: y=  110 len= 31 'これは非常に長い台詞であり物語の核心に触れる重要な部分である。'
+  b6: y=  132 len= 10 '魔王：愚かな人間よ。'
+  --- apply_inheritance=True -> 2 segment
+      speaker='勇者'       src=(0, 1, 2, 3, 4, 5) len=159 text='これは非常に長い台詞であり物語の核心に触れる重要な部分である。 これは非常に長い台詞であり物'
+      speaker='魔王'       src=(6,) len=7 text='愚かな人間よ。'
+  --- apply_inheritance=False -> 2 segment
+      speaker='勇者'       src=(0, 1, 2, 3, 4, 5) len=159 text='これは非常に長い台詞であり物語の核心に触れる重要な部分である。 これは非常に長い台詞であり物'
+      speaker='魔王'       src=(6,) len=7 text='愚かな人間よ。'
+  K23 (bolumleme+text+bbox+placeholders) BIREBIR: True
+
+==========================================================================
+S7 -- MIRAS ALINAN speaker Unicode BIREBIR mi? (fullwidth ： ayrac)
+--------------------------------------------------------------------------
+  isim='勇者'             sep='：' -> speaker='勇者'             BIREBIR=True cp_in=['0x52c7', '0x8005'] cp_out=['0x52c7', '0x8005']
+  isim='魔王'             sep=':' -> speaker='魔王'             BIREBIR=True cp_in=['0x9b54', '0x738b'] cp_out=['0x9b54', '0x738b']
+  isim='김철수'            sep='：' -> speaker='김철수'            BIREBIR=True cp_in=['0xae40', '0xcca0', '0xc218'] cp_out=['0xae40', '0xcca0', '0xc218']
+  isim='Пётр'           sep='：' -> speaker='Пётр'           BIREBIR=True cp_in=['0x41f', '0x451', '0x442', '0x440'] cp_out=['0x41f', '0x451', '0x442', '0x440']
+  isim='Ayşe'           sep=':' -> speaker='Ayşe'           BIREBIR=True cp_in=['0x41', '0x79', '0x15f', '0x65'] cp_out=['0x41', '0x79', '0x15f', '0x65']
+  isim='María'          sep='：' -> speaker='María'          BIREBIR=True cp_in=['0x4d', '0x61', '0x72', '0xed', '0x61'] cp_out=['0x4d', '0x61', '0x72', '0xed', '0x61']
+  isim='María'         sep=':' -> speaker=None             BIREBIR=False cp_in=['0x4d', '0x61', '0x72', '0x69', '0x301', '0x61'] cp_out=[]  <== NFKC farkli: 'María'
+  isim='ｱｲｳ'            sep=':' -> speaker='ｱｲｳ'            BIREBIR=True cp_in=['0xff71', '0xff72', '0xff73'] cp_out=['0xff71', '0xff72', '0xff73']  <== NFKC farkli: 'アイウ'
+  isim='ＡＢＣ'            sep=':' -> speaker='ＡＢＣ'            BIREBIR=True cp_in=['0xff21', '0xff22', '0xff23'] cp_out=['0xff21', '0xff22', '0xff23']  <== NFKC farkli: 'ABC'
+  isim='あい'             sep='：' -> speaker='あい'             BIREBIR=True cp_in=['0x3042', '0x3044'] cp_out=['0x3042', '0x3044']
+
+==========================================================================
+S8 -- UZUNLUK bolunmesinde MIRAS alinan speaker Unicode BIREBIR mi?
+--------------------------------------------------------------------------
+  isim='勇者'       -> 2 segment, speakerlar=['勇者', '勇者']
+      hepsi BIREBIR: True  cp=[['0x52c7', '0x8005'], ['0x52c7', '0x8005']]
+  isim='김철수'      -> 2 segment, speakerlar=['김철수', '김철수']
+      hepsi BIREBIR: True  cp=[['0xae40', '0xcca0', '0xc218'], ['0xae40', '0xcca0', '0xc218']]
+  isim='ＡＢＣ'      -> 2 segment, speakerlar=['ＡＢＣ', 'ＡＢＣ']
+      hepsi BIREBIR: True  cp=[['0xff21', '0xff22', '0xff23'], ['0xff21', '0xff22', '0xff23']]
+
+==========================================================================
+S9 -- BOSLUK ARTIGI: '勇者 ： ' / '  勇者：  ' gibi bicimler
+--------------------------------------------------------------------------
+  ham='勇者：'        -> speaker='勇者'         cp=['0x52c7', '0x8005']  seg=1
+  ham='勇者 ：'       -> speaker='勇者'         cp=['0x52c7', '0x8005']  seg=1
+  ham=' 勇者： '      -> speaker='勇者'         cp=['0x52c7', '0x8005']  seg=1
+  ham='勇者\u3000：'  -> speaker='勇者'         cp=['0x52c7', '0x8005']  seg=1
+  ham='勇者：\u3000'  -> speaker='勇者'         cp=['0x52c7', '0x8005']  seg=1
+  ham='勇 者：'       -> speaker='勇 者'        cp=['0x52c7', '0x20', '0x8005']  seg=1
+
+==========================================================================
+S10 -- KARISIK SCRIPT: JP etiket + Latin govde / KR etiket + JP govde
+--------------------------------------------------------------------------
+  '勇者：'      -> 1 seg  speakerlar=['勇者']
+      text='This is the first line of an English body. and this is the unlabeled continuation line.'
+  '김철수：'     -> 1 seg  speakerlar=['김철수']
+      text='これは日本語の本文です。 これは未ラベルの続きです。'
+  'Hero：'    -> 1 seg  speakerlar=['Hero']
+      text='日本語とEnglishが混ざったmixed本文。 続きのmixed行です。'
+
+==========================================================================
+S11 -- KOTU KULLANIM: _normalize_impl genel API'ye sizmis mi?
+--------------------------------------------------------------------------
+  normalizer.__all__ = ('normalize',)
+  '_normalize_impl' in __all__ : False
+  '_group' in __all__          : False
+  normalize imzasi   : (blocks: 'Sequence[TextBlock]', preset: 'OcrPreset') -> 'list[Segment]'
+  _normalize_impl im.: (blocks: 'Sequence[TextBlock]', preset: 'OcrPreset', *, apply_inheritance: 'bool' = True) -> 'list[Segment]'
+  docstring'de 'SADECE'          : True
+  docstring'de 'MAKINE DENETIMI' : True
+  docstring'de 'test'            : True
+  docstring'de 'uretim'          : False
+  docstring'de 'URETIM'          : False
+  docstring'de 'sizmaz'          : False
+  docstring'de 'SIZMAZ'          : True
+  docstring'de 'ACMAZ'           : True
+  '_' ile baslayan (PEP8 private) mi: True
+

@@ -1,0 +1,953 @@
+$ python -m pytest tests/unit/ocr/test_normalizer.py -q   (KIRMIZI FAZ -- implementasyon oncesi stub)
+
+FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF                        [100%]
+================================== FAILURES ===================================
+______________ test_k1_line_boxes_bos_ve_dolu_ayni_sonucu_verir _______________
+
+    def test_k1_line_boxes_bos_ve_dolu_ayni_sonucu_verir() -> None:
+        dolu = blk("Merhaba", 10, 10, line_boxes=(Rect(10, 10, 300, 20),))
+        bos = blk("Merhaba", 10, 10, line_boxes=())
+>       out_dolu = normalize([dolu], OcrPreset.DIALOGUE)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\unit\ocr\test_normalizer.py:60: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+blocks = [TextBlock(text='Merhaba', bbox=Rect(x=10, y=10, w=300, h=20, monitor_index=0, dpi_scale=1.0), confidence=0.9, line_boxes=(Rect(x=10, y=10, w=300, h=20, monitor_index=0, dpi_scale=1.0),))]
+preset = <OcrPreset.DIALOGUE: 'dialogue'>
+
+    def normalize(blocks: Sequence[TextBlock], preset: OcrPreset) -> list[Segment]:
+>       raise NotImplementedError("kirmizi faz stub")
+E       NotImplementedError: kirmizi faz stub
+
+src\ocr\normalizer.py:7: NotImplementedError
+_________________ test_k1_blok_ici_newline_tek_segmente_iner __________________
+
+    def test_k1_blok_ici_newline_tek_segmente_iner() -> None:
+        b = blk("Merhaba\ndunya", 10, 10)
+>       out = normalize([b], OcrPreset.DIALOGUE)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\unit\ocr\test_normalizer.py:67: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+blocks = [TextBlock(text='Merhaba\ndunya', bbox=Rect(x=10, y=10, w=300, h=20, monitor_index=0, dpi_scale=1.0), confidence=0.9, line_boxes=())]
+preset = <OcrPreset.DIALOGUE: 'dialogue'>
+
+    def normalize(blocks: Sequence[TextBlock], preset: OcrPreset) -> list[Segment]:
+>       raise NotImplementedError("kirmizi faz stub")
+E       NotImplementedError: kirmizi faz stub
+
+src\ocr\normalizer.py:7: NotImplementedError
+______________ test_k2_esik_alti_orta_blok_komsulari_birlestirir ______________
+
+    def test_k2_esik_alti_orta_blok_komsulari_birlestirir() -> None:
+        # idx0 "-" ile biter, idx1 (ARADA, esik-alti) duser, idx2 kucuk harfle
+        # baslar. Filtreleme birlestirmeden ONCE oldugu icin (K2), idx0 ve
+        # idx2 -- idx1 hic yokmus gibi -- birbirine hyphen kurali ile birlesir.
+        b0 = blk("kelime-", 10, 0, confidence=0.9)
+        b1 = blk("ARA", 10, 24, confidence=0.1)  # menu esigi 0.55 altinda -> duser
+        b2 = blk("lenmis", 10, 48, confidence=0.9)
+>       out = normalize([b0, b1, b2], OcrPreset.MENU)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\unit\ocr\test_normalizer.py:87: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+blocks = [TextBlock(text='kelime-', bbox=Rect(x=10, y=0, w=300, h=20, monitor_index=0, dpi_scale=1.0), confidence=0.9, line_box...lock(text='lenmis', bbox=Rect(x=10, y=48, w=300, h=20, monitor_index=0, dpi_scale=1.0), confidence=0.9, line_boxes=())]
+preset = <OcrPreset.MENU: 'menu'>
+
+    def normalize(blocks: Sequence[TextBlock], preset: OcrPreset) -> list[Segment]:
+>       raise NotImplementedError("kirmizi faz stub")
+E       NotImplementedError: kirmizi faz stub
+
+src\ocr\normalizer.py:7: NotImplementedError
+____________________ test_k3_cikti_okuma_sirasinda_donuyor ____________________
+
+    def test_k3_cikti_okuma_sirasinda_donuyor() -> None:
+        alt = blk("Alt satir", 10, 200)
+        ust = blk("Ust satir", 10, 10)
+        orta = blk("Orta satir", 10, 100)
+>       out = normalize([alt, ust, orta], OcrPreset.MENU)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\unit\ocr\test_normalizer.py:102: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+blocks = [TextBlock(text='Alt satir', bbox=Rect(x=10, y=200, w=300, h=20, monitor_index=0, dpi_scale=1.0), confidence=0.9, line...text='Orta satir', bbox=Rect(x=10, y=100, w=300, h=20, monitor_index=0, dpi_scale=1.0), confidence=0.9, line_boxes=())]
+preset = <OcrPreset.MENU: 'menu'>
+
+    def normalize(blocks: Sequence[TextBlock], preset: OcrPreset) -> list[Segment]:
+>       raise NotImplementedError("kirmizi faz stub")
+E       NotImplementedError: kirmizi faz stub
+
+src\ocr\normalizer.py:7: NotImplementedError
+__________________________ test_k3_ayni_y_de_x_artan __________________________
+
+    def test_k3_ayni_y_de_x_artan() -> None:
+        sag = blk("Sag", 500, 10, w=100)
+        sol = blk("Sol", 10, 10, w=100)
+>       out = normalize([sag, sol], OcrPreset.MENU)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\unit\ocr\test_normalizer.py:109: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+blocks = [TextBlock(text='Sag', bbox=Rect(x=500, y=10, w=100, h=20, monitor_index=0, dpi_scale=1.0), confidence=0.9, line_boxes...xtBlock(text='Sol', bbox=Rect(x=10, y=10, w=100, h=20, monitor_index=0, dpi_scale=1.0), confidence=0.9, line_boxes=())]
+preset = <OcrPreset.MENU: 'menu'>
+
+    def normalize(blocks: Sequence[TextBlock], preset: OcrPreset) -> list[Segment]:
+>       raise NotImplementedError("kirmizi faz stub")
+E       NotImplementedError: kirmizi faz stub
+
+src\ocr\normalizer.py:7: NotImplementedError
+__________________________ test_k4_tek_kanji_korunur __________________________
+
+    def test_k4_tek_kanji_korunur() -> None:
+>       out = normalize([blk("\u529b", 10, 10)], OcrPreset.MENU)  # \u529b
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\unit\ocr\test_normalizer.py:121: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+blocks = [TextBlock(text='\u529b', bbox=Rect(x=10, y=10, w=300, h=20, monitor_index=0, dpi_scale=1.0), confidence=0.9, line_boxes=())]
+preset = <OcrPreset.MENU: 'menu'>
+
+    def normalize(blocks: Sequence[TextBlock], preset: OcrPreset) -> list[Segment]:
+>       raise NotImplementedError("kirmizi faz stub")
+E       NotImplementedError: kirmizi faz stub
+
+src\ocr\normalizer.py:7: NotImplementedError
+_________________________ test_k4_tek_hangul_korunur __________________________
+
+    def test_k4_tek_hangul_korunur() -> None:
+>       out = normalize([blk("\uac00", 10, 10)], OcrPreset.MENU)  # \uac00
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\unit\ocr\test_normalizer.py:126: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+blocks = [TextBlock(text='\uac00', bbox=Rect(x=10, y=10, w=300, h=20, monitor_index=0, dpi_scale=1.0), confidence=0.9, line_boxes=())]
+preset = <OcrPreset.MENU: 'menu'>
+
+    def normalize(blocks: Sequence[TextBlock], preset: OcrPreset) -> list[Segment]:
+>       raise NotImplementedError("kirmizi faz stub")
+E       NotImplementedError: kirmizi faz stub
+
+src\ocr\normalizer.py:7: NotImplementedError
+_______________ test_k4_tek_kiril_harfi_korunur_beyaz_liste_yok _______________
+
+    def test_k4_tek_kiril_harfi_korunur_beyaz_liste_yok() -> None:
+        # {"I","a","1","?"} gibi sabit bir liste kullanilsaydi bu harf silinirdi.
+>       out = normalize([blk("\u0416", 10, 10)], OcrPreset.MENU)  # \u0416
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\unit\ocr\test_normalizer.py:132: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+blocks = [TextBlock(text='\u0416', bbox=Rect(x=10, y=10, w=300, h=20, monitor_index=0, dpi_scale=1.0), confidence=0.9, line_boxes=())]
+preset = <OcrPreset.MENU: 'menu'>
+
+    def normalize(blocks: Sequence[TextBlock], preset: OcrPreset) -> list[Segment]:
+>       raise NotImplementedError("kirmizi faz stub")
+E       NotImplementedError: kirmizi faz stub
+
+src\ocr\normalizer.py:7: NotImplementedError
+__________________________ test_k4_tek_rakam_korunur __________________________
+
+    def test_k4_tek_rakam_korunur() -> None:
+>       out = normalize([blk("7", 10, 10)], OcrPreset.MENU)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\unit\ocr\test_normalizer.py:137: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+blocks = [TextBlock(text='7', bbox=Rect(x=10, y=10, w=300, h=20, monitor_index=0, dpi_scale=1.0), confidence=0.9, line_boxes=())]
+preset = <OcrPreset.MENU: 'menu'>
+
+    def normalize(blocks: Sequence[TextBlock], preset: OcrPreset) -> list[Segment]:
+>       raise NotImplementedError("kirmizi faz stub")
+E       NotImplementedError: kirmizi faz stub
+
+src\ocr\normalizer.py:7: NotImplementedError
+__________________________ test_k4_tek_sembol_atilir __________________________
+
+    def test_k4_tek_sembol_atilir() -> None:
+>       out = normalize([blk("#", 10, 10)], OcrPreset.MENU)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\unit\ocr\test_normalizer.py:142: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+blocks = [TextBlock(text='#', bbox=Rect(x=10, y=10, w=300, h=20, monitor_index=0, dpi_scale=1.0), confidence=0.9, line_boxes=())]
+preset = <OcrPreset.MENU: 'menu'>
+
+    def normalize(blocks: Sequence[TextBlock], preset: OcrPreset) -> list[Segment]:
+>       raise NotImplementedError("kirmizi faz stub")
+E       NotImplementedError: kirmizi faz stub
+
+src\ocr\normalizer.py:7: NotImplementedError
+___________________ test_k4_soru_ve_unlem_istisnasi_korunur ___________________
+
+    def test_k4_soru_ve_unlem_istisnasi_korunur() -> None:
+>       out = normalize([blk("?", 10, 10), blk("!", 500, 10)], OcrPreset.MENU)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\unit\ocr\test_normalizer.py:147: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+blocks = [TextBlock(text='?', bbox=Rect(x=10, y=10, w=300, h=20, monitor_index=0, dpi_scale=1.0), confidence=0.9, line_boxes=()...extBlock(text='!', bbox=Rect(x=500, y=10, w=300, h=20, monitor_index=0, dpi_scale=1.0), confidence=0.9, line_boxes=())]
+preset = <OcrPreset.MENU: 'menu'>
+
+    def normalize(blocks: Sequence[TextBlock], preset: OcrPreset) -> list[Segment]:
+>       raise NotImplementedError("kirmizi faz stub")
+E       NotImplementedError: kirmizi faz stub
+
+src\ocr\normalizer.py:7: NotImplementedError
+__________ test_k5_kesme_cizgili_kelime_birlesir_on_ayardan_bagimsiz __________
+
+    def test_k5_kesme_cizgili_kelime_birlesir_on_ayardan_bagimsiz() -> None:
+        b0 = blk("tra-", 10, 0)
+        b1 = blk("dition", 10, 24)
+>       out = normalize([b0, b1], OcrPreset.MENU)  # MENU gruplamaz -- yine de birlesir
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\unit\ocr\test_normalizer.py:161: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+blocks = [TextBlock(text='tra-', bbox=Rect(x=10, y=0, w=300, h=20, monitor_index=0, dpi_scale=1.0), confidence=0.9, line_boxes=...lock(text='dition', bbox=Rect(x=10, y=24, w=300, h=20, monitor_index=0, dpi_scale=1.0), confidence=0.9, line_boxes=())]
+preset = <OcrPreset.MENU: 'menu'>
+
+    def normalize(blocks: Sequence[TextBlock], preset: OcrPreset) -> list[Segment]:
+>       raise NotImplementedError("kirmizi faz stub")
+E       NotImplementedError: kirmizi faz stub
+
+src\ocr\normalizer.py:7: NotImplementedError
+______________________ test_k5_gercek_tire_dokunulmuyor _______________________
+
+    def test_k5_gercek_tire_dokunulmuyor() -> None:
+>       out = normalize([blk("well-known", 10, 10)], OcrPreset.DIALOGUE)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\unit\ocr\test_normalizer.py:168: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+blocks = [TextBlock(text='well-known', bbox=Rect(x=10, y=10, w=300, h=20, monitor_index=0, dpi_scale=1.0), confidence=0.9, line_boxes=())]
+preset = <OcrPreset.DIALOGUE: 'dialogue'>
+
+    def normalize(blocks: Sequence[TextBlock], preset: OcrPreset) -> list[Segment]:
+>       raise NotImplementedError("kirmizi faz stub")
+E       NotImplementedError: kirmizi faz stub
+
+src\ocr\normalizer.py:7: NotImplementedError
+____________ test_k5_buyuk_harfle_baslayan_sonraki_satir_birlesmez ____________
+
+    def test_k5_buyuk_harfle_baslayan_sonraki_satir_birlesmez() -> None:
+        b0 = blk("End-", 10, 0)
+        b1 = blk("Next Sentence", 10, 24)
+>       out = normalize([b0, b1], OcrPreset.MENU)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\unit\ocr\test_normalizer.py:175: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+blocks = [TextBlock(text='End-', bbox=Rect(x=10, y=0, w=300, h=20, monitor_index=0, dpi_scale=1.0), confidence=0.9, line_boxes=...xt='Next Sentence', bbox=Rect(x=10, y=24, w=300, h=20, monitor_index=0, dpi_scale=1.0), confidence=0.9, line_boxes=())]
+preset = <OcrPreset.MENU: 'menu'>
+
+    def normalize(blocks: Sequence[TextBlock], preset: OcrPreset) -> list[Segment]:
+>       raise NotImplementedError("kirmizi faz stub")
+E       NotImplementedError: kirmizi faz stub
+
+src\ocr\normalizer.py:7: NotImplementedError
+_______ test_iki_satira_bolunmus_cumle_dialogue_ile_gruplanip_birlesir ________
+
+    def test_iki_satira_bolunmus_cumle_dialogue_ile_gruplanip_birlesir() -> None:
+        b0 = blk("Bu uzun bir", 10, 0)
+        b1 = blk("cumledir.", 10, 22)  # kucuk bosluk -> dialogue gruplar
+>       out = normalize([b0, b1], OcrPreset.DIALOGUE)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\unit\ocr\test_normalizer.py:182: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+blocks = [TextBlock(text='Bu uzun bir', bbox=Rect(x=10, y=0, w=300, h=20, monitor_index=0, dpi_scale=1.0), confidence=0.9, line...k(text='cumledir.', bbox=Rect(x=10, y=22, w=300, h=20, monitor_index=0, dpi_scale=1.0), confidence=0.9, line_boxes=())]
+preset = <OcrPreset.DIALOGUE: 'dialogue'>
+
+    def normalize(blocks: Sequence[TextBlock], preset: OcrPreset) -> list[Segment]:
+>       raise NotImplementedError("kirmizi faz stub")
+E       NotImplementedError: kirmizi faz stub
+
+src\ocr\normalizer.py:7: NotImplementedError
+_________________ test_k6_placeholder_sira_ve_tekrar_korunur __________________
+
+    def test_k6_placeholder_sira_ve_tekrar_korunur() -> None:
+>       out = normalize([blk("Merhaba %s ve %s nasilsin", 10, 10)], OcrPreset.DIALOGUE)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\unit\ocr\test_normalizer.py:195: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+blocks = [TextBlock(text='Merhaba %s ve %s nasilsin', bbox=Rect(x=10, y=10, w=300, h=20, monitor_index=0, dpi_scale=1.0), confidence=0.9, line_boxes=())]
+preset = <OcrPreset.DIALOGUE: 'dialogue'>
+
+    def normalize(blocks: Sequence[TextBlock], preset: OcrPreset) -> list[Segment]:
+>       raise NotImplementedError("kirmizi faz stub")
+E       NotImplementedError: kirmizi faz stub
+
+src\ocr\normalizer.py:7: NotImplementedError
+___________________ test_k6_yuzde_sayisi_placeholder_degil ____________________
+
+    def test_k6_yuzde_sayisi_placeholder_degil() -> None:
+>       out = normalize([blk("Toplam 50% tamamlandi", 10, 10)], OcrPreset.DIALOGUE)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\unit\ocr\test_normalizer.py:202: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+blocks = [TextBlock(text='Toplam 50% tamamlandi', bbox=Rect(x=10, y=10, w=300, h=20, monitor_index=0, dpi_scale=1.0), confidence=0.9, line_boxes=())]
+preset = <OcrPreset.DIALOGUE: 'dialogue'>
+
+    def normalize(blocks: Sequence[TextBlock], preset: OcrPreset) -> list[Segment]:
+>       raise NotImplementedError("kirmizi faz stub")
+E       NotImplementedError: kirmizi faz stub
+
+src\ocr\normalizer.py:7: NotImplementedError
+________________ test_k6_farkli_desen_turleri_sirayla_toplanir ________________
+
+    def test_k6_farkli_desen_turleri_sirayla_toplanir() -> None:
+        text = "Merhaba {0}, saglik <color=red>dusuk</color> ve [Envanter] doldu"
+>       out = normalize([blk(text, 10, 10)], OcrPreset.DIALOGUE)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\unit\ocr\test_normalizer.py:210: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+blocks = [TextBlock(text='Merhaba {0}, saglik <color=red>dusuk</color> ve [Envanter] doldu', bbox=Rect(x=10, y=10, w=300, h=20, monitor_index=0, dpi_scale=1.0), confidence=0.9, line_boxes=())]
+preset = <OcrPreset.DIALOGUE: 'dialogue'>
+
+    def normalize(blocks: Sequence[TextBlock], preset: OcrPreset) -> list[Segment]:
+>       raise NotImplementedError("kirmizi faz stub")
+E       NotImplementedError: kirmizi faz stub
+
+src\ocr\normalizer.py:7: NotImplementedError
+__________________________ test_k7_esige_esit_kalir ___________________________
+
+    def test_k7_esige_esit_kalir() -> None:
+>       params = get_params(OcrPreset.DIALOGUE)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\unit\ocr\test_normalizer.py:223: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+preset = <OcrPreset.DIALOGUE: 'dialogue'>
+
+    def get_params(preset: OcrPreset) -> NormalizerParams:
+>       raise NotImplementedError("kirmizi faz stub")
+E       NotImplementedError: kirmizi faz stub
+
+src\ocr\presets.py:14: NotImplementedError
+_________________________ test_k7_esik_altinda_duser __________________________
+
+    def test_k7_esik_altinda_duser() -> None:
+>       params = get_params(OcrPreset.DIALOGUE)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\unit\ocr\test_normalizer.py:229: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+preset = <OcrPreset.DIALOGUE: 'dialogue'>
+
+    def get_params(preset: OcrPreset) -> NormalizerParams:
+>       raise NotImplementedError("kirmizi faz stub")
+E       NotImplementedError: kirmizi faz stub
+
+src\ocr\presets.py:14: NotImplementedError
+_____________________ test_k7_nan_confidence_value_error ______________________
+
+    def test_k7_nan_confidence_value_error() -> None:
+        with pytest.raises(ValueError):
+>           normalize([blk("Merhaba", 10, 10, confidence=math.nan)], OcrPreset.DIALOGUE)
+
+tests\unit\ocr\test_normalizer.py:239: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+blocks = [TextBlock(text='Merhaba', bbox=Rect(x=10, y=10, w=300, h=20, monitor_index=0, dpi_scale=1.0), confidence=nan, line_boxes=())]
+preset = <OcrPreset.DIALOGUE: 'dialogue'>
+
+    def normalize(blocks: Sequence[TextBlock], preset: OcrPreset) -> list[Segment]:
+>       raise NotImplementedError("kirmizi faz stub")
+E       NotImplementedError: kirmizi faz stub
+
+src\ocr\normalizer.py:7: NotImplementedError
+________________ test_k7_alan_disi_confidence_value_error[1.5] ________________
+
+bad = 1.5
+
+    @pytest.mark.parametrize("bad", [1.5, -0.1, 1.0001])
+    def test_k7_alan_disi_confidence_value_error(bad: float) -> None:
+        with pytest.raises(ValueError):
+>           normalize([blk("Merhaba", 10, 10, confidence=bad)], OcrPreset.DIALOGUE)
+
+tests\unit\ocr\test_normalizer.py:245: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+blocks = [TextBlock(text='Merhaba', bbox=Rect(x=10, y=10, w=300, h=20, monitor_index=0, dpi_scale=1.0), confidence=1.5, line_boxes=())]
+preset = <OcrPreset.DIALOGUE: 'dialogue'>
+
+    def normalize(blocks: Sequence[TextBlock], preset: OcrPreset) -> list[Segment]:
+>       raise NotImplementedError("kirmizi faz stub")
+E       NotImplementedError: kirmizi faz stub
+
+src\ocr\normalizer.py:7: NotImplementedError
+_______________ test_k7_alan_disi_confidence_value_error[-0.1] ________________
+
+bad = -0.1
+
+    @pytest.mark.parametrize("bad", [1.5, -0.1, 1.0001])
+    def test_k7_alan_disi_confidence_value_error(bad: float) -> None:
+        with pytest.raises(ValueError):
+>           normalize([blk("Merhaba", 10, 10, confidence=bad)], OcrPreset.DIALOGUE)
+
+tests\unit\ocr\test_normalizer.py:245: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+blocks = [TextBlock(text='Merhaba', bbox=Rect(x=10, y=10, w=300, h=20, monitor_index=0, dpi_scale=1.0), confidence=-0.1, line_boxes=())]
+preset = <OcrPreset.DIALOGUE: 'dialogue'>
+
+    def normalize(blocks: Sequence[TextBlock], preset: OcrPreset) -> list[Segment]:
+>       raise NotImplementedError("kirmizi faz stub")
+E       NotImplementedError: kirmizi faz stub
+
+src\ocr\normalizer.py:7: NotImplementedError
+______________ test_k7_alan_disi_confidence_value_error[1.0001] _______________
+
+bad = 1.0001
+
+    @pytest.mark.parametrize("bad", [1.5, -0.1, 1.0001])
+    def test_k7_alan_disi_confidence_value_error(bad: float) -> None:
+        with pytest.raises(ValueError):
+>           normalize([blk("Merhaba", 10, 10, confidence=bad)], OcrPreset.DIALOGUE)
+
+tests\unit\ocr\test_normalizer.py:245: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+blocks = [TextBlock(text='Merhaba', bbox=Rect(x=10, y=10, w=300, h=20, monitor_index=0, dpi_scale=1.0), confidence=1.0001, line_boxes=())]
+preset = <OcrPreset.DIALOGUE: 'dialogue'>
+
+    def normalize(blocks: Sequence[TextBlock], preset: OcrPreset) -> list[Segment]:
+>       raise NotImplementedError("kirmizi faz stub")
+E       NotImplementedError: kirmizi faz stub
+
+src\ocr\normalizer.py:7: NotImplementedError
+_____________ test_k8_source_blocks_orijinal_indeks_ve_artan_sira _____________
+
+    def test_k8_source_blocks_orijinal_indeks_ve_artan_sira() -> None:
+        # idx1 dusuyor (esik alti); idx0/idx2/idx3 zincirleme hyphen ile
+        # birlesiyor. Sonuc TEK segmentin source_blocks'u (0,2,3) olmali --
+        # (0,1,2) DEGIL (filtre-sonrasi sikistirilmis indeks olsaydi boyle
+        # cikardi).
+        b0 = blk("abc-", 10, 0, confidence=0.9)
+        b1 = blk("ZZZ", 10, 24, confidence=0.1)
+        b2 = blk("def-", 10, 48, confidence=0.9)
+        b3 = blk("ghi", 10, 72, confidence=0.9)
+>       out = normalize([b0, b1, b2, b3], OcrPreset.MENU)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\unit\ocr\test_normalizer.py:263: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+blocks = [TextBlock(text='abc-', bbox=Rect(x=10, y=0, w=300, h=20, monitor_index=0, dpi_scale=1.0), confidence=0.9, line_boxes=...xtBlock(text='ghi', bbox=Rect(x=10, y=72, w=300, h=20, monitor_index=0, dpi_scale=1.0), confidence=0.9, line_boxes=())]
+preset = <OcrPreset.MENU: 'menu'>
+
+    def normalize(blocks: Sequence[TextBlock], preset: OcrPreset) -> list[Segment]:
+>       raise NotImplementedError("kirmizi faz stub")
+E       NotImplementedError: kirmizi faz stub
+
+src\ocr\normalizer.py:7: NotImplementedError
+________________ test_k8_source_blocks_segmentler_arasi_ayrik _________________
+
+    def test_k8_source_blocks_segmentler_arasi_ayrik() -> None:
+        b0 = blk("Merhaba", 10, 0)
+        b1 = blk("Gunaydin", 10, 500)  # cok uzak -- MENU zaten gruplamaz
+>       out = normalize([b0, b1], OcrPreset.MENU)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\unit\ocr\test_normalizer.py:274: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+blocks = [TextBlock(text='Merhaba', bbox=Rect(x=10, y=0, w=300, h=20, monitor_index=0, dpi_scale=1.0), confidence=0.9, line_box...k(text='Gunaydin', bbox=Rect(x=10, y=500, w=300, h=20, monitor_index=0, dpi_scale=1.0), confidence=0.9, line_boxes=())]
+preset = <OcrPreset.MENU: 'menu'>
+
+    def normalize(blocks: Sequence[TextBlock], preset: OcrPreset) -> list[Segment]:
+>       raise NotImplementedError("kirmizi faz stub")
+E       NotImplementedError: kirmizi faz stub
+
+src\ocr\normalizer.py:7: NotImplementedError
+_________________ test_k9_yalniz_etiket_sonraki_bloga_tasinir _________________
+
+    def test_k9_yalniz_etiket_sonraki_bloga_tasinir() -> None:
+        etiket = blk("Ada:", 10, 0)
+        icerik = blk("Merhaba nasilsin", 10, 22)
+>       out = normalize([etiket, icerik], OcrPreset.DIALOGUE)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\unit\ocr\test_normalizer.py:291: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+blocks = [TextBlock(text='Ada:', bbox=Rect(x=10, y=0, w=300, h=20, monitor_index=0, dpi_scale=1.0), confidence=0.9, line_boxes=...'Merhaba nasilsin', bbox=Rect(x=10, y=22, w=300, h=20, monitor_index=0, dpi_scale=1.0), confidence=0.9, line_boxes=())]
+preset = <OcrPreset.DIALOGUE: 'dialogue'>
+
+    def normalize(blocks: Sequence[TextBlock], preset: OcrPreset) -> list[Segment]:
+>       raise NotImplementedError("kirmizi faz stub")
+E       NotImplementedError: kirmizi faz stub
+
+src\ocr\normalizer.py:7: NotImplementedError
+__________________ test_k9_yalniz_etiket_sonraki_yoksa_duser __________________
+
+    def test_k9_yalniz_etiket_sonraki_yoksa_duser() -> None:
+>       out = normalize([blk("Ada:", 10, 0)], OcrPreset.DIALOGUE)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\unit\ocr\test_normalizer.py:299: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+blocks = [TextBlock(text='Ada:', bbox=Rect(x=10, y=0, w=300, h=20, monitor_index=0, dpi_scale=1.0), confidence=0.9, line_boxes=())]
+preset = <OcrPreset.DIALOGUE: 'dialogue'>
+
+    def normalize(blocks: Sequence[TextBlock], preset: OcrPreset) -> list[Segment]:
+>       raise NotImplementedError("kirmizi faz stub")
+E       NotImplementedError: kirmizi faz stub
+
+src\ocr\normalizer.py:7: NotImplementedError
+________ test_k9_dialogue_farkli_konusmacili_komsu_bloklar_ayri_kalir _________
+
+    def test_k9_dialogue_farkli_konusmacili_komsu_bloklar_ayri_kalir() -> None:
+        ada = blk("Ada: Merhaba", 10, 0)
+        efe = blk("Efe: Selam", 10, 22)  # cok yakin -- gruplanmaya aday geometri
+>       out = normalize([ada, efe], OcrPreset.DIALOGUE)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\unit\ocr\test_normalizer.py:306: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+blocks = [TextBlock(text='Ada: Merhaba', bbox=Rect(x=10, y=0, w=300, h=20, monitor_index=0, dpi_scale=1.0), confidence=0.9, lin...(text='Efe: Selam', bbox=Rect(x=10, y=22, w=300, h=20, monitor_index=0, dpi_scale=1.0), confidence=0.9, line_boxes=())]
+preset = <OcrPreset.DIALOGUE: 'dialogue'>
+
+    def normalize(blocks: Sequence[TextBlock], preset: OcrPreset) -> list[Segment]:
+>       raise NotImplementedError("kirmizi faz stub")
+E       NotImplementedError: kirmizi faz stub
+
+src\ocr\normalizer.py:7: NotImplementedError
+_________________ test_k9_bos_metinli_segment_asla_uretilmez __________________
+
+    def test_k9_bos_metinli_segment_asla_uretilmez() -> None:
+        bloklar = [blk("Ada:", 10, 0), blk("   ", 10, 22), blk("#", 10, 44)]
+>       out = normalize(bloklar, OcrPreset.DIALOGUE)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\unit\ocr\test_normalizer.py:314: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+blocks = [TextBlock(text='Ada:', bbox=Rect(x=10, y=0, w=300, h=20, monitor_index=0, dpi_scale=1.0), confidence=0.9, line_boxes=...TextBlock(text='#', bbox=Rect(x=10, y=44, w=300, h=20, monitor_index=0, dpi_scale=1.0), confidence=0.9, line_boxes=())]
+preset = <OcrPreset.DIALOGUE: 'dialogue'>
+
+    def normalize(blocks: Sequence[TextBlock], preset: OcrPreset) -> list[Segment]:
+>       raise NotImplementedError("kirmizi faz stub")
+E       NotImplementedError: kirmizi faz stub
+
+src\ocr\normalizer.py:7: NotImplementedError
+______________________ test_k10_bbox_birlesimi_kapsayici ______________________
+
+    def test_k10_bbox_birlesimi_kapsayici() -> None:
+        b0 = blk("Bu uzun bir", 10, 0, w=200, h=20)
+        b1 = blk("cumledir.", 50, 22, w=260, h=18)
+>       out = normalize([b0, b1], OcrPreset.DIALOGUE)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\unit\ocr\test_normalizer.py:327: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+blocks = [TextBlock(text='Bu uzun bir', bbox=Rect(x=10, y=0, w=200, h=20, monitor_index=0, dpi_scale=1.0), confidence=0.9, line...k(text='cumledir.', bbox=Rect(x=50, y=22, w=260, h=18, monitor_index=0, dpi_scale=1.0), confidence=0.9, line_boxes=())]
+preset = <OcrPreset.DIALOGUE: 'dialogue'>
+
+    def normalize(blocks: Sequence[TextBlock], preset: OcrPreset) -> list[Segment]:
+>       raise NotImplementedError("kirmizi faz stub")
+E       NotImplementedError: kirmizi faz stub
+
+src\ocr\normalizer.py:7: NotImplementedError
+__________________ test_k10_farkli_monitor_index_value_error __________________
+
+    def test_k10_farkli_monitor_index_value_error() -> None:
+        b0 = blk("tra-", 10, 0, monitor_index=0)
+        b1 = blk("dition", 10, 22, monitor_index=1)
+        with pytest.raises(ValueError):
+>           normalize([b0, b1], OcrPreset.MENU)
+
+tests\unit\ocr\test_normalizer.py:340: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+blocks = [TextBlock(text='tra-', bbox=Rect(x=10, y=0, w=300, h=20, monitor_index=0, dpi_scale=1.0), confidence=0.9, line_boxes=...lock(text='dition', bbox=Rect(x=10, y=22, w=300, h=20, monitor_index=1, dpi_scale=1.0), confidence=0.9, line_boxes=())]
+preset = <OcrPreset.MENU: 'menu'>
+
+    def normalize(blocks: Sequence[TextBlock], preset: OcrPreset) -> list[Segment]:
+>       raise NotImplementedError("kirmizi faz stub")
+E       NotImplementedError: kirmizi faz stub
+
+src\ocr\normalizer.py:7: NotImplementedError
+____________________ test_k10_farkli_dpi_scale_value_error ____________________
+
+    def test_k10_farkli_dpi_scale_value_error() -> None:
+        b0 = blk("tra-", 10, 0, dpi_scale=1.0)
+        b1 = blk("dition", 10, 22, dpi_scale=1.25)
+        with pytest.raises(ValueError):
+>           normalize([b0, b1], OcrPreset.MENU)
+
+tests\unit\ocr\test_normalizer.py:347: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+blocks = [TextBlock(text='tra-', bbox=Rect(x=10, y=0, w=300, h=20, monitor_index=0, dpi_scale=1.0), confidence=0.9, line_boxes=...ock(text='dition', bbox=Rect(x=10, y=22, w=300, h=20, monitor_index=0, dpi_scale=1.25), confidence=0.9, line_boxes=())]
+preset = <OcrPreset.MENU: 'menu'>
+
+    def normalize(blocks: Sequence[TextBlock], preset: OcrPreset) -> list[Segment]:
+>       raise NotImplementedError("kirmizi faz stub")
+E       NotImplementedError: kirmizi faz stub
+
+src\ocr\normalizer.py:7: NotImplementedError
+___________ test_k11_menu_gruplamaz_dialogue_gruplar_ayni_geometri ____________
+
+    def test_k11_menu_gruplamaz_dialogue_gruplar_ayni_geometri() -> None:
+        b0 = blk("Bu uzun bir", 10, 0)
+        b1 = blk("cumledir.", 10, 22)
+>       menu_out = normalize([b0, b1], OcrPreset.MENU)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\unit\ocr\test_normalizer.py:360: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+blocks = [TextBlock(text='Bu uzun bir', bbox=Rect(x=10, y=0, w=300, h=20, monitor_index=0, dpi_scale=1.0), confidence=0.9, line...k(text='cumledir.', bbox=Rect(x=10, y=22, w=300, h=20, monitor_index=0, dpi_scale=1.0), confidence=0.9, line_boxes=())]
+preset = <OcrPreset.MENU: 'menu'>
+
+    def normalize(blocks: Sequence[TextBlock], preset: OcrPreset) -> list[Segment]:
+>       raise NotImplementedError("kirmizi faz stub")
+E       NotImplementedError: kirmizi faz stub
+
+src\ocr\normalizer.py:7: NotImplementedError
+____________ test_k11_dikey_bosluk_orani_preset_farkini_degistirir ____________
+
+    def test_k11_dikey_bosluk_orani_preset_farkini_degistirir() -> None:
+        # h=20; dialogue esigi 0.8*20=16, tooltip esigi 0.3*20=6. gap=10:
+        # dialogue'da gruplanir, tooltip'te gruplanmaz.
+        b0 = blk("Bu uzun bir", 10, 0, h=20)
+        b1 = blk("cumledir.", 10, 30, h=20)  # gap = 30-20 = 10
+>       dialogue_out = normalize([b0, b1], OcrPreset.DIALOGUE)
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\unit\ocr\test_normalizer.py:371: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+blocks = [TextBlock(text='Bu uzun bir', bbox=Rect(x=10, y=0, w=300, h=20, monitor_index=0, dpi_scale=1.0), confidence=0.9, line...k(text='cumledir.', bbox=Rect(x=10, y=30, w=300, h=20, monitor_index=0, dpi_scale=1.0), confidence=0.9, line_boxes=())]
+preset = <OcrPreset.DIALOGUE: 'dialogue'>
+
+    def normalize(blocks: Sequence[TextBlock], preset: OcrPreset) -> list[Segment]:
+>       raise NotImplementedError("kirmizi faz stub")
+E       NotImplementedError: kirmizi faz stub
+
+src\ocr\normalizer.py:7: NotImplementedError
+_______ test_k11_guven_esigi_preset_farkini_degistirir_dialogue_tooltip _______
+
+    def test_k11_guven_esigi_preset_farkini_degistirir_dialogue_tooltip() -> None:
+>       dialogue_th = get_params(OcrPreset.DIALOGUE).confidence_threshold
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\unit\ocr\test_normalizer.py:378: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+preset = <OcrPreset.DIALOGUE: 'dialogue'>
+
+    def get_params(preset: OcrPreset) -> NormalizerParams:
+>       raise NotImplementedError("kirmizi faz stub")
+E       NotImplementedError: kirmizi faz stub
+
+src\ocr\presets.py:14: NotImplementedError
+______ test_k11_guven_esigi_preset_farkini_degistirir_dialogue_subtitle _______
+
+    def test_k11_guven_esigi_preset_farkini_degistirir_dialogue_subtitle() -> None:
+>       dialogue_th = get_params(OcrPreset.DIALOGUE).confidence_threshold
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\unit\ocr\test_normalizer.py:388: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+preset = <OcrPreset.DIALOGUE: 'dialogue'>
+
+    def get_params(preset: OcrPreset) -> NormalizerParams:
+>       raise NotImplementedError("kirmizi faz stub")
+E       NotImplementedError: kirmizi faz stub
+
+src\ocr\presets.py:14: NotImplementedError
+_________ test_k11_maksimum_grup_karakteri_preset_farkini_degistirir __________
+
+    def test_k11_maksimum_grup_karakteri_preset_farkini_degistirir() -> None:
+>       tooltip_cap = get_params(OcrPreset.TOOLTIP).max_group_chars
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\unit\ocr\test_normalizer.py:398: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+preset = <OcrPreset.TOOLTIP: 'tooltip'>
+
+    def get_params(preset: OcrPreset) -> NormalizerParams:
+>       raise NotImplementedError("kirmizi faz stub")
+E       NotImplementedError: kirmizi faz stub
+
+src\ocr\presets.py:14: NotImplementedError
+_______________ test_k11_yatay_ortusme_yetersizse_gruplanmiyor ________________
+
+    def test_k11_yatay_ortusme_yetersizse_gruplanmiyor() -> None:
+        b0 = blk("Sol taraf", 0, 0, w=100, h=20)
+        b1 = blk("Sag taraf", 400, 10, w=100, h=20)  # dikeyde yakin, yatayda ortusme yok
+>       out = normalize([b0, b1], OcrPreset.DIALOGUE)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\unit\ocr\test_normalizer.py:417: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+blocks = [TextBlock(text='Sol taraf', bbox=Rect(x=0, y=0, w=100, h=20, monitor_index=0, dpi_scale=1.0), confidence=0.9, line_bo...(text='Sag taraf', bbox=Rect(x=400, y=10, w=100, h=20, monitor_index=0, dpi_scale=1.0), confidence=0.9, line_boxes=())]
+preset = <OcrPreset.DIALOGUE: 'dialogue'>
+
+    def normalize(blocks: Sequence[TextBlock], preset: OcrPreset) -> list[Segment]:
+>       raise NotImplementedError("kirmizi faz stub")
+E       NotImplementedError: kirmizi faz stub
+
+src\ocr\normalizer.py:7: NotImplementedError
+________________________ test_k12_bos_girdi_bos_liste _________________________
+
+    def test_k12_bos_girdi_bos_liste() -> None:
+>       assert normalize([], OcrPreset.DIALOGUE) == []
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\unit\ocr\test_normalizer.py:428: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+blocks = [], preset = <OcrPreset.DIALOGUE: 'dialogue'>
+
+    def normalize(blocks: Sequence[TextBlock], preset: OcrPreset) -> list[Segment]:
+>       raise NotImplementedError("kirmizi faz stub")
+E       NotImplementedError: kirmizi faz stub
+
+src\ocr\normalizer.py:7: NotImplementedError
+__________________ test_k12_tum_bloklar_esik_alti_bos_liste ___________________
+
+    def test_k12_tum_bloklar_esik_alti_bos_liste() -> None:
+>       out = normalize([blk("Merhaba", 10, 10, confidence=0.01)], OcrPreset.DIALOGUE)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\unit\ocr\test_normalizer.py:432: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+blocks = [TextBlock(text='Merhaba', bbox=Rect(x=10, y=10, w=300, h=20, monitor_index=0, dpi_scale=1.0), confidence=0.01, line_boxes=())]
+preset = <OcrPreset.DIALOGUE: 'dialogue'>
+
+    def normalize(blocks: Sequence[TextBlock], preset: OcrPreset) -> list[Segment]:
+>       raise NotImplementedError("kirmizi faz stub")
+E       NotImplementedError: kirmizi faz stub
+
+src\ocr\normalizer.py:7: NotImplementedError
+____________ test_k12_gurultu_sonrasi_hicbir_sey_kalmadi_bos_liste ____________
+
+    def test_k12_gurultu_sonrasi_hicbir_sey_kalmadi_bos_liste() -> None:
+>       out = normalize([blk("#", 10, 10), blk("   ", 200, 10)], OcrPreset.DIALOGUE)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\unit\ocr\test_normalizer.py:437: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+blocks = [TextBlock(text='#', bbox=Rect(x=10, y=10, w=300, h=20, monitor_index=0, dpi_scale=1.0), confidence=0.9, line_boxes=()...tBlock(text='   ', bbox=Rect(x=200, y=10, w=300, h=20, monitor_index=0, dpi_scale=1.0), confidence=0.9, line_boxes=())]
+preset = <OcrPreset.DIALOGUE: 'dialogue'>
+
+    def normalize(blocks: Sequence[TextBlock], preset: OcrPreset) -> list[Segment]:
+>       raise NotImplementedError("kirmizi faz stub")
+E       NotImplementedError: kirmizi faz stub
+
+src\ocr\normalizer.py:7: NotImplementedError
+__________________ test_k14_normalizasyon_butcesi_5ms_medyan __________________
+
+    def test_k14_normalizasyon_butcesi_5ms_medyan() -> None:
+        blocks = _budget_blocks()
+        assert len(blocks) == 30
+        assert all(38 <= len(b.text) <= 60 for b in blocks)
+    
+        durations_ms: list[float] = []
+        for _ in range(50):
+            start = time.perf_counter()
+>           normalize(blocks, OcrPreset.DIALOGUE)
+
+tests\unit\ocr\test_normalizer.py:463: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+blocks = [TextBlock(text='Bu diyalog metni numara 00 icin ornek satirdir.', bbox=Rect(x=10, y=0, w=300, h=20, monitor_index=0, ...k satirdir.', bbox=Rect(x=10, y=110, w=300, h=20, monitor_index=0, dpi_scale=1.0), confidence=0.9, line_boxes=()), ...]
+preset = <OcrPreset.DIALOGUE: 'dialogue'>
+
+    def normalize(blocks: Sequence[TextBlock], preset: OcrPreset) -> list[Segment]:
+>       raise NotImplementedError("kirmizi faz stub")
+E       NotImplementedError: kirmizi faz stub
+
+src\ocr\normalizer.py:7: NotImplementedError
+__________________ test_yozlasmis_bbox_genislik_sifir_cokmez __________________
+
+    def test_yozlasmis_bbox_genislik_sifir_cokmez() -> None:
+>       out = normalize([blk("Merhaba", 10, 10, w=0)], OcrPreset.DIALOGUE)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\unit\ocr\test_normalizer.py:476: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+blocks = [TextBlock(text='Merhaba', bbox=Rect(x=10, y=10, w=0, h=20, monitor_index=0, dpi_scale=1.0), confidence=0.9, line_boxes=())]
+preset = <OcrPreset.DIALOGUE: 'dialogue'>
+
+    def normalize(blocks: Sequence[TextBlock], preset: OcrPreset) -> list[Segment]:
+>       raise NotImplementedError("kirmizi faz stub")
+E       NotImplementedError: kirmizi faz stub
+
+src\ocr\normalizer.py:7: NotImplementedError
+_________________ test_yozlasmis_bbox_yukseklik_sifir_cokmez __________________
+
+    def test_yozlasmis_bbox_yukseklik_sifir_cokmez() -> None:
+        b0 = blk("Bu uzun bir", 10, 0, h=0)
+        b1 = blk("cumledir.", 10, 0, h=0)
+>       out = normalize([b0, b1], OcrPreset.DIALOGUE)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\unit\ocr\test_normalizer.py:483: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+blocks = [TextBlock(text='Bu uzun bir', bbox=Rect(x=10, y=0, w=300, h=0, monitor_index=0, dpi_scale=1.0), confidence=0.9, line_...ock(text='cumledir.', bbox=Rect(x=10, y=0, w=300, h=0, monitor_index=0, dpi_scale=1.0), confidence=0.9, line_boxes=())]
+preset = <OcrPreset.DIALOGUE: 'dialogue'>
+
+    def normalize(blocks: Sequence[TextBlock], preset: OcrPreset) -> list[Segment]:
+>       raise NotImplementedError("kirmizi faz stub")
+E       NotImplementedError: kirmizi faz stub
+
+src\ocr\normalizer.py:7: NotImplementedError
+______________ test_yozlasmis_negatif_genislik_yukseklik_cokmez _______________
+
+    def test_yozlasmis_negatif_genislik_yukseklik_cokmez() -> None:
+>       out = normalize([blk("Merhaba", 10, 10, w=-5, h=-5)], OcrPreset.DIALOGUE)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\unit\ocr\test_normalizer.py:488: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+blocks = [TextBlock(text='Merhaba', bbox=Rect(x=10, y=10, w=-5, h=-5, monitor_index=0, dpi_scale=1.0), confidence=0.9, line_boxes=())]
+preset = <OcrPreset.DIALOGUE: 'dialogue'>
+
+    def normalize(blocks: Sequence[TextBlock], preset: OcrPreset) -> list[Segment]:
+>       raise NotImplementedError("kirmizi faz stub")
+E       NotImplementedError: kirmizi faz stub
+
+src\ocr\normalizer.py:7: NotImplementedError
+______________ test_yozlasmis_bos_ve_yalniz_bosluk_metin_cokmez _______________
+
+    def test_yozlasmis_bos_ve_yalniz_bosluk_metin_cokmez() -> None:
+>       out = normalize([blk("", 10, 10), blk("   ", 200, 10)], OcrPreset.DIALOGUE)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\unit\ocr\test_normalizer.py:493: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+blocks = [TextBlock(text='', bbox=Rect(x=10, y=10, w=300, h=20, monitor_index=0, dpi_scale=1.0), confidence=0.9, line_boxes=())...tBlock(text='   ', bbox=Rect(x=200, y=10, w=300, h=20, monitor_index=0, dpi_scale=1.0), confidence=0.9, line_boxes=())]
+preset = <OcrPreset.DIALOGUE: 'dialogue'>
+
+    def normalize(blocks: Sequence[TextBlock], preset: OcrPreset) -> list[Segment]:
+>       raise NotImplementedError("kirmizi faz stub")
+E       NotImplementedError: kirmizi faz stub
+
+src\ocr\normalizer.py:7: NotImplementedError
+_______________________ test_yozlasmis_tek_blok_cokmez ________________________
+
+    def test_yozlasmis_tek_blok_cokmez() -> None:
+>       out = normalize([blk("Tek blok", 10, 10)], OcrPreset.DIALOGUE)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\unit\ocr\test_normalizer.py:498: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+blocks = [TextBlock(text='Tek blok', bbox=Rect(x=10, y=10, w=300, h=20, monitor_index=0, dpi_scale=1.0), confidence=0.9, line_boxes=())]
+preset = <OcrPreset.DIALOGUE: 'dialogue'>
+
+    def normalize(blocks: Sequence[TextBlock], preset: OcrPreset) -> list[Segment]:
+>       raise NotImplementedError("kirmizi faz stub")
+E       NotImplementedError: kirmizi faz stub
+
+src\ocr\normalizer.py:7: NotImplementedError
+___________________ test_yozlasmis_otuzdan_cok_blok_cokmez ____________________
+
+    def test_yozlasmis_otuzdan_cok_blok_cokmez() -> None:
+        bloklar = [blk(f"Satir {i}", 10, i * 22) for i in range(45)]
+>       out = normalize(bloklar, OcrPreset.MENU)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\unit\ocr\test_normalizer.py:504: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+blocks = [TextBlock(text='Satir 0', bbox=Rect(x=10, y=0, w=300, h=20, monitor_index=0, dpi_scale=1.0), confidence=0.9, line_box...xt='Satir 5', bbox=Rect(x=10, y=110, w=300, h=20, monitor_index=0, dpi_scale=1.0), confidence=0.9, line_boxes=()), ...]
+preset = <OcrPreset.MENU: 'menu'>
+
+    def normalize(blocks: Sequence[TextBlock], preset: OcrPreset) -> list[Segment]:
+>       raise NotImplementedError("kirmizi faz stub")
+E       NotImplementedError: kirmizi faz stub
+
+src\ocr\normalizer.py:7: NotImplementedError
+=========================== short test summary info ===========================
+FAILED tests/unit/ocr/test_normalizer.py::test_k1_line_boxes_bos_ve_dolu_ayni_sonucu_verir
+FAILED tests/unit/ocr/test_normalizer.py::test_k1_blok_ici_newline_tek_segmente_iner
+FAILED tests/unit/ocr/test_normalizer.py::test_k2_esik_alti_orta_blok_komsulari_birlestirir
+FAILED tests/unit/ocr/test_normalizer.py::test_k3_cikti_okuma_sirasinda_donuyor
+FAILED tests/unit/ocr/test_normalizer.py::test_k3_ayni_y_de_x_artan - NotImpl...
+FAILED tests/unit/ocr/test_normalizer.py::test_k4_tek_kanji_korunur - NotImpl...
+FAILED tests/unit/ocr/test_normalizer.py::test_k4_tek_hangul_korunur - NotImp...
+FAILED tests/unit/ocr/test_normalizer.py::test_k4_tek_kiril_harfi_korunur_beyaz_liste_yok
+FAILED tests/unit/ocr/test_normalizer.py::test_k4_tek_rakam_korunur - NotImpl...
+FAILED tests/unit/ocr/test_normalizer.py::test_k4_tek_sembol_atilir - NotImpl...
+FAILED tests/unit/ocr/test_normalizer.py::test_k4_soru_ve_unlem_istisnasi_korunur
+FAILED tests/unit/ocr/test_normalizer.py::test_k5_kesme_cizgili_kelime_birlesir_on_ayardan_bagimsiz
+FAILED tests/unit/ocr/test_normalizer.py::test_k5_gercek_tire_dokunulmuyor - ...
+FAILED tests/unit/ocr/test_normalizer.py::test_k5_buyuk_harfle_baslayan_sonraki_satir_birlesmez
+FAILED tests/unit/ocr/test_normalizer.py::test_iki_satira_bolunmus_cumle_dialogue_ile_gruplanip_birlesir
+FAILED tests/unit/ocr/test_normalizer.py::test_k6_placeholder_sira_ve_tekrar_korunur
+FAILED tests/unit/ocr/test_normalizer.py::test_k6_yuzde_sayisi_placeholder_degil
+FAILED tests/unit/ocr/test_normalizer.py::test_k6_farkli_desen_turleri_sirayla_toplanir
+FAILED tests/unit/ocr/test_normalizer.py::test_k7_esige_esit_kalir - NotImple...
+FAILED tests/unit/ocr/test_normalizer.py::test_k7_esik_altinda_duser - NotImp...
+FAILED tests/unit/ocr/test_normalizer.py::test_k7_nan_confidence_value_error
+FAILED tests/unit/ocr/test_normalizer.py::test_k7_alan_disi_confidence_value_error[1.5]
+FAILED tests/unit/ocr/test_normalizer.py::test_k7_alan_disi_confidence_value_error[-0.1]
+FAILED tests/unit/ocr/test_normalizer.py::test_k7_alan_disi_confidence_value_error[1.0001]
+FAILED tests/unit/ocr/test_normalizer.py::test_k8_source_blocks_orijinal_indeks_ve_artan_sira
+FAILED tests/unit/ocr/test_normalizer.py::test_k8_source_blocks_segmentler_arasi_ayrik
+FAILED tests/unit/ocr/test_normalizer.py::test_k9_yalniz_etiket_sonraki_bloga_tasinir
+FAILED tests/unit/ocr/test_normalizer.py::test_k9_yalniz_etiket_sonraki_yoksa_duser
+FAILED tests/unit/ocr/test_normalizer.py::test_k9_dialogue_farkli_konusmacili_komsu_bloklar_ayri_kalir
+FAILED tests/unit/ocr/test_normalizer.py::test_k9_bos_metinli_segment_asla_uretilmez
+FAILED tests/unit/ocr/test_normalizer.py::test_k10_bbox_birlesimi_kapsayici
+FAILED tests/unit/ocr/test_normalizer.py::test_k10_farkli_monitor_index_value_error
+FAILED tests/unit/ocr/test_normalizer.py::test_k10_farkli_dpi_scale_value_error
+FAILED tests/unit/ocr/test_normalizer.py::test_k11_menu_gruplamaz_dialogue_gruplar_ayni_geometri
+FAILED tests/unit/ocr/test_normalizer.py::test_k11_dikey_bosluk_orani_preset_farkini_degistirir
+FAILED tests/unit/ocr/test_normalizer.py::test_k11_guven_esigi_preset_farkini_degistirir_dialogue_tooltip
+FAILED tests/unit/ocr/test_normalizer.py::test_k11_guven_esigi_preset_farkini_degistirir_dialogue_subtitle
+FAILED tests/unit/ocr/test_normalizer.py::test_k11_maksimum_grup_karakteri_preset_farkini_degistirir
+FAILED tests/unit/ocr/test_normalizer.py::test_k11_yatay_ortusme_yetersizse_gruplanmiyor
+FAILED tests/unit/ocr/test_normalizer.py::test_k12_bos_girdi_bos_liste - NotI...
+FAILED tests/unit/ocr/test_normalizer.py::test_k12_tum_bloklar_esik_alti_bos_liste
+FAILED tests/unit/ocr/test_normalizer.py::test_k12_gurultu_sonrasi_hicbir_sey_kalmadi_bos_liste
+FAILED tests/unit/ocr/test_normalizer.py::test_k14_normalizasyon_butcesi_5ms_medyan
+FAILED tests/unit/ocr/test_normalizer.py::test_yozlasmis_bbox_genislik_sifir_cokmez
+FAILED tests/unit/ocr/test_normalizer.py::test_yozlasmis_bbox_yukseklik_sifir_cokmez
+FAILED tests/unit/ocr/test_normalizer.py::test_yozlasmis_negatif_genislik_yukseklik_cokmez
+FAILED tests/unit/ocr/test_normalizer.py::test_yozlasmis_bos_ve_yalniz_bosluk_metin_cokmez
+FAILED tests/unit/ocr/test_normalizer.py::test_yozlasmis_tek_blok_cokmez - No...
+FAILED tests/unit/ocr/test_normalizer.py::test_yozlasmis_otuzdan_cok_blok_cokmez
+49 failed in 0.70s
+
+exit_code: 1

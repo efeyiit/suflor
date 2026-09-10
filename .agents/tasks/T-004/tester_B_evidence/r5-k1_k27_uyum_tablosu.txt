@@ -1,0 +1,33 @@
+Taranan test fonksiyonu sayisi: 182 (5 dosya)
+
+K   | testi olan dosyalar (sayi)                | ilk ornek
+----+-------------------------------------------+--------------------------------------
+K1  | B/tur2(2), B/tur5(1), GERCEK(2)           | test_k1_uc_bicim_ayni_segment_metnini_uretir
+K2  | B/tur2(3), B/tur3(2), GERCEK(1)           | test_k2_esik_alti_orta_blok_konusmacili_cumleyi_bozmadan_bir
+K3  | B/tur2(1), B/tur5(1), GERCEK(2)           | test_k3_karisik_sirali_girdi_okuma_sirasina_dogrulanir
+K4  | B/tur2(1), GERCEK(6)                      | test_k4_tek_kanji_ve_tek_sembol_farkli_muamele_gorur
+K5  | B/tur2(1), GERCEK(3)                      | test_k5_satir_sonu_tire_ile_satir_ortasi_tire_farkli_davrani
+K6  | B/tur2(1), GERCEK(3)                      | test_k6_placeholder_metni_degistirmiyor_sayilar_haric
+K7  | B/tur2(2), GERCEK(4)                      | test_k7_nan_sessizce_esik_alti_sayilmiyor_value_error_firlat
+K8  | B/tur2(2), B/tur5(1), GERCEK(2)           | test_k8_cok_bloklu_senaryo_orijinal_indeks_uzayi_ve_ayriklik
+K9  | B/tur2(5), B/tur5(1), GERCEK(4)           | test_k9_dialogue_farkli_konusmacili_komsu_bloklar_asla_birle
+K10 | B/tur2(1), B/tur5(1), GERCEK(3)           | test_k10_farkli_monitor_sessizce_ilkinden_kopyalamiyor_hata_
+K11 | B/tur2(1), B/tur5(1), GERCEK(6)           | test_k11_dort_on_ayar_ayni_geometride_gercekten_farkli_davra
+K12 | B/tur2(1), B/tur5(1), GERCEK(3)           | test_k12_hepsi_esik_alti_kurtarma_yapilmiyor
+K13 | B/tur2(1), B/tur5(1)                      | test_k13_ayni_girdi_ile_ardisik_cagrilar_bitbit_ayni
+K14 | B/tur2(2), B/tur3(2), B/tur5(2), GERCEK(1 | test_k14_gercek_test_dosyasinda_assert_olarak_duruyor
+K15 | B/tur2(2), B/tur3(1), B/tur5(1), GERCEK(7 | test_k15_should_group_matrisinin_bes_satiri_tek_tek
+K16 | B/tur2(1), B/tur3(1), GERCEK(2)           | test_k16_pipeline_hem_yukseklik_hem_genislik_yozlasmis_kosul
+K17 | B/tur2(4), GERCEK(2)                      | test_k17_fullwidth_ayirac_metnin_ortasinda_da_calisir
+K18 | B/tur2(3), GERCEK(1)                      | test_k18_fullwidth_soru_unlem_pipeline_uzerinden_korunur
+K19 | B/tur3(2), GERCEK(5)                      | test_r3_k19_mixed_zincir_length_split_sonra_gap_split_miras_
+K20 | B/tur3(3), GERCEK(1)                      | test_r3_k20_bagimsiz_tam_unicode_taramasi_docstringle_birebi
+K21 | B/mutant(1), GERCEK(10)                   | test_r5_mutant_m2_k21_ayrimini_da_bozuyor
+K22 |                                           | -- YOK --
+K23 | B/tur5(14), B/mutant(2), GERCEK(3)        | test_r5_k23_group_gercekten_iki_gecisten_olusuyor
+K24 | B/tur5(4), B/mutant(1), GERCEK(2)         | test_r5_k24_ignore_length_sorgusu_tail_ile_cagriliyor_ast
+K25 | B/tur5(2)                                 | test_r5_k25_secenek1_imza_ve_donus_tipi_korunmus
+K26 | B/tur5(5), GERCEK(2)                      | test_r5_k26_bagimsiz_tarama_alti_karakteri_birebir_dogruluyo
+K27 | B/tur5(4), GERCEK(4)                      | test_r5_k27_ayni_fixture_dort_on_ayarda_beklendigi_gibi_davr
+
+Adinda K-etiketi tasiyan testi OLMAYAN kararlar: [22]

@@ -1,0 +1,21 @@
+# T-004 TUR 5 / TESTER-B -- BULGU (bloke etmeyen): docstring'de ANILAN ama VAR OLMAYAN test adlari
+# PROTOKOL 4.6/2: 'Her degismezin yaninda onu olcen kabul komutu ve test adi yazilir.'
+
+GERCEK test dosyasindaki test fonksiyonu sayisi: 93
+
+BAYAT ATIFLAR (2):
+
+  - yer            : modul docstring (normalizer.py satir ~92)
+    ANILAN ad      : test_k2_esik_alti_blok_ortada
+    GERCEK en yakin: test_k7_esik_altinda_duser
+
+  - yer            : modul docstring (normalizer.py satir ~203)
+    ANILAN ad      : test_k26_alti_karakterin_hepsi_uyumluluk_formu_ve_etiket_dagilimi_dogru
+    GERCEK en yakin: test_k26_alti_karakterin_hepsi_uyumluluk_formu_ve_etiket_dogru
+
+NOT: olcumun KENDISI var ve YESIL -- bulgu SADECE isim/atif duzeyinde.
+     K26 icin gercek adlar:
+       - test_k26_alti_karakterin_etiket_dagilimi_iki_iki_iki
+       - test_k26_alti_karakterin_hepsi_uyumluluk_formu_ve_etiket_dogru
+     K2 icin gercek adlar:
+       - test_k2_esik_alti_orta_blok_komsulari_birlestirir

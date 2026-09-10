@@ -1,0 +1,115 @@
+FF.F...FFF.F                                                             [100%]
+================================== FAILURES ===================================
+_____________ test_k15_kritik_etiketli_coklu_govde_birlesir_ascii _____________
+
+    def test_k15_kritik_etiketli_coklu_govde_birlesir_ascii() -> None:
+        """Tasarim dokumani S5.2'nin modulun VAR OLMA SEBEBI olarak verdigi
+        ornegin ta kendisi: `['Ada:', 'Bu uzun bir', 'cumledir.']` TUR 1'de
+        2 segmente bolunuyordu (ikincisi `speaker=None`, cumle KOPUYORDU).
+        K15 ile 1 segmente birlesir, konusmaci VE cumle butunlugu korunur."""
+        etiket = blk("Ada:", 10, 0)
+        satir1 = blk("Bu uzun bir", 10, 22)
+        satir2 = blk("cumledir.", 10, 44)
+        out = normalize([etiket, satir1, satir2], OcrPreset.DIALOGUE)
+>       assert len(out) == 1
+E       AssertionError: assert 2 == 1
+E        +  where 2 = len([Segment(text='Bu uzun bir', bbox=Rect(x=10, y=22, w=300, h=20, monitor_index=0, dpi_scale=1.0), speaker='Ada', placeh...bbox=Rect(x=10, y=44, w=300, h=20, monitor_index=0, dpi_scale=1.0), speaker=None, placeholders=(), source_blocks=(2,))])
+
+tests\unit\ocr\test_normalizer.py:535: AssertionError
+____________ test_k15_kritik_etiketli_coklu_govde_birlesir_japonca ____________
+
+    def test_k15_kritik_etiketli_coklu_govde_birlesir_japonca() -> None:
+        """Ayni senaryo, Japonca'da BIREBIR ayni sekilde bozuluyordu (TUR 1)
+        ve BIREBIR ayni sekilde duzeliyor (TUR 2, K15). Etiket ASCII `:` ile
+        (K17'nin fullwidth ayraci burada devrede degil -- ayri test:
+        `test_k17_fullwidth_iki_nokta_konusmaci_ayiklanir`)."""
+        etiket = blk("\u52c7\u8005:", 10, 0)
+        satir1 = blk("\u3053\u306e\u753a\u306f\u3068\u3066\u3082", 10, 22)
+        satir2 = blk("\u5927\u304d\u3044\u3067\u3059\u306d\u3002", 10, 44)
+        out = normalize([etiket, satir1, satir2], OcrPreset.DIALOGUE)
+>       assert len(out) == 1
+E       AssertionError: assert 2 == 1
+E        +  where 2 = len([Segment(text='\u3053\u306e\u753a\u306f\u3068\u3066\u3082', bbox=Rect(x=10, y=22, w=300, h=20, monitor_index=0, dpi_scale=1.0), speaker='\u52c7\u8005', placeholder...bbox=Rect(x=10, y=44, w=300, h=20, monitor_index=0, dpi_scale=1.0), speaker=None, placeholders=(), source_blocks=(2,))])
+
+tests\unit\ocr\test_normalizer.py:550: AssertionError
+________________ test_k15_matris_x_none_gruplanir_devam_satiri ________________
+
+    def test_k15_matris_x_none_gruplanir_devam_satiri() -> None:
+        """a.speaker=X, b.speaker=None -> EVET (devam satiri, K15'in asil
+        duzelttigi satir) -- X MIRAS ALINIR."""
+        a, b = _matrix_items("Ada", None)
+>       assert _should_group(a, b, get_params(OcrPreset.DIALOGUE)) is True
+E       AssertionError: assert False is True
+E        +  where False = _should_group(_Item(text='a', bbox=Rect(x=0, y=0, w=100, h=20, monitor_index=0, dpi_scale=1.0), speaker='Ada', source_blocks=(0,)), _Item(text='b', bbox=Rect(x=0, y=20, w=100, h=20, monitor_index=0, dpi_scale=1.0), speaker=None, source_blocks=(1,)), NormalizerParams(confidence_threshold=0.6, max_vertical_gap_ratio=0.8, max_group_chars=280, should_group=True))
+E        +    where NormalizerParams(confidence_threshold=0.6, max_vertical_gap_ratio=0.8, max_group_chars=280, should_group=True) = get_params(<OcrPreset.DIALOGUE: 'dialogue'>)
+E        +      where <OcrPreset.DIALOGUE: 'dialogue'> = OcrPreset.DIALOGUE
+
+tests\unit\ocr\test_normalizer.py:578: AssertionError
+_______________ test_k16_yukseklik_sifir_gap_sifir_iki_segment ________________
+
+    def test_k16_yukseklik_sifir_gap_sifir_iki_segment() -> None:
+        """h=0 VE gap=0 (iki blok AYNI y'de, ikisi de h=0) -- TUR 1'de
+        docstring'in "gruplama yok" vaadine RAGMEN 1 segmente birlesiyordu
+        (`gap > 0` degilse eski kod reddetmiyordu); K16 ile HER ZAMAN 2
+        segment."""
+        b0 = blk("Merhaba", 10, 0, h=0)
+        b1 = blk("dunya", 10, 0, h=0)
+        out = normalize([b0, b1], OcrPreset.DIALOGUE)
+>       assert len(out) == 2
+E       AssertionError: assert 1 == 2
+E        +  where 1 = len([Segment(text='Merhaba dunya', bbox=Rect(x=10, y=0, w=300, h=0, monitor_index=0, dpi_scale=1.0), speaker=None, placeholders=(), source_blocks=(0, 1))])
+
+tests\unit\ocr\test_normalizer.py:615: AssertionError
+___________________ test_k16_negatif_yukseklik_iki_segment ____________________
+
+    def test_k16_negatif_yukseklik_iki_segment() -> None:
+        """a: y=-15 h=20 (bottom=5), b: y=0 h=-10 (bottom=-10) -> gap=-5
+        (kutular cakisiyor); ref_height=min(20,-10)=-10 <= 0 -> K16 ile
+        KOSULSUZ reddedilir, 2 segment (TUR 1'de 1 segmente birlesiyordu --
+        sef'in ILK sondasi da bunu yanlis kurup dogrulayamamisti, PROTOKOL
+        S3 kapi 6)."""
+        b0 = blk("Merhaba", 10, -15, h=20)
+        b1 = blk("dunya", 10, 0, h=-10)
+        out = normalize([b0, b1], OcrPreset.DIALOGUE)
+>       assert len(out) == 2
+E       AssertionError: assert 1 == 2
+E        +  where 1 = len([Segment(text='Merhaba dunya', bbox=Rect(x=10, y=-15, w=300, h=20, monitor_index=0, dpi_scale=1.0), speaker=None, placeholders=(), source_blocks=(0, 1))])
+
+tests\unit\ocr\test_normalizer.py:628: AssertionError
+______________ test_k17_fullwidth_iki_nokta_konusmaci_ayiklanir _______________
+
+    def test_k17_fullwidth_iki_nokta_konusmaci_ayiklanir() -> None:
+        """`'\u52c7\u8005\uff1a\u3053\u3093\u306b\u3061\u306f'` (fullwidth `\uff1a` U+FF1A ile) -- TUR 1'de bu
+        ayirac taninmiyordu, blok konusmacisiz KALIYORDU; K17 ile konusmaci
+        dogru ayiklanir (JP/KR oyunlarinda STANDART yazim bicimi)."""
+        out = normalize([blk("\u52c7\u8005\uff1a\u3053\u3093\u306b\u3061\u306f", 10, 0)], OcrPreset.DIALOGUE)
+        assert len(out) == 1
+>       assert out[0].speaker == "\u52c7\u8005"
+E       AssertionError: assert None == '\u52c7\u8005'
+E        +  where None = Segment(text='\u52c7\u8005\uff1a\u3053\u3093\u306b\u3061\u306f', bbox=Rect(x=10, y=0, w=300, h=20, monitor_index=0, dpi_scale=1.0), speaker=None, placeholders=(), source_blocks=(0,)).speaker
+
+tests\unit\ocr\test_normalizer.py:641: AssertionError
+_____________ test_k18_fullwidth_soru_unlem_tek_karakter_korunur ______________
+
+    def test_k18_fullwidth_soru_unlem_tek_karakter_korunur() -> None:
+        """Tek-karakterli fullwidth `\uff1f` (U+FF1F) VE `\uff01` (U+FF01) bloklari --
+        TUR 1'de SESSIZCE siliniyordu (ASCII `?`/`!` zaten korunuyordu, bkz.
+        `test_k4_soru_ve_unlem_istisnasi_korunur`); K18 (NFKC denkligi) ile
+        ARTIK korunuyor."""
+        out = normalize([blk("\uff1f", 10, 10), blk("\uff01", 500, 10)], OcrPreset.MENU)
+>       assert [s.text for s in out] == ["\uff1f", "\uff01"]
+E       AssertionError: assert [] == ['\uff1f', '\uff01']
+E         
+E         Right contains 2 more items, first extra item: '\uff1f'
+E         Use -v to get more diff
+
+tests\unit\ocr\test_normalizer.py:661: AssertionError
+=========================== short test summary info ===========================
+FAILED tests/unit/ocr/test_normalizer.py::test_k15_kritik_etiketli_coklu_govde_birlesir_ascii
+FAILED tests/unit/ocr/test_normalizer.py::test_k15_kritik_etiketli_coklu_govde_birlesir_japonca
+FAILED tests/unit/ocr/test_normalizer.py::test_k15_matris_x_none_gruplanir_devam_satiri
+FAILED tests/unit/ocr/test_normalizer.py::test_k16_yukseklik_sifir_gap_sifir_iki_segment
+FAILED tests/unit/ocr/test_normalizer.py::test_k16_negatif_yukseklik_iki_segment
+FAILED tests/unit/ocr/test_normalizer.py::test_k17_fullwidth_iki_nokta_konusmaci_ayiklanir
+FAILED tests/unit/ocr/test_normalizer.py::test_k18_fullwidth_soru_unlem_tek_karakter_korunur
+7 failed, 5 passed, 49 deselected in 0.34s

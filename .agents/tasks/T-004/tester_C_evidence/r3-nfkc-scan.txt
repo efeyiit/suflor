@@ -1,0 +1,20 @@
+Python 3.12.10 (tags/v3.12.10:0cc8128, Apr  8 2025, 12:21:36) [MSC v.1943 64 bit (AMD64)]
+unicodedata unidata_version: 15.0.0
+
+Codepoints that NFKC-normalize to exactly '?' (excluding '?' itself):
+  U+FE16  PRESENTATION FORM FOR VERTICAL QUESTION MARK
+  U+FE56  SMALL QUESTION MARK
+  U+FF1F  FULLWIDTH QUESTION MARK
+
+Codepoints that NFKC-normalize to exactly '!' (excluding '!' itself):
+  U+FE15  PRESENTATION FORM FOR VERTICAL EXCLAMATION MARK
+  U+FE57  SMALL EXCLAMATION MARK
+  U+FF01  FULLWIDTH EXCLAMATION MARK
+
+TOTAL non-ASCII-self codepoints: 6
+All: ['U+FE15', 'U+FE16', 'U+FE56', 'U+FE57', 'U+FF01', 'U+FF1F']
+
+Docstring'in claimed list (K20): ['U+FE15', 'U+FE16', 'U+FE56', 'U+FE57', 'U+FF01', 'U+FF1F']
+Match exactly? True
+In found but not in docstring list: []
+In docstring list but not found: []

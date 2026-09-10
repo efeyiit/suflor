@@ -1,0 +1,17 @@
+# purity_check.py icindeki check_cross_process_determinism, OcrPreset.dialogue (kucuk harf)
+# kullanir; ancak src/contracts/models.py (dondurulmus) enum uyeleri BUYUK HARFTIR
+# (DIALOGUE = "dialogue"). Bu, normalize() cagrilmadan ONCE, saf Python attribute
+# erisiminde patlar -- normalizer.py/presets.py icerigiyle ILGISIZDIR. Kanit:
+
+$ python -c "from src.contracts.models import OcrPreset; print(OcrPreset.dialogue)"
+Traceback (most recent call last):
+  File "<string>", line 1, in <module>
+AttributeError: type object 'OcrPreset' has no attribute 'dialogue'
+exit_code: 1
+
+$ python -c "from src.contracts.models import OcrPreset; print(OcrPreset.DIALOGUE)"   # DOGRU uye adi
+dialogue
+exit_code: 0
+
+# purity_check.py icindeki tam satir (degistirilemez, dokunulmadi):
+74:        "out = normalize(bs, OcrPreset.dialogue)\n"

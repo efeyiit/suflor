@@ -1,0 +1,6 @@
+cap = 280 max_vertical_gap_ratio = 0.8
+reason when BOTH length-exceeded AND HUGE gap simultaneously: length
+(K19 table says: gap -> None should remain. If 'length' wins due to check order, inheritance WRONGLY fires)
+
+  speaker='Ada' len=275 src=(0, 1) text[:20]='xxxxxxxxxxxxxxxxxxxx'
+  speaker='Ada' len=50 src=(2,) text[:20]='yyyyyyyyyyyyyyyyyyyy'

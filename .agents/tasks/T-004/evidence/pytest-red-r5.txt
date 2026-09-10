@@ -1,0 +1,148 @@
+============================= test session starts =============================
+platform win32 -- Python 3.12.10, pytest-9.1.1, pluggy-1.6.0 -- C:\Users\pc\AppData\Local\Programs\Python\Python312\python.exe
+cachedir: .pytest_cache
+rootdir: C:\Users\pc\Desktop\efe\çeviri uygulamasý
+collecting ... collected 98 items / 93 deselected / 5 selected
+
+tests/unit/ocr/test_normalizer.py::test_k23_miras_acik_kapali_bolumleme_degismezi_fuzz FAILED [ 20%]
+tests/unit/ocr/test_normalizer.py::test_k23_kendi_etiketiyle_gelen_kuyruk_mirastan_dolayi_yanlislikla_birlesmiyor FAILED [ 40%]
+tests/unit/ocr/test_normalizer.py::test_k23_invariant_b1_senaryosunda_bolumleme_ayni_speaker_farkli FAILED [ 60%]
+tests/unit/ocr/test_normalizer.py::test_k24_kuyruk_ile_birlesik_bbox_farkli_sonuc_verir PASSED [ 80%]
+tests/unit/ocr/test_normalizer.py::test_k24_normalize_uzerinden_kuyruk_temelli_kontrol_yanlis_mirasi_onler FAILED [100%]
+
+================================== FAILURES ===================================
+_____________ test_k23_miras_acik_kapali_bolumleme_degismezi_fuzz _____________
+
+    def test_k23_miras_acik_kapali_bolumleme_degismezi_fuzz() -> None:
+        """K23 DEGISMEZ, ZORUNLU makine denetimi (sef_karari-tur5.md): sabit
+        tohum, >=2000 (burada 2500) rastgele girdi, DORT on ayarin HEPSI,
+        yozlasmis geometri DAHIL -- `_normalize_impl(..., apply_inheritance=
+        True)` ile `..., apply_inheritance=False)`'nin URETTIGI BOLUMLEME
+        (`source_blocks` dizisi) VE `text`/`bbox`/`placeholders`/segment
+        SAYISI **TEK BIR farkla bile** testi KIRAR; miras kararindan SADECE
+        `speaker` alaninin degismesine IZIN VERILIR."""
+        rng = Random(20260910)
+        presets = (OcrPreset.DIALOGUE, OcrPreset.MENU, OcrPreset.TOOLTIP, OcrPreset.SUBTITLE)
+        n_denenen = 2500
+        n_farkli = 0
+        ilk_fark: str | None = None
+        for i in range(n_denenen):
+            preset = presets[i % len(presets)]
+            blocks = _k23_random_blocks(rng, preset)
+            with_inherit = _normalize_impl(blocks, preset, apply_inheritance=True)
+            without_inherit = _normalize_impl(blocks, preset, apply_inheritance=False)
+            fark_bulundu = False
+            if len(with_inherit) != len(without_inherit):
+                fark_bulundu = True
+                aciklama = f"segment SAYISI farkli ({len(with_inherit)} != {len(without_inherit)})"
+            else:
+                aciklama = ""
+                for a, b in zip(with_inherit, without_inherit):
+                    if (a.text, a.bbox, a.placeholders, a.source_blocks) != (
+                        b.text,
+                        b.bbox,
+                        b.placeholders,
+                        b.source_blocks,
+                    ):
+                        fark_bulundu = True
+                        aciklama = f"source_blocks {a.source_blocks} != {b.source_blocks} (veya text/bbox/placeholders)"
+                        break
+            if fark_bulundu:
+                n_farkli += 1
+                if ilk_fark is None:
+                    ilk_fark = f"iterasyon {i} (preset={preset.value}): {aciklama}"
+        assert n_denenen >= 2000
+>       assert n_farkli == 0, (
+            f"K23 DEGISMEZI ihlal edildi -- {n_farkli}/{n_denenen} girdide bolumleme "
+            f"miras acik/kapali FARKLI cikti. Ilk fark: {ilk_fark}"
+        )
+E       AssertionError: K23 DEGISMEZI ihlal edildi -- 422/2500 girdide bolumleme miras acik/kapali FARKLI cikti. Ilk fark: iterasyon 16 (preset=dialogue): segment SAYISI farkli (2 != 3)
+E       assert 422 == 0
+
+tests\unit\ocr\test_normalizer.py:1135: AssertionError
+_ test_k23_kendi_etiketiyle_gelen_kuyruk_mirastan_dolayi_yanlislikla_birlesmiyor _
+
+    def test_k23_kendi_etiketiyle_gelen_kuyruk_mirastan_dolayi_yanlislikla_birlesmiyor() -> None:
+        """B1 (yuksek siddetli, sef_karari-tur5.md -- kirmizi takim buldu, sef
+        kendi eliyle yeniden uretti): tur 4'un mekanizmasinda miras, MUTE
+        EDILMIS `speaker` degerini bir SONRAKI gruplama kararina GIRDI
+        yapiyordu -- kendi `Ada:` etiketiyle gelen YENI bir replik (govde3),
+        SADECE onceki (miras yoluyla "Ada" GORUNEN) segmentle AYNI ada sahip
+        OLDUGU icin (X/X -> evet) YANLISLIKLA onun kuyruguna YAPISIYORDU:
+    
+            VARYANT A (tur 4, HATALI): speaker='Ada' src=(0,1); speaker='Ada' src=(2,3)  <- b2/b3 BIRLESTI
+            VARYANT B (tur 5, DOGRU):  speaker='Ada' src=(0,1); speaker='Ada' src=(2,);  speaker='Ada' src=(3,)
+    
+        b2<->b3 GEOMETRISI/METNI iki varyantta AYNI -- TEK fark ONCEKI sinirin
+        (govde2'nin) miras kararinin SONRAKI karara (govde2 vs govde3) SIZIP
+        SIZMAMASIDIR. Tur 5 SONRASI 3 AYRI segment (VARYANT B) -- govde2
+        GORUNUMDE "Ada"yi miras alsa da, BOLUMLEME karari onun OZGUN (None)
+        speaker'ina gore ZATEN verilmis, GERIYE degismiyor."""
+        etiket = blk("Ada:", 10, 0)
+        govde1 = blk("x" * 150, 10, 22)  # etiketle SIKI gruplanir
+        govde2 = blk("y" * 150, 10, 44)  # govde1'e SIKI -- govde1+govde2 DIALOGUE cap'ini (280) asar (SADECE uzunluk)
+        govde3 = blk("Ada: " + "z" * 50, 10, 66)  # KENDI etiketiyle -- govde2+govde3 cap ICINDE kalir
+        out = normalize([etiket, govde1, govde2, govde3], OcrPreset.DIALOGUE)
+>       assert len(out) == 3  # VARYANT B -- b2/b3 AYRI kalir (VARYANT A'da 2 olurdu, BIRLESIRLERDI)
+        ^^^^^^^^^^^^^^^^^^^^
+E       AssertionError: assert 2 == 3
+E        +  where 2 = len([Segment(text='xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx', bbox=Rect(x=10, y=22, w=300, h=20, monitor_index=0, dpi_scale=1.0), speaker='Ada', placeholders=(), source_blocks=(0, 1)), Segment(text='yyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy zzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz', bbox=Rect(x=10, y=44, w=300, h=42, monitor_index=0, dpi_scale=1.0), speaker='Ada', placeholders=(), source_blocks=(2, 3))])
+
+tests\unit\ocr\test_normalizer.py:1162: AssertionError
+______ test_k23_invariant_b1_senaryosunda_bolumleme_ayni_speaker_farkli _______
+
+    def test_k23_invariant_b1_senaryosunda_bolumleme_ayni_speaker_farkli() -> None:
+        """K23 DEGISMEZININ, B1'in TAM senaryosunda (yukaridaki test) DOGRUDAN
+        denetimi: `apply_inheritance=True`/`False` AYNI bolumlemeyi (`source_
+        blocks`, `text`) uretir -- SADECE govde2'nin `speaker`'i degisir."""
+        etiket = blk("Ada:", 10, 0)
+        govde1 = blk("x" * 150, 10, 22)
+        govde2 = blk("y" * 150, 10, 44)
+        govde3 = blk("Ada: " + "z" * 50, 10, 66)
+        blocks = [etiket, govde1, govde2, govde3]
+        with_inherit = _normalize_impl(blocks, OcrPreset.DIALOGUE, apply_inheritance=True)
+        without_inherit = _normalize_impl(blocks, OcrPreset.DIALOGUE, apply_inheritance=False)
+>       assert [s.source_blocks for s in with_inherit] == [s.source_blocks for s in without_inherit]
+E       AssertionError: assert [(0, 1), (2, 3)] == [(0, 1), (2,), (3,)]
+E         
+E         At index 1 diff: (2, 3) != (2,)
+E         Right contains one more item: (3,)
+E         
+E         Full diff:
+E           [
+E               (...
+E         
+E         ...Full output truncated (10 lines hidden), use '-vv' to show
+
+tests\unit\ocr\test_normalizer.py:1183: AssertionError
+___ test_k24_normalize_uzerinden_kuyruk_temelli_kontrol_yanlis_mirasi_onler ___
+
+    def test_k24_normalize_uzerinden_kuyruk_temelli_kontrol_yanlis_mirasi_onler() -> None:
+        """Ayni K24 senaryosu, uctan uca `normalize()` uzerinden: `govde_derin`
+        (grubun BASINDA, en alta uzanan oge, `y=0 h=500`) ile `govde_kuyruk`
+        (`y=10 h=20`, `govde_derin`in ICINE gomulu ama okuma sirasi SONRAKI)
+        SIKI gruplanir; birlikte DIALOGUE cap'ini (280) da asarlar (SADECE
+        uzunluk -- birlesik bbox'a gore). `govde3`, BIRLESIK bbox'a (bottom=
+        500) gore YAKIN (gap=5, miras ALIRDI) ama KUYRUGA (`govde_kuyruk`,
+        bottom=30) gore GERCEKTEN kopuktur (gap=475). K24 sonrasi -- kuyruk
+        temelli kontrol -- miras UYGULANMAZ."""
+        etiket = blk("Ada:", 10, -25)
+        govde_derin = blk("x" * 200, 10, 0, h=500)  # y=0..500 -- grubun EN ALTA uzanan ogesi
+        govde_kuyruk = blk("y" * 30, 10, 10, h=20)  # y=10..30 -- govde_derin'e gomulu, okuma sirasi SONRAKI (kuyruk)
+        govde3 = blk("z" * 60, 10, 505, h=20)  # birlesik bbox'a gore gap=5 (YAKIN); kuyruga gore gap=475 (KOPUK)
+        out = normalize([etiket, govde_derin, govde_kuyruk, govde3], OcrPreset.DIALOGUE)
+        assert len(out) == 2
+        assert out[0].speaker == "Ada"
+        assert out[0].source_blocks == (0, 1, 2)
+>       assert out[1].speaker is None  # K24: KUYRUK temelli kontrol GERCEK kopusu gorur, miras YOK
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       AssertionError: assert 'Ada' is None
+E        +  where 'Ada' = Segment(text='zzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz', bbox=Rect(x=10, y=505, w=300, h=20, monitor_index=0, dpi_scale=1.0), speaker='Ada', placeholders=(), source_blocks=(3,)).speaker
+
+tests\unit\ocr\test_normalizer.py:1237: AssertionError
+=========================== short test summary info ===========================
+FAILED tests/unit/ocr/test_normalizer.py::test_k23_miras_acik_kapali_bolumleme_degismezi_fuzz
+FAILED tests/unit/ocr/test_normalizer.py::test_k23_kendi_etiketiyle_gelen_kuyruk_mirastan_dolayi_yanlislikla_birlesmiyor
+FAILED tests/unit/ocr/test_normalizer.py::test_k23_invariant_b1_senaryosunda_bolumleme_ayni_speaker_farkli
+FAILED tests/unit/ocr/test_normalizer.py::test_k24_normalize_uzerinden_kuyruk_temelli_kontrol_yanlis_mirasi_onler
+================= 4 failed, 1 passed, 93 deselected in 0.34s ==================

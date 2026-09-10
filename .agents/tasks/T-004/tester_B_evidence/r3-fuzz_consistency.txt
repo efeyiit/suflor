@@ -1,0 +1,9 @@
+============================= test session starts =============================
+platform win32 -- Python 3.12.10, pytest-9.1.1, pluggy-1.6.0 -- C:\Users\pc\AppData\Local\Programs\Python\Python312\python.exe
+cachedir: .pytest_cache
+rootdir: C:\Users\pc\Desktop\efe\çeviri uygulamasý
+collecting ... collected 58 items / 57 deselected / 1 selected
+
+.agents/tasks/T-004/tester_B/test_karar_uyumu_tur3.py::test_r3_should_group_ve_rejection_reason_fuzz_tutarli_sabit_tohum PASSED [100%]
+
+====================== 1 passed, 57 deselected in 0.18s =======================

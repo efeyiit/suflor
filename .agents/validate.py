@@ -134,8 +134,11 @@ def main() -> None:
         # Tester korlugu: delivery.md okunmus olamaz -> ret ise gerekce zorunlu
         if data.get("decision") == "ret" and not (data.get("blocking_issues") or []):
             errors.append("ret verildi ama 'blocking_issues' bos - gerekcesiz ret kabul edilmez")
-        if data.get("decision") == "ret" and not (task_dir / "feedback.md").exists():
-            errors.append("ret verildi ama feedback.md yazilmamis")
+        if data.get("decision") == "ret":
+            # verdict.md -> feedback.md ;  verdict-A.md -> feedback-A.md
+            fb = path.name.replace("verdict", "feedback", 1)
+            if not (task_dir / fb).exists():
+                errors.append(f"ret verildi ama {fb} yazilmamis")
 
     if errors:
         fail(errors)

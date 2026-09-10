@@ -1,0 +1,9 @@
+Olcek sinamasi -- ust uste binen (ayni bbox) bloklar, DIALOGUE preset, medyan sure (7 tekrar)
+==========================================================================================
+n=    1  medyan=   0.0075 ms  cikti_segment_sayisi=1
+n=   30  medyan=   0.1187 ms  cikti_segment_sayisi=1
+n=  100  medyan=   0.4607 ms  cikti_segment_sayisi=1
+n=  500  medyan=   3.5440 ms  cikti_segment_sayisi=1
+n= 1000  medyan=   9.2736 ms  cikti_segment_sayisi=1
+n= 2000  medyan=  26.7302 ms  cikti_segment_sayisi=1
+10000-karakterlik TEK blok: medyan=0.0297 ms

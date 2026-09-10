@@ -1,0 +1,11 @@
+# T-004 TUR 5 / TESTER-B
+# komut: python -m pytest tests/unit/ocr/test_normalizer.py -k test_k14_normalizasyon_butcesi_5ms_medyan -v --no-header -p no:cacheprovider
+
+============================= test session starts =============================
+collecting ... collected 98 items / 97 deselected / 1 selected
+
+tests/unit/ocr/test_normalizer.py::test_k14_normalizasyon_butcesi_5ms_medyan PASSED [100%]
+
+====================== 1 passed, 97 deselected in 0.10s =======================
+
+# exit_code: 0

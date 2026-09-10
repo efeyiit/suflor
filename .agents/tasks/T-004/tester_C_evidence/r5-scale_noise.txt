@@ -1,0 +1,21 @@
+n=2000 `kelime{i}-` -> 1 segment (hyphen kuralı adim 3'te hepsini TEK ogeye indirdi mi: True)
+  -> `_group` bu olcumde 1 ogeyle cagirilir; iki-gecisli yapinin
+     (K23/K24) bu sayilara katkisi YAPISAL olarak ~0'dir.
+
+AYNI olcum 6 kez tekrar (medyan-of-7), makine gurultusu:
+  kosu 1:  24.827 ms
+  kosu 2:  25.577 ms
+  kosu 3:  24.211 ms
+  kosu 4:  24.356 ms
+  kosu 5:  25.065 ms
+  kosu 6:  24.054 ms
+  min=24.054  max=25.577  yayilim=6.3%
+
+TUR 3 (ayni yontem, ayni makine) = 26.461 ms
+TUR 4 (ayni yontem, ayni makine) = 20.138 ms
+TUR 5 (bu kosu)                  = 24.054 .. 25.577 ms
+
+SONUC: TUR 5 degerleri TUR 3 tabanının ALTINDA, TUR 4 tabanının
+USTUNDE -- TUR 4 tabani bu makinedeki dagilimin ALT ucundan bir
+kosu. Bu veri seklinde `_group` tek ogeyle cagirildigi icin fark
+iki-gecisli yapiya ATFEDILEMEZ; makine durumu gurultusudur.

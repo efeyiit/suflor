@@ -1,0 +1,170 @@
+KARAR KIRMIZI TAKIMI 2. GECIS -- SEFIN KENDI KOSUMLARI (PROTOKOL 4.6/6)
+Tarih: tur 6, surum 2 -> surum 3 gecisi. Kum havuzlari: scratchpad/krt6b/
+
+[Y1] Olcu 3'un SURUM 2 fixture'i (Q,P,R) uc uygulamada da AYNI:
+       repo_base (K28 yok)  QPR: [((0, 1, 2), 'Ada')]
+       repo_i    (dogru)    QPR: [((0, 1, 2), 'Ada')]
+       repo_iv   (M4 mutant)QPR: [((0, 1, 2), 'Ada')]
+     -> tek segment, sinir yok. Kararin yazdigi "son segment speaker=None" HICBIRINDE tutmuyor.
+     Depo kokunde de ayni: normalize(QPR) -> [((0,1,2),'Ada')], out[-1].speaker is None -> False
+
+[Y1] DUZELTILMIS fixture (olcu 3'): idx0="raki"@(0,40,240,5) idx1="Ada: "+130X@(0,0,240,18)
+     idx2=88Y+" son-"@(0,20,240,18) idx3=140Z@(0,50,240,18)
+       repo_base   olcu3': [((0, 1, 2), 'Ada'), ((3,), 'Ada')]   <- kirilir (dogru)
+       repo_i      olcu3': [((0, 1, 2), 'Ada'), ((3,), None)]    <- gecer
+       repo_iv     olcu3': [((0, 1, 2), 'Ada'), ((3,), 'Ada')]   <- kirilir (dogru)
+       repo_m4c    olcu3': [((0, 1, 2), 'Ada'), ((3,), 'Ada')]   <- kirilir (dogru)
+       repo_opt1   olcu3': [((0, 1, 2), 'Ada'), ((3,), None)]    <- gecer
+     -> ayirt ediyor.
+
+[Y2] Iki uygulama secenegi, kor tester takimi (tests/unit/ocr + tester_A/B/C):
+       repo_base                                 474 passed, 4 xfailed   TypeError satiri: 0
+       repo_i    (surum 2: varsayilansiz _Item)   70 failed, 407 passed  TypeError satiri: 123
+       repo_opt1 (_group(..., *, blocks=()))       9 failed, 468 passed  TypeError satiri: 0
+     Kor tester dosyalarinda dogrudan _Item(...) insasi: A=23 (4+9+10), B=65 (2+26+37), C=14 -> toplam 102
+     tester_A'da TypeError yutan blok: 6 yer (sonda_r5_bulgu.py:162; test_r5_partition_invariant.py:276,296,397,435,451)
+
+[Y3] `tail` degiskenine yapilan TUM atamalar (src/ocr/normalizer.py):
+       satir 1349: tail = items[0]
+       satir 1357: tail = nxt
+       satir 1366: tail = nxt
+     -> birikmis `current` sorguya HIC girmez; adim-5 yayilimi davranissal olarak gozlenemez.
+
+[D1] K29 kapisi surum 3 (sef yamasi) iki kenarda dogrulandi:
+       satir-BASI `_` sarmasi, gercek ad  -> []                                  (yanlis pozitif YOK)
+       satir-BASI `_` sarmasi, hayali ad  -> [('test_pre_yok','AD',...)]          (yakaliyor)
+       attribute docstring'e hayali ad    -> yakalandi, exit=1                    (yanlis negatif YOK)
+       --selftest exit=0 ; tam kosum: 2 gercek ihlal (normalizer.py:92 ve :203), exit=1
+
+==== 3. GECIS -- SEFIN KENDI KOSUMLARI ====
+[Z1] tester_B/test_karar_uyumu_tur5.py:279 test_r5_k23_normalize_gercekten_miras_ACIK_yola_delege_ediyor
+     docstring sik (b): "(delegasyon anahtar kelimeyi GECMEDIGI icin urun davranisi TAM OLARAK bu
+     varsayilana bagli -- varsayilan False'a cevrilse normalize SESSIZCE mirasi kaybederdi)"
+     -> "apply_inheritance=True acikca yaz" maddesi bu testi kirar. Madde GERI CEKILDI.
+
+[Z2] olcu 3 fixture'i, depo tabaninda uc on ayarda:
+       DIALOGUE : [((0,1,2),'Ada'), ((3,),'Ada')]
+       TOOLTIP  : [((1,),'Ada'), ((0,2),'Ada'), ((3,),'Ada')]
+       SUBTITLE : [((1,),'Ada'), ((0,2),'Ada'), ((3,),'Ada')]
+     -> bolumleme on ayara gore degisiyor; her on ayar kendi bolumlemesiyle pinlenmeli.
+     TOOLTIP'te de son segment tabanda 'Ada' -> on-ayar kapili mutant burada yakalanir.
+
+[Z3] Ikili (y,x) vs uclu (y,x,i) anahtar, source_blocks ARTAN + sorted KARARLI kosulunda:
+       200.000 ornek | esit (y,x) cifti iceren: 69.721 | ikili != uclu siralama: 0
+     -> ucuncu bilesen davranissal NO-OP. "Ikili anahtar esitlikte ayrisir" cumlesi YANLIS idi.
+     Ayni kokten: tail -> current ikamesi de esdeger (current.source_blocks kapsar, okuma-sirasi-son ayni).
+
+==== 4. GECIS -- SEFIN KENDI KOSUMLARI ====
+[W1] KRT'nin diferansiyel surucusu (krt6d/diff_kos.py), sef tarafindan kosuldu.
+     Referans = v4 (dogru uygulama), on ayar basina 4000 girdi, ayrisan girdi sayisi:
+       mutant      DIALOGUE   TOOLTIP  SUBTITLE      MENU   TOPLAM
+       base            1273      1554      1698         0    4525
+       m8k                0      1554      1698         0    3252   (dialogue-kapili)
+       m8s                0         0      1698         0    1698   (subtitle-kapili, max_group_chars>=200)
+       m8s_conf           0         0      1698         0    1698   (subtitle-kapili, confidence>=0.60)
+       m8s_gap            0         0      1698         0    1698   (subtitle-kapili, gap<=0.8)
+       m9                 0         0         0         0       0   (suzulmus blocks -- bu derlemde esik-alti blok YOK)
+       m14                0         0         0         0       0   (ikili anahtar -- ESDEGER, Z3 dogrulandi)
+       m15                0         0         0         0       0   (tail->current -- ESDEGER)
+       m10                0         0         0         0       0   (speaker/text de ikame -- ESDEGER, O7)
+     -> B1 dogrulandi: subtitle-kapili uc mutant dialogue+tooltip'te DOGRU, yalniz subtitle'da bozuk (%42,5).
+     -> B2 dogrulandi (yapisal): diff4.py derleminde her blok confidence=0.9, yani hic esik-alti blok yok,
+        dolayisiyla suzulmus `blocks` indeks kaydirmaz ve m9 olcu 6'yi gecer.
+
+[on ayar tablosu, sef okudu -- kapi kosullarinin neden boyle bolundugu]
+  DIALOGUE conf=0.60 gap=0.8 chars=280 | MENU conf=0.55 gap=0.5 chars=120 should_group=False
+  TOOLTIP  conf=0.65 gap=0.3 chars=200 | SUBTITLE conf=0.55 gap=1.0 chars=160
+
+[sef sondasi -- BASARISIZ deneme, kayda gecer] Sef once kendi derlemini yazdi (1500 girdi, rastgele
+  hyphen/shuffle) ve alti mutantin altisinda da AYNI imzayi aldi (0 ayrisma) -- yani kendi derlemi
+  ayirt etmiyordu. Sebep: on ayar parametrelerini okumadan derlem kurmak. Kayitli ders yinelendi:
+  "beklentiyi yazmadan once parametreyi oku". Sonra KRT'nin surucusu kosuldu (yukarisi).
+
+==== 5. GECIS -- SEFIN KENDI KOSUMLARI ====
+[V1] Iki elemanli kumede sirali[-1] ile sirali[min(1,len-1)] AYNI:
+       (0,2) -> 2 ve 2   AYNI      |   (0,2,5) -> 5 ve 2   AYRISIR
+     Kararin fixture'larinda kuyruk 2 blogu asmiyordu -> off-by-one gorunmezdi.
+     Zincirleme hyphen ile 3 bloklu kuyruk URETILEBILIYOR (sef kosumu):
+       bloklar: "Ada: X*130"@(0,0,240,18) / "Y*40 son-"@(0,20) / "z*40 son-"@(0,40) / "w*40"@(0,60,240,5) / "Z*150"@(0,90)
+       sorgulanan (tail.sb, nxt.sb): [((1, 2, 3), (4,))]   -> max len(tail.sb) = 3
+     NOT: zincir devamlari KUCUK harfle baslamak zorunda (K5), yoksa zincir kopar.
+
+[V2] _group -> _group_rejection_reason cagrilari (AST, sef kosumu):
+       satir 1262: 3 konumlu argum., anahtar yok
+       satir 1351: 3 konumlu argum., anahtar yok
+       satir 1363: 3 konumlu argum., anahtar ['ignore_length']
+     -> kanca (a, b, params) goruyor; tail/nxt kimligi imzada YOK, yalniz source_blocks'tan
+        geri kazanilabiliyor -> K28'e ONKOSUL olarak yazildi.
+
+[O3] Kor tester takimi KARARSIZ (sef, 3 kosum):
+       1 failed, 473 passed, 4 xfailed
+       1 failed, 473 passed, 4 xfailed
+       474 passed, 4 xfailed
+     Kirilan: tester_C::test_olcek_tur4_ile_karsilastirma_iki_gecisli_group_kotulesmemis (yuke duyarli)
+     tester_C TEK BASINA: 125 passed x4 kosum -> kararli. Tur 6 kapisi olcek testlerini ayri kosar.
+
+==== OLCU KITI DOGRULAMASI (olcu_kiti.py, sef; 10 kum uygulamasi, on ayar basina 2500 girdi) ====
+uygulama     DIALOGUE            TOOLTIP             SUBTITLE            fixture'lar
+dogru(w_v4)  ayr=0 pat=0         ayr=0 pat=0         ayr=0 pat=0         olcu3D/3T/3b OK
+m26 off-by-1 ayr=2295            ayr=3173            ayr=3616            -
+m8s subtitle ayr=0               ayr=0               ayr=6707            -
+m9  suzulmus ayr=207 pat=638     ayr=122 pat=875     ayr=51 pat=983      -
+m4  indeks   ayr=1429            ayr=2425            ayr=2881            olcu3D/3T KIRIK
+m5  sag nxt  ayr=1735            ayr=3464            ayr=4204            -
+m8k dialogue ayr=0               ayr=5572            ayr=6707            olcu3T KIRIK
+m22 sb yeniden yazar: uclu_sol=0 (alt sinir ihlali -> gurultulu kirilir)
+m10 esdeger  ayr=0               ayr=0               ayr=0               hepsi OK  (dogru: isaretlenmiyor)
+m14 esdeger  ayr=0               ayr=0               ayr=0               hepsi OK  (dogru: isaretlenmiyor)
+
+Kitin kendi alt sinirlari (dogru uygulamada):
+  DIALOGUE sinir=3273 coklu_sol=2775 uclu_sol=2311 coklu_sag=1808 esik_alti=1084
+  TOOLTIP  sinir=5796 coklu_sol=3860 uclu_sol=3196 coklu_sag=3625 esik_alti=1084
+  SUBTITLE sinir=7081 coklu_sol=4443 uclu_sol=3642 coklu_sag=4430 esik_alti=1084
+  python .agents/tasks/T-004/olcu_kiti.py -> KIT: TEMIZ (exit 0)
+
+==== 6. GECIS -- SEFIN KENDI KOSUMLARI (kit surum 1 KIRILDI) ====
+Kit surum 1, kacan mutantlar (uc on ayarda da ayrisma=0, fixture'lar OK):
+  w_n06 | DIA:ayr=0 uclu=861  TOO:ayr=0 uclu=2892 SUB:ayr=0 uclu=3655 | olcu3D=OK olcu3T=OK olcu3b=OK
+  w_n10 | DIA:ayr=0 uclu=531  TOO:ayr=0 uclu=390  SUB:ayr=0 uclu=228  | hepsi OK
+  w_n11 | DIA:ayr=0 uclu=2311 TOO:ayr=0 uclu=3196 SUB:ayr=0 uclu=3642 | hepsi OK
+Kok sebep: referans_cifti, MUTANTIN KENDI verdigi source_blocks'tan turuyordu.
+
+Kit SURUM 2 ile ayni mutantlar:
+  w_n06 | DIA:KIMLIK=2615 TOO:KIMLIK=1542 SUB:KIMLIK=930
+  w_n08 | DIA:KIMLIK=3700 TOO:KIMLIK=6449 SUB:KIMLIK=8047 | o3KIRIK/o3bKIRIK
+  w_n10 | DIA:KIMLIK=3367+eksik:derin_sol TOO:KIMLIK=4893+eksik SUB:KIMLIK=5900+eksik
+  w_n19 | DIA:KAPSAM=5990 TOO:KAPSAM=5664 SUB:KAPSAM=5519
+  w_n20 | DIA:KAPSAM=4992 TOO:KAPSAM=4679 SUB:KAPSAM=4485
+  w_n11 | DIA:geo=308 TOO:geo=353 SUB:geo=358      (ASCII-disi kalibrasyonundan SONRA)
+  w_n13 | DIA:geo=264 TOO:geo=286 SUB:geo=288
+  w_n14 | DIA:geo=734 TOO:geo=1073 SUB:geo=1241
+  w_n15 | DIA:geo=135 TOO:geo=337 SUB:geo=430
+  w_n17 | DIA:geo=125 TOO:geo=315 SUB:geo=398
+  w_n05 | uc on ayar TEMIZ ama olcu3 fixture KIRIK  (fixture yakaliyor)
+  w_n22 | TEMIZ   w_n24 | TEMIZ   (KRT: davranissal ESDEGER -- dogru sekilde isaretlenmiyor)
+  w_v4  | TEMIZ hepsi   (dogru uygulama)
+KACAN IKI MUTANT (kayda gecti, gizlenmiyor):
+  w_n18 (fazladan ignore_length=False kosulu) ve w_n23 (gorunum gecisi ters yon) -- ikisi de
+  sorgu YAPISINDA degil DAVRANISTA ayrisiyor. Kite eklenmedi (kitin _group'un miras kararini
+  yeniden uygulamasi gerekirdi); Tester-B'nin M10/M11 mutant yukumlulugune cevrildi.
+
+Kit surum 2 kendini sinamasi (dogru uygulamada, on ayar basina 2500 girdi):
+  DIALOGUE sinir=3802 coklu=3013 uclu=2532 derin=278 sag=2292 ascii_disi=451 yoz=2031 neg=142
+           buyuk=786 ikikon=145 kapsam=9078 esik_alti=1241 | kimlik=0 kapsam_ihlali=0 sira=0
+  TOOLTIP  sinir=6377 coklu=4188 uclu=3476 derin=295 sag=4117 ascii_disi=524 ...
+  SUBTITLE sinir=7683 coklu=4820 uclu=3943 derin=296 sag=4951 ascii_disi=541 ...
+  KIT: TEMIZ (exit 0)
+Kalibrasyon notu: ASCII-disi sinif ilk halinde 31/59/153 sorgu uretiyordu (alt sinir 100).
+  Sebep: CJK/RTL karakterler kucuk harf DEGIL, bu yuzden _merge_hyphenated zinciri kopuyor ve
+  kuyruk tek bloklu kaliyor. Devam satirlari ASCII kucuk harfle BASLAYACAK bicimde duzeltildi
+  -> 451/524/541.
+
+==== KIT ICE AKTARIMI -- SEF COZDU (6. gecisin entegrasyon bulgusu) ====
+ONCE:  tests/unit/ocr icinden `from olcu_kiti import ...` -> ModuleNotFoundError (pytest exit 2)
+       depoda conftest.py YOK, pytest.ini/pyproject.toml/setup.cfg/tox.ini YOK
+COZUM: sefe ait IKI conftest.py -- tests/unit/ocr/conftest.py ve .agents/tasks/T-004/conftest.py
+       (depo kokunu ve kit dizinini sys.path'e ekler; hicbir gorevin owns'inda DEGIL)
+SONRA: tests/unit/ocr/_kit_import_sondasi.py   exit=0  1 passed
+       tests/unit/ocr                          exit=0  98 passed
+       .agents/tasks/T-004/tester_B            exit=0  117 passed   (TEK BASINA -- onceden patliyordu)
+       tests/unit (tam takim)                  795 passed           (regresyon yok)

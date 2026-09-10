@@ -1,0 +1,40 @@
+=== K15 -- _should_group matris (bes satir), duzeltilmis konusmaci esleme ===
+  X/X          a.speaker= 'Ada' b.speaker= 'Ada' -> should_group = True
+  X/None       a.speaker= 'Ada' b.speaker=  None -> should_group = True
+  None/None    a.speaker=  None b.speaker=  None -> should_group = True
+  None/Y       a.speaker=  None b.speaker= 'Efe' -> should_group = False
+  X/Y(!=X)     a.speaker= 'Ada' b.speaker= 'Efe' -> should_group = False
+
+=== K15 -- tam pipeline, iki ayri uc-bloklu konusmaci govdesi (kritik) ===
+  speaker='Ada' text='Bu uzun bir cumledir.' source_blocks=(0, 1, 2)
+  speaker='Efe' text='Bu da baska bir cumle.' source_blocks=(3, 4, 5)
+  segment sayisi = 2 (beklenen: 2, konusmacilar KARISMAMALI)
+
+=== K16 -- yozlasmis h/w kosulsuz red (tam pipeline) ===
+  h=0,gap=0                -> 2 segment ['Merhaba', 'dunya']
+  negatif h, cakisiyor     -> 2 segment ['Merhaba', 'dunya']
+  w=0                      -> 2 segment ['Merhaba', 'dunya']
+  negatif w                -> 2 segment ['Merhaba', 'dunya']
+
+=== K17 -- ayirac kumesi saldirilari ===
+  fullwidth colon        -> [('勇者', 'こんにちは')]
+  leading separator      -> [(None, '：Merhaba')]
+  multi-sep leftmost wins-> [('Ada', 'Efe:Merhaba')]
+  fullwidth-digit clock  -> [(None, '１２：３０ desu')]
+
+=== K18 -- NFKC istisna kapsam testi ===
+  fullwidth ?/! kept     -> ['？', '！']
+  U+203C (NFKC->'!!')    -> [] (beklenen: [] -- atilmali, cift-karakter NFKC istisna DISI)
+  U+FE16 (NFKC->'?')     -> ['︖'] (beklenen: korunmali, tek-karakter NFKC ile '?'e esit)
+
+=== K9 gozlem -- ardisik iki bos etiket ===
+  speaker='Efe' text='Merhaba' source_blocks=(0, 1, 2)
+  (Ada'nin indeksi (0) dusmuyor, Efe segmentine katiliyor -- K8'in 4 ACIK garantisi ihlal edilmiyor, bloke edici DEGIL)
+
+=== Regresyon: K4/K5/K6/K7/K10 (K15-K18 tarafindan etkilenmemis olmali) ===
+  K6 tekrar/sira         -> ('%s', '%s')
+  K6 '50%' placeholder   -> () (beklenen: bos tuple)
+  K7 esige esit kalir    -> ['tam esik']
+  K10 hyphen-merge monitor mismatch -> ValueError: birlesecek bloklarin monitor_index/dpi_scale degerleri uyusmuyor: (0, 1.0) != (1, 1.0)
+  K10 BIRLESMEYEN iki farkli-monitor blok -> hata YOK, ayri segmentler: ['a', 'b'] (dogru: K10 SADECE birlesim DENENDIGINDE devreye girer, MENU'de gruplama+hyphen yok -> birlesim hic denenmiyor)
+  K4 tek kanji korunur   -> ['力']

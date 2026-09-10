@@ -1,0 +1,6 @@
+TUR 2 -- ust-uste binen bloklarda olcek zaman olcumu (K15/K16 sonrasi)
+Karsilastirma: TUR 1 (tester_C_evidence/scale_timing.txt) n=500->~3.5ms n=1000->~9.3ms n=2000->~26.7ms
+
+n=500 ust-uste-binen (hepsi ayni bbox.y=100,x=100) -> medyan 3.443 ms (7 tekrar)
+n=1000 ust-uste-binen (hepsi ayni bbox.y=100,x=100) -> medyan 9.271 ms (7 tekrar)
+n=2000 ust-uste-binen (hepsi ayni bbox.y=100,x=100) -> medyan 27.069 ms (7 tekrar)

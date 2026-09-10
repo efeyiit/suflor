@@ -1,0 +1,15 @@
+--- PYTHONHASHSEED=1 ---
+('Birinci satir ikinci satir devam', 'Ada', (), (0, 1, 2), Rect(x=10, y=22, w=300, h=42, monitor_index=0, dpi_scale=1.0))
+('Ucuncu konusmaci satiri', 'Efe', (), (3, 4), Rect(x=10, y=88, w=300, h=20, monitor_index=0, dpi_scale=1.0))
+('この町はとても 大きいですね ？ ！ ﹖', '勇者', (), (5, 6, 7, 8, 9, 10), Rect(x=10, y=132, w=300, h=108, monitor_index=0, dpi_scale=1.0))
+('well-known kelime {0} adet %s 50% 50%s 力 가 Ж', None, ('{0}', '%s', '%s'), (14, 15, 16, 17, 18, 19, 20, 21), Rect(x=10, y=308, w=300, h=174, monitor_index=0, dpi_scale=1.0))
+--- PYTHONHASHSEED=99999 ---
+('Birinci satir ikinci satir devam', 'Ada', (), (0, 1, 2), Rect(x=10, y=22, w=300, h=42, monitor_index=0, dpi_scale=1.0))
+('Ucuncu konusmaci satiri', 'Efe', (), (3, 4), Rect(x=10, y=88, w=300, h=20, monitor_index=0, dpi_scale=1.0))
+('この町はとても 大きいですね ？ ！ ﹖', '勇者', (), (5, 6, 7, 8, 9, 10), Rect(x=10, y=132, w=300, h=108, monitor_index=0, dpi_scale=1.0))
+('well-known kelime {0} adet %s 50% 50%s 力 가 Ж', None, ('{0}', '%s', '%s'), (14, 15, 16, 17, 18, 19, 20, 21), Rect(x=10, y=308, w=300, h=174, monitor_index=0, dpi_scale=1.0))
+--- PYTHONHASHSEED=random ---
+('Birinci satir ikinci satir devam', 'Ada', (), (0, 1, 2), Rect(x=10, y=22, w=300, h=42, monitor_index=0, dpi_scale=1.0))
+('Ucuncu konusmaci satiri', 'Efe', (), (3, 4), Rect(x=10, y=88, w=300, h=20, monitor_index=0, dpi_scale=1.0))
+('この町はとても 大きいですね ？ ！ ﹖', '勇者', (), (5, 6, 7, 8, 9, 10), Rect(x=10, y=132, w=300, h=108, monitor_index=0, dpi_scale=1.0))
+('well-known kelime {0} adet %s 50% 50%s 力 가 Ж', None, ('{0}', '%s', '%s'), (14, 15, 16, 17, 18, 19, 20, 21), Rect(x=10, y=308, w=300, h=174, monitor_index=0, dpi_scale=1.0))

@@ -1,0 +1,4 @@
+denetlenen: normalizer.py, presets.py
+
+TEMIZ: saf, mutable global yok, surecler arasi deterministik
+EXIT:0

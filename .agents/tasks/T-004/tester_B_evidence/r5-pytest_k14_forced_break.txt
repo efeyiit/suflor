@@ -1,0 +1,16 @@
+# T-004 TUR 5 / TESTER-B
+# komut: python -m pytest .agents/tasks/T-004/tester_B -k k14 -v --no-header -p no:cacheprovider
+
+============================= test session starts =============================
+collecting ... collected 117 items / 111 deselected / 6 selected
+
+.agents/tasks/T-004/tester_B/test_karar_uyumu.py::test_k14_gercek_test_dosyasinda_assert_olarak_duruyor PASSED [ 16%]
+.agents/tasks/T-004/tester_B/test_karar_uyumu.py::test_k14_assertion_imkansiz_esikle_gercekten_kiriliyor PASSED [ 33%]
+.agents/tasks/T-004/tester_B/test_karar_uyumu_tur3.py::test_r3_k14_assertion_imkansiz_esikle_gercekten_kiriliyor PASSED [ 50%]
+.agents/tasks/T-004/tester_B/test_karar_uyumu_tur3.py::test_r3_k14_gercek_test_dosyasinda_hala_gercek_assert PASSED [ 66%]
+.agents/tasks/T-004/tester_B/test_karar_uyumu_tur5.py::test_r5_k14_gercek_testin_kendi_govdesi_imkansiz_esikle_kiriliyor PASSED [ 83%]
+.agents/tasks/T-004/tester_B/test_karar_uyumu_tur5.py::test_r5_k14_gercek_testte_hala_gercek_assert_ve_skip_yok PASSED [100%]
+
+====================== 6 passed, 111 deselected in 0.15s ======================
+
+# exit_code: 0

@@ -1,0 +1,10 @@
+K23 DEGISMEZ denetimi -- normalizer.py (TUR 5, DUZELTILMIS)
+sabit tohum: 20260910
+denenen girdi sayisi: 2500
+kullanilan on ayarlar: dialogue, menu, tooltip, subtitle (donusumlu)
+uretici: %50 genel rastgele (_k23_general_random_blocks, yozlasmis geometri dahil) + %50 hedefli B1-yapili (_k23_targeted_boundary_blocks)
+karsilastirilan alanlar: segment sayisi, text, bbox, placeholders, source_blocks (speaker HARIC)
+bulunan fark sayisi: 0
+ilk fark: None
+
+SONUC: DEGISMEZ SAGLANDI (0 fark)

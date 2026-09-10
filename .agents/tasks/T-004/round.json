@@ -1,0 +1,28 @@
+{
+  "task": "T-004",
+  "round": 5,
+  "tur1": {
+    "A": "ret",
+    "B": "onay",
+    "C": "ret",
+    "bloke_edici": 4
+  },
+  "tur2": {
+    "A": "onay",
+    "B": "onay",
+    "C": "onay"
+  },
+  "tur3_acilis_sebebi": "sef, tester-C'nin 'bloke etmeyen' iki notundan birini yeniden siniflandirdi",
+  "yeni_kararlar": [
+    "K19 uzunluk-bolunmesinde konusmaci mirasi",
+    "K20 NFKC iddiasi olgusal duzeltme"
+  ],
+  "mercek_sayisi": 2,
+  "mercek_gerekcesi": "A'nin garanti-alani mercegi tur 2'de izgara+fuzz ile tukendi; K19/K20 yeni garanti alani acmiyor",
+  "tur5": {
+    "A": "ret (R5-1: tail adim 3'ten sonra ham degil, K24 x K2 x K5)",
+    "B": "bekleniyor",
+    "C": "bekleniyor",
+    "K23_durumu": "SAGLANDI - A 12800 kosum 0 fark, implementer 2500 kosum 0 fark"
+  }
+}

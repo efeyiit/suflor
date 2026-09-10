@@ -1,0 +1,36 @@
+==============================================================================
+K19 -- uzunluk bolunmesinde kuyruk speaker MIRAS alir
+==============================================================================
+DIALOGUE.max_group_chars = 280
+girdi: 1 etiket blogu + 7 govde blogu (her biri 60 karakter, gap=2px)
+cikti: 2 segment
+  [0] speaker='Ada'  len=243  source_blocks=(0, 1, 2, 3, 4)
+  [1] speaker='Ada'  len=182  source_blocks=(5, 6, 7)
+SONUC: HER segment speaker='Ada' -- K19 dogrulandi (uzunluk-kaynakli miras)
+
+------------------------------------------------------------------------------
+K19 -- ayni senaryo GEOMETRIK bosluk ile (miras YOK, None kalmali)
+------------------------------------------------------------------------------
+  [0] speaker='Ada'  text='ilk parca'
+  [1] speaker=None  text='ikinci parca'
+SONUC: kuyruk speaker=None KALDI (bolunme sebebi geometri, miras YOK) -- dogru
+
+==============================================================================
+K15 matrisi (K19 sonrasi hala DOGRUDAN _should_group ile GECERLI)
+==============================================================================
+  X/X          a='Ada'  b='Ada'  -> _should_group=True   beklenen=True   [OK]
+  X/None       a='Ada'  b=None   -> _should_group=True   beklenen=True   [OK]
+  None/None    a=None   b=None   -> _should_group=True   beklenen=True   [OK]
+  None/Y       a=None   b='Efe'  -> _should_group=False  beklenen=False  [OK]
+  X/Y          a='Ada'  b='Efe'  -> _should_group=False  beklenen=False  [OK]
+
+==============================================================================
+K20 -- NFKC ile ?/!ye acilan ALTI karakter (sefin taramasi)
+==============================================================================
+  U+FE15 PRESENTATION FORM FOR VERTICAL EXCLAMATION MARK      cat=Po  NFKC='!'  korundu=True
+  U+FE16 PRESENTATION FORM FOR VERTICAL QUESTION MARK         cat=Po  NFKC='?'  korundu=True
+  U+FE56 SMALL QUESTION MARK                                  cat=Po  NFKC='?'  korundu=True
+  U+FE57 SMALL EXCLAMATION MARK                               cat=Po  NFKC='!'  korundu=True
+  U+FF01 FULLWIDTH EXCLAMATION MARK                           cat=Po  NFKC='!'  korundu=True
+  U+FF1F FULLWIDTH QUESTION MARK                              cat=Po  NFKC='?'  korundu=True
+SONUC: alti karakterin HEPSI tek-karakter blok olarak korundu

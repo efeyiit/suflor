@@ -1,0 +1,31 @@
+# T-004 TUR 5 / TESTER-B
+# komut: python -m pytest .agents/tasks/T-004/tester_B -k k23 -v --no-header -p no:cacheprovider
+
+============================= test session starts =============================
+collecting ... collected 117 items / 96 deselected / 21 selected
+
+.agents/tasks/T-004/tester_B/test_k23_mutant_sondasi_tur5.py::test_r5_mutant_sonda_kontrol_kosumu_temiz PASSED [  4%]
+.agents/tasks/T-004/tester_B/test_k23_mutant_sondasi_tur5.py::test_r5_mutant_m1_bolumlemeye_sizinti_k23u_kiriyor PASSED [  9%]
+.agents/tasks/T-004/tester_B/test_k23_mutant_sondasi_tur5.py::test_r5_mutant_m2_m3_k24u_kiriyor_ama_k23u_kirmiyor[M2_k24_sorgusu_kaldirildi] PASSED [ 14%]
+.agents/tasks/T-004/tester_B/test_k23_mutant_sondasi_tur5.py::test_r5_mutant_m2_m3_k24u_kiriyor_ama_k23u_kirmiyor[M3_tail_yerine_current] PASSED [ 19%]
+.agents/tasks/T-004/tester_B/test_k23_mutant_sondasi_tur5.py::test_r5_mutant_m2_k21_ayrimini_da_bozuyor PASSED [ 23%]
+.agents/tasks/T-004/tester_B/test_karar_uyumu_tur5.py::test_r5_k23_group_gercekten_iki_gecisten_olusuyor PASSED [ 28%]
+.agents/tasks/T-004/tester_B/test_karar_uyumu_tur5.py::test_r5_k23_bolumleme_gecisinde_hicbir_speaker_mutasyonu_yok PASSED [ 33%]
+.agents/tasks/T-004/tester_B/test_karar_uyumu_tur5.py::test_r5_k23_apply_inheritance_tam_olarak_tek_bir_yerde_okunur PASSED [ 38%]
+.agents/tasks/T-004/tester_B/test_karar_uyumu_tur5.py::test_r5_k23_goruntu_gecisi_yalnizca_speaker_gunceller PASSED [ 42%]
+.agents/tasks/T-004/tester_B/test_karar_uyumu_tur5.py::test_r5_k23_goruntu_gecisi_hicbir_gruplama_kararina_geri_beslenmez PASSED [ 47%]
+.agents/tasks/T-004/tester_B/test_karar_uyumu_tur5.py::test_r5_k23_normalize_impl_bayragi_yalniz_group_cagrisina_iletir PASSED [ 52%]
+.agents/tasks/T-004/tester_B/test_karar_uyumu_tur5.py::test_r5_k23_normalize_gercekten_miras_ACIK_yola_delege_ediyor PASSED [ 57%]
+.agents/tasks/T-004/tester_B/test_karar_uyumu_tur5.py::test_r5_k23_normalize_impl_genel_apiye_sizmiyor PASSED [ 61%]
+.agents/tasks/T-004/tester_B/test_karar_uyumu_tur5.py::test_r5_k23_bolumleme_degismezi_kendi_karisik_ureticimle PASSED [ 66%]
+.agents/tasks/T-004/tester_B/test_karar_uyumu_tur5.py::test_r5_k23_bolumleme_degismezi_monolog_ureticiyle_ve_bos_degil PASSED [ 71%]
+.agents/tasks/T-004/tester_B/test_karar_uyumu_tur5.py::test_r5_k23_b1_senaryosu_kendi_etiketli_kuyruk_yapismiyor PASSED [ 76%]
+.agents/tasks/T-004/tester_B/test_karar_uyumu_tur5.py::test_r5_k23_b1_japonca_uc_konusmaci_zinciri PASSED [ 80%]
+.agents/tasks/T-004/tester_B/test_karar_uyumu_tur5.py::test_r5_k23_zincirleme_miras_ve_geometrik_kopusta_kesilme PASSED [ 85%]
+.agents/tasks/T-004/tester_B/test_karar_uyumu_tur5.py::test_r5_k23_ayni_y_yanyana_ve_cok_kucuk_h_bolumleme_ayni PASSED [ 90%]
+.agents/tasks/T-004/tester_B/test_karar_uyumu_tur5.py::test_r5_tur5_kararlari_modul_docstringinde_belgeli[## K23/K24] PASSED [ 95%]
+.agents/tasks/T-004/tester_B/test_karar_uyumu_tur5.py::test_r5_tur5_kararlari_modul_docstringinde_belgeli[K23 -- DEGISMEZ] PASSED [100%]
+
+====================== 21 passed, 96 deselected in 2.16s ======================
+
+# exit_code: 0

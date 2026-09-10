@@ -1,0 +1,8 @@
+# T-004 TUR 5 / TESTER-B
+# komut: python .agents/tasks/T-004/purity_check.py
+
+denetlenen: normalizer.py, presets.py
+
+TEMIZ: saf, mutable global yok, surecler arasi deterministik
+
+# exit_code: 0

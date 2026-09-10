@@ -1,0 +1,7 @@
+cap = 280
+reason when BOTH length-exceeded AND h=0 degenerate simultaneously: length
+(if 'length' -> K19 will INHERIT speaker despite geometry ALSO being broken)
+(if 'height' -> K19 will NOT inherit, geometry priority wins)
+
+  speaker='Ada' len=288 src=(0, 1) text[:30]="Ada'nin sozu xxxxxxxxxxxxxxxxx"
+  speaker='Ada' len=50 src=(2,) text[:30]='yyyyyyyyyyyyyyyyyyyyyyyyyyyyyy'

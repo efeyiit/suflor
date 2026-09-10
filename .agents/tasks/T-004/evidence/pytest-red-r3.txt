@@ -1,0 +1,48 @@
+FF...                                                                    [100%]
+================================== FAILURES ===================================
+________ test_k19_uzunluk_bolunmesinde_kuyruk_speaker_miras_alir_ascii ________
+
+    def test_k19_uzunluk_bolunmesinde_kuyruk_speaker_miras_alir_ascii() -> None:
+        """"Ada:" etiketini COK sayida (~60 karakterlik) govde bloðu takip
+        ediyor -- birlikte `max_group_chars`'i (DIALOGUE) kesinlikle asiyor,
+        bu yuzden en az bir UZUNLUK-kaynakli bolunme olusuyor. TUR 2'de (K15
+        dahil) boyle bir bolunmenin kuyrugu speaker=None KALIYORDU (bilgi
+        kaybi -- sef_karari-tur3.md ornegiyle BIREBIR ayni sinif hata); K19
+        ile HER kuyruk segment Ada'yi MIRAS alir. Geometri (dikey bosluk=2px,
+        tam yatay ortusme) gruplamayi KESMEYECEK kadar sikidir -- bolunmenin
+        TEK sebebi uzunluktur."""
+        cap = get_params(OcrPreset.DIALOGUE).max_group_chars
+        etiket = blk("Ada:", 10, 0)
+        govde_metni = "x" * 60
+        n = (cap // 60) + 3  # cap'i kesinlikle asacak kadar govde blogu
+        govde = [blk(govde_metni, 10, 22 * (i + 1)) for i in range(n)]
+        out = normalize([etiket, *govde], OcrPreset.DIALOGUE)
+        assert len(out) >= 2  # UZUNLUK siniri en az bir bolunme yaratti
+>       assert all(s.speaker == "Ada" for s in out)  # K19: HER kuyruk MIRAS aldi
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       assert False
+E        +  where False = all(<generator object test_k19_uzunluk_bolunmesinde_kuyruk_speaker_miras_alir_ascii.<locals>.<genexpr> at 0x0000022D7ACB0380>)
+
+tests\unit\ocr\test_normalizer.py:693: AssertionError
+_______ test_k19_uzunluk_bolunmesinde_kuyruk_speaker_miras_alir_japonca _______
+
+    def test_k19_uzunluk_bolunmesinde_kuyruk_speaker_miras_alir_japonca() -> None:
+        """Ayni senaryo Japonca'da -- `len()` codepoint sayar, coklu-baytlik
+        karakterlerde de K19 AYNI sekilde calisir (`normalize` zaten dil
+        parametresi almaz, K5 gerekcesiyle AYNI ilke)."""
+        cap = get_params(OcrPreset.DIALOGUE).max_group_chars
+        etiket = blk("\u52c7\u8005:", 10, 0)
+        govde_metni = "\u3042" * 60
+        n = (cap // 60) + 3
+        govde = [blk(govde_metni, 10, 22 * (i + 1)) for i in range(n)]
+        out = normalize([etiket, *govde], OcrPreset.DIALOGUE)
+        assert len(out) >= 2
+>       assert all(s.speaker == "\u52c7\u8005" for s in out)
+E       assert False
+E        +  where False = all(<generator object test_k19_uzunluk_bolunmesinde_kuyruk_speaker_miras_alir_japonca.<locals>.<genexpr> at 0x0000022D7AE2CA00>)
+
+tests\unit\ocr\test_normalizer.py:710: AssertionError
+=========================== short test summary info ===========================
+FAILED tests/unit/ocr/test_normalizer.py::test_k19_uzunluk_bolunmesinde_kuyruk_speaker_miras_alir_ascii
+FAILED tests/unit/ocr/test_normalizer.py::test_k19_uzunluk_bolunmesinde_kuyruk_speaker_miras_alir_japonca
+2 failed, 3 passed, 67 deselected in 0.26s

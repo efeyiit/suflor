@@ -1,0 +1,11 @@
+============================= test session starts =============================
+platform win32 -- Python 3.12.10, pytest-9.1.1, pluggy-1.6.0 -- C:\Users\pc\AppData\Local\Programs\Python\Python312\python.exe
+cachedir: .pytest_cache
+rootdir: C:\Users\pc\Desktop\efe\çeviri uygulamasý
+collecting ... collected 58 items / 55 deselected / 3 selected
+
+.agents/tasks/T-004/tester_B/test_karar_uyumu_tur3.py::test_r3_k20_bagimsiz_tam_unicode_taramasi_docstringle_birebir_eslesir PASSED [ 33%]
+.agents/tasks/T-004/tester_B/test_karar_uyumu_tur3.py::test_r3_k20_docstring_listesi_koddan_ayri_bir_beyaz_liste_DEGIL PASSED [ 66%]
+.agents/tasks/T-004/tester_B/test_karar_uyumu_tur3.py::test_r3_k20_docstring_beyaz_liste_degil_ibaresini_tasir PASSED [100%]
+
+====================== 3 passed, 55 deselected in 0.26s =======================

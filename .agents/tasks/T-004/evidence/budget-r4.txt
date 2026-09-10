@@ -1,0 +1,10 @@
+K14 butce olcumu (TUR 4 -- K21/K22 sonrasi yeniden olcum)
+n_calls=50  preset=DIALOGUE  blocks=30  ~40 char/block
+medyan: 0.1521 ms  (butce: <= 5.0 ms)
+min: 0.1477 ms  max: 0.2539 ms  p95~: 0.1811 ms
+SONUC: GECTI
+
+Olcek dogrulamasi (Tester-C tur 2/3 bulgusu -- O(n)'den kotu, bilinen sinir, bu turde DEGISMEDI):
+  n=  500  medyan=   2.744 ms
+  n= 1000  medyan=   7.032 ms
+  n= 2000  medyan=  20.138 ms

@@ -1,0 +1,32 @@
+=== K21 -- _group_rejection_reason ignore_length davranisi ===
+DIALOGUE max_group_chars=280
+
+sadece uzunluk (gap=2, tam ortusme)           orijinal='length'   ignore_length=None       -> miras=VAR
+uzunluk + BUYUK dikey bosluk (gap=980)        orijinal='length'   ignore_length='gap'      -> miras=YOK
+uzunluk + h=0 (yozlasmis)                     orijinal='length'   ignore_length='height'   -> miras=YOK
+uzunluk + w=0 (yozlasmis)                     orijinal='length'   ignore_length='width'    -> miras=YOK
+uzunluk + yetersiz yatay ortusme              orijinal='length'   ignore_length='overlap'  -> miras=YOK
+uzunluk + farkli konusmaci                    orijinal='speaker'  ignore_length='speaker'  -> miras=YOK
+
+=== K21 -- uctan uca normalize() ornekleri ===
+
+-- sadece uzunluk (yakin bloklar) --
+  speaker='Ada'  src=(0, 1) len=150
+  speaker='Ada'  src=(2,) len=150
+
+-- uzunluk + BUYUK dikey bosluk (BILESIK -- sef_karari-tur4.md ornegi) --
+  speaker='Ada'  src=(0, 1) len=150
+  speaker=None   src=(2,) len=150
+
+-- uc parcali zincir: 1. bolunme SADECE uzunluk (miras VAR),
+   2. bolunme BILESIK (miras YOK) --
+  speaker='Ada'  src=(0, 1) len=150
+  speaker='Ada'  src=(2,) len=150
+  speaker=None   src=(3,) len=150
+
+=== K15 matrisinin bes satiri -- K19/K21 SONRASI da degismedi ===
+  a='Ada'  b='Ada'  -> gruplanir=True   (beklenen=True  ) [OK]
+  a='Ada'  b=None   -> gruplanir=True   (beklenen=True  ) [OK]
+  a=None   b=None   -> gruplanir=True   (beklenen=True  ) [OK]
+  a=None   b='Efe'  -> gruplanir=False  (beklenen=False ) [OK]
+  a='Ada'  b='Efe'  -> gruplanir=False  (beklenen=False ) [OK]

@@ -1,0 +1,5 @@
+K14 butce olcumu (TUR 3 -- K19/K20 sonrasi yeniden olcum)
+n_calls=50  preset=DIALOGUE  blocks=30  ~40 char/block
+medyan: 0.1776 ms  (butce: <= 5.0 ms)
+min: 0.1666 ms  max: 0.8518 ms  p95~: 0.2789 ms
+SONUC: GECTI

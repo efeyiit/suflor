@@ -1,0 +1,73 @@
+.......................FF.................                               [100%]
+================================== FAILURES ===================================
+__ test_bbox_zero_height_touching_blocks_DOES_group_contradicting_docstring ___
+
+    def test_bbox_zero_height_touching_blocks_DOES_group_contradicting_docstring() -> None:
+        """KIRMIZI/BULGU TESTI -- MERCEK A'nin ana bulgusu.
+    
+        normalizer.py modul docstring'i (K10 bolumu) ACIKCA soyluyor:
+    
+            "...bbox.h == 0 veya bbox.w == 0 durumunda (yozlasmis girdi) bolme
+            hatasi OLUSMAZ; bu durumlarda ilgili kosul basitce 'gruplama yok'
+            tarafina duser (bkz. _should_group govdesi)."
+    
+        Bu KOSULSUZ bir iddia: "h==0 -> gruplama yok". Ama `_should_group`
+        govdesine bakildiginda (normalizer.py:484-491):
+    
+            gap = b.bbox.y - a.bbox.bottom
+            ref_height = min(a.bbox.h, b.bbox.h)
+            if ref_height > 0:
+                if not (gap < params.max_vertical_gap_ratio * ref_height):
+                    return False
+            else:                       # <-- h==0 (veya negatif) BURAYA DUSER
+                if gap > 0:
+                    return False        # <-- SADECE gap>0 ise reddedilir!
+    
+        yani `ref_height <= 0` VE `gap <= 0` (iki kutu dikeyde DEGIYOR/CAKISIYOR)
+        oldugunda kod REDDETMEZ -- yatay ortusme kosuluna GECER ve o da
+        saglaniyorsa GRUPLAMA GERCEKLESIR. Asagidaki iki blok tam bu durumu
+        kurar: ikisi de h=0, ayni y'de (gap=0), tam yatay ortusmeli.
+    
+        Beklenen (docstring'in soyledigi): 2 ayri Segment ("gruplama yok").
+        Gercek (kodun yaptigi):            1 birlesmis Segment.
+    
+        Bu test BILEREK docstring'in iddiasini assert eder ve bu yuzden
+        KIRMIZI (basarisiz) gecmesi beklenir -- kirmizi cikti, docstring'in
+        garanti alaninin (K10 govde-aciklamasi) kabul ettigi TUM h==0 girdileri
+        icin dogru OLMADIGININ kanitidir.
+        """
+        a = TextBlock(text="Merhaba", bbox=Rect(x=0, y=0, w=100, h=0), confidence=0.9)
+        b = TextBlock(text="dunya", bbox=Rect(x=0, y=0, w=100, h=0), confidence=0.9)
+        out = normalize([a, b], OcrPreset.DIALOGUE)
+>       assert len(out) == 2, (
+            "Docstring 'h==0 -> kosul basitce gruplama-yok tarafina duser' diyor; "
+            f"ama gercek sonuc {len(out)} segment (1 ise BIRLESTIRILMIS demektir -- "
+            "docstring'in iddiasi bu girdi icin YANLIS)."
+        )
+E       AssertionError: Docstring 'h==0 -> kosul basitce gruplama-yok tarafina duser' diyor; ama gercek sonuc 1 segment (1 ise BIRLESTIRILMIS demektir -- docstring'in iddiasi bu girdi icin YANLIS).
+E       assert 1 == 2
+E        +  where 1 = len([Segment(text='Merhaba dunya', bbox=Rect(x=0, y=0, w=100, h=0, monitor_index=0, dpi_scale=1.0), speaker=None, placeholders=(), source_blocks=(0, 1))])
+
+.agents\tasks\T-004\tester_A\test_warranty_domain.py:235: AssertionError
+____ test_bbox_negative_height_touching_blocks_also_groups_same_root_cause ____
+
+    def test_bbox_negative_height_touching_blocks_also_groups_same_root_cause() -> None:
+        """Ayni kok neden negatif yukseklik icin de gecerli (sadece h==0'a
+        ozgu degil) -- ref_height<=0 olan HER durumda ayni sapma var."""
+        item_low = TextBlock(text="AAA", bbox=Rect(x=0, y=-15, w=100, h=20), confidence=0.9)
+        item_deg = TextBlock(text="BBB", bbox=Rect(x=0, y=0, w=100, h=-10), confidence=0.9)
+        out = normalize([item_low, item_deg], OcrPreset.DIALOGUE)
+>       assert len(out) == 2, (
+            f"negatif h + gap<=0 -> docstring'e gore 'gruplama yok' beklenir, "
+            f"gercek {len(out)} segment dondu"
+        )
+E       AssertionError: negatif h + gap<=0 -> docstring'e gore 'gruplama yok' beklenir, gercek 1 segment dondu
+E       assert 1 == 2
+E        +  where 1 = len([Segment(text='AAA BBB', bbox=Rect(x=0, y=-15, w=100, h=20, monitor_index=0, dpi_scale=1.0), speaker=None, placeholders=(), source_blocks=(0, 1))])
+
+.agents\tasks\T-004\tester_A\test_warranty_domain.py:248: AssertionError
+=========================== short test summary info ===========================
+FAILED .agents/tasks/T-004/tester_A/test_warranty_domain.py::test_bbox_zero_height_touching_blocks_DOES_group_contradicting_docstring
+FAILED .agents/tasks/T-004/tester_A/test_warranty_domain.py::test_bbox_negative_height_touching_blocks_also_groups_same_root_cause
+2 failed, 40 passed in 0.32s
+EXIT:1

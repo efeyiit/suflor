@@ -1,0 +1,55 @@
+# T-004 TUR 5 / TESTER-B -- KIRIK TESTIN TESHISI
+# hedef: tester_B/test_karar_uyumu_tur3.py::test_r3_k2_esik_alti_orta_blok_uzunluk_mirasiyla_birlikte_dogru_calisir
+# soru: kod K'lerden mi sapiyor, yoksa assertion bayat mi?
+
+=== GIRDI ===
+cap=280  n=7  gurultu blok indeksi=[5]
+  b0  y=0    h=20 conf=0.90 len(text)=4   Ada:
+  b1  y=22   h=20 conf=0.90 len(text)=60  xxxxxxxxxxxx
+  b2  y=44   h=20 conf=0.90 len(text)=60  xxxxxxxxxxxx
+  b3  y=66   h=20 conf=0.90 len(text)=60  xxxxxxxxxxxx
+  b4  y=88   h=20 conf=0.90 len(text)=60  xxxxxxxxxxxx
+  b5  y=110  h=20 conf=0.05 len(text)=7   GURULTU
+  b6  y=132  h=20 conf=0.90 len(text)=60  xxxxxxxxxxxx
+  b7  y=154  h=20 conf=0.90 len(text)=60  xxxxxxxxxxxx
+  b8  y=176  h=20 conf=0.90 len(text)=60  xxxxxxxxxxxx
+
+=== CIKTI (normalize) ===
+  src=(0, 1, 2, 3, 4) speaker='Ada'  len(text)=243
+  src=(6, 7, 8)      speaker=None   len(text)=182
+
+=== ADIM 5'E GIREN OGELER (esik+gurultu+konusmaci sonrasi) ===
+  src=(0, 1)   y=22   bottom=42   speaker='Ada'  len=60
+  src=(2,)     y=44   bottom=64   speaker=None   len=60
+  src=(3,)     y=66   bottom=86   speaker=None   len=60
+  src=(4,)     y=88   bottom=108  speaker=None   len=60
+  src=(6,)     y=132  bottom=152  speaker=None   len=60
+  src=(7,)     y=154  bottom=174  speaker=None   len=60
+  src=(8,)     y=176  bottom=196  speaker=None   len=60
+
+=== BOLUMLEME SINIRLARI ===
+  SINIR: kapanan grup src=(0, 1, 2, 3, 4)  ->  nxt src=(6,)
+    reason (ANA karar, current ile)         = 'length'
+    TUR 3 (K19) mekanizmasi: reason=='length'-> miras VAR
+    TUR 4/5 (K21+K24) sorgusu tail ile      = 'gap'  (gap=24, esik=16.0)
+    (karsilastirma) ayni sorgu current ile  = 'gap'  (gap=24)
+    nxt.speaker (ham)                       = None
+    -> K21/K24 mirasi: YOK
+
+=== K2 ORDERING (esas iddia) ===
+  gurultulu cikti : [((0, 1, 2, 3, 4), 'Ada'), ((6, 7, 8), None)]
+  gurultusuz cikti: [((0, 1, 2, 3, 4), 'Ada'), ((5, 6, 7), None)]
+  NOT: indeks uzayi kayar (blok cikarildi); metin/speaker/bolumleme SEKLI ayni mi:
+   metinler ayni : True
+   speakerlar ayni: True
+   segment sayisi : 2 2
+  gurultu indeksi hicbir source_blocks'ta yok: True
+
+=== K23 (bu senaryo) ===
+  acik  src: [(0, 1, 2, 3, 4), (6, 7, 8)] ['Ada', None]
+  kapali src: [(0, 1, 2, 3, 4), (6, 7, 8)] ['Ada', None]
+  bolumleme BIREBIR ayni: True
+
+=== KONTROL: gurultu blogu dikey BOSLUK ACMIYORSA ===
+  cikti: [((0, 1, 2, 3, 4), 'Ada'), ((6, 7, 8), 'Ada')]
+  hepsi 'Ada': True

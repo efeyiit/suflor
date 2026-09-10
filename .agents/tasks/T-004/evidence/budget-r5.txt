@@ -1,0 +1,8 @@
+K14 sartnamesi (30 blok, ~40 karakter/blok, dialogue, 50 tekrar):
+  medyan: 0.1556 ms (butce: 5 ms)
+  min: 0.1527 ms, max: 0.2343 ms
+
+Olcek dogrulamasi (ust uste binen bloklar, Tester-C senaryosu, 7 tekrar/medyan):
+  n=500: medyan 2.737 ms (min 2.660, max 3.002)
+  n=1000: medyan 6.723 ms (min 6.486, max 7.579)
+  n=2000: medyan 21.071 ms (min 20.545, max 22.642)

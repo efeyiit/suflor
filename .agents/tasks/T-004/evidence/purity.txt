@@ -1,0 +1,10 @@
+$ python .agents/tasks/T-004/purity_check.py
+
+denetlenen: normalizer.py, presets.py
+
+IHLAL (1):
+  determinizm kosumu HATA verdi (PYTHONHASHSEED=0): Traceback (most recent call last):
+  File "<string>", line 6, in <module>
+AttributeError: type object 'OcrPreset' has no attribute 'dialogue'
+
+exit_code: 1

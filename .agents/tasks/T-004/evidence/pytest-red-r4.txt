@@ -1,0 +1,85 @@
+.......FFF                                                               [100%]
+================================== FAILURES ===================================
+___________ test_k21_bilesik_sinirda_gecmis_hatali_miras_artik_yok ____________
+
+    def test_k21_bilesik_sinirda_gecmis_hatali_miras_artik_yok() -> None:
+        """sef_karari-tur4.md / feedback-C.md ornegiyle BIREBIR ayni sinif:
+        "Ada:" etiketini YAKIN bir govde blogu takip ediyor (etiketle
+        gruplanir), ardindan GERCEK bir geometrik kopus (1000px asagida)
+        OLAN, AYNI ZAMANDA (etiketli blokla birlikte) uzunluk sinirini da
+        asan bir govde blogu geliyor. TUR 3'te (K19, duzeltme oncesi) bu
+        kuyruk YANLISLIKLA "Ada"yi MIRAS ALIYORDU (kod "length" reason'ina
+        rastladigi icin geometrik kopusu hic GORMEDEN); K21 SONRASI kuyruk
+        `speaker=None` KALIR (gercek kopus GORULUR)."""
+        etiket = blk("Ada:", 10, 0)
+        govde1 = blk("x" * 150, 10, 22)
+        # bilesik: HEM uzunluk (150+1+150=301 > cap=280) HEM buyuk dikey bosluk
+        govde2 = blk("y" * 150, 10, 22 + 20 + 1000)
+        out = normalize([etiket, govde1, govde2], OcrPreset.DIALOGUE)
+        assert len(out) == 2
+        assert out[0].speaker == "Ada"
+        assert out[0].text == "x" * 150
+>       assert out[1].speaker is None  # K21: bilesik sinir -- miras YOK
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       AssertionError: assert 'Ada' is None
+E        +  where 'Ada' = Segment(text='yyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy...ox=Rect(x=10, y=1042, w=300, h=20, monitor_index=0, dpi_scale=1.0), speaker='Ada', placeholders=(), source_blocks=(2,)).speaker
+
+tests\unit\ocr\test_normalizer.py:927: AssertionError
+_ test_k21_bilesik_sinirda_yukseklik_sifir_ile_normalize_uzerinden_miras_yok __
+
+    def test_k21_bilesik_sinirda_yukseklik_sifir_ile_normalize_uzerinden_miras_yok() -> None:
+        """Ayni bilesik durum, geometrik kopus yerine YOZLASMIS bbox
+        (`h=0`, K16) ile -- uctan uca `normalize()` uzerinden de K21'in
+        dogru calistigini dogrular (sadece dusuk seviye `_group_rejection_
+        reason` degil)."""
+        etiket = blk("Ada:", 10, 0)
+        govde1 = blk("x" * 150, 10, 22)
+        govde2 = blk("y" * 150, 10, 44, h=0)
+        out = normalize([etiket, govde1, govde2], OcrPreset.DIALOGUE)
+        assert len(out) == 2
+        assert out[0].speaker == "Ada"
+>       assert out[1].speaker is None  # K21: uzunluk + h=0 bilesigi -- miras YOK
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       AssertionError: assert 'Ada' is None
+E        +  where 'Ada' = Segment(text='yyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy... bbox=Rect(x=10, y=44, w=300, h=0, monitor_index=0, dpi_scale=1.0), speaker='Ada', placeholders=(), source_blocks=(2,)).speaker
+
+tests\unit\ocr\test_normalizer.py:942: AssertionError
+__ test_k21_zincirde_her_bolunme_noktasi_kendi_sebebine_gore_degerlendirilir __
+
+    def test_k21_zincirde_her_bolunme_noktasi_kendi_sebebine_gore_degerlendirilir() -> None:
+        """Uc parcaya bolunen bir zincirde IKI bolunme noktasi var ve HER
+        BIRI KENDI sebebine gore degerlendiriliyor -- ayni zincirde biri
+        MIRAS ALIYOR biri ALMIYOR:
+    
+            etiket "Ada:" + govde1 (yakin, etiketle gruplanir)
+            govde1 -> govde2: SADECE uzunluk asiliyor (geometri SIKI)
+                               -> 1. bolunme, MIRAS VAR (K21: tek engel uzunluk)
+            govde2 -> govde3: uzunluk VE buyuk dikey bosluk AYNI ANDA
+                               -> 2. bolunme, MIRAS YOK (K21: bilesik sinir)
+    
+        Ikinci bolunmenin MIRAS ALMAMASI, ilk bolunmede MIRAS ALINMIS
+        OLMASINDAN etkilenmiyor -- her `_group_rejection_reason` cagrisi
+        SADECE kendi cifti degerlendirir (K21 kok sebep: eski kod da her
+        cifti ayri degerlendiriyordu, hata REASON'IN kendisindeydi, cagri
+        sirasinda degil)."""
+        etiket = blk("Ada:", 10, 0)
+        govde1 = blk("x" * 150, 10, 22)  # etiketle SIKI gruplanir (kisa gap)
+        govde2 = blk("y" * 150, 10, 44)  # govde1'e SIKI (gap=2) -- SADECE uzunluk asiyor
+        govde3 = blk("z" * 150, 10, 44 + 20 + 1000)  # govde2'den 1000px asagida -- bilesik
+        out = normalize([etiket, govde1, govde2, govde3], OcrPreset.DIALOGUE)
+        assert len(out) == 3
+        assert out[0].speaker == "Ada"
+        assert out[0].text == "x" * 150
+        assert out[1].speaker == "Ada"  # K21: 1. bolunme -- SADECE uzunluk -- MIRAS VAR
+        assert out[1].text == "y" * 150
+>       assert out[2].speaker is None  # K21: 2. bolunme -- bilesik -- MIRAS YOK
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       AssertionError: assert 'Ada' is None
+E        +  where 'Ada' = Segment(text='zzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz...ox=Rect(x=10, y=1064, w=300, h=20, monitor_index=0, dpi_scale=1.0), speaker='Ada', placeholders=(), source_blocks=(3,)).speaker
+
+tests\unit\ocr\test_normalizer.py:971: AssertionError
+=========================== short test summary info ===========================
+FAILED tests/unit/ocr/test_normalizer.py::test_k21_bilesik_sinirda_gecmis_hatali_miras_artik_yok
+FAILED tests/unit/ocr/test_normalizer.py::test_k21_bilesik_sinirda_yukseklik_sifir_ile_normalize_uzerinden_miras_yok
+FAILED tests/unit/ocr/test_normalizer.py::test_k21_zincirde_her_bolunme_noktasi_kendi_sebebine_gore_degerlendirilir
+3 failed, 7 passed, 72 deselected in 0.21s

@@ -1,0 +1,19 @@
+# K14 butce olcumu -- ham cikti. Iki parca:
+# (1) test dosyasindaki assertli test (kirilirsa pytest FAILED doner)
+# (2) aynı olcumun okunabilir sayisal dokumu (medyan, min, max)
+
+$ python -m pytest tests/unit/ocr/test_normalizer.py::test_k14_normalizasyon_butcesi_5ms_medyan -q
+.                                                                        [100%]
+1 passed in 0.14s
+exit_code: 0
+
+$ python budget_measure.py   (30 blok, ~40 karakter/blok, dialogue, 50 cagri)
+blok sayisi: 30
+blok basina karakter (min/max): 47/47
+cagri sayisi: 50
+min: 0.1633 ms
+medyan: 0.1721 ms
+max: 0.3268 ms
+butce (K14): 5.0 ms
+SONUC: GECTI
+exit_code: 0
