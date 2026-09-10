@@ -1,4 +1,4 @@
-"""T-004 tur 6 — K28 OLCU KITI, SURUM 2 (sefe ait; implementer ve tester ICE AKTARIR, DEGISTIRMEZ).
+"""T-004 tur 6 — K28 OLCU KITI, SURUM 3 (sefe ait; implementer ve tester ICE AKTARIR, DEGISTIRMEZ).
 
 Neden kod, neden duzyazi degil
 ------------------------------
@@ -27,6 +27,37 @@ YERDE mi sordun" diye sormuyordu. Ornekler (kitin KENDI derleminde davranissal
 ayrisma, olcu 6 hepsinde TEMIZ diyordu): n06 tail birlesim dalinda guncellenmiyor
 (1280), n08 taraflar takas (5317), n10 bir onceki oge (2281), n18/n19/n20
 kapsam ihlali (3726/1724/1235).
+
+SURUM 3 -- surum 2'nin DORT gercek kusuru (7. gecis)
+----------------------------------------------------
+Y3 (EN AGIR) KAPSAM kanali DOGRU uygulamada YANLIS POZITIF veriyordu. Iki
+   sebep: `birlesik_kutu` `monitor_index`/`dpi_scale` tasimiyordu (girdi
+   (1, 1.5) iken (0, 1.0) uretiyordu), ve K9'un `pending_blocks` yoluyla
+   yutulan YALNIZ-ETIKET bloklari `source_blocks`'a giriyor ama bbox'a
+   girmiyor -- birlesik-kutu esitligi orada YAPI GEREGI yanlis. Kapinin
+   dogru uygulamayi reddetmesi, hic kapi olmamasindan kotudur. Kanal artik
+   esitlik degil SIZINTI ariyor: cok bloklu bir tarafin bbox'i, o tarafin
+   TEK bir ham blogunun bbox'ina esitse (ve birlesikten farkliysa) ham ikame
+   o yola sizmis demektir.
+Y4 KAPSAM yalniz SOL tarafi denetliyordu; sag taraftan sizan mutant geciyordu.
+Y2 KIMLIK ve SIRA kanallari istisnada SESSIZCE kapaniyordu (`except: sb_liste=[]`
+   ve `if sb_liste:`). `_merge_hyphenated`'e tek bir zorunlu argüman eklemek
+   ikisini de susturuyordu. Artik `kimlik_kosulamadi` sayaci var ve `temiz`e dahil.
+Y5 Kabul komutu (`python olcu_kiti.py`) dort sayaci YAZDIRIYOR ama ASSERT
+   ETMIYORDU: 1216 ayrisma ureten bir uygulamaya "KIT: TEMIZ", exit 0 diyordu.
+   Artik kimlik/kapsam/sira ihlalleri assert ediliyor (ayrisma K28 uygulanana
+   kadar beklenen bir deger oldugu icin ayri raporlanir) ve etiket
+   "KIT SAGLIGI" -- "uygulama temiz" diye okunmasin diye.
+Ek: SAYI kanali (bolumleme sorgusu sayisi = oge sayisi - 1) -- 7. gecisin
+   n18/M10 sinifini yeniden uygulama gerektirmeden yakalar.
+
+BILINEN SINIR (gizlenmiyor, karara yazildi): `adim1_4` referansi denetlenen
+modulun kendi yardimcilarini (`_merge_hyphenated`, `_extract_speakers`, ...)
+cagirarak uretir, yani PROTOKOL 4.6/8'in tam anlamiyla bagimsiz DEGILDIR: o
+yardimcilari degistiren bir mutantta kitin oge listesi mutantla birlikte kayar.
+Adim 1-4'u kit icinde yeniden yazmak kitin kendi yeniden uygulamasini bir hata
+kaynagi yapardi; sef bu takasi bilerek yapti ve sinifi tester yukumlulugune
+cevirdi (bkz. karar, M12).
 
 Surum 2 uc sey ekliyor:
   1. BAGIMSIZ KIMLIK KANALI -- kit adim 1-4'u kendi yeniden turetir ve her
@@ -183,11 +214,52 @@ def adim1_4(blocks: Sequence[TextBlock], preset: OcrPreset) -> list[object]:
 
 
 def birlesik_kutu(blocks: Sequence[TextBlock], sb: Sequence[int]) -> Rect:
-    """`source_blocks`'un birlesik sinirlayici kutusu (bolumleme sorgusunun bbox'i)."""
+    """`source_blocks`'un birlesik sinirlayici kutusu.
+
+    SURUM 3: `monitor_index`/`dpi_scale` ILK bloktan tasinir. Surum 2 bunlari
+    varsayilanda (0, 1.0) birakiyordu ve girdi (1, 1.5) oldugunda DOGRU
+    uygulamada yanlis pozitif uretiyordu (sef olctu).
+    """
     xs = [blocks[i].bbox for i in sb]
     x0 = min(b.x for b in xs); y0 = min(b.y for b in xs)
     x1 = max(b.x + b.w for b in xs); y1 = max(b.y + b.h for b in xs)
-    return Rect(x0, y0, x1 - x0, y1 - y0)
+    ilk = xs[0]
+    return Rect(x0, y0, x1 - x0, y1 - y0, ilk.monitor_index, ilk.dpi_scale)
+
+
+def _yalniz_etiket(text: str) -> bool:
+    """Blok yalnizca bir konusmaci etiketi mi ("Ada:") -- geometriye katki vermez.
+
+    K9 boyle bloklari `pending_blocks` ile bir sonraki ogeye yutar: blok
+    `source_blocks`'a girer ama bbox'a girmez. Kapsam kanali bunu bilmezse
+    dogru uygulamada yanlis pozitif uretir (sef olctu).
+    """
+    ad, kalan = N._split_speaker_label(text)
+    return ad is not None and not kalan.strip()
+
+
+def ham_ikame_sizmis(blocks: Sequence[TextBlock], sb: Sequence[int], bbox: Rect) -> bool:
+    """Bolumleme sorgusuna ham ikame SIZMIS mi (surum 3, Y3).
+
+    Esitlik ("bbox birlesik kutu olmali") YANLIS bir degismezdir: K9'un
+    `pending_blocks` yoluyla yutulan yalniz-etiket bloklari `source_blocks`'a
+    girer ama bbox'a girmez. Onun yerine SIZINTININ KENDISI aranir: ham ikame
+    bbox'i TEK bir ham blogun kutusuyla degistirir. Yani cok bloklu bir tarafin
+    bbox'i, o tarafin tek bir kaynak blogunun bbox'ina esitse ve birlesik
+    kutudan farkliysa, ikame o yola sizmistir.
+    """
+    if len(sb) < 2:
+        return False                      # tek bloklu tarafta sizinti gozlenemez
+    if bbox == birlesik_kutu(blocks, sb):
+        return False                      # tam birlesik kutu: temiz
+    # K9'un `pending_blocks` yoluyla yutulan YALNIZ-ETIKET bloklari
+    # `source_blocks`'a girer ama GEOMETRIYE katkı vermez ("Ada:" gibi, bolme
+    # sonrasi kalani bos). Karsilastirma yalnizca geometriye katki veren
+    # altkumeyle yapilir; aksi halde kapı DOGRU uygulamayi reddeder (sef olctu).
+    gecerli = [i for i in sb if not _yalniz_etiket(blocks[i].text)]
+    if gecerli and gecerli != list(sb) and bbox == birlesik_kutu(blocks, gecerli):
+        return False
+    return any(bbox == blocks[i].bbox for i in sb)
 
 
 # --------------------------------------------------------------------------- derlem
@@ -274,6 +346,8 @@ class Olcu6Sonuc:
     iki_konusmaci: int = 0
     kapsam: int = 0
     esik_alti: int = 0
+    sayi_ihlali: int = 0
+    kimlik_kosulamadi: int = 0
     ayrisma: int = 0
     kimlik_ihlali: int = 0
     kapsam_ihlali: int = 0
@@ -284,7 +358,9 @@ class Olcu6Sonuc:
     @property
     def temiz(self) -> bool:
         return (self.ayrisma == 0 and self.kimlik_ihlali == 0 and self.kapsam_ihlali == 0
-                and self.sira_ihlali == 0 and self.patlama == 0 and not self.eksik_sinirlar)
+                and self.sira_ihlali == 0 and self.sayi_ihlali == 0
+                and self.kimlik_kosulamadi == 0
+                and self.patlama == 0 and not self.eksik_sinirlar)
 
 
 def olcu6_kos(preset: OcrPreset, girdiler: list[list[TextBlock]] | None = None) -> Olcu6Sonuc:
@@ -314,8 +390,15 @@ def olcu6_kos(preset: OcrPreset, girdiler: list[list[TextBlock]] | None = None) 
         try:
             ogeler = adim1_4(bl, preset)
             sb_liste = [tuple(it.source_blocks) for it in ogeler]  # type: ignore[attr-defined]
-        except Exception:
+        except Exception as exc:  # noqa: BLE001
+            # Y2: SESSIZ KAPANMA YOK. Kimlik/sira/sayi kanallari kosulamadiysa
+            # bu bir IHLALDIR -- tek satirlik bir imza degisikligi ikisini de
+            # susturup mutanti akliyordu (sef olctu).
             sb_liste = []
+            r.kimlik_kosulamadi += 1
+            if not r.ilk_fark:
+                r.ilk_fark = f"KIMLIK KOSULAMADI: adim1_4 patladi -> {type(exc).__name__}: {exc}"
+        bolumleme_sayisi = 0
         with sorgu_kaydi() as kayit:
             try:
                 N.normalize(bl, preset)
@@ -327,17 +410,25 @@ def olcu6_kos(preset: OcrPreset, girdiler: list[list[TextBlock]] | None = None) 
         onceki_k = -1
         for sg in kayit:
             if not sg.miras:
-                # (C) KAPSAM: bolumleme sorgusunda ham ikame OLMAMALI
+                # (C) KAPSAM: bolumleme sorgusuna ham ikame SIZMAMIS olmali.
+                # Surum 3: esitlik degil SIZINTI aranir (Y3) ve IKI TARAF da
+                # denetlenir (Y4).
                 r.kapsam += 1
+                bolumleme_sayisi += 1
                 try:
-                    bek = birlesik_kutu(bl, sg.sol_sb)
+                    sol_sizdi = ham_ikame_sizmis(bl, sg.sol_sb, sg.sol_bbox)
+                    sag_sizdi = ham_ikame_sizmis(bl, sg.sag_sb, sg.sag_bbox)
                 except Exception:
                     continue
-                if sg.sol_bbox != bek:
+                if sol_sizdi or sag_sizdi:
                     r.kapsam_ihlali += 1
                     if not r.ilk_fark:
-                        r.ilk_fark = (f"KAPSAM: bolumleme sorgusunda ham ikame sizmis; "
-                                      f"sol_sb={sg.sol_sb} birlesik={bek} olculen={sg.sol_bbox}")
+                        taraf = "sol" if sol_sizdi else "sag"
+                        sb_ = sg.sol_sb if sol_sizdi else sg.sag_sb
+                        bb_ = sg.sol_bbox if sol_sizdi else sg.sag_bbox
+                        r.ilk_fark = (f"KAPSAM: bolumleme sorgusunun {taraf} tarafina ham ikame "
+                                      f"sizmis; sb={sb_} birlesik={birlesik_kutu(bl, sb_)} "
+                                      f"olculen={bb_}")
                 continue
             r.sinir += 1
             if len(sg.sol_sb) > 1:
@@ -388,6 +479,14 @@ def olcu6_kos(preset: OcrPreset, girdiler: list[list[TextBlock]] | None = None) 
                     r.ilk_fark = (f"GEOMETRI: sol_sb={sg.sol_sb} beklenen={bek_sol} "
                                   f"olculen={sg.sol_bbox} | sag_sb={sg.sag_sb} "
                                   f"beklenen={bek_sag} olculen={sg.sag_bbox}")
+        # (E) SAYI: bolumleme sorgusu sayisi = oge sayisi - 1 (surum 3).
+        # Miras kararina fazladan kosul ekleyen ya da sorgu uretimini kapayan
+        # mutantlari yeniden uygulama gerektirmeden yakalar (7. gecis n18/M10).
+        if sb_liste and len(sb_liste) >= 2 and bolumleme_sayisi != len(sb_liste) - 1:
+            r.sayi_ihlali += 1
+            if not r.ilk_fark:
+                r.ilk_fark = (f"SAYI: bolumleme sorgusu sayisi {bolumleme_sayisi}, "
+                              f"beklenen {len(sb_liste) - 1} (oge sayisi - 1)")
     for ad, alt in OLCU6_ALT_SINIRLAR.items():
         if getattr(r, ad) < alt:
             r.eksik_sinirlar.append(f"{ad}={getattr(r, ad)} < {alt}")
@@ -462,13 +561,22 @@ def _selftest() -> int:
               f"yoz={r.yozlasmis:4d} neg={r.negatif:4d} buyuk={r.buyuk:4d} ikikon={r.iki_konusmaci:4d} "
               f"kapsam={r.kapsam:5d} esik_alti={r.esik_alti:4d}")
         print(f"  {'':9s} | ayrisma={r.ayrisma} kimlik={r.kimlik_ihlali} "
-              f"kapsam_ihlali={r.kapsam_ihlali} sira={r.sira_ihlali} patlama={r.patlama}")
+              f"kapsam_ihlali={r.kapsam_ihlali} sira={r.sira_ihlali} sayi={r.sayi_ihlali} "
+              f"kimlik_kosulamadi={r.kimlik_kosulamadi} patlama={r.patlama}")
         if r.eksik_sinirlar:
             hata = 1
             print(f"    KIT IHLALI (derlem yetersiz): {r.eksik_sinirlar}")
         if r.patlama:
             hata = 1
             print(f"    KIT IHLALI (patlama): {r.ilk_fark[:160]}")
+        # Y5: sayaclar YAZDIRILMAKLA KALMAZ, ASSERT EDILIR. `ayrisma` K28
+        # uygulanana kadar beklenen bir degerdir (R5-1 hala acik), o yuzden
+        # ayri raporlanir; digerleri BUGUN de 0 olmak zorundadir.
+        for ad in ("kimlik_ihlali", "kapsam_ihlali", "sira_ihlali", "sayi_ihlali",
+                   "kimlik_kosulamadi"):
+            if getattr(r, ad):
+                hata = 1
+                print(f"    IHLAL {ad}={getattr(r, ad)}: {r.ilk_fark[:200]}")
     print("--- fixture sekilleri ---")
     with sorgu_kaydi() as k3b:
         N.normalize(olcu3b_fixture(), OcrPreset.DIALOGUE)
@@ -490,7 +598,9 @@ def _selftest() -> int:
             got = [(s.source_blocks, s.speaker) for s in N.normalize(f(), pr)]
             print(f"  {ad} {pr.name:9s} simdi={got}")
             print(f"  {' ' * (len(ad) + 10)}bek ={b}  {'(zaten saglaniyor)' if got == b else '(K28 sonrasi saglanacak)'}")
-    print("KIT: TEMIZ" if not hata else "KIT: IHLAL")
+    print("KIT SAGLIGI: TEMIZ" if not hata else "KIT SAGLIGI: IHLAL")
+    print("  (not: `ayrisma` K28 uygulanana kadar >0 BEKLENIR -- R5-1 acik; "
+          "kimlik/kapsam/sira/sayi ihlalleri ise bugun de 0 olmalidir)")
     return hata
 
 

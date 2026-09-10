@@ -62,9 +62,9 @@
       "depends_on": [
         "T-001"
       ],
-      "durum": "tur6-karar-kirmizi-takimi-7.gecis",
+      "durum": "tur6-implementer",
       "tur": 6,
-      "not": "Karar KT alti gecis. 6. gecis KITI KIRDI: 26 mutantin 13'u temiz geciyordu; kok sebep referansin MUTANTIN KENDI source_blocks'undan turemesiydi. Kit SURUM 2: bagimsiz kimlik kanali (adim 1-4 yeniden turetimi), kapsam denetimi (ignore_length=False cagrilari), alti yeni girdi sinifi (ASCII-disi/yozlasmis/negatif/buyuk/iki-konusmaci/derin zincir), sira denetimi. Sef dogruladi: 11 mutant yakalandi, 2 esdeger dogru sekilde isaretlenmedi, 2 mutant (n18/n23) kacti -> Tester-B'nin M10/M11 yukumlulugune cevrildi ve kararda 'olculmuyor' diye isaretlendi. 7. gecis kit surum 2'yi curutecek. Kit ice aktarimi cozuldu: sefe ait iki conftest.py (tests/unit/ocr ve .agents/tasks/T-004); tester_B artik tek basina kosuyor."
+      "not": "Karar KT yedi gecis. 7. gecis kit v2'yi curuttu: kapsam kanali DOGRU uygulamayi reddediyordu (iki sebep), kimlik/sira istisnada sessizce kapaniyordu, kabul komutu dort sayaci assert etmiyordu. Kit SURUM 3 ucunu de kapatti + SAYI kanali ekledi (M10 artik olculuyor). Sef dogruladi: dogru uygulamada uc yanlis pozitif gitti, n63/n58/n18 yakalandi. KAPI KAPANDI: K28 implementer'a gidiyor; kitin bilinen sinirlari (n23, adim1_4 bagimsizligi, MENU/apply_inheritance=False, bes girdi sinifi, params kimligi) M11-M15 olarak tester yukumlulugune yazildi. 8. KT gecisi kit uzerinde PARALEL kosacak, bulgulari TESTER turuna girdi olacak."
     },
     {
       "id": "T-005",

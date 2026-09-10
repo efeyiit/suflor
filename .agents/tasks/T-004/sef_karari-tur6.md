@@ -1,8 +1,48 @@
-# Şef Kararı — T-004, Tur 6 (sürüm 7 — altı KRT geçişi; ölçüler **kod**, kit sürüm 2)
+# Şef Kararı — T-004, Tur 6 (sürüm 8 — yedi KRT geçişi; kit sürüm 3; **implementer'a gidiyor**)
 
 Tur 5'te **A ret** verdi, **B onay**, **C onay**. K23 değişmezi **sağlandı** (A: 12.800 koşumda 0 bölümleme farkı; implementer: 2500'de 0). Kalan: K24'te yeni bir etkileşim hatası (R5-1) ve B/C'nin belgeleme bulguları.
 
-> **Sürüm 7 neden var — ve "sonuncusu" demenin bedeli.** Sürüm 6, ölçüleri koda taşıyıp "bu sonuncusu" demişti. Altıncı geçiş **kiti kırdı**: 26 yeni mutantın 13'ü kitin üç ön ayarını da `TEMİZ` geçti, yedisi ayrıca 478 kör testte doğru uygulamayla birebir aynı çıktı verdi. Kök sebep kitin **kendi tasarımındaydı** ve şef onu doğruladı: `referans_cifti` referansı **mutantın kendi verdiği `source_blocks`'tan** türetiyordu. Kit yalnızca *"verdiğin bbox verdiğin `source_blocks` ile tutarlı mı"* diye soruyordu; *"doğru öğeyi mi verdin, doğru yerde mi sordun"* diye sormuyordu.
+> **Sürüm 8 — kit sürüm 3, ve kapının kapanma kararı.** Yedinci geçiş 37 yeni mutantla kit sürüm 2'yi çürüttü ve **haklıydı**. Şef dört bulguyu kendi eliyle yeniden üretti; en ağırı şuydu:
+> **(Y3) Kapı DOĞRU uygulamayı reddediyordu.** `birlesik_kutu` `monitor_index`/`dpi_scale` taşımıyordu (girdi `(1, 1.5)` iken `(0, 1.0)` üretiyordu) ve K9'un `pending_blocks` yoluyla yutulan **yalnız-etiket** blokları `source_blocks`'a girip bbox'a girmediği için birleşik-kutu eşitliği orada **yapı gereği yanlıştı**. Şef ikisini de ölçtü: doğru uygulamada `kapsam_ihlali = 1` ve `1`. *Doğru uygulamayı reddeden bir kapı, hiç kapı olmamasından kötüdür.*
+> **(Y2) Kimlik ve sıra kanalları istisnada sessizce kapanıyordu** — `_merge_hyphenated`'e tek bir zorunlu argüman eklemek ikisini de susturuyordu.
+> **(Y4) Kapsam yalnız sol tarafı** denetliyordu.
+> **(Y5) Kabul komutu dört sayacı yazdırıyor ama ASSERT ETMİYORDU** — şef doğruladı: `_selftest` yalnız `eksik_sinirlar` ve `patlama` için `hata=1` yapıyor; 1216 ayrışmalı bir uygulamaya `exit 0`, `"KIT: TEMIZ"` diyordu.
+>
+> **Kit sürüm 3** (şef doğruladı, ölçümler `sef_dogrulama/krt6b_sef_kosumlari.txt`):
+> ```
+> uygulama                              kit v2              kit v3
+> dogru uygulama (uc yanlis pozitif)    kapsam_ihlali=1     TEMIZ          <- Y3 kapandi
+> n63 sessiz kapanma (imza + n06)       TEMIZ               KOSULAMADI=2500  <- Y2
+> n58 sag tarafa sizinti                TEMIZ               KAPSAM=5232      <- Y4
+> n18 fazladan kosul (M10 idi)          TEMIZ               SAYI=1244/1851/2219
+> n06 tail guncellenmiyor               KIMLIK              KIMLIK=2387/1350/826
+> n55 ayni (y,x) kapisi                 geo                 geo=804/1081/1216
+> n23 gorunum gecisi ters yon           TEMIZ               TEMIZ          <- HALA KACIYOR
+> ```
+> Kapsam kanalı artık **eşitlik değil sızıntı** arıyor: çok bloklu bir tarafın bbox'ı, o tarafın **tek** bir ham bloğunun kutusuna eşitse (ve geometriye katkı veren altkümenin birleşiminden farklıysa) ham ikame o yola sızmıştır. Yalnız-etiket blokları muaf. Yeni **SAYI kanalı** (`#bölümleme == len(öğeler) − 1`) M10'u tester yükümlülüğü olmaktan çıkarıp ölçüye çevirdi.
+>
+> ### Ve kapı burada kapanıyor — gerekçesiyle
+>
+> Yedi geçiş. Değişmez (K28) **sürüm 3'ten beri değişmedi**; kırılan hep ölçü oldu. Sürüm 6'da "ölçüyü koda taşıyarak" bitireceğimi yazdım — bitmedi, çünkü **kod da yanlış şeyi ölçebiliyor**. Sürüm 7'de kit sürüm 2 ile kapatacağımı yazdım — kapanmadı.
+>
+> Şu an duran gerçek: kit 590 satır, dört kanal, on bir alt sınır; ölçtüğü uygulama ~15 satır. Doğrulama aygıtı doğrulanan şeyden bir büyüklük mertebesi karmaşık ve kendi hata oranı **yakınsamıyor**. Sekizinci bir geçiş daha bulgu verecek — ama her turda bulunan şeyin şiddeti düştü: artık "kapı bozuk ürünü geçiriyor" değil, ağırlıklı olarak "kapı yeterince keskin değil".
+>
+> **Protokolün cevabı zaten var ve ben onu kullanmıyordum:** kör tester sistemi tam olarak şefin kaçırdığını yakalamak için var. Karar kırmızı takımı bir **ön süzgeçtir**, tester'ların yerine geçmez. Yedinci geçişin kendi verisi bunu gösteriyor: kaçan mutantların çoğu kör tester takımında zaten ek kırıklar üretiyor (28, 13, 17, 32, 34...); **hem kite hem 1174 kör teste görünmeyen yalnızca altı tane**. O altısı aşağıda **adlandırılmış tester yükümlülüğü** olarak yazılı.
+>
+> Bu yüzden K28 **implementer'a gidiyor**. Sekizinci kırmızı takım geçişi kit üzerinde **paralel** koşacak, ama bulguları implementer turuna değil **tester turuna** girdi olacak — implementer'ın altından ölçü çekilmez.
+>
+> ### Kitin bilinen sınırları (gizlenmiyor — §4.6/2)
+>
+> | Sınır | Ne ölçülmüyor | Kime devredildi |
+> |---|---|---|
+> | `adim1_4` bağımsız değil | Referansı denetlenen modülün kendi yardımcılarını (`_merge_hyphenated`, `_extract_speakers`, `_is_noise`, `_collapse_intraline`) çağırarak üretir; o yardımcıları değiştiren mutantta kitin öğe listesi **mutantla birlikte kayar** (PROTOKOL §4.6/8'in tam anlamıyla ihlali). Adım 1–4'ü kit içinde yeniden yazmak kitin **kendi** yeniden uygulamasını yeni bir hata kaynağı yapardı; şef bu takası bilerek yaptı. | **M12** — Tester-B |
+> | `n23` sınıfı | Görünüm geçişini ters yönde işleyen mutant. Sorgu **sırasını bozmuyor** (kit `sira_ihlali` kanalı canlı; sentetik ters kayıtta 361 ihlal veriyor) — adım 5'in görünüm döngüsünü ters çeviriyor ve o döngü hiç sorgu üretmiyor. | **M11** — Tester-B |
+> | MENU ön ayarı ve `apply_inheritance=False` yolu | Kit üçünü koşuyor, dördüncüyü ve kapalı-miras kipini koşmuyor. | **M13** — Tester-B |
+> | Beş girdi sınıfı | emoji/astral, `monitor_index≠0`, `dpi_scale≠1.0`, ≥40 bloklu girdi, ASCII-dışı **konuşmacı adı**. Beşi de kite **ve** kör takıma görünmez. | **M14** — Tester-C (sınır-dil) |
+> | Sorgudaki `params` kimliği | Kit `params`ı kaydetmiyor; yanlış `params` ile sorulan bir sorgu görünmez. | **M15** — Tester-B |
+> | Alt sınırlar gevşek | Taban/zemin oranı %65–%99,97 bastırmaya izin veriyor; sayacı kıl payı tutan mutant geçer. | kayda geçti, ölçü değil |
+>
+> **Sürüm 7 neden vardı — ve "sonuncusu" demenin bedeli.** Sürüm 6, ölçüleri koda taşıyıp "bu sonuncusu" demişti. Altıncı geçiş **kiti kırdı**: 26 yeni mutantın 13'ü kitin üç ön ayarını da `TEMİZ` geçti, yedisi ayrıca 478 kör testte doğru uygulamayla birebir aynı çıktı verdi. Kök sebep kitin **kendi tasarımındaydı** ve şef onu doğruladı: `referans_cifti` referansı **mutantın kendi verdiği `source_blocks`'tan** türetiyordu. Kit yalnızca *"verdiğin bbox verdiğin `source_blocks` ile tutarlı mı"* diye soruyordu; *"doğru öğeyi mi verdin, doğru yerde mi sordun"* diye sormuyordu.
 >
 > Ölçüyü koda taşımak doğru hamleydi ama yetmedi: **kod da yanlış şeyi ölçebiliyor.** Kit sürüm 2 üç kanal ekliyor:
 > 1. **Bağımsız kimlik kanalı** — kit adım 1–4'ü kendi yeniden türetir (`adim1_4`) ve her sorguda sol tarafın bir **öğenin** `source_blocks`'u, sağ tarafın onu **hemen izleyen** öğe olduğunu doğrular. Mutantın verdiği veriye güvenmez.
@@ -26,7 +66,7 @@ Tur 5'te **A ret** verdi, **B onay**, **C onay**. K23 değişmezi **sağlandı**
 > n22/n24 (KRT: davranissal olarak ESDEGER)    TEMIZ    TEMIZ   <- dogru, isaretlenmemeli
 > dogru uygulama                               TEMIZ    TEMIZ
 > ```
-> **Kapanmayan iki mutant — ölçülmüş sınır, gizlenmiyor:** `n18` (doğru sorgu + fazladan `ignore_length=False` koşulu) ve `n23` (görünüm geçişi ters yönde) kit sürüm 2'yi de geçiyor. İkisi de sorgu **yapısında** değil **davranışta** ayrışıyor; yakalamak kitin `_group`'un miras kararını **yeniden uygulamasını** gerektirir ve şefin kendi yeniden uygulaması yanlış olursa kapı sessizce bozulur. Bu yüzden kite eklenmiyor, **Tester-B'nin mutant yükümlülüğüne** çevriliyor (aşağıda M10/M11). Kararın §4.6/2 dürüstlüğü gereği: bu iki sınıf **kit tarafından ölçülmüyor**.
+> **Kapanmayan iki mutant (sürüm 7 durumu; sürüm 8'de `n18` KAPANDI):** `n18` (doğru sorgu + fazladan `ignore_length=False` koşulu) ve `n23` (görünüm geçişi ters yönde) kit sürüm 2'yi geçiyordu. **`n18` artık kitin SAYI kanalıyla ölçülüyor** (`1244/1851/2219`) — "kit tarafından ölçülmüyor" damgası kaldırıldı. `n23` hâlâ kaçıyor. İkisi de sorgu **yapısında** değil **davranışta** ayrışıyor; yakalamak kitin `_group`'un miras kararını **yeniden uygulamasını** gerektirir ve şefin kendi yeniden uygulaması yanlış olursa kapı sessizce bozulur. Bu yüzden kite eklenmiyor, **Tester-B'nin mutant yükümlülüğüne** çevriliyor (aşağıda M10/M11). Kararın §4.6/2 dürüstlüğü gereği: bu iki sınıf **kit tarafından ölçülmüyor**.
 >
 > **Sürüm 6'nın iki olgusal hatası düzeltildi:** (a) "O2: kapsam ihlali yalnız ölçü 7'yle görünür" — yanlıştı, ölçü 7 bunu **yapı gereği göremez** (bölümleme geçişi `apply_inheritance`'ı hiç okumaz); doğru kapı kitin **kapsam kanalı**dır. (b) "M26 → ölçü 3b kırılmalı" — yanlıştı; `olcu3b` fixture'ı K28 **öncesi de yeşil**, ayırt ediciliği yalnız sorgu çiftinde. Zorunlu test artık çıktıyı değil **sorgu çiftini** assert eder.
 >
@@ -161,14 +201,16 @@ Kit şunları sağlar ve implementer ile üç tester **aynı** kaynaktan kullan�
 | `sorgu_kaydi()` | `ignore_length=True` gelen **her** `_group_rejection_reason` çağrısını kaydeden bağlam yöneticisi | geçiş 4 W1 (değişmezi kancalar, mekanizmayı değil) |
 | `derlem(n=2500)` | zincirleme hyphen (3+ bloklu kuyruk), eşik-altı bloklar (`conf=0.50`, üç ön ayarın da altında), `shuffle` | geçiş 5 V1, geçiş 4 W2, O1 |
 | `olcu6_kos(preset)` | ön ayar başına denetim + alt sınırlar | geçiş 3 Z2, geçiş 4 W1 |
-| `OLCU6_ALT_SINIRLAR` | `sinir≥1, coklu_sol≥500, uclu_sol≥200, coklu_sag≥500, esik_alti≥500` | totolojik denetimi imkânsız kılar |
+| `OLCU6_ALT_SINIRLAR` | **on bir** alt sınır: `sinir≥1, coklu_sol≥500, uclu_sol≥200, coklu_sag≥500, derin_sol≥50, ascii_disi≥100, yozlasmis≥50, negatif≥50, buyuk≥50, iki_konusmaci≥50, kapsam≥100` (`esik_alti` bir alt sınır **değildir**, derlem sağlığı sayacıdır) | totolojik denetimi imkânsız kılar |
 | `olcu3_fixture` / `OLCU3_BEKLENEN` | sırasız girdi, **çift** bloklu kuyruk, `dialogue`+`tooltip` beklentileri | geçiş 2 Y1, geçiş 3 Z2 |
 | `olcu3b_fixture` / `OLCU3B_BEKLENEN` | zincirleme hyphen, **üç** bloklu kuyruk (`tail.source_blocks=(1,2,3)`) | geçiş 5 V1 |
 | `adim1_4(blocks, preset)` | `_group`'a giren öğe listesinin **bağımsız** yeniden türetimi | geçiş 6 Y1 (kimlik kanalı) |
 | `birlesik_kutu(blocks, sb)` | bölümleme sorgusunun beklenen bbox'ı | geçiş 6 (kapsam kanalı) |
 | `olcu5_fixture` | iki sınır, ikisinde de çok bloklu kuyruk | geçiş 4 O6 |
+| `ham_ikame_sizmis(blocks, sb, bbox)` | kapsam kanalının **sızıntı** testi (eşitlik değil); yalnız-etiket blokları muaf | geçiş 7 Y3 |
+| `Olcu6Sonuc.sayi_ihlali` / `.kimlik_kosulamadi` | sorgu sayısı kanalı; kimlik kanalının **sessizce kapanmadığının** kanıtı | geçiş 7 Y2, M10 |
 
-**Kitin içe aktarılması — şef çözdü, implementer'ın işi değil.** Depoda `pytest.ini`/`pyproject.toml` yok ve `tests/unit/ocr` bir paket değil; şef ölçtü: `from olcu_kiti import ...` → `ModuleNotFoundError`. Test dosyası içine `sys.path.insert` yazmak toplama sırasına bağlıdır (tester dizini **tek başına** koşulduğunda patlar). Şef iki **kendine ait** `conftest.py` teslim etti — `tests/unit/ocr/conftest.py` ve `.agents/tasks/T-004/conftest.py` — depo kökünü ve kit dizinini `sys.path`'e ekliyorlar. **İkisi de hiçbir görevin `owns`'ında değildir; implementer ve testerlar dokunmaz.** Şef doğruladı: `tests/unit/ocr` tek başına 98 passed, `tester_B` tek başına 117 passed, tam takım 795 passed (regresyon yok).
+**Kitin içe aktarılması — şef çözdü, implementer'ın işi değil.** Depoda `pytest.ini`/`pyproject.toml` yok ve `tests/unit/ocr` bir paket değil; şef ölçtü: `from olcu_kiti import ...` → `ModuleNotFoundError`. Test dosyası içine `sys.path.insert` yazmak toplama sırasına bağlıdır (tester dizini **tek başına** koşulduğunda patlar). Şef iki **kendine ait** `conftest.py` teslim etti — `tests/unit/ocr/conftest.py` ve `.agents/tasks/T-004/conftest.py` — depo kökünü ve kit dizinini `sys.path`'e ekliyorlar. **İkisi de hiçbir görevin `owns`'ında değildir; implementer ve testerlar dokunmaz.** Şef doğruladı: `tests/unit/ocr` tek başına **98 passed**, `tester_B` tek başına **117 passed**, `tests/` **795 passed**. **Düzeltme (§4.6/3):** sürüm 7 buna "tam takım 795" diyordu — yanlıştı; 795 yalnız `tests/`. Kör tester dizinleri dâhil tam takım **1170 passed, 1 failed, 4 xfailed** (şef ölçtü). Tek kırık, bilinen kararsız `tester_C::test_olcek_tur4_*` — O3'te belgelenen yük bağımlı ölçek testi.
 
 `python .agents/tasks/T-004/olcu_kiti.py` kitin **kendi sağlığını** sınar (derlem alt sınırları üretiyor mu, fixture'lar gerekli şekli veriyor mu, kanca kayıt tutuyor mu) — ürünün doğruluğunu değil. Şef koştu: `KIT: TEMIZ`.
 
@@ -180,15 +222,17 @@ Kit şunları sağlar ve implementer ile üç tester **aynı** kaynaktan kullan�
 4. **İki yön** — ham geometriyle miras **uygulanması gereken** ama birleşik geometriyle uygulanmayacak bir vaka; bölümleme pinli.
 5. **Yapısal test (iki taraf ayrı koşumlarda, artı AST)** — `olcu5_fixture()` ile `sorgu_kaydi()`; mutasyon (i) okuma-sırası-son ham blok, (ii) okuma-sırası-ilk ham blok; ikisinde de gözlenen çift **değişmeli**, birleşik `bbox` bozulduğunda **değişmemeli**; `gözlenen_sınır >= 2`. AST yarısı: `_normalize_impl` içindeki `_group(...)` çağrısı `blocks=` taşır **ve değeri `blocks` adının kendisidir** (`ast.unparse(kw["blocks"]) == "blocks"`).
 3b. **(düzeltildi — geçiş 6)** `olcu3b`'nin zorunlu testi **çıktıyı değil sorgu çiftini** assert eder: `sorgu_kaydi()` ile alınan miras sorgusunda `sol_sb == (1,2,3)` ve `sol_bbox == blocks[3].bbox` (okuma sırasında son ham blok). Çıktı assert'i K28 **öncesi de yeşildi**, yani hiçbir şey ölçmüyordu (§4.6/4).
-6. **Makine denetimi** — üç ön ayar için ayrı ayrı `olcu6_kos(preset)`; `r.temiz` (yani `ayrisma == 0`, **`kimlik_ihlali == 0`**, **`kapsam_ihlali == 0`**, `sira_ihlali == 0`, `patlama == 0`, `eksik_sinirlar == []`). (Kit alt sınırları kendi kontrol eder; test `r.temiz` ile assert eder ve `r.ilk_fark`'ı mesaj olarak verir.) Kitin eşik-altı güven değeri `ESIK_ALTI_CONF = 0.50` — **üç ön ayarın da eşiğinin altında** (SUBTITLE 0.55 < DIALOGUE 0.60 < TOOLTIP 0.65); ön ayar-bağımsız yazılsaydı `0.58` seçen bir derlem `subtitle` koşumunda eşik-altı blok üretmez ve M9 oradan geçerdi (O1).
+6. **Makine denetimi** — üç ön ayar için ayrı ayrı `olcu6_kos(preset)`; `r.temiz` (yani `ayrisma == 0`, **`kimlik_ihlali == 0`**, **`kapsam_ihlali == 0`**, `sira_ihlali == 0`, `patlama == 0`, `eksik_sinirlar == []`). (Kit alt sınırları kendi kontrol eder; test `r.temiz` ile assert eder ve `r.ilk_fark`'ı mesaj olarak verir.) Kitin eşik-altı güven değeri **ön ayar tablosundan türetilir**: `min(0.60, 0.65, 0.55) × 0.8 = **0.44**` (sürüm 2'de sabit `0.50` yazılmıştı; tablo aşağı kayarsa sabit değer artık eşik-altı olmaz ve denetim sessizce boşalır). Ön ayar-bağımsız yazılsaydı `0.58` seçen bir derlem `subtitle` koşumunda eşik-altı blok üretmez ve M9 oradan geçerdi (O1).
 7. **K23 korunur** — miras açık/kapalı bölümleme farkı 0, **üç ön ayarda ayrı ayrı**. *(Sürüm 6 burada "kapsam ihlalini yalnız bu koşum görür" diyordu; **yanlıştı** — bölümleme geçişi `apply_inheritance`'ı hiç okumadığı için ölçü 7 kapsam ihlalini **yapı gereği göremez**. Doğru kapı kitin **kapsam kanalı**dır, ölçü 6'nın içinde.)*
 8. **Zincirleme miras** — `Ada: a` / `b` / `c` üç ayrı segmentte `['Ada','Ada','Ada']`.
 
 **Tester-A'nın dört `strict=True` xfail'i (KRT iki geçişte de ölçtü):** parametrize edilmiş **üç** varyant düzeltme sonrası **XPASS ile kırılır** — A bunları yeşil testlere çevirir. **Dördüncüsü** (`test_r51_makine_denetimi_ham_son_blok_kuralinda_sifir_ayrisma`) `_group`'u/`normalize`'ı **hiç çağırmaz** (şef doğruladı: `_group_rejection_reason`'ı doğrudan çağırıyor, satır 811–825), gruplama döngüsünü test içinde kurar ve adım 3'ün ürettiği öğe yapısını ölçer — `_group`'taki hiçbir düzeltme onu XPASS yapamaz. A onu tur 6'da `normalize`/`_group` üzerinden geçen, sırasız girdi de içeren yeni bir makine denetimiyle **yeniden yazar**; tur 6 kapısı yeni denetimin yeşiline bakar.
 
-**Tester-B'ye — kitin ölçmediği iki mutant sınıfı (zorunlu, M10/M11):** kit sürüm 2 sorgunun **kimliğini, kapsamını ve geometrisini** ölçer; sorgu **sayısı ve sırası** anomalilerini ölçmez. B bu ikisini mutant olarak taşır ve davranışsal diferansiyelle (≥3000 girdi × 3 ön ayar, doğru uygulamaya karşı) yakalar:
-- **M10** — miras kararına fazladan bir koşul ekleyen mutant (ör. bölümleme sorgusunun sonucunu da şart koşan); KRT ölçtü: 4363 dar-diff ayrışma, kit `TEMİZ`.
-- **M11** — görünüm geçişini ters yönde işleyen mutant (zincirleme mirası bozar); KRT ölçtü: 1322 ayrışma, kit `TEMİZ`.
+**Tester-B'ye — kitin ölçmediği mutant sınıfları (zorunlu, M11–M13, M15):** kit sürüm 3 sorgunun **kimliğini, kapsamını, geometrisini, sırasını ve sayısını** ölçer. Ölçmedikleri yukarıdaki "bilinen sınırlar" tablosunda; B şunları mutant olarak taşır ve davranışsal diferansiyelle (≥3000 girdi × 4 ön ayar, doğru uygulamaya karşı) yakalar: B bu ikisini mutant olarak taşır ve davranışsal diferansiyelle (≥3000 girdi × 3 ön ayar, doğru uygulamaya karşı) yakalar:
+- **M11** — görünüm geçişini ters yönde işleyen mutant (zincirleme mirası bozar); KRT ölçtü: 1322 ayrışma, kit `TEMİZ` (sorgu sırasını bozmadığı için).
+- **M12** — `_merge_hyphenated` / `_extract_speakers` / `_is_noise` / `_collapse_intraline`'dan birini değiştiren mutant; kitin `adim1_4`'ü **mutantla birlikte kayar** ve kimlik kanalı boşalır. KRT ölçtü: n27 (`islower`→`isalpha`) 3672 ayrışma, kit `TEMİZ`.
+- **M13** — yalnız `MENU` ön ayarında ya da yalnız `apply_inheritance=False` yolunda bozulan mutant; kit bu iki noktayı koşmuyor. KRT ölçtü: n36 (MENU) 2422, n37 (K23 kancası) 12 — ikisi de kit `TEMİZ`.
+- **M15** — miras sorgusunu **yanlış `params`** ile soran mutant; kit `params` kimliğini kaydetmiyor. KRT ölçtü: 398/516, kit `TEMİZ` **ve** kör takımda ek kırık **0**.
 B'nin diferansiyeli bu iki sınıfı **kırmak zorundadır**; kıramıyorsa B'nin sondası dişsizdir ve bu bir ret nedenidir.
 
 **Tester-B'ye ve Tester-A'ya not (zorunlu — PROTOKOL §4.6/5):** K28 `_group`'un miras-sorgusu satırını değiştirdiği için şunlar **kaçınılmaz olarak bayatlar** (şef ölçtü, doğru uygulamada `-k k23` **5 kırık** veriyor):
@@ -290,7 +334,8 @@ Altı geçiş. Altıncısı kiti kırdı ve kit sürüm 2'ye çıktı; **yedinci
 | 2 | ölçüyü ayırt edici kurmadı (fixture üç uygulamada da aynı çıktıyı veriyordu); iki seçenekten pahalı olanı **yanlış varyantını** ölçerek seçti | §4.6/4, §4.6/2 |
 | 3 | "ölçtüm" dediği sayı başka bir şeyi ölçüyordu (ikili/üçlü anahtar yerine okuma/indeks sırası); ölçülerin tamamını tek ön ayarda bıraktı; bir kapı aletini kıran bir madde ekledi | §4.6/3, §4.6/2, §4.6/5 |
 | 4 | ölçüyü **mekanizmaya** kancaladı (`_raw_query_pair`), böylece mekanizma atlandığında ölçü sessizce boşaldı; iki "ölçüldü" iddiasını kendi koşmadan yazdı ve ikisi de yanlış çıktı | §4.6/1, §4.6/3 |
-| 6 | kiti yazdı ama referansı **denetlenen uygulamanın kendi verdiği veriden** türetti; kitin derlemi altı girdi sınıfını hiç üretmiyordu; iki olgusal hata (ölçü 7'nin kapsamı, M26→ölçü 3b) | §4.6/4, §4.6/7 |
+| 6 | kiti yazdı ama referansı **denetlenen uygulamanın kendi verdiği veriden** türetti; kitin derlemi altı girdi sınıfını hiç üretmiyordu; iki olgusal hata (ölçü 7'nin kapsamı, M26→ölçü 3b) | **§4.6/8**, §4.6/4 |
+| 7 | kapı **doğru uygulamayı reddediyordu** (kapsam kanalı iki ayrı sebeple yanlış pozitif); kimlik/sıra kanalları istisnada sessizce kapanıyordu; **kabul komutu dört sayacı assert etmiyordu** — 1216 ayrışmalı uygulamaya "TEMIZ, exit 0"; altı olgusal hata (biri "795 passed") | §4.6/2, §4.6/3 |
 | 5 | fixture'ların hiçbiri 2 bloktan büyük kuyruk üretmiyordu (off-by-one görünmezdi); ölçünün kimlik kanalını (`source_blocks`) önkoşul olarak yazmamıştı | §4.6/4, §4.6/2 |
 
 **Beş turun asıl dersi — sürüm 6'nın yapısal cevabı:** hata sınıfı hep aynıydı ve hep düzyazıdaydı. Bir ölçü düzyazıyla tarif edildiği sürece her turda yeniden yorumlanır; kod olarak yazıldığında yorumlanamaz. Ölçüler artık `olcu_kiti.py`'de ve mutantlara karşı doğrulanmış durumda. Bu, PROTOKOL §4.6/2'nin ("her değişmezin yanında onu ölçen kabul komutu ve test adı yazılır") pratikteki üst sınırıdır: **ölçü, koşulabilir bir artefakt olarak teslim edilir.**

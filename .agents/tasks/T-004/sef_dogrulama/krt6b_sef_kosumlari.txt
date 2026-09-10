@@ -168,3 +168,38 @@ SONRA: tests/unit/ocr/_kit_import_sondasi.py   exit=0  1 passed
        tests/unit/ocr                          exit=0  98 passed
        .agents/tasks/T-004/tester_B            exit=0  117 passed   (TEK BASINA -- onceden patliyordu)
        tests/unit (tam takim)                  795 passed           (regresyon yok)
+
+==== 7. GECIS -- SEFIN KENDI KOSUMLARI (kit surum 2 KIRILDI) ====
+[Y3] KAPSAM kanali DOGRU uygulamada YANLIS POZITIF (sef kosumu):
+     birlesik_kutu(girdi monitor_index=1, dpi_scale=1.5) -> monitor_index=0 dpi_scale=1.0
+       -> dogru uygulamada kapsam_ihlali = 1
+     yalniz-etiket blok ("Ada:" K9 pending_blocks ile yutuluyor; source_blocks'a girer,
+     bbox'a girmez) -> dogru uygulamada kapsam_ihlali = 1
+     Kapinin dogru uygulamayi reddetmesi, hic kapi olmamasindan kotudur.
+[Y5] _selftest yalnizca `eksik_sinirlar` ve `patlama` icin hata=1 yapiyor; ayrisma /
+     kimlik_ihlali / kapsam_ihlali / sira_ihlali YAZDIRILIYOR ama ASSERT EDILMIYOR.
+     Mevcut depo (K28 yok, ayrisma=3677) -> "KIT: TEMIZ", exit 0.
+[olgu] Karar surum 7 "tam takim 795 passed" diyordu. Sef olctu:
+       pytest tests            -> 795 passed
+       pytest tests + tester_A/B/C -> 1 failed, 1170 passed, 4 xfailed
+       (tek kirik: bilinen kararsiz tester_C::test_olcek_tur4_*)
+
+==== KIT SURUM 3 DOGRULAMASI (sef) ====
+Yanlis pozitif denetimi (DOGRU uygulama, uc vaka):
+  monitor_index/dpi_scale tasiyan girdi   kapsam_ihlali = 0   OK
+  yalniz-etiket blok                      kapsam_ihlali = 0   OK
+  etiket + cok bloklu zincir              kapsam_ihlali = 0   OK
+Mutantlar (on ayar basina 2500 girdi):
+  w_v4  (dogru)         DIA TEMIZ  TOO TEMIZ  SUB TEMIZ            o3/o3b OK
+  krt6f/w_n06           KIMLIK=2387 / 1350 / 826
+  w_n63 (imza+n06)      KOSULAMADI=2500 / 2500 / 2500   <- Y2 kapandi
+  w_n58 (sag sizinti)   KAPSAM=5232 / 5232 / 5232       <- Y4 kapandi
+  w_n18 (fazladan kosul)SAYI=1244 / 1851 / 2219         <- M10 artik OLCULUYOR
+  w_n55 (ayni (y,x))    geo=804 / 1081 / 1216
+  w_n23 (ters yon)      TEMIZ                            <- HALA KACIYOR (M11)
+Kit kendini sinamasi (mevcut depo, K28 yok):
+  ayrisma=3677/6119/7249 (BEKLENEN -- R5-1 acik)
+  kimlik=0 kapsam_ihlali=0 sira=0 sayi=0 kimlik_kosulamadi=0 patlama=0
+  KIT SAGLIGI: TEMIZ  exit=0
+NOT: krt6g/w_n06 ile krt6f/w_n06 FARKLI dosyalar (7. gecis kendi kopyasini kurmus);
+     sef once yanlis kopyayi olctu ve "regresyon" sandi -- dogru kopyada regresyon YOK.
