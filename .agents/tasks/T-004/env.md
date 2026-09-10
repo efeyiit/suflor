@@ -165,3 +165,56 @@ Paket kararları numaralandırdı. Her birini koda karşı **tek tek** doğrula.
 4. **Kötü kullanım.** Bir sonraki ajan (OCR motoru, pipeline) bu API'yi kullanırken hangi yanlışı yapmaya davet ediliyor? Yanıltıcı isim, belgelenmemiş zorunlu çağrı sırası, sessizce yanlış sonuç döndüren çağrı biçimi, kolay yanlış anlaşılan varsayılan?
 5. **Ölçek.** 1 blok · 500 blok · 10.000 karakterlik tek blok · hepsi aynı `bbox`'ta üst üste binen bloklar. Çökme, kuadratik yavaşlama veya bellek patlaması var mı?
 6. **`presets.py` genişletilebilirliği.** Paket, `ölçekleme faktörü` ve `kontrast ön işlemesi` alanlarının sonraki göreve bırakıldığını söylüyor. Yapı bu genişlemeyi kaldırıyor mu, yoksa sonraki ajan dosyayı yeniden mi yazmak zorunda kalacak?
+
+---
+
+# TUR 6 — ne değişti, neye bakılacak
+
+**Şefin kararı:** `sef_karari-tur6.md` **sürüm 8** — oku. Yedi karar-kırmızı-takım geçişinden geçti.
+
+**Tek kod değişikliği (K28).** Miras-uygunluk sorgusunun **iki tarafı da** artık özgün `TextBlock` listesinden geliyor: sol taraf kapanan grubun **okuma sırasındaki son** kaynak bloğu, sağ taraf adayın **okuma sırasındaki ilk** kaynak bloğu. Okuma sırası `(bbox.y, bbox.x, girdi indeksi)`. Yeni modül düzeyi yardımcı `_raw_query_pair(tail, nxt, blocks)`; `_group` imzasına keyword-only `blocks` eklendi. `_Item`, `normalize` gövdesi, `_should_group` **değişmedi**.
+
+**Belgeleme (K29–K32).** İki bayat test atfı düzeltildi; K2×K19/K21 koşullu etkileşimi, aynı konuşmacının çift-etiketli birleşmesi ve NFC varsayımı hem docstring'e hem `known_gaps`'e yazıldı.
+
+## Şefin kendi ölçümü (tekrar edebilirsin)
+
+```
+mypy --strict                      exit 0
+pytest tests/unit/ocr              124 passed
+purity_check.py                    exit 0  (iki K29 ihlali kapandi)
+olcu_kiti.py                       exit 0  -- ayrisma 3677/6119/7249 -> 0/0/0
+pytest tests                       821 passed  (taban 795, dusen yok)
+kor tester takimi (uc kosum)       9 failed, 370 passed, 1 xfailed  -- KARARLI
+```
+
+Dokuz kırığın dokuzu da kararın §4.6/5 listesinde **önceden adlandırılmış** kaçınılmaz bayatlamalar: üç `test_r51_kuyruk_*` (XPASS — hata düzeldi), `M1`/`M2`/`M3`/`m2_k21` mutant sondası desenleri, `normalize_impl_bayragi` (artık `blocks` da geçiyor), `k24_tail_ast` (çağrı biçimi değişti). **A ve B bunları yeniden nişanlar.** Onuncu bir kırık görürsen o gerçek bir regresyondur — bildir.
+
+## Ölçü kiti
+
+`.agents/tasks/T-004/olcu_kiti.py` **şefe aittir; içe aktar, DEĞİŞTİRME.** `from olcu_kiti import ...` çalışır (`conftest.py` kurdu). Kit dört kanal ölçer: geometri, kimlik, kapsam, sıra + sayı. Kitin **ölçmediği** sınıflar kararda "bilinen sınırlar" tablosunda ve aşağıda mercek başına yazılı.
+
+## Tur 6 mercekleri
+
+### MERCEK A — Garanti alanı
+1. **`test_r5_partition_invariant.py`'yi yeniden nişanla.** Üç `strict=True` xfail artık XPASS — düzeltilmiş davranışı doğrulayan yeşil testlere çevir. Dördüncüsü (`test_r51_makine_denetimi_*`) `_group`'u hiç çağırmıyor; `normalize`/`_group` üzerinden geçen, **sırasız girdi ve ≥3 bloklu kuyruk içeren** yeni bir makine denetimiyle yeniden yaz. `:401`'in kör-sonda testi kırılmıyor ama **sessizce bayatlıyor** (kendi yerel `_group_tur4` kopyasını ölçüyor) — yeni sorgu biçimine nişanla.
+2. **`source_blocks[-1]` her durumda tanımlı mı:** tek bloklu grup, boş grup, `_group([], params)`, tek öğeli liste.
+3. **Zincirleme miras** `tests/` altında pinli mi (`Ada: a` / `b` / `c` → `['Ada','Ada','Ada']`).
+4. `_raw_query_pair`'in sınır durumları: `blocks=()` ile çağrı, indeks aralık dışı, `source_blocks` tek elemanlı.
+
+### MERCEK B — Karar uyumu
+1. **Bayatlayan dört kapı aletini yeniden nişanla** (AST beklentisi, M1/M2/M3 desenleri) ve **beş yeni mutant** ekle:
+   - **M4** `_raw_query_pair`'de okuma sırası yerine indeks sırası → ölçü 3/3b ve kit `geo` kırılmalı
+   - **M5** sağ tarafı `nxt` bırakan → ölçü 2 kırılmalı
+   - **M11** görünüm geçişini **ters yönde** işleyen → **kit bunu görmez** (KRT ölçtü: 1322 ayrışma, kit `TEMİZ`); davranışsal diferansiyelle yakala
+   - **M12** `_merge_hyphenated`/`_extract_speakers`/`_is_noise`/`_collapse_intraline`'dan birini değiştiren → **kitin `adim1_4`'ü mutantla birlikte kayar**, kimlik kanalı boşalır (KRT: n27 → 3672 ayrışma, kit `TEMİZ`)
+   - **M13** yalnız `MENU` ön ayarında ya da yalnız `apply_inheritance=False` yolunda bozulan → **kit bu iki noktayı koşmuyor** (KRT: 2422 ve 12)
+   - **M15** sorguyu **yanlış `params`** ile soran → kit `params` kimliğini kaydetmiyor (KRT: 398/516, kör takımda ek kırık **0**)
+2. K23 hâlâ iki geçişli mi (AST); bölümleme döngüsünde `replace` **yok** mu; görünüm geçişindeki tek `replace` yalnız `speaker` mi yazıyor.
+3. `_should_group`'un tek satırlık devretme deseni korunmuş mu; `_group` imzası kararda yazıldığı gibi mi.
+
+### MERCEK C — Sınır, kötü kullanım ve dil
+1. **Kitin üretmediği beş girdi sınıfı (M14) — bu senin alanın, kör takım da görmüyor:** emoji/astral karakterler ve ZWJ dizileri, `monitor_index ≠ 0`, `dpi_scale ≠ 1.0`, **≥40 bloklu** girdi, **ASCII-dışı konuşmacı adı** (CJK/RTL etiket). Beşi de kite **ve** 1174 kör teste görünmez.
+2. K32'yi sına: NFC/NFD aynı gövde → segment sayısı farkı; **yalnız etiket aksanlıysa** segment sayısı aynı ama `speaker` `None`'a düşüyor mu.
+3. K31 (a)/(b): aynı adla iki etiket birleşiyor mu; tanınmayan ikinci etiket (rakamlı ad) metinde kalıyor mu.
+4. Ölçek: `n=500/1000/2000` süreleri tur 5'e göre kötüleşti mi. **Uyarı:** `test_olcek_tur2/tur4` yük altında kararsız (şef ölçtü); tek başına koş.
+5. Yozlaşmış geometri: `w<=0`, `h<=0`, aynı `(y,x)` çiftli bloklar, tek karakterli bloklar.

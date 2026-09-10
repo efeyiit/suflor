@@ -76,6 +76,74 @@ K-bolumu icinde "(tur 5)" etiketiyle belgelenir; K23/K24 icin miras
 mekanizmasinin KENDISI (`_group`) tur 5'te YENIDEN YAZILDI -- bkz. "##
 K23/K24" bolumu.
 
+TUR 6 (duzeltme turu -- `.agents/tasks/T-004/sef_karari-tur6.md`): tur
+5'te A RET, B ve C ONAY verdi. K23 degismezi SAGLANDI; kalan bulgu
+R5-1 idi ve sefin karari YEDI kirmizi takim gecisinden gecti. BES YENI
+KARAR: K28 (DAVRANIS -- miras-uygunluk sorgusunun IKI tarafi da OZGUN
+`TextBlock` listesinden gelir; bkz. asagida "## K28"), K29 (SALT
+DOKUMANTASYON -- bu dosyanin docstring'lerinde ANILAN her `test_*` adi
+test dosyasinda GERCEKTEN var olmali; iki bayat ad duzeltildi), K30
+(SALT DOKUMANTASYON -- K2 x K19/K21 etkilesimi KOSULLU cumleyle
+yazildi; bkz. `_group`), K31 (SALT DOKUMANTASYON -- bitisik iki
+replikte IKI alt durum; bkz. `_group`) ve K32 (SALT DOKUMANTASYON --
+girdi NFC varsayimi MODUL duzeyindedir; bkz. asagida "## K32"). Yalniz
+K28 KOD degisikligidir; K29-K32 davranisi DEGISTIRMEZ.
+
+## K28 (tur 6) -- miras-uygunluk sorgusunun IKI tarafi da OZGUN bloktan
+
+DEGISMEZ: bir grup kapanirken miras-uygunluk sorgusuna (`_group_
+rejection_reason(..., ignore_length=True)` cagrisi) verilen IKI geometri
+de `normalize`'a verilen OZGUN `TextBlock` listesinden gelir --
+
+  - SOL taraf `bbox` = kapanan grubun kaynak bloklari arasinda OKUMA
+    SIRASINDA SON gelen blogun `bbox`'i;
+  - SAG taraf `bbox` = adayin (`nxt`) kaynak bloklari arasinda OKUMA
+    SIRASINDA ILK gelen blogun `bbox`'i.
+
+OKUMA SIRASI = `(bbox.y, bbox.x, girdi indeksi)` ARTAN -- adim 1'in
+kararli `sorted(enumerate(blocks), key=(y, x))` cagrisiyla AYNI. HICBIR
+birlesik `_Item` `bbox`'i (adim 3'ten ya da adim 5'ten) bu sorguya
+GIRMEZ. Sorgunun `speaker`/`text` alanlari sirasiyla `tail` ve `nxt`'ten
+alinir; YALNIZCA `bbox` IKAME EDILIR (`dataclasses.replace`; `speaker`,
+`text` VE `source_blocks` AYNEN korunur).
+
+`source_blocks[-1]` / `[0]` KULLANILMAZ: `source_blocks` K8 geregi artan
+INDEKS sirasindadir, K3 geregi girdi listesi okuma sirasinda OLMAK
+ZORUNDA DEGILDIR; en buyuk indeks ile okuma sirasindaki son blok AYNI
+SEY DEGILDIR.
+
+KAPSAM (K24'ten devralinir): bu degismez YALNIZCA miras-uygunluk
+sorgusu icindir. `_group`'un ANA birlestirme karari (bolumleme gecisi)
+K10/K11 uyarinca `current`'in BIRLESIK `bbox`'ini kullanmaya DEVAM
+EDER; K23'un iki-gecis yapisi DEGISMEZ.
+
+Uygulama: modul duzeyinde `_raw_query_pair(tail, nxt, blocks)` (tam
+gerekce ve olcumler orada) + `_group(items, params, *, blocks=(),
+apply_inheritance=True)`. `_Item` DEGISMEDI (yeni alan yok, adim 3/adim
+5 yayilimi yok) -- geometri SORGU ANINDA turetilir, saklanan ve
+bayatlayabilecek bir kopya YOKTUR.
+
+KOK, ACIK BIRAKILDI: R5-1'in KOKU adim 3'un (`_merge_hyphenated`, K5)
+GEOMETRIK KONTROL YAPMAMASIDIR; K28 SEMPTOMU kapatir, koku DEGIL --
+adim 3 SALT TIPOGRAFIKTIR ve OYLE KALIR (bkz. `_merge_hyphenated`).
+
+## K32 (tur 6) -- girdi NFC varsayimi, MODUL duzeyinde
+
+`normalize` girdinin **NFC** oldugunu VARSAYAR. Ad suzgeci codepoint
+bazli `isalpha()`'dir; NFD adlar (birlesik aksan) konusmaci SAYILMAZ,
+etiket METINDE kalir (K31/b). Bu varsayim SUZGECLE SINIRLI DEGILDIR:
+`max_group_chars` (K11) ve `_MAX_SPEAKER_NAME_LEN` (K9) CODEPOINT
+SAYAR; ayni GORUNEN metin NFD gelirse BOLUMLEME DE DEGISIR. Olcum (sef,
+kirmizi takim yeniden uretti): 3 bloklu aksanli bir govde NFC'de 1
+segment, NFD'de 3 segment (blok basina ~85-92 codepoint); YALNIZ etiket
+aksanliysa segment SAYISI degismez (1/1) ama `speaker` `'María'` ->
+`None`'a duser ve etiket metinde kalir. Ayrac kumesi (`:` / `：`, K17)
+ETKILENMEZ. Davranis tur 6'da DEGISTIRILMEDI (K9/K11'in sozluksel
+kurallarina dokunmak yeni bir kapi turudur); NFC normalizasyonu T-006
+CIKIS SOZLESMESINE adaydir. Testler:
+`test_k32_nfd_govde_bolumlemeyi_degistirir` ve `test_k32_nfd_yalniz_
+etiket_segment_sayisini_degistirmez_ama_speakeri_dusurur`.
+
 ## Isleme sirasi (K2 -- degistirilemez)
 
     1. guven esigi filtresi + gecerlilik denetimi (K7)
@@ -89,7 +157,15 @@ Sira SONUCU DEGISTIRIR: bolunmus bir cumlenin ORTASINDAKI esik-alti blok
 adim 1'de düşer, bu yuzden adim 3+ o blok hic var olmamis gibi calisir --
 kalan iki parca birbirine (hyphen kosulu tutuyorsa) birlesebilir. Bu,
 "once filtrele sonra birlestir" sirasinin DOGAL sonucudur, kusur degildir
-(bkz. `tests/unit/ocr/test_normalizer.py::test_k2_esik_alti_blok_ortada`).
+(bkz. `tests/unit/ocr/test_normalizer.py::test_k2_esik_alti_orta_blok_
+komsulari_birlestirir`).
+
+K30 (sef_karari-tur6.md, TUR 6) -- BU CUMLE KOSULLUDUR: adim 1'de dusen
+blok, adim 5'te geride GERCEK bir GEOMETRIK BOSLUK birakir. "O blok hic
+var olmamis gibi calisir" ifadesi METIN/HYPHEN icin dogrudur, GEOMETRI
+icin DEGIL -- artik bosluk esigi ASARSA sinir yalniz-uzunluk siniri
+olmaktan cikar ve miras UYGULANMAZ, ASMAZSA miras KORUNUR. Tam ifade ve
+iki test icin bkz. `_group` docstring'inin K30 bolumu.
 
 ## K1 -- "satir" tanimi
 
@@ -201,7 +277,7 @@ Tek karakterlik (strip sonrasi uzunluk == 1) bir blok/satir:
     docstring'in OLGUSAL ifadesini duzeltir (K20/K22 ile AYNI ilke: kod
     HER ZAMAN dogruydu, yalniz docstring'in OLGUSAL iddiasi hatali
     kurulmustu). Zorunlu test: `test_k26_alti_karakterin_hepsi_uyumluluk_
-    formu_ve_etiket_dagilimi_dogru` (tests/unit/ocr/test_normalizer.py)
+    formu_ve_etiket_dogru` (tests/unit/ocr/test_normalizer.py)
     -- `unicodedata.decomposition` ile ALTISININ da uyumluluk formu
     OLDUGUNU VE etiket dagilimini (2x `<wide>`, 2x `<small>`, 2x
     `<vertical>`) SABITLER.
@@ -871,8 +947,10 @@ def normalize(blocks: Sequence[TextBlock], preset: OcrPreset) -> list[Segment]:
     """OCR bloklarini cevrilmeye hazir `Segment` listesine indirger.
 
     Tam davranis sozlesmesi bu modulun UST docstring'indedir (K1-K14,
-    K15-K18 [tur 2], K19-K22 [tur 3/4], K23-K27 [tur 5], yozlasmis
-    girdiler). Ozet: 6 sabit adim (K2) -- esik filtresi, gurultu eleme,
+    K15-K18 [tur 2], K19-K22 [tur 3/4], K23-K27 [tur 5], K28-K32 [tur
+    6], yozlasmis girdiler). GIRDININ NFC OLDUGU VARSAYILIR (K32 --
+    NFD girdi hem konusmaci tanimayi hem BOLUMLEMEYI degistirir).
+    Ozet: 6 sabit adim (K2) -- esik filtresi, gurultu eleme,
     satir birlestirme+hyphen, konusmaci ayiklama, on-ayara-gore
     gruplama, yer tutucu toplama. Cikti okuma sirasindadir (K3). Saf
     fonksiyon: I/O yok, global mutasyon yok, rastgelelik yok.
@@ -912,6 +990,12 @@ def _normalize_impl(
     docstring'i "## K23/K24") tanimi/ispatidir -- `_group`'un ARTIK IKI
     ayri gecisten olusmasi sayesinde (bkz. `_group` docstring'i)
     bolumleme gecisi bu bayraktan YAPI GEREGI ETKILENMEZ.
+
+    K28 (TUR 6): adim 5'teki `_group` cagrisi `blocks=blocks` ile
+    yapilir -- `blocks`, bu fonksiyona verilen OZGUN dizidir (adim 1'de
+    esik-alti diye ELENEN bloklar DAHIL; `source_blocks` indeksleri o
+    dizinin indeksleridir, K8). Suzulmus/sikistirilmis bir liste
+    gecirmek miras-uygunluk sorgusunda INDEKS KAYMASINA yol acar.
     """
     _validate_confidences(blocks)
     params = get_params(preset)
@@ -936,7 +1020,13 @@ def _normalize_impl(
     items = _extract_speakers(items)
 
     # 5. gruplama -- on ayara gore (K11); menu icin _group HIC cagirilmaz (K27)
-    grouped = _group(items, params, apply_inheritance=apply_inheritance) if params.should_group else items
+    # K28 (TUR 6): `blocks=blocks` -- OZGUN (adim 1'de elenenler DAHIL) liste
+    # gecirilmek ZORUNDADIR; suzulmus bir liste indeks kaymasi uretir.
+    grouped = (
+        _group(items, params, blocks=blocks, apply_inheritance=apply_inheritance)
+        if params.should_group
+        else items
+    )
 
     # 6. yer tutucu toplama (K6) + Segment insasi
     segments = [
@@ -1058,7 +1148,22 @@ def _union_rect(a: Rect, b: Rect) -> Rect:
 
 def _merge_hyphenated(items: list[_Item]) -> list[_Item]:
     """K1 + K5: okuma sirasindaki komsu ogeleri, hyphen kosulu tutuyorsa
-    birlestirir (bloklar-arasi satir birlestirme)."""
+    birlestirir (bloklar-arasi satir birlestirme).
+
+    K28-KOK (sef_karari-tur6.md, TUR 6 -- BILINCLI ve ACIK BIRAKILMIS
+    SINIR): ADIM 3 SALT TIPOGRAFIKTIR (K5) ve HICBIR GEOMETRIK KONTROL
+    YAPMAZ -- tire satirin son karakteriyse ve sonraki satir kucuk harfle
+    basliyorsa iki oge, ARALARINDAKI GEOMETRIK MESAFEYE BAKILMAKSIZIN
+    birlesir. Bulgu R5-1'in KOKU BUDUR: adim 3 COK BLOKLU `_Item`'lar
+    uretir ve o `_Item`'in `bbox`'i BIRLESIK kutudur. Sef bu koku tur
+    6'da BILINCLI olarak ACIK BIRAKTI -- adim 3 salt tipografiktir ve
+    OYLE KALIR; K28 SEMPTOMU kapatir, koku DEGIL.
+
+    Birlesik oge geometrisi ADIM 5'in MIRAS kararina HIC GIRMEZ: sorgu
+    aninda `_raw_query_pair` onun yerine OZGUN bloklari koyar (K28).
+    BOLUMLEME kararina ise birlesik `bbox` ile GIRER (K10/K11) -- bu
+    ayrim K28'in KAPSAM cumlesidir ve olcu kitinin KAPSAM kanaliyla
+    denetlenir."""
     if not items:
         return []
     result: list[_Item] = []
@@ -1098,7 +1203,17 @@ def _split_speaker_label(text: str) -> tuple[str | None, str]:
     kumesindeki EN SOLDAKI eslesme (K17: ASCII `:` + fullwidth `：`).
     `Isim`: ilk karakter Unicode harf, geri kalani yalniz harf/bosluk/
     kesme/tire, uzunluk `_MAX_SPEAKER_NAME_LEN` altinda -- rakam icermez
-    (`"12:30"` gibi bir metin konusmaci sayilmaz)."""
+    (`"12:30"` gibi bir metin konusmaci sayilmaz).
+
+    K32 (sef_karari-tur6.md, TUR 6) -- GIRDI NFC VARSAYIMI: `normalize`
+    girdinin **NFC** oldugunu VARSAYAR. Buradaki ad suzgeci CODEPOINT
+    BAZLI `isalpha()`'dir; NFD adlar (birlesik aksan -- `'Mari' + U+0301
+    + 'a'`) konusmaci SAYILMAZ (birlesen aksan `Mn` kategorisindedir,
+    `isalpha()` `False` doner), etiket METINDE kalir (K31/b yolu). Sef
+    olctu: `'María: hola'` NFC -> `speaker='María'`; NFD -> `speaker=
+    None`, `text` etiketi TASIR. Varsayim BU SUZGECLE SINIRLI DEGILDIR
+    -- MODUL DUZEYINDEDIR; tam kapsam ve bolumleme etkisi icin bkz. modul
+    ust docstring'inin "## K32" bolumu."""
     idx = _find_speaker_separator(text)
     if idx <= 0:
         return None, text
@@ -1258,12 +1373,90 @@ def _should_group(a: _Item, b: _Item, params: NormalizerParams) -> bool:
     K21 (sef_karari-tur4.md, TUR 4) `_group_rejection_reason`'a
     KEYWORD-ONLY, VARSAYILANI `False` olan bir `ignore_length` parametresi
     ekledi -- bu satir o parametreyi HIC GECMEDIGI icin (varsayilan
-    kullanilir) K21'den ETKILENMEDI, GOVDESI TEK KARAKTER DEGISMEDI."""
+    kullanilir) K21'den ETKILENMEDI, GOVDESI TEK KARAKTER DEGISMEDI. K28
+    (TUR 6) de bu fonksiyona DOKUNMADI: ham-blok ikamesi YALNIZCA miras-
+    uygunluk sorgusunun (`ignore_length=True`) cagri noktasindadir."""
     return _group_rejection_reason(a, b, params) is None
 
 
+def _raw_query_pair(
+    tail: _Item, nxt: _Item, blocks: Sequence[TextBlock]
+) -> tuple[_Item, _Item]:
+    """K28 (sef_karari-tur6.md, TUR 6): miras-uygunluk sorgusunun IKI
+    tarafinin da geometrisini OZGUN `TextBlock` listesinden turetir.
+
+    Doner: `(sol, sag)` --
+      - `sol` = `tail`in KOPYASI, `bbox` yerine `tail.source_blocks` icinde
+        OKUMA SIRASINDA SON gelen ozgun blogun `bbox`'i;
+      - `sag` = `nxt`in KOPYASI, `bbox` yerine `nxt.source_blocks` icinde
+        OKUMA SIRASINDA ILK gelen ozgun blogun `bbox`'i.
+
+    OKUMA SIRASI = `(bbox.y, bbox.x, girdi indeksi)` ARTAN -- `_normalize_
+    impl`'in ADIM 1'de kullandigi kararli `sorted(enumerate(blocks),
+    key=(y, x))` cagrisiyla AYNI siradir. Ucuncu bilesen (girdi indeksi)
+    bugunku kodda davranissal bir NO-OP'tur (`source_blocks` K8 geregi
+    artan ve `sorted` kararlidir, yani esitlikte ikili anahtar zaten girdi
+    indeksine duser -- sef olctu: 200.000 ornekte 0 ayrisma); tanimi K8'e
+    BAGIMLI olmaktan cikarmak icin ACIKCA yazilir.
+
+    NEDEN (bulgu R5-1, Tester-A sol taraf + kirmizi takim sag taraf, sef
+    ikisini de kendi eliyle yeniden uretti): K2'nin sirasinda ADIM 3
+    (`_merge_hyphenated`, K5) ADIM 5'ten (`_group`) ONCE calisir ve
+    hyphen'li satirlari TEK bir `_Item`'a birlestirir -- o `_Item`'in
+    `bbox`'i BIRLESIK kutudur. `_group` onu `tail` (ya da `nxt`) olarak
+    kullanirsa K24'un kaldirdigi artifakt adim 3 uzerinden GERI gelir:
+    birlesik kutu gercek satir-arasi kopusu GIZLER (`gap` yanlislikla
+    kucuk/negatif, `ref_height`/`ref_width` yanlislikla buyuk, `overlap`
+    UYDURULMUS) ve `speaker` gercek kopusun OTESINE atfedilir. Sag tarafta
+    ayni artifakt bir K16 ihlalini de gizler: adayin ham ILK satirinin
+    `h == 0` olmasi birlesik kutuda gorunmez. Olcum (A'nin derlemi):
+    30.174 sinirin %5,2'si; sag tarafta birlesik aday iceren 2065 sinirin
+    242'si, 239'u tehlikeli yonde.
+
+    `source_blocks[-1]` / `[0]` KULLANILMAZ: `source_blocks` K8 geregi
+    artan INDEKS sirasindadir, K3 geregi girdi listesi OKUMA sirasinda
+    OLMAK ZORUNDA DEGILDIR; en buyuk indeks ile okuma sirasindaki son blok
+    AYNI SEY DEGILDIR (sef olctu: 25.460 sinirin %3,2'sinde, sirasiz
+    girdilerde %8,5'inde ayrisiyorlar; sirasiz girdide `[-1]` segment
+    uretmeyen bir ETIKET blogunu bile gosterebilir).
+
+    IKAME YALNIZ `bbox`'a dokunur: `dataclasses.replace` ile `speaker`,
+    `text` VE `source_blocks` AYNEN KORUNUR. `speaker`/`text` bu cagri
+    noktasinda OLU alanlardir (cagri `nxt.speaker is None` ile kisa devre
+    olur ve `ignore_length=True` uzunluk kontrolunu atlar) -- ikisini de
+    ham bloktan alan bir uygulama DAVRANISSAL olarak esdegerdir (sef
+    olctu: dort on ayar x 4000 girdi, 0 ayrisma); kural OKUNABILIRLIK ve
+    `ignore_length` bir gun kaldirilirsa DOGRULUK icindir.
+    `source_blocks`'un korunmasi da urun davranisi icin OLU bir alandir
+    ama OLCUNUN ONKOSULUDUR: olcu kitinin kancasi yalnizca `(a, b,
+    params)` gorur, `tail`/`nxt` KIMLIGI baska hicbir kanaldan geri
+    kazanilamaz.
+
+    SOZLESME -- `blocks` OZGUN listedir: `normalize`'a verilen `blocks`
+    dizisinin KENDISI (adim 1'de esik-alti diye ELENEN bloklar DAHIL;
+    indeksler OZGUN indekslerdir). Suzulmus/sikistirilmis bir liste
+    gecirmek INDEKS KAYMASINA yol acar -- bunu olcu 5'in AST yarisi
+    (`_normalize_impl` icindeki `_group(...)` cagrisi `blocks=blocks`
+    yaziyor mu) ve, derlem esik-alti blok icerdiginde, olcu 6 yakalar.
+
+    `blocks` YETERSIZSE `IndexError` yukselir (bkz. `_group`'un `blocks=()`
+    varsayilani) -- bu BILINCLIDIR: sessiz yanlis uretmek yerine gurultulu
+    kirilir."""
+
+    def reading_order(idxs: tuple[int, ...]) -> list[int]:
+        return sorted(idxs, key=lambda i: (blocks[i].bbox.y, blocks[i].bbox.x, i))
+
+    left_idx = reading_order(tail.source_blocks)[-1]
+    right_idx = reading_order(nxt.source_blocks)[0]
+    return (replace(tail, bbox=blocks[left_idx].bbox), replace(nxt, bbox=blocks[right_idx].bbox))
+
+
 def _group(
-    items: list[_Item], params: NormalizerParams, *, apply_inheritance: bool = True
+    items: list[_Item],
+    params: NormalizerParams,
+    *,
+    blocks: Sequence[TextBlock] = (),
+    apply_inheritance: bool = True,
 ) -> list[_Item]:
     """K11: `params.should_group` `True` iken okuma-sirali komsu ogeleri
     `_group_rejection_reason` kosuluna gore birlestirir. Metinler TEK
@@ -1318,14 +1511,15 @@ def _group(
        speaker_miras_alir_ascii` -- ZATEN 2 gruba bolunen bu senaryoda
        zincirleme HENUZ gozlenmiyor, ama YAPI zincirlemeye IZIN VERIR).
 
-    `pure_length` (K19+K21+K24 -- bir sinirin "SADECE uzunluk sinirli"
+    `pure_length` (K19+K21+K24+K28 -- bir sinirin "SADECE uzunluk sinirli"
     olup OLMADIGI): `reason == "length"` (kapanan grup ile `nxt` arasinda
     -- birikmis/birlesik `current` ile HESAPLANIR, K10/K11'in mevcut ANA
     birlestirme SEMANTIGI DEGISMEDI) VE `nxt.speaker is None` (miras
     ALACAK ogenin KENDI etiketi OLMAMALI -- bu HAM/OZGUN deger, HICBIR
     ZAMAN mute EDILMEDIGI icin BURADA GUVENLE OKUNUR) VE (K24, sef_karari
-    -tur5.md) `_group_rejection_reason(tail, nxt, params, ignore_length=
-    True) is None` -- burada `tail`, `current`'in BIRLESIK `bbox`'i
+    -tur5.md; K28, sef_karari-tur6.md) `_group_rejection_reason(*_raw_
+    query_pair(tail, nxt, blocks), params, ignore_length=True) is None`
+    -- burada `tail`, `current`'in BIRLESIK `bbox`'i
     DEGIL, grubun okuma-sirasindaki SON (birlesime en son katilan) HAM
     ogesidir (asagida ayrica TUTULUR, her birlesimde `tail = nxt`
     guncellenir). K24 gerekcesi: birlesik `bbox`, grubun EN ALTA uzanan
@@ -1340,7 +1534,69 @@ def _group(
     sorulur; bu, zincirlemeyi DOGAL olarak MUMKUN kilan degisikliktir VE
     hicbir MEVCUT testle CELISMEZ (K21'in dusuk-seviye 6 testi HALA
     `_group_rejection_reason`'i DOGRUDAN cagirir, bu fonksiyonun ICINE
-    HIC GIRMEZ)."""
+    HIC GIRMEZ).
+
+    TUR 6 (K28, sef_karari-tur6.md) -- `blocks` PARAMETRESI: K24 `tail`i
+    getirmisti, ama `tail`in KENDISI de ADIM 3'ten (`_merge_hyphenated`,
+    K5) BIRLESIK gelebilir; AYNI sey ADAY (`nxt`) icin de gecerlidir.
+    K28 sorgunun IKI tarafinin da geometrisini OZGUN `TextBlock`
+    listesinden okur: `_raw_query_pair(tail, nxt, blocks)` SOL tarafa
+    `tail.source_blocks`'un OKUMA SIRASINDA SON, SAG tarafa
+    `nxt.source_blocks`'un OKUMA SIRASINDA ILK ozgun blogunun `bbox`'ini
+    koyar (tam gerekce, olcumler ve okuma sirasi tanimi o fonksiyonun
+    docstring'indedir).
+
+      - `blocks` KEYWORD-ONLY ve VARSAYILANI `()`; varsayilan YALNIZCA
+        `items` bosken ya da UZUNLUK-TEK sinir DOGMAYAN DOGRUDAN cagrilar
+        icindir. Aksi halde `IndexError` yukselir -- BILINCLIDIR: sessiz
+        yanlis yerine GURULTULU hata (patlama GECIKMELIDIR, yalniz
+        `reason == "length" and nxt.speaker is None` sinirinda dogar).
+      - `_normalize_impl` bu parametreyi `blocks=blocks` ile gecirmek
+        ZORUNDADIR (OZGUN liste -- adim 1'de ELENEN bloklar DAHIL,
+        indeksler OZGUN indekslerdir).
+      - KAPSAM (K24'ten devralinir): ham ikame YALNIZCA miras-uygunluk
+        sorgusu icindir. ANA birlestirme karari (asagidaki bolumleme
+        dongusunun `_group_rejection_reason(current, nxt, params)`
+        cagrisi) K10/K11 uyarinca `current`'in BIRLESIK `bbox`'ini
+        KULLANMAYA DEVAM EDER; K23'un iki-gecis yapisi DEGISMEZ.
+      - Bolumleme dongusunun ICINDE hicbir `replace(...)` YAZILMAZ --
+        ikame TAMAMEN `_raw_query_pair`'in icindedir.
+
+    K30 (sef_karari-tur6.md, TUR 6) -- K2 x K19/K21 ETKILESIMI, KOSULLU:
+    ADIM 1'de dusen bir blok, ADIM 5'te geride GERCEK bir GEOMETRIK
+    BOSLUK birakir -- modul docstring'inin K2 bolumundeki "o blok hic var
+    olmamis gibi calisir" ifadesi METIN/HYPHEN icin dogrudur, GEOMETRI
+    icin DEGIL. Bu ARTIK bosluk `max_vertical_gap_ratio * min(h)` esigini
+    ASARSA sinir artik yalniz-uzunluk siniri DEGILDIR ve K21 uyarinca
+    miras UYGULANMAZ; ASMAZSA miras KORUNUR. IKISI DE K2 sirasinin
+    BILINCLI sonucudur -- sonuc ARTIK BOSLUGUN BUYUKLUGUNE baglidir (sef
+    olctu: 22px > 14.4 esik -> miras kesilir; 4px < 14.4 -> miras
+    korunur). Iki yol da birer testle sabitlenmistir:
+    `test_k30_artik_bosluk_esigi_asmazsa_miras_korunur` ve
+    `test_k30_artik_bosluk_esigi_asarsa_miras_yok`.
+
+    K31 (sef_karari-tur6.md, TUR 6) -- BITISIK IKI REPLIK, IKI ALT DURUM:
+    K15 uyarinca geometrik olarak bitisik iki replik, IKINCI BLOGUN
+    KONUSMACISI BIRINCIYLE AYNI ya da `None` ISE tek segmentte birlesir
+    (iki FARKLI TANINAN ad BIRLESMEZ -- sef dogruladi: `['Ada: merhaba',
+    'Bora: nasilsin']` -> IKI ayri segment); ikinci blogun ETIKET
+    TASIMASI utterance siniri SAYILMAZ (K15'in BILINCLI siniri).
+
+      (a) Ikinci etiket K9'a gore TANINIYORSA ve ad AYNIYSA etiket
+          METINDEN DUSER, segment TEK `speaker` tasir:
+          `['Ada: merhaba', 'Ada: nasilsin']` -> `'merhaba nasilsin'`,
+          `speaker='Ada'` (bkz. `test_k31a_ikinci_etiket_taniniyorsa_
+          duser_tek_segment_kalir`).
+      (b) Ikinci etiket K9'un AD SUZGECINDEN gecemiyorsa (rakam iceren
+          ad, K32'deki NFD adlar) o blok `speaker=None` KALIR, K15'in
+          `X/None` satiriyla bloklar YINE birlesir, ETIKET METNIN ICINDE
+          KALIR ve segment ILK konusmaciya atfedilir:
+          `['Ada: merhaba', 'Ada2: nasilsin']` -> `'merhaba Ada2:
+          nasilsin'`, `speaker='Ada'` (bkz. `test_k31b_taninmayan_ikinci_
+          etiket_metinde_kalir`).
+
+    (b) urun etkisi olarak (a)'dan KOTUDUR; IKISI DE BILINCLI SINIRDIR --
+    sef tur 6'da davranisi DEGISTIRMIYOR."""
     if not items:
         return []
     groups: list[_Item] = []
@@ -1360,7 +1616,13 @@ def _group(
             pure_length_boundaries.append(
                 reason == "length"
                 and nxt.speaker is None
-                and _group_rejection_reason(tail, nxt, params, ignore_length=True) is None
+                # K28 (TUR 6): sorgunun IKI tarafi da OZGUN bloklardan --
+                # ikame `_raw_query_pair`'in ICINDEDIR, bu dongude DEGIL
+                # (bolumleme gecisi hicbir `replace(...)` yazmaz).
+                and _group_rejection_reason(
+                    *_raw_query_pair(tail, nxt, blocks), params, ignore_length=True
+                )
+                is None
             )
             current = nxt
             tail = nxt

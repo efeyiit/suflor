@@ -1,0 +1,7 @@
+$ python -m pytest tests/unit/ocr/test_normalizer.py -q -k k14_normalizasyon_butcesi
+.                                                                        [100%]
+1 passed, 123 deselected in 0.11s
+EXIT=0
+
+--- K14 medyan olcumu (test ile AYNI sartname: 30 blok, ~40 karakter, dialogue, 50 cagri) ---
+blok=30 medyan=0.170 ms  min=0.166  max=0.263  butce=5.000 ms

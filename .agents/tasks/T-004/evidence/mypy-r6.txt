@@ -1,0 +1,3 @@
+$ python -m mypy --strict src/ocr/normalizer.py src/ocr/presets.py
+Success: no issues found in 2 source files
+EXIT=0

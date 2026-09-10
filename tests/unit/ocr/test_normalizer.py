@@ -20,13 +20,26 @@ sonunda BES YENI karar (K23-K27) icin regresyon/denetim testleri
 eklendi -- bkz. `# --- TUR 5 ---` basligindan sonraki blok. K23 icin
 `_normalize_impl` (normalizer.py'nin ozel, GENEL API'YE SIZMAYAN test
 kancasi) DOGRUDAN import edilir.
+
+TUR 6 (duzeltme turu -- `.agents/tasks/T-004/sef_karari-tur6.md`): dosya
+sonunda K28 (miras-uygunluk sorgusunun IKI tarafi da OZGUN `TextBlock`
+listesinden gelir) icin SEKIZ ZORUNLU olcu ve K30/K31/K32 icin
+belgeleyici testler eklendi -- bkz. `# --- TUR 6 ---` basligindan sonraki
+blok. K28'in olculeri SEFE AIT `.agents/tasks/T-004/olcu_kiti.py`'den ICE
+AKTARILIR (yeniden yazilmaz): referans turetimi, derlem, alt sinirlar ve
+fixture'lar orada tek bir yerde ve mutantlara karsi dogrulanmis durur.
+Kitin `sys.path`'e girmesini sefe ait `tests/unit/ocr/conftest.py` saglar.
 """
 from __future__ import annotations
 
+import ast
+import inspect
 import math
 import statistics
+import textwrap
 import time
 import unicodedata
+from collections.abc import Callable
 from random import Random
 
 import pytest
@@ -1324,3 +1337,501 @@ def test_k27_menu_gruplama_yok_miras_kavrami_yok() -> None:
     assert len(out) == 2  # gruplama YOK -- govde1 VE govde2 AYRI segment
     assert out[0].speaker == "Ada"  # K9 etiket-tasima HALA calisir (gruplamadan BAGIMSIZ)
     assert out[1].speaker is None  # K27: miras KAVRAMI YOK -- "devam" sayilmiyor
+
+
+# ===========================================================================
+# --- TUR 6 (sef_karari-tur6.md) --------------------------------------------
+#
+# K28  -- miras-uygunluk sorgusunun IKI tarafi da OZGUN `TextBlock`
+#         listesinden gelir (sol = kapanan grubun okuma sirasindaki SON ham
+#         blogu, sag = adayin okuma sirasindaki ILK ham blogu). Sekiz
+#         ZORUNLU olcu (1, 2, 3, 3b, 4, 5, 6, 7, 8) asagida.
+# K30  -- K2 x K19/K21 KOSULLU etkilesimi: adim 1'de dusen blogun biraktigi
+#         ARTIK bosluk esigi ASARSA miras yok, ASMAZSA miras korunur.
+# K31  -- bitisik iki replik: (a) ikinci etiket taniniyorsa duser,
+#         (b) taninmiyorsa metinde KALIR, segment ILK konusmaciya atfedilir.
+# K32  -- girdi NFC varsayimi MODUL duzeyindedir: NFD govde BOLUMLEMEYI de
+#         degistirir (codepoint sayan `max_group_chars`/`_MAX_SPEAKER_NAME_LEN`).
+#
+# Olculer sefe ait `.agents/tasks/T-004/olcu_kiti.py`'den ICE AKTARILIR --
+# yeniden yazilmaz (kit mutantlara karsi sef tarafindan dogrulanmistir).
+# ===========================================================================
+
+from olcu_kiti import (  # noqa: E402  -- sys.path'i sefe ait conftest.py kurar
+    OLCU3_BEKLENEN,
+    OLCU3B_BEKLENEN,
+    ON_AYARLAR,
+    derlem,
+    olcu3_fixture,
+    olcu3b_fixture,
+    olcu5_fixture,
+    olcu6_kos,
+    sorgu_kaydi,
+)
+
+
+def _miras_sorgulari(blocks: list[TextBlock], preset: OcrPreset) -> list[tuple[object, ...]]:
+    """`sorgu_kaydi()` ile gozlenen MIRAS (`ignore_length=True`) sorgularinin
+    `(sol_sb, sol_bbox, sag_sb, sag_bbox)` dortlusu -- olcu 5'in karsilastirma
+    birimi."""
+    with sorgu_kaydi() as kayit:
+        normalize(blocks, preset)
+    return [(s.sol_sb, s.sol_bbox, s.sag_sb, s.sag_bbox) for s in kayit if s.miras]
+
+
+# --- OLCU 1 -- SOL taraf: kapanan grubun okuma sirasindaki SON HAM blogu ----
+#
+# R5-1 (Tester-A): adim 3 (`_merge_hyphenated`, K5) hyphen'li satirlari TEK
+# `_Item`'a birlestirir ve o `_Item`'in bbox'i BIRLESIK kutudur. `_group` onu
+# `tail` olarak kullanirsa K24'un kaldirdigi artifakt adim 3 uzerinden GERI
+# gelir: birlesik kutu gercek satir-arasi kopusu GIZLER ve `speaker` gercek
+# kopusun OTESINE atfedilir. Uc varyant da A'nin sondasindan (biri
+# non-monotonik, ikisi monotonik -- "egzotik geometri" savunmasi KAPALI).
+
+
+def _olcu1_sol_varyant_a() -> list[TextBlock]:
+    """Non-monotonik: kuyruk birlesik h=50 (derin ilk satir), ham SON satir
+    h=18 -- birlesik kutu `bottom`'u 70'e tasir, gercek `bottom` 43."""
+    return [
+        blk("Ada: " + "X" * 150, 0, 0, w=240, h=18),
+        blk("Y" * 40 + " son-", 0, 20, w=240, h=50),
+        blk("z" * 40, 0, 25, w=240, h=18),
+        blk("Q" * 60, 0, 85, w=240, h=50),
+    ]
+
+
+def _olcu1_sol_varyant_b() -> list[TextBlock]:
+    """Monotonik: kuyruk birlesik h=35, ham SON satir h=5 -- esik
+    `0.8 * min(h)` birlesikte 14.4, hamda 4.0."""
+    return [
+        blk("Ada: " + "X" * 150, 0, 0, w=240, h=18),
+        blk("Y" * 40 + " son-", 0, 20, w=240, h=18),
+        blk("z" * 40, 0, 50, w=240, h=5),
+        blk("Q" * 60, 0, 65, w=240, h=18),
+    ]
+
+
+def _olcu1_sol_varyant_c() -> list[TextBlock]:
+    """Monotonik: kuyruk birlesik w=308/x=0, ham SON satir w=8/x=300 --
+    birlesik kutu yatay ortusmeyi UYDURUR (240px), gercek ortusme 0."""
+    return [
+        blk("Ada: " + "X" * 150, 0, 0, w=240, h=18),
+        blk("Y" * 40 + " son-", 0, 20, w=240, h=18),
+        blk("z" * 40, 300, 40, w=8, h=18),
+        blk("Q" * 60, 0, 60, w=240, h=18),
+    ]
+
+
+@pytest.mark.parametrize(
+    ("varyant", "beklenen_sebep"),
+    [
+        (_olcu1_sol_varyant_a, "gap"),
+        (_olcu1_sol_varyant_b, "gap"),
+        (_olcu1_sol_varyant_c, "overlap"),
+    ],
+)
+def test_k28_olcu1_sol_taraf_birlesik_kuyruk_gercek_kopusu_gizlemez(
+    varyant: Callable[[], list[TextBlock]], beklenen_sebep: str
+) -> None:
+    """OLCU 1 (sef_karari-tur6.md, R5-1 SOL taraf): miras-uygunluk sorgusunun
+    SOL tarafi, kapanan grubun kaynak bloklari arasinda OKUMA SIRASINDAKI
+    SON blogun bbox'i olmalidir -- adim 3'un urettigi BIRLESIK kutu DEGIL.
+
+    Uc varyantin UCUNDE de birlesik kutu sorguyu `None` yapiyor (miras
+    UYGULANIYOR, YANLIS); ham son satirla sorgu `beklenen_sebep` donuyor
+    (miras UYGULANMIYOR, DOGRU) -- yani son segment `speaker=None` kalir."""
+    blocks = varyant()
+    out = normalize(blocks, OcrPreset.DIALOGUE)
+    assert [s.source_blocks for s in out] == [(0, 1, 2), (3,)]  # bolumleme PINLI
+    assert out[0].speaker == "Ada"
+    assert out[1].speaker is None, "birlesik kutu gercek kopusu gizledi -- K28 ihlali"
+
+    # Sorgunun SOL tarafi gercekten HAM son bloktan mi geliyor?
+    sorgular = _miras_sorgulari(blocks, OcrPreset.DIALOGUE)
+    assert len(sorgular) == 1
+    sol_sb, sol_bbox, _, sag_bbox = sorgular[0]
+    assert sol_sb == (1, 2)
+    assert sol_bbox == blocks[2].bbox  # okuma sirasinda SON ham blok
+    assert sag_bbox == blocks[3].bbox
+    params = get_params(OcrPreset.DIALOGUE)
+    sol = _Item(text="", bbox=sol_bbox, speaker="Ada", source_blocks=(1, 2))
+    sag = _Item(text="", bbox=sag_bbox, speaker=None, source_blocks=(3,))
+    assert _group_rejection_reason(sol, sag, params, ignore_length=True) == beklenen_sebep
+
+
+# --- OLCU 2 -- SAG taraf: adayin okuma sirasindaki ILK HAM blogu ------------
+#
+# KRT sondasi (sef kosumu): AYNI artifakt SAG tarafta da olur -- aday adim
+# 3'ten birlesik gelirse `ref_height`/`ref_width`/`overlap` birlesik kutudan
+# hesaplanir ve sorgu GEVSER. A2 varyanti ayrica bir K16 REGRESYON testidir:
+# adayin ham ilk satirinin `h == 0` olmasi (yozlasmis geometri, K16 KOSULSUZ
+# red) birlesik kutu tarafindan TAMAMEN gizlenir.
+
+
+def _olcu2_sag_varyant_a2() -> list[TextBlock]:
+    """K16 REGRESYONU: adayin ham ILK satiri `h=0` (yozlasmis), birlesik
+    kutu h=23 -- yozlasmislik gizleniyor."""
+    return [
+        blk("Ada: " + "X" * 150, 0, 0, w=240, h=18),
+        blk("W" * 80, 0, 20, w=240, h=18),
+        blk("Y" * 40 + " son-", 0, 45, w=240, h=0),
+        blk("z" * 40, 0, 50, w=240, h=18),
+    ]
+
+
+def _olcu2_sag_varyant_b() -> list[TextBlock]:
+    """Birlesik `h` sismesi: aday birlesik h=60, ham ilk satir h=5."""
+    return [
+        blk("Ada: " + "X" * 150, 0, 0, w=240, h=18),
+        blk("W" * 80, 0, 20, w=240, h=18),
+        blk("Y" * 40 + " son-", 0, 50, w=240, h=5),
+        blk("z" * 40, 0, 60, w=240, h=50),
+    ]
+
+
+def _olcu2_sag_varyant_c() -> list[TextBlock]:
+    """Birlesik `w`/`x` sismesi: aday birlesik w=308/x=0, ham ilk satir
+    w=8/x=300."""
+    return [
+        blk("Ada: " + "X" * 150, 0, 0, w=240, h=18),
+        blk("W" * 80, 0, 20, w=240, h=18),
+        blk("Y" * 40 + " son-", 300, 45, w=8, h=18),
+        blk("z" * 40, 0, 50, w=240, h=18),
+    ]
+
+
+@pytest.mark.parametrize(
+    ("varyant", "beklenen_sebep"),
+    [
+        (_olcu2_sag_varyant_a2, "height"),
+        (_olcu2_sag_varyant_b, "gap"),
+        (_olcu2_sag_varyant_c, "overlap"),
+    ],
+)
+def test_k28_olcu2_sag_taraf_birlesik_aday_gercek_kopusu_gizlemez(
+    varyant: Callable[[], list[TextBlock]], beklenen_sebep: str
+) -> None:
+    """OLCU 2 (sef_karari-tur6.md, R5-1 SAG taraf): sorgunun SAG tarafi,
+    adayin (`nxt`) kaynak bloklari arasinda OKUMA SIRASINDAKI ILK blogun
+    bbox'i olmalidir. A2 varyanti AYRICA K16 regresyon testidir (`h == 0`
+    yozlasmis geometri birlesik kutu tarafindan gizlenmemeli)."""
+    blocks = varyant()
+    out = normalize(blocks, OcrPreset.DIALOGUE)
+    assert [s.source_blocks for s in out] == [(0, 1), (2, 3)]  # bolumleme PINLI
+    assert out[0].speaker == "Ada"
+    assert out[1].speaker is None, "birlesik aday kutusu gercek kopusu gizledi -- K28 ihlali"
+
+    sorgular = _miras_sorgulari(blocks, OcrPreset.DIALOGUE)
+    assert len(sorgular) == 1
+    sol_sb, sol_bbox, sag_sb, sag_bbox = sorgular[0]
+    assert (sol_sb, sag_sb) == ((1,), (2, 3))
+    assert sol_bbox == blocks[1].bbox
+    assert sag_bbox == blocks[2].bbox  # okuma sirasinda ILK ham blok
+    params = get_params(OcrPreset.DIALOGUE)
+    sol = _Item(text="", bbox=sol_bbox, speaker="Ada", source_blocks=(1,))
+    sag = _Item(text="", bbox=sag_bbox, speaker=None, source_blocks=(2, 3))
+    assert _group_rejection_reason(sol, sag, params, ignore_length=True) == beklenen_sebep
+
+
+# --- OLCU 3 -- sirasiz girdi + CIFT bloklu kuyruk (kit fixture'i) -----------
+
+
+@pytest.mark.parametrize("preset", list(OLCU3_BEKLENEN))
+def test_k28_olcu3_sirasiz_girdi_cift_bloklu_kuyruk(preset: OcrPreset) -> None:
+    """OLCU 3 (kit `olcu3_fixture`/`OLCU3_BEKLENEN`): girdi listesi OKUMA
+    SIRASINDA DEGIL (K3) -- `source_blocks[-1]` (INDEKS sirasi) ile okuma
+    sirasindaki son blok AYRISIR. `dialogue` VE `tooltip` ile parametrize:
+    tek on ayarda bakilsaydi ham ikameyi ON AYARA KAPILAYAN bir uygulama
+    (KRT'nin `dialogue`-kapili mutanti) sekiz olcunun HICBIRINE takilmazdi."""
+    blocks = olcu3_fixture()
+    out = normalize(blocks, preset)
+    assert [(s.source_blocks, s.speaker) for s in out] == OLCU3_BEKLENEN[preset]
+
+
+def test_k28_olcu3b_zincirleme_hyphen_uc_bloklu_kuyruk_sorgu_cifti() -> None:
+    """OLCU 3b (kit `olcu3b_fixture`): UC bloklu kuyruk. Olcu 3 TEK BASINA
+    YETMEZ -- iki elemanli bir kumede `sirali[-1]` ile `sirali[1]` AYNI
+    seydir, off-by-one ancak 3+ blokta gorunur (sef olctu: `m26` off-by-one
+    sekiz duzyazi olcusunu de 478 kor testi de geciyordu).
+
+    Bu test CIKTIYI degil SORGU CIFTINI assert eder: ciktinin kendisi K28
+    ONCESI de yesildi, yani hicbir sey olcmuyordu (PROTOKOL S4.6/4)."""
+    blocks = olcu3b_fixture()
+    sorgular = _miras_sorgulari(blocks, OcrPreset.DIALOGUE)
+    assert len(sorgular) == 1
+    sol_sb, sol_bbox, sag_sb, sag_bbox = sorgular[0]
+    assert sol_sb == (1, 2, 3)
+    assert sol_bbox == blocks[3].bbox  # okuma sirasinda SON -- `sirali[1]` idx2 OLURDU
+    assert sol_bbox != blocks[2].bbox
+    assert sag_sb == (4,)
+    assert sag_bbox == blocks[4].bbox
+    out = normalize(blocks, OcrPreset.DIALOGUE)
+    assert [(s.source_blocks, s.speaker) for s in out] == OLCU3B_BEKLENEN[OcrPreset.DIALOGUE]
+
+
+# --- OLCU 4 -- IKI YON: ham geometri mirasi ACAR, birlesik kutu KAPATIR -----
+
+
+def test_k28_olcu4_ham_geometri_mirasi_acar_birlesik_kutu_kapatir() -> None:
+    """OLCU 4 (sef_karari-tur6.md): K28 tek yonlu bir DARALTMA degildir --
+    ham geometriyle miras UYGULANMASI GEREKEN ama birlesik geometriyle
+    UYGULANMAYACAK bir vaka.
+
+    Kuyruk (idx1+idx2) birlesik kutusu x=0..308 (w=308); ham SON satir
+    (idx2) x=300..308 (w=8). Aday idx3 x=250..490. Yatay ortusme esigi
+    `0.30 * min(w)`: birlesikte `min(308, 240) = 240` -> 72px gerekir, gercek
+    ortusme 58px -> `"overlap"` REDDI (miras YOK). Ham son satirla
+    `min(8, 240) = 8` -> 2.4px gerekir, gercek ortusme 8px -> sorgu `None`
+    (miras VAR). Bolumleme iki yolda da AYNI (K23)."""
+    blocks = [
+        blk("Ada: " + "X" * 150, 0, 0, w=240, h=18),
+        blk("Y" * 40 + " son-", 0, 20, w=240, h=18),
+        blk("z" * 40, 300, 40, w=8, h=18),
+        blk("V" * 60, 250, 60, w=240, h=18),
+    ]
+    out = normalize(blocks, OcrPreset.DIALOGUE)
+    assert [s.source_blocks for s in out] == [(0, 1, 2), (3,)]
+    assert out[0].speaker == "Ada"
+    assert out[1].speaker == "Ada", "ham geometri mirasi ACMALIYDI -- K28 ihlali"
+
+    sorgular = _miras_sorgulari(blocks, OcrPreset.DIALOGUE)
+    assert len(sorgular) == 1
+    _, sol_bbox, _, sag_bbox = sorgular[0]
+    assert sol_bbox == blocks[2].bbox
+    assert sag_bbox == blocks[3].bbox
+
+
+# --- OLCU 5 -- YAPISAL: sorguyu HAM bloklar belirler, birlesik kutu DEGIL ---
+
+
+def test_k28_olcu5_yapisal_sorguyu_ham_bloklar_belirler() -> None:
+    """OLCU 5 (kit `olcu5_fixture`, `sorgu_kaydi`): iki sinir, ikisinde de
+    COK bloklu kuyruk. Uc ayri kosum:
+
+      (i)  okuma-sirasi-SON ham blok (idx0) mutasyonu -> sorgu cifti DEGISIR
+      (ii) sag tarafin okuma-sirasi-ILK ham blogu (idx3) mutasyonu -> DEGISIR
+      (iii) YALNIZ birlesik kutuyu bozan mutasyon (idx2 -- kuyrugun okuma
+            sirasindaki ILK blogu, SON'u DEGIL) -> sorgu cifti DEGISMEZ
+
+    (iii) ayirt edici yaridir: birlesik kutu kullanan bir uygulamada o da
+    degisir. Uc kosumda da BOLUMLEME ayni kalir (K23)."""
+    taban_blocks = olcu5_fixture()
+    taban = _miras_sorgulari(taban_blocks, OcrPreset.DIALOGUE)
+    taban_bolumleme = [s.source_blocks for s in normalize(taban_blocks, OcrPreset.DIALOGUE)]
+    assert len(taban) >= 2, "olcu 5 fixture'i en az IKI sinir uretmeli"
+    assert all(len(sol_sb) > 1 for sol_sb, _, _, _ in taban)
+
+    def mutasyon(idx: int, yeni_h: int) -> list[TextBlock]:
+        blocks = olcu5_fixture()
+        eski = blocks[idx].bbox
+        blocks[idx] = TextBlock(
+            text=blocks[idx].text,
+            bbox=Rect(x=eski.x, y=eski.y, w=eski.w, h=yeni_h),
+            confidence=blocks[idx].confidence,
+        )
+        return blocks
+
+    son_ham = mutasyon(0, 7)  # (i)  kuyrugun okuma-sirasi-SON blogu
+    ilk_ham_sag = mutasyon(3, 21)  # (ii) sag tarafin okuma-sirasi-ILK blogu
+    yalniz_birlesik = mutasyon(2, 30)  # (iii) YALNIZ birlesik kutuyu bozar
+
+    assert _miras_sorgulari(son_ham, OcrPreset.DIALOGUE) != taban
+    assert _miras_sorgulari(ilk_ham_sag, OcrPreset.DIALOGUE) != taban
+    assert _miras_sorgulari(yalniz_birlesik, OcrPreset.DIALOGUE) == taban, (
+        "birlesik kutu bozuldugunda sorgu cifti DEGISTI -- sorgu ham bloklardan "
+        "degil birlesik `_Item`'dan geliyor (K28 ihlali)"
+    )
+    for blocks in (son_ham, ilk_ham_sag, yalniz_birlesik):
+        assert [s.source_blocks for s in normalize(blocks, OcrPreset.DIALOGUE)] == taban_bolumleme
+
+
+def test_k28_olcu5_ast_normalize_impl_group_cagrisina_blocks_adini_gecirir() -> None:
+    """OLCU 5'in AST yarisi: `_normalize_impl` icindeki `_group(...)` cagrisi
+    `blocks=` anahtar kelimesini TASIR ve degeri `blocks` ADININ KENDISIDIR.
+    Suzulmus/sikistirilmis bir liste gecirmek INDEKS KAYMASI uretir (K28'in
+    `_raw_query_pair` sozlesmesi: `blocks` OZGUN listedir)."""
+    agac = ast.parse(textwrap.dedent(inspect.getsource(_normalize_impl)))
+    cagrilar = [
+        n
+        for n in ast.walk(agac)
+        if isinstance(n, ast.Call) and isinstance(n.func, ast.Name) and n.func.id == "_group"
+    ]
+    assert len(cagrilar) == 1, f"_normalize_impl icinde TEK bir `_group` cagrisi olmali: {len(cagrilar)}"
+    kw = {k.arg: k.value for k in cagrilar[0].keywords}
+    assert "blocks" in kw, "`_group` cagrisi `blocks=` tasimiyor"
+    assert ast.unparse(kw["blocks"]) == "blocks"
+
+
+# --- OLCU 6 -- MAKINE DENETIMI (kit `olcu6_kos`, uc on ayar ayri ayri) -----
+
+
+@pytest.mark.parametrize("preset", list(ON_AYARLAR))
+def test_k28_olcu6_makine_denetimi(preset: OcrPreset) -> None:
+    """OLCU 6 (kit `olcu6_kos`): 2500 girdilik derlem uzerinde BES bagimsiz
+    kanal -- GEOMETRI (`ayrisma`), KIMLIK, KAPSAM, SIRA, SAYI -- artik
+    `patlama` ve derlem alt sinirlari (`eksik_sinirlar`). `r.temiz` bunlarin
+    HEPSINI kapsar. Uc on ayar AYRI AYRI kosar: geciş 3'un `dialogue`-kapili
+    mutanti tek on ayarli bir olcuden gecerdi."""
+    r = olcu6_kos(preset)
+    assert r.temiz, r.ilk_fark
+
+
+# --- OLCU 7 -- K23 KORUNUR: miras acik/kapali bolumleme farki 0 -------------
+
+
+@pytest.mark.parametrize("preset", list(ON_AYARLAR))
+def test_k28_olcu7_k23_bolumleme_degismezi_kit_derleminde(preset: OcrPreset) -> None:
+    """OLCU 7: K28 K23'u BOZMAZ -- kitin derleminde (zincirleme hyphen,
+    esik-alti bloklar, shuffle, ASCII-disi, yozlasmis/negatif geometri,
+    buyuk girdi, iki konusmaci) miras ACIK ve KAPALI bolumleme BIREBIR ayni.
+    Uc on ayarda AYRI AYRI."""
+    farkli = 0
+    ilk_fark = ""
+    girdiler = derlem()
+    for bl in girdiler:
+        acik = _normalize_impl(bl, preset, apply_inheritance=True)
+        kapali = _normalize_impl(bl, preset, apply_inheritance=False)
+        a = [(s.text, s.bbox, s.placeholders, s.source_blocks) for s in acik]
+        k = [(s.text, s.bbox, s.placeholders, s.source_blocks) for s in kapali]
+        if a != k:
+            farkli += 1
+            if not ilk_fark:
+                ilk_fark = f"{[s.source_blocks for s in acik]} != {[s.source_blocks for s in kapali]}"
+    assert len(girdiler) >= 2000
+    assert farkli == 0, f"K23 ihlali ({preset.name}): {farkli} girdide bolumleme ayrisiyor -- {ilk_fark}"
+
+
+# --- OLCU 8 -- ZINCIRLEME miras: uc ayri segmentte de `Ada` -----------------
+
+
+def test_k28_olcu8_zincirleme_miras_uc_segmentte_korunur() -> None:
+    """OLCU 8 (Tester-A gozlem 2): `Ada: a` / `b` / `c` -- ard arda IKI
+    uzunluk-tek-engelli sinir. Goruntu gecisi SOLDAN SAGA islendigi icin
+    ikinci segment mirasi alir VE ucuncu segment onu ondan devralir."""
+    blocks = [
+        blk("Ada: " + "X" * 150, 0, 0, w=240, h=18),
+        blk("Y" * 150, 0, 20, w=240, h=18),
+        blk("Z" * 150, 0, 40, w=240, h=18),
+    ]
+    out = normalize(blocks, OcrPreset.DIALOGUE)
+    assert [s.source_blocks for s in out] == [(0,), (1,), (2,)]
+    assert [s.speaker for s in out] == ["Ada", "Ada", "Ada"]
+
+
+# --- K30 -- K2 x K19/K21: artik bosluk KOSULLU -----------------------------
+
+
+def test_k30_artik_bosluk_esigi_asmazsa_miras_korunur() -> None:
+    """K30 (sef_karari-tur6.md, Tester-B bulgusu -- IKINCI yol): adim 1'de
+    dusen esik-alti blok, adim 5'te geride GERCEK bir geometrik bosluk
+    birakir. Bu ARTIK bosluk (6px) `max_vertical_gap_ratio * min(h)` esigini
+    (0.8 * 18 = 14.4px) ASMIYOR -> sinir yalniz-uzunluk sinirdir ve miras
+    KORUNUR. Bkz. ayni fixture'in asan yolu:
+    `test_k30_artik_bosluk_esigi_asarsa_miras_yok`."""
+    blocks = [
+        blk("Ada: " + "X" * 150, 0, 0, w=240, h=18),
+        blk("D" * 30, 0, 20, w=240, h=18, confidence=0.40),  # esik alti -> DUSER
+        blk("Y" * 150, 0, 24, w=240, h=18),  # artik bosluk = 24 - 18 = 6px
+    ]
+    out = normalize(blocks, OcrPreset.DIALOGUE)
+    assert [s.source_blocks for s in out] == [(0,), (2,)]
+    assert [s.speaker for s in out] == ["Ada", "Ada"]
+
+
+def test_k30_artik_bosluk_esigi_asarsa_miras_yok() -> None:
+    """K30 -- BIRINCI yol: AYNI fixture, yalniz son blok 16px asagida. Artik
+    bosluk 22px > 14.4px -> sinir artik yalniz-uzunluk sinirI DEGILDIR ve
+    K21 uyarinca miras UYGULANMAZ."""
+    blocks = [
+        blk("Ada: " + "X" * 150, 0, 0, w=240, h=18),
+        blk("D" * 30, 0, 20, w=240, h=18, confidence=0.40),
+        blk("Y" * 150, 0, 40, w=240, h=18),  # artik bosluk = 40 - 18 = 22px
+    ]
+    out = normalize(blocks, OcrPreset.DIALOGUE)
+    assert [s.source_blocks for s in out] == [(0,), (2,)]
+    assert [s.speaker for s in out] == ["Ada", None]
+
+
+# --- K31 -- bitisik iki replik: (a) ve (b) ---------------------------------
+
+
+def test_k31a_ikinci_etiket_taniniyorsa_duser_tek_segment_kalir() -> None:
+    """K31 (a) (sef sondasi): `["Ada: merhaba", "Ada: nasilsin"]` -> TEK
+    segment `'merhaba nasilsin'`, `speaker='Ada'`. K15 uyarinca ikinci
+    blogun ETIKET TASIMASI utterance siniri SAYILMAZ -- bu K15'in BILINCLI
+    sinirdir. Iki FARKLI TANINAN ad ise birlesmez (asagida)."""
+    out = normalize([blk("Ada: merhaba", 0, 0), blk("Ada: nasilsin", 0, 20)], OcrPreset.DIALOGUE)
+    assert len(out) == 1
+    assert out[0].source_blocks == (0, 1)
+    assert out[0].speaker == "Ada"
+    assert out[0].text == "merhaba nasilsin"
+
+
+def test_k31_iki_farkli_taninan_ad_birlesmez() -> None:
+    """K31'in siniri: iki FARKLI taninan ad (X/Y) ASLA birlesmez (K9 + K15)."""
+    out = normalize([blk("Ada: merhaba", 0, 0), blk("Bora: nasilsin", 0, 20)], OcrPreset.DIALOGUE)
+    assert [(s.source_blocks, s.speaker, s.text) for s in out] == [
+        ((0,), "Ada", "merhaba"),
+        ((1,), "Bora", "nasilsin"),
+    ]
+
+
+def test_k31b_taninmayan_ikinci_etiket_metinde_kalir() -> None:
+    """K31 (b) (KRT sondasi, sef yeniden uretti): ikinci etiket K9'un ad
+    suzgecinden GECEMIYORSA (`"Ada2"` -- rakam iceriyor) o blok
+    `speaker=None` kalir, K15'in `X/None` satiriyla bloklar YINE birlesir,
+    ETIKET METNIN ICINDE KALIR ve segment ILK konusmaciya atfedilir.
+    Urun etkisi olarak (a)'dan KOTUDUR; sef bilincli olarak DEGISTIRMIYOR."""
+    out = normalize([blk("Ada: merhaba", 0, 0), blk("Ada2: nasilsin", 0, 20)], OcrPreset.DIALOGUE)
+    assert len(out) == 1
+    assert out[0].source_blocks == (0, 1)
+    assert out[0].speaker == "Ada"
+    assert out[0].text == "merhaba Ada2: nasilsin"
+
+
+# --- K32 -- NFC varsayimi MODUL duzeyinde ----------------------------------
+
+
+def test_k32_nfd_govde_bolumlemeyi_degistirir() -> None:
+    """K32 (sef_karari-tur6.md, Tester-C + KRT B10): `normalize` girdinin
+    NFC oldugunu VARSAYAR. Varsayim ad suzgeciyle SINIRLI DEGILDIR:
+    `len()` codepoint saydigi icin `max_group_chars` (K11) ve
+    `_MAX_SPEAKER_NAME_LEN` (K9) de etkilenir. AYNI GORUNEN uc bloklu govde
+    NFC'de TEK segment, NFD'de UC segment olur.
+
+    Bu test davranisi BELGELER, DUZELTMEZ -- NFC normalizasyonu T-006 cikis
+    sozlesmesine adaydir. Govde PINLIDIR: fark yalnizca GOVDESI DE aksanli
+    metinde (blok basina ~85-92 codepoint) dogar."""
+    govde = "áéíóú" * 18  # 90 codepoint (NFC)
+    assert len(govde) == 90
+    assert len(unicodedata.normalize("NFD", govde)) == 180
+
+    def kur(form: str) -> list[TextBlock]:
+        return [
+            blk(unicodedata.normalize(form, "María: " + govde), 0, 0, w=240, h=18),
+            blk(unicodedata.normalize(form, govde), 0, 20, w=240, h=18),
+            blk(unicodedata.normalize(form, govde), 0, 40, w=240, h=18),
+        ]
+
+    nfc = normalize(kur("NFC"), OcrPreset.DIALOGUE)
+    nfd = normalize(kur("NFD"), OcrPreset.DIALOGUE)
+    assert [s.source_blocks for s in nfc] == [(0, 1, 2)]
+    assert [s.speaker for s in nfc] == ["María"]
+    assert [s.source_blocks for s in nfd] == [(0,), (1,), (2,)]
+    assert [s.speaker for s in nfd] == [None, None, None]
+
+
+def test_k32_nfd_yalniz_etiket_segment_sayisini_degistirmez_ama_speakeri_dusurur() -> None:
+    """K32'nin ikinci yarisi: YALNIZ etiket aksanliysa segment SAYISI
+    degismez (NFC 1 / NFD 1) -- ama `speaker` `'María'`dan `None`'a duser
+    ve etiket METINDE kalir. Yalniz-sayi assert'i bu ayrimi KACIRIRDI."""
+    def kur(form: str) -> list[TextBlock]:
+        return [blk(unicodedata.normalize(form, "María: ") + "hola amigos", 0, 0, w=240, h=18)]
+
+    nfc = normalize(kur("NFC"), OcrPreset.DIALOGUE)
+    nfd = normalize(kur("NFD"), OcrPreset.DIALOGUE)
+    assert len(nfc) == len(nfd) == 1
+    assert nfc[0].speaker == "María"
+    assert nfc[0].text == "hola amigos"
+    assert nfd[0].speaker is None
+    assert nfd[0].text == unicodedata.normalize("NFD", "María: ") + "hola amigos"

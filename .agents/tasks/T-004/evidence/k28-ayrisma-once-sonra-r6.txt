@@ -1,0 +1,10 @@
+$ python .agents/tasks/T-004/evidence/../../../../scratchpad/k28_once_sonra.py  (bkz. delivery.md)
+=== ONCE  (K28 uygulanmamis: _raw_query_pair -> (tail, nxt) kimligi) ===
+  DIALOGUE  ayrisma= 3677 kimlik=0 kapsam_ihlali=0 sira=0 sayi=0 patlama=0 temiz=False
+  TOOLTIP   ayrisma= 6119 kimlik=0 kapsam_ihlali=0 sira=0 sayi=0 patlama=0 temiz=False
+  SUBTITLE  ayrisma= 7249 kimlik=0 kapsam_ihlali=0 sira=0 sayi=0 patlama=0 temiz=False
+=== SONRA (K28 uygulanmis, teslim edilen kod) ===
+  DIALOGUE  ayrisma=    0 kimlik=0 kapsam_ihlali=0 sira=0 sayi=0 patlama=0 temiz=True
+  TOOLTIP   ayrisma=    0 kimlik=0 kapsam_ihlali=0 sira=0 sayi=0 patlama=0 temiz=True
+  SUBTITLE  ayrisma=    0 kimlik=0 kapsam_ihlali=0 sira=0 sayi=0 patlama=0 temiz=True
+EXIT=0

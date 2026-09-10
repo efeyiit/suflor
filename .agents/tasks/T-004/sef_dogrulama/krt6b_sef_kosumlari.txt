@@ -203,3 +203,35 @@ Kit kendini sinamasi (mevcut depo, K28 yok):
   KIT SAGLIGI: TEMIZ  exit=0
 NOT: krt6g/w_n06 ile krt6f/w_n06 FARKLI dosyalar (7. gecis kendi kopyasini kurmus);
      sef once yanlis kopyayi olctu ve "regresyon" sandi -- dogru kopyada regresyon YOK.
+
+==== TUR 6 IMPLEMENTER TESLIMI -- SEF SONDASI ====
+SAHIPLIK: yasak dosyalara dokunulmamis (olcu_kiti.py, purity_check.py, conftest.py,
+          tester_A/B/C -- git diff bos). Yazilanlar: normalizer.py, test_normalizer.py,
+          delivery.md, evidence/*.
+DORT KABUL KOMUTU (sef kendi kostu):
+  mypy --strict                 exit 0   "Success: no issues found in 2 source files"
+  pytest tests/unit/ocr         exit 0   124 passed
+  purity_check.py               exit 0   "TEMIZ: saf, mutable global yok, surecler arasi deterministik"
+  olcu_kiti.py                  exit 0   ayrisma=0/0/0 kimlik=0 kapsam=0 sira=0 sayi=0 kosulamadi=0
+REGRESYON: pytest tests -> 821 passed (taban 795, dusen YOK)
+R5-1 DUZELDI (sef sondasi):
+  olcu3  DIALOGUE [((0,1,2),'Ada'), ((3,), None)]   OK   (onceden ((3,),'Ada'))
+  olcu3  TOOLTIP  [((1,),'Ada'), ((0,2),'Ada'), ((3,), None)]  OK
+  olcu3b DIALOGUE [((0,1,2,3),'Ada'), ((4,), None)] OK
+  K28 DOGRUDAN: sol_sb=(1,2,3) sol_bbox==okuma_sirasi referansi True; sag_sb=(4,) True
+  sag taraf h=0 varyanti (K16 sinifi): [((0,1),'Ada'), ((2,3), None)]  -> miras dogru kesildi
+YAPISAL (karar neyi dondurmustu):
+  _raw_query_pair modul duzeyinde: True
+  _group imzasi: (items, params, *, blocks=(), apply_inheritance=True)   <- kararda yazildigi gibi
+  _should_group imzasi: (a, b, params)                                   <- DEGISMEDI
+  normalize govdesi: return _normalize_impl(blocks, preset)              <- DEGISMEDI
+  _Item alanlari: text, bbox, speaker, source_blocks                     <- DEGISMEDI
+  _group icinde tek replace: satir 1637, GORUNUM GECISINDE (bolumleme dongusunde DEGIL),
+    yalniz speaker yaziyor -> K23'un izin verdigi tek yer
+KIT HALA DISLI (yeni koda M4 mutanti uygulandi):
+  M4 (okuma sirasi -> indeks sirasi) -> geo=1668/2672/3163 + olcu3 fixture KIRIK
+KOR TESTER TAKIMI: uc ardisik kosum -> 9 failed, 370 passed, 1 xfailed (KARARLI)
+  Dokuzun dokuzu da karardaki 4.6/5 listesinde ONCEDEN adlandirilmis:
+    3x test_r51_kuyruk_* (XPASS -- hata duzeldi), M1, M2, M3, m2_k21,
+    normalize_impl_bayragi, k24_tail_ast
+  (Daha once gorulen "10", bilinen kararsiz tester_C olcek testiydi.)

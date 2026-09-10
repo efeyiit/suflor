@@ -1,0 +1,426 @@
+........................................................................ [ 58%]
+..........................FFFFFFFFFFFFFFF...........                     [100%]
+================================== FAILURES ===================================
+_ test_k28_olcu1_sol_taraf_birlesik_kuyruk_gercek_kopusu_gizlemez[_olcu1_sol_varyant_a-gap] _
+
+varyant = <function _olcu1_sol_varyant_a at 0x000001FC7FC92AC0>
+beklenen_sebep = 'gap'
+
+    @pytest.mark.parametrize(
+        ("varyant", "beklenen_sebep"),
+        [
+            (_olcu1_sol_varyant_a, "gap"),
+            (_olcu1_sol_varyant_b, "gap"),
+            (_olcu1_sol_varyant_c, "overlap"),
+        ],
+    )
+    def test_k28_olcu1_sol_taraf_birlesik_kuyruk_gercek_kopusu_gizlemez(
+        varyant: Callable[[], list[TextBlock]], beklenen_sebep: str
+    ) -> None:
+        """OLCU 1 (sef_karari-tur6.md, R5-1 SOL taraf): miras-uygunluk sorgusunun
+        SOL tarafi, kapanan grubun kaynak bloklari arasinda OKUMA SIRASINDAKI
+        SON blogun bbox'i olmalidir -- adim 3'un urettigi BIRLESIK kutu DEGIL.
+    
+        Uc varyantin UCUNDE de birlesik kutu sorguyu `None` yapiyor (miras
+        UYGULANIYOR, YANLIS); ham son satirla sorgu `beklenen_sebep` donuyor
+        (miras UYGULANMIYOR, DOGRU) -- yani son segment `speaker=None` kalir."""
+        blocks = varyant()
+        out = normalize(blocks, OcrPreset.DIALOGUE)
+        assert [s.source_blocks for s in out] == [(0, 1, 2), (3,)]  # bolumleme PINLI
+        assert out[0].speaker == "Ada"
+>       assert out[1].speaker is None, "birlesik kutu gercek kopusu gizledi -- K28 ihlali"
+E       AssertionError: birlesik kutu gercek kopusu gizledi -- K28 ihlali
+E       assert 'Ada' is None
+E        +  where 'Ada' = Segment(text='QQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQ', bbox=Rect(x=0, y=85, w=240, h=50, monitor_index=0, dpi_scale=1.0), speaker='Ada', placeholders=(), source_blocks=(3,)).speaker
+
+tests\unit\ocr\test_normalizer.py:1447: AssertionError
+_ test_k28_olcu1_sol_taraf_birlesik_kuyruk_gercek_kopusu_gizlemez[_olcu1_sol_varyant_b-gap] _
+
+varyant = <function _olcu1_sol_varyant_b at 0x000001FC7FC93CE0>
+beklenen_sebep = 'gap'
+
+    @pytest.mark.parametrize(
+        ("varyant", "beklenen_sebep"),
+        [
+            (_olcu1_sol_varyant_a, "gap"),
+            (_olcu1_sol_varyant_b, "gap"),
+            (_olcu1_sol_varyant_c, "overlap"),
+        ],
+    )
+    def test_k28_olcu1_sol_taraf_birlesik_kuyruk_gercek_kopusu_gizlemez(
+        varyant: Callable[[], list[TextBlock]], beklenen_sebep: str
+    ) -> None:
+        """OLCU 1 (sef_karari-tur6.md, R5-1 SOL taraf): miras-uygunluk sorgusunun
+        SOL tarafi, kapanan grubun kaynak bloklari arasinda OKUMA SIRASINDAKI
+        SON blogun bbox'i olmalidir -- adim 3'un urettigi BIRLESIK kutu DEGIL.
+    
+        Uc varyantin UCUNDE de birlesik kutu sorguyu `None` yapiyor (miras
+        UYGULANIYOR, YANLIS); ham son satirla sorgu `beklenen_sebep` donuyor
+        (miras UYGULANMIYOR, DOGRU) -- yani son segment `speaker=None` kalir."""
+        blocks = varyant()
+        out = normalize(blocks, OcrPreset.DIALOGUE)
+        assert [s.source_blocks for s in out] == [(0, 1, 2), (3,)]  # bolumleme PINLI
+        assert out[0].speaker == "Ada"
+>       assert out[1].speaker is None, "birlesik kutu gercek kopusu gizledi -- K28 ihlali"
+E       AssertionError: birlesik kutu gercek kopusu gizledi -- K28 ihlali
+E       assert 'Ada' is None
+E        +  where 'Ada' = Segment(text='QQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQ', bbox=Rect(x=0, y=65, w=240, h=18, monitor_index=0, dpi_scale=1.0), speaker='Ada', placeholders=(), source_blocks=(3,)).speaker
+
+tests\unit\ocr\test_normalizer.py:1447: AssertionError
+_ test_k28_olcu1_sol_taraf_birlesik_kuyruk_gercek_kopusu_gizlemez[_olcu1_sol_varyant_c-overlap] _
+
+varyant = <function _olcu1_sol_varyant_c at 0x000001FC7FC93D80>
+beklenen_sebep = 'overlap'
+
+    @pytest.mark.parametrize(
+        ("varyant", "beklenen_sebep"),
+        [
+            (_olcu1_sol_varyant_a, "gap"),
+            (_olcu1_sol_varyant_b, "gap"),
+            (_olcu1_sol_varyant_c, "overlap"),
+        ],
+    )
+    def test_k28_olcu1_sol_taraf_birlesik_kuyruk_gercek_kopusu_gizlemez(
+        varyant: Callable[[], list[TextBlock]], beklenen_sebep: str
+    ) -> None:
+        """OLCU 1 (sef_karari-tur6.md, R5-1 SOL taraf): miras-uygunluk sorgusunun
+        SOL tarafi, kapanan grubun kaynak bloklari arasinda OKUMA SIRASINDAKI
+        SON blogun bbox'i olmalidir -- adim 3'un urettigi BIRLESIK kutu DEGIL.
+    
+        Uc varyantin UCUNDE de birlesik kutu sorguyu `None` yapiyor (miras
+        UYGULANIYOR, YANLIS); ham son satirla sorgu `beklenen_sebep` donuyor
+        (miras UYGULANMIYOR, DOGRU) -- yani son segment `speaker=None` kalir."""
+        blocks = varyant()
+        out = normalize(blocks, OcrPreset.DIALOGUE)
+        assert [s.source_blocks for s in out] == [(0, 1, 2), (3,)]  # bolumleme PINLI
+        assert out[0].speaker == "Ada"
+>       assert out[1].speaker is None, "birlesik kutu gercek kopusu gizledi -- K28 ihlali"
+E       AssertionError: birlesik kutu gercek kopusu gizledi -- K28 ihlali
+E       assert 'Ada' is None
+E        +  where 'Ada' = Segment(text='QQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQ', bbox=Rect(x=0, y=60, w=240, h=18, monitor_index=0, dpi_scale=1.0), speaker='Ada', placeholders=(), source_blocks=(3,)).speaker
+
+tests\unit\ocr\test_normalizer.py:1447: AssertionError
+_ test_k28_olcu2_sag_taraf_birlesik_aday_gercek_kopusu_gizlemez[_olcu2_sag_varyant_a2-height] _
+
+varyant = <function _olcu2_sag_varyant_a2 at 0x000001FC7FC93EC0>
+beklenen_sebep = 'height'
+
+    @pytest.mark.parametrize(
+        ("varyant", "beklenen_sebep"),
+        [
+            (_olcu2_sag_varyant_a2, "height"),
+            (_olcu2_sag_varyant_b, "gap"),
+            (_olcu2_sag_varyant_c, "overlap"),
+        ],
+    )
+    def test_k28_olcu2_sag_taraf_birlesik_aday_gercek_kopusu_gizlemez(
+        varyant: Callable[[], list[TextBlock]], beklenen_sebep: str
+    ) -> None:
+        """OLCU 2 (sef_karari-tur6.md, R5-1 SAG taraf): sorgunun SAG tarafi,
+        adayin (`nxt`) kaynak bloklari arasinda OKUMA SIRASINDAKI ILK blogun
+        bbox'i olmalidir. A2 varyanti AYRICA K16 regresyon testidir (`h == 0`
+        yozlasmis geometri birlesik kutu tarafindan gizlenmemeli)."""
+        blocks = varyant()
+        out = normalize(blocks, OcrPreset.DIALOGUE)
+        assert [s.source_blocks for s in out] == [(0, 1), (2, 3)]  # bolumleme PINLI
+        assert out[0].speaker == "Ada"
+>       assert out[1].speaker is None, "birlesik aday kutusu gercek kopusu gizledi -- K28 ihlali"
+E       AssertionError: birlesik aday kutusu gercek kopusu gizledi -- K28 ihlali
+E       assert 'Ada' is None
+E        +  where 'Ada' = Segment(text='YYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYY sonzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz', bbox=Rect(x=0, y=45, w=240, h=23, monitor_index=0, dpi_scale=1.0), speaker='Ada', placeholders=(), source_blocks=(2, 3)).speaker
+
+tests\unit\ocr\test_normalizer.py:1522: AssertionError
+_ test_k28_olcu2_sag_taraf_birlesik_aday_gercek_kopusu_gizlemez[_olcu2_sag_varyant_b-gap] _
+
+varyant = <function _olcu2_sag_varyant_b at 0x000001FC7FC93F60>
+beklenen_sebep = 'gap'
+
+    @pytest.mark.parametrize(
+        ("varyant", "beklenen_sebep"),
+        [
+            (_olcu2_sag_varyant_a2, "height"),
+            (_olcu2_sag_varyant_b, "gap"),
+            (_olcu2_sag_varyant_c, "overlap"),
+        ],
+    )
+    def test_k28_olcu2_sag_taraf_birlesik_aday_gercek_kopusu_gizlemez(
+        varyant: Callable[[], list[TextBlock]], beklenen_sebep: str
+    ) -> None:
+        """OLCU 2 (sef_karari-tur6.md, R5-1 SAG taraf): sorgunun SAG tarafi,
+        adayin (`nxt`) kaynak bloklari arasinda OKUMA SIRASINDAKI ILK blogun
+        bbox'i olmalidir. A2 varyanti AYRICA K16 regresyon testidir (`h == 0`
+        yozlasmis geometri birlesik kutu tarafindan gizlenmemeli)."""
+        blocks = varyant()
+        out = normalize(blocks, OcrPreset.DIALOGUE)
+        assert [s.source_blocks for s in out] == [(0, 1), (2, 3)]  # bolumleme PINLI
+        assert out[0].speaker == "Ada"
+>       assert out[1].speaker is None, "birlesik aday kutusu gercek kopusu gizledi -- K28 ihlali"
+E       AssertionError: birlesik aday kutusu gercek kopusu gizledi -- K28 ihlali
+E       assert 'Ada' is None
+E        +  where 'Ada' = Segment(text='YYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYY sonzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz', bbox=Rect(x=0, y=50, w=240, h=60, monitor_index=0, dpi_scale=1.0), speaker='Ada', placeholders=(), source_blocks=(2, 3)).speaker
+
+tests\unit\ocr\test_normalizer.py:1522: AssertionError
+_ test_k28_olcu2_sag_taraf_birlesik_aday_gercek_kopusu_gizlemez[_olcu2_sag_varyant_c-overlap] _
+
+varyant = <function _olcu2_sag_varyant_c at 0x000001FC7FCB4040>
+beklenen_sebep = 'overlap'
+
+    @pytest.mark.parametrize(
+        ("varyant", "beklenen_sebep"),
+        [
+            (_olcu2_sag_varyant_a2, "height"),
+            (_olcu2_sag_varyant_b, "gap"),
+            (_olcu2_sag_varyant_c, "overlap"),
+        ],
+    )
+    def test_k28_olcu2_sag_taraf_birlesik_aday_gercek_kopusu_gizlemez(
+        varyant: Callable[[], list[TextBlock]], beklenen_sebep: str
+    ) -> None:
+        """OLCU 2 (sef_karari-tur6.md, R5-1 SAG taraf): sorgunun SAG tarafi,
+        adayin (`nxt`) kaynak bloklari arasinda OKUMA SIRASINDAKI ILK blogun
+        bbox'i olmalidir. A2 varyanti AYRICA K16 regresyon testidir (`h == 0`
+        yozlasmis geometri birlesik kutu tarafindan gizlenmemeli)."""
+        blocks = varyant()
+        out = normalize(blocks, OcrPreset.DIALOGUE)
+        assert [s.source_blocks for s in out] == [(0, 1), (2, 3)]  # bolumleme PINLI
+        assert out[0].speaker == "Ada"
+>       assert out[1].speaker is None, "birlesik aday kutusu gercek kopusu gizledi -- K28 ihlali"
+E       AssertionError: birlesik aday kutusu gercek kopusu gizledi -- K28 ihlali
+E       assert 'Ada' is None
+E        +  where 'Ada' = Segment(text='YYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYY sonzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz', bbox=Rect(x=0, y=45, w=308, h=23, monitor_index=0, dpi_scale=1.0), speaker='Ada', placeholders=(), source_blocks=(2, 3)).speaker
+
+tests\unit\ocr\test_normalizer.py:1522: AssertionError
+__________ test_k28_olcu3_sirasiz_girdi_cift_bloklu_kuyruk[dialogue] __________
+
+preset = <OcrPreset.DIALOGUE: 'dialogue'>
+
+    @pytest.mark.parametrize("preset", list(OLCU3_BEKLENEN))
+    def test_k28_olcu3_sirasiz_girdi_cift_bloklu_kuyruk(preset: OcrPreset) -> None:
+        """OLCU 3 (kit `olcu3_fixture`/`OLCU3_BEKLENEN`): girdi listesi OKUMA
+        SIRASINDA DEGIL (K3) -- `source_blocks[-1]` (INDEKS sirasi) ile okuma
+        sirasindaki son blok AYRISIR. `dialogue` VE `tooltip` ile parametrize:
+        tek on ayarda bakilsaydi ham ikameyi ON AYARA KAPILAYAN bir uygulama
+        (KRT'nin `dialogue`-kapili mutanti) sekiz olcunun HICBIRINE takilmazdi."""
+        blocks = olcu3_fixture()
+        out = normalize(blocks, preset)
+>       assert [(s.source_blocks, s.speaker) for s in out] == OLCU3_BEKLENEN[preset]
+E       AssertionError: assert [((0, 1, 2), ...((3,), 'Ada')] == [((0, 1, 2), ... ((3,), None)]
+E         
+E         At index 1 diff: ((3,), 'Ada') != ((3,), None)
+E         Use -v to get more diff
+
+tests\unit\ocr\test_normalizer.py:1548: AssertionError
+__________ test_k28_olcu3_sirasiz_girdi_cift_bloklu_kuyruk[tooltip] ___________
+
+preset = <OcrPreset.TOOLTIP: 'tooltip'>
+
+    @pytest.mark.parametrize("preset", list(OLCU3_BEKLENEN))
+    def test_k28_olcu3_sirasiz_girdi_cift_bloklu_kuyruk(preset: OcrPreset) -> None:
+        """OLCU 3 (kit `olcu3_fixture`/`OLCU3_BEKLENEN`): girdi listesi OKUMA
+        SIRASINDA DEGIL (K3) -- `source_blocks[-1]` (INDEKS sirasi) ile okuma
+        sirasindaki son blok AYRISIR. `dialogue` VE `tooltip` ile parametrize:
+        tek on ayarda bakilsaydi ham ikameyi ON AYARA KAPILAYAN bir uygulama
+        (KRT'nin `dialogue`-kapili mutanti) sekiz olcunun HICBIRINE takilmazdi."""
+        blocks = olcu3_fixture()
+        out = normalize(blocks, preset)
+>       assert [(s.source_blocks, s.speaker) for s in out] == OLCU3_BEKLENEN[preset]
+E       AssertionError: assert [((1,), 'Ada'...((3,), 'Ada')] == [((1,), 'Ada'... ((3,), None)]
+E         
+E         At index 2 diff: ((3,), 'Ada') != ((3,), None)
+E         Use -v to get more diff
+
+tests\unit\ocr\test_normalizer.py:1548: AssertionError
+_______ test_k28_olcu3b_zincirleme_hyphen_uc_bloklu_kuyruk_sorgu_cifti ________
+
+    def test_k28_olcu3b_zincirleme_hyphen_uc_bloklu_kuyruk_sorgu_cifti() -> None:
+        """OLCU 3b (kit `olcu3b_fixture`): UC bloklu kuyruk. Olcu 3 TEK BASINA
+        YETMEZ -- iki elemanli bir kumede `sirali[-1]` ile `sirali[1]` AYNI
+        seydir, off-by-one ancak 3+ blokta gorunur (sef olctu: `m26` off-by-one
+        sekiz duzyazi olcusunu de 478 kor testi de geciyordu).
+    
+        Bu test CIKTIYI degil SORGU CIFTINI assert eder: ciktinin kendisi K28
+        ONCESI de yesildi, yani hicbir sey olcmuyordu (PROTOKOL S4.6/4)."""
+        blocks = olcu3b_fixture()
+        sorgular = _miras_sorgulari(blocks, OcrPreset.DIALOGUE)
+        assert len(sorgular) == 1
+        sol_sb, sol_bbox, sag_sb, sag_bbox = sorgular[0]
+        assert sol_sb == (1, 2, 3)
+>       assert sol_bbox == blocks[3].bbox  # okuma sirasinda SON -- `sirali[1]` idx2 OLURDU
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       AssertionError: assert Rect(x=0, y=2...dpi_scale=1.0) == Rect(x=0, y=6...dpi_scale=1.0)
+E         
+E         Omitting 4 identical items, use -vv to show
+E         Differing attributes:
+E         ['y', 'h']
+E         
+E         Drill down into differing attribute y:
+E           y: 20 != 60...
+E         
+E         ...Full output truncated (3 lines hidden), use '-vv' to show
+
+tests\unit\ocr\test_normalizer.py:1564: AssertionError
+________ test_k28_olcu4_ham_geometri_mirasi_acar_birlesik_kutu_kapatir ________
+
+    def test_k28_olcu4_ham_geometri_mirasi_acar_birlesik_kutu_kapatir() -> None:
+        """OLCU 4 (sef_karari-tur6.md): K28 tek yonlu bir DARALTMA degildir --
+        ham geometriyle miras UYGULANMASI GEREKEN ama birlesik geometriyle
+        UYGULANMAYACAK bir vaka.
+    
+        Kuyruk (idx1+idx2) birlesik kutusu x=0..308 (w=308); ham SON satir
+        (idx2) x=300..308 (w=8). Aday idx3 x=250..490. Yatay ortusme esigi
+        `0.30 * min(w)`: birlesikte `min(308, 240) = 240` -> 72px gerekir, gercek
+        ortusme 58px -> `"overlap"` REDDI (miras YOK). Ham son satirla
+        `min(8, 240) = 8` -> 2.4px gerekir, gercek ortusme 8px -> sorgu `None`
+        (miras VAR). Bolumleme iki yolda da AYNI (K23)."""
+        blocks = [
+            blk("Ada: " + "X" * 150, 0, 0, w=240, h=18),
+            blk("Y" * 40 + " son-", 0, 20, w=240, h=18),
+            blk("z" * 40, 300, 40, w=8, h=18),
+            blk("V" * 60, 250, 60, w=240, h=18),
+        ]
+        out = normalize(blocks, OcrPreset.DIALOGUE)
+        assert [s.source_blocks for s in out] == [(0, 1, 2), (3,)]
+        assert out[0].speaker == "Ada"
+>       assert out[1].speaker == "Ada", "ham geometri mirasi ACMALIYDI -- K28 ihlali"
+E       AssertionError: ham geometri mirasi ACMALIYDI -- K28 ihlali
+E       assert None == 'Ada'
+E        +  where None = Segment(text='VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV', bbox=Rect(x=250, y=60, w=240, h=18, monitor_index=0, dpi_scale=1.0), speaker=None, placeholders=(), source_blocks=(3,)).speaker
+
+tests\unit\ocr\test_normalizer.py:1595: AssertionError
+_____________ test_k28_olcu5_yapisal_sorguyu_ham_bloklar_belirler _____________
+
+    def test_k28_olcu5_yapisal_sorguyu_ham_bloklar_belirler() -> None:
+        """OLCU 5 (kit `olcu5_fixture`, `sorgu_kaydi`): iki sinir, ikisinde de
+        COK bloklu kuyruk. Uc ayri kosum:
+    
+          (i)  okuma-sirasi-SON ham blok (idx0) mutasyonu -> sorgu cifti DEGISIR
+          (ii) sag tarafin okuma-sirasi-ILK ham blogu (idx3) mutasyonu -> DEGISIR
+          (iii) YALNIZ birlesik kutuyu bozan mutasyon (idx2 -- kuyrugun okuma
+                sirasindaki ILK blogu, SON'u DEGIL) -> sorgu cifti DEGISMEZ
+    
+        (iii) ayirt edici yaridir: birlesik kutu kullanan bir uygulamada o da
+        degisir. Uc kosumda da BOLUMLEME ayni kalir (K23)."""
+        taban_blocks = olcu5_fixture()
+        taban = _miras_sorgulari(taban_blocks, OcrPreset.DIALOGUE)
+        taban_bolumleme = [s.source_blocks for s in normalize(taban_blocks, OcrPreset.DIALOGUE)]
+        assert len(taban) >= 2, "olcu 5 fixture'i en az IKI sinir uretmeli"
+        assert all(len(sol_sb) > 1 for sol_sb, _, _, _ in taban)
+    
+        def mutasyon(idx: int, yeni_h: int) -> list[TextBlock]:
+            blocks = olcu5_fixture()
+            eski = blocks[idx].bbox
+            blocks[idx] = TextBlock(
+                text=blocks[idx].text,
+                bbox=Rect(x=eski.x, y=eski.y, w=eski.w, h=yeni_h),
+                confidence=blocks[idx].confidence,
+            )
+            return blocks
+    
+        son_ham = mutasyon(0, 7)  # (i)  kuyrugun okuma-sirasi-SON blogu
+        ilk_ham_sag = mutasyon(3, 21)  # (ii) sag tarafin okuma-sirasi-ILK blogu
+        yalniz_birlesik = mutasyon(2, 30)  # (iii) YALNIZ birlesik kutuyu bozar
+    
+        assert _miras_sorgulari(son_ham, OcrPreset.DIALOGUE) != taban
+        assert _miras_sorgulari(ilk_ham_sag, OcrPreset.DIALOGUE) != taban
+>       assert _miras_sorgulari(yalniz_birlesik, OcrPreset.DIALOGUE) == taban, (
+            "birlesik kutu bozuldugunda sorgu cifti DEGISTI -- sorgu ham bloklardan "
+            "degil birlesik `_Item`'dan geliyor (K28 ihlali)"
+        )
+E       AssertionError: birlesik kutu bozuldugunda sorgu cifti DEGISTI -- sorgu ham bloklardan degil birlesik `_Item`'dan geliyor (K28 ihlali)
+E       assert [((0, 2), Rec...i_scale=1.0))] == [((0, 2), Rec...i_scale=1.0))]
+E         
+E         At index 0 diff: ((0, 2), Rect(x=0, y=20, w=240, h=30, monitor_index=0, dpi_scale=1.0), (3,), Rect(x=0, y=50, w=240, h=18, monitor_index=0, dpi_scale=1.0)) != ((0, 2), Rect(x=0, y=20, w=240, h=25, monitor_index=0, dpi_scale=1.0), (3,), Rect(x=0, y=50, w=240, h=18, monitor_index=0, dpi_scale=1.0))
+E         Use -v to get more diff
+
+tests\unit\ocr\test_normalizer.py:1640: AssertionError
+___ test_k28_olcu5_ast_normalize_impl_group_cagrisina_blocks_adini_gecirir ____
+
+    def test_k28_olcu5_ast_normalize_impl_group_cagrisina_blocks_adini_gecirir() -> None:
+        """OLCU 5'in AST yarisi: `_normalize_impl` icindeki `_group(...)` cagrisi
+        `blocks=` anahtar kelimesini TASIR ve degeri `blocks` ADININ KENDISIDIR.
+        Suzulmus/sikistirilmis bir liste gecirmek INDEKS KAYMASI uretir (K28'in
+        `_raw_query_pair` sozlesmesi: `blocks` OZGUN listedir)."""
+        agac = ast.parse(textwrap.dedent(inspect.getsource(_normalize_impl)))
+        cagrilar = [
+            n
+            for n in ast.walk(agac)
+            if isinstance(n, ast.Call) and isinstance(n.func, ast.Name) and n.func.id == "_group"
+        ]
+        assert len(cagrilar) == 1, f"_normalize_impl icinde TEK bir `_group` cagrisi olmali: {len(cagrilar)}"
+        kw = {k.arg: k.value for k in cagrilar[0].keywords}
+>       assert "blocks" in kw, "`_group` cagrisi `blocks=` tasimiyor"
+E       AssertionError: `_group` cagrisi `blocks=` tasimiyor
+E       assert 'blocks' in {'apply_inheritance': <ast.Name object at 0x000001FC7FE46590>}
+
+tests\unit\ocr\test_normalizer.py:1661: AssertionError
+__________________ test_k28_olcu6_makine_denetimi[dialogue] ___________________
+
+preset = <OcrPreset.DIALOGUE: 'dialogue'>
+
+    @pytest.mark.parametrize("preset", list(ON_AYARLAR))
+    def test_k28_olcu6_makine_denetimi(preset: OcrPreset) -> None:
+        """OLCU 6 (kit `olcu6_kos`): 2500 girdilik derlem uzerinde BES bagimsiz
+        kanal -- GEOMETRI (`ayrisma`), KIMLIK, KAPSAM, SIRA, SAYI -- artik
+        `patlama` ve derlem alt sinirlari (`eksik_sinirlar`). `r.temiz` bunlarin
+        HEPSINI kapsar. Uc on ayar AYRI AYRI kosar: geciþ 3'un `dialogue`-kapili
+        mutanti tek on ayarli bir olcuden gecerdi."""
+        r = olcu6_kos(preset)
+>       assert r.temiz, r.ilk_fark
+E       AssertionError: GEOMETRI: sol_sb=(2, 3, 7) beklenen=Rect(x=300, y=20, w=308, h=0, monitor_index=0, dpi_scale=1.0) olculen=Rect(x=0, y=20, w=608, h=5, monitor_index=0, dpi_scale=1.0) | sag_sb=(4, 5, 8) beklenen=Rect(x=100, y=85, w=240, h=50, monitor_index=0, dpi_scale=1.0) olculen=Rect(x=100, y=85, w=440, h=70, monitor_index=0, dpi_scale=1.0)
+E       assert False
+E        +  where False = Olcu6Sonuc(on_ayar='DIALOGUE', sinir=3802, sira_ihlali=0, coklu_sol=3013, uclu_sol=2532, derin_sol=278, coklu_sag=2292...tor_index=0, dpi_scale=1.0) olculen=Rect(x=100, y=85, w=440, h=70, monitor_index=0, dpi_scale=1.0)', eksik_sinirlar=[]).temiz
+
+tests\unit\ocr\test_normalizer.py:1676: AssertionError
+___________________ test_k28_olcu6_makine_denetimi[tooltip] ___________________
+
+preset = <OcrPreset.TOOLTIP: 'tooltip'>
+
+    @pytest.mark.parametrize("preset", list(ON_AYARLAR))
+    def test_k28_olcu6_makine_denetimi(preset: OcrPreset) -> None:
+        """OLCU 6 (kit `olcu6_kos`): 2500 girdilik derlem uzerinde BES bagimsiz
+        kanal -- GEOMETRI (`ayrisma`), KIMLIK, KAPSAM, SIRA, SAYI -- artik
+        `patlama` ve derlem alt sinirlari (`eksik_sinirlar`). `r.temiz` bunlarin
+        HEPSINI kapsar. Uc on ayar AYRI AYRI kosar: geciþ 3'un `dialogue`-kapili
+        mutanti tek on ayarli bir olcuden gecerdi."""
+        r = olcu6_kos(preset)
+>       assert r.temiz, r.ilk_fark
+E       AssertionError: GEOMETRI: sol_sb=(2, 3, 7) beklenen=Rect(x=300, y=20, w=308, h=0, monitor_index=0, dpi_scale=1.0) olculen=Rect(x=0, y=20, w=608, h=5, monitor_index=0, dpi_scale=1.0) | sag_sb=(4, 5, 8) beklenen=Rect(x=100, y=85, w=240, h=50, monitor_index=0, dpi_scale=1.0) olculen=Rect(x=100, y=85, w=440, h=70, monitor_index=0, dpi_scale=1.0)
+E       assert False
+E        +  where False = Olcu6Sonuc(on_ayar='TOOLTIP', sinir=6377, sira_ihlali=0, coklu_sol=4188, uclu_sol=3476, derin_sol=295, coklu_sag=4117,...tor_index=0, dpi_scale=1.0) olculen=Rect(x=100, y=85, w=440, h=70, monitor_index=0, dpi_scale=1.0)', eksik_sinirlar=[]).temiz
+
+tests\unit\ocr\test_normalizer.py:1676: AssertionError
+__________________ test_k28_olcu6_makine_denetimi[subtitle] ___________________
+
+preset = <OcrPreset.SUBTITLE: 'subtitle'>
+
+    @pytest.mark.parametrize("preset", list(ON_AYARLAR))
+    def test_k28_olcu6_makine_denetimi(preset: OcrPreset) -> None:
+        """OLCU 6 (kit `olcu6_kos`): 2500 girdilik derlem uzerinde BES bagimsiz
+        kanal -- GEOMETRI (`ayrisma`), KIMLIK, KAPSAM, SIRA, SAYI -- artik
+        `patlama` ve derlem alt sinirlari (`eksik_sinirlar`). `r.temiz` bunlarin
+        HEPSINI kapsar. Uc on ayar AYRI AYRI kosar: geciþ 3'un `dialogue`-kapili
+        mutanti tek on ayarli bir olcuden gecerdi."""
+        r = olcu6_kos(preset)
+>       assert r.temiz, r.ilk_fark
+E       AssertionError: GEOMETRI: sol_sb=(0,) beklenen=Rect(x=0, y=0, w=240, h=18, monitor_index=0, dpi_scale=1.0) olculen=Rect(x=0, y=0, w=240, h=18, monitor_index=0, dpi_scale=1.0) | sag_sb=(2, 3, 7) beklenen=Rect(x=0, y=20, w=8, h=5, monitor_index=0, dpi_scale=1.0) olculen=Rect(x=0, y=20, w=608, h=5, monitor_index=0, dpi_scale=1.0)
+E       assert False
+E        +  where False = Olcu6Sonuc(on_ayar='SUBTITLE', sinir=7683, sira_ihlali=0, coklu_sol=4820, uclu_sol=3943, derin_sol=296, coklu_sag=4951...onitor_index=0, dpi_scale=1.0) olculen=Rect(x=0, y=20, w=608, h=5, monitor_index=0, dpi_scale=1.0)', eksik_sinirlar=[]).temiz
+
+tests\unit\ocr\test_normalizer.py:1676: AssertionError
+=========================== short test summary info ===========================
+FAILED tests/unit/ocr/test_normalizer.py::test_k28_olcu1_sol_taraf_birlesik_kuyruk_gercek_kopusu_gizlemez[_olcu1_sol_varyant_a-gap]
+FAILED tests/unit/ocr/test_normalizer.py::test_k28_olcu1_sol_taraf_birlesik_kuyruk_gercek_kopusu_gizlemez[_olcu1_sol_varyant_b-gap]
+FAILED tests/unit/ocr/test_normalizer.py::test_k28_olcu1_sol_taraf_birlesik_kuyruk_gercek_kopusu_gizlemez[_olcu1_sol_varyant_c-overlap]
+FAILED tests/unit/ocr/test_normalizer.py::test_k28_olcu2_sag_taraf_birlesik_aday_gercek_kopusu_gizlemez[_olcu2_sag_varyant_a2-height]
+FAILED tests/unit/ocr/test_normalizer.py::test_k28_olcu2_sag_taraf_birlesik_aday_gercek_kopusu_gizlemez[_olcu2_sag_varyant_b-gap]
+FAILED tests/unit/ocr/test_normalizer.py::test_k28_olcu2_sag_taraf_birlesik_aday_gercek_kopusu_gizlemez[_olcu2_sag_varyant_c-overlap]
+FAILED tests/unit/ocr/test_normalizer.py::test_k28_olcu3_sirasiz_girdi_cift_bloklu_kuyruk[dialogue]
+FAILED tests/unit/ocr/test_normalizer.py::test_k28_olcu3_sirasiz_girdi_cift_bloklu_kuyruk[tooltip]
+FAILED tests/unit/ocr/test_normalizer.py::test_k28_olcu3b_zincirleme_hyphen_uc_bloklu_kuyruk_sorgu_cifti
+FAILED tests/unit/ocr/test_normalizer.py::test_k28_olcu4_ham_geometri_mirasi_acar_birlesik_kutu_kapatir
+FAILED tests/unit/ocr/test_normalizer.py::test_k28_olcu5_yapisal_sorguyu_ham_bloklar_belirler
+FAILED tests/unit/ocr/test_normalizer.py::test_k28_olcu5_ast_normalize_impl_group_cagrisina_blocks_adini_gecirir
+FAILED tests/unit/ocr/test_normalizer.py::test_k28_olcu6_makine_denetimi[dialogue]
+FAILED tests/unit/ocr/test_normalizer.py::test_k28_olcu6_makine_denetimi[tooltip]
+FAILED tests/unit/ocr/test_normalizer.py::test_k28_olcu6_makine_denetimi[subtitle]
+15 failed, 109 passed in 2.56s
