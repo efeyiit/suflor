@@ -1,0 +1,47 @@
+$ python .agents/tasks/T-005/tester_D/t2_docstring_olcumu2.py
+== (1) KANONIK SESSIZ ORNEK: uyari SAYISI (yutulmadan) ==
+  HAM  uint32(2500,100,200,100) -> ('ok', (2500, 100, 200, 100), 2)
+  DUZ  int(2500,100,200,100)    -> ('ok', (2500, 100, 60, 100), 0)
+  (son alan = RuntimeWarning sayisi)
+  dpi.classify_region(HAM) = inside  | RuntimeWarning x2
+  dpi.classify_region(DUZ) = partial  | RuntimeWarning x0
+
+== (2) DERIN INSIDE'DA AYRISMA: olumsuz iddianin sinanmasi ==
+iddia: 'Kenardan uzak (derin INSIDE) bolgelerde dort tipte de ayrisma SIFIRDIR'
+
+  uint8: 6 ayrisma / 36 temsil edilebilir kombinasyon
+    Rect(uint8(200),100,200,1): DUZ=ok(200, 100, 200, 1) HAM=CaptureErrorbolge hicbir monitorle kesismiyor: x=200, y=100, w=200,
+    Rect(uint8(200),100,200,50): DUZ=ok(200, 100, 200, 50) HAM=CaptureErrorbolge hicbir monitorle kesismiyor: x=200, y=100, w=200,
+    Rect(uint8(200),100,200,200): DUZ=ok(200, 100, 200, 200) HAM=CaptureErrorbolge hicbir monitorle kesismiyor: x=200, y=100, w=200,
+    Rect(uint8(200),200,200,1): DUZ=ok(200, 200, 200, 1) HAM=CaptureErrorbolge hicbir monitorle kesismiyor: x=200, y=200, w=200,
+    ... (+2)
+
+  uint16: 64 ayrisma / 1408 temsil edilebilir kombinasyon
+    Rect(uint16(200),100,200,1): DUZ=ok(200, 100, 200, 1) HAM=CaptureErrorbolge hicbir monitorle kesismiyor: x=200, y=100, w=200,
+    Rect(uint16(200),100,200,50): DUZ=ok(200, 100, 200, 50) HAM=CaptureErrorbolge hicbir monitorle kesismiyor: x=200, y=100, w=200,
+    Rect(uint16(200),100,200,200): DUZ=ok(200, 100, 200, 200) HAM=CaptureErrorbolge hicbir monitorle kesismiyor: x=200, y=100, w=200,
+    Rect(uint16(200),100,200,500): DUZ=ok(200, 100, 200, 500) HAM=CaptureErrorbolge hicbir monitorle kesismiyor: x=200, y=100, w=200,
+    ... (+60)
+
+  uint32: 64 ayrisma / 1408 temsil edilebilir kombinasyon
+    Rect(uint32(200),100,200,1): DUZ=ok(200, 100, 200, 1) HAM=CaptureErrorbolge hicbir monitorle kesismiyor: x=200, y=100, w=200,
+    Rect(uint32(200),100,200,50): DUZ=ok(200, 100, 200, 50) HAM=CaptureErrorbolge hicbir monitorle kesismiyor: x=200, y=100, w=200,
+    Rect(uint32(200),100,200,200): DUZ=ok(200, 100, 200, 200) HAM=CaptureErrorbolge hicbir monitorle kesismiyor: x=200, y=100, w=200,
+    Rect(uint32(200),100,200,500): DUZ=ok(200, 100, 200, 500) HAM=CaptureErrorbolge hicbir monitorle kesismiyor: x=200, y=100, w=200,
+    ... (+60)
+
+  uint64: 64 ayrisma / 1408 temsil edilebilir kombinasyon
+    Rect(uint64(200),100,200,1): DUZ=ok(200, 100, 200, 1) HAM=CaptureErrorbolge hicbir monitorle kesismiyor: x=200, y=100, w=200,
+    Rect(uint64(200),100,200,50): DUZ=ok(200, 100, 200, 50) HAM=CaptureErrorbolge hicbir monitorle kesismiyor: x=200, y=100, w=200,
+    Rect(uint64(200),100,200,200): DUZ=ok(200, 100, 200, 200) HAM=CaptureErrorbolge hicbir monitorle kesismiyor: x=200, y=100, w=200,
+    Rect(uint64(200),100,200,500): DUZ=ok(200, 100, 200, 500) HAM=CaptureErrorbolge hicbir monitorle kesismiyor: x=200, y=100, w=200,
+    ... (+60)
+
+== (3) DERIN INSIDE ayrisanlarin ORTAK yapisi ==
+hipotez: sol monitorle (x=-2560) yapilan isaretsiz cikarma tasiyor;
+bolge INSIDE olsa bile classify_region 'outside' verir (gurultulu red).
+  DUZ  Rect(500,300,200,200)          -> ('ok', (500, 300, 200, 200), 0)
+  HAM  Rect(uint32(500),300,200,200)  -> ('ok', (500, 300, 200, 200), 2)
+  TEK MONITOR (yalniz M1) ile ayni ham rect:
+    ('ok', (500, 300, 200, 200)) | RuntimeWarning x0
+EXIT=0

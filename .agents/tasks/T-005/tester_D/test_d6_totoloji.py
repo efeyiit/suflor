@@ -87,23 +87,35 @@ def test_d6_esitlik_olcusu_numpy_sizintisini_GOREMEZ() -> None:
         json.dumps(asdict(a))
 
 
-def test_d6_backend_e_giden_kutunun_TIPI_hicbir_iddiada_gecmiyor() -> None:
-    """`test_k3_*` yalnizca `==` olcuyor; tip kimligi olcusu yok.
+def test_d6_TUR2_backend_e_giden_kutunun_TIPI_artik_olculuyor() -> None:
+    """TUR 2'DE YENIDEN NISANLANDI.
 
-    Bu, K3 olcusunun sizintiyi goremeyecegini KAYNAKTAN dogrular. (Teslim
-    edilen uygulama dogru: kutuya duz `int` gidiyor -- asagida olculuyor.)
+    Tur 1'de bu test "K3 olculeri yalnizca `==` kullaniyor, tip kimligi olcusu
+    YOK" notunu kaynaktan dogruluyordu. Tur 2'de olcu eklendi; test artik
+    tersini bekliyor ve ayrica §4.6/7'yi arar: olcu tip uzayinin EN AZ IKI
+    noktasinda kosmali.
     """
     metin = (DEPO / "tests" / "unit" / "capture" / "test_service.py").read_text(
         encoding="utf-8"
     )
     agac = ast.parse(metin)
-    k3_govdeleri = [
-        ast.unparse(n) for n in ast.walk(agac)
-        if isinstance(n, ast.FunctionDef) and n.name.startswith("test_k3_")
-    ]
-    assert k3_govdeleri, "test_k3_* bulunamadi"
-    assert not any("type(" in g and "grab_rects" in g for g in k3_govdeleri), (
-        "beklenmedik: K3 testleri artik tip kimligi olcuyor -- bu not guncellenmeli"
+    k3 = {n.name: ast.unparse(n) for n in ast.walk(agac)
+          if isinstance(n, ast.FunctionDef) and n.name.startswith("test_k3_")}
+    assert k3, "test_k3_* bulunamadi"
+    tip_olcen = [ad for ad, g in k3.items()
+                 if "type(" in g and "grab_rects" in g and "is int" in g]
+    assert tip_olcen, (
+        "GERILEME: K3 olculeri yine yalnizca `==` ile yazilmis; "
+        "`Rect(np.int64(100),...) == Rect(100,...)` -> True oldugu icin backend'e "
+        "giden kutudaki numpy sizintisi GORUNMEZ olur (M37 sinifi)"
+    )
+    govde = k3[tip_olcen[0]]
+    tipler = [t for t in ("int64", "int32", "uint8", "uint16", "uint32", "uint64")
+              if f"np.{t}" in govde]
+    assert len(tipler) >= 2, (
+        f"tip kimligi olcusu tip uzayinin TEK noktasinda kosuyor ({tipler}); "
+        f"PROTOKOL §4.6/7 en az iki nokta ister -- yalniz `int64`'u duzlestiren "
+        f"bir uygulama tek tipli olcuyu gecer"
     )
 
 

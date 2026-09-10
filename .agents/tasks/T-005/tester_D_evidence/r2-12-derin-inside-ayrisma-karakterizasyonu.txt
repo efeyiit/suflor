@@ -1,0 +1,40 @@
+C:\Users\pc\Desktop\efe\çeviri uygulaması\src\capture\dpi.py:321: RuntimeWarning: overflow encountered in scalar subtract
+  w = x2 - x1
+C:\Users\pc\Desktop\efe\çeviri uygulaması\src\capture\dpi.py:368: RuntimeWarning: overflow encountered in scalar multiply
+  covered += piece.w * piece.h
+C:\Users\pc\Desktop\efe\çeviri uygulaması\src\capture\dpi.py:368: RuntimeWarning: overflow encountered in scalar add
+  covered += piece.w * piece.h
+C:\Users\pc\Desktop\efe\çeviri uygulaması\src\capture\dpi.py:321: RuntimeWarning: overflow encountered in scalar subtract
+  w = x2 - x1
+C:\Users\pc\Desktop\efe\çeviri uygulaması\src\capture\dpi.py:368: RuntimeWarning: overflow encountered in scalar multiply
+  covered += piece.w * piece.h
+C:\Users\pc\Desktop\efe\çeviri uygulaması\src\capture\dpi.py:368: RuntimeWarning: overflow encountered in scalar add
+  covered += piece.w * piece.h
+C:\Users\pc\Desktop\efe\çeviri uygulaması\src\capture\dpi.py:321: RuntimeWarning: overflow encountered in scalar subtract
+  w = x2 - x1
+C:\Users\pc\Desktop\efe\çeviri uygulaması\src\capture\dpi.py:368: RuntimeWarning: overflow encountered in scalar multiply
+  covered += piece.w * piece.h
+C:\Users\pc\Desktop\efe\çeviri uygulaması\src\capture\dpi.py:368: RuntimeWarning: overflow encountered in scalar add
+  covered += piece.w * piece.h
+$ derin-INSIDE ayrisma karakterizasyonu (tester_D, tur 2)
+monitorler: (Rect(x=-2560, y=0, w=2560, h=1440, monitor_index=0, dpi_scale=1.0), Rect(x=0, y=0, w=2560, h=1440, monitor_index=0, dpi_scale=1.0))
+
+== A. TEK NOKTA, en yalin yeniden uretim ==
+  uint16: classify(HAM)=outside (RuntimeWarning x3) | classify(DUZ)=inside | _hedef_dikdortgen(HAM)=('CaptureError', 'bolge hicbir monitorle kesismiyor: x=200, y=100, w')
+  uint32: classify(HAM)=outside (RuntimeWarning x3) | classify(DUZ)=inside | _hedef_dikdortgen(HAM)=('CaptureError', 'bolge hicbir monitorle kesismiyor: x=200, y=100, w')
+  uint64: classify(HAM)=outside (RuntimeWarning x3) | classify(DUZ)=inside | _hedef_dikdortgen(HAM)=('CaptureError', 'bolge hicbir monitorle kesismiyor: x=200, y=100, w')
+  NOT: bolge x=200..400, y=100..300 -- M1=(0,0,2560,1440)'in TAMAMEN icinde;
+       en yakin dis kenara uzaklik 2160 px (sag), 1140 px (alt), M0/M1 dikisine 200 px.
+
+== B. Derin-INSIDE grid'de ayrisan (x,w) ciftleri (uint32) ==
+  ayrisan (x,w) ciftleri ve her birinde kac (y,h):
+    x=  200 w= 200 -> 32 (y,h) kombinasyonu; ornek [(100, 1), (100, 50)]
+    x=  500 w= 500 -> 32 (y,h) kombinasyonu; ornek [(100, 1), (100, 50)]
+  TOPLAM ayrisma: 64 / 1408
+
+== C. Dis kenara ne kadar uzakta? ==
+    x=200, w=200: sag=400 (M1 sag kenari 2560, uzaklik 2160), M0/M1 dikisine uzaklik 200
+    x=500, w=500: sag=1000 (M1 sag kenari 2560, uzaklik 1560), M0/M1 dikisine uzaklik 500
+
+== D. Kontrol: ayni grid ama TEK monitor (M1) -- ayrisma var mi? ==
+  TEK monitor (M1) ile ayrisma: 0 / 1408  -> tasmayi doguran, NEGATIF x'li M0'dir.

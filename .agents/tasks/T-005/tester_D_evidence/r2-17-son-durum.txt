@@ -1,0 +1,40 @@
+$ git status --short -- src tests
+(bos = src/ ve tests/ DEGISTIRILMEDI)
+
+$ git status --short  (tum depo -- yalnizca tester_D ve tester_D_evidence dokunuldu)
+ M .agents/tasks/T-005/tester_D/test_d5_bos_olcum_noktalari.py
+ M .agents/tasks/T-005/tester_D/test_d6_totoloji.py
+?? .agents/tasks/T-005/tester_D/mutant_kiti_tur2.py
+?? .agents/tasks/T-005/tester_D/t2_docstring_olcumu.py
+?? .agents/tasks/T-005/tester_D/t2_docstring_olcumu2.py
+?? .agents/tasks/T-005/tester_D/t2_onerilen_duzeltme_gucu.py
+?? .agents/tasks/T-005/tester_D/test_d9_tur2_docstring_iddialari.py
+?? .agents/tasks/T-005/tester_D_evidence/r2-01-mypy.txt
+?? .agents/tasks/T-005/tester_D_evidence/r2-02-pytest-owned.txt
+?? .agents/tasks/T-005/tester_D_evidence/r2-03-headless.txt
+?? .agents/tasks/T-005/tester_D_evidence/r2-04-cov.txt
+?? .agents/tasks/T-005/tester_D_evidence/r2-05-pytest-all.txt
+?? .agents/tasks/T-005/tester_D_evidence/r2-06-tester-D-bayat.txt
+?? .agents/tasks/T-005/tester_D_evidence/r2-07-kapsam-pragma.txt
+?? .agents/tasks/T-005/tester_D_evidence/r2-08-sef-kapi-mutantlari.txt
+?? .agents/tasks/T-005/tester_D_evidence/r2-09-mutant-dalga-tur2.txt
+?? .agents/tasks/T-005/tester_D_evidence/r2-10-docstring-tasma-olcumu.txt
+?? .agents/tasks/T-005/tester_D_evidence/r2-11-docstring-sifir-iddiasi.txt
+?? .agents/tasks/T-005/tester_D_evidence/r2-12-derin-inside-ayrisma-karakterizasyonu.txt
+?? .agents/tasks/T-005/tester_D_evidence/r2-13-en-guclu-karsi-ornek.txt
+?? .agents/tasks/T-005/tester_D_evidence/r2-14-known-gaps-vs-docstring.txt
+?? .agents/tasks/T-005/tester_D_evidence/r2-15-tester-D-kiti-tur2.txt
+?? .agents/tasks/T-005/tester_D_evidence/r2-16-onerilen-duzeltme-gucu.txt
+?? .agents/tasks/T-005/tester_D_evidence/r2-17-son-durum.txt
+
+$ git diff --stat -- src tests
+(bos)
+
+$ ayna agacinin yeri (depo DISI):
+C:/Users/pc/AppData/Local/Temp/scratch/.../scratchpad/t005_tester_D_mutroot
+
+=== SON KONTROL (butun kosumlardan SONRA) ===
+$ git status --short -- src tests
+(bos = src/ ve tests/ HIC DEGISTIRILMEDI)
+$ git status --short -- .agents/tasks/T-005/headless_check.py .agents/tasks/T-005/packet.md .agents/PROTOKOL.md .agents/validate.py .agents/tasks/T-005/sef_karari-tur2.md .agents/tasks/T-005/sef_dogrulama
+(bos = yazma yasagi olan dosyalarin hicbirine dokunulmadi)

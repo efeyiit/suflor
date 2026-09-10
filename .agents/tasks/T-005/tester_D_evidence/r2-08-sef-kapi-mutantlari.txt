@@ -1,0 +1,40 @@
+$ TESTER_D_SCRATCH=<scratchpad> python .agents/tasks/T-005/tester_D/mutant_kiti.py M12 M13 M37 M44
+ayna agaci: C:\Users\pc\AppData\Local\Temp\scratch\C--Users-pc-Desktop-efe--eviri-uygulamas-\d52c967f-bd19-4db3-b5e9-77e6cd08b889\scratchpad\t005_tester_D_mutroot   (depo YAZILMAZ)
+MUTANT KITI -- her mutant icin hangi kapi YAKALAR (X) / KACIRIR (.)
+kapilar: G1-mypy | G2-pytest | G3-headless | G4-kapsam | G5-tumdizin
+
+M12 [.X.XX] YAKALANDI
+     __exit__ close() CAGIRMAZ (baglam yoneticisi tutamaci sizdirir)
+     hedef degismez: K10 `__exit__` -> close()
+     | G2-pytest:1 failed, 162 passed in 0.71s
+     | G4-kapsam:Required test coverage of 95% reached. Total coverage: 98.83%
+     | G5-tumdizin:1 failed, 745 passed in 1.23s
+M13 [.X.XX] YAKALANDI
+     close() idempotent DEGIL (tutamaci None yapmaz -> ikinci close tekrar kapatir)
+     hedef degismez: K10 close idempotent
+     | G2-pytest:2 failed, 161 passed in 0.68s
+     | G4-kapsam:Required test coverage of 95% reached. Total coverage: 98.83%
+     | G5-tumdizin:2 failed, 744 passed in 1.16s
+M37 [.X.XX] YAKALANDI
+     backend'e DUZLESTIRILMEMIS geometri gider; Frame.rect duz kalir (K3 `==` gormez)
+     hedef degismez: K8 duzlestirme -- olcunun `==` ile yazilmasi
+     | G2-pytest:1 failed, 162 passed in 0.65s
+     | G4-kapsam:Required test coverage of 95% reached. Total coverage: 98.84%
+     | G5-tumdizin:1 failed, 745 passed in 1.17s
+M44 [.X.XX] YAKALANDI
+     FakeBackend varsayilan ureticisi 4 kanal yerine 3 kanal dondurur
+     hedef degismez: K1 FakeBackend varsayilan sozlesmesi
+     | G2-pytest:1 failed, 162 passed in 0.35s
+     | G4-kapsam:Required test coverage of 95% reached. Total coverage: 98.83%
+     | G5-tumdizin:1 failed, 745 passed in 0.86s
+
+=== MARKDOWN TABLOSU ===
+| # | mutant | hedef degismez | G1-mypy | G2-pytest | G3-headless | G4-kapsam | G5-tumdizin |
+|---|---|---|---|---|---|---|---|
+| M12 | __exit__ close() CAGIRMAZ (baglam yoneticisi tutamaci sizdirir) | K10 `__exit__` -> close() | . | X | . | X | X |
+| M13 | close() idempotent DEGIL (tutamaci None yapmaz -> ikinci close tekrar kapatir) | K10 close idempotent | . | X | . | X | X |
+| M37 | backend'e DUZLESTIRILMEMIS geometri gider; Frame.rect duz kalir (K3 `==` gormez) | K8 duzlestirme -- olcunun `==` ile yazilmasi | . | X | . | X | X |
+| M44 | FakeBackend varsayilan ureticisi 4 kanal yerine 3 kanal dondurur | K1 FakeBackend varsayilan sozlesmesi | . | X | . | X | X |
+
+Kacan mutant yok.
+EXIT=0

@@ -1,0 +1,36 @@
+$ grep -rn "pragma" src/capture/
+src/capture/service.py:159:    def monitors(self) -> Sequence[Mapping[str, object]]:  # pragma: no cover -- K1: gercek ekran, headless_check §3 ile denetleniyor
+src/capture/service.py:165:    def grab(self, rect: Rect) -> ImageArray:  # pragma: no cover -- K1: gercek ekran, headless_check §3 ile denetleniyor
+src/capture/service.py:173:    def close(self) -> None:  # pragma: no cover -- K1: gercek ekran, headless_check §3 ile denetleniyor
+
+$ grep -rn "no cover\|exclude_lines\|nocov" --include=*.py --include=*.cfg --include=*.ini --include=*.toml -r src tests .coveragerc pyproject.toml setup.cfg tox.ini 2>/dev/null
+src/capture/service.py:159:    def monitors(self) -> Sequence[Mapping[str, object]]:  # pragma: no cover -- K1: gercek ekran, headless_check §3 ile denetleniyor
+src/capture/service.py:165:    def grab(self, rect: Rect) -> ImageArray:  # pragma: no cover -- K1: gercek ekran, headless_check §3 ile denetleniyor
+src/capture/service.py:173:    def close(self) -> None:  # pragma: no cover -- K1: gercek ekran, headless_check §3 ile denetleniyor
+tests/unit/capture/test_change_detector.py:480:                except Exception as exc:  # pragma: no cover -- basarisizlikta rapor icin
+ls: cannot access '.coveragerc': No such file or directory
+ls: cannot access 'pyproject.toml': No such file or directory
+ls: cannot access 'setup.cfg': No such file or directory
+ls: cannot access 'tox.ini': No such file or directory
+ls: cannot access 'pytest.ini': No such file or directory
+
+$ kapsanmayan iki satir (501, 504):
+            )
+
+        geometri = duz
+        if sinif is dpi.RegionValidity.PARTIAL:
+            birlesim = union_bbox(self._monitors)
+            if birlesim is None:  # yapisal olarak erisilemez (kume bos degil)
+                raise CaptureError("birlesim dikdortgeni hesaplanamadi")
+            kirpik = dpi.intersect(duz, birlesim)
+            if kirpik is None:  # yapisal olarak erisilemez (PARTIAL => kesisim var)
+                raise CaptureError("birlesime kirpma bos sonuc verdi")
+            geometri = kirpik
+
+        x, y, w, h = int(geometri.x), int(geometri.y), int(geometri.w), int(geometri.h)
+        aday = Rect(x=x, y=y, w=w, h=h, monitor_index=0, dpi_scale=duz.dpi_scale)
+
+$ tur1 -> tur2 kapsam karsilastirmasi
+tur1: 171 stmts / 2 miss / 98.83% (satir 479, 482)  [r1-04-cov.txt]
+tur2: 171 stmts / 2 miss / 98.83% (satir 501, 504)  [r2-04-cov.txt]
+DEGISIM YOK -- ne pay ne payda oynadi; satir numaralari yalniz docstring uzadigi icin kaydi.

@@ -1,0 +1,186 @@
+$ python .agents/tasks/T-005/tester_D/mutant_kiti_tur2.py
+TUR 2 MUTANT DALGASI -- X = kapi yakaladi, . = kacirdi
+kapilar: G1-mypy | G2-pytest | G3-headless | G4-kapsam | G5-tumdizin
+
+M50 [.X.XX] YAKALANDI
+     __exit__ tutamaci KAPATMADAN birakir (alan None olur, DC sizar)
+     hedef degismez: K10 `__exit__` -> close()  [M12'nin `_tutamac`'i sifirlayan varyanti]
+     | G2-pytest:1 failed, 162 passed in 0.71s
+     |       FAILED tests/unit/capture/test_service.py::test_k10_exit_uzun_omurlu_tutamaci_kapatir
+     | G4-kapsam:Required test coverage of 95% reached. Total coverage: 98.83%
+     |       FAILED tests/unit/capture/test_service.py::test_k10_exit_uzun_omurlu_tutamaci_kapatir
+     | G5-tumdizin:1 failed, 745 passed in 1.17s
+     |       FAILED tests/unit/capture/test_service.py::test_k10_exit_uzun_omurlu_tutamaci_kapatir
+M53 [.....] *** HICBIR KAPI YAKALAMADI ***
+     __exit__ yalnizca ISTISNASIZ cikista kapatir (govde patlarsa tutamac sizar)
+     hedef degismez: K10 `__exit__` -> close()  [istisna yolu]
+M51 [.XXXX] YAKALANDI
+     close() alani sifirlar ama ALTTAKI close()'u CAGIRMAZ (M13'un aynasi)
+     hedef degismez: K10 close() tutamaci kapatir
+     | G2-pytest:2 failed, 161 passed in 0.64s
+     |       FAILED tests/unit/capture/test_service.py::test_k10_exit_uzun_omurlu_tutamaci_kapatir
+     |       FAILED tests/unit/capture/test_service.py::test_k10_close_tutamaci_sifirlar_ve_idempotenttir
+     | G3-headless:IHLAL (2):
+     | G4-kapsam:Required test coverage of 95% reached. Total coverage: 98.83%
+     |       FAILED tests/unit/capture/test_service.py::test_k10_exit_uzun_omurlu_tutamaci_kapatir
+     |       FAILED tests/unit/capture/test_service.py::test_k10_close_tutamaci_sifirlar_ve_idempotenttir
+     | G5-tumdizin:2 failed, 744 passed in 1.13s
+     |       FAILED tests/unit/capture/test_service.py::test_k10_exit_uzun_omurlu_tutamaci_kapatir
+     |       FAILED tests/unit/capture/test_service.py::test_k10_close_tutamaci_sifirlar_ve_idempotenttir
+M52 [.....] *** HICBIR KAPI YAKALAMADI ***
+     KONTROL: close() sirasi ters (once alan sifirlanir, sonra kapatilir) -- davranis AYNI
+     hedef degismez: yanlis pozitif denetimi: KACMASI DOGRU
+M54 [..X..] YAKALANDI
+     grab() tutamaci BASKA alana (_tutamac2) yazar; close()/__exit__ hala _tutamac'a bakar -> enjeksiyon testleri gecer, URETIMDE her tutamac sizar
+     hedef degismez: TOTOLOJI SONDASI: sahte tutamac enjeksiyonu uretimin kurdugu durumu mu olcuyor?
+     | G3-headless:IHLAL (2):
+M56 [.X.XX] YAKALANDI
+     varsayilan uretici DEVRIK sekil dondurur ((w,h,4))
+     hedef degismez: K1 varsayilan uretici sekli  [M44'un devrik varyanti]
+     | G2-pytest:39 failed, 124 passed in 0.86s
+     |       FAILED tests/unit/capture/test_service.py::test_k1_fake_backend_varsayilan_ureticisi_bgra_sifir_dizi
+     |       FAILED tests/unit/capture/test_service.py::test_k3_dpi_scale_backend_kutusunu_degistirmez[1.0]
+     |       FAILED tests/unit/capture/test_service.py::test_k3_dpi_scale_backend_kutusunu_degistirmez[1.25]
+     |       FAILED tests/unit/capture/test_service.py::test_k3_dpi_scale_backend_kutusunu_degistirmez[1.5]
+     |       FAILED tests/unit/capture/test_service.py::test_k3_dpi_scale_backend_kutusunu_degistirmez[2.0]
+     |       FAILED tests/unit/capture/test_service.py::test_k3_dort_olcek_ayni_kutuyu_uretir
+     |       FAILED tests/unit/capture/test_service.py::test_k3_inside_kutusu_cagiranin_verdigiyle_birebir
+     |       FAILED tests/unit/capture/test_service.py::test_k3_backend_kutusu_duz_int_tasir
+     |       FAILED tests/unit/capture/test_service.py::test_k4_kirpma_birlesime_gore - sr...
+     |       FAILED tests/unit/capture/test_service.py::test_k4_partial_kirpilir[sol] - sr...
+     |       FAILED tests/unit/capture/test_service.py::test_k4_partial_kirpilir[sag] - sr...
+     |       FAILED tests/unit/capture/test_service.py::test_k4_partial_kirpilir[ust] - sr...
+     |       FAILED tests/unit/capture/test_service.py::test_k4_partial_kirpilir[alt] - sr...
+     |       FAILED tests/unit/capture/test_service.py::test_k4_partial_kirpilir[kose] - s...
+     |       FAILED tests/unit/capture/test_service.py::test_k4_partial_kirpilir[yayilan]
+     |       FAILED tests/unit/capture/test_service.py::test_k4_monitor_index_girdisi_karari_degistirmez[0]
+     |       FAILED tests/unit/capture/test_service.py::test_k4_monitor_index_girdisi_karari_degistirmez[1]
+     |       FAILED tests/unit/capture/test_service.py::test_k4_monitor_index_girdisi_karari_degistirmez[7]
+     |       FAILED tests/unit/capture/test_service.py::test_k5_refresh_hatasi_eski_kumeyi_korur
+     |       FAILED tests/unit/capture/test_service.py::test_k5_capture_full_monitors_cagirmaz
+     |       FAILED tests/unit/capture/test_service.py::test_k5_sira_degisimi_kirpmayi_degistirmez_metadatayi_degistirir
+     |       FAILED tests/unit/capture/test_service.py::test_k8_dpi_scale_korunur_inside
+     |       FAILED tests/unit/capture/test_service.py::test_k8_dpi_scale_korunur_partial
+     |       FAILED tests/unit/capture/test_service.py::test_k8_capture_full_dpi_scale_1_0
+     |       FAILED tests/unit/capture/test_service.py::test_k8_monitor_index_inside_cagiranin_degeri_yok_sayilir
+     |       FAILED tests/unit/capture/test_service.py::test_k8_monitor_index_partial_tek_monitore_duser
+     |       FAILED tests/unit/capture/test_service.py::test_k8_monitor_index_iki_monitore_yayilan_eksi_bir
+     |       FAILED tests/unit/capture/test_service.py::test_k8_monitor_index_capture_full[0]
+     |       FAILED tests/unit/capture/test_service.py::test_k8_monitor_index_capture_full[1]
+     |       FAILED tests/unit/capture/test_service.py::test_k8_frame_rect_alanlari_duz_int[inside-int64]
+     |       FAILED tests/unit/capture/test_service.py::test_k8_frame_rect_alanlari_duz_int[inside-int32]
+     |       FAILED tests/unit/capture/test_service.py::test_k8_frame_rect_alanlari_duz_int[inside-uint8]
+     |       FAILED tests/unit/capture/test_service.py::test_k8_frame_rect_alanlari_duz_int[inside-int]
+     |       FAILED tests/unit/capture/test_service.py::test_k8_monitor_index_isaretsiz_numpy[uint16]
+     |       FAILED tests/unit/capture/test_service.py::test_k8_monitor_index_isaretsiz_numpy[uint32]
+     |       FAILED tests/unit/capture/test_service.py::test_k8_frame_rect_geometrisi_gercekten_yakalanan
+     |       FAILED tests/unit/capture/test_service.py::test_k9_capture_full_ayni_rect_ve_ayni_grab_cagrisi
+     |       FAILED tests/unit/capture/test_service.py::test_k9_sanal_masaustu_birlesim_ile_yakalanir
+     |       FAILED tests/unit/capture/test_service.py::test_k11_butce - src.contracts.err...
+     | G4-kapsam:Required test coverage of 95% reached. Total coverage: 98.83%
+     |       FAILED tests/unit/capture/test_service.py::test_k1_fake_backend_varsayilan_ureticisi_bgra_sifir_dizi
+     |       FAILED tests/unit/capture/test_service.py::test_k3_dpi_scale_backend_kutusunu_degistirmez[1.0]
+     |       FAILED tests/unit/capture/test_service.py::test_k3_dpi_scale_backend_kutusunu_degistirmez[1.25]
+     |       FAILED tests/unit/capture/test_service.py::test_k3_dpi_scale_backend_kutusunu_degistirmez[1.5]
+     |       FAILED tests/unit/capture/test_service.py::test_k3_dpi_scale_backend_kutusunu_degistirmez[2.0]
+     |       FAILED tests/unit/capture/test_service.py::test_k3_dort_olcek_ayni_kutuyu_uretir
+     |       FAILED tests/unit/capture/test_service.py::test_k3_inside_kutusu_cagiranin_verdigiyle_birebir
+     |       FAILED tests/unit/capture/test_service.py::test_k3_backend_kutusu_duz_int_tasir
+     |       FAILED tests/unit/capture/test_service.py::test_k4_kirpma_birlesime_gore - sr...
+     |       FAILED tests/unit/capture/test_service.py::test_k4_partial_kirpilir[sol] - sr...
+     |       FAILED tests/unit/capture/test_service.py::test_k4_partial_kirpilir[sag] - sr...
+     |       FAILED tests/unit/capture/test_service.py::test_k4_partial_kirpilir[ust] - sr...
+     |       FAILED tests/unit/capture/test_service.py::test_k4_partial_kirpilir[alt] - sr...
+     |       FAILED tests/unit/capture/test_service.py::test_k4_partial_kirpilir[kose] - s...
+     |       FAILED tests/unit/capture/test_service.py::test_k4_partial_kirpilir[yayilan]
+     |       FAILED tests/unit/capture/test_service.py::test_k4_monitor_index_girdisi_karari_degistirmez[0]
+     |       FAILED tests/unit/capture/test_service.py::test_k4_monitor_index_girdisi_karari_degistirmez[1]
+     |       FAILED tests/unit/capture/test_service.py::test_k4_monitor_index_girdisi_karari_degistirmez[7]
+     |       FAILED tests/unit/capture/test_service.py::test_k5_refresh_hatasi_eski_kumeyi_korur
+     |       FAILED tests/unit/capture/test_service.py::test_k5_capture_full_monitors_cagirmaz
+     |       FAILED tests/unit/capture/test_service.py::test_k5_sira_degisimi_kirpmayi_degistirmez_metadatayi_degistirir
+     |       FAILED tests/unit/capture/test_service.py::test_k8_dpi_scale_korunur_inside
+     |       FAILED tests/unit/capture/test_service.py::test_k8_dpi_scale_korunur_partial
+     |       FAILED tests/unit/capture/test_service.py::test_k8_capture_full_dpi_scale_1_0
+     |       FAILED tests/unit/capture/test_service.py::test_k8_monitor_index_inside_cagiranin_degeri_yok_sayilir
+     |       FAILED tests/unit/capture/test_service.py::test_k8_monitor_index_partial_tek_monitore_duser
+     |       FAILED tests/unit/capture/test_service.py::test_k8_monitor_index_iki_monitore_yayilan_eksi_bir
+     |       FAILED tests/unit/capture/test_service.py::test_k8_monitor_index_capture_full[0]
+     |       FAILED tests/unit/capture/test_service.py::test_k8_monitor_index_capture_full[1]
+     |       FAILED tests/unit/capture/test_service.py::test_k8_frame_rect_alanlari_duz_int[inside-int64]
+     |       FAILED tests/unit/capture/test_service.py::test_k8_frame_rect_alanlari_duz_int[inside-int32]
+     |       FAILED tests/unit/capture/test_service.py::test_k8_frame_rect_alanlari_duz_int[inside-uint8]
+     |       FAILED tests/unit/capture/test_service.py::test_k8_frame_rect_alanlari_duz_int[inside-int]
+     |       FAILED tests/unit/capture/test_service.py::test_k8_monitor_index_isaretsiz_numpy[uint16]
+     |       FAILED tests/unit/capture/test_service.py::test_k8_monitor_index_isaretsiz_numpy[uint32]
+     |       FAILED tests/unit/capture/test_service.py::test_k8_frame_rect_geometrisi_gercekten_yakalanan
+     |       FAILED tests/unit/capture/test_service.py::test_k9_capture_full_ayni_rect_ve_ayni_grab_cagrisi
+     |       FAILED tests/unit/capture/test_service.py::test_k9_sanal_masaustu_birlesim_ile_yakalanir
+     |       FAILED tests/unit/capture/test_service.py::test_k11_butce - src.contracts.err...
+     | G5-tumdizin:39 failed, 707 passed in 1.36s
+     |       FAILED tests/unit/capture/test_service.py::test_k1_fake_backend_varsayilan_ureticisi_bgra_sifir_dizi
+     |       FAILED tests/unit/capture/test_service.py::test_k3_dpi_scale_backend_kutusunu_degistirmez[1.0]
+     |       FAILED tests/unit/capture/test_service.py::test_k3_dpi_scale_backend_kutusunu_degistirmez[1.25]
+     |       FAILED tests/unit/capture/test_service.py::test_k3_dpi_scale_backend_kutusunu_degistirmez[1.5]
+     |       FAILED tests/unit/capture/test_service.py::test_k3_dpi_scale_backend_kutusunu_degistirmez[2.0]
+     |       FAILED tests/unit/capture/test_service.py::test_k3_dort_olcek_ayni_kutuyu_uretir
+     |       FAILED tests/unit/capture/test_service.py::test_k3_inside_kutusu_cagiranin_verdigiyle_birebir
+     |       FAILED tests/unit/capture/test_service.py::test_k3_backend_kutusu_duz_int_tasir
+     |       FAILED tests/unit/capture/test_service.py::test_k4_kirpma_birlesime_gore - sr...
+     |       FAILED tests/unit/capture/test_service.py::test_k4_partial_kirpilir[sol] - sr...
+     |       FAILED tests/unit/capture/test_service.py::test_k4_partial_kirpilir[sag] - sr...
+     |       FAILED tests/unit/capture/test_service.py::test_k4_partial_kirpilir[ust] - sr...
+     |       FAILED tests/unit/capture/test_service.py::test_k4_partial_kirpilir[alt] - sr...
+     |       FAILED tests/unit/capture/test_service.py::test_k4_partial_kirpilir[kose] - s...
+     |       FAILED tests/unit/capture/test_service.py::test_k4_partial_kirpilir[yayilan]
+     |       FAILED tests/unit/capture/test_service.py::test_k4_monitor_index_girdisi_karari_degistirmez[0]
+     |       FAILED tests/unit/capture/test_service.py::test_k4_monitor_index_girdisi_karari_degistirmez[1]
+     |       FAILED tests/unit/capture/test_service.py::test_k4_monitor_index_girdisi_karari_degistirmez[7]
+     |       FAILED tests/unit/capture/test_service.py::test_k5_refresh_hatasi_eski_kumeyi_korur
+     |       FAILED tests/unit/capture/test_service.py::test_k5_capture_full_monitors_cagirmaz
+     |       FAILED tests/unit/capture/test_service.py::test_k5_sira_degisimi_kirpmayi_degistirmez_metadatayi_degistirir
+     |       FAILED tests/unit/capture/test_service.py::test_k8_dpi_scale_korunur_inside
+     |       FAILED tests/unit/capture/test_service.py::test_k8_dpi_scale_korunur_partial
+     |       FAILED tests/unit/capture/test_service.py::test_k8_capture_full_dpi_scale_1_0
+     |       FAILED tests/unit/capture/test_service.py::test_k8_monitor_index_inside_cagiranin_degeri_yok_sayilir
+     |       FAILED tests/unit/capture/test_service.py::test_k8_monitor_index_partial_tek_monitore_duser
+     |       FAILED tests/unit/capture/test_service.py::test_k8_monitor_index_iki_monitore_yayilan_eksi_bir
+     |       FAILED tests/unit/capture/test_service.py::test_k8_monitor_index_capture_full[0]
+     |       FAILED tests/unit/capture/test_service.py::test_k8_monitor_index_capture_full[1]
+     |       FAILED tests/unit/capture/test_service.py::test_k8_frame_rect_alanlari_duz_int[inside-int64]
+     |       FAILED tests/unit/capture/test_service.py::test_k8_frame_rect_alanlari_duz_int[inside-int32]
+     |       FAILED tests/unit/capture/test_service.py::test_k8_frame_rect_alanlari_duz_int[inside-uint8]
+     |       FAILED tests/unit/capture/test_service.py::test_k8_frame_rect_alanlari_duz_int[inside-int]
+     |       FAILED tests/unit/capture/test_service.py::test_k8_monitor_index_isaretsiz_numpy[uint16]
+     |       FAILED tests/unit/capture/test_service.py::test_k8_monitor_index_isaretsiz_numpy[uint32]
+     |       FAILED tests/unit/capture/test_service.py::test_k8_frame_rect_geometrisi_gercekten_yakalanan
+     |       FAILED tests/unit/capture/test_service.py::test_k9_capture_full_ayni_rect_ve_ayni_grab_cagrisi
+     |       FAILED tests/unit/capture/test_service.py::test_k9_sanal_masaustu_birlesim_ile_yakalanir
+     |       FAILED tests/unit/capture/test_service.py::test_k11_butce - src.contracts.err...
+M57 [.X.XX] YAKALANDI
+     varsayilan uretici SIFIR degil BIR dizi dondurur
+     hedef degismez: K1 varsayilan uretici icerigi  [M44'un icerik varyanti]
+     | G2-pytest:1 failed, 162 passed in 0.63s
+     |       FAILED tests/unit/capture/test_service.py::test_k1_fake_backend_varsayilan_ureticisi_bgra_sifir_dizi
+     | G4-kapsam:Required test coverage of 95% reached. Total coverage: 98.83%
+     |       FAILED tests/unit/capture/test_service.py::test_k1_fake_backend_varsayilan_ureticisi_bgra_sifir_dizi
+     | G5-tumdizin:1 failed, 745 passed in 1.14s
+     |       FAILED tests/unit/capture/test_service.py::test_k1_fake_backend_varsayilan_ureticisi_bgra_sifir_dizi
+M58 [.....] *** HICBIR KAPI YAKALAMADI ***
+     backend kutusuna numpy skaleri YALNIZ PARTIAL yolunda sizar (geometri ayni, `==` esit)
+     hedef degismez: K3/K8 tip kimligi -- olcunun INSIDE + PARTIAL iki noktada kosmasi (§4.6/7)
+
+=== MARKDOWN TABLOSU ===
+| # | mutant | hedef degismez | G1-mypy | G2-pytest | G3-headless | G4-kapsam | G5-tumdizin |
+|---|---|---|---|---|---|---|---|
+| M50 | __exit__ tutamaci KAPATMADAN birakir (alan None olur, DC sizar) | K10 `__exit__` -> close()  [M12'nin `_tutamac`'i sifirlayan varyanti] | . | X | . | X | X |
+| M53 | __exit__ yalnizca ISTISNASIZ cikista kapatir (govde patlarsa tutamac sizar) | K10 `__exit__` -> close()  [istisna yolu] | . | . | . | . | . |
+| M51 | close() alani sifirlar ama ALTTAKI close()'u CAGIRMAZ (M13'un aynasi) | K10 close() tutamaci kapatir | . | X | X | X | X |
+| M52 | KONTROL: close() sirasi ters (once alan sifirlanir, sonra kapatilir) -- davranis AYNI | yanlis pozitif denetimi: KACMASI DOGRU | . | . | . | . | . |
+| M54 | grab() tutamaci BASKA alana (_tutamac2) yazar; close()/__exit__ hala _tutamac'a bakar -> enjeksiyon testleri gecer, URETIMDE her tutamac sizar | TOTOLOJI SONDASI: sahte tutamac enjeksiyonu uretimin kurdugu durumu mu olcuyor? | . | . | X | . | . |
+| M56 | varsayilan uretici DEVRIK sekil dondurur ((w,h,4)) | K1 varsayilan uretici sekli  [M44'un devrik varyanti] | . | X | . | X | X |
+| M57 | varsayilan uretici SIFIR degil BIR dizi dondurur | K1 varsayilan uretici icerigi  [M44'un icerik varyanti] | . | X | . | X | X |
+| M58 | backend kutusuna numpy skaleri YALNIZ PARTIAL yolunda sizar (geometri ayni, `==` esit) | K3/K8 tip kimligi -- olcunun INSIDE + PARTIAL iki noktada kosmasi (§4.6/7) | . | . | . | . | . |
+
+HICBIR KAPININ YAKALAMADIGI MUTANTLAR (3): M53, M52, M58
+EXIT=0

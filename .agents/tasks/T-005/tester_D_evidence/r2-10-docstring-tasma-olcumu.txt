@@ -1,0 +1,59 @@
+$ python .agents/tasks/T-005/tester_D/t2_docstring_olcumu.py
+TESTER-D tur 2 -- docstring tasma iddialarinin BAGIMSIZ olcumu
+monitorler (gercek duzen): (Rect(x=-2560, y=0, w=2560, h=1440, monitor_index=0, dpi_scale=1.0), Rect(x=0, y=0, w=2560, h=1440, monitor_index=0, dpi_scale=1.0))
+
+### Docstring'in KANONIK ornekleri (birebir)
+Rect(uint32(2500),uint32(100),uint32(200),uint32(100))
+  DUZLESTIRILMIS (urunun yolu): ('ok', (2500, 100, 60, 100))
+  HAM numpy (duzlestirme olmasa): ('ok', (2500, 100, 200, 100))
+  uyarilar: []
+  URUNUN GERCEK CIKTISI: Frame.rect = (2500, 100, 60, 100) tipler=['int', 'int', 'int', 'int']
+
+Rect(uint16(100),uint16(100),uint16(100),uint16(100))
+  DUZLESTIRILMIS: ('ok', (100, 100, 100, 100))
+  HAM numpy:      ('CaptureError', 'bolge hicbir monitorle kesismiyor: x=100, y=100, w=100, h=10')
+
+RuntimeWarning: overflow -- dort isaretsiz tipte de var mi?
+  uint8: sonuc=CaptureError | RuntimeWarning x5 | ornek: overflow encountered in scalar multiply
+  uint16: sonuc=CaptureError | RuntimeWarning x3 | ornek: overflow encountered in scalar subtract
+  uint32: sonuc=CaptureError | RuntimeWarning x3 | ornek: overflow encountered in scalar subtract
+  uint64: sonuc=CaptureError | RuntimeWarning x3 | ornek: overflow encountered in scalar subtract
+
+K6 taksonomisi DISI ciplak istisna avi (L duzeni A=(0,0,100,100) B=(100,100,100,100), uint8):
+  ciplak istisna sayisi: 25
+    Rect(uint8(10),uint8(10),uint8(200),uint8(200)) -> ('CIPLAK:OverflowError', 'Python integer 10000 out of bounds for uint8')
+    Rect(uint8(10),uint8(20),uint8(200),uint8(200)) -> ('CIPLAK:OverflowError', 'Python integer 10000 out of bounds for uint8')
+    Rect(uint8(10),uint8(30),uint8(200),uint8(200)) -> ('CIPLAK:OverflowError', 'Python integer 10000 out of bounds for uint8')
+    Rect(uint8(10),uint8(40),uint8(200),uint8(200)) -> ('CIPLAK:OverflowError', 'Python integer 10000 out of bounds for uint8')
+    Rect(uint8(10),uint8(50),uint8(200),uint8(200)) -> ('CIPLAK:OverflowError', 'Python integer 10000 out of bounds for uint8')
+
+### KENAR GRID -- docstring'in sayilarinin grid'i (x 0..2600, y 0..1400, w/h in {1,50,200,500})
+grid: x=[0, 100, 200]..2600 (27 nokta) | y=[0, 100, 200]..1400 (15 nokta) | w,h in (1, 50, 200, 500)
+kombinasyon/tip = 6480
+| tip | temsil edilemez | ayni | ok->HATA (gurultulu red) | HATA->ok (gecersiz bolge kabul) | SESSIZ (farkli geometri) | CIPLAK istisna |
+|---|---|---|---|---|---|---|
+| uint8 | 6399 | 72 | 9 | 0 | **0** | 0 |
+| uint16 | 0 | 5370 | 120 | 240 | **750** | 0 |
+| uint32 | 0 | 5012 | 120 | 240 | **1108** | 0 |
+| uint64 | 0 | 5012 | 120 | 240 | **1108** | 0 |
+
+### DERIN INSIDE GRID -- monitorun ic bolgesi (x 100..1100, y 100..800, w/h in {1,50,200,500})
+grid: x=[100, 200, 300]..1100 (11 nokta) | y=[100, 200, 300]..800 (8 nokta) | w,h in (1, 50, 200, 500)
+kombinasyon/tip = 1408
+| tip | temsil edilemez | ayni | ok->HATA (gurultulu red) | HATA->ok (gecersiz bolge kabul) | SESSIZ (farkli geometri) | CIPLAK istisna |
+|---|---|---|---|---|---|---|
+| uint8 | 1372 | 30 | 6 | 0 | **0** | 0 |
+| uint16 | 0 | 1344 | 64 | 0 | **0** | 0 |
+| uint32 | 0 | 1344 | 64 | 0 | **0** | 0 |
+| uint64 | 0 | 1344 | 64 | 0 | **0** | 0 |
+
+### DERIN INSIDE, uint8'e SIGAN grid (x 0..200, y 0..200, w/h in {1,20,50})
+grid: x=[0, 50, 100]..200 (5 nokta) | y=[0, 50, 100]..200 (5 nokta) | w,h in (1, 20, 50)
+kombinasyon/tip = 225
+| tip | temsil edilemez | ayni | ok->HATA (gurultulu red) | HATA->ok (gecersiz bolge kabul) | SESSIZ (farkli geometri) | CIPLAK istisna |
+|---|---|---|---|---|---|---|
+| uint8 | 0 | 210 | 15 | 0 | **0** | 0 |
+| uint16 | 0 | 210 | 15 | 0 | **0** | 0 |
+| uint32 | 0 | 210 | 15 | 0 | **0** | 0 |
+| uint64 | 0 | 210 | 15 | 0 | **0** | 0 |
+EXIT=0

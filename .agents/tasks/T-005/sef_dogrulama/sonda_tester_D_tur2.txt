@@ -1,0 +1,65 @@
+==== T-005 TESTER D, TUR 2 -- SEF SONDASI ====
+Karar: RET (ikinci kez). PROTOKOL 4.6/6: iki bloke bulgu da sef tarafindan uretildi.
+
+SAHIPLIK  git status --short -- src tests  -> BOS. Mutantlar ayna agacinda.
+
+--- D2-1: M53 (istisna yolunda kapatmayan __exit__) -> BIREBIR UREDI ---
+Sef mutanti kendi kurdu:
+    def __exit__(self, exc_type=None, *_): 
+        if exc_type is None: self.close()
+BES KABUL KOMUTU (sef kostu, TABAN ile AYNI):
+  mypy exit 0 · sahipli 163 passed · headless TEMIZ · capture 746 · tam takim 985
+GERCEK ZARAR (gercek ekranda, urunun NORMAL hata yolu):
+  with MssBackend() as b: b.grab(...); raise CaptureError(...)   <- K6 sinif b/c
+    -> istisnali cikis sonrasi _tutamac = <mss.base.MSS ...>  ACIK KALDI
+  Taban ayni dizide kapatiyor. mss'te __del__ yok -> her hatali yakalama bir
+  window DC sizdirir; 5001. ornekte GetWindowDC kalici duser.
+
+--- D2-3: docstring'in OLUMSUZ iddiasi YANLIS -> BIREBIR UREDI ---
+Docstring diyor ki: "Kenardan uzak (derin INSIDE) bolgelerde ise dort tipte de
+ayrisma SIFIRDIR -- tasma yalnizca monitor sinirlarina yaklasan bolgelerde
+gozlemlenebilir hale gelir."
+SEF OLCUMU -- Rect(1000,600,1000,200), M1=(0,0,2560,1440) icinde:
+  kenarlara uzaklik: sol=1000 ust=600 sag=560 alt=640   (derin INSIDE)
+  duz int  -> OK (1000,600,1000,200)
+  uint16   -> CaptureError: bolge hicbir monitorle kesismiyor
+  uint32   -> ayni      uint64 -> ayni
+AYRISAN AILE = "x == w", kenar uzakligiyla ILGISI YOK (sef taradi):
+  x=1000 w=1000  AYRISIYOR      x=1000 w=1001  ayrismiyor
+  x= 999 w=1000  ayrismiyor     x= 500 w= 500  AYRISIYOR
+  x= 500 w= 501  ayrismiyor     x= 300 w= 300  AYRISIYOR
+  x=1200 w=1200  AYRISIYOR
+SINIF: PROTOKOL 4.6/10'un yasakladigi sinifin BIR KAT ASAGIDA tekrari.
+  Kurali sef iki saat once yazdi; bu kez ihlal DOCSTRING'de ve implementer'da.
+  Iddianin dayandigi grid (adim 20) "x == w" noktasini yapisal olarak uretemiyor.
+
+--- SEFIN KENDI HATASI (D dolayli olarak cürüttü) ---
+sef_karari-tur2.md'nin "YAPILMAYACAKLAR" tablosu soyle diyordu:
+  "headless_check.py §3'e with bacagi eklemek -- T2-1 SINIFI tests/ KATMANINDA
+   KAPANIYOR; ayri tur."
+Bu OLCULMEMIS bir iddiaydi ve YANLISTI: sinifin istisna yarisi acik kaldi.
+Ertelemenin gerekcesi de bir iddiadir ve olculmelidir.
+
+--- SEFIN YAPISAL OLCUMU (tur 3'un tasarimi bunun uzerine kuruldu) ---
+Python'da `with` blogundan cikis yollari ve __exit__'in gordugu exc_type:
+  normal cikis      -> None
+  return            -> None
+  break             -> None
+  continue          -> None
+  istisna           -> ValueError
+  generator.close() -> GeneratorExit
+EKSENIN AYRIK SINIF SAYISI = 2 (None / istisna). Ucuncu varyant YOK.
+Ikisini de kosan parametrik bir olcu ekseni TAMAMEN kapatir.
+
+--- D'nin bloke ETMEYEN bulgulari (sef kabul etti) ---
+* M54 (grab tutamaci _tutamac2'ye yazar) yalniz headless §3 c1_close ile
+  yakalaniyor; §3 degisirse iki test sessizce totolojiye doner. Kayda gecti.
+* Kapsam ARTMADI: tur 1 ve tur 2 birebir %98.83 (171 ifade / 2 eksik).
+  Sefin "%98.83 -> %99" ifadesi YUVARLAMA; pay/payda oyunu yok. D hakli.
+* known_gaps ile docstring celismiyor; hata kopyalamada degil GENELLEMEDE.
+
+KARAR: D'nin RET'i KABUL. T-005 tur 3'e gidiyor.
+NOT (PROTOKOL §7): 3. turda tester hala ret verirse Hakem cagrilir. Ancak burada
+  KILITLENME YOK -- implementer, tester ve sef UCU DE ayni seyi soyluyor:
+  "uygulama dogru, kusur kapida". Hakemin ayirt edecegi bir anlasmazlik yok;
+  her tur ayni degismezin OLCULMEMIS baska bir yarisini buldu, yani ilerleme var.

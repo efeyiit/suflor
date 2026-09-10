@@ -1,0 +1,8 @@
+$ python -m pytest .agents/tasks/T-005/tester_D -q   (tur 2: yeniden nisanlanmis kit)
+...............................................................x........ [ 62%]
+..........................................x                              [100%]
+=========================== short test summary info ===========================
+XFAIL .agents/tasks/T-005/tester_D/test_d5_bos_olcum_noktalari.py::test_d5_TUR2_BULGU_exit_ISTISNA_yolu_olculmuyor - BULGU D-2.1 (tur 2): T2-1'in eklendigi olcu `__exit__`'i YALNIZ istisnasiz cikista kosuyor. `__exit__`'i 'yalnizca exc_type is None ise close()' yapan bir uygulama (M53) BES kabul komutundan da temiz geciyor -- oysa K10 'her `with` blogu bir window DC sizdirir, 5001. kapatilmamis ornekte GetWindowDC kalici olarak duser' diyor ve `CaptureError` ile biten bir `with` govdesi urunun NORMAL hata yoludur (K6 sinif b/c). PROTOKOL §4.6/7: davranissal olcu, kapsadigi uzayin EN AZ IKI noktasinda kosmali; istisna/istisnasiz ekseninde tek nokta var. `[OLCULMUYOR]` damgasi da yok (§4.6/2).
+XFAIL .agents/tasks/T-005/tester_D/test_d9_tur2_docstring_iddialari.py::test_d9_BULGU_docstring_sifir_iddiasi_metinde_duruyor - BULGU D-2.2 (tur 2): `capture_region` docstring'i olculmemis bir OLUMSUZ iddia tasiyor -- 'Kenardan uzak (derin INSIDE) bolgelerde ise dort tipte de ayrisma SIFIRDIR' ve 'tasma yalnizca monitor sinirlarina yaklasan bolgelerde gozlemlenebilir hale gelir'. Olcum: `Rect(1000, 600, 1000, 200)` her kenardan >=560 px uzak, M1'in tamamen icinde ve uint16/32/64'te `CaptureError` veriyor; ayrisan aile `x == w` ve kenara uzaklikla ilgisi yok (kaynak M0'in negatif x'i). Bu, PROTOKOL §4.6/10'un yasakladigi sinifin ta kendisi ve kural bu turda TAM BU cumlenin atasi yuzunden eklendi.
+113 passed, 2 xfailed in 33.11s
+EXIT=0

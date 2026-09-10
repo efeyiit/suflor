@@ -1,0 +1,5 @@
+$ python .agents/validate.py .agents/tasks/T-005/verdict-D.md
+KABUL EDILEBILIR  (verdict-D.md, rol=tester, tur=2)
+  18 komut/kontrol, hepsinin kaniti diskte mevcut ve dolu
+  karar: ret
+EXIT=0

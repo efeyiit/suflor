@@ -1,0 +1,18 @@
+$ python .agents/tasks/T-005/tester_D/t2_onerilen_duzeltme_gucu.py
+ONERILEN DUZELTMENIN AYIRT ETME GUCU (ayna agaci, depo YAZILMAZ)
+ayna: C:\Users\pc\AppData\Local\Temp\scratch\C--Users-pc-Desktop-efe--eviri-uygulamas-\d52c967f-bd19-4db3-b5e9-77e6cd08b889\scratchpad\t005_tester_D_mutroot
+
+== A) oneri EKLENMEDEN (bugunku taban) ==
+  TABAN                                            -> exit=0  163 passed in 0.63s  
+  M53 (__exit__ yalniz istisnasiz cikista kapatir) -> exit=0  163 passed in 0.57s  
+  M12 (__exit__ -> return None)                    -> exit=1  1 failed, 162 passed in 0.67s  ['test_k10_exit_uzun_omurlu_tutamaci_kapatir']
+  M50 (__exit__ kapatmadan birakir)                -> exit=1  1 failed, 162 passed in 0.67s  ['test_k10_exit_uzun_omurlu_tutamaci_kapatir']
+
+== B) oneri EKLENEREK (tek test, +25 satir) ==
+  TABAN                                            -> exit=0  164 passed in 0.60s  
+  M53 (__exit__ yalniz istisnasiz cikista kapatir) -> exit=1  1 failed, 163 passed in 0.62s  ['test_k10_exit_ISTISNA_yolunda_da_kapatir']
+  M12 (__exit__ -> return None)                    -> exit=1  2 failed, 162 passed in 0.70s  ['test_k10_exit_uzun_omurlu_tutamaci_kapatir', 'test_k10_exit_ISTISNA_yolunda_da_kapatir']
+  M50 (__exit__ kapatmadan birakir)                -> exit=1  2 failed, 162 passed in 0.69s  ['test_k10_exit_uzun_omurlu_tutamaci_kapatir', 'test_k10_exit_ISTISNA_yolunda_da_kapatir']
+
+ayna geri alindi.
+EXIT=0
