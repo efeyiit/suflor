@@ -75,3 +75,28 @@ BU HATA PROTOKOL 4.6'ya 10. KURALI DOGURDU:
 KARAR: Tur 2 teslimi KABUL EDILEBILIR. Implementer'in itirazi kabul edildi ve
        sefin karar belgesi duzeltildi (curuk tablo silinmedi, "CURUDU" damgasiyla
        birakildi -- T-004'un K24 ilkesi).
+
+=========================================================================
+EK -- BAGIMSIZ UCUNCU OLCUM (sefin kendi geriye donuk kaniti)
+=========================================================================
+Sef, T2-2'yi karara yazmadan ONCE genis bir tarama baslatmisti (x,y,w,h 0..3000,
+adim 7/97/13/151, dort tip, ~61M kombinasyon/tip). Tarama YAVAS oldugu icin sef
+onu kesti ve yerine DAR bir grid (0..260) kosup "sessiz ayrisma sifir" sonucunu
+karara yazdi. Genis tarama arka planda calismaya devam etti ve sonradan bitti:
+
+  tip      ayni        ok->HATA   HATA->ok      SESSIZ
+  uint8       4362        78            0            0   (255 tavani -> kenara ulasamiyor)
+  uint16  14043270      4260     36073100     11320750
+  uint32  11478277      4200     36073100     13885803
+  uint64  11478277      4200     36073100     13885803
+
+  SESSIZ ornekleri:
+    uint16 (0,0,27,2568)  dogru=(0,0,27,1440)  ham=(0,0,27,2568)   istisna YOK
+    uint16 (0,0,40,1662)  dogru=(0,0,40,1440)  ham=(0,0,40,1662)   istisna YOK
+
+DERS (kural 10'un yaninda duran ikinci ders):
+  Sefin ELINDE dogru olcum ZATEN VARDI. Kenarlari gecen grid'i kendisi kurmustu.
+  Yavas diye kesti, yerine hizli ama DAR bir grid kostu ve KARARI ONA DAYANDIRDI.
+  Yani hata "olcemedim" degil, "olcumu bitirmeden sonuc yazdim" idi.
+  Bir olcum kesilirse, ONUN yerine gecen olcumun AYNI parametre uzayini
+  kapsadigi gosterilmelidir; kapsamiyorsa sonuc yazilmaz.
