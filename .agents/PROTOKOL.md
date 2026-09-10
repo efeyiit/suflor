@@ -238,6 +238,8 @@ Kapıyı kapatırken kaçan her sınıf **adlandırılmış tester yükümlülü
 
 (T-004 K28: değişmez üçüncü sürümden sonra hiç değişmedi; yedi geçişte kırılan hep **ölçü** oldu. Kapı yedinci turda kapandı, iş iki saatte bitti ve üç kör tester onay verdi — ama dokuz bulgu daha bildirdiler, **dördü şefin kendi hatasıydı**. Yani tester'lar kapının kaçırdığını gerçekten yakalıyor. T-002 ve T-003 aynı sistemle **1 saat 44 dakikada** kabul edilmişti; fark işin zorluğu değil, kapıda geçen turdu.)
 
+**Şefin commit disiplini (bir tur ölçülmüş hatadan doğdu).** Başka bir görevin implementer'ı **kırmızı fazdayken** `git add -A` çalıştırmak, onun yarım test dosyalarını bu görevin commit'ine süpürür: kaynak dosyalar henüz takipsiz olduğu için o commit **temiz checkout'ta toplama hatası** verir. Şef commit'i **açık yol listesiyle** atar (`git add src/ocr tests/unit/ocr .agents/tasks/T-004`), ve iki iş paralel koşarken tam-takım regresyonunu **kendi görevinin kapsamına daraltır**. (T-004 tur 7: `f75d4d4` temiz checkout'ta 2 toplama hatası verdi; bir sonraki commit kapattı ama tarihte kırık bir nokta kaldı — Tester-B yakaladı.)
+
 Kırmızı takım bu dokuzunu ayrıca denetler.
 
 ## 5. Görev paketi zorunlu alanları

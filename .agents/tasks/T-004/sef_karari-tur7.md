@@ -41,7 +41,9 @@ Kırmızı takımın bu turda yakalayacağı bir hata sınıfı açılmıyor. Ay
 
 **Bulan:** Tester-B (N3) · **Şef doğrulaması:** M15, dört kabul komutunu, 124 ürün testini **ve** ölçü kitinin beş kanalını temiz geçiyor; B'nin kendi diferansiyelinde 1844 ayrışma veriyor.
 
-**M15 nedir:** miras-uygunluk sorgusunu **yanlış `params`** ile soran uygulama — ör. `get_params(OcrPreset.DIALOGUE)` yerine çağrının aldığı `params`'tan başkasını geçiren. Kit `params` kimliğini **kaydetmiyor**, bu yüzden dört kanalın hiçbiri görmüyor.
+**M15 nedir:** miras-uygunluk sorgusunu **yanlış `params`** ile soran uygulama — ör. çağrının aldığı `params` yerine sabit bir ön ayarınkini geçiren. Kit `params` kimliğini **kaydetmiyor**, bu yüzden dört kanalın hiçbiri görmüyor.
+
+**DÜZELTME (Tester-B, tur 7 — şef doğruladı):** bu ölçü **tek ön ayarla sınanamaz**. `get_params` modül düzeyinde **tekil** döndürür (`is` karşılaştırması `True`), bu yüzden sorguyu sabit `get_params(DIALOGUE)` ile soran mutant — yani M15'in birebir kendisi — yalnız-`dialogue` bir testte hem davranış hem `is` kimlik assert'ini **geçer**. Test **iki ön ayarla** (`dialogue` + `tooltip`) koşmak zorundadır; bu, §4.6/7'nin "ölçü parametre uzayının en az iki noktasında koşar" kuralının bu ölçüdeki karşılığıdır.
 
 **DEĞİŞMEZ:** Miras-uygunluk sorgusu, `_group`'a verilen **aynı** `params` nesnesiyle sorulur; ön ayar eşiği sorgu içinde değiştirilemez.
 

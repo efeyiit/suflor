@@ -1,6 +1,6 @@
 {
-  "faz": "pilot",
-  "guncelleme": "tur 6: implementer tamam + sef dogrulamasi tamam; testerlar yarim (verdict yok)",
+  "faz": "dalga 1",
+  "guncelleme": "T-004 KABUL (7 tur). T-005 implementer tamam, sef dogruladi, testerlar sirada.",
   "paralellik_tavani": 4,
   "kilitlenme_esigi": 3,
   "tasima": "alt-ajan",
@@ -62,9 +62,10 @@
       "depends_on": [
         "T-001"
       ],
-      "durum": "tur7-tester-B",
+      "durum": "kabul",
       "tur": 7,
-      "not": "TUR 6: UC TESTER DE ONAY (A 13, B 12, C 15 kontrol; sef hepsini yeniden uretti). K28 kodda, R5-1 kapandi, kit ayrismasi 0/0/0, tests 821 passed, kor takim 623 passed 1 xfailed 0 kirik. Dokuz bulgu bildirildi, DORDU SEFIN HATASIYDI: K32'nin NFC varsayimi (Devanagari/Ibranice/Arapca adlar ZATEN NFC ama Mn/Mc yuzunden taninmiyor -- NFC normalizasyonu bu sinifi KAPATMAZ), M5->olcu 5 (olcu5 fixture'inin sag taraflari tek bloklu), env.md M4->3b, bayat K24 docstring bolumu. Ilk ucu duzeltildi. TUR 7 acildi (kapanis): T7-1 K24 docstring, T7-2 M15 kapisi. Kirmizi takima gitmiyor (yeni degismez yok), tek tester (B) kosacak. Alti kalem bilincli ertelendi."
+      "not": "KABUL (7 tur). K1-K32; K28 miras sorgusunun iki tarafi da ozgun bloktan. 125 urun testi + 623 kor tester testi. Dort tester onayi (tur 6: A/B/C, tur 7: B). Karar kirmizi takimi 7 gecis, 55+ bulgu; implementer'a giden hata SIFIR. Sefin 15 olculmus hatasi PROTOKOL 4.6'nin dokuz kuralini dogurdu. Dokuz acik kalem decision.md'de kayitli (Mn/Mc adlar, ZWJ sismesi, monitor sinir asimi, NaN tani, kit fixture/adim1_4/n23/MENU, olcek testi kararsizligi).",
+      "donduruldu": true
     },
     {
       "id": "T-005",
