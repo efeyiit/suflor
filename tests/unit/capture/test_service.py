@@ -932,18 +932,69 @@ class _SahteTutamac:
             self._kapali = True
 
 
-def test_k10_exit_uzun_omurlu_tutamaci_kapatir() -> None:
+@pytest.mark.parametrize(
+    "istisna_tipi",
+    [None, CaptureError],
+    ids=["exc_type=None", "exc_type=CaptureError"],
+)
+def test_k10_exit_uzun_omurlu_tutamaci_kapatir(
+    istisna_tipi: type[BaseException] | None,
+) -> None:
+    """K10: `__exit__` -> `close()` KOSULSUZDUR -- cikis yolundan bagimsiz.
+
+    Olcu `exc_type` EKSENINDE parametrelidir. `with` blogundan cikista
+    `__exit__`'in gordugu `exc_type` tam **iki ayrik sinif** alir:
+
+    | cikis yolu | `exc_type` |
+    |---|---|
+    | normal dusus / `return` / `break` / `continue` | `None` |
+    | govdede istisna | `ValueError`, `CaptureError`, ... |
+    | `generator.close()` | `GeneratorExit` |
+
+    Ucuncu bir varyant yoktur: `return`/`break`/`continue` birinci sinifa,
+    `generator.close()` ikinciye coker. Bu yuzden iki parametre ekseni
+    TAMAMEN kapatir -- tek noktada kalan bir olcu, o noktaya kapili bir
+    uygulamayi goremez (PROTOKOL §4.6/7).
+
+    Istisna bacagi urunun ISTISNAI degil NORMAL yoludur: K6 sinif (b)
+    backend istisnasi ve sinif (c) gecersiz cikti TANIMLI hata
+    siniflaridir ve `capture_region` ikisini de `CaptureError` olarak
+    cagirana yayar. Yalnizca temiz cikista kapatan bir uygulama bu yuzden
+    HER hatali yakalamada bir window DC sizdirir -- `mss`'te `__del__`
+    yoktur ve K10'un olctugu ariza 5001. kapatilmamis ornekte
+    `GetWindowDC`'yi KALICI olarak dusurur.
+
+    Uc iddia birden olculur: (1) tutamac kapandi, (2) alan sifirlandi,
+    (3) `__exit__` istisnayi YUTMADI -- govdede yukselen `CaptureError`
+    cagirana ulasti. (3) olmadan "istisnayi yut ve sessizce kapat"
+    varyanti (`__exit__` -> `return True`) olcuye takilmazdi.
+    """
     b = MssBackend()
     t = _SahteTutamac()
     b._tutamac = t  # type: ignore[assignment]
-    with b as ic:
-        assert ic is b
-        assert t.kapatma == 0
+
+    if istisna_tipi is None:
+        with b as ic:
+            assert ic is b
+            assert t.kapatma == 0
+    else:
+        # `pytest.raises` ayni anda iki seyi olcer: istisna cagirana ULASTI
+        # (yani `__exit__` `True` dondurup YUTMADI) ve degistirilmeden geldi.
+        with pytest.raises(istisna_tipi, match="govde patladi"):
+            with b as ic:
+                assert ic is b
+                assert t.kapatma == 0
+                raise istisna_tipi("govde patladi")
+
+    yol = "temiz cikis" if istisna_tipi is None else "istisna ile cikis"
     assert t.kapatma == 1, (
-        "__exit__ close() cagirmadi -> her `with` blogu bir window DC sizdirir "
-        "(K10: 5001. kapatilmamis ornekte GetWindowDC kalici olarak duser)"
+        f"__exit__ ({yol}, exc_type="
+        f"{None if istisna_tipi is None else istisna_tipi.__name__}) close() "
+        "cagirmadi -> o cikis yolundaki her `with` blogu bir window DC "
+        "sizdirir (K10: 5001. kapatilmamis ornekte GetWindowDC kalici olarak "
+        "duser)"
     )
-    assert b._tutamac is None
+    assert b._tutamac is None, f"__exit__ ({yol}) `_tutamac` alanini sifirlamadi"
 
 
 def test_k10_close_tutamaci_sifirlar_ve_idempotenttir() -> None:

@@ -1,0 +1,94 @@
+$ python .agents/tasks/T-005/evidence/t3-2-olcum-kiti.py
+
+
+==========================================================================
+A -- KANONIK KARSI ORNEK: Rect(1000, 600, 1000, 200), IKI MONITOR
+==========================================================================
+monitorler: M0=-2560,0,2560,1440  M1=0,0,2560,1440
+bolge M1'in TAMAMEN icinde. kenar uzakliklari:
+  sol(M0/M1 dikisine) 1000 | ust 600 | sag 2560-2000=560 | alt 1440-800=640
+  int    : ('ok', (1000, 600, 1000, 200), 0)
+  uint8  : TEMSIL EDILEMEZ -> OverflowError: Python integer 1000 out of bounds for uint8
+  uint16 : ('CaptureError', 'bolge hicbir monitorle kesismiyor: x=1000, y=600, w=1000, h=200', 0)
+  uint32 : ('CaptureError', 'bolge hicbir monitorle kesismiyor: x=1000, y=600, w=1000, h=200', 0)
+  uint64 : ('CaptureError', 'bolge hicbir monitorle kesismiyor: x=1000, y=600, w=1000, h=200', 0)
+
+URUNUN KENDI YOLU (duzlestirme DEVREDE) -- ayni girdiler:
+  int    : ok (1000, 600, 1000, 200) tipler=['int', 'int', 'int', 'int']
+  uint8  : TEMSIL EDILEMEZ
+  uint16 : ok (1000, 600, 1000, 200) tipler=['int', 'int', 'int', 'int']
+  uint32 : ok (1000, 600, 1000, 200) tipler=['int', 'int', 'int', 'int']
+  uint64 : ok (1000, 600, 1000, 200) tipler=['int', 'int', 'int', 'int']
+
+==========================================================================
+B -- KOMSU TABLOSU: ayrisma kenar uzakligiyla DEGIL x==w ile geliyor mu
+==========================================================================
+     x      w  x==w |                        int |                     uint32
+--------------------------------------------------------------------------
+  1000   1000  True |   ok(1000, 600, 1000, 200) |               CaptureError  AYRISMA
+  1000   1001 False |   ok(1000, 600, 1001, 200) |   ok(1000, 600, 1001, 200)  
+   999   1000 False |    ok(999, 600, 1000, 200) |    ok(999, 600, 1000, 200)  
+   500    500  True |     ok(500, 600, 500, 200) |               CaptureError  AYRISMA
+   300    300  True |     ok(300, 600, 300, 200) |               CaptureError  AYRISMA
+  1200   1200  True |   ok(1200, 600, 1200, 200) |               CaptureError  AYRISMA
+   100    100  True |     ok(100, 600, 100, 200) |               CaptureError  AYRISMA
+  2000    500 False |    ok(2000, 600, 500, 200) |    ok(2000, 600, 500, 200)  
+   500   2000 False |    ok(500, 600, 2000, 200) |    ok(500, 600, 2000, 200)  
+
+==========================================================================
+C -- DERIN INSIDE GRID: x==w ailesini URETEBILEN grid (POZITIF KONTROL)
+==========================================================================
+
+-- IKI MONITOR (M0 negatif x)
+tip       temsil edilebilir   AYRISMA   x==w olan ayrisma   x!=w olan ayrisma
+uint8                    12         6                   6                   0
+uint16                  486        54                  54                   0
+uint32                  486        54                  54                   0
+uint64                  486        54                  54                   0
+
+-- TEK MONITOR (yalniz M1 geometrisi)
+tip       temsil edilebilir   AYRISMA   x==w olan ayrisma   x!=w olan ayrisma
+uint8                    12         0                   0                   0
+uint16                  486         0                   0                   0
+uint32                  486         0                   0                   0
+uint64                  486         0                   0                   0
+
+==========================================================================
+D -- POZITIF KONTROL: olcunun ATESLEDIGI acikca gosterilir
+==========================================================================
+Bir 'ayrisma yok' sayimi ancak olcunun ateslenebildigi gosterilirse
+anlam tasir (PROTOKOL §4.6/10). Ayni olcu, ayni kod yolu:
+  derin INSIDE x==w          duz=('ok', (1000, 600, 1000, 200))               ham=('CaptureError', 'bolge hicbir monitorle kes -> ATESLEDI
+  kenardan tasan (PARTIAL)   duz=('ok', (2500, 100, 60, 100))                 ham=('ok', (2500, 100, 200, 100))                -> ATESLEDI
+  derin INSIDE x!=w          duz=('ok', (999, 600, 1000, 200))                ham=('ok', (999, 600, 1000, 200))                -> ateslemedi
+
+==========================================================================
+C2 -- AYRISAN AILE x==w ILE SINIRLI MI? (hedefli sonda)
+==========================================================================
+C'deki grid'de ayrisanlarin TAMAMI x==w cikti. Bu, ailenin x==w'den
+IBARET oldugunu gostermez -- yalnizca o grid'in baska uye URETMEDIGINI.
+Iki-monitor duzeninde, x != w olan uyeler icin hedefli tarama:
+tip           x      y      w      h |                    duz int |                        ham
+--------------------------------------------------------------------------------------------
+uint16      100    600   1124     64 |     ok(100, 600, 1124, 64) |               CaptureError
+uint16      300    600   1324     64 |     ok(300, 600, 1324, 64) |               CaptureError
+uint16      500    600   1524     64 |     ok(500, 600, 1524, 64) |               CaptureError
+uint16      700    600   1724     64 |     ok(700, 600, 1724, 64) |               CaptureError
+uint16      100    600    612    128 |     ok(100, 600, 612, 128) |               CaptureError
+uint16      100    600   1124    128 |    ok(100, 600, 1124, 128) |               CaptureError
+uint16      300    600    812    128 |     ok(300, 600, 812, 128) |               CaptureError
+uint16      300    600   1324    128 |    ok(300, 600, 1324, 128) |               CaptureError
+-> x != w olan ayrisan uye sayisi (bu hedefli taramada): 52
+
+==========================================================================
+E -- L DUZENINDE uint8: K6 TAKSONOMISI DISI CIPLAK OverflowError
+==========================================================================
+kucuk L duzeni A=(0,0,100,100) B=(100,100,100,100), uint8
+  uint8 x=0 y=0 w=201 h=201: duz=('ok', (0, 0, 200, 200))                     ham=('OverflowError', 'Python integer 10000 out of bounds fo
+  uint8 x=0 y=0 w=255 h=255: duz=('ok', (0, 0, 200, 200))                     ham=('OverflowError', 'Python integer 10000 out of bounds fo
+  uint8 x=50 y=50 w=200 h=200: duz=('ok', (50, 50, 150, 150))                   ham=('OverflowError', 'Python integer 10000 out of bounds fo
+  uint8 x=90 y=50 w=20 h=20: duz=('ok', (90, 50, 20, 20))                     ham=('ok', (90, 50, 20, 20))
+
+BITTI
+
+exit_code=0

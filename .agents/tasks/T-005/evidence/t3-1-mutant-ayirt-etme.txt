@@ -1,0 +1,27 @@
+$ python .agents/tasks/T-005/evidence/t3-1-mutant-kiti.py
+
+==============================================================================
+T3-1 -- `__exit__` cikis-yolu ekseni: ayirt etme gucu
+==============================================================================
+depo koku  : C:\Users\pc\Desktop\efe\çeviri uygulaması
+ayna agaci : C:\Users\pc\AppData\Local\Temp\t005-ayna-zfz731b9\ayna  (gecici; depodaki src/ ve tests/ DEGISMEZ)
+TUR2 testi : git show HEAD:tests/unit/capture/test_service.py
+TUR3 testi : tests/unit/capture/test_service.py (calisma agaci)
+
+mutant       TUR2 testleri                      TUR3 testleri                     
+------------------------------------------------------------------------------
+TABAN        123 passed in 0.59s                124 passed in 0.59s               
+MT-53        123 passed in 0.56s                1 failed, 123 passed in 0.69s     
+MT-12        1 failed, 122 passed in 0.69s      2 failed, 122 passed in 0.68s     
+MT-YUT       123 passed in 0.60s                1 failed, 123 passed in 0.67s     
+MT-KONTROL   123 passed in 0.59s                124 passed in 0.56s               
+
+TABAN        TUR2=KACTI      TUR3=KACTI       (mutasyon yok)
+MT-53        TUR2=KACTI      TUR3=YAKALANDI   __exit__ YALNIZCA istisnasiz cikista kapatir (govde patlarsa sizar)
+MT-12        TUR2=YAKALANDI  TUR3=YAKALANDI   __exit__ hicbir sey yapmaz (-> return None)
+MT-YUT       TUR2=KACTI      TUR3=YAKALANDI   __exit__ kapatir ama istisnayi YUTAR (-> return True)
+MT-KONTROL   TUR2=KACTI      TUR3=KACTI       KONTROL: davranis-esdeger (govde tek satirdan iki satira acildi)
+
+ayna agaci silindi; depo dokunulmadan kaldi.
+
+exit_code=0

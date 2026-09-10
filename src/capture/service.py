@@ -402,14 +402,33 @@ class CaptureService:
           ama `classify_region` onu `inside` sayar ve sonuc `w=200` cikar --
           istisna yok, uyari disinda gorunur iz yok.
 
-        Kenar gecen bir grid'de (x 0..2600, y 0..1400, w/h in {1,50,200,500})
-        `uint32`/`uint64` icin 6480 kombinasyonun **1108'i** sessizce farkli
-        geometri, **240'i** sessizce kabul edilen GECERSIZ bolge veriyor;
-        `uint8` kucuk monitor duzenlerinde ayrica K6 taksonomisi disinda
-        **ciplak `OverflowError`** firlatiyor. Kenardan uzak (derin INSIDE)
-        bolgelerde ise dort tipte de ayrisma **sifirdir** -- tasma yalnizca
-        monitor sinirlarina yaklasan bolgelerde gozlemlenebilir hale gelir.
-        `classify_region`, `intersect` ve `monitor_index` hesabi bu yuzden
+        Ayrisan girdilerin kumesi **[OLCULMUYOR]** -- asagidakiler olculmus
+        UYELERDIR, kumenin karakterizasyonu DEGILDIR:
+
+        * **kenardan tasan bolgeler.** Kenar gecen bir grid'de (x 0..2600,
+          y 0..1400, w/h in {1,50,200,500}) `uint32`/`uint64` icin 6480
+          kombinasyonun **1108'i** sessizce farkli geometri, **240'i**
+          sessizce kabul edilen GECERSIZ bolge veriyor.
+        * **derin INSIDE bolgeler de ayrisiyor** (olculdu).
+          `Rect(1000, 600, 1000, 200)` `M1`'in tamamen icindedir ve her
+          kenardan **>= 560 px** uzaktir; buna ragmen duz `int` ile
+          `(1000, 600, 1000, 200)` verirken ham `uint16`/`uint32`/`uint64`
+          ile `CaptureError` alir. Olculen uyeler arasinda `x == w` ailesi
+          var (100/100, 300/300, 500/500, 1000/1000, 1200/1200 ayrisiyor --
+          ayni tabloda `x=1000 w=1001` ve `x=999 w=1000` komsulari
+          ayrismiyor, yani olcu o noktalarda ATESLENEBILIR durumdadir) ve
+          `x != w` olan uyeler de var (`uint16`, `Rect(100, 600, 1124, 64)`
+          -- ayni derinlikte, `CaptureError`). Yani aile `x == w` ile
+          **sinirli degildir**.
+        * **L duzeninde `uint8`** -- K6 taksonomisi DISINDA ciplak
+          `OverflowError` (`Rect(0, 0, 201, 201)`, duzen A=(0,0,100,100),
+          B=(100,100,100,100)).
+
+        Ham ciktilar: `.agents/tasks/T-005/evidence/t3-2-derin-inside-ayrisma.txt`
+        (derin INSIDE uyeleri + pozitif kontrol) ve
+        `.agents/tasks/T-005/evidence/t2-2-tasma-olcumu.txt` (kenar grid'i).
+        Duzlestirme bu yuzden bolgeye gore degil **KOSULSUZ** uygulanir;
+        `classify_region`, `intersect` ve `monitor_index` hesabi
         **yalniz duzlestirilmis** `Rect` gorur.
 
         Kirpma **her zaman** `union_bbox(monitors)`'a karsi yapilir, **asla**
