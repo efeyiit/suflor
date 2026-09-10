@@ -83,7 +83,7 @@
       ],
       "durum": "paket-v8-kirmizi-takim-bekliyor",
       "tur": 0,
-      "not": "Paket KT yedi tur: 23+27+15+13+14+16 = 108+ bulgu, 18'i yuksek. v7'nin iki yuksegi: grab kutusunu kirpan uygulama bes kapidan geciyordu (§3 tek noktada olcuyordu -- artik negatif koordinatta ikinci nokta); ve sefin v7'de K10'a yazdigi OLCU cumlesi VAR OLMAYAN bir denetimi tarif ediyordu (4.6/2+/3) -- geri cekildi, kopyalama gercek mss'te gozlemlenemez oldugu icin kapi degil tercih olarak yazildi. Ayrica: girise kabul kapisi (int() sessiz kirpmayi onler), K7 tip duzeyine tasindi (dort ayrisma girdisi), capture_full bacagi [OLCULMUYOR], §5 elif zinciri ayrildi, §4 dekorator + calisma zamani protokol uyumu."
+      "not": "Paket KT yedi tur: 23+27+15+13+14+16 = 108+ bulgu, 18'i yuksek. v7'nin iki yuksegi: grab kutusunu kirpan uygulama bes kapidan geciyordu (§3 tek noktada olcuyordu -- artik negatif koordinatta ikinci nokta); ve sefin v7'de K10'a yazdigi OLCU cumlesi VAR OLMAYAN bir denetimi tarif ediyordu (4.6/2+/3) -- geri cekildi, kopyalama gercek mss'te gozlemlenemez oldugu icin kapi degil tercih olarak yazildi. Ayrica: girise kabul kapisi (int() sessiz kirpmayi onler), K7 tip duzeyine tasindi (dort ayrisma girdisi), capture_full bacagi [OLCULMUYOR], §5 elif zinciri ayrildi, §4 dekorator + calisma zamani protokol uyumu. env.md yazildi: DORT mercek (takma ad / sayisal / durum makinesi / test kalitesi), gerekce olculmus hata dagilimina dayali (4.5 artirmayi yasaklamiyor)."
     },
     {
       "id": "T-006",
