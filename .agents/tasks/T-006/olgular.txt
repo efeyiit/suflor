@@ -1,0 +1,79 @@
+==== T-006 (OCR MOTORU) -- SEFIN ON OLCUMLERI ====
+Paket yazilmadan once olculdu. Hicbiri hafizadan degil; hepsi bu makinede kosuldu.
+Makine: 32 cekirdek, Python 3.12.10, onnxruntime 1.27.0, Windows 11.
+
+[O1] PAKETLE GELEN MODELLER JP/KR OKUYAMIYOR
+  rapidocr-onnxruntime 1.4.4 uc ONNX modeli paketin ICINDE tasiyor:
+    ch_PP-OCRv4_det_infer.onnx        4.7 MB   (tespit)
+    ch_PP-OCRv4_rec_infer.onnx       10.9 MB   (tanima)
+    ch_ppocr_mobile_v2.0_cls_infer   0.6 MB   (aci siniflandirma)
+  Yani v1 icin MODEL INDIRICI BILESEN (tasarim 13, ModelManager) GEREKMEZ -- ama
+  yalniz EN/ZH icin.
+  Olcum (900x120 tek satir):
+    EN  "The village elder is waiting for you."  -> BIREBIR      guven 0.99
+    ZH  "村里的长老在等你。"                        -> BIREBIR      guven 1.00
+    JP  "村の長老があなたを待っています。"           -> "の長老待。"   guven 0.87
+    JP2 "セーブしますか？ はい いいえ"              -> "？"          guven 0.73
+    KR  "마을 장로가 당신을 기다리고 있습니다."      -> "只合山."      guven 0.62
+  TESHIS: TESPIT calisiyor (kutular dogru bulunuyor), TANIMA calismiyor --
+  ch sozlugunde kana ve hangul YOK. Yalniz TANIMA modeli degistirilmeli.
+
+[O2] YANLIS DILDE TANIMA "KENDINDEN EMIN YANLIS" URETIYOR
+  JP diyalog kutusu, ch modeliyle: 4 satir bulundu, ortalama guven 0.90,
+  ama metin bozuk ("村の長老待。"). On ayarlarimizin guven esigi
+  (DIALOGUE 0.60) bunu SUZEMEZ. Dil secimi ACIK olmali, guvene guvenilemez.
+
+[O3] IS PARCACIGI SAYISI BELIRLEYICI -- 5 KAT FARK
+  1200x400 gercekci diyalog kutusu, ayni model, ayni goruntu:
+    varsayilan (intra/inter = -1, "otomatik")   1450 ms
+    4 is parcacigi                               201 ms
+    8 is parcacigi                               195 ms
+    cls kapali + 8 parcacik                      192 ms
+  32 cekirdekli makinede onnxruntime'in "otomatik"u asiri parcacik acip
+  birbirini bogyor. TASARIM BUTCESI 250 ms; varsayilan ayarla 6 KAT ASILIYOR,
+  8 parcacikla ALTINDA KALINIYOR. Bu bir yapilandirma karari, kod karari degil.
+
+[O4] JAPONCA MODEL RESMI KANALDAN GELIYOR VE CALISIYOR
+  rapidocr 3.9.2 paketinin LangRec listesi:
+    CH CH_DOC EN ARABIC CHINESE_CHT CYRILLIC DEVANAGARI JAPAN KOREAN
+    KA LATIN TA TE ESLAV TH EL
+  Motorler: ONNXRUNTIME OPENVINO PADDLE TORCH TENSORRT MNN
+  Surumler: PPOCRV4 PPOCRV5 PPOCRV6
+  Indirilenler (ilk kullanimda, tek sefer):
+    multi_PP-OCRv3_det_mobile.onnx    2.31 MB
+    japan_PP-OCRv4_rec_mobile.onnx    9.30 MB
+  Kaynak: modelscope.cn/models/RapidAI/RapidOCR  (resmi dagitim)
+  OLCUM -- 1200x400 Japonca diyalog kutusu, 8 parcacik, cls kapali:
+    medyan 191-206 ms   4 satir   4/4 BIREBIR DOGRU
+      長老マルクス                        guven 1.00
+      村の長老があなたを待っています。      guven 1.00
+      水車小屋を過ぎて東の道を行きなさい。  guven 0.98
+      日が暮れたら道を外れないように。      guven 1.00
+
+[O5] KORECE DE CALISIYOR AMA TESPIT KELIME KELIME AYIRIYOR
+  Ayni kurulum, korean_PP-OCRv4_rec:
+    17 KUTU (4 satir degil) -- tespit kelime siniri buluyor
+    ortalama guven 1.00
+    okuma sirasina dizilip birlestirilince benzerlik 0.971
+    tek fark: cumle sonu noktalari dusuyor
+  17 kutu 17 tanima kosumu demek -> medyan 2070 ms. Kutu sayisi surenin
+  belirleyicisi. TextNormalizer (T-004) zaten kutulari birlestiriyor, yani
+  ayirma sorun degil; SURE sorun. Tespit parametreleri ayarlanmali.
+
+[O6] SEFIN KENDI OLCUM HATASI (kayda geciyor)
+  Korece'yi ilk olcumde "0/4 dogru" diye yazdim. Yanlisti: 17 KELIME kutusunu
+  4 SATIR beklentisiyle karsilastirmisim. Dogru karsilastirma (okuma sirasina
+  diz, birlestir, sonra kiyasla) %97.1 veriyor.
+  DERS: cikti bicimi degistiginde karsilastirma bicimi de degismeli;
+  "0/4" gibi bir sonuc once OLCUNUN kendisinden suphelenmeyi gerektirir.
+
+== PAKETE GIRECEK SONUCLAR ==
+  1. v1 motoru rapidocr 3.x / ONNXRUNTIME uzerine kurulur.
+  2. Dil ACIK secilir (JAPAN/KOREAN/CH/EN); guven esigi dil hatasini gormez.
+  3. Is parcacigi sayisi ACIK verilir; "otomatik" birakilamaz (6 kat fark).
+  4. cls (aci siniflandirma) KAPALI -- oyun metni donuk degil.
+  5. JP/KR icin ilk kullanimda 11.6 MB indirme var. "Ilk acilista tamamen
+     cevrimdisi" iddiasi JP/KR icin TUTMUYOR; tasarim metni duzeltilmeli
+     ya da modeller kurulum paketine gomulmeli.
+  6. Sure butcesi kutu sayisina bagli; tek bir "250 ms" sayisi yeterli degil,
+     olcum kutu basina yapilmali.
