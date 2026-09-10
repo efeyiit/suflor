@@ -1,0 +1,35 @@
+MUTANT KITI -- her mutant icin hangi kapi YAKALAR (X) / KACIRIR (.)
+kapilar: G1-mypy | G2-pytest | G3-headless | G4-kapsam | G5-tumdizin
+
+M46 [X....] YAKALANDI
+     monitors() ham listeyi KOPYALAMADAN dondurur
+     hedef degismez: K10 -- paket bunu 'uygulama tercihi, kapi DEGIL' diyor (Y7-2); damga durust mu
+     | G1-mypy:src\capture\service.py:163: error: Unused "type: ignore" comment  [unused-ignore]
+M47 [.X.XX] YAKALANDI
+     FakeBackend.monitors() [0] birlesim girdisini KOYMAZ (ilk monitoru yutar)
+     hedef degismez: K1 FakeBackend bicim sozlesmesi
+     | G2-pytest:40 failed, 119 passed in 0.90s
+     | G4-kapsam:Required test coverage of 95% reached. Total coverage: 98.83%
+     | G5-tumdizin:40 failed, 702 passed in 1.44s
+M48 [.X.XX] YAKALANDI
+     K6 (b) yeniden deneme sayisi 3 yerine 2
+     hedef degismez: K6 (b) en fazla 3 cagri
+     | G2-pytest:1 failed, 158 passed in 0.66s
+     | G4-kapsam:Required test coverage of 95% reached. Total coverage: 98.83%
+     | G5-tumdizin:1 failed, 741 passed in 1.12s
+M49 [.X.XX] YAKALANDI
+     ilk basarili yakalama seq=1 olur (0 degil)
+     hedef degismez: K2 ilk yakalama seq=0
+     | G2-pytest:13 failed, 146 passed in 0.76s
+     | G4-kapsam:Required test coverage of 95% reached. Total coverage: 98.83%
+     | G5-tumdizin:13 failed, 729 passed in 1.25s
+
+=== MARKDOWN TABLOSU ===
+| # | mutant | hedef degismez | G1-mypy | G2-pytest | G3-headless | G4-kapsam | G5-tumdizin |
+|---|---|---|---|---|---|---|---|
+| M46 | monitors() ham listeyi KOPYALAMADAN dondurur | K10 -- paket bunu 'uygulama tercihi, kapi DEGIL' diyor (Y7-2); damga durust mu | X | . | . | . | . |
+| M47 | FakeBackend.monitors() [0] birlesim girdisini KOYMAZ (ilk monitoru yutar) | K1 FakeBackend bicim sozlesmesi | . | X | . | X | X |
+| M48 | K6 (b) yeniden deneme sayisi 3 yerine 2 | K6 (b) en fazla 3 cagri | . | X | . | X | X |
+| M49 | ilk basarili yakalama seq=1 olur (0 degil) | K2 ilk yakalama seq=0 | . | X | . | X | X |
+
+Kacan mutant yok.

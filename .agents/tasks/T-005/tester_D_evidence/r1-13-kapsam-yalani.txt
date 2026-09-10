@@ -1,0 +1,24 @@
+=== D7: KAPSAM YALANI -- fazladan '# pragma: no cover' esigi kirmiyor mu? ===
+
+--- TABAN (mutasyonsuz) ---
+Name                      Stmts   Miss  Cover   Missing
+-------------------------------------------------------
+src\capture\monitors.py      34      0   100%
+src\capture\service.py      137      2    99%   479, 482
+-------------------------------------------------------
+TOTAL                       171      2    99%
+Required test coverage of 95% reached. Total coverage: 98.83%
+159 passed in 0.69s
+EXIT=0
+
+--- 4 FAZLADAN '# pragma: no cover' EKLENDIKTEN SONRA ---
+Name                      Stmts   Miss  Cover   Missing
+-------------------------------------------------------
+src\capture\monitors.py      34      0   100%
+src\capture\service.py      115      2    98%   479, 482
+-------------------------------------------------------
+TOTAL                       149      2    99%
+Required test coverage of 95% reached. Total coverage: 98.66%
+159 passed in 0.70s
+EXIT=0
+toplam pragma sayisi: 7

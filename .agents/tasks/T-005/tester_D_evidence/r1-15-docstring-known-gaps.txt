@@ -1,0 +1,23 @@
+=== D8b: 'IKI YERE yaz' kuralinin DOCSTRING yarisi (tester delivery.md okuyamaz) ===
+K2 seq tek ornek             -> 0 eslesme
+K5 konumsal kimlik           -> 0 eslesme
+K8 DPI uretemez              -> 0 eslesme
+K8 intersect metadata        -> 0 eslesme
+K10 DPI politikasi           -> 1 eslesme
+K10 QApplication             -> 1 eslesme
+K11 13.5 ms                  -> 0 eslesme
+K11 butce asiliyor           -> 0 eslesme
+K12 thread                   -> 0 eslesme
+
+--- ham eslesmeler ---
+src/capture/service.py:4:yonetimi), 5.7 (performans butcesi), 6 (teknoloji secimi: `mss`) ve 8.3-A2
+src/capture/service.py:34:`PER_MONITOR_DPI_AWARE` yapar (`0 -> 2`, GERI ALINAMAZ; sef olctu) ve Qt'nin
+src/capture/service.py:35:olceklemesini etkiler. **`MssBackend` metotlari `QApplication` kurulmadan
+src/capture/service.py:47:Performans -- butce SIMDIDEN ASILIYOR (kapsam disi, belgelenir)
+src/capture/service.py:50:5.7'nin 10 ms butcesinin cok altindadir (olculdu, 200 cagri, 600x200 bolge:
+src/capture/service.py:52:gercek `mss.grab` medyani **13.5 ms**'dir ve 600x200 ile 100x50 icin
+src/capture/service.py:54:"Capture <= 10 ms" butcesi `mss` ile **zaten asiliyor**; bu T-005'in kapsami
+src/capture/service.py:59:`CaptureService` thread-safe **degildir**: `seq` sayaci ve monitor onbellegi
+src/capture/service.py:326:    **Servis DPI olcegi URETEMEZ.** `mss` monitor sozlukleri olcek anahtari
+src/capture/service.py:516:        13.5 ms daha harcanirdi.
+src/capture/monitors.py:42:Monitor kimligi -- KONUMSAL ve KARARSIZ (kabul edilen eksiklik)

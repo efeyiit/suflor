@@ -1,0 +1,36 @@
+==== T-005 TESTER C (mercek C: durum makinesi) -- SEF SONDASI ====
+PROTOKOL 4.6/6: her iddia sef tarafindan kendi eliyle yeniden uretildi.
+
+1) BICIM     validate.py verdict-C.md -> KABUL EDILEBILIR (rol=tester, tur=1, onay)
+2) SAHIPLIK  git status (?? disi) BOS
+3) TAKIM     pytest tester_C -> 122 passed
+
+4) C-G1 "saat firlatirsa seq tuketilir, Frame dogmaz"  -> DOGRULANDI
+     Enjekte saat 2. cagrida firlatiyor:
+       1. yakalama seq=0 · 2. yakalama RuntimeError · 3. yakalama seq=2
+       ATLANAN seq = 1.  self._seq += 1, Frame(...) kurulumundan ONCE kosuyor.
+     Uretimde erisilemez (time.monotonic firlatmaz) ama K6 taksonomisinin
+     disinda kalan tek seq sizinti yolu. Kayda gecti.
+
+5) C-G2 "bos kume guard'i davranissal olarak gereksiz"  -> BUYUK OLCUDE DOGRULANDI
+     SEF ILK OLCUMU YANLIS KURDU (farkli girdilerle iki mesaji karsilastirdi).
+     DOGRU KURULUM -- guard kum havuzunda SILINDI, ayni girdi:
+       guard VAR : CaptureError 'monitor kumesi bos: yakalanacak ekran yok'
+       guard YOK : CaptureError 'bolge hicbir monitorle kesismiyor: x=10,y=20,w=100,h=50'
+     Istisna SINIFI ayni (ikisi de CaptureError) -> davranis degismez.
+     Mesaj FARKLI -> C'nin "birebir ayni mesaj" ifadesi TAM DEGIL; guard'in
+     gercek degeri TANI MESAJI kalitesi, davranis degil.
+     KAPI OLCUMU (asil bulgu):
+       URUNUN kendi takimi (742 test) : 742 passed -- MUTANTI HIC GORMUYOR
+       C'nin takimi                   : 1 failed   -- goruyor
+     C ayirt edici mesaj olcusunu eklemis; PROTOKOL 6 uyarinca "paketin lafzinin
+     bir adim otesi" diye bildirmesi dogru.
+
+6) DESEN (sefin kendi cikarimi, iki sondanin ortak sonucu):
+     Mutant                                  urun takimi   tester takimi
+     np.ascontiguousarray (takma ad)          1 / 742        14 (A)
+     bos kume guard'i silme                   0 / 742         1 (C)
+   Urunun kendi takimi bu iki sinifta ZAYIF. Kapi calisiyor ama marji ince.
+   MERCEK D (test kalitesi) bunu degerlendirmeli -- D'ye devredildi.
+
+KARAR: C'nin onayi KABUL EDILEBILIR.

@@ -1,0 +1,20 @@
+=== ONERILEN DUZELTME: iki testin AYIRT ETME GUCU ===
+(ayna agacinda; src/ ve tests/ DEGISTIRILMEDI)
+
+--- TABAN ---
+..                                                                       [100%]
+2 passed, 119 deselected in 0.14s
+--- M12-exit ---
+E        +  where 0 = <test_service._SahteTutamac object at 0x000001CC1A225C40>.kapatma
+
+tests\unit\capture\test_service.py:899: AssertionError
+=========================== short test summary info ===========================
+FAILED tests/unit/capture/test_service.py::test_k10_exit_uzun_omurlu_tutamaci_kapatir
+1 failed, 1 passed, 119 deselected in 0.23s
+--- M13-close ---
+
+tests\unit\capture\test_service.py:912: AssertionError
+=========================== short test summary info ===========================
+FAILED tests/unit/capture/test_service.py::test_k10_exit_uzun_omurlu_tutamaci_kapatir
+FAILED tests/unit/capture/test_service.py::test_k10_close_tutamaci_sifirlar_ve_idempotenttir
+2 failed, 119 deselected in 0.24s

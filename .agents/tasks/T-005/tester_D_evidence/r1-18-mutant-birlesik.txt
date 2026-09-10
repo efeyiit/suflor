@@ -1,0 +1,59 @@
+MUTANT SONDASI -- BIRLESIK TABLO (49 mutant x 5 kapi)
+X = kapi YAKALADI (exit != 0) · . = KACIRDI (exit 0)
+Kaynak: r1-10 (dalga 1), r1-11 (dalga 2), r1-12 (dalga 3), r1-16 (dalga 4).
+Dalga 2/3/4 ayni ID'yi tasiyan duzeltilmis mutanti icerir ve dalga 1'i EZER.
+
+| # | mutant | hedef degismez | G1-mypy | G2-pytest | G3-headless | G4-kapsam | G5-tumdizin |
+|---|---|---|---|---|---|---|---|
+| M01 | kopya -> ascontiguousarray (4 kanalda kopyalar, 3 kanalda TAKMA AD) | K7 sahiplik | . | X | . | X | X |
+| M02 | kopya SALT-OKUNUR (frombuffer/tobytes): bellek paylasmiyor ama writeable=False | K7 writeable -- `writeable` iddiasinin BAGIMSIZ gucu | . | X | . | X | X |
+| M03 | TIP kurali -> GIRDI SAYAN kural: iki bicimi hasattr ile eler, gerisini np.asarray ile cevirir | K7 `isinstance` tip duzeyi kurali (dort ayrisan bicim) | . | X | . | X | X |
+| M04 | tip denetimi tamamen kaldirildi, her sey np.asarray ile cevriliyor | K7 sessiz donusum yasagi | . | X | . | X | X |
+| M05 | grab kutusunu 0'a KIRPAR (negatif sanal-masaustu koordinati) | K10 kutu birebir -- olcunun IKI NOKTADA kosmasi (Y7-1) | . | . | X | . | . |
+| M06 | grab HAM ScreenShot dondurur (np.ndarray degil) | K10/K7 -- olcunun denetledigi koddan referans TURETMEMESI (Y6-2) | . | . | X | . | . |
+| M07 | monitors() kurdugu MSS()'i KAPATMAZ (5001. cagrida GetWindowDC olur) | K10 cagri basina tam 1 kapatma | . | . | X | . | . |
+| M08 | monitors() sonucu ONBELLEKLER (canli degil) | K10 canlilik | X | . | X | . | . |
+| M09 | protokol uyum satirlari SILINDI | K1/O-F uyum -- mekanizmanin varligi (Y5-1) | . | . | X | . | . |
+| M10 | uyum satirlari CIPLAK ek aciklamaya dondu (deger yok -> mypy hicbir sey dogrulamaz) | K1/O-F uyum -- degerin CAGRI olmasi (Y6-1) | . | . | X | . | . |
+| M11 | FakeBackend.grab DEKORATORLU (mypy imzayi Any'ye dusurur) | K1 uyum -- dekorator kacisi (Y7-5) | . | X | X | X | X |
+| M12 | __exit__ close() CAGIRMAZ (baglam yoneticisi tutamaci sizdirir) | K10 `__exit__` -> close() | . | . | . | . | . |
+| M13 | close() idempotent DEGIL (tutamaci None yapmaz -> ikinci close tekrar kapatir) | K10 close idempotent | . | . | . | . | . |
+| M14 | monitors.py: int(v) yerine cast(int, v) -- numpy skaleri Rect'e sizar | K5 duzlestirme (Y-C) | . | X | . | X | X |
+| M15 | monitors.py: YALNIZ np.int64 duzlestirilir; int32/uint8 sizar | K5 duzlestirme olcusunun DORT TIPTE kosmasi (Y5-6) | . | X | . | X | X |
+| M16 | capture_region girisi: YALNIZ int64/int duzlesir; int32/uint8 Frame.rect'e sizar | K8 duzlestirme olcusunun DORT TIPTE kosmasi (Y6-5) | X | X | . | X | X |
+| M17 | giris KABUL KAPISI kaldirildi, ciplak int() (10.9 -> 10, '10'/True sessizce kabul) | K8 kabul kapisi (Y7-3) | X | X | . | X | X |
+| M18 | dpi_scale duzlestirmesi kaldirildi (np.float32 Frame.rect'e sizar) | K8 dpi_scale float duzlestirmesi | . | X | . | X | X |
+| M19 | capture_region girisinde duzlestirme HIC yapilmaz | K8 giristeki duzlestirme (isaretsiz numpy tasmasi) | . | X | . | X | X |
+| M20 | PARTIAL kirpmasi TEK MONITORE gore (birlesime degil) | K4 kirpma birlesime gore | . | X | . | X | X |
+| M21 | monitor_index: 1'den fazla kesisimde -1 yerine ILKI dondurulur | K8 monitor_index -1 kurali | . | X | . | X | X |
+| M22 | monitor_index: cagiranin degeri kullanilir (hesaplanmaz) | K8 monitor_index hesaplanir | . | X | . | X | X |
+| M23 | refresh_monitors hata yolunda ESKI KUMEYI KAYBEDER | K5 durum degismezi | . | X | . | X | X |
+| M24 | K6 sinif (c) YENIDEN DENENIR (3 cagri) ve __cause__ baglanir | K6 (c): 1 cagri, __cause__ None | . | X | . | X | X |
+| M25 | seq basarisiz yakalamalarda da TUKETILIR | K2 seq tuketilmez | . | X | . | X | X |
+| M26 | capture_full NEGATIF indeksi kabul eder (Python dilimlemesi) | K9 aralik disi | . | X | . | X | X |
+| M27 | yapimda monitor kumesi HIC okunmaz | K5 okuma zamani | . | X | . | X | X |
+| M28 | rects_from_mss_monitors [0] birlesim girdisini ATMAZ | K5 bicim | . | X | . | X | X |
+| M29 | engel fixture'i oturum degil FONKSIYON kapsamli | K1 oturum kapsami | . | . | X | . | . |
+| M30 | engel modul GERCEK mss'e devreder | K1 engel devretmez | . | . | X | . | . |
+| M31 | FAZLADAN `# pragma: no cover` (K13'un yasakladigi yer) | K13 'baska no cover yasak' -- makinenin GORMEDIGI kural | . | . | . | . | . |
+| M32 | UC fazladan pragma (capture_full + _monitor_indeksi + _backend_dan_al) | K13 kapsam esigi fazladan pragmayi GORMEZ | . | . | . | . | . |
+| M33 | capture_full numpy skaleri ENJEKTE eder (paketin [OLCULMUYOR] damgaladigi bacak) | K8 capture_full duzlestirme bacagi -- damganin dogrulugu | . | . | . | . | . |
+| M34 | FakeBackend raw_override'i OZEL adla saklar (tester'in mutasyonu sessizce kaybolur) | K1 FakeBackend sozlesmesi -- public mutasyon arayuzu | . | X | . | X | X |
+| M35 | grab her cagrida tutamaci kapatip birakir (uzun omurlu DEGIL) | K10 uzun omurlu tutamac (sicak yol maliyeti) | . | . | X | . | . |
+| M36 | close() tutamaci SIZDIRIR (alttaki MSS()'i hic kapatmaz) | K10 close() gercekten kapatir | . | . | X | . | . |
+| M37 | backend'e DUZLESTIRILMEMIS geometri gider; Frame.rect duz kalir (K3 `==` gormez) | K8 duzlestirme -- olcunun `==` ile yazilmasi | . | . | . | . | . |
+| M38 | union_bbox monitor_index=-1 yerine 0 yazar | K5 union_bbox metadata | . | X | . | X | X |
+| M39 | list_monitors backend istisnasini SARMALAR (oldugu gibi yaymaz) | K5 istisna oldugu gibi yayilir | . | X | . | X | X |
+| M40 | K7 boyut (h, w) uyusma denetimi kaldirildi | K7 bicim -- boyut uyusmazligi | . | X | . | X | X |
+| M41 | __enter__ BASKA bir ornek dondurur | K10 baglam yoneticisi | . | X | . | X | X |
+| M42 | kontrol mutanti: zararsiz ekleme (kapilar yanlis pozitif vermemeli) | -- kontrol -- | . | . | . | . | . |
+| M43 | CaptureService.monitors ozelligi KOPYA dondurur (docstring ulasilmaz olur) | -- kontrol: ozelligin gozlemlenebilirligi -- | . | . | . | . | . |
+| M44 | FakeBackend varsayilan ureticisi 4 kanal yerine 3 kanal dondurur | K1 FakeBackend varsayilan sozlesmesi | . | . | . | . | . |
+| M45 | FakeBackend grab_rects'i KAYDETMEZ (K3/K9 gozlem kanali kapanir) | K1 FakeBackend gozlem oznitelikleri | . | X | . | X | X |
+| M46 | monitors() ham listeyi KOPYALAMADAN dondurur | K10 -- paket bunu 'uygulama tercihi, kapi DEGIL' diyor (Y7-2); damga durust mu | X | . | . | . | . |
+| M47 | FakeBackend.monitors() [0] birlesim girdisini KOYMAZ (ilk monitoru yutar) | K1 FakeBackend bicim sozlesmesi | . | X | . | X | X |
+| M48 | K6 (b) yeniden deneme sayisi 3 yerine 2 | K6 (b) en fazla 3 cagri | . | X | . | X | X |
+| M49 | ilk basarili yakalama seq=1 olur (0 degil) | K2 ilk yakalama seq=0 | . | X | . | X | X |
+
+HICBIR KAPININ YAKALAMADIGI MUTANTLAR (9): M12, M13, M31, M32, M33, M37, M42, M43, M44
+TOPLAM MUTANT: 49

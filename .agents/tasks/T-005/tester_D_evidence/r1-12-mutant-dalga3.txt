@@ -1,0 +1,32 @@
+MUTANT KITI -- her mutant icin hangi kapi YAKALAR (X) / KACIRIR (.)
+kapilar: G1-mypy | G2-pytest | G3-headless | G4-kapsam | G5-tumdizin
+
+M37 [.....] *** HICBIR KAPI YAKALAMADI ***
+     backend'e DUZLESTIRILMEMIS geometri gider; Frame.rect duz kalir (K3 `==` gormez)
+     hedef degismez: K8 duzlestirme -- olcunun `==` ile yazilmasi
+M42 [.....] *** HICBIR KAPI YAKALAMADI ***
+     kontrol mutanti: zararsiz ekleme (kapilar yanlis pozitif vermemeli)
+     hedef degismez: -- kontrol --
+M43 [.....] *** HICBIR KAPI YAKALAMADI ***
+     CaptureService.monitors ozelligi KOPYA dondurur (docstring ulasilmaz olur)
+     hedef degismez: -- kontrol: ozelligin gozlemlenebilirligi --
+M44 [.....] *** HICBIR KAPI YAKALAMADI ***
+     FakeBackend varsayilan ureticisi 4 kanal yerine 3 kanal dondurur
+     hedef degismez: K1 FakeBackend varsayilan sozlesmesi
+M45 [.X.XX] YAKALANDI
+     FakeBackend grab_rects'i KAYDETMEZ (K3/K9 gozlem kanali kapanir)
+     hedef degismez: K1 FakeBackend gozlem oznitelikleri
+     | G2-pytest:17 failed, 142 passed in 0.77s
+     | G4-kapsam:Required test coverage of 95% reached. Total coverage: 98.82%
+     | G5-tumdizin:17 failed, 725 passed in 1.26s
+
+=== MARKDOWN TABLOSU ===
+| # | mutant | hedef degismez | G1-mypy | G2-pytest | G3-headless | G4-kapsam | G5-tumdizin |
+|---|---|---|---|---|---|---|---|
+| M37 | backend'e DUZLESTIRILMEMIS geometri gider; Frame.rect duz kalir (K3 `==` gormez) | K8 duzlestirme -- olcunun `==` ile yazilmasi | . | . | . | . | . |
+| M42 | kontrol mutanti: zararsiz ekleme (kapilar yanlis pozitif vermemeli) | -- kontrol -- | . | . | . | . | . |
+| M43 | CaptureService.monitors ozelligi KOPYA dondurur (docstring ulasilmaz olur) | -- kontrol: ozelligin gozlemlenebilirligi -- | . | . | . | . | . |
+| M44 | FakeBackend varsayilan ureticisi 4 kanal yerine 3 kanal dondurur | K1 FakeBackend varsayilan sozlesmesi | . | . | . | . | . |
+| M45 | FakeBackend grab_rects'i KAYDETMEZ (K3/K9 gozlem kanali kapanir) | K1 FakeBackend gozlem oznitelikleri | . | X | . | X | X |
+
+HICBIR KAPININ YAKALAMADIGI MUTANTLAR (4): M37, M42, M43, M44

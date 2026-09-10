@@ -1,0 +1,13 @@
+$ python .agents/tasks/T-005/headless_check.py
+denetlenen: service.py, monitors.py, conftest.py, test_service.py, test_monitors.py
+
+TEMIZ: K1 engeli calisiyor, devretmiyor, oturum kapsamli; mss'e yuklemede girisim yok; grab icerigi dogru; monitors() kur+kapat+canli; grab tutamaci tek; close idempotent; Qt yok
+EXIT=0
+
+$ python -m pytest tests -q
+........................................................................ [ 95%]
+.............................................                            [100%]
+981 passed in 3.39s
+
+$ git status --short -- src tests
+(bos = src/ ve tests/ DEGISTIRILMEDI)

@@ -1,0 +1,59 @@
+=== MERCEK B kapilarinin AYIRT ETME GUCU: mutasyon kosumu ===
+Yontem: src/ ve tester_B/ gecici bir kopyaya alindi (DEPODAKI src DEGISTIRILMEDI),
+her mutasyon tek tek uygulandi, tester_B testleri kosuldu, sonra geri alindi.
+Bir mutasyon hicbir testi dusurmezse o kapi TOTOLOJIDIR.
+
+--- 1. tur: mutasyon yakalandi mi (-x, ilk dusen) ---
+mutasyon                         exit  ozet
+----------------------------------------------------------------------------------------------------
+M1_giris_duzlestirme_yok         1     YAKALANDI | 1 failed, 29 passed, 8 warnings in 0.16s | ['.agents/tasks/T-005/tester_B/test_b_sayisal.py::test_b1_frame_rect_duz_int[partial-uint8]']
+M2_monitor_duzlestirme_yok       1     YAKALANDI | 1 failed, 11 passed in 0.16s | ['.agents/tasks/T-005/tester_B/test_b_sayisal.py::test_b1_monitors_yolu_duz_int[int64]']
+M3_ciplak_int                    1     YAKALANDI | 1 failed, 71 passed, 1 skipped in 0.21s | ['.agents/tasks/T-005/tester_B/test_b_sayisal.py::test_b4_kabul_kapisi_dort_alanda_reddeder[x-str]']
+M4_dpi_scale_duzlestirme_yok     1     YAKALANDI | 1 failed, 58 passed, 1 skipped in 0.18s | ['.agents/tasks/T-005/tester_B/test_b_sayisal.py::test_b3_dpi_scale_duz_float_a_duzlesir[float32]']
+M5_tek_monitore_kirpma           1     YAKALANDI | 1 failed, 27 passed in 0.16s | ['.agents/tasks/T-005/tester_B/test_b_sayisal.py::test_b1_frame_rect_duz_int[partial-int64]']
+M6_cast_kacisi                   1     YAKALANDI | 1 failed, 11 passed in 0.16s | ['.agents/tasks/T-005/tester_B/test_b_sayisal.py::test_b1_monitors_yolu_duz_int[int64]']
+M7_duzlestirme_gec               1     YAKALANDI | 1 failed, 29 passed, 8 warnings in 0.16s | ['.agents/tasks/T-005/tester_B/test_b_sayisal.py::test_b1_frame_rect_duz_int[partial-uint8]']
+M8_yalniz_int64                  1     YAKALANDI | 1 failed, 12 passed in 0.16s | ['.agents/tasks/T-005/tester_B/test_b_sayisal.py::test_b1_monitors_yolu_duz_int[int32]']
+
+--- 2. tur: HEDEFLENEN kapi da dusuyor mu (-x yok, tam liste) ---
+
+### M5_tek_monitore_kirpma  -> 20 failed, 116 passed, 1 skipped in 1.35s
+     dusen kapi: test_b1_frame_rect_duz_int
+     dusen kapi: test_b2_servis_isaretsiz_numpy_de_tasmaz_l_duzeni
+     dusen kapi: test_b2_servis_isaretsiz_numpy_de_tasmaz_partial
+     dusen kapi: test_b6_dort_kenar_ve_kose_kirpmasi
+     dusen kapi: test_b6_iki_monitore_yayilan_bolge_birlesime_kirpilir
+     dusen kapi: test_b6_kirpma_aritmetigi_numpy_girdide_de_ayni
+     dusen kapi: test_b6_kirpma_sira_degisimine_duyarsiz
+     dusen kapi: test_b6_l_duzeninde_olu_alan_kirpmaya_dahil
+
+### M6_cast_kacisi  -> 16 failed, 120 passed, 1 skipped in 1.36s
+     dusen kapi: test_b1_monitors_yolu_dort_alan_ayri_ayri
+     dusen kapi: test_b1_monitors_yolu_duz_int
+     dusen kapi: test_b1_servis_onbellegi_duz_int
+     dusen kapi: test_b1_union_bbox_servis_yolunda_duz_int
+     dusen kapi: test_b2_isaretsiz_monitor_sozlugu_de_tasmaz
+     dusen kapi: test_b5_kaynakta_cast_kacisi_yok
+
+### M7_duzlestirme_gec  -> 49 failed, 87 passed, 1 skipped in 1.41s
+     dusen kapi: test_b1_frame_rect_duz_int
+     dusen kapi: test_b2_servis_isaretsiz_numpy_de_tasmaz_inside
+     dusen kapi: test_b2_servis_isaretsiz_numpy_de_tasmaz_l_duzeni
+     dusen kapi: test_b2_servis_isaretsiz_numpy_de_tasmaz_partial
+     dusen kapi: test_b4_kabul_kapisi_dort_alanda_reddeder
+     dusen kapi: test_b4_kapi_alan_denetiminden_ONCE_kosar
+     dusen kapi: test_b4_kapi_ek_yozlasmis_girdiler
+     dusen kapi: test_b4_kapi_hatasi_seq_tuketmez
+     dusen kapi: test_b6_asiri_buyuk_koordinat_K6_taksonomisinde_kalir
+
+### M3_ciplak_int  -> 37 failed, 99 passed, 1 skipped in 1.38s
+     dusen kapi: test_b4_kabul_kapisi_dort_alanda_reddeder
+     dusen kapi: test_b4_kapi_alan_denetiminden_ONCE_kosar
+     dusen kapi: test_b4_kapi_ek_yozlasmis_girdiler
+     dusen kapi: test_b4_kapi_hatasi_seq_tuketmez
+     dusen kapi: test_b5_duzlestirmede_type_ignore_ile_susturma_yok
+
+### M4_dpi_scale  -> 7 failed, 129 passed, 1 skipped in 1.36s
+     dusen kapi: test_b3_dpi_scale_duz_float_a_duzlesir
+     dusen kapi: test_b5_duzlestirmede_type_ignore_ile_susturma_yok
+     dusen kapi: test_bB_uctan_uca_numpy_girdi_serilesebilir_frame_uretir

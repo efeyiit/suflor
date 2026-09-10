@@ -1,0 +1,47 @@
+MERCEK A -- mutasyon denetimi: her kapinin ayirt etme gucu
+src/ DEGISTIRILMEDI; mutantlar calisma zamaninda -p eklentisiyle enjekte edildi.
+
+########## mutant1 ##########
+import numpy as np
+FAILED .agents/tasks/T-005/tester_A/test_mercek_a_takma_ad.py::test_a1_sahiplik_dort_yon[3ch-yazilabilir]
+FAILED .agents/tasks/T-005/tester_A/test_mercek_a_takma_ad.py::test_a1_sahiplik_dort_yon[3ch-salt-okunur]
+FAILED .agents/tasks/T-005/tester_A/test_mercek_a_takma_ad.py::test_a1_sahiplik_gizli_referans_yok[3ch-yazilabilir]
+FAILED .agents/tasks/T-005/tester_A/test_mercek_a_takma_ad.py::test_a1_sahiplik_gizli_referans_yok[3ch-salt-okunur]
+FAILED .agents/tasks/T-005/tester_A/test_mercek_a_takma_ad.py::test_a1_frame_i_bozmak_backend_i_bozmaz[3ch-yazilabilir]
+FAILED .agents/tasks/T-005/tester_A/test_mercek_a_takma_ad.py::test_a1_frame_i_bozmak_backend_i_bozmaz[3ch-salt-okunur]
+FAILED .agents/tasks/T-005/tester_A/test_mercek_a_takma_ad.py::test_a1_backend_i_bozmak_onceki_frame_i_bozmaz[3]
+FAILED .agents/tasks/T-005/tester_A/test_mercek_a_takma_ad.py::test_a1_salt_okunur_gorunum_altindaki_bellek_degisirse[3]
+FAILED .agents/tasks/T-005/tester_A/test_mercek_a_takma_ad.py::test_a1_arena_gorunumu_arenayi_paylasmaz[3]
+FAILED .agents/tasks/T-005/tester_A/test_mercek_a_takma_ad.py::test_a1_partial_kirpma_yolunda_da_kopya
+FAILED .agents/tasks/T-005/tester_A/test_mercek_a_takma_ad.py::test_a1_may_share_memory_de_False[3ch-yazilabilir]
+FAILED .agents/tasks/T-005/tester_A/test_mercek_a_takma_ad.py::test_a1_may_share_memory_de_False[3ch-salt-okunur]
+FAILED .agents/tasks/T-005/tester_A/test_mercek_a_takma_ad.py::test_a1_ndarray_alt_sinifi_kaynak
+FAILED .agents/tasks/T-005/tester_A/test_mercek_a_takma_ad.py::test_a1_dilimlemeyi_yutan_alt_sinif
+14 failed, 60 passed in 0.32s
+
+########## mutant2 ##########
+def pytest_configure(config):
+FAILED .agents/tasks/T-005/tester_A/test_mercek_a_takma_ad.py::test_a2_raw_override_yolunda_donen_nesne_CANLIDIR
+FAILED .agents/tasks/T-005/tester_A/test_mercek_a_takma_ad.py::test_a3_yapimdan_sonra_atama_sonraki_cagrida_gorunur
+FAILED .agents/tasks/T-005/tester_A/test_mercek_a_takma_ad.py::test_a3_YERINDE_mutasyon_sonraki_cagrida_gorunur
+FAILED .agents/tasks/T-005/tester_A/test_mercek_a_takma_ad.py::test_a3_None_a_donunce_monitor_rects_yoluna_dusulur
+FAILED .agents/tasks/T-005/tester_A/test_mercek_a_takma_ad.py::test_a3_refresh_monitors_CANLI_degeri_gorur
+FAILED .agents/tasks/T-005/tester_A/test_mercek_a_takma_ad.py::test_a4_tutulan_referans_KARARLI_bir_anlik_goruntudur
+FAILED .agents/tasks/T-005/tester_A/test_mercek_a_takma_ad.py::test_a4_refresh_hatasi_eski_kumeyi_KORUR
+7 failed, 67 passed in 0.25s
+
+########## mutant3 ##########
+def pytest_configure(config):
+FAILED .agents/tasks/T-005/tester_A/test_mercek_a_takma_ad.py::test_a4_refresh_hatasi_eski_kumeyi_KORUR
+FAILED .agents/tasks/T-005/tester_A/test_mercek_a_takma_ad.py::test_a4_refresh_backend_istisnasinda_da_eski_kume_korunur
+2 failed, 72 passed in 0.21s
+
+########## mutant4 ##########
+def pytest_configure(config):
+FAILED .agents/tasks/T-005/tester_A/test_mercek_a_takma_ad.py::test_a2_servis_kumesi_backend_listesinden_BAGIMSIZ
+FAILED .agents/tasks/T-005/tester_A/test_mercek_a_takma_ad.py::test_a3_refresh_monitors_CANLI_degeri_gorur
+FAILED .agents/tasks/T-005/tester_A/test_mercek_a_takma_ad.py::test_a4_monitors_degismez_bir_yapi_dondurur
+FAILED .agents/tasks/T-005/tester_A/test_mercek_a_takma_ad.py::test_a4_tutulan_referans_KARARLI_bir_anlik_goruntudur
+FAILED .agents/tasks/T-005/tester_A/test_mercek_a_takma_ad.py::test_a4_refresh_hatasi_eski_kumeyi_KORUR
+5 failed, 69 passed in 0.23s
+

@@ -1,0 +1,60 @@
+== A0: sefin tuzagi + dort yon + dondurulmusluk ham olcumleri ==
+ascontiguousarray kanal=3: shares_memory=True owndata=False
+ascontiguousarray kanal=4: shares_memory=False owndata=True
+arena-view ascontiguousarray: True
+3ch-yazilabilir: kaynak_writeable=True shares=False img_writeable=True owndata=True base=None
+4ch-yazilabilir: kaynak_writeable=True shares=False img_writeable=True owndata=True base=None
+3ch-salt-okunur: kaynak_writeable=False shares=False img_writeable=True owndata=True base=None
+4ch-salt-okunur: kaynak_writeable=False shares=False img_writeable=True owndata=True base=None
+arena-gorunum: shares(image,arena)= False  shares(image,gorunum)= False
+broadcast: shares= False writeable= True px= [np.uint8(1), np.uint8(2), np.uint8(3)]
+iki kare shares= False
+shares_memory tipi: bool
+
+== 2. monitors() donusu ==
+tip: list len: 3
+bozduktan sonra ikinci cagri len: 3 -> etkilendi mi: False
+sozluk bozulunca ikinci cagri left: -2560 -> etkilendi mi: False
+ayni nesne mi (m3 is m4): False
+
+== 2b. raw_override yolunda donen liste ==
+r1 is ov: True
+bozduktan sonra fb2.raw_override[1]['left']: 777
+
+== 3. raw_override canliligi ==
+baslangic raw_override: None
+public mi (adin sinif sozlugunde/ornekte): True
+atama sonrasi len: 2
+yerinde append sonrasi len: 3
+None'a donunce len: 3
+
+== 4. servis onbellegi ==
+monitors tipi: tuple
+monitors is _monitors: True
+backend bozulunca servis onbellegi degisti mi: False
+refresh hatasi: CaptureError
+eski kume korundu mu: True | ayni nesne mi: True
+hata sonrasi capture_region calisti, rect: Rect(x=0, y=0, w=10, h=20, monitor_index=1, dpi_scale=1.0)
+
+== 5. Rect / Frame dondurulmus mu ==
+Rect.x atamasi -> FrozenInstanceError
+object.__setattr__ ile x = 9 (bypass MUMKUN)
+__dict__ ile x = 42 (bypass MUMKUN) | __slots__ var mi: False
+dataclasses.replace: Rect(x=10, y=2, w=3, h=4, monitor_index=0, dpi_scale=1.0)
+farkli goruntu, ayni metadata -> f1 == f2: True
+hash esit mi: True
+Frame.seq atamasi -> FrozenInstanceError
+dondurulmus Frame'in image'i YERINDE degistirildi -> 200 | f1==f2 hala: True
+
+ndarray alt sinifi: tip= ndarray shares(base)= False may_share= False writeable= True
+MaskedArray: tip= ndarray shares= False may_share= False
+__getitem__ yutan alt sinif: shares= False may_share= False shape= (20, 10, 3)
+F-contiguous: shares= False C_CONT= True
+kanal=3 salt_okunur=False: may_share=False
+kanal=3 salt_okunur=True: may_share=False
+kanal=4 salt_okunur=False: may_share=False
+kanal=4 salt_okunur=True: may_share=False
+
+_uyum_fake tipi: FakeBackend grab_rects: [] monitors_calls: 0
+_uyum_mss tipi: MssBackend tutamac: None
+capture_full: rect is monitors[1]? False | esit mi: True

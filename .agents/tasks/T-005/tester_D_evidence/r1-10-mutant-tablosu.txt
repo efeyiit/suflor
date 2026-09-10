@@ -1,0 +1,212 @@
+MUTANT KITI -- her mutant icin hangi kapi YAKALAR (X) / KACIRIR (.)
+kapilar: G1-mypy | G2-pytest | G3-headless | G4-kapsam | G5-tumdizin
+
+M01 [.X.XX] YAKALANDI
+     kopya -> ascontiguousarray (4 kanalda kopyalar, 3 kanalda TAKMA AD)
+     hedef degismez: K7 sahiplik
+     | G2-pytest:1 failed, 158 passed in 0.66s
+     | G4-kapsam:Required test coverage of 95% reached. Total coverage: 98.83%
+     | G5-tumdizin:1 failed, 741 passed in 1.19s
+M02 [.X.XX] YAKALANDI
+     kopya SALT-OKUNUR (frombuffer/tobytes): bellek paylasmiyor ama writeable=False
+     hedef degismez: K7 writeable -- `writeable` iddiasinin BAGIMSIZ gucu
+     | G2-pytest:3 failed, 156 passed in 0.75s
+     | G4-kapsam:Required test coverage of 95% reached. Total coverage: 98.83%
+     | G5-tumdizin:3 failed, 739 passed in 1.20s
+M03 [.X.XX] YAKALANDI
+     TIP kurali -> GIRDI SAYAN kural: iki bicimi hasattr ile eler, gerisini np.asarray ile cevirir
+     hedef degismez: K7 `isinstance` tip duzeyi kurali (dort ayrisan bicim)
+     | G2-pytest:74 failed, 85 passed in 1.37s
+     | G4-kapsam:Required test coverage of 95% reached. Total coverage: 95.93%
+     | G5-tumdizin:74 failed, 668 passed in 1.93s
+M04 [.X.XX] YAKALANDI
+     tip denetimi tamamen kaldirildi, her sey np.asarray ile cevriliyor
+     hedef degismez: K7 sessiz donusum yasagi
+     | G2-pytest:4 failed, 155 passed in 0.66s
+     | G4-kapsam:Required test coverage of 95% reached. Total coverage: 98.83%
+     | G5-tumdizin:4 failed, 738 passed in 1.19s
+M05 [..X..] YAKALANDI
+     grab kutusunu 0'a KIRPAR (negatif sanal-masaustu koordinati)
+     hedef degismez: K10 kutu birebir -- olcunun IKI NOKTADA kosmasi (Y7-1)
+     | G3-headless:IHLAL (1):
+M06 [..X..] YAKALANDI
+     grab HAM ScreenShot dondurur (np.ndarray degil)
+     hedef degismez: K10/K7 -- olcunun denetledigi koddan referans TURETMEMESI (Y6-2)
+     | G3-headless:IHLAL (1):
+M07 [..X..] YAKALANDI
+     monitors() kurdugu MSS()'i KAPATMAZ (5001. cagrida GetWindowDC olur)
+     hedef degismez: K10 cagri basina tam 1 kapatma
+     | G3-headless:IHLAL (4):
+M08 [.....] *** HICBIR KAPI YAKALAMADI ***
+     monitors() sonucu ONBELLEKLER (canli degil)
+     hedef degismez: K10 canlilik
+M09 [..X..] YAKALANDI
+     protokol uyum satirlari SILINDI
+     hedef degismez: K1/O-F uyum -- mekanizmanin varligi (Y5-1)
+     | G3-headless:IHLAL (2):
+M10 [..X..] YAKALANDI
+     uyum satirlari CIPLAK ek aciklamaya dondu (deger yok -> mypy hicbir sey dogrulamaz)
+     hedef degismez: K1/O-F uyum -- degerin CAGRI olmasi (Y6-1)
+     | G3-headless:IHLAL (2):
+M11 [.XXXX] YAKALANDI
+     FakeBackend.grab DEKORATORLU (mypy imzayi Any'ye dusurur)
+     hedef degismez: K1 uyum -- dekorator kacisi (Y7-5)
+     | G2-pytest:
+     | G3-headless:IHLAL (4):
+     | G4-kapsam:
+     | G5-tumdizin:
+M12 [.....] *** HICBIR KAPI YAKALAMADI ***
+     __exit__ close() CAGIRMAZ (baglam yoneticisi tutamaci sizdirir)
+     hedef degismez: K10 `__exit__` -> close()
+M13 [.....] *** HICBIR KAPI YAKALAMADI ***
+     close() idempotent DEGIL (tutamaci None yapmaz -> ikinci close tekrar kapatir)
+     hedef degismez: K10 close idempotent
+M14 [.X.XX] YAKALANDI
+     monitors.py: int(v) yerine cast(int, v) -- numpy skaleri Rect'e sizar
+     hedef degismez: K5 duzlestirme (Y-C)
+     | G2-pytest:4 failed, 155 passed in 0.70s
+     | G4-kapsam:Required test coverage of 95% reached. Total coverage: 98.83%
+     | G5-tumdizin:4 failed, 738 passed in 1.20s
+M15 [.X.XX] YAKALANDI
+     monitors.py: YALNIZ np.int64 duzlestirilir; int32/uint8 sizar
+     hedef degismez: K5 duzlestirme olcusunun DORT TIPTE kosmasi (Y5-6)
+     | G2-pytest:2 failed, 157 passed in 0.64s
+     | G4-kapsam:Required test coverage of 95% reached. Total coverage: 98.84%
+     | G5-tumdizin:2 failed, 740 passed in 1.15s
+M16 [XX.XX] YAKALANDI
+     capture_region girisi: YALNIZ int64/int duzlesir; int32/uint8 Frame.rect'e sizar
+     hedef degismez: K8 duzlestirme olcusunun DORT TIPTE kosmasi (Y6-5)
+     | G1-mypy:src\capture\service.py:278: error: Unused "type: ignore" comment  [unused-ignore]
+     | G2-pytest:1 failed, 158 passed, 4 warnings in 0.63s
+     | G4-kapsam:Required test coverage of 95% reached. Total coverage: 98.83%
+     | G5-tumdizin:1 failed, 741 passed, 4 warnings in 1.15s
+M17 [XX.XX] YAKALANDI
+     giris KABUL KAPISI kaldirildi, ciplak int() (10.9 -> 10, '10'/True sessizce kabul)
+     hedef degismez: K8 kabul kapisi (Y7-3)
+     | G1-mypy:src\capture\service.py:275: error: Returning Any from function declared to return "int"  [no-any-return]
+     | G2-pytest:6 failed, 153 passed in 0.68s
+     | G4-kapsam:Required test coverage of 95% reached. Total coverage: 98.77%
+     | G5-tumdizin:6 failed, 736 passed in 1.21s
+M18 [.X.XX] YAKALANDI
+     dpi_scale duzlestirmesi kaldirildi (np.float32 Frame.rect'e sizar)
+     hedef degismez: K8 dpi_scale float duzlestirmesi
+     | G2-pytest:5 failed, 154 passed in 0.67s
+     | G4-kapsam:Required test coverage of 95% reached. Total coverage: 98.82%
+     | G5-tumdizin:5 failed, 737 passed in 1.19s
+M19 [.X.XX] YAKALANDI
+     capture_region girisinde duzlestirme HIC yapilmaz
+     hedef degismez: K8 giristeki duzlestirme (isaretsiz numpy tasmasi)
+     | G2-pytest:11 failed, 148 passed, 10 warnings in 0.75s
+     | G4-kapsam:FAIL Required test coverage of 95% not reached. Total coverage: 91.23%
+     | G5-tumdizin:11 failed, 731 passed, 10 warnings in 1.26s
+M20 [.X.XX] YAKALANDI
+     PARTIAL kirpmasi TEK MONITORE gore (birlesime degil)
+     hedef degismez: K4 kirpma birlesime gore
+     | G2-pytest:8 failed, 151 passed in 0.70s
+     | G4-kapsam:Required test coverage of 95% reached. Total coverage: 99.42%
+     | G5-tumdizin:8 failed, 734 passed in 1.24s
+M21 [.X.XX] YAKALANDI
+     monitor_index: 1'den fazla kesisimde -1 yerine ILKI dondurulur
+     hedef degismez: K8 monitor_index -1 kurali
+     | G2-pytest:2 failed, 157 passed in 0.64s
+     | G4-kapsam:Required test coverage of 95% reached. Total coverage: 98.83%
+     | G5-tumdizin:2 failed, 740 passed in 1.16s
+M22 [.X.XX] YAKALANDI
+     monitor_index: cagiranin degeri kullanilir (hesaplanmaz)
+     hedef degismez: K8 monitor_index hesaplanir
+     | G2-pytest:6 failed, 153 passed in 0.68s
+     | G4-kapsam:Required test coverage of 95% reached. Total coverage: 97.66%
+     | G5-tumdizin:6 failed, 736 passed in 1.19s
+M23 [.X.XX] YAKALANDI
+     refresh_monitors hata yolunda ESKI KUMEYI KAYBEDER
+     hedef degismez: K5 durum degismezi
+     | G2-pytest:1 failed, 158 passed in 0.67s
+     | G4-kapsam:Required test coverage of 95% reached. Total coverage: 98.84%
+     | G5-tumdizin:1 failed, 741 passed in 1.15s
+M24 [.X.XX] YAKALANDI
+     K6 sinif (c) YENIDEN DENENIR (3 cagri) ve __cause__ baglanir
+     hedef degismez: K6 (c): 1 cagri, __cause__ None
+     | G2-pytest:18 failed, 141 passed in 0.79s
+     | G4-kapsam:Required test coverage of 95% reached. Total coverage: 98.86%
+     | G5-tumdizin:18 failed, 724 passed in 1.33s
+M25 [.X.XX] YAKALANDI
+     seq basarisiz yakalamalarda da TUKETILIR
+     hedef degismez: K2 seq tuketilmez
+     | G2-pytest:7 failed, 152 passed in 0.68s
+     | G4-kapsam:Required test coverage of 95% reached. Total coverage: 98.83%
+     | G5-tumdizin:7 failed, 735 passed in 1.23s
+M26 [.X.XX] YAKALANDI
+     capture_full NEGATIF indeksi kabul eder (Python dilimlemesi)
+     hedef degismez: K9 aralik disi
+     | G2-pytest:2 failed, 157 passed in 0.68s
+     | G4-kapsam:Required test coverage of 95% reached. Total coverage: 98.83%
+     | G5-tumdizin:2 failed, 740 passed in 1.21s
+M27 [.X.XX] YAKALANDI
+     yapimda monitor kumesi HIC okunmaz
+     hedef degismez: K5 okuma zamani
+     | G2-pytest:91 failed, 68 passed in 1.42s
+     | G4-kapsam:FAIL Required test coverage of 95% not reached. Total coverage: 73.10%
+     | G5-tumdizin:91 failed, 651 passed in 1.96s
+M28 [.X.XX] YAKALANDI
+     rects_from_mss_monitors [0] birlesim girdisini ATMAZ
+     hedef degismez: K5 bicim
+     | G2-pytest:41 failed, 118 passed in 1.10s
+     | G4-kapsam:Required test coverage of 95% reached. Total coverage: 98.25%
+     | G5-tumdizin:41 failed, 701 passed in 1.62s
+M29 [..X..] YAKALANDI
+     engel fixture'i oturum degil FONKSIYON kapsamli
+     hedef degismez: K1 oturum kapsami
+     | G3-headless:IHLAL (2):
+M30 [..X..] YAKALANDI
+     engel modul GERCEK mss'e devreder
+     hedef degismez: K1 engel devretmez
+     | G3-headless:IHLAL (1):
+M31 [.....] *** HICBIR KAPI YAKALAMADI ***
+     FAZLADAN `# pragma: no cover` (K13'un yasakladigi yer)
+     hedef degismez: K13 'baska no cover yasak' -- makinenin GORMEDIGI kural
+M32 [.....] *** HICBIR KAPI YAKALAMADI ***
+     UC fazladan pragma (capture_full + _monitor_indeksi + _backend_dan_al)
+     hedef degismez: K13 kapsam esigi fazladan pragmayi GORMEZ
+M33 [X....] YAKALANDI
+     capture_full numpy skaleri ENJEKTE eder (paketin [OLCULMUYOR] damgaladigi bacak)
+     hedef degismez: K8 capture_full duzlestirme bacagi -- damganin dogrulugu
+     | G1-mypy:src\capture\service.py:442: error: Argument 1 to "Rect" has incompatible type "signedinteger[_64Bit]"; expecte
+
+=== MARKDOWN TABLOSU ===
+| # | mutant | hedef degismez | G1-mypy | G2-pytest | G3-headless | G4-kapsam | G5-tumdizin |
+|---|---|---|---|---|---|---|---|
+| M01 | kopya -> ascontiguousarray (4 kanalda kopyalar, 3 kanalda TAKMA AD) | K7 sahiplik | . | X | . | X | X |
+| M02 | kopya SALT-OKUNUR (frombuffer/tobytes): bellek paylasmiyor ama writeable=False | K7 writeable -- `writeable` iddiasinin BAGIMSIZ gucu | . | X | . | X | X |
+| M03 | TIP kurali -> GIRDI SAYAN kural: iki bicimi hasattr ile eler, gerisini np.asarray ile cevirir | K7 `isinstance` tip duzeyi kurali (dort ayrisan bicim) | . | X | . | X | X |
+| M04 | tip denetimi tamamen kaldirildi, her sey np.asarray ile cevriliyor | K7 sessiz donusum yasagi | . | X | . | X | X |
+| M05 | grab kutusunu 0'a KIRPAR (negatif sanal-masaustu koordinati) | K10 kutu birebir -- olcunun IKI NOKTADA kosmasi (Y7-1) | . | . | X | . | . |
+| M06 | grab HAM ScreenShot dondurur (np.ndarray degil) | K10/K7 -- olcunun denetledigi koddan referans TURETMEMESI (Y6-2) | . | . | X | . | . |
+| M07 | monitors() kurdugu MSS()'i KAPATMAZ (5001. cagrida GetWindowDC olur) | K10 cagri basina tam 1 kapatma | . | . | X | . | . |
+| M08 | monitors() sonucu ONBELLEKLER (canli degil) | K10 canlilik | . | . | . | . | . |
+| M09 | protokol uyum satirlari SILINDI | K1/O-F uyum -- mekanizmanin varligi (Y5-1) | . | . | X | . | . |
+| M10 | uyum satirlari CIPLAK ek aciklamaya dondu (deger yok -> mypy hicbir sey dogrulamaz) | K1/O-F uyum -- degerin CAGRI olmasi (Y6-1) | . | . | X | . | . |
+| M11 | FakeBackend.grab DEKORATORLU (mypy imzayi Any'ye dusurur) | K1 uyum -- dekorator kacisi (Y7-5) | . | X | X | X | X |
+| M12 | __exit__ close() CAGIRMAZ (baglam yoneticisi tutamaci sizdirir) | K10 `__exit__` -> close() | . | . | . | . | . |
+| M13 | close() idempotent DEGIL (tutamaci None yapmaz -> ikinci close tekrar kapatir) | K10 close idempotent | . | . | . | . | . |
+| M14 | monitors.py: int(v) yerine cast(int, v) -- numpy skaleri Rect'e sizar | K5 duzlestirme (Y-C) | . | X | . | X | X |
+| M15 | monitors.py: YALNIZ np.int64 duzlestirilir; int32/uint8 sizar | K5 duzlestirme olcusunun DORT TIPTE kosmasi (Y5-6) | . | X | . | X | X |
+| M16 | capture_region girisi: YALNIZ int64/int duzlesir; int32/uint8 Frame.rect'e sizar | K8 duzlestirme olcusunun DORT TIPTE kosmasi (Y6-5) | X | X | . | X | X |
+| M17 | giris KABUL KAPISI kaldirildi, ciplak int() (10.9 -> 10, '10'/True sessizce kabul) | K8 kabul kapisi (Y7-3) | X | X | . | X | X |
+| M18 | dpi_scale duzlestirmesi kaldirildi (np.float32 Frame.rect'e sizar) | K8 dpi_scale float duzlestirmesi | . | X | . | X | X |
+| M19 | capture_region girisinde duzlestirme HIC yapilmaz | K8 giristeki duzlestirme (isaretsiz numpy tasmasi) | . | X | . | X | X |
+| M20 | PARTIAL kirpmasi TEK MONITORE gore (birlesime degil) | K4 kirpma birlesime gore | . | X | . | X | X |
+| M21 | monitor_index: 1'den fazla kesisimde -1 yerine ILKI dondurulur | K8 monitor_index -1 kurali | . | X | . | X | X |
+| M22 | monitor_index: cagiranin degeri kullanilir (hesaplanmaz) | K8 monitor_index hesaplanir | . | X | . | X | X |
+| M23 | refresh_monitors hata yolunda ESKI KUMEYI KAYBEDER | K5 durum degismezi | . | X | . | X | X |
+| M24 | K6 sinif (c) YENIDEN DENENIR (3 cagri) ve __cause__ baglanir | K6 (c): 1 cagri, __cause__ None | . | X | . | X | X |
+| M25 | seq basarisiz yakalamalarda da TUKETILIR | K2 seq tuketilmez | . | X | . | X | X |
+| M26 | capture_full NEGATIF indeksi kabul eder (Python dilimlemesi) | K9 aralik disi | . | X | . | X | X |
+| M27 | yapimda monitor kumesi HIC okunmaz | K5 okuma zamani | . | X | . | X | X |
+| M28 | rects_from_mss_monitors [0] birlesim girdisini ATMAZ | K5 bicim | . | X | . | X | X |
+| M29 | engel fixture'i oturum degil FONKSIYON kapsamli | K1 oturum kapsami | . | . | X | . | . |
+| M30 | engel modul GERCEK mss'e devreder | K1 engel devretmez | . | . | X | . | . |
+| M31 | FAZLADAN `# pragma: no cover` (K13'un yasakladigi yer) | K13 'baska no cover yasak' -- makinenin GORMEDIGI kural | . | . | . | . | . |
+| M32 | UC fazladan pragma (capture_full + _monitor_indeksi + _backend_dan_al) | K13 kapsam esigi fazladan pragmayi GORMEZ | . | . | . | . | . |
+| M33 | capture_full numpy skaleri ENJEKTE eder (paketin [OLCULMUYOR] damgaladigi bacak) | K8 capture_full duzlestirme bacagi -- damganin dogrulugu | X | . | . | . | . |
+
+HICBIR KAPININ YAKALAMADIGI MUTANTLAR (5): M08, M12, M13, M31, M32

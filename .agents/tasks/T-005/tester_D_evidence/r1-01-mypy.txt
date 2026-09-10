@@ -1,0 +1,3 @@
+$ python -m mypy --strict --explicit-package-bases src/capture/service.py src/capture/monitors.py
+Success: no issues found in 2 source files
+EXIT=0

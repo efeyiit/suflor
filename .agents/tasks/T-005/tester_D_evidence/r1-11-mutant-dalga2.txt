@@ -1,0 +1,68 @@
+MUTANT KITI -- her mutant icin hangi kapi YAKALAR (X) / KACIRIR (.)
+kapilar: G1-mypy | G2-pytest | G3-headless | G4-kapsam | G5-tumdizin
+
+M08 [X.X..] YAKALANDI
+     monitors() sonucu ONBELLEKLER (canli degil)
+     hedef degismez: K10 canlilik
+     | G1-mypy:src\capture\service.py:167: error: Unused "type: ignore" comment  [unused-ignore]
+     | G3-headless:IHLAL (7):
+M33 [.....] *** HICBIR KAPI YAKALAMADI ***
+     capture_full numpy skaleri ENJEKTE eder (paketin [OLCULMUYOR] damgaladigi bacak)
+     hedef degismez: K8 capture_full duzlestirme bacagi -- damganin dogrulugu
+M34 [.X.XX] YAKALANDI
+     FakeBackend raw_override'i OZEL adla saklar (tester'in mutasyonu sessizce kaybolur)
+     hedef degismez: K1 FakeBackend sozlesmesi -- public mutasyon arayuzu
+     | G2-pytest:5 failed, 154 passed in 0.66s
+     | G4-kapsam:Required test coverage of 95% reached. Total coverage: 98.25%
+     | G5-tumdizin:5 failed, 737 passed in 1.16s
+M35 [..X..] YAKALANDI
+     grab her cagrida tutamaci kapatip birakir (uzun omurlu DEGIL)
+     hedef degismez: K10 uzun omurlu tutamac (sicak yol maliyeti)
+     | G3-headless:IHLAL (3):
+M36 [..X..] YAKALANDI
+     close() tutamaci SIZDIRIR (alttaki MSS()'i hic kapatmaz)
+     hedef degismez: K10 close() gercekten kapatir
+     | G3-headless:IHLAL (2):
+M37 [.....] *** HICBIR KAPI YAKALAMADI ***
+     backend'e DUZLESTIRILMEMIS geometri gider; Frame.rect duz kalir (K3 `==` gormez)
+     hedef degismez: K8 duzlestirme -- olcunun `==` ile yazilmasi
+M38 [.X.XX] YAKALANDI
+     union_bbox monitor_index=-1 yerine 0 yazar
+     hedef degismez: K5 union_bbox metadata
+     | G2-pytest:4 failed, 155 passed in 0.62s
+     | G4-kapsam:Required test coverage of 95% reached. Total coverage: 98.83%
+     | G5-tumdizin:4 failed, 738 passed in 1.14s
+M39 [.X.XX] YAKALANDI
+     list_monitors backend istisnasini SARMALAR (oldugu gibi yaymaz)
+     hedef degismez: K5 istisna oldugu gibi yayilir
+     | G2-pytest:1 failed, 158 passed in 0.62s
+     | G4-kapsam:Required test coverage of 95% reached. Total coverage: 98.86%
+     | G5-tumdizin:1 failed, 741 passed in 1.13s
+M40 [.X.XX] YAKALANDI
+     K7 boyut (h, w) uyusma denetimi kaldirildi
+     hedef degismez: K7 bicim -- boyut uyusmazligi
+     | G2-pytest:6 failed, 153 passed in 0.66s
+     | G4-kapsam:Required test coverage of 95% reached. Total coverage: 98.82%
+     | G5-tumdizin:6 failed, 736 passed in 1.18s
+M41 [.X.XX] YAKALANDI
+     __enter__ BASKA bir ornek dondurur
+     hedef degismez: K10 baglam yoneticisi
+     | G2-pytest:1 failed, 158 passed in 0.64s
+     | G4-kapsam:Required test coverage of 95% reached. Total coverage: 98.83%
+     | G5-tumdizin:1 failed, 741 passed in 1.18s
+
+=== MARKDOWN TABLOSU ===
+| # | mutant | hedef degismez | G1-mypy | G2-pytest | G3-headless | G4-kapsam | G5-tumdizin |
+|---|---|---|---|---|---|---|---|
+| M08 | monitors() sonucu ONBELLEKLER (canli degil) | K10 canlilik | X | . | X | . | . |
+| M33 | capture_full numpy skaleri ENJEKTE eder (paketin [OLCULMUYOR] damgaladigi bacak) | K8 capture_full duzlestirme bacagi -- damganin dogrulugu | . | . | . | . | . |
+| M34 | FakeBackend raw_override'i OZEL adla saklar (tester'in mutasyonu sessizce kaybolur) | K1 FakeBackend sozlesmesi -- public mutasyon arayuzu | . | X | . | X | X |
+| M35 | grab her cagrida tutamaci kapatip birakir (uzun omurlu DEGIL) | K10 uzun omurlu tutamac (sicak yol maliyeti) | . | . | X | . | . |
+| M36 | close() tutamaci SIZDIRIR (alttaki MSS()'i hic kapatmaz) | K10 close() gercekten kapatir | . | . | X | . | . |
+| M37 | backend'e DUZLESTIRILMEMIS geometri gider; Frame.rect duz kalir (K3 `==` gormez) | K8 duzlestirme -- olcunun `==` ile yazilmasi | . | . | . | . | . |
+| M38 | union_bbox monitor_index=-1 yerine 0 yazar | K5 union_bbox metadata | . | X | . | X | X |
+| M39 | list_monitors backend istisnasini SARMALAR (oldugu gibi yaymaz) | K5 istisna oldugu gibi yayilir | . | X | . | X | X |
+| M40 | K7 boyut (h, w) uyusma denetimi kaldirildi | K7 bicim -- boyut uyusmazligi | . | X | . | X | X |
+| M41 | __enter__ BASKA bir ornek dondurur | K10 baglam yoneticisi | . | X | . | X | X |
+
+HICBIR KAPININ YAKALAMADIGI MUTANTLAR (2): M33, M37

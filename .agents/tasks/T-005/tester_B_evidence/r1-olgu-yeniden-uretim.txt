@@ -1,0 +1,142 @@
+=== MERCEK B -- SEFIN IKI OLGUSUNUN VE YAN OLGULARIN YENIDEN URETIMI (tester B, kendi kosumu) ===
+
+$ python -W error::RuntimeWarning probe1.py  (dondurulmus dpi.py + Rect sozlesmesi, DOGRUDAN)
+== OLGU 1: esitlik sizintiyi GORMEZ ==
+a == b        : True
+hash esit     : True
+kume boyutu   : 1
+a.right       : 40 int64
+type(a.x)     : int64  type(b.x): int
+json a        : TypeError: Object of type int64 is not JSON serializable
+json b        : {"x": 10, "y": 20, "w": 30, "h": 40, "monitor_index": 0, "dpi_scale": 1.0}
+
+== OLGU 2: isaretsiz numpy dondurulmus dpi.py'de TASAR ==
+uint16   classify=partial                        kesisen=[0, 1] uyari=4 ['overflow encountered in scalar subtract', 'overflow encountered in scalar multiply', 'overflow encountered in scalar add', 'overflow encountered in scalar subtract']
+uint32   classify=partial                        kesisen=[0, 1] uyari=4 ['overflow encountered in scalar subtract', 'overflow encountered in scalar multiply', 'overflow encountered in scalar add', 'overflow encountered in scalar subtract']
+int64    classify=inside                         kesisen=[1] uyari=0 []
+int32    classify=inside                         kesisen=[1] uyari=0 []
+uint8    classify=inside                         kesisen=[0, 1] uyari=5 ['overflow encountered in scalar multiply', 'overflow encountered in scalar subtract', 'overflow encountered in scalar multiply', 'overflow encountered in scalar multiply', 'overflow encountered in scalar subtract']
+int      classify=inside                         kesisen=[1] uyari=0 []
+
+== np.bool_ Integral mi? ==
+np.bool_ Integral : False
+np.float64 float alt sinifi : True
+np.float32 float alt sinifi : False
+json np.float64 : SERILESTI
+json np.float32 : TypeError: Object of type float32 is not JSON serializable
+
+$ python probe2.py  (CaptureService uzerinden: duzlestirme, kabul kapisi, kirpma)
+== SERVIS: isaretsiz numpy INSIDE, -W error::RuntimeWarning ==
+uint16   mi=1 rect=(10, 10, 100, 50) tipler=['int', 'int', 'int', 'int', 'int'] dpi=float json=ok grab=Rect(x=10, y=10, w=100, h=50, monitor_index=1, dpi_scale=1.0)
+uint32   mi=1 rect=(10, 10, 100, 50) tipler=['int', 'int', 'int', 'int', 'int'] dpi=float json=ok grab=Rect(x=10, y=10, w=100, h=50, monitor_index=1, dpi_scale=1.0)
+uint8    mi=1 rect=(10, 10, 100, 50) tipler=['int', 'int', 'int', 'int', 'int'] dpi=float json=ok grab=Rect(x=10, y=10, w=100, h=50, monitor_index=1, dpi_scale=1.0)
+int64    mi=1 rect=(10, 10, 100, 50) tipler=['int', 'int', 'int', 'int', 'int'] dpi=float json=ok grab=Rect(x=10, y=10, w=100, h=50, monitor_index=1, dpi_scale=1.0)
+int32    mi=1 rect=(10, 10, 100, 50) tipler=['int', 'int', 'int', 'int', 'int'] dpi=float json=ok grab=Rect(x=10, y=10, w=100, h=50, monitor_index=1, dpi_scale=1.0)
+int      mi=1 rect=(10, 10, 100, 50) tipler=['int', 'int', 'int', 'int', 'int'] dpi=float json=ok grab=Rect(x=10, y=10, w=100, h=50, monitor_index=1, dpi_scale=1.0)
+
+== SERVIS: PARTIAL yolu, dort tip ==
+int64    rect=(2500, 0, 60, 100) mi=1 tipler=['int', 'int', 'int', 'int']
+int32    rect=(2500, 0, 60, 100) mi=1 tipler=['int', 'int', 'int', 'int']
+uint16   rect=(2500, 0, 60, 100) mi=1 tipler=['int', 'int', 'int', 'int']
+uint32   rect=(2500, 0, 60, 100) mi=1 tipler=['int', 'int', 'int', 'int']
+int      rect=(2500, 0, 60, 100) mi=1 tipler=['int', 'int', 'int', 'int']
+
+== KABUL KAPISI ==
+  '10'                 -> CaptureError: bolge alani 'x' tamsayi olmali, gelen: '10'  grab_calls=0
+  True                 -> CaptureError: bolge alani 'x' tamsayi olmali, gelen: True  grab_calls=0
+  10.9                 -> CaptureError: bolge alani 'x' tamsayi olmali, gelen: 10.9  grab_calls=0
+  nan                  -> CaptureError: bolge alani 'x' tamsayi olmali, gelen: nan  grab_calls=0
+  inf                  -> CaptureError: bolge alani 'x' tamsayi olmali, gelen: inf  grab_calls=0
+  np.float32(10.5)     -> CaptureError: bolge alani 'x' tamsayi olmali, gelen: np.float32(10.5)  grab_calls=0
+  np.True_             -> CaptureError: bolge alani 'x' tamsayi olmali, gelen: np.True_  grab_calls=0
+  None                 -> CaptureError: bolge alani 'x' tamsayi olmali, gelen: None  grab_calls=0
+  10.0                 -> KABUL x=10 type=int grab_calls=1
+  np.float64(10.0)     -> KABUL x=10 type=int grab_calls=1
+  np.float32(10.0)     -> KABUL x=10 type=int grab_calls=1
+  np.uint64(10)        -> KABUL x=10 type=int grab_calls=1
+
+== dpi_scale kapisi ==
+  1.5                  -> KABUL dpi=1.5 type=float json=ok
+  np.float32(1.5)      -> KABUL dpi=1.5 type=float json=ok
+  np.float64(1.5)      -> KABUL dpi=1.5 type=float json=ok
+  2                    -> KABUL dpi=2.0 type=float json=ok
+  np.int64(2)          -> KABUL dpi=2.0 type=float json=ok
+  '1.5'                -> CaptureError: bolge alani 'dpi_scale' sayi olmali, gelen: '1.5'
+  True                 -> CaptureError: bolge alani 'dpi_scale' sayi olmali, gelen: True
+  None                 -> CaptureError: bolge alani 'dpi_scale' sayi olmali, gelen: None
+  np.True_             -> CaptureError: bolge alani 'dpi_scale' sayi olmali, gelen: np.True_
+  nan                  -> KABUL dpi=nan type=float json=ok
+
+== KIRPMA ARITMETIGI (5300w) ==
+  birlesime kirpma w = 5120  mi = -1
+  tek monitore kirpma w = 2560
+  union_bbox = Rect(x=-2560, y=0, w=5120, h=1440, monitor_index=-1, dpi_scale=1.0)
+
+== union_bbox numpy sizintisi (dogrudan cagri) ==
+  union_bbox(numpy Rect) -> Rect(x=np.int64(0), y=np.int64(0), w=np.int64(100), h=np.int64(50), monitor_index=-1, dpi_scale=1.0) ['int64', 'int64', 'int64', 'int64']
+  list_monitors ile -> (Rect(x=0, y=0, w=100, h=50, monitor_index=0, dpi_scale=1.0),) ['int', 'int', 'int', 'int']
+  union_bbox(list_monitors ciktisi) -> ['int', 'int', 'int', 'int']
+
+$ python probe3.py  (monitors.py yolu, raw_override, sinir degerler)
+== monitors.py yolu: dort tip x dort alan, raw_override ile ==
+int64    tipler=['int', 'int', 'int', 'int', 'int'] json=ok union=Rect(x=0, y=0, w=200, h=100, monitor_index=-1, dpi_scale=1.0) uniontip=['int', 'int', 'int', 'int']
+int32    tipler=['int', 'int', 'int', 'int', 'int'] json=ok union=Rect(x=0, y=0, w=200, h=100, monitor_index=-1, dpi_scale=1.0) uniontip=['int', 'int', 'int', 'int']
+uint8    tipler=['int', 'int', 'int', 'int', 'int'] json=ok union=Rect(x=0, y=0, w=200, h=100, monitor_index=-1, dpi_scale=1.0) uniontip=['int', 'int', 'int', 'int']
+int      tipler=['int', 'int', 'int', 'int', 'int'] json=ok union=Rect(x=0, y=0, w=200, h=100, monitor_index=-1, dpi_scale=1.0) uniontip=['int', 'int', 'int', 'int']
+uint16   tipler=['int', 'int', 'int', 'int', 'int'] json=ok union=Rect(x=0, y=0, w=200, h=100, monitor_index=-1, dpi_scale=1.0) uniontip=['int', 'int', 'int', 'int']
+uint32   tipler=['int', 'int', 'int', 'int', 'int'] json=ok union=Rect(x=0, y=0, w=200, h=100, monitor_index=-1, dpi_scale=1.0) uniontip=['int', 'int', 'int', 'int']
+uint64   tipler=['int', 'int', 'int', 'int', 'int'] json=ok union=Rect(x=0, y=0, w=200, h=100, monitor_index=-1, dpi_scale=1.0) uniontip=['int', 'int', 'int', 'int']
+
+== servis raw_override numpy ile kurulum + yakalama, -W error::RuntimeWarning ==
+uint8    mons=(Rect(x=0, y=0, w=100, h=100, monitor_index=0, dpi_scale=1.0), Rect(x=100, y=0, w=100, h=100, monitor_index=1, dpi_scale=1.0)) frame.rect=Rect(x=150, y=10, w=40, h=40, monitor_index=1, dpi_scale=1.0) tip_x=int
+uint16   mons=(Rect(x=0, y=0, w=100, h=100, monitor_index=0, dpi_scale=1.0), Rect(x=100, y=0, w=100, h=100, monitor_index=1, dpi_scale=1.0)) frame.rect=Rect(x=150, y=10, w=40, h=40, monitor_index=1, dpi_scale=1.0) tip_x=int
+uint32   mons=(Rect(x=0, y=0, w=100, h=100, monitor_index=0, dpi_scale=1.0), Rect(x=100, y=0, w=100, h=100, monitor_index=1, dpi_scale=1.0)) frame.rect=Rect(x=150, y=10, w=40, h=40, monitor_index=1, dpi_scale=1.0) tip_x=int
+int64    mons=(Rect(x=0, y=0, w=100, h=100, monitor_index=0, dpi_scale=1.0), Rect(x=100, y=0, w=100, h=100, monitor_index=1, dpi_scale=1.0)) frame.rect=Rect(x=150, y=10, w=40, h=40, monitor_index=1, dpi_scale=1.0) tip_x=int
+int32    mons=(Rect(x=0, y=0, w=100, h=100, monitor_index=0, dpi_scale=1.0), Rect(x=100, y=0, w=100, h=100, monitor_index=1, dpi_scale=1.0)) frame.rect=Rect(x=150, y=10, w=40, h=40, monitor_index=1, dpi_scale=1.0) tip_x=int
+int      mons=(Rect(x=0, y=0, w=100, h=100, monitor_index=0, dpi_scale=1.0), Rect(x=100, y=0, w=100, h=100, monitor_index=1, dpi_scale=1.0)) frame.rect=Rect(x=150, y=10, w=40, h=40, monitor_index=1, dpi_scale=1.0) tip_x=int
+
+== monitor_index girdisi numpy ise Frame.rect.monitor_index ==
+  girdi mi=np.int64(7)        -> Frame mi=1 type=int
+  girdi mi=np.uint8(7)        -> Frame mi=1 type=int
+  girdi mi=7                  -> Frame mi=1 type=int
+  girdi mi=np.int32(0)        -> Frame mi=1 type=int
+
+== asiri buyuk / sinir degerler ==
+  x=1e+30                    -> CaptureError: bolge hicbir monitorle kesismiyor: x=1000000000000000019884624838656, 
+  x=np.uint64(18446744073709551615) -> CaptureError: bolge hicbir monitorle kesismiyor: x=18446744073709551615, y=0, w=100,
+  x=1180591620717411303424   -> CaptureError: bolge hicbir monitorle kesismiyor: x=1180591620717411303424, y=0, w=10
+  x=-1e+30                   -> CaptureError: bolge hicbir monitorle kesismiyor: x=-1000000000000000019884624838656,
+  x=np.float64(-2600.0)      -> CaptureError: boyut uyusmuyor: beklenen (50, 60), gelen (10, 10)
+
+== karisik isaretli aritmetik olgusu ==
+  np.uint64(100) - np.int64(0) -> 100.0 float64
+  karisik sozlukten Rect tipleri: ['int', 'int', 'int', 'int']
+
+$ python probe4.py  (PARTIAL, L duzeni, dort alanda kapi, capture_full)
+== K8 PARTIAL sol tasma, numpy + np.float32 olcek ==
+  int64  Rect(x=-2560, y=0, w=60, h=100, monitor_index=0, dpi_scale=1.5)  tipler=['int', 'int', 'int', 'int', 'int', 'float'] json={"x": -2560, "y": 0, "w": 60, "h": 100, "monitor_index": 0, "dpi_scale": 1.5}
+  int32  Rect(x=-2560, y=0, w=60, h=100, monitor_index=0, dpi_scale=1.5)  tipler=['int', 'int', 'int', 'int', 'int', 'float'] json={"x": -2560, "y": 0, "w": 60, "h": 100, "monitor_index": 0, "dpi_scale": 1.5}
+  int    Rect(x=-2560, y=0, w=60, h=100, monitor_index=0, dpi_scale=1.5)  tipler=['int', 'int', 'int', 'int', 'int', 'float'] json={"x": -2560, "y": 0, "w": 60, "h": 100, "monitor_index": 0, "dpi_scale": 1.5}
+
+== L duzeni olu alan, isaretsiz numpy ==
+  uint16   rect=Rect(x=90, y=50, w=20, h=20, monitor_index=0, dpi_scale=1.0) (beklenen mi=0)
+  uint32   rect=Rect(x=90, y=50, w=20, h=20, monitor_index=0, dpi_scale=1.0) (beklenen mi=0)
+  uint8    rect=Rect(x=90, y=50, w=20, h=20, monitor_index=0, dpi_scale=1.0) (beklenen mi=0)
+  int      rect=Rect(x=90, y=50, w=20, h=20, monitor_index=0, dpi_scale=1.0) (beklenen mi=0)
+
+== kabul kapisi DORT ALANDA ayri ayri ==
+  x: CaptureError -> bolge alani 'x' tamsayi olmali, gelen: '10' | grab=0
+  y: CaptureError -> bolge alani 'y' tamsayi olmali, gelen: 10.9 | grab=0
+  w: CaptureError -> bolge alani 'w' tamsayi olmali, gelen: nan | grab=0
+  h: CaptureError -> bolge alani 'h' tamsayi olmali, gelen: np.float32(10.5) | grab=0
+
+== capture_full: dort tip monitor sozlugu, Frame.rect duz mu ==
+  int64    Rect(x=100, y=0, w=100, h=100, monitor_index=1, dpi_scale=1.0) tipler=['int', 'int', 'int', 'int', 'int', 'float']
+  int32    Rect(x=100, y=0, w=100, h=100, monitor_index=1, dpi_scale=1.0) tipler=['int', 'int', 'int', 'int', 'int', 'float']
+  uint8    Rect(x=100, y=0, w=100, h=100, monitor_index=1, dpi_scale=1.0) tipler=['int', 'int', 'int', 'int', 'int', 'float']
+  int      Rect(x=100, y=0, w=100, h=100, monitor_index=1, dpi_scale=1.0) tipler=['int', 'int', 'int', 'int', 'int', 'float']
+
+== 5300w kirpma, numpy dort tipte ==
+  int64  w=5120 (beklenen 5120) grab_w=5120 mi=-1
+  int32  w=5120 (beklenen 5120) grab_w=5120 mi=-1
+  int    w=5120 (beklenen 5120) grab_w=5120 mi=-1

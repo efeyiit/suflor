@@ -1,0 +1,42 @@
+==== T-005 TESTER B (mercek B: sayisal) -- SEF SONDASI ====
+PROTOKOL 4.6/6: her iddia sef tarafindan kendi eliyle yeniden uretildi.
+
+1) BICIM     validate.py verdict-B.md -> KABUL EDILEBILIR (rol=tester, tur=1, onay)
+               10 komut/kontrol, kanitlarin hepsi diskte ve dolu
+2) SAHIPLIK  git status (?? disi) BOS -- src/, tests/, headless_check.py dokunulmamis
+3) TAKIM     pytest tester_B -> 136 passed, 1 skipped
+
+4) B'NIN YENI OLGUSU: "np.uint8 de tasiyor"  -> DOGRULANDI
+     M0=(-2560,0,2560,1440) M1=(0,0,2560,1440), Rect(T(10),T(20),T(100),T(50)):
+       uint8  -> classify=inside   RuntimeWarning VAR  (sonuc tesadufen dogru)
+       uint16 -> classify=partial  RuntimeWarning VAR
+       uint32 -> classify=partial  RuntimeWarning VAR
+       uint64 -> classify=partial  RuntimeWarning VAR   <- BUNU DA SEF LISTELEMEMISTI
+       int64/int -> inside, uyari YOK
+     Yani DORT isaretsiz tipin DORDU de tasiyor. service.py docstring'i yalniz
+     uint16/uint32 sayiyor -> EKSIK (bkz. madde 6).
+
+5) B'NIN SONUC IDDIASI: "monitor_index 1 yerine -1 olurdu"  -> UREMEDI
+     Duzlestirme atlanarak _hedef_dikdortgen dogrudan cagrildi:
+       uint8/16/32/64 -> monitor_index = 1  (dogru), tasma uyarisi 3-4 adet
+     Bu geometride sonuc degismiyor. B'nin OLGUSU dogru, CIKARIMI degil.
+
+6) SEFIN KENDI CUMLESI CURUDU (B'nin bulgusu bunu tetikledi):
+     src/capture/service.py capture_region docstring'i soyle diyor:
+       "...yani monitor_index SESSIZCE yanlis cikardi."
+     SEF OLCUMU (1.136.328 kombinasyon, x/y 0..260, w/h 1..260, dort tip):
+       tip      ayni     ok->HATA   HATA->ok   SESSIZ
+       uint8    264264     2136        0         0
+       uint16   290688     1152        0         0
+       uint32   290688     1152        0         0
+       uint64   290688     1152        0         0
+     SESSIZ ayrisma = SIFIR. Tasmanin tek gorunur kipi CaptureError, yani
+     GURULTULU RED. "Sessizce yanlis" DOGRULANMIYOR.
+     ETKI: davranis dogru, duzlestirme HALA GEREKLI (2136 gecerli bolge
+     aksi halde reddedilirdi) -- ama GEREKCE cumlesi yanlis. Belge duzeltmesi.
+     SINIF: T-004'un T7-1'i ile ayni (bayat/asiri iddiali docstring).
+
+7) B'NIN BLOKE ETMEYEN UC GOZLEMI: kayda gecti, itiraz yok.
+
+KARAR: B'nin onayi KABUL EDILEBILIR. Bir olgu eklendi (uint8+uint64), bir cikarim
+       reddedildi (monitor_index -1), ve sefin kendi docstring cumlesi curudu.

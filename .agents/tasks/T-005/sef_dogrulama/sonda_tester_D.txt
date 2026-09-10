@@ -1,0 +1,44 @@
+==== T-005 TESTER D (mercek D: test kalitesi) -- SEF SONDASI ====
+Karar: RET. PROTOKOL 4.6/6: iki bloke bulgunun ikisi de sef tarafindan yeniden uretildi.
+
+1) BICIM     validate.py verdict-D.md -> exit 0, 17 kontrol
+2) SAHIPLIK  git status -- src tests  -> BOS. Mutantlar ayna agacinda kosulmus.
+
+3) D-1 (M12: __exit__ close() cagirmaz)  -> BIREBIR UREDI
+     SEF BES KABUL KOMUTUNU KENDI KOSTU (kum havuzu kopyasinda):
+                     TABAN            M12              M13
+       mypy          exit 0           exit 0           exit 0
+       sahipli       159 passed       159 passed       159 passed
+       headless      exit 0 TEMIZ     exit 0 TEMIZ     exit 0 TEMIZ
+       capture       742 passed       742 passed       742 passed
+       tam takim     981 passed       981 passed       981 passed
+     Iki mutant da BES KAPIDAN DA taban ile AYNI ciktiyla geciyor.
+     GERCEK EKRANDA ZARAR (sef olctu):
+       M12: `with MssBackend() as b: b.grab(...)` -> cikista _tutamac = <mss.base.MSS>
+            ACIK KALDI. Taban: None. Her `with` bir window DC sizdirir.
+       M13: grab -> close() -> grab
+            M13  : ScreenShotError "Windows graphics function failed: BitBlt"
+            TABAN: (16,32,4) OK, yeni MSS kuruldu.
+     M13 URUNU GERCEKTEN KIRIYOR ve hicbir kapi gormuyor. D'nin ret'i HAKLI.
+
+4) D'NIN ONERDIGI DUZELTMENIN AYIRT ETME GUCU -> SEF KENDI OLCTU
+     Iki test tests/unit/capture/test_service.py'ye eklendi (sahte tutamac
+     enjeksiyonu, gercek ekrana SIFIR temas):
+       TABAN                    2 passed
+       M12 (__exit__ bos)       1 failed, 1 passed
+       M13 (close sifirlamaz)   2 failed
+     Ekli haliyle taban: sahipli 161 passed, tam takim 983 passed, mypy exit 0.
+
+5) SEFIN KAPI KUSURU (D bildirdi, sef dogruladi)  -> paket sürüm 9'da duzeltilecek
+     packet.md K10 OLCU satiri "(Test paketi bunu olcemez, K1 geregi.)" diye
+     bitiyor. OLGUSAL OLARAK YANLIS: _tutamac'a sahte nesne enjekte edilerek
+     __exit__/close() gercek ekrana hic dokunmadan olculuyor -- 4. maddede
+     sef bunu bizzat yapti. Bu parantez, olculebilir bir degismezi
+     "olculemez" diye damgalayarak kapinin kor kalmasini MESRULASTIRMISTI.
+
+6) D'NIN BLOKE ETMEYEN IKI OLCUM BOSLUGU (sef kabul etti, tur 2'ye alindi)
+     M44: FakeBackend varsayilan image_factory (h,w,4) sekli olculmuyor
+     M37: K3 olcusu `==` ile yazilmis -> backend kutusuna numpy sizmasi gorunmez
+          (uygulama DOGRU; olcu kor)
+
+KARAR: D'nin RET'i KABUL. T-005 tur 2'ye gidiyor.

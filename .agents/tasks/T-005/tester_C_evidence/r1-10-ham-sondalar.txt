@@ -1,0 +1,71 @@
+=== HAM SONDA 1: seq matrisi + K6 dizileri ===
+[1] seq permutasyon matrisi: 155 dizi denendi, 0 kirik
+[2] K6 dizileri:
+    b_b_b    -> sonuc=hata  grab=3 seq=None cause=RuntimeError(istisna-3) context=None
+    b_b_S    -> sonuc=kare  grab=3 seq=0 cause=None(None) context=None
+    b_S      -> sonuc=kare  grab=2 seq=0 cause=None(None) context=None
+    b_c      -> sonuc=hata  grab=2 seq=None cause=None(None) context=None
+    b_b_c    -> sonuc=hata  grab=3 seq=None cause=None(None) context=None
+    c_S      -> sonuc=hata  grab=1 seq=None cause=None(None) context=None
+    S        -> sonuc=kare  grab=1 seq=0 cause=None(None) context=None
+    c        -> sonuc=hata  grab=1 seq=None cause=None(None) context=None
+    a(OUTSIDE) -> grab=0 cause=None context=None
+[3] arka arkaya 3 capture (backend ilk 5 cagride patliyor): [('hata', None), ('kare', 0), ('kare', 1)] grab=7
+[4] saat istisnasi:
+    1. 0
+    2. istisna: RuntimeError saat coktu
+    3. 2 (2 ise seq TUKETILDI)
+
+=== HAM SONDA 2: refresh hata yolu / bos kume / kume degisimi / capture_full ===
+[1] refresh_monitors() hata yolu -- eski kume korunuyor mu:
+    left_eksik    CaptureError korundu=True sonraki_kirpma=(-2560,60) mi=0 seq=1 monitors_calls=2
+    left_None     CaptureError korundu=True sonraki_kirpma=(-2560,60) mi=0 seq=1 monitors_calls=2
+    width_str     CaptureError korundu=True sonraki_kirpma=(-2560,60) mi=0 seq=1 monitors_calls=2
+    height_bool   CaptureError korundu=True sonraki_kirpma=(-2560,60) mi=0 seq=1 monitors_calls=2
+    top_float     CaptureError korundu=True sonraki_kirpma=(-2560,60) mi=0 seq=1 monitors_calls=2
+    np_bool       CaptureError korundu=True sonraki_kirpma=(-2560,60) mi=0 seq=1 monitors_calls=2
+    ikinci_bozuk  CaptureError korundu=True sonraki_kirpma=(-2560,60) mi=0 seq=1 monitors_calls=2
+[1b] OSError oldugu gibi yayildi: surucu coktu; korundu=True
+     sonraki capture seq=1
+[2] bos kume: kuruldu, monitors=()
+    capture_region: CaptureError('monitor kumesi bos: yakalanacak ekran yok') grab=0
+    capture_full(0): CaptureError('monitor indeksi aralik disi: 0 (kume boyutu 0)') grab=0
+    capture_full(-1): CaptureError('monitor indeksi aralik disi: -1 (kume boyutu 0)') grab=0
+    capture_full(99): CaptureError('monitor indeksi aralik disi: 99 (kume boyutu 0)') grab=0
+    union_bbox(()) = None
+[2b] dolu->bos->dolu: s1=0
+     bos kume: ()
+     bosta capture: CaptureError('monitor kumesi bos: yakalanacak ekran yok')
+     geri dolu: 2 monitor, s2=1 (1 olmali)
+[3] PARTIAL_sol     geo_ayni=True geo=(-2560, 0, 60, 100) mi: 0 -> 1  grab_kutu_ayni=True
+[3] INSIDE_sag      geo_ayni=True geo=(100, 100, 50, 50) mi: 1 -> 0  grab_kutu_ayni=True
+[3] INSIDE_yayilan  geo_ayni=True geo=(-50, 0, 100, 100) mi: -1 -> -1  grab_kutu_ayni=True
+[3] PARTIAL_ust     geo_ayni=True geo=(100, 0, 100, 50) mi: 1 -> 0  grab_kutu_ayni=True
+[3b] tam_sol->OUTSIDE     once=(-2000,100) sonra=CaptureError('bolge hicbir monitorle kesismiyor: x=-2000, y=0, w=100, h=100')
+[3b] yayilan->PARTIAL     once=(-50,100,mi=-1) sonra=(0,50,mi=0)
+[3c] capture_full(0) sira degisiminden ONCE x=-2560 SONRA x=0 -> ayni fiziksel monitor mu: False
+[4] capture_full(-100) -> CaptureError grab+0 ('monitor indeksi aralik disi: -100 (kume boyutu 2)')
+[4] capture_full(  -2) -> CaptureError grab+0 ('monitor indeksi aralik disi: -2 (kume boyutu 2)')
+[4] capture_full(  -1) -> CaptureError grab+0 ('monitor indeksi aralik disi: -1 (kume boyutu 2)')
+[4] capture_full(   0) -> kare seq=1 x=-2560 mi=0 grab+1
+[4] capture_full(   1) -> kare seq=2 x=0 mi=1 grab+1
+[4] capture_full(   2) -> CaptureError grab+0 ('monitor indeksi aralik disi: 2 (kume boyutu 2)')
+[4] capture_full(   3) -> CaptureError grab+0 ('monitor indeksi aralik disi: 3 (kume boyutu 2)')
+[4] capture_full(  99) -> CaptureError grab+0 ('monitor indeksi aralik disi: 99 (kume boyutu 2)')
+[5] sifir genislikli monitor kabul edildi: (Rect(x=0, y=0, w=0, h=1440, monitor_index=0, dpi_scale=1.0),)
+    capture_full(0) -> CaptureError('bolgenin alani yok: w=0, h=1440 (ikisi de pozitif olmali)') grab=0
+
+=== HAM SONDA 3: MssBackend omru (casus modul) ===
+[A] 200 x monitors(): MSS=200 close=200 canli=0 zirve_canli=0
+    kurulum==kapatma: True  sizinti=0
+[B] 3 x grab(): +MSS=1 (1 olmali) tutamac_kimligi_sabit=True canli=1
+[C] close() x2: +1 sonra +0 (ikinci 0 olmali) canli=0
+    close() SONRASI grab(): calisti, YENI MSS kuruldu (+1), shape=(16, 64, 4) -> tutamac YENIDEN DOGDU, canli=1
+[D] ic ice with: x1 is b2=True x2 is b2=True ic_cikista_close=1 (1) canli=0 -> dis blokta grab YENI tutamac kurdu mu: +1; son_close=2
+    cikista sizinti=0
+[E] with icinde ValueError: yutuldu=False (False olmali) close=1 (1) canli=0 (0)
+[F] grab yapilmadan close()/with: MSS=0 (0) close=0 (0)
+[G] 1. close(): OSError: close patladi
+    2. close(): OSError: close patladi  -> IDEMPOTENT DEGIL
+    3. close() (patlatma kapali): close=1 canli=0
+[H] canlilik: len(m1)=3 len(m2)=2 len(m3)=3; m1 bozuldu -> m3[0]['left']=-2560 (-2560 olmali)

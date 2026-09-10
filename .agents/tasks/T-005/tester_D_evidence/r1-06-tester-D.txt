@@ -1,0 +1,8 @@
+$ python -m pytest .agents/tasks/T-005/tester_D -q
+.........................................................x.x............ [ 74%]
+.........................                                                [100%]
+=========================== short test summary info ===========================
+XFAIL .agents/tasks/T-005/tester_D/test_d5_bos_olcum_noktalari.py::test_d5_BULGU_exit_close_cagirmayan_uygulama_kapiya_takilmali - BULGU D-1: K10'un `__exit__` -> close() degismezini BES kabul komutundan hicbiri olcmuyor. §3 casusu `with b:` kullanmiyor (yalniz b.close()), ve tek birim testi (`test_k1_mss_backend_yapimi_mss_e_dokunmaz`) sadece `ic is b` iddiasinda bulunuyor -- tutamac None oldugu icin close() zaten etkisiz. Olcum noktasi YAPISAL OLARAK BOS ve `[OLCULMUYOR]` damgasi TASIMIYOR (PROTOKOL §4.6/2).
+XFAIL .agents/tasks/T-005/tester_D/test_d5_bos_olcum_noktalari.py::test_d5_BULGU_idempotent_olmayan_close_kapiya_takilmali - BULGU D-2: §3'un `c2_close` olcusu YAPISAL OLARAK DUSEMEZ. Casus `_FakeMSS.close()` kendi icinde `self._closed` ile korunuyor (gercek `mss.MSS.close()` gibi), bu yuzden `MssBackend.close()` tutamaci sifirlamasa da sayac artmaz. `close() idempotenttir` degismezinin yanindaki OLCU sessizdir; gercek zarar KAPATILMIS TUTAMACLA GRAB'dir ve o hicbir kapida olculmez (PROTOKOL §4.6/7).
+95 passed, 2 xfailed in 23.58s
+EXIT=0

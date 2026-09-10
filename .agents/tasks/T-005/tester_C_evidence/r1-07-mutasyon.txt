@@ -1,0 +1,23 @@
+$ python <scratch>/mutasyon.py   # tester_C kapilarinin mutasyon denetimi (depo DOKUNULMAZ, kopyada mutasyon)
+[TABAN] mutasyonsuz kopya: 122 passed in 3.58s  (exit 0)
+  M1_seq_hatada_da_tuketilir             OLDU  | 1 failed, 4 passed in 0.20s
+  M2_refresh_once_atar_sonra_dogrular    OLDU  | 1 failed, 45 passed in 0.22s
+  M3_refresh_seq_i_sifirlar              OLDU  | 1 failed, 42 passed in 0.22s
+  M4_c_sinifi_yeniden_denenir            OLDU  | 1 failed, 2 passed in 0.19s
+  M5_deneme_sayisi_5                     OLDU  | 1 failed, 1 passed in 0.19s
+  M6_ilk_istisna_baglanir                OLDU  | 1 failed, 12 passed in 0.20s
+  M7_capture_full_negatif_indeks         OLDU  | 1 failed, 78 passed in 0.33s
+  M8_capture_full_len_kabul              OLDU  | 1 failed, 37 passed in 0.21s
+  M9_monitor_index_cagirandan            OLDU  | 1 failed, 43 passed in 0.23s
+  M10_kirpma_tek_monitore                OLDU  | 1 failed, 63 passed in 0.25s
+  M11_mss_monitors_kapatmaz              OLDU  | 1 failed, 91 passed in 3.29s
+  M12_mss_grab_her_cagrida_yeni          OLDU  | 1 failed, 96 passed in 3.24s
+  M13_mss_close_idempotent_degil         OLDU  | 91 passed, 1 error in 3.24s
+  M14_mss_monitors_onbellekler           OLDU  | 1 failed, 91 passed in 3.23s
+  M15_mss_exit_istisnayi_yutar           OLDU  | 1 failed, 104 passed in 3.24s
+  M16_yapim_hatasinda_bos_kume           OLDU  | 1 failed, 119 passed in 3.50s
+  M17_giris_kapisi_yok                   OLDU  | 1 failed, 28 passed in 0.20s
+  M18_bos_kume_denetimi_yok              OLDU  | 1 failed, 41 passed in 0.21s
+
+Butun 18 mutasyon en az bir kapida oldu.
+EXIT=0

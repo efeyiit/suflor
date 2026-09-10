@@ -1,0 +1,22 @@
+=== D8: validate.py'nin GORMEDIGI KAPILAR ===
+
+--- A) known_gaps: []  ve  TEK komut (bes yerine) ---
+KABUL EDILEBILIR  (sahte_teslim_A.md, rol=implementer, tur=1)
+  1 komut/kontrol, hepsinin kaniti diskte mevcut ve dolu
+  durum: tamamlandi
+EXIT=0
+
+--- B) known_gaps alani HIC YOK, tek komut ---
+KABUL EDILEBILIR  (sahte_teslim_B.md, rol=implementer, tur=1)
+  1 komut/kontrol, hepsinin kaniti diskte mevcut ve dolu
+  durum: tamamlandi
+EXIT=0
+
+--- C) src/ altindaki '# pragma: no cover' sayimi (K13: yalniz MssBackend.monitors/grab/close) ---
+src/capture/service.py:159:    def monitors(self) -> Sequence[Mapping[str, object]]:  # pragma: no cover -- K1: gercek ekran, headless_check §3 ile denetleniyor
+src/capture/service.py:165:    def grab(self, rect: Rect) -> ImageArray:  # pragma: no cover -- K1: gercek ekran, headless_check §3 ile denetleniyor
+src/capture/service.py:173:    def close(self) -> None:  # pragma: no cover -- K1: gercek ekran, headless_check §3 ile denetleniyor
+toplam: 3 (service.py) + 0 (monitors.py)
+
+--- D) kapsam yapilandirma dosyasi (gizli exclude_lines) var mi? ---
+(yok: .coveragerc / setup.cfg / tox.ini / pyproject.toml bulunmuyor)

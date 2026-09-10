@@ -1,0 +1,32 @@
+==== T-005 TESTER A (mercek A: takma ad) -- SEF SONDASI ====
+PROTOKOL 4.6/6: her iddia sef tarafindan kendi eliyle yeniden uretildi.
+
+1) BICIM       validate.py verdict-A.md -> KABUL EDILEBILIR (rol=tester, tur=1, karar: onay)
+                 9 komut/kontrol, hepsinin kaniti diskte mevcut ve DOLU
+2) SAHIPLIK    git status --short (?? disi) -> BOS. src/, tests/, headless_check.py
+                 dosyalarinin hicbiri degismemis. A yalniz kendi dizinine yazmis.
+3) TAKIM       pytest .agents/tasks/T-005/tester_A -> 74 passed
+4) DISLILIK    SEF KENDI MUTANTINI ENJEKTE ETTI (kum havuzu kopyasinda, depoya dokunmadan):
+                 np.array(ham[:,:,:3], dtype=np.uint8, copy=True, order="C")
+                   -> np.ascontiguousarray(ham[:,:,:3])
+                 A'nin takimi   : 14 failed / 60 passed
+                 Urunun takimi  :  1 failed / 741 passed
+                 A'nin 14 kiriginin 14'u de 3-KANAL parametresinde. A'nin cekirdek
+                 iddiasi ("mutant yalniz 3 kanalda isirir") BIREBIR dogrulandi.
+5) MEKANIZMA   np.shares_memory dogrudan olcum:
+                 3 kanal -> dogru kopya False, mutant TRUE   (takma ad sizar)
+                 4 kanal -> dogru kopya False, mutant False  (sessizce gizlenir)
+                 Yani sinif yalnizca 3 kanalda gorunur; 4 kanal testi bunu ASLA yakalayamaz.
+
+BLOKE OLMAYAN GOZLEMLER (sef dogruladi, T-005'in sucu degil, donmus src/contracts/):
+  G1 Frame.image compare=False -> siyah kare == beyaz kare (ayni metadata). Sahiplik
+     regresyonu "==" ile OLCULEMEZ; shares_memory/content ile olculmeli. A oyle yapmis.
+  G2 Rect/Frame __slots__ yok -> object.__setattr__ donmusluqu deler (olcum: x=999 yazildi).
+     Donmusluk sozlesmesi "kaza"ya karsi, "kotu niyet"e karsi degil.
+
+SEFIN KENDI BULDUGU (A'nin raporunda yok, D'ye devredilir):
+  Urunun kendi takimi bu sinifi TEK testle tutuyor: tests/unit/capture/test_service.py::
+  test_k7_sahiplik_3kanal. 742 testin 741'i bu mutanti gormuyor. Kapi calisiyor ama
+  MARJI TEK SATIR. Mercek D (test kalitesi) bunu degerlendirmeli.
+
+KARAR: A'nin onayi KABUL EDILEBILIR. Bulgu yok, itiraz yok, sahiplik temiz.
