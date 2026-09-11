@@ -1,0 +1,18 @@
+T-011 real_check v4 -- sozluk gomme, gercek NMT
+  IHLAL  [1a] gomulu: hedef terim 5/6 ciktida
+  ok     [1b] kazanc (hamda yok, gomulude var): 3/6, cumleler [1, 2, 4] (>= 2 pozitif kontrol)
+  ok     [2a] KR gomulu: degirmen=True tekrar=False
+  ok     [2b] pozitif kontrol: hamda ikili tekrar var=True (K-B2)
+  ok     [3a] {PLAYER} korunan aralikta: 0 hit; bildirilmezse 1 (kontrol)
+  ok     [3b] {0} bitisik: Marcus hit var (1)
+  ok     [3c] gomulu+yer tutucu ceviri: Marcus=True {0}=True
+  ok     [4a] RAPOR unvan+ad, adlar-yalniz sozluk: Elder sizmasi=True Marcus=True (gri bolge, dusurmez)
+  ok     [4b] NEGATIF: bilesik cumlede ad gomme yapiyi bozmaz: Marcus=True kasaba=False ihtiyar=True (ham: ihtiyar=True)
+  IHLAL  [5a] statik: JP -san eki 0 hit, KR -ege eki 0 hit (1/1 beklenir)
+  IHLAL  [6] zincir: windmills=1 (0) windmill=2 (2) ad+ad bitisik=2 (2)
+  ok     [7a] tek heceli KR terim reddedildi, mesajda terim var=True
+  ok     [7b] izinli tek hece, bilesik icinde eslesmez: 0 hit
+  ok     [7c] bilinen sinir (siyah giysi cumlesi): 1 hit (rapor; ek kurali ayristiramaz)
+  ok     [8] 1000 segment lookup+gom medyan 11.5 ms (< 50)
+
+REAL_CHECK: 3 IHLAL

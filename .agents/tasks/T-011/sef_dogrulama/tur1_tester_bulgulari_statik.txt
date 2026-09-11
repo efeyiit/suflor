@@ -1,0 +1,8 @@
+SEF YENIDEN URETIM -- tester-A/B statik bulgular (hit sayilari)
+Y-B2 JP saygi ekleri (san/sama/tachi/tte/ka): [0, 0, 0, 0, 0] (beklenen: hepsi 0 -> paket eksigi)
+Y-B2 KR ekler (ege/hante/nim/deul/ssi): [0, 0, 0, 0, 0] (beklenen: hepsi 0)
+O-B5 uzun+saygi eki: [('\\u9577\\u8001', 0, 2)] (yalniz unvan gomulur -> kismi)
+O-B1 kaynakta terminator: sema KABUL ETTI, hit: 1
+O-B3 hedef kaynagi iceriyor: sema KABUL ETTI
+O-B6 kimlik hit: [('Marcus', 'Marcus')]
+K-B4 'Ihtiyar'.lower() kodpoint: 8 (8 = tuzak)

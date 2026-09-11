@@ -1,0 +1,64 @@
+hits: [TermHit(source_term='長老', target_term='İhtiyar', start=0, end=2, segment_index=None, note=None), TermHit(source_term='マルクス', target_term='Marcus', start=2, end=6, segment_index=None, note=None), TermHit(source_term='水車小屋', target_term='Değirmen', start=7, end=11, segment_index=None, note=None)]
+CV: hits[0].segment_index gecersiz: NoneType (int, [0, 1) bekleniyor)
+dup seg hits: [(0, 0, 2, 'İhtiyar'), (0, 2, 6, 'Marcus'), (0, 7, 11, 'Değirmen'), (1, 0, 2, 'İhtiyar'), (1, 2, 6, 'Marcus'), (1, 7, 11, 'Değirmen')]
+dup gom: ['İhtiyarMarcusがDeğirmenで待っています。', 'İhtiyarMarcusがDeğirmenで待っています。'] False
+speaker hits: ()
+identity hits: (TermHit(source_term='Marcus', target_term='Marcus', start=0, end=6, segment_index=0, note=None),)
+identity gom: Marcusが待っています。 False True
+gom1: İhtiyarMarcusがDeğirmenで待っています。
+re-lookup: ()
+gom2: İhtiyarMarcusがDeğirmenで待っています。 True
+EN gom1: The İhtiyar Marcus waits by the Değirmen.
+EN re-lookup: (TermHit(source_term='Marcus', target_term='Marcus', start=12, end=18, segment_index=0, note=None),)
+EN gom2: The İhtiyar Marcus waits by the Değirmen.
+sifir hits (no placeholders): (TermHit(source_term='0', target_term='Sıfır', start=1, end=2, segment_index=0, note=None), TermHit(source_term='マルクス', target_term='Marcus', start=3, end=7, segment_index=0, note=None))
+sifir gom: {Sıfır}Marcusは村にいます。
+sifir hits (with placeholders): (TermHit(source_term='マルクス', target_term='Marcus', start=3, end=7, segment_index=0, note=None),)
+'マルクス♪' 0 So
+'♪マルクス' 0 So
+'マルクス→' 0 Sm
+'マルクス＋' 0 Sm
+'マルクス♥' 0 So
+'マルクス☆' 0 So
+'Marcus♪' 0 So
+'마르쿠스♪' 0 So
+'マルクス～' 0 Sm
+'マルクス♡' 0 So
+'★マルクス★' 0 So
+'マルクス…' 1 Po
+'マルクス:' 1 Po
+'マルクス;' 1 Po
+'マルクス!' 1 Po
+'マルクス！' 1 Po
+'マルクス ' 1 Zs
+'マルクス※' 1 Po
+'マルクス〜' 1 Pd
+'マルクス♫' 0 So
+str placeholders TypeError False placeholders bir str dizisi olmali, gelen: str
+None path TypeError False json_path Path ya da str olmali, gelen: NoneType
+int text TypeError False text str olmali, gelen: int
+list of int placeholders TypeError False placeholders ogesi str olmali, gelen: int
+gom str placeholders: TypeError placeholders bir str dizisi olmali, gelen: str
+lookup_segments str placeholders: TypeError placeholders bir str dizisi olmali, gelen: str
+generator lookup_segments: (TermHit(source_term='長老', target_term='İhtiyar', start=0, end=2, segment_index=0, note=None), TermHit(source_term='マルクス', target_term='Marcus', start=2, end=6, segment_index=0, note=None), TermHit(source_term='水車小屋', target_term='Değirmen', start=7, end=11, segment_index=0, note=None))
+generator gom empty hits: (Segment(text='長老マルクスが水車小屋で待っています。', bbox=Rect(x=0, y=0, w=1, h=1, monitor_index=0, dpi_scale=1.0), speaker=None, placeholders=(), source_blocks=()),)
+generator gom hits: ['İhtiyarMarcusがDeğirmenで待っています。']
+list in: <class 'tuple'> ['İhtiyarMarcusがDeğirmenで待っています。']
+'' () () True
+'{0}' ('{0}',) () True
+'{0}' () () True
+'   ' () () True
+kaynak with 。 accepted; terimler: (SozlukTerimi(kaynak='「マルクス」。', hedef='Marcus', note=None, kisa_terim_izni=False), SozlukTerimi(kaynak='mill', hedef='Değirmen mill', note=None, kisa_terim_izni=False))
+[]
+mill->Değirmen mill gom1: by the Değirmen mill.
+gom2: by the Değirmen Değirmen mill.
+gom3: by the Değirmen Değirmen Değirmen mill.
+hedef 'Marcus…' kabul
+hedef 'Marcus:' kabul
+hedef 'Marcus;' kabul
+hedef 'Marcus,' kabul
+hedef 'St Marcus' kabul
+hedef 'Marcus・A' kabul
+hedef 'Marcus\n' RED sozluk semasi: terim 'マルクス': 'hedef' bas/son bosluk tasiyor: 'Marcus\n'
+hedef 'Marcus\tA' kabul
+hedef 'Ma rcus' kabul

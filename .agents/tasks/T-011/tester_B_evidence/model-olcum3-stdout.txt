@@ -1,0 +1,4 @@
+  M0 kor_Hang: yalniz ad gomulu -> Elder=True Ihtiyar=False
+  M1 kor_Hang: yalniz ad gomulu -> Elder=False Ihtiyar=True
+  M2 jpn_Jpan: yalniz ad gomulu -> Elder=False Ihtiyar=True
+exit=0

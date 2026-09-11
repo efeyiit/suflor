@@ -1,0 +1,33 @@
+SEF SONDASI -- unvan terimi (elder) gomme: ham vs gomulu
+
+kor_Hang | 마을 장로가 당신을 기다리고 있습니다.
+   ham   : Köy ihtiyarı sizi bekliyor.
+   gomulu: İhtiyar kasabası sizi bekliyor.   (1 hit)
+
+kor_Hang | 장로 마르쿠스
+   ham   : İhtiyar Marcus
+   gomulu: İhtiyar Marcus   (2 hit)
+
+kor_Hang | 장로가 말했다.
+   ham   : Bir ihtiyar dedi.
+   gomulu: İhtiyar dedi.   (1 hit)
+
+kor_Hang | 장로는 방앗간에 있습니다.
+   ham   : Büyükler bir çukurda.
+   gomulu: İhtiyar Değirmen'de yer almaktadır.   (2 hit)
+
+jpn_Jpan | 村の長老があなたを待っています。
+   ham   : Köyün ihtiyarları seni bekliyor.
+   gomulu: Köyde İhtiyar seni bekliyor.   (1 hit)
+
+jpn_Jpan | 長老マルクス
+   ham   : İhtiyar Marks.
+   gomulu: İhtiyar Marcus   (2 hit)
+
+jpn_Jpan | 長老は水車小屋にいます。
+   ham   : İhtiyar su arabası kulübesinde.
+   gomulu: İhtiyar Değirmen'de.   (2 hit)
+
+eng_Latn | The elder waits for you.
+   ham   : Yaşlı seni bekliyor.
+   gomulu: İhtiyar seni bekliyor.   (1 hit)

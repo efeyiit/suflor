@@ -1,0 +1,30 @@
+CUMLE: The windmills turn slowly.
+  hits: [(4, 8, 'wind')]
+  gomulu kaynak: The Rüzgarmills turn slowly.
+  ham ceviri   : Rüzgar değirmenleri yavaş dönüyor.
+  gomulu ceviri: Rüzgarmills yavaş dönüyor.
+  OZET: hit=1 gomulu_kaynak_parcali_kelime=True ciktida_Degirmen=False ciktida_Ruzgar=True ham_kelime=4 gom_kelime=3
+CUMLE: The old windmill is broken.
+  hits: [(8, 12, 'wind'), (12, 16, 'mill')]
+  gomulu kaynak: The old RüzgarDeğirmen is broken.
+  ham ceviri   : Eski rüzgar değirmeni kırılmış.
+  gomulu ceviri: Eski Rüzgar Değirmen kırılmış.
+  OZET: hit=2 gomulu_kaynak_parcali_kelime=True ciktida_Degirmen=True ciktida_Ruzgar=True ham_kelime=4 gom_kelime=4
+CUMLE: Marcus waits by the windmill.
+  hits: [(0, 6, 'Marcus'), (20, 24, 'wind'), (24, 28, 'mill')]
+  gomulu kaynak: Marcus waits by the RüzgarDeğirmen.
+  ham ceviri   : Marcus rüzgar değirmeninin yanında bekliyor.
+  gomulu ceviri: Marcus Rüzgar Değirmen'de bekliyor.
+  OZET: hit=3 gomulu_kaynak_parcali_kelime=True ciktida_Degirmen=True ciktida_Ruzgar=True ham_kelime=5 gom_kelime=4
+CUMLE: Marcus waits by the mill.
+  hits: [(0, 6, 'Marcus'), (20, 24, 'mill')]
+  gomulu kaynak: Marcus waits by the Değirmen.
+  ham ceviri   : Marcus değirmenin yanında bekliyor.
+  gomulu ceviri: Marcus Değirmen'in yanında bekliyor.
+  OZET: hit=2 gomulu_kaynak_parcali_kelime=False ciktida_Degirmen=True ciktida_Ruzgar=False ham_kelime=4 gom_kelime=4
+CUMLE: The wind is strong today.
+  hits: [(4, 8, 'wind')]
+  gomulu kaynak: The Rüzgar is strong today.
+  ham ceviri   : Rüzgar bugün güçlü.
+  gomulu ceviri: Rüzgar bugün güçlü.
+  OZET: hit=1 gomulu_kaynak_parcali_kelime=False ciktida_Degirmen=False ciktida_Ruzgar=True ham_kelime=3 gom_kelime=3

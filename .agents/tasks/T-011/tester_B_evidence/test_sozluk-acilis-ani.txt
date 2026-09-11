@@ -1,0 +1,1 @@
+tester_B: test_sozluk.py ILK ACILIS ani (kendi testlerim 89 passed + 1 xfailed, model olcumleri A-I bitti): 2026-09-11 19:30:06

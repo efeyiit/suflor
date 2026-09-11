@@ -1,0 +1,61 @@
+== A. G1 6 cumle: ham vs gomulu, gomme katkisi ==
+  A0 jpn_Jpan: hedef hamda=False gomuluda=True katki=True
+  A1 jpn_Jpan: hedef hamda=False gomuluda=True katki=True
+  A2 jpn_Jpan: hedef hamda=False gomuluda=True katki=True
+  A3 kor_Hang: hedef hamda=True gomuluda=True katki=False
+  A4 kor_Hang: hedef hamda=False gomuluda=True katki=True
+  A5 eng_Latn: hedef hamda=True gomuluda=True katki=False
+  [A] #1 sayaci 6/6, #2 sayaci 4/6, GERCEK gomme katkisi 4/6, deterministik 6/6
+== B. kendi 6 cumlem: ham vs gomulu (bozulma aranir) ==
+  B0 jpn_Jpan: hit=3 hedef 3/3 gomuluda, 0/3 hamda, EN kelime=0, uzunluk ham=42 gom=32
+  B1 jpn_Jpan: hit=2 hedef 2/2 gomuluda, 2/2 hamda, EN kelime=0, uzunluk ham=37 gom=35
+  B2 jpn_Jpan: hit=3 hedef 3/3 gomuluda, 1/3 hamda, EN kelime=0, uzunluk ham=55 gom=37
+  B3 kor_Hang: hit=2 hedef 2/2 gomuluda, 1/2 hamda, EN kelime=0, uzunluk ham=29 gom=26
+  B4 kor_Hang: hit=3 hedef 3/3 gomuluda, 2/3 hamda, EN kelime=0, uzunluk ham=36 gom=36
+  B5 kor_Hang: hit=1 hedef 1/1 gomuluda, 1/1 hamda, EN kelime=0, uzunluk ham=37 gom=37
+== C. Y3: 11 terim, ham ceviride hedef var mi (varsa model biliyor) ==
+  C0 jpn_Jpan terim#0: hedef hamda=False (True = model zaten biliyor, Y3 ihlali) gomuluda=True
+  C1 kor_Hang terim#1: hedef hamda=True (True = model zaten biliyor, Y3 ihlali) gomuluda=True
+  C2 eng_Latn terim#2: hedef hamda=True (True = model zaten biliyor, Y3 ihlali) gomuluda=True
+  C3 jpn_Jpan terim#3: hedef hamda=True (True = model zaten biliyor, Y3 ihlali) gomuluda=True
+  C4 kor_Hang terim#4: hedef hamda=True (True = model zaten biliyor, Y3 ihlali) gomuluda=True
+  C5 jpn_Jpan terim#5: hedef hamda=False (True = model zaten biliyor, Y3 ihlali) gomuluda=True
+  C6 kor_Hang terim#6: hedef hamda=False (True = model zaten biliyor, Y3 ihlali) gomuluda=True
+  C7 eng_Latn terim#7: hedef hamda=False (True = model zaten biliyor, Y3 ihlali) gomuluda=True
+  C8 jpn_Jpan terim#8: hedef hamda=True (True = model zaten biliyor, Y3 ihlali) gomuluda=True
+  C9 kor_Hang terim#9: hedef hamda=True (True = model zaten biliyor, Y3 ihlali) gomuluda=True
+  C10 eng_Latn terim#10: hedef hamda=True (True = model zaten biliyor, Y3 ihlali) gomuluda=True
+  [C] 11 terimin 7'inde ham ceviri hedefi zaten iceriyor
+== D. yalniz-terim segment ==
+  D0 jpn_Jpan: gomulu kaynak uzunluk=6 cikti uzunluk=9 aynen=False
+  D1 jpn_Jpan: gomulu kaynak uzunluk=8 cikti uzunluk=8 aynen=True
+  D2 jpn_Jpan: gomulu kaynak uzunluk=13 cikti uzunluk=14 aynen=False
+  D3 kor_Hang: gomulu kaynak uzunluk=7 cikti uzunluk=7 aynen=True
+  D4 eng_Latn: gomulu kaynak uzunluk=8 cikti uzunluk=8 aynen=True
+  D5 jpn_Jpan: gomulu kaynak uzunluk=4 cikti uzunluk=5 aynen=True
+== E. sinir kacagi sinifi (saygi eki / KR ek disi): hit yok -> ham ceviride ad? ==
+  E0 jpn_Jpan: hit=0 hedef ciktida=False
+  E1 jpn_Jpan: hit=1 hedef ciktida=False
+  E2 kor_Hang: hit=0 hedef ciktida=False
+  E3 kor_Hang: hit=0 hedef ciktida=True
+  E4 kor_Hang: hit=0 hedef ciktida=True
+  E5 jpn_Jpan: hit=0 hedef ciktida=False
+  [E] 6 cumlenin 4'inde hedef terim ciktida YOK (sinir kurali eslemedi)
+== F. real_check #3 pozitif kontrol: KR hamda tekrar var mi ==
+  [F] hamda 'dogu'ya dogru dogu'ya dogru' tekrari: True
+== H. fixture terimiyle Y3 zarar sinifi: unvan bilesik icinde (ham dogru mu, gomulu bozuk mu) ==
+  H0 kor_Hang: hit=1 hedef hamda=True gomuluda=True uzunluk ham=24 gom=27
+  H1 kor_Hang: hit=2 hedef hamda=True gomuluda=True uzunluk ham=30 gom=35
+  H2 kor_Hang: hit=1 hedef hamda=True gomuluda=True uzunluk ham=31 gom=27
+  H3 kor_Hang: hit=2 hedef hamda=False gomuluda=True uzunluk ham=32 gom=38
+  H4 jpn_Jpan: hit=1 hedef hamda=True gomuluda=True uzunluk ham=24 gom=21
+  H5 jpn_Jpan: hit=2 hedef hamda=False gomuluda=True uzunluk ham=49 gom=38
+  H6 eng_Latn: hit=1 hedef hamda=True gomuluda=True uzunluk ham=19 gom=19
+  H7 eng_Latn: hit=2 hedef hamda=True gomuluda=True uzunluk ham=36 gom=37
+== I. kaynak terimde terminator: cumle siniri yutulur ==
+  [I] sema kabul etti; parca sayisi ham=2 gomulu=1; ceviri uzunluk ham=28 gom=12
+== G. sure (modelsiz): 1000 segment x N terim ==
+  G n=11: lookup_segments+gom medyan 30.4 ms (min 29.1); kapi yolu medyan 39.6 ms (min 38.0)
+  G n=50: lookup_segments+gom medyan 31.3 ms (min 29.8); kapi yolu medyan 40.1 ms (min 37.4)
+  G n=500: lookup_segments+gom medyan 31.2 ms (min 29.9); kapi yolu medyan 39.7 ms (min 38.7)
+exit=0

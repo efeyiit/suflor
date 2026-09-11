@@ -1,0 +1,9 @@
+[M0] kor_Hang kaynak='장로 마르쿠스' gomulu='장로 Marcus'
+     gom='Elder Marcus'
+     Elder=True Ihtiyar=False
+[M1] kor_Hang kaynak='장로 마르쿠스가 오셨습니다.' gomulu='장로 Marcus가 오셨습니다.'
+     gom='İhtiyar Marcus geldi.'
+     Elder=False Ihtiyar=True
+[M2] jpn_Jpan kaynak='長老マルクス' gomulu='長老マルクス'
+     gom='İhtiyar Marks.'
+     Elder=False Ihtiyar=True

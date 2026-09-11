@@ -1,0 +1,9 @@
+== J/K. kismi gomme ==
+  J0 jpn_Jpan: hit=1 hedef hamda 1/2 gomuluda 1/2
+  J1 kor_Hang: hit=1 hedef hamda 1/2 gomuluda 1/2
+  J2 jpn_Jpan: hit=1 hedef hamda 0/2 gomuluda 1/2
+  K0 jpn_Jpan: hit=2 hedef hamda 1/2 gomuluda 2/2
+  K1 kor_Hang: hit=2 hedef hamda 1/2 gomuluda 2/2
+== L. real_check #7 yeniden (yalitilmis) ==
+  [L] kapi yolu medyan 17.6 ms, min 17.0, max 20.1 (< 50)
+exit=0

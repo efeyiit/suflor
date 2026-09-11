@@ -1,0 +1,148 @@
+== honorific / ek miss class ==
+'マルクスさん' 0
+'マルクスさんが来た。' 0
+'マルクス様' 0
+'マルクス殿' 0
+'マルクス君' 0
+'マルクスちゃん' 0
+'マルクス達' 0
+'マルクスたち' 0
+'マルクスって' 0
+'マルクスだ' 0
+'マルクスです' 1
+'マルクスじゃない' 0
+'マルクスなら' 0
+'マルクスも' 1
+'マルクスへ' 1
+'マルクスから' 0
+'マルクスまで' 0
+'マルクスより' 0
+'マルクスか' 0
+'マルクスよ' 0
+'マルクスね' 0
+'マルクス!' 1
+'마르쿠스님' 0
+'마르쿠스씨' 0
+'마르쿠스야' 0
+'마르쿠스아' 0
+'마르쿠스에게' 0
+'마르쿠스한테' 0
+'마르쿠스께' 0
+'마르쿠스랑' 0
+'마르쿠스처럼' 0
+'마르쿠스보다' 0
+'마르쿠스마다' 0
+'마르쿠스밖에' 0
+'마르쿠스조차' 0
+'마르쿠스한테서' 0
+'마르쿠스들' 0
+'마르쿠스라고' 0
+'마르쿠스라면' 0
+'마르쿠스인가' 0
+'마르쿠스야!' 0
+'마르쿠스가' 1
+'마르쿠스를' 1
+'마르쿠스는' 1
+'장로님' 0
+'장로께서' 1
+'장로에게' 0
+'방앗간으로' 1
+'방앗간에서는' 1
+'방앗간까지는' 1
+'방앗간이다' 0
+'방앗간입니다' 0
+"Marcus's" 1
+"Marcus'" 1
+'Marcus2' 0
+"elder's" 1
+'elders' 0
+'mills' 0
+'Marcus-san' 1
+== symbol class on fixture sentences ==
+base hits 7
+'♪' So suffix hits 5 prefix hits 2
+'～' Sm suffix hits 5 prefix hits 2
+'♥' So suffix hits 5 prefix hits 2
+'☆' So suffix hits 5 prefix hits 2
+'→' Sm suffix hits 5 prefix hits 2
+'＋' Sm suffix hits 5 prefix hits 2
+'♡' So suffix hits 5 prefix hits 2
+'★' So suffix hits 5 prefix hits 2
+'…' Po suffix hits 7 prefix hits 7
+'！' Po suffix hits 7 prefix hits 7
+'〜' Pd suffix hits 7 prefix hits 7
+'・' Po suffix hits 7 prefix hits 7
+'♫' So suffix hits 5 prefix hits 2
+'※' Po suffix hits 7 prefix hits 7
+'〒' So suffix hits 5 prefix hits 2
+'©' So suffix hits 5 prefix hits 2
+'™' So suffix hits 5 prefix hits 2
+'°' So suffix hits 5 prefix hits 2
+'＄' Sc suffix hits 5 prefix hits 2
+'￥' Sc suffix hits 5 prefix hits 2
+'％' Po suffix hits 7 prefix hits 7
+'＆' Po suffix hits 7 prefix hits 7
+'＃' Po suffix hits 7 prefix hits 7
+'＠' Po suffix hits 7 prefix hits 7
+== NFD placeholder + gom NFC drift ==
+hits (TermHit(source_term='マルクス', target_term='Marcus', start=11, end=15, segment_index=0, note=None),)
+gom text NFC? True placeholder still substring? False ph NFC in text? True
+parts ['{Değirmen}はMarcusの家です。'] [True]
+repair on hypothetical output: {Değirmen} Marcus evi {Değirmen}
+control NFC: ph substring? True
+no-hit NFD stays NFD? True False
+== kaynak with terminator changes T-007 split ==
+hits ()
+hits2 (TermHit(source_term='マルクス。', target_term='Marcus', start=2, end=7, segment_index=0, note=None),) gom: 彼はMarcus 行こう。 split before 2 after 1
+== IGNORECASE Turkish I ==
+'istanbul' [('istanbul', 0, 8)]
+'ISTANBUL' [('ISTANBUL', 0, 8)]
+'ıstanbul' [('ıstanbul', 0, 8)]
+'İstanbul' [('İstanbul', 0, 8)]
+'IŞIK' [('IŞIK', 0, 4)]
+'isik' []
+'Isık' []
+'ışık' [('ışık', 0, 4)]
+== lookup vs lookup_segments equality over random segments ==
+diff 0 hits 4466
+== identity hit & counter semantics ==
+identity: hits 1 text same True is False
+== hedef contains kaynak (idempotence) ==
+0 by the Değirmen mill.
+1 by the Değirmen Değirmen mill.
+2 by the Değirmen Değirmen Değirmen mill.
+== schema: hedef == kaynak? hedef contains kaynak? ==
+Marcus -> Marcus kabul
+mill -> Değirmen mill kabul
+Değirmen mill -> mill kabul
+== record-level unknown key / whitespace ==
+{'kaynak': 'マルクス', 'hedef': 'Marcus', 'ozel_ad': True} RED sozluk semasi: terim 'マルクス': bilinmeyen anahtar(lar) ['ozel_ad']; izinli: ['hedef', 'kayna
+{'kaynak': 'マルクス', 'hedef': 'Marcus', 'kategori': 'ad'} RED sozluk semasi: terim 'マルクス': bilinmeyen anahtar(lar) ['kategori']; izinli: ['hedef', 'kayn
+{'kaynak': 'マルクス ', 'hedef': 'Marcus'} RED sozluk semasi: terim kaydi #0: 'kaynak' bas/son bosluk tasiyor: 'マルクス '
+{'kaynak': 'マルクス', 'hedef': 'Marcus', 'not': None} kabul
+{'kaynak': 'マルクス', 'hedef': 'Marcus', 'kisa_terim_izni': 1} RED sozluk semasi: terim 'マルクス': 'kisa_terim_izni' bool olmali, gelen: int
+== top-level extra keys ==
+top-level extra: 1
+empty glossary: 0 [] True
+== KR ek chain false positive probes ==
+'방앗간이 왔다' 1
+'방앗간이다' 0
+'방앗간에 가' 1
+'방앗간의 로' 1
+'방앗간도 둑' 1
+'방앗간도둑' 0
+'방앗간은가' 1
+'방앗간이가 왔다' 1
+'방앗간로가' 1
+'방앗간에서는요' 0
+== hedef ilk harf buyutme ==
+'iPhone' 'İPhone'
+'ışık' 'Işık'
+'ihtiyar' 'İhtiyar'
+'1up' '1up'
+'ñandu' 'Ñandu'
+'ǆemal' 'Ǆemal'
+'ﬁne' 'FIne'
+'ß' 'SS'
+'değirmen' 'Değirmen'
+'ǅ' 'Ǆ'

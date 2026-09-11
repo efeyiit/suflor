@@ -1,0 +1,41 @@
+== 1. ß/ẞ: uc terim, ilk dal kisa terminalde durur, uzun terim ikinci dalda ==
+  desen: (?=[m])(?=(ma(?:\xdfe(?:n)?|\u1e9eer)))
+  Ma\xdfen geht  -> [(0, 5, 'Ma\\xdfen', 'Massen')]
+  Ma\u1e9eer geht -> []
+  Ma\xdfer geht  -> []
+  Ma\xdfe geht   -> [(0, 4, 'Ma\\xdfe', 'Masse')]
+  MASSER         -> []
+  Ma\u1e9een geht -> [(0, 5, 'Ma\\u1e9een', 'Massen')]
+  beklenen (docstring 'aday kumesi TAM'): 'Maßer geht' -> Maẞer [0,5) (re.I ß~ẞ); 'Maẞen geht' -> Maßen [0,5)
+== 1b. JSON sirasi ters: Maẞer once ==
+  Ma\xdfer geht  -> [(0, 5, 'Ma\\xdfer', 'Masser')]
+  Ma\u1e9een geht -> [(0, 5, 'Ma\\u1e9een', 'Massen')]
+  Ma\u1e9ee geht -> [(0, 4, 'Ma\\u1e9ee', 'Masse')]
+== 1c. tek kodpoint casefold (ayni dal) kontrolu: Marcus/marcus aurelius ==
+  'MARCUS AURELIUS x' -> [(0, 15, 'MARCUS AURELIUS', 'MA')]
+  'Marcus x' -> [(0, 6, 'Marcus', 'M')]
+== 1d. Yunan iota-subscript: ᾈ (U+1F88) ~ ᾀ (U+1F80) re.I; casefold 2 kodpoint ==
+  re.I esler mi: True; casefold: '\\u1f00\\u03b9' len 2
+  \u1f88\u03b2\u03b4 x -> []
+  \u1f80\u03b2\u03b3 x -> [(0, 3, '\\u1f80\\u03b2\\u03b3', 'A')]
+  \u1f80\u03b2\u03b4 x -> []
+== 2. regex-ozel ilk karakterli terimler ==
+  desen ilk 60: (?=[\(\-\.\[\\\]\^\|])(?=((?:\]x|\^x|\-x|\\x|\[x|\.x|\|x|\(x
+  ]x     -> [(0, 2, ']x', 'A')]
+  ^x     -> [(0, 2, '^x', 'B')]
+  -x     -> [(0, 2, '-x', 'C')]
+  \x     -> [(0, 2, '\\x', 'D')]
+  [x     -> [(0, 2, '[x', 'E')]
+  .x     -> [(0, 2, '.x', 'F')]
+  |x     -> [(0, 2, '|x', 'G')]
+  (x     -> [(0, 2, '(x', 'H')]
+  ax     -> []
+  yx     -> []
+== 3. yer tutucu ortusmesiz tarama: 'aa' x 'aaa' ==
+  'aaab' yt=('aa',): []  (korunan [0,2); aab [1,4) ortusur -> yok)
+  'aaab' yt=():      [] (aab solu 'a' harf -> yok; pozitif: ' aab')
+  ' aab' yt=():      [(1, 4, 'aab', 'X')]
+== 4. hedef == kaynak (ozdes) her gecis hit ==
+  'Marcus Marcus' -> [(0, 6, 'Marcus', 'Marcus'), (7, 13, 'Marcus', 'Marcus')]
+== 5. lookup('') ve yalniz bosluk / yalniz noktalama / yalniz yt ==
+  '' -> []; '   ' -> []; '...' -> []; '{0}' yt -> []

@@ -1,0 +1,6 @@
+.........................................................x.............. [ 78%]
+....................                                                     [100%]
+=========================== short test summary info ===========================
+XFAIL .agents/tasks/T-011/tester_B/test_mercek_b.py::test_b9_k1_paket_negatifleri_eslesmez[\\uac80\\uc740 \\uc637] - paketin belgeli bilinen siniri: `\uac80`+ek `\uc740` kuraldan gecer (K1)
+91 passed, 1 xfailed in 0.59s
+exit=0

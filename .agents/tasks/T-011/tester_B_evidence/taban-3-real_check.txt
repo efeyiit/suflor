@@ -1,0 +1,16 @@
+T-011 real_check -- sozluk gomme, gercek NMT
+  ok     [1] gomulu: hedef terim 6/6 ciktida
+  ok     [2] pozitif kontrol: gommeden 4/6'da hedef YOK (>= 2)
+  ok     [3] KR: degirmen=True tekrar=False
+  ok     [4] unvan: Elder=False Ihtiyar=True Marcus=True
+  ok     [3a] {PLAYER} korunan aralikta: 0 hit; bildirilmezse 1 hit (kontrol)
+  ok     [3b] {0} bitisik: Marcus hit var (1)
+  ok     [3c] gomulu+yer tutucu ceviri: Marcus=True {0}=True
+  ok     [6a] tek heceli KR terim reddedildi, mesajda terim var=True
+  ok     [6b] izinli tek hece, bilesik icinde eslesmez: 0 hit
+  ok     [6c] bilinen sinir (siyah giysi cumlesi): 1 hit (rapor; ek kurali ayristiramaz)
+  ok     [5] buyuk harf gomme raporu (Degirmen): kesme=False (18 kar.)
+  ok     [7] 1000 segment lookup+gom medyan 35.0 ms (< 50)
+
+REAL_CHECK: TEMIZ
+exit=0

@@ -1,0 +1,31 @@
+== 1. tek segment, yogun hit: uzunluk 2x -> sure kac x? ==
+  len=  1750 hit=  500 medyan      2.9 ms  (onceki x2 uzunluga oran: -)
+  len=  3500 hit= 1000 medyan      9.2 ms  (onceki x2 uzunluga oran: 3.16x)
+  len=  7000 hit= 2000 medyan     32.1 ms  (onceki x2 uzunluga oran: 3.49x)
+  len= 14000 hit= 4000 medyan    121.2 ms  (onceki x2 uzunluga oran: 3.78x)
+  len= 28000 hit= 8000 medyan    471.7 ms  (onceki x2 uzunluga oran: 3.89x)
+== 1b. ayni hit yogunlugu, seyrek metin (hit sayisi sabit, uzunluk artar) ==
+  len=  8500 hit=  501 medyan      7.0 ms
+  len= 23500 hit=  501 medyan      7.0 ms
+  len= 83500 hit=  501 medyan      7.6 ms
+== 2. real_check #7 yolu MODELSIZ (ayni cumle, ayni fixture) ==
+  tur 0: kapi yolu medyan 15.9 ms (min 15.7, max 17.6); hit=3000
+  tur 1: kapi yolu medyan 16.3 ms (min 16.1, max 19.4); hit=3000
+  tur 2: kapi yolu medyan 16.1 ms (min 15.8, max 18.0); hit=3000
+  lookup_segments yolu medyan 12.2 ms
+== 3. Latin bilesik: docstring 'windmill eslesmez' -- 'wind' de sozlukteyken ==
+  'windmill'         yalniz mill: []  |  mill+wind: [(0, 4, 'wind', 'R\\xfczgar'), (4, 8, 'mill', 'De\\u011firmen')]
+  'the windmill.'    yalniz mill: []  |  mill+wind: [(4, 8, 'wind', 'R\\xfczgar'), (8, 12, 'mill', 'De\\u011firmen')]
+  'Windmill'         yalniz mill: []  |  mill+wind: [(0, 4, 'Wind', 'R\\xfczgar'), (4, 8, 'mill', 'De\\u011firmen')]
+  'windmills'        yalniz mill: []  |  mill+wind: [(0, 4, 'wind', 'R\\xfczgar')]
+  'wind mill'        yalniz mill: [(5, 9, 'mill', 'De\\u011firmen')]  |  mill+wind: [(0, 4, 'wind', 'R\\xfczgar'), (5, 9, 'mill', 'De\\u011firmen')]
+  gom: 'The R\\xfczgarDe\\u011firmen is old.'
+  KR 방앗간집주인 (mill house-owner): [(0, 3, '\\ubc29\\uc557\\uac04', 'De\\u011firmen'), (3, 6, '\\uc9d1\\uc8fc\\uc778', 'EvSahibi')]
+  KR 방앗간집주인 yalniz 방앗간: [] (G5 negatifi korunuyor)
+  'elderly' elder+ly sozlukte: [(0, 5, 'elder', '\\u0130htiyar'), (5, 7, 'ly', 'Ly')]
+  'Marcuses' Marcus+es: [(0, 6, 'Marcus', 'Marcus'), (6, 8, 'es', 'Es')]
+== 4. IGNORECASE denklik taramasi (bagimsiz): re.I esleyen her (c, d) ciftinde _anahtar ayni mi ==
+  sre tablo okunamadi: ImportError
+  re.I ile eslesen (c,d) cifti: 2912; _anahtar farkli olan: 0; case-varyanti olup re.I eslesmeyen (pozitif kontrol): 0
+== 4b. ters yon: _anahtar AYNI ama re.I eslesmeyen ciftler (tekrar reddi > eslesme; ss/eszett gibi) ==
+  _anahtar ayni ama re.I eslesmeyen tek-kodpoint cifti: 0

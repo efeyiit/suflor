@@ -1,0 +1,125 @@
+== 1. yer tutucu: icerme / ortusme / bos / uzun / terim icinden ==
+birbirini iceren yt                            metin={0}{1}Marcus                       yt=('{0}', '{0}{1}')      -> [(6, 12, 'Marcus', 'Marcus')]
+ters sira                                      metin={0}{1}Marcus                       yt=('{0}{1}', '{0}')      -> [(6, 12, 'Marcus', 'Marcus')]
+yalniz {0} -> {1} metin, Marcus?               metin={0}{1}Marcus                       yt=('{0}',)               -> [(6, 12, 'Marcus', 'Marcus')]
+yt yok: {0}{1} TERIM -> hit?                   metin={0}{1}Marcus                       yt=()                     -> [(0, 6, '{0}{1}', 'Cift'), (6, 12, 'Marcus', 'Marcus')]
+ortusen yt: 0}{1 (kismi)                       metin={0}{1}Marcus                       yt=('0}{1',)              -> [(6, 12, 'Marcus', 'Marcus')]
+bos dize + terimle ayni yt                     metin=Marcus                             yt=('', 'Marcus')         -> []
+yt == terim, iki gecis                         metin=Marcus Marcus                      yt=('Marcus',)            -> []
+yt terimin icinden geciyor                     metin=Mar{0}cus                          yt=('{0}',)               -> []
+kontrol: yt bildirilmemis, { P* sinir -> Mar? cus? metin=Mar{0}cus                          yt=()                     -> []
+cok uzun yt (metinde yok)                      metin=Marcus                             yt=('xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx',) -> [(0, 6, 'Marcus', 'Marcus')]
+tek harf yt terimin ilk harfi                  metin=Marcus                             yt=('M',)                 -> []
+tek harf yt terimin son harfi                  metin=Marcus                             yt=('s',)                 -> []
+yt terimin ortasi                              metin=Marcus                             yt=('arc',)               -> []
+yt bitisik terim (yt basi sinir)               metin=Marcus\u30de\u30eb\u30af\u30b9     yt=('\u30de\u30eb\u30af\u30b9',) -> [(0, 6, 'Marcus', 'Marcus')]
+yt solda bitisik (yt sonu sinir)               metin=\u30de\u30eb\u30af\u30b9Marcus     yt=('\u30de\u30eb\u30af\u30b9',) -> [(4, 10, 'Marcus', 'Marcus')]
+yt buyuk/kucuk DUYARLI -> MARCUS terim mi?     metin=MARCUS                             yt=('Marcus',)            -> [(0, 6, 'MARCUS', 'Marcus')]
+yt buyuk, metin kucuk                          metin=marcus                             yt=('MARCUS',)            -> [(0, 6, 'marcus', 'Marcus')]
+NFD yt + NFD metin                             metin={U\u0308nlu\u0308}Marcus           yt=('{U\u0308nlu\u0308}',) -> [(6, 12, 'Marcus', 'Marcus')]
+NFC metin, NFD yt (yt NFC'lenir mi)            metin={\xdcnl\xfc}Marcus                 yt=('{U\u0308nlu\u0308}',) -> [(6, 12, 'Marcus', 'Marcus')]
+NFD metin, NFC yt                              metin={U\u0308nlu\u0308}Marcus           yt=('{\xdcnl\xfc}',)      -> [(6, 12, 'Marcus', 'Marcus')]
+liste yt (Sequence)                            metin=Marcus                             yt=['Marcus']             -> []
+  duz str yt -> TypeError: placeholders bir str dizisi olmali, gelen: str
+  int yt -> TypeError: placeholders ogesi str olmali, gelen: int
+  None yt -> TypeError: placeholders bir str dizisi olmali, gelen: NoneType
+== 1b. gom: yt ile ortusen hit (lookup atlar, elle verilirse ContractViolation mi) ==
+yt icindeki hit elle                           -> ContractViolation: hits[0]: aralik [1, 7) bir yer tutucuyla ortusuyor
+yt == terim, hit tam yt                        -> ContractViolation: hits[0]: aralik [0, 6) bir yer tutucuyla ortusuyor
+hit yt'yi kapsiyor                             -> ContractViolation: hits[0]: aralik [0, 9) bir yer tutucuyla ortusuyor
+  NFD seg: girdi yt in text = True; hits=[(7, 13, 'Marcus', 'Marcus')]
+  NFD seg gom -> cikti yt in text = False; placeholders aynen=True; text NFC=True
+== 2. sema sinirlari ==
+  bos sozluk                                         -> KABUL len=0 repr=GlossaryStore(terim_sayisi=0, dosya='cev.json')
+  terimler dict                                      -> ValueError: sozluk semasi (cev.json): 'terimler' bir liste olmali, gelen: dict
+  terimler null                                      -> ValueError: sozluk semasi (cev.json): 'terimler' bir liste olmali, gelen: NoneType
+  terimler str                                       -> ValueError: sozluk semasi (cev.json): 'terimler' bir liste olmali, gelen: str
+  ust duzey liste                                    -> ValueError: sozluk semasi (cev.json): ust duzey 'terimler' listesi tasiyan bir JSON nesnesi olmali
+  ust duzey bos nesne                                -> ValueError: sozluk semasi (cev.json): ust duzey 'terimler' listesi tasiyan bir JSON nesnesi olmali
+  kisa_terim_izni true + 2 kodpoint                  -> KABUL len=1 repr=GlossaryStore(terim_sayisi=1, dosya='cev.json')
+  not bos dize                                       -> KABUL len=1 repr=GlossaryStore(terim_sayisi=1, dosya='cev.json')
+  not null                                           -> KABUL len=1 repr=GlossaryStore(terim_sayisi=1, dosya='cev.json')
+  not int                                            -> ValueError: sozluk semasi: terim 'ab': 'not' str ya da null olmali, gelen: int
+  hedef yalniz bosluk                                -> ValueError: sozluk semasi: terim 'ab': 'hedef' bos
+  kaynak yalniz bosluk                               -> ValueError: sozluk semasi: terim kaydi #0: 'kaynak' bos
+  kaynak ic bosluk (izinli mi)                       -> KABUL len=1 repr=GlossaryStore(terim_sayisi=1, dosya='cev.json')
+  hedef ic bosluk                                    -> KABUL len=1 repr=GlossaryStore(terim_sayisi=1, dosya='cev.json')
+  hedef ic tab                                       -> KABUL len=1 repr=GlossaryStore(terim_sayisi=1, dosya='cev.json')
+  hedef ic yeni satir                                -> KABUL len=1 repr=GlossaryStore(terim_sayisi=1, dosya='cev.json')
+  kaynak ic yeni satir                               -> KABUL len=1 repr=GlossaryStore(terim_sayisi=1, dosya='cev.json')
+  yinelenen kaynak NFC/NFD                           -> ValueError: sozluk semasi: terim 'De\u011firmen': tekrar eden kaynak ('De\u011firmen' ile ayni)
+  hedef ideografik nokta                             -> ValueError: sozluk semasi: terim 'ab': hedef cumle sonu isareti iceremez (.!?\u3002\uff01\uff1f); bolmeyi tetikler
+  hedef elipsis (yasak degil?)                       -> KABUL len=1 repr=GlossaryStore(terim_sayisi=1, dosya='cev.json')
+  hedef noktali virgul                               -> KABUL len=1 repr=GlossaryStore(terim_sayisi=1, dosya='cev.json')
+  hedef iki nokta                                    -> KABUL len=1 repr=GlossaryStore(terim_sayisi=1, dosya='cev.json')
+  hedef cift unlem U+203C                            -> KABUL len=1 repr=GlossaryStore(terim_sayisi=1, dosya='cev.json')
+  hedef tam genislik soru                            -> ValueError: sozluk semasi: terim 'ab': hedef cumle sonu isareti iceremez (.!?\u3002\uff01\uff1f); bolmeyi tetikler
+  hedef %s (yer tutucu bicimi, yasak degil)          -> KABUL len=1 repr=GlossaryStore(terim_sayisi=1, dosya='cev.json')
+  hedef <T0>                                         -> KABUL len=1 repr=GlossaryStore(terim_sayisi=1, dosya='cev.json')
+  hedef [Mill]                                       -> KABUL len=1 repr=GlossaryStore(terim_sayisi=1, dosya='cev.json')
+  kaynak {0} (yer tutucu bicimi kaynakta)            -> KABUL len=1 repr=GlossaryStore(terim_sayisi=1, dosya='cev.json')
+  v1 ozel_ad bayragi                                 -> ValueError: sozluk semasi: terim 'ab': bilinmeyen anahtar(lar) ['ozel_ad']; izinli: ['hedef', 'kaynak', 'kisa_terim_izni', 'not']
+  kisa_terim_izni int 1                              -> ValueError: sozluk semasi: terim 'ab': 'kisa_terim_izni' bool olmali, gelen: int
+  kisa_terim_izni null                               -> ValueError: sozluk semasi: terim 'ab': 'kisa_terim_izni' bool olmali, gelen: NoneType
+  ust duzey ek anahtar                               -> KABUL len=1 repr=GlossaryStore(terim_sayisi=1, dosya='cev.json')
+  kayit str                                          -> ValueError: sozluk semasi: terim kaydi #1 bir JSON nesnesi degil: str
+  kayit null                                         -> ValueError: sozluk semasi: terim kaydi #1 bir JSON nesnesi degil: NoneType
+  ikinci kayit hedef eksik (ILK hatali bildirilir)   -> ValueError: sozluk semasi: terim 'cd': 'hedef' alani eksik
+  kaynak int                                         -> ValueError: sozluk semasi: terim kaydi #0: 'kaynak' str olmali, gelen: int
+  tekrar kaynak                                      -> ValueError: sozluk semasi: terim 'ab': tekrar eden kaynak ('ab' ile ayni)
+  tekrar kaynak buyuk/kucuk                          -> ValueError: sozluk semasi: terim 'ab': tekrar eden kaynak ('AB' ile ayni)
+  tek kodpoint buyuk noktali I + izin                -> KABUL len=1 repr=GlossaryStore(terim_sayisi=1, dosya='cev.json')
+  tek emoji kodpoint                                 -> ValueError: sozluk semasi: terim '\U0001f600': tek kodpointlik kaynak terim (tek hangul hecesi / tek kanji / tek harf) sinir kuraliyla bilesiklerden ayr
+  iki emoji                                          -> KABUL len=1 repr=GlossaryStore(terim_sayisi=1, dosya='cev.json')
+  hedef emoji (ilk_harfi_buyut harf-disi)            -> KABUL len=1 repr=GlossaryStore(terim_sayisi=1, dosya='cev.json')
+  hedef isik -> Isik                                 -> KABUL len=1 repr=GlossaryStore(terim_sayisi=1, dosya='cev.json')
+  hedef ihtiyar -> Ihtiyar noktali                   -> KABUL len=1 repr=GlossaryStore(terim_sayisi=1, dosya='cev.json')
+  hedef fi ligature -> upper 'FI'ne? (uzunluk degisir) -> KABUL len=1 repr=GlossaryStore(terim_sayisi=1, dosya='cev.json')
+  hedef dz digraph U+01C6 -> upper U+01C4 (titlecase U+01C5?) -> KABUL len=1 repr=GlossaryStore(terim_sayisi=1, dosya='cev.json')
+  hedef eszett -> upper 'SS'                         -> KABUL len=1 repr=GlossaryStore(terim_sayisi=1, dosya='cev.json')
+  10000 kodpoint kaynak                              -> RecursionError: maximum recursion depth exceeded
+  10000 kodpoint hedef                               -> KABUL len=1 repr=GlossaryStore(terim_sayisi=1, dosya='cev.json')
+  yinelenen JSON anahtari (son kazanir)              -> KABUL len=1 repr=GlossaryStore(terim_sayisi=1, dosya='cev.json')
+== 2b. sema hatasi mesaj sizintisi: terim tasir (istenen), ContractViolation tasimaz ==
+  sema ValueError terim tasiyor: True; dosya adi tasiyor: False
+  ust duzey hata dosya adi tasiyor: True
+  FileNotFoundError sarilmamis: FileNotFoundError; mesaj yol tasiyor: True
+  json_path int -> TypeError: json_path Path ya da str olmali, gelen: int
+  bozuk JSON ValueError: dosya adi=True; icerik sizdi=False; mesaj=sozluk JSON ayristirilamadi (kotu.json): Expecting property name enclosed in double quotes: line 1 column 2 (char 1)
+  BOM'lu dosya: 1 terim
+  UTF-16 dosya: 1 terim
+  gecersiz UTF-8 -> ValueError (ValueError alt sinifi mi: True): sozluk JSON ayristirilamadi (gecersiz.json): 'utf-8' codec can't decode byte 0xff in position 26: in
+  dizin yolu -> PermissionError (sarilmamis)
+== 2c. ContractViolation mesajlari metin/terim tasir mi ==
+  aralik disi                -> CV; sizinti: metin=False terim=False hedef=False; msg=hits[0]: aralik gecersiz [0, 999) (metin uzunlugu 26)
+  dilim farkli               -> CV; sizinti: metin=False terim=False hedef=False; msg=hits[0]: source_term metnin [0, 10) dilimiyle ayni degil
+  start==end                 -> CV; sizinti: metin=False terim=False hedef=False; msg=hits[0]: aralik gecersiz [3, 3) (metin uzunlugu 26)
+  negatif start              -> CV; sizinti: metin=False terim=False hedef=False; msg=hits[0]: aralik gecersiz [-1, 5) (metin uzunlugu 26)
+  segment_index None         -> CV; sizinti: metin=False terim=False hedef=False; msg=hits[0].segment_index gecersiz: NoneType (int, [0, 1) bekleniyor)
+  segment_index -1           -> CV; sizinti: metin=False terim=False hedef=False; msg=hits[0].segment_index aralik disi: -1 (segment sayisi 1)
+  segment_index 1 (len 1)    -> CV; sizinti: metin=False terim=False hedef=False; msg=hits[0].segment_index aralik disi: 1 (segment sayisi 1)
+  segment_index True         -> CV; sizinti: metin=False terim=False hedef=False; msg=hits[0].segment_index gecersiz: bool (int, [0, 1) bekleniyor)
+  segment_index float        -> CV; sizinti: metin=False terim=False hedef=False; msg=hits[0].segment_index gecersiz: float (int, [0, 1) bekleniyor)
+  bos target                 -> CV; sizinti: metin=False terim=False hedef=False; msg=hits[0]: target_term bos ya da str degil
+  start bool                 -> CV; sizinti: metin=False terim=False hedef=False; msg=hits[0]: start/end int olmali
+  start float                -> CV; sizinti: metin=False terim=False hedef=False; msg=hits[0]: start/end int olmali
+  source_term None           -> CV; sizinti: metin=False terim=False hedef=False; msg=hits[0]: source_term metnin [0, 10) dilimiyle ayni degil
+  target None                -> CV; sizinti: metin=False terim=False hedef=False; msg=hits[0]: target_term bos ya da str degil
+  ortusen iki hit -> CV; sizinti metin=False; msg=hits[0] ve hits[1] ortusuyor: [0, 10) / [5, 14)
+  bitisik iki hit -> OK: 'AB kelimesi burada'
+  hit str -> CV; sizinti=False; msg=hits[0] TermHit degil: str
+  segment str -> CV; sizinti=False; msg=segments[0] Segment degil ya da text str degil: str
+  segments bozuk + hits bos -> tuple len 2 (denetim yok, aynen doner)
+  lookup_segments str -> CV; sizinti=False; msg=segments[0] Segment degil ya da text str degil: str
+  lookup int -> TypeError: text str olmali, gelen: int
+  lookup None -> TypeError: text str olmali, gelen: NoneType
+== 3. saflik/kanal: 0 bayt stdout/stderr/log/warnings ==
+  stdout=0 stderr=0 log=0 warnings=0
+  repr terim tasir mi: False ; repr=GlossaryStore(terim_sayisi=3, dosya='s.json')
+  'src' logger handler sayisi: 0; 'src.translate.sozluk' handler: 0
+  logging.Logger.manager'da sozluk logger var mi: True
+== 3b. dosya silinince lookup ==
+  dosya var: False; lookup: [(0, 6, 'Marcus', 'Marcus')]
+== 3c. determinizm: ayni girdi iki kez, yeni liste ==
+  esit=True ayni nesne=False
+  terimler tuple degismez: tuple

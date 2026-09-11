@@ -1,0 +1,40 @@
+== git status --short -- src tests real_check packet fixtures ==
+(bos olmali)
+== git diff HEAD --stat -- src tests ==
+== HEAD ==
+1ff6a8ad3ce7fa3a90c45729f9052595c631d742
+== sha256 ==
+7c57ca9f0bc374689819b7110d987c90111aa28c8c1f03e4e310e24a127680db *src/translate/sozluk.py
+9aca296d84440ca1aa8f2daadcc97a208f31c640c0f82b27282d044776f26302 *tests/unit/translate/test_sozluk.py
+8ff3aacb57bed20eeedd326892de94d838d27a00462004e10bc61d3ae1e9e87d *.agents/tasks/T-011/real_check.py
+== tester_A dizini ==
+.agents/tasks/T-011/tester_A:
+__pycache__
+conftest.py
+sonda_01_sinir.py
+sonda_02_ignorecase_nfc.py
+sonda_03_yertutucu_sema.py
+sonda_04_buyuk.py
+sonda_05_olcek.py
+sonda_06_gercek_model.py
+sonda_07_trie_dal.py
+test_mercek_a.py
+yardimci.py
+
+.agents/tasks/T-011/tester_A_evidence:
+A-birlikte-kosum.txt
+A-git-status-depo-dokunulmadi.txt
+A-mercek-testleri.txt
+sonda-01-sinir.txt
+sonda-02-ignorecase-nfc.txt
+sonda-03-yertutucu-sema.txt
+sonda-04-buyuk.txt
+sonda-05-olcek.txt
+sonda-06-gercek-model-stdout.txt
+sonda-06-gercek-model.txt
+sonda-07-trie-dal.txt
+taban-1-mypy.txt
+taban-2-pytest.txt
+taban-3-real_check.txt
+taban-4-kapsam.txt
+taban-5-tum-takim.txt

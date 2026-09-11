@@ -1,0 +1,48 @@
+sys.getrecursionlimit() = 1000
+== 1. RecursionError esigi: tek terim, uzunluk N ==
+  N=   50 -> KABUL, lookup 1 hit [(2, 52)]
+  N=  100 -> KABUL, lookup 1 hit [(2, 102)]
+  N=  200 -> KABUL, lookup 1 hit [(2, 202)]
+  N=  400 -> KABUL, lookup 1 hit [(2, 402)]
+  N=  600 -> KABUL, lookup 1 hit [(2, 602)]
+  N=  800 -> KABUL, lookup 1 hit [(2, 802)]
+  N=  900 -> KABUL, lookup 1 hit [(2, 902)]
+  N=  950 -> KABUL, lookup 1 hit [(2, 952)]
+  N=  960 -> KABUL, lookup 1 hit [(2, 962)]
+  N=  970 -> KABUL, lookup 1 hit [(2, 972)]
+  N=  980 -> KABUL, lookup 1 hit [(2, 982)]
+  N=  990 -> KABUL, lookup 1 hit [(2, 992)]
+  N= 1000 -> RecursionError
+  N= 1100 -> RecursionError
+  N= 2000 -> RecursionError
+  TAM ESIK: N=995 son kabul, N=996 ilk RecursionError (tek terim, bu surecte)
+== 1b. Esik derinlige mi (en uzun terim) bagli, terim sayisina mi ==
+  2000 terim x 52 kodpoint -> KABUL len=2000
+  300 kodpointlik JP cumle terimi -> KABUL
+== 1c. pytest gibi derin yigin altinda esik duser mi ==
+  yigin 0 + N=400 -> KABUL
+  yigin 100 + N=400 -> KABUL
+  yigin 300 + N=400 -> KABUL
+  yigin 500 + N=400 -> KABUL
+== 2. 10 000 karakterlik tek segment ==
+  len=9500; hit=1500; sure=25.0 ms
+  gom sure=3.6 ms; cikti len=15000; Marcus sayisi=500
+  10k terim-siz: 0 hit, 1.0 ms
+  10k ilk-karakter tuzagi (マx10000): 0 hit, 0.5 ms
+  10k onek tuzagi (マルクx3333, son harf eksik): 0 hit, 0.4 ms
+== 3. 5000 terimli sozluk: yukleme + lookup ==
+  5000 terim yukleme: 75 ms; desen uzunlugu: 21233
+  40 kelimelik KR metin, 5000 terim: 40 hit, medyan 0.26 ms
+== 4. 1000 segment x {11, 50, 500, 5000} terim: lookup_segments + gom medyan ==
+  11 terim      : hit/segment=6, medyan 31.7 ms, min 30.2, max 37.4
+  50 terim      : hit/segment=6, medyan 33.5 ms, min 30.6, max 35.8
+  500 terim     : hit/segment=6, medyan 30.0 ms, min 29.1, max 36.9
+  5000 terim    : hit/segment=6, medyan 31.9 ms, min 30.9, max 36.7
+  11+2000 cesitli: hit/segment=6, medyan 36.2 ms, min 33.2, max 40.0
+  oran 500/11 = 0.95; 5000/11 = 1.01; cesitli/11 = 1.14
+  kapi yolu (lookup+replace) 11 terim: medyan 40.9 ms
+== 5. regex geri izleme: onek zinciri sozluk + en kotu metin ==
+  onek zinciri (a2..a11) x a*10000: 909 hit, 850.2 ms
+  (a*11 b) x 800: 800 hit, 453.4 ms
+  'a*11 ' x 800 (hepsi sinirli, 800 hit + 8000 onek adayi): 800 hit, 559.7 ms
+  dallanan trie (ab)^k c/d, metin (ab)^5000 (asla bitmez): 0 hit, 6.5 ms

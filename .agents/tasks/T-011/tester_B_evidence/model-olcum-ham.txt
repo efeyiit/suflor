@@ -1,0 +1,202 @@
+== A ==
+[A0] jpn_Jpan kaynak='長老マルクス'
+      gomulu_kaynak='İhtiyarMarcus'
+      ham='İhtiyar Marks.'
+      gom='İhtiyar Marcus'
+      hedef_hamda=False hedef_gomuluda=True
+[A1] jpn_Jpan kaynak='マルクスがあなたを待っています。'
+      gomulu_kaynak='Marcusがあなたを待っています。'
+      ham='Marks seni bekliyor.'
+      gom='Marcus seni bekliyor.'
+      hedef_hamda=False hedef_gomuluda=True
+[A2] jpn_Jpan kaynak='水車小屋を過ぎて東の道を行きなさい。'
+      gomulu_kaynak='Değirmenを過ぎて東の道を行きなさい。'
+      ham='Su arabası kulübesinden geçip doğuya doğru yürüyün.'
+      gom="Değirmen'i geçerek doğuya doğru yürüyün."
+      hedef_hamda=False hedef_gomuluda=True
+[A3] kor_Hang kaynak='장로 마르쿠스'
+      gomulu_kaynak='İhtiyar Marcus'
+      ham='İhtiyar Marcus'
+      gom='İhtiyar Marcus'
+      hedef_hamda=True hedef_gomuluda=True
+[A4] kor_Hang kaynak='방앗간을 지나 동쪽 길로 가십시오.'
+      gomulu_kaynak='Değirmen을 지나 동쪽 길로 가십시오.'
+      ham="Doğu'ya doğru Doğu'ya doğru yürüyün."
+      gom="Değirmen'den geçin ve doğuya doğru gidin."
+      hedef_hamda=False hedef_gomuluda=True
+[A5] eng_Latn kaynak='The elder Marcus waits by the mill.'
+      gomulu_kaynak='The İhtiyar Marcus waits by the Değirmen.'
+      ham='Yaşlı Marcus, değirmenin yanında bekliyor.'
+      gom="İhtiyar Marcus Değirmen'in yanında bekliyor."
+      hedef_hamda=True hedef_gomuluda=True
+== B ==
+[B0] jpn_Jpan kaynak='マルクスはアイラと水車小屋へ行った。'
+      gomulu_kaynak='MarcusはAylaとDeğirmenへ行った。'
+      ham="Marks, Aira'yı ve arabayı arabaya götürdü."
+      gom="Marcus Ayla ve Değirmen'e gitti."
+      hits=3 hedefler=['Ayla', 'Değirmen', 'Marcus'] hamda=[] gomuluda=['Ayla', 'Değirmen', 'Marcus'] ingilizce_kelime=0
+[B1] jpn_Jpan kaynak='アイラが長老に手紙を渡した。'
+      gomulu_kaynak='Aylaがİhtiyarに手紙を渡した。'
+      ham='Ayla ihtiyarlara bir mektup gönderdi.'
+      gom="Ayla İhtiyar'a bir mektup gönderdi."
+      hits=2 hedefler=['Ayla', 'İhtiyar'] hamda=['Ayla', 'İhtiyar'] gomuluda=['Ayla', 'İhtiyar'] ingilizce_kelime=0
+[B2] jpn_Jpan kaynak='水車小屋の長老がマルクスを呼んだ。'
+      gomulu_kaynak='DeğirmenのİhtiyarがMarcusを呼んだ。'
+      ham="Su arabası kulübesindeki ihtiyarlar Marks'ı çağırdılar."
+      gom="Değirmen'deki İhtiyar Marcus'u aradı."
+      hits=3 hedefler=['Değirmen', 'Marcus', 'İhtiyar'] hamda=['İhtiyar'] gomuluda=['Değirmen', 'Marcus', 'İhtiyar'] ingilizce_kelime=0
+[B3] kor_Hang kaynak='장로가 마르쿠스를 불렀습니다.'
+      gomulu_kaynak='İhtiyar가 Marcus를 불렀습니다.'
+      ham="Bir ihtiyar Markos'u çağırdı."
+      gom="İhtiyar Marcus'a seslendi."
+      hits=2 hedefler=['Marcus', 'İhtiyar'] hamda=['İhtiyar'] gomuluda=['Marcus', 'İhtiyar'] ingilizce_kelime=0
+[B4] kor_Hang kaynak='마르쿠스는 방앗간에서 아일라를 만났습니다.'
+      gomulu_kaynak='Marcus는 Değirmen에서 Ayla를 만났습니다.'
+      ham="Marcus, Baytgan'da Ayla'yla tanıştı."
+      gom="Marcus Ayla'yla Değirmen'de tanıştı."
+      hits=3 hedefler=['Ayla', 'Değirmen', 'Marcus'] hamda=['Ayla', 'Marcus'] gomuluda=['Ayla', 'Değirmen', 'Marcus'] ingilizce_kelime=0
+[B5] kor_Hang kaynak='아일라가 장로에게 편지를 건넸습니다.'
+      gomulu_kaynak='Ayla가 장로에게 편지를 건넸습니다.'
+      ham='Ayla ihtiyarlara bir mektup gönderdi.'
+      gom='Ayla ihtiyarlara bir mektup gönderdi.'
+      hits=1 hedefler=['Ayla'] hamda=['Ayla'] gomuluda=['Ayla'] ingilizce_kelime=0
+== C ==
+[C0] jpn_Jpan terim='マルクス'->'Marcus' kaynak='マルクスが来た。'
+      ham='Marks geldi.'
+      gom='Marcus geldi.'
+      hedef_hamda=False
+[C1] kor_Hang terim='마르쿠스'->'Marcus' kaynak='마르쿠스가 왔습니다.'
+      ham='Marcus geldi.'
+      gom='Marcus geldi.'
+      hedef_hamda=True
+[C2] eng_Latn terim='Marcus'->'Marcus' kaynak='Marcus came.'
+      ham='Marcus geldi.'
+      gom='Marcus geldi.'
+      hedef_hamda=True
+[C3] jpn_Jpan terim='アイラ'->'Ayla' kaynak='アイラが来た。'
+      ham='Ayla geldi.'
+      gom='Ayla geldi.'
+      hedef_hamda=True
+[C4] kor_Hang terim='아일라'->'Ayla' kaynak='아일라가 왔습니다.'
+      ham='Ayla geldi.'
+      gom='Ayla geldi.'
+      hedef_hamda=True
+[C5] jpn_Jpan terim='水車小屋'->'Değirmen' kaynak='水車小屋は古い。'
+      ham='Su arabası evleri eski.'
+      gom='Değirmen çok eski.'
+      hedef_hamda=False
+[C6] kor_Hang terim='방앗간'->'Değirmen' kaynak='방앗간은 오래되었습니다.'
+      ham='Bapatgan çok uzun zamandır.'
+      gom='Değirmen çok eski.'
+      hedef_hamda=False
+[C7] eng_Latn terim='mill'->'Değirmen' kaynak='The mill is old.'
+      ham='Mülen eskidir.'
+      gom='Değirmen yaşlı.'
+      hedef_hamda=False
+[C8] jpn_Jpan terim='長老'->'İhtiyar' kaynak='長老が来た。'
+      ham='İhtiyar geldi.'
+      gom='İhtiyar geldi.'
+      hedef_hamda=True
+[C9] kor_Hang terim='장로'->'İhtiyar' kaynak='장로가 왔습니다.'
+      ham='Bir ihtiyar geldi.'
+      gom='İhtiyar geldi.'
+      hedef_hamda=True
+[C10] eng_Latn terim='elder'->'İhtiyar' kaynak='The elder came.'
+      ham='İhtiyar geldi.'
+      gom='İhtiyar geldi.'
+      hedef_hamda=True
+== D ==
+[D0] jpn_Jpan kaynak='マルクス' gomulu_kaynak='Marcus'
+      ham='Marx.'
+      gom='- Marcus.'
+      gomulu_metin_aynen_cikti=False
+[D1] jpn_Jpan kaynak='水車小屋' gomulu_kaynak='Değirmen'
+      ham='Su arabası dairesinde.'
+      gom='Değirmen'
+      gomulu_metin_aynen_cikti=True
+[D2] jpn_Jpan kaynak='長老マルクス' gomulu_kaynak='İhtiyarMarcus'
+      ham='İhtiyar Marks.'
+      gom='İhtiyar Marcus'
+      gomulu_metin_aynen_cikti=False
+[D3] kor_Hang kaynak='장로' gomulu_kaynak='İhtiyar'
+      ham='İhtiyar'
+      gom='İhtiyar'
+      gomulu_metin_aynen_cikti=True
+[D4] eng_Latn kaynak='mill' gomulu_kaynak='Değirmen'
+      ham='değirmen'
+      gom='Değirmen'
+      gomulu_metin_aynen_cikti=True
+[D5] jpn_Jpan kaynak='アイラ' gomulu_kaynak='Ayla'
+      ham='Ayla.'
+      gom='Ayla.'
+      gomulu_metin_aynen_cikti=True
+== E ==
+[E0] jpn_Jpan kaynak='マルクスさんが来た。' hits=0 gomulu_kaynak='マルクスさんが来た。'
+      ham='Bay Marks geldi.'
+      gom='Bay Marks geldi.'
+      hedef_ciktida=False
+[E1] jpn_Jpan kaynak='マルクス様は水車小屋にいます。' hits=1 gomulu_kaynak='マルクス様はDeğirmenにいます。'
+      ham='Bay Marks, su arabası kabinde.'
+      gom="Marks, Değirmen'de."
+      hedef_ciktida=False
+[E2] kor_Hang kaynak='마르쿠스에게 말했습니다.' hits=0 gomulu_kaynak='마르쿠스에게 말했습니다.'
+      ham="Markos'a söyledim."
+      gom="Markos'a söyledim."
+      hedef_ciktida=False
+[E3] kor_Hang kaynak='장로님이 오셨습니다.' hits=0 gomulu_kaynak='장로님이 오셨습니다.'
+      ham='Bir ihtiyar geldi.'
+      gom='Bir ihtiyar geldi.'
+      hedef_ciktida=True
+[E4] kor_Hang kaynak='마르쿠스님, 안녕하세요.' hits=0 gomulu_kaynak='마르쿠스님, 안녕하세요.'
+      ham='Marcus, merhaba.'
+      gom='Marcus, merhaba.'
+      hedef_ciktida=True
+[E5] jpn_Jpan kaynak='マルクスたちは東へ行った。' hits=0 gomulu_kaynak='マルクスたちは東へ行った。'
+      ham='Markslar doğuya gitti.'
+      gom='Markslar doğuya gitti.'
+      hedef_ciktida=False
+[F] ham="Doğu'ya doğru Doğu'ya doğru yürüyün." tekrar=True
+== H ==
+[H0] kor_Hang kaynak='마을 장로가 왔습니다.'
+      gomulu_kaynak='마을 İhtiyar가 왔습니다.'
+      ham='Köyde bir ihtiyar geldi.'
+      gom='İhtiyar kasabasından geldi.'
+      hedef_hamda=True hedef_gomuluda=True
+[H1] kor_Hang kaynak='마을 장로가 마르쿠스를 불렀습니다.'
+      gomulu_kaynak='마을 İhtiyar가 Marcus를 불렀습니다.'
+      ham="Köy ihtiyarı Marcus'u çağırdı."
+      gom="İhtiyar kasabası Marcus'a seslendi."
+      hedef_hamda=True hedef_gomuluda=True
+[H2] kor_Hang kaynak='장로 회의가 열렸습니다.'
+      gomulu_kaynak='İhtiyar 회의가 열렸습니다.'
+      ham='Bir ihtiyar toplantısı yapıldı.'
+      gom='İhtiyar toplantısı yapıldı.'
+      hedef_hamda=True hedef_gomuluda=True
+[H3] kor_Hang kaynak='장로의 집은 방앗간 옆입니다.'
+      gomulu_kaynak='İhtiyar의 집은 Değirmen 옆입니다.'
+      ham="Cano'nun evi çukurun yanındadır."
+      gom="İhtiyar'ın evi Değirmen'in yanındadır."
+      hedef_hamda=False hedef_gomuluda=True
+[H4] jpn_Jpan kaynak='村の長老が来た。'
+      gomulu_kaynak='村のİhtiyarが来た。'
+      ham='Köyün ihtiyarları geldi.'
+      gom='Köyden İhtiyar geldi.'
+      hedef_hamda=True hedef_gomuluda=True
+[H5] jpn_Jpan kaynak='長老の家は水車小屋の隣です。'
+      gomulu_kaynak='İhtiyarの家はDeğirmenの隣です。'
+      ham='Yaşlıların evi su arabası kulübesinin yanındadır.'
+      gom="İhtiyar'ın evi Değirmen'in yanındadır."
+      hedef_hamda=False hedef_gomuluda=True
+[H6] eng_Latn kaynak='The village elder came.'
+      gomulu_kaynak='The village İhtiyar came.'
+      ham='Köy ihtiyarı geldi.'
+      gom='İhtiyar köyü geldi.'
+      hedef_hamda=True hedef_gomuluda=True
+[H7] eng_Latn kaynak='The elder council met at the mill.'
+      gomulu_kaynak='The İhtiyar council met at the Değirmen.'
+      ham='İhtiyarlar Konseyi derende toplandı.'
+      gom="İhtiyar Konseyi Değirmen'de toplandı."
+      hedef_hamda=True hedef_gomuluda=True
+[I] kaynak='彼はマルクス。 行こう。' gomulu='彼はMarcus 行こう。'
+    ham='Bu adam Marks. Hadi gidelim.'
+    gom='O da Marcus.'

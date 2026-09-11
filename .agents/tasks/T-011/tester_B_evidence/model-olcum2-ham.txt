@@ -1,0 +1,20 @@
+[J0] jpn_Jpan kaynak='長老マルクス様が来た。' hits=1 gomulu='İhtiyarマルクス様が来た。'
+     ham='İhtiyar Marks geldi.'
+     gom='İhtiyar Marks geldi.'
+     hamda=['İhtiyar'] gomuluda=['İhtiyar']
+[J1] kor_Hang kaynak='장로 마르쿠스님이 오셨습니다.' hits=1 gomulu='İhtiyar 마르쿠스님이 오셨습니다.'
+     ham='İhtiyar Mark geldi.'
+     gom='İhtiyar Markus geldi.'
+     hamda=['İhtiyar'] gomuluda=['İhtiyar']
+[J2] jpn_Jpan kaynak='水車小屋のマルクス様' hits=1 gomulu='Değirmenのマルクス様'
+     ham='Su arabası kulübesindeki Marks Bay.'
+     gom="Değirmen'deki Marks Bay."
+     hamda=[] gomuluda=['Değirmen']
+[K0] jpn_Jpan kaynak='長老マルクスが来た。' hits=2 gomulu='İhtiyarMarcusが来た。'
+     ham='İhtiyar Marks geldi.'
+     gom='İhtiyar Marcus geldi.'
+     hamda=['İhtiyar'] gomuluda=['İhtiyar', 'Marcus']
+[K1] kor_Hang kaynak='장로 마르쿠스가 오셨습니다.' hits=2 gomulu='İhtiyar Marcus가 오셨습니다.'
+     ham='İhtiyar Mark geldi.'
+     gom='İhtiyar Marcus geldi.'
+     hamda=['İhtiyar'] gomuluda=['İhtiyar', 'Marcus']

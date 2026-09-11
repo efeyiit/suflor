@@ -1,0 +1,72 @@
+== 1. IGNORECASE: Latin/Turkce/ozel katlamalar ==
+tam buyuk                                    metin=MARCUS                                   -> [(0, 6, 'MARCUS', 'Marcus')]
+tam kucuk                                    metin=marcus                                   -> [(0, 6, 'marcus', 'Marcus')]
+karisik                                      metin=mArCuS                                   -> [(0, 6, 'mArCuS', 'Marcus')]
+uzun s (U+017F) -- IGNORECASE s~long-s       metin=Marcu\u017f                              -> [(0, 6, 'Marcu\\u017f', 'Marcus')]
+MARCUS + bosluk                              metin=MARCUS bekliyor                          -> [(0, 6, 'MARCUS', 'Marcus')]
+istanbul (kucuk i)                           metin=istanbul                                 -> [(0, 8, 'istanbul', '\\u0130stanbul')]
+ISTANBUL (buyuk I)                           metin=ISTANBUL                                 -> [(0, 8, 'ISTANBUL', '\\u0130stanbul')]
+noktasiz i ile                               metin=\u0131stanbul                            -> [(0, 8, '\\u0131stanbul', '\\u0130stanbul')]
+buyuk noktali I ile                          metin=\u0130STANBUL                            -> [(0, 8, '\\u0130STANBUL', '\\u0130stanbul')]
+STRASSE vs strasse-eszett -- casefold ss     metin=STRASSE                                  -> []
+STRA + buyuk eszett? (U+00DF kucuk)          metin=STRA\xdfE                                -> [(0, 6, 'STRA\\xdfE', 'Sokak')]
+strasse                                      metin=strasse                                  -> []
+Strasse eszett                               metin=Stra\xdfe                                -> [(0, 6, 'Stra\\xdfe', 'Sokak')]
+buyuk eszett U+1E9E                          metin=STRA\u1e9eE                              -> [(0, 6, 'STRA\\u1e9eE', 'Sokak')]
+fi ligature (U+FB01) vs fine                 metin=\ufb01ne                                 -> []
+FINE                                         metin=FINE                                     -> [(0, 4, 'FINE', 'Ince')]
+sigma kucuk                                  metin=\u03c3\u03bf\u03c6\u03b9\u03b1           -> [(0, 5, '\\u03c3\\u03bf\\u03c6\\u03b9\\u03b1', 'Sofya')]
+final sigma sonek -> harf komsusu            metin=\u03c3\u03bf\u03c6\u03b9\u03b1\u03c2     -> []
+Sigma bas buyuk                              metin=\u03a3\u03bf\u03c6\u03b9\u03b1           -> [(0, 5, '\\u03a3\\u03bf\\u03c6\\u03b9\\u03b1', 'Sofya')]
+Kiril kucuk                                  metin=\u043a\u0440\u0435\u043c\u043b\u044c     -> [(0, 6, '\\u043a\\u0440\\u0435\\u043c\\u043b\\u044c', 'Kremlin')]
+Kiril buyuk                                  metin=\u041a\u0420\u0415\u041c\u041b\u042c     -> [(0, 6, '\\u041a\\u0420\\u0415\\u041c\\u041b\\u042c', 'Kremlin')]
+== 1b. sozlukte kucuk, metinde ozel buyuk ==
+U+212A Kelvin isareti + elvin                metin=\u212aelvin                              -> [(0, 6, 'Kelvin', 'Kelvin')]
+KELVIN                                       metin=KELVIN                                   -> [(0, 6, 'KELVIN', 'Kelvin')]
+fi ligature + s-cedilla (uzunluk 2 vs 3)     metin=\ufb01\u015f                             -> []
+FIS noktali buyuk I                          metin=F\u0130\u015e                            -> [(0, 3, 'F\\u0130\\u015e', 'Fis')]
+FIS noktasiz buyuk I                         metin=FI\u015e                                 -> [(0, 3, 'FI\\u015e', 'Fis')]
+DIS                                          metin=DI\u015e                                 -> [(0, 3, 'DI\\u015e', 'Dis')]
+dis (noktali i) -- dis-noktasiz ile ayni anahtar mi? metin=di\u015f                                 -> [(0, 3, 'di\\u015f', 'Dis')]
+== 1c. tekrar reddi: IGNORECASE denk ciftler ==
+  Marcus       + MARCUS       -> ValueError: sozluk semasi: terim 'MARCUS': tekrar eden kaynak ('Marcus' ile ayni)
+  istanbul     + \u0130stanbul -> ValueError: sozluk semasi: terim '\u0130stanbul': tekrar eden kaynak ('istanbul' ile ayni)
+  d\u0131\u015f + di\u015f     -> ValueError: sozluk semasi: terim 'di\u015f': tekrar eden kaynak ('d\u0131\u015f' ile ayni)
+  stra\xdfe    + strasse      -> ValueError: sozluk semasi: terim 'stra\xdfe': tekrar eden kaynak ('strasse' ile ayni)
+  fine         + \ufb01ne     -> ValueError: sozluk semasi: terim '\ufb01ne': tekrar eden kaynak ('fine' ile ayni)
+  K            + \u212a       -> ValueError: sozluk semasi: terim 'K': tekrar eden kaynak ('K' ile ayni)
+  s            + \u017f       -> ValueError: sozluk semasi: terim '\u017f': tekrar eden kaynak ('s' ile ayni)
+== 1d. tekrar reddi ATLANMIS ciftte lookup davranisi (iki terim ayni IGNORECASE sinifinda) ==
+  stra\xdfe + strasse: yuklenemedi: sozluk semasi: terim 'stra\xdfe': tekrar eden kaynak ('stras
+  fine + \ufb01ne: yuklenemedi: sozluk semasi: terim '\ufb01ne': tekrar eden kaynak ('fine' 
+  K + \u212a: yuklenemedi: sozluk semasi: terim 'K': tekrar eden kaynak ('K' ile ayni)
+  s + \u017f: yuklenemedi: sozluk semasi: terim '\u017f': tekrar eden kaynak ('s' ile a
+== 2. NFC: NFD metin, indeksler, gom ciktisi ==
+  NFD uzunluklar: Degirmen 9 (NFC 8), KR 17 (NFC 7), cafe 13 (NFC 12)
+NFD Degirmen + ' eski'                       metin=Deg\u0306irmen eski                      -> [(0, 8, 'De\\u011firmen', 'De\\u011firmen')]
+NFD KR                                       metin=\u1107\u1161\u11bc\u110b\u1161\u11ba\u1100\u1161\u11ab\u110b\u1173\u11af \u110c\u1175\u1102\u1161 -> [(0, 3, '\\ubc29\\uc557\\uac04', 'De\\u011firmen')]
+NFD cafe                                     metin=le cafe\u0301 noir                       -> [(3, 7, 'caf\\xe9', 'Kahve')]
+  cafe: NFD metin[3:7] = 'cafe'; NFC metin dilimi = 'caf\\xe9'
+== 2b. terimleri_gom'a NFD segment ==
+  gom OK; girdi len=13; cikti text = 'le Kahve noir'; cikti NFC?=True
+  NFD girdi (len 16) -> cikti (len 13); ARALIK DISI 'cafe' ve 'ete' degisti mi? girdi[:5]='cafe\\u0301' cikti[:5]='caf\\xe9 '
+  aralik disi karakterler aynen mi: girdi[:5]==cikti[:5] -> False
+  hit yok + NFD segment -> ayni nesne mi: True
+  hit'siz NFD segment baska segment hit'liyken: ayni nesne=True, text NFD kaldi=True
+== 2c. hit NFD source_term / target_term, segment NFC ==
+  NFD source_term kabul: 'le Kahve noir'
+  NFD target_term -> cikti NFC? True, text='le Kahv\\xe9 noir'
+== 3. kodpoint indeksleri: astral + birlestirici ==
+emoji (astral) once                          metin=\U0001f600\u30de\u30eb\u30af\u30b9       -> []
+CJK Ext-B astral + bosluk once               metin=\U0002000b \u30de\u30eb\u30af\u30b9      -> [(2, 6, '\\u30de\\u30eb\\u30af\\u30b9', 'Marcus')]
+CJK Ext-B astral BITISIK (harf komsusu -> hayir) metin=\U0002000b\u30de\u30eb\u30af\u30b9       -> []
+Marcus + birlestirici aksan (Mn) sagda       metin=Marcus\u0301                             -> []
+birlestirici aksan solda                     metin=\u0301Marcus                             -> []
+Marcus + ZWJ (Cf)                            metin=Marcus\u200d                             -> []
+ka+handakuten(U+309A) ki terim + ga          metin=\u304b\u309a\u304d\u304c                 -> [(0, 3, '\\u304b\\u309a\\u304d', 'Kaki')]
+kontrol: farkli yerde handakuten -> hayir    metin=\u304b\u304d\u309a\u304c                 -> []
+marukusu + birlestirici dakuten (Mn) -> ?    metin=\u30de\u30eb\u30af\u30b9\u3099           -> []
+kontrol: marukuzu (NFC bilesik) -> hayir     metin=\u30de\u30eb\u30af\u30ba                 -> []
+== 4. lookup sonucu gom'a: source_term buyuk/kucuk metinden mi ==
+  source_term='MARCUS' target='Marcus' start=0 end=6
+  gom -> 'Marcus bekliyor'

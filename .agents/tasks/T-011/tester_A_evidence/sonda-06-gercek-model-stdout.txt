@@ -1,0 +1,32 @@
+CUMLE: The windmills turn slowly.
+  hits: [(4, 8, 'wind')]
+  gomulu kaynak: The R\xfczgarmills turn slowly.
+  ham ceviri   : R\xfczgar de\u011firmenleri yava\u015f d\xf6n\xfcyor.
+  gomulu ceviri: R\xfczgarmills yava\u015f d\xf6n\xfcyor.
+  OZET: hit=1 gomulu_kaynak_parcali_kelime=True ciktida_Degirmen=False ciktida_Ruzgar=True ham_kelime=4 gom_kelime=3
+CUMLE: The old windmill is broken.
+  hits: [(8, 12, 'wind'), (12, 16, 'mill')]
+  gomulu kaynak: The old R\xfczgarDe\u011firmen is broken.
+  ham ceviri   : Eski r\xfczgar de\u011firmeni k\u0131r\u0131lm\u0131\u015f.
+  gomulu ceviri: Eski R\xfczgar De\u011firmen k\u0131r\u0131lm\u0131\u015f.
+  OZET: hit=2 gomulu_kaynak_parcali_kelime=True ciktida_Degirmen=True ciktida_Ruzgar=True ham_kelime=4 gom_kelime=4
+CUMLE: Marcus waits by the windmill.
+  hits: [(0, 6, 'Marcus'), (20, 24, 'wind'), (24, 28, 'mill')]
+  gomulu kaynak: Marcus waits by the R\xfczgarDe\u011firmen.
+  ham ceviri   : Marcus r\xfczgar de\u011firmeninin yan\u0131nda bekliyor.
+  gomulu ceviri: Marcus R\xfczgar De\u011firmen'de bekliyor.
+  OZET: hit=3 gomulu_kaynak_parcali_kelime=True ciktida_Degirmen=True ciktida_Ruzgar=True ham_kelime=5 gom_kelime=4
+CUMLE: Marcus waits by the mill.
+  hits: [(0, 6, 'Marcus'), (20, 24, 'mill')]
+  gomulu kaynak: Marcus waits by the De\u011firmen.
+  ham ceviri   : Marcus de\u011firmenin yan\u0131nda bekliyor.
+  gomulu ceviri: Marcus De\u011firmen'in yan\u0131nda bekliyor.
+  OZET: hit=2 gomulu_kaynak_parcali_kelime=False ciktida_Degirmen=True ciktida_Ruzgar=False ham_kelime=4 gom_kelime=4
+CUMLE: The wind is strong today.
+  hits: [(4, 8, 'wind')]
+  gomulu kaynak: The R\xfczgar is strong today.
+  ham ceviri   : R\xfczgar bug\xfcn g\xfc\xe7l\xfc.
+  gomulu ceviri: R\xfczgar bug\xfcn g\xfc\xe7l\xfc.
+  OZET: hit=1 gomulu_kaynak_parcali_kelime=False ciktida_Degirmen=False ciktida_Ruzgar=True ham_kelime=3 gom_kelime=3
+yazildi -> sonda-06-gercek-model.txt
+exit_code=0

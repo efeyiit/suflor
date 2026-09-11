@@ -1,0 +1,15 @@
+HEAD: 1ff6a8a  2026-09-11 19:32:40
+--- git status --short (tum depo)
+?? .agents/tasks/T-011/sef_dogrulama/y3_unvan_jangro.txt
+?? .agents/tasks/T-011/tester_A/
+?? .agents/tasks/T-011/tester_A_evidence/
+?? .agents/tasks/T-011/tester_B/
+?? .agents/tasks/T-011/tester_B_evidence/
+--- git status --short -- src tests demo real_check packet fixtures (tester-B dokunmadi; BOS beklenir)
+--- sha256 (olculen kaynak)
+7c57ca9f0bc374689819b7110d987c90111aa28c8c1f03e4e310e24a127680db *src/translate/sozluk.py
+9aca296d84440ca1aa8f2daadcc97a208f31c640c0f82b27282d044776f26302 *tests/unit/translate/test_sozluk.py
+8ff3aacb57bed20eeedd326892de94d838d27a00462004e10bc61d3ae1e9e87d *.agents/tasks/T-011/real_check.py
+6e062a36b7be0cb1f9da1e75e82f29baee7f69838a18d316236d34e7d6fa0635 *.agents/tasks/T-011/fixtures/sozluk_ornek.json
+--- not: demo/sozluk_ornek.json ve demo/canli_cevir.py 1ff6a8a ile SEF tarafindan commit edildi (implementer sahiplik ihlali DEGIL)
+1ff6a8a Demo: sözlük zinciri canlı çeviriye bağlandı (KR/JP uçtan uca ekran görüntüleri); T-012 UI kabuğu isteği kaydedildi

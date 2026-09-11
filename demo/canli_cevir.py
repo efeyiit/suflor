@@ -30,7 +30,7 @@ from demo.bolge_izle import SecimKatmani, _frame_to_qimage  # noqa: E402
 from src.capture.change_detector import ChangeDetector  # noqa: E402
 from src.capture.monitors import union_bbox  # noqa: E402
 from src.capture.service import CaptureService, MssBackend  # noqa: E402
-from src.contracts.errors import ModelMissingError, OcrError  # noqa: E402
+from src.contracts.errors import ModelMissingError, OcrError, TranslatorError  # noqa: E402
 from src.contracts.models import Frame, OcrPreset, Rect, Segment, TextBlock, TranslationRequest  # noqa: E402
 from src.ocr.normalizer import normalize  # noqa: E402
 from src.ocr.satir_birlestirici import satirlari_birlestir  # noqa: E402
@@ -68,7 +68,7 @@ class GosterimCevirici:
         if self._sozluk is not None:
             hits = self._sozluk.lookup_segments(segmentler)
             gomulu = list(terimleri_gom(segmentler, hits))
-            terimler = [h.target_term for h in hits]
+            terimler = [h.target_term for h in hits if h.target_term != h.source_term]  # kimlik cipasi sayilmaz
         istek = TranslationRequest(segments=tuple(gomulu), source_lang=self._kaynak, target_lang="tr")
         return gomulu, list(self._saglayici.translate(istek).translations), terimler
 
@@ -89,7 +89,12 @@ class CeviriIsi(QtCore.QObject):
             self.bitti.emit([], [Segment(text=f"[hata] {hata}", bbox=kare.rect)], [""], [], 0.0, 0.0)
             return
         t1 = time.perf_counter()
-        gomulu, ceviriler, terimler = self._cevirici.cevir(list(segmentler))  # T-011: sözlük çeviriden önce
+        try:
+            gomulu, ceviriler, terimler = self._cevirici.cevir(list(segmentler))  # T-011: sözlük çeviriden önce
+        except TranslatorError as hata:  # sözlük/çeviri sözleşme hatası: pencere donmasın, göster
+            self.bitti.emit(bloklar, segmentler, [f"[çeviri hatası] {type(hata).__name__}"] * len(segmentler), [],
+                            (t1 - t0) * 1000, 0.0)
+            return
         t2 = time.perf_counter()
         self.bitti.emit(bloklar, gomulu, ceviriler, terimler, (t1 - t0) * 1000, (t2 - t1) * 1000)
 
