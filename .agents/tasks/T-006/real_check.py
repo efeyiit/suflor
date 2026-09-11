@@ -193,6 +193,12 @@ def main() -> int:
     (tamam if kb <= 150.0 else uyari)(f"[5] KOREAN: medyan {med:.0f} ms / {kutu} kutu = {kb:.0f} ms/kutu  (eşik 150 ms/kutu)")
 
     # --- K5 güven süzülmüyor: en düşük güvenli blok da listede -----------------
+    # #8 (KRT-1 Y1 pozitif kontrolü): KR fixture + JAPAN modeli düşük puanlı bloklar üretir;
+    # kütüphanenin Global.text_score=0.5 süzgeci AÇIKSA bunlar sessizce kaybolur.
+    b_kr_jp = jp.recognize(f_kr, OcrPreset.DIALOGUE)
+    dusuk = sum(1 for b in b_kr_jp if b.confidence < 0.5)
+    (tamam if dusuk >= 1 else ihlal)(
+        f"[8] KR+JAPAN: {len(b_kr_jp)} blok, {dusuk} tanesi confidence<0.5 — ≥1 olmalı (süzgeç KAPALI kanıtı)")
     if b_kr:
         gmin = min(b.confidence for b in b_kr)
         (tamam if type(gmin) is float else ihlal)(f"[K5] confidence tipi float (min {gmin:.3f})")

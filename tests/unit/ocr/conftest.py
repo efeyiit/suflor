@@ -22,3 +22,47 @@ _KIT = _KOK / ".agents" / "tasks" / "T-004"
 for _yol in (str(_KOK), str(_KIT)):
     if _yol not in sys.path:
         sys.path.insert(0, _yol)
+
+
+# ---------------------------------------------------------------------------
+# T-006 K1 bariyeri — ŞEFE AİT, modül düzeyinde (fixture'da DEĞİL).
+#
+# Neden modül düzeyi: oturum fixture'ı toplama SONRASI kurulur ve test
+# modülünün en üstündeki `import rapidocr`'u göremez (T-006 KRT-1 Y7, pytest
+# sandığında ölçüldü). Bu bloğun çalışması `conftest` yüklenirken olur, yani
+# bu dizindeki hiçbir test modülü toplanmadan önce.
+#
+# Ne yapar: `rapidocr*` ve `onnxruntime*` için import girişimini `RuntimeError`
+# ile KESER. Birim testleri gerçek modeli hiç yükleyemez; gerçek davranış yalnız
+# `.agents/tasks/T-006/real_check.py`'de (ayrı süreç) ölçülür.
+#
+# Pozitif kontrol (§4.6/10): `tests/unit/ocr/test_conftest_bariyer.py` bu
+# bariyerin gerçekten ateşlediğini doğrular. Bariyer sessizce boşalırsa o test
+# düşer.
+# ---------------------------------------------------------------------------
+import importlib.abc as _abc
+import importlib.machinery as _mach
+
+_YASAK_KOKLER: tuple[str, ...] = ("rapidocr", "onnxruntime")
+
+
+class _T006Bariyer(_abc.MetaPathFinder):
+    """`rapidocr`/`onnxruntime` import'unu test sürecinde keser."""
+
+    def find_spec(
+        self,
+        fullname: str,
+        path: object = None,
+        target: object = None,
+    ) -> _mach.ModuleSpec | None:
+        kok = fullname.split(".", 1)[0]
+        if kok in _YASAK_KOKLER:
+            raise RuntimeError(
+                f"T-006 K1 bariyeri: birim testleri {fullname!r} import edemez; "
+                "gerçek model yalnız .agents/tasks/T-006/real_check.py ile ölçülür"
+            )
+        return None
+
+
+if not any(isinstance(_f, _T006Bariyer) for _f in sys.meta_path):
+    sys.meta_path.insert(0, _T006Bariyer())

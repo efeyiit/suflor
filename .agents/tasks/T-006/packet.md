@@ -4,11 +4,10 @@ title: "RapidOcrEngine: yerel ONNX OCR motoru (JP/KR/EN/ZH), dil açık, iş par
 role: implementer
 level: B
 wave: 1
-packet_version: 1
+packet_version: 2
 owns:
   - "src/ocr/rapid_engine.py"
   - "tests/unit/ocr/test_rapid_engine.py"
-  - "tests/unit/ocr/conftest.py"
   - ".agents/tasks/T-006/evidence/**"
   - ".agents/tasks/T-006/delivery.md"
 forbidden:
@@ -17,10 +16,12 @@ forbidden:
   - "src/ocr/normalizer.py"
   - "src/ocr/presets.py"
   - "src/ocr/__init__.py"
+  - "tests/unit/ocr/conftest.py"
   - "tests/unit/ocr/test_normalizer.py"
   - "tests/unit/capture/**"
   - "demo/**"
   - ".agents/tasks/T-006/real_check.py"
+  - ".agents/tasks/T-006/fixtures/**"
   - "diğer tüm dizinler"
 depends_on: ["T-001", "T-004", "T-005"]
 acceptance:
@@ -29,36 +30,45 @@ acceptance:
   - "python .agents/tasks/T-006/real_check.py"
   - "python -m pytest tests/unit/ocr/test_rapid_engine.py -q --cov=src.ocr.rapid_engine --cov-fail-under=90 --cov-report=term-missing"
   - "python -m pytest tests -q"
-budget_ms: 300   # 1200x400, 4 satırlık diyalog kutusu, gerçek model, 8 iş parçacığı (O4: 191-206 ms ölçüldü)
+budget_ms: 300   # TEK bütçe: JAPAN, 1200x400 4 satırlık fixture, gerçek v4-mobile model, 8 iş parçacığı (O4: 191-206 ms). Diğer diller RAPORLANIR.
 ---
+
+> **Paket sürümü 2.** v1 kırmızı takımdan **7 yüksek** bulguyla döndü; şef üçünü (Y1, Y2, Y5) kendi eliyle yeniden üretti, ikisi (Y4, Y6) şefin kendi ölçümüyle çakıştı. Değişenler `Y*` etiketiyle işaretli. **Ham çıktılar:** `olgular.txt` (O1–O6) ve `krt-1.md`.
 
 # Görev
 
-`OcrEngine` arayüzünün (`src/contracts/interfaces.py`) v1 uygulaması: `Frame` → `list[TextBlock]`. Tasarım §5.1 (bileşen 3), §3.2, §5.7, §6. **Oku.**
-
-**Bu paket ölçüme dayanıyor.** `.agents/tasks/T-006/olgular.txt` — şefin altı ön ölçümü (O1–O6). Her karar oradaki bir olguya bağlı. **Önce onu oku.**
+`OcrEngine` arayüzünün (`src/contracts/interfaces.py`) v1 uygulaması: `Frame` → `list[TextBlock]`. Tasarım §5.1 (bileşen 3), §3.2, §5.7, §6. **Oku.** Sonra `olgular.txt` ve `krt-1.md`'yi oku — her karar oradaki bir ölçüme bağlı.
 
 ## Ne yazılacak
 
-**`src/ocr/rapid_engine.py`** — `RapidOcrEngine(OcrEngine)`. Altta `rapidocr` 3.9.2 (`EngineType.ONNXRUNTIME`). Motor **tembel** kurulur (ilk `recognize`'da), **enjekte edilebilir** (testler gerçek modeli hiç yüklemez).
+**`src/ocr/rapid_engine.py`** — `RapidOcrEngine(OcrEngine)`. Altta `rapidocr` 3.9.2, `EngineType.ONNXRUNTIME`. Motor **tembel** kurulur, tek **enjeksiyon dikişi** vardır (Y-orta: örnek/fabrika çelişkisi kaldırıldı):
 
 ```python
-class Tanıyıcı(Protocol):
-    """rapidocr'un çağrı biçimi: BGR uint8 dizi -> (kutular, metinler, puanlar) | None"""
-    def __call__(self, image: ImageArray) -> TanımaSonucu | None: ...
+class OcrLanguage(StrEnum):
+    JAPAN = "japan"; KOREAN = "korean"; CHINESE = "chinese"; ENGLISH = "english"
+
+class TanımaÇıktısı(Protocol):        # rapidocr'un RapidOCROutput'unun bize gereken yüzü
+    boxes: object | None               # ndarray float32 (N,4,2) ya da None
+    txts: Sequence[str] | None
+    scores: Sequence[float] | None
+
+Tanıyıcı = Callable[[ImageArray], TanımaÇıktısı]
+TanıyıcıFabrikası = Callable[[dict[str, object]], Tanıyıcı]   # params sözlüğünü alır
 
 class RapidOcrEngine(OcrEngine):
     def __init__(
         self, *,
-        language: OcrLanguage,                 # StrEnum: JAPAN | KOREAN | CHINESE | ENGLISH — ZORUNLU, varsayılan YOK
-        threads: int = 8,                      # -1 ("otomatik") YASAK — K3
-        allow_download: bool = False,          # model yoksa: True -> rapidocr indirir, False -> ModelMissingError
-        recognizer: Tanıyıcı | None = None,    # test enjeksiyonu; None -> rapidocr tembel kurulur
+        language: OcrLanguage,                          # ZORUNLU, varsayılan YOK (K2)
+        threads: int | None = None,                     # None -> min(8, os.cpu_count()); -1 YASAK (K3)
+        allow_download: bool = False,                   # K6
+        model_dir: Path | None = None,                  # None -> rapidocr'un kendi models/ dizini (K6)
+        recognizer_factory: TanıyıcıFabrikası | None = None,   # None -> gerçek rapidocr (K1)
     ) -> None: ...
     def recognize(self, frame: Frame, preset: OcrPreset) -> list[TextBlock]: ...
+    def close(self) -> None: ...
 ```
 
-`OcrLanguage` bu modülde tanımlanır (`src/contracts/` dondurulmuş). Dört üye yeter; `rapidocr.LangRec`'e eşlemeyi modül içinde tek bir sözlük yapar.
+**`rapidocr` yalnız fonksiyon gövdesi içinde import edilir** (T-005 K10 "tembel import" ile aynı; Y7: modül düzeyi import bariyeri patlatır). Modül düzeyinde `LangRec`/`LangDet` **adı geçmez**; dil eşlemesi bir fonksiyonun içinde kurulur.
 
 ---
 
@@ -66,77 +76,88 @@ class RapidOcrEngine(OcrEngine):
 
 ## K1 · Testler gerçek modeli hiç yüklemez; gerçek model tek kapıdan ölçülür
 
-**DEĞİŞMEZ:** `tests/unit/ocr/test_rapid_engine.py` hiçbir testte `rapidocr`'u import etmez, `onnxruntime` oturumu açmaz, disk'ten `.onnx` okumaz, ağa çıkmaz. Bütün birim testleri `recognizer=` ile **sahte tanıyıcı** enjekte eder.
-**ÖLÇÜ:** `tests/unit/ocr/conftest.py` — oturum kapsamlı fixture `sys.modules["rapidocr"]`'a **patlayan** bir bariyer koyar (import edilirse `RuntimeError`); ayrıca `sys.meta_path`'e bulucu ekleyip `onnxruntime` için import girişimi sayar → **0** olmalı. `real_check.py` (şefe ait) gerçek modeli **`--real`** ile ayrı süreçte koşar.
-**Neden:** T-005 K1 ile aynı gerekçe — model yükleme 1-2 s, testleri yavaşlatır ve her geliştirici makinesinde model bulunmasını şart koşar. Gerçek davranış yine ölçülür, ama tek yerden.
+**DEĞİŞMEZ:** `tests/unit/ocr/test_rapid_engine.py` hiçbir testte `rapidocr`'u import etmez, `onnxruntime` oturumu açmaz, ağa çıkmaz. Her birim testi `recognizer_factory=` ile **sahte** enjekte eder.
+**ÖLÇÜ (Y7 düzeltildi):** Bariyer **şefe ait** `tests/unit/ocr/conftest.py`'de, **modül düzeyinde** (fixture'da değil — fixture toplama sonrası kurulur ve modül düzeyi import'u görmez; KRT pytest sandığında ölçtü). Bariyer `sys.modules["rapidocr"]`'a import edilince `RuntimeError` fırlatan bir nöbetçi koyar ve `sys.meta_path`'e `onnxruntime` import girişimlerini sayan bulucu ekler. **Pozitif kontrol:** conftest'in kendi self-testi `import rapidocr` deneyip `RuntimeError` aldığını doğrular — bariyerin ateşlediği gösterilir (§4.6/10). `real_check.py` gerçek modeli ayrı süreçte koşar. **Implementer bu conftest'e dokunmaz** (T-004'ün `olcu_kiti` yolu da orada; üzerine yazılırsa 125 normalizer testi + 623 kör test kırılır).
 
 ## K2 · Dil açık seçilir; güven puanı dil hatasını göremez
 
-**DEĞİŞMEZ:** `language` zorunlu, varsayılanı yok. Motor dili **tahmin etmez**. Yanlış dilde tanıma yüksek güvenle yanlış metin üretir (O2: `ch` modeli Japonca diyalogda 0.90 güvenle `村の長老待。`); bu yüzden dil bir **yapılandırma** kararıdır, motor kararı değil.
-**ÖLÇÜ:** `RapidOcrEngine()` (dilsiz) → `TypeError` (Python'un keyword-only zorunluluğu; AST ile `language` parametresinin varsayılanı olmadığı denetlenir). `real_check.py`: Japonca diyalog kutusu `language=JAPAN` ile **4/4 satır birebir**, aynı görüntü `language=CHINESE` ile 4/4 **değil** — ölçünün ateşlediği gösterilir (§4.6/10 pozitif kontrol).
+**DEĞİŞMEZ:** `language` zorunlu, varsayılanı yok, motor dili **tahmin etmez** (O2: `ch` modeli Japonca'da 0.90 güvenle yanlış).
+**ÖLÇÜ:** AST — `__init__`'te `language` parametresinin varsayılanı **yok**. `RapidOcrEngine()` → `TypeError`. `real_check.py` #1/#2: JAPAN 4/4, aynı görüntü CHINESE **<4** (pozitif kontrol; Y2 ile birlikte okuyun — bu kontrol **yalnız v4-mobile model tablosuyla** ateşler, v6 varsayılanında CH/EN/JAPAN aynı dosyaya çözülür ve kontrol **düşer**).
 
-## K3 · İş parçacığı sayısı açık; "otomatik" yasak
+## K3 · İş parçacığı sayısı açık; "otomatik" hiçbir yoldan girmez
 
-**DEĞİŞMEZ:** `threads` motora **aynen** geçer (`EngineConfig.onnxruntime.intra_op_num_threads` ve `inter_op_num_threads`). `threads < 1` → `ValueError` yapımda. `-1` **hiçbir yoldan** motora ulaşmaz.
-**ÖLÇÜ:** Sahte `rapidocr.RapidOCR` sınıfı (test içinde, `sys.modules` üzerinden değil — `recognizer` fabrikası enjekte edilerek) kendisine verilen `params` sözlüğünü kaydeder; test `threads=4` ve `threads=8` ile **iki noktada** iki anahtarın da o değeri taşıdığını, `Global.use_cls`'nin `False` olduğunu assert eder. `threads=0` ve `threads=-1` → `ValueError`. **Neden:** O3 — 32 çekirdekte "otomatik" 1450 ms, 8 parçacık 195 ms; **6 kat**. Bütçe 250 ms.
+**DEĞİŞMEZ (Y5 düzeltildi):** `threads` ∈ `[1, os.cpu_count()]`; `None` → `min(8, os.cpu_count() or 1)`. Aralık dışı (`0`, `-1`, `cpu_count+1`) → `ValueError` **yapımda**. Değer `EngineConfig.onnxruntime.intra_op_num_threads` **ve** `inter_op_num_threads`'e aynen gider. **Neden üst sınır:** KRT ölçtü, şef doğruladı — `threads > cpu_count` verilirse onnxruntime **sessizce (0,0) = otomatik**'e döner; O3'te "otomatik" 6 kat yavaş. `Global.use_cls = False` (O3: oyun metni dönük değil).
+**ÖLÇÜ:** Sahte fabrika `params` sözlüğünü kaydeder; `threads=4` ve `threads=8` **iki noktada** iki anahtar da o değer, `Global.use_cls is False`. `monkeypatch.setattr(os, "cpu_count", lambda: 6)` ile `threads=8` → `ValueError` (sessiz otomatik **değil**); aynı yamayla `threads=None` → `6`; `threads=4` → geçer (pozitif kontrol). `threads=0`, `-1` → `ValueError`.
 
 ## K4 · `bbox` ekran koordinatında, düz `int`, eksen hizalı
 
-**DEĞİŞMEZ:** rapidocr dört köşeli float çokgen döndürür (`[[x1,y1],[x2,y2],[x3,y3],[x4,y4]]`, görüntü-yerel). `TextBlock.bbox`, çokgenin **eksen hizalı sınır kutusu**dur, `frame.rect.x/y` kadar **kaydırılmış** (ekran fiziksel koordinatı), dört alanı **`type(v) is int`** (`x`,`y` = floor; `w`,`h` = ceil(sağ)−floor(sol) ile **kapsayıcı**). `monitor_index` ve `dpi_scale` `frame.rect`'ten **aynen** taşınır.
-**ÖLÇÜ:** Sahte tanıyıcı `np.float32` köşeli çokgen döndürür; test **iki frame'de** koşar: `Frame.rect=(0,0,…)` ve `Frame.rect=(-2600,-50,…, monitor_index=0)` (negatif sanal-masaüstü; bu makinede gerçek). Her `bbox` alanı için `type(v) is int` (`==` yetmez — T-004/T-005'te ölçüldü, `np.int64(10) == 10` `True`); kaydırma doğru; `json.dumps(asdict(bbox))` `TypeError` vermez. Çokgen döndürülmüş (eğik) olduğunda kutu köşelerin **min/max**'ını alır — bir eğik çokgen fixture'ı zorunlu.
+**DEĞİŞMEZ:** rapidocr `(N,4,2)` float32 çokgen döndürür, görüntü-yerel. `TextBlock.bbox` = çokgenin eksen hizalı sınır kutusu, `frame.rect.x/y` kadar **kaydırılmış**, alanları **`type(v) is int`**: `x=floor(min_x)`, `y=floor(min_y)`, `w=ceil(max_x)−x`, `h=ceil(max_y)−y`. `monitor_index`/`dpi_scale` `frame.rect`'ten aynen. `w=0`/`h=0` **mümkündür** (dejenere çokgen) ve **olduğu gibi** geçer — kırpma/eleme normalizer'ın işi (KRT düşük bulgusu: belgelenir).
+**ÖLÇÜ:** Sahte fabrika `np.float32` çokgen verir; **iki frame**: `rect=(0,0,…)` ve `rect=(-2600,-50,…, monitor_index=0)`. Her alan `type(v) is int` (`==` yetmez), kaydırma tam `rect.x/y`, `json.dumps(asdict(bbox))` geçer. Eğik çokgen fixture'ı zorunlu (min/max). Tam sayı köşeli çokgen (`[[10,20],[50,20],[50,40],[10,40]]`) → `w=40,h=20` (fazla piksel **yok** — KRT ölçtü).
 
-## K5 · Güven süzülmez, sıra korunur, boş sonuç geçerli
+## K5 · Güven süzülmez; kütüphanenin kendi süzgeci KAPATILIR (Y1)
 
-**DEĞİŞMEZ:** Arayüz sözleşmesi: motor **eşik uygulamaz** (`TextNormalizer`'ın işi). rapidocr'un her `(kutu, metin, puan)` üçlüsü **bire bir** bir `TextBlock` olur, **rapidocr'un sırasıyla**; `confidence` puanın `float`'ı (`type is float`), `text` **değiştirilmez** (strip yok, normalize yok — o da normalizer'ın işi). rapidocr `None` ya da boş liste döndürürse `[]` döner, istisna **yok**.
-**ÖLÇÜ:** Sahte tanıyıcı üç blok verir: puanlar `0.05`, `0.99`, `0.60`; metinlerden biri başında/sonunda boşluklu, biri boş string. Çıktı **3 blok**, aynı sırada, metinler **aynen**, güvenler aynen. `None` ve `([],[],[])` → `[]`. Bu ölçü K7'nin "eleme yok" kuralını da kapsar.
+**DEĞİŞMEZ:** Arayüz: motor **eşik uygulamaz**. rapidocr'un `Global.text_score` varsayılanı **0.5**'tir ve puanı altında kalan blokları **sessizce düşürür** (KRT ölçtü, şef doğruladı: KR fixture + JAPAN modeli → varsayılanla 9 kutu, `text_score=0.0` ile 17 kutu; 8 blok kayıp). Motor `Global.text_score = 0.0` **geçer**. Her `(kutu, metin, puan)` üçlüsü bire bir `TextBlock`, rapidocr sırasıyla; `confidence` = `float(puan)`, `text` **değiştirilmez**. Boş sonuç: rapidocr `None` **döndürmez**, `boxes/txts/scores` alanları `None` olan `RapidOCROutput` döndürür (Y4; şef ölçtü) → `[]`, istisna **yok**.
+**ÖLÇÜ:** Sahte fabrika `params["Global.text_score"] == 0.0` assert eder. Sahte tanıyıcı puanlar `0.05/0.99/0.60`, biri boşluklu metin, biri boş string → **3 blok** aynen. `boxes=None` nesnesi → `[]`. `real_check.py` #8 (pozitif kontrol): KR fixture `language=JAPAN` ile → **en az 1 blok `confidence < 0.5`** dönmeli; dönmüyorsa süzgeç açık demektir.
 
-## K6 · Hata sınıflandırması
+## K6 · Hata sınıflandırması ve indirme denetimi (Y6)
 
-**DEĞİŞMEZ:** (a) Motor kurulurken model dosyası yok **ve** `allow_download=False` → `ModelMissingError` (`__cause__` rapidocr'un özgün istisnası). (b) Motor kuruldu ama `recognize` içinde istisna → `OcrError` (`__cause__` özgün). (c) `frame.image` 3 kanallı `uint8` değilse → `ContractViolation`, motor **çağrılmaz**. **Yeniden deneme yok** (OCR deterministik; T-005 K6'nın aksine).
-**ÖLÇÜ:** Enjekte edilen sahte fabrika `FileNotFoundError` fırlatır → `ModelMissingError`, `__cause__` o. Sahte tanıyıcı `RuntimeError` fırlatır → `OcrError`. `(h,w,4)` ve `(h,w)` ve `float32` görüntü → `ContractViolation`, tanıyıcı çağrı sayısı **0**. `allow_download=True`'nun **gerçek** davranışı yalnız `real_check.py`'de (K1).
+**DEĞİŞMEZ:** rapidocr'un `model_dir` parametresi **yok sayılıyor** (şef ölçtü); tek işleyen `Det.model_path`/`Rec.model_path`. Bu yüzden `allow_download` motorun kendi işidir:
+- Motor beklenen dosya adını rapidocr'un kendi çözücüsüyle bulur: `rapidocr.inference_engine.base.InferSession.get_model_url(FileInfo(...))` → URL → `Path(url).name`. `model_dir` `None` ise `Path(rapidocr.__file__).parent / "models"`.
+- `allow_download=False`: det ve rec için **açık** `model_path` = `model_dir / ad` geçilir; dosya yoksa rapidocr **çağrılmadan** `ModelMissingError` (mesajda eksik dosya adı, `__cause__` yok — dosya sistemi kontrolü bizim). Cls modeli paketle geliyor ve `use_cls=False`; yönetilmez.
+- `allow_download=True`: `model_path` geçilmez; rapidocr ilk kurulumda indirir (O4: modelscope.cn, 2.3+9.3 MB). Çevrimdışıysa rapidocr `DownloadFileException` fırlatır → `ModelMissingError` (`__cause__` özgün).
+- (b) Motor kuruldu, `recognize` içinde istisna → `OcrError` (`__cause__` özgün). Kurulumda rapidocr `ValueError` (desteklenmeyen dil/sürüm kombinasyonu, Y2) → `OcrError`.
+- (c) `frame.image` `(h,w,3)` `uint8` değilse → `ContractViolation`, motor **çağrılmaz** (`CaptureService` 3 kanal BGR veriyor — KRT doğruladı). **Yeniden deneme yok.**
+**ÖLÇÜ:** Sahte fabrika `FileNotFoundError` **fırlatmaz** — çünkü kontrol fabrikadan önce. Test: `allow_download=False`, `model_dir=tmp_path` (boş) → ilk `recognize` `ModelMissingError`, fabrika **çağrılmadı** (sayaç 0). `model_dir`'e beklenen adlarla boş dosyalar konunca → fabrika çağrıldı, `params["Det.model_path"]` ve `["Rec.model_path"]` o dosyalar. `allow_download=True` → `params`'ta `model_path` **yok**. Sahte tanıyıcı `RuntimeError` → `OcrError`. `(h,w,4)`, `(h,w)`, `float32` → `ContractViolation`, sayaç 0. Gerçek `DownloadFileException` yolu **`[ÖLÇÜLMÜYOR]`** — ağ kesmek kapının işi değil; belgelenir.
 
-## K7 · Motor hiçbir OCR metnini loglamaz; rapidocr'un logu susturulur
+## K7 · Motor OCR metnini loglamaz; rapidocr'un logu susturulur (kurulumdan SONRA)
 
-**DEĞİŞMEZ:** PROTOKOL §7 loglama disiplini. `rapid_engine.py` içinde `print` **yok**; `logging` çağrılarının hiçbirine `TextBlock.text` ya da rapidocr metni girmez. rapidocr'un kendi logger'ı (`"RapidOCR"`) motor kurulurken `WARNING`'e çekilir (O4'te görüldü: renk kodlu `INFO` satırları stdout'a yazıyor).
-**ÖLÇÜ:** AST — modülde `print` çağrısı 0; `logging.*` çağrılarının argümanlarında `.text`/`txts`/`metin` adlı isim **yok**. Çalışma zamanı — `caplog` ile bir `recognize` koşumu: kayıtların hiçbiri sahte tanıyıcının döndürdüğü **nöbetçi** metni (`"NÖBETÇİ-7f3a"`) içermez.
+**DEĞİŞMEZ:** `rapid_engine.py`'de `print` yok; hiçbir `logging` çağrısına blok metni girmez. rapidocr `"RapidOCR"` logger'ını **kurulumda kendisi seviyelendirir** (KRT orta) — bu yüzden motor seviyeyi `ERROR`'a **rapidocr örneğini kurduktan sonra** çeker (`WARNING` yetmez: boş sonuçta `WARNING` basıyor, şef ölçtü).
+**ÖLÇÜ:** AST — `print` çağrısı 0; `logging` argümanlarında `.text`/`txts` yok. Çalışma zamanı — `caplog.at_level(logging.WARNING, logger="RapidOCR")` altında nöbetçi metinli (`"NÖBETÇİ-7f3a"`) bir `recognize` → kayıtların hiçbiri nöbetçiyi içermez. Sıralama testi: sahte fabrika çağrıldığında logger seviyesini `INFO`'ya **sıfırlar** (rapidocr'u taklit); `recognize` sonrası seviye yine `ERROR` olmalı.
 
 ## K8 · `preset` kabul edilir ama v1'de motoru değiştirmez `[ÖLÇÜLMÜYOR → belgelenir]`
 
-**DEĞİŞMEZ:** `recognize(frame, preset)` dört `OcrPreset` üyesini de kabul eder ve **aynı** sonucu verir. Tasarım §3.2 ön ayarın "ölçekleme faktörü ve kontrast ön işlemesi"ni değiştirmesini öngörüyor; bu **ölçülmeden** yazılmaz (küçük yazı için 2× büyütmenin yardımcı olup olmadığı bilinmiyor). v1: parametre alınır, docstring'e `[ÖLÇÜLMÜYOR]` damgasıyla "ön ayar bazlı ön işleme T-0xx" yazılır.
-**ÖLÇÜ:** Aynı sahte tanıyıcı, dört preset → dört **eşit** çıktı. Damga docstring'de **var** (AST ile `[ÖLÇÜLMÜYOR]` metni aranır).
+**DEĞİŞMEZ:** Dört `OcrPreset` de aynı sonucu verir. Tasarım §3.2'nin ön ayar bazlı ölçekleme/kontrast önerisi **ölçülmeden yazılmaz**; docstring'e `[ÖLÇÜLMÜYOR]` damgasıyla "ön ayar bazlı ön işleme: ayrı görev".
+**ÖLÇÜ:** Aynı sahte, dört preset → dört **eşit** çıktı. Damga docstring'de var (AST).
 
-## K9 · Süre kutu sayısına bağlıdır; ölçü kutu başına
+## K9 · Süre kutu sayısına bağlıdır; ölçü dışarıdan, tek bütçe
 
-**DEĞİŞMEZ:** Bütçe tek sayı değil (O5: Korece 17 kutu → 2070 ms, Japonca 4 kutu → 200 ms). `recognize` ölçülen süreyi **döndürmez** (arayüz sabit) ama motor son çağrının `(toplam_ms, kutu_sayısı)`'nı `last_timing` özelliğinde tutar.
-**ÖLÇÜ:** `real_check.py`: Japonca 4 satırlık diyalog ≤ **300 ms** (medyan, 5 koşum, ısınma sonrası); İngilizce ≤ 350 ms; Korece kutu başına ≤ **150 ms** raporlanır (toplam **bütçe değil**, tespit kelime ayırdığı için). Bu ölçüler `[ÖLÇÜLMÜYOR]` değil ama **makineye bağlı**; `real_check` sayıyı yazar, eşik aşımında **uyarı** verir, düşürmez — bütçe kararı şefin.
+**DEĞİŞMEZ:** Bütçe **bir** yerde, **bir** sayıdır: `budget_ms: 300` = JAPAN fixture, 4 satır, v4-mobile, 8 parçacık (O4). Diğer diller `real_check`'te **raporlanır**, düşürmez (O5: Korece tespit kelime ayırır, 17 kutu → süre kutu sayısıyla ölçeklenir). Motor **süre tutmaz** (`last_timing` kaldırıldı — KRT: ölçüsüz alan yazılmaz).
+**ÖLÇÜ:** `real_check.py` #5.
 
 ## K10 · Tembel kurulum, tek örnek, kapatma
 
-**DEĞİŞMEZ:** `__init__` rapidocr'a dokunmaz (K1 altında kapsanabilir). İlk `recognize` motoru kurar; sonrakiler **aynı** örneği kullanır (kurulum 1-2 s, her karede yapılamaz). `close()` idempotent; kapatıldıktan sonra `recognize` → `OcrError`.
-**ÖLÇÜ:** Enjekte fabrika çağrı sayacı: yapım → 0; üç `recognize` → **1**. `close()` iki kez → sessiz; sonra `recognize` → `OcrError`. **Değer ekseni dersi (T-005 D-3.Y1):** kapatma bayrağı hangi yoldan geçilirse geçilsin okunur — `with` bloğu **yok** (motor bağlam yöneticisi değil, gereksiz yüzey açmaz).
+**DEĞİŞMEZ:** `__init__` rapidocr'a dokunmaz. İlk `recognize` kurar; sonrakiler aynı örnek. `close()` idempotent; sonrası `recognize` → `OcrError`. Bağlam yöneticisi **değil** (T-005 D-3.Y1 dersi: `with` yüzeyi açılmaz).
+**ÖLÇÜ:** Fabrika sayacı: yapım → 0; üç `recognize` → 1. `close()` ×2 sessiz; sonra `recognize` → `OcrError`, fabrika sayacı hâlâ 1.
+
+## K11 · Model tablosu dil başına SABİT (Y2, Y3)
+
+**DEĞİŞMEZ:** Kütüphane varsayılanı PP-OCRv6-small'dır ve **kullanılmaz**: KOREAN'da `ValueError`, JAPAN'da 425 ms (şef) / 1.6 s (KRT), CH/EN/JAPAN aynı dosyaya çözülüp K2 pozitif kontrolünü düşürür. Motor her dil için **şu tabloyu** geçer:
+
+| `OcrLanguage` | `Det.lang_type` | `Rec.lang_type` | ortak |
+|---|---|---|---|
+| JAPAN | `MULTI` | `JAPAN` | `Det/Rec.engine_type=ONNXRUNTIME`, `Det/Rec.model_type=MOBILE`, `Det/Rec.ocr_version=PPOCRV4` |
+| KOREAN | `MULTI` | `KOREAN` | aynı |
+| CHINESE | `CH` | `CH` | aynı |
+| ENGLISH | `CH` | `EN` | aynı |
+
+**Neden det iki farklı:** Y3 — `multi` det İngilizce'yi 22 kelime kutusuna böler (4/4 satır düşer); `ch` det İngilizce'de 4/4 verir ama Korece boşluklarını yitirir. Tablo her dile uyanı seçer.
+**ÖLÇÜ:** Sahte fabrika `params`'ı kaydeder; **dört dilin dördü** için altı anahtar tablodaki değer (enum üyeleriyle karşılaştırılır, string'le değil). `real_check.py` #1–#4 bu tabloyla geçer; #2 pozitif kontrolü **yalnız** bu tabloyla ateşler.
 
 ---
 
-# Kabul kapısı — `real_check.py` (şefe ait, implementer koşar ama yazmaz)
+# Windows tuzakları (KRT orta) — yapıyla kapanır, belgelenir
 
-Şefin üç PNG'si (`.agents/tasks/T-006/fixtures/dlg_{EN,JP,KR}.png`, 1200×400, O4/O5'te üretildi) üzerinde **gerçek** modelle:
+- **cv2.imread ASCII-dışı yolda `None` döner** (bu depo yolu `çeviri` içeriyor). Motor rapidocr'a **yalnız numpy dizi** verir, asla yol; `real_check` de öyle. Docstring'e yazılır.
+- **cp1254 konsolda Japonca metin `UnicodeEncodeError`.** Motor ve kapı OCR metnini **stdout'a yazmaz** (K7 zaten); testler de metin basmaz.
 
-1. `JAPAN` → 4/4 satır birebir (`長老マルクス` / `村の長老があなたを待っています。` / …).
-2. Aynı görüntü `CHINESE` → 4/4 **değil** (K2'nin pozitif kontrolü).
-3. `KOREAN` → okuma sırasına dizilip birleştirilince benzerlik ≥ 0.95 (O5: 0.971 ölçüldü; noktalar düşüyor, bu **bilinen** kayıp).
-4. `ENGLISH` → 4/4.
-5. Süreler K9'a göre raporlanır.
-6. `bbox`'lar `frame.rect`'e göre kaydırılmış: PNG `Frame.rect=(-2600,-50,1200,400)` ile sarılır, ilk satırın `bbox.x < 0` olmalı.
-7. `allow_download=False` + model yok → `ModelMissingError` (ayrı süreçte, model dizini geçici olarak boş bir yere yönlendirilerek; rapidocr'un model yolu parametresi kullanılır).
+# Yozlaşmış girdiler — hepsi sahte tanıyıcıyla test edilir
 
-Model dosyaları `real_check` koşulmadan önce diskte olmalı (`rapidocr` ilk kullanımda modelscope.cn'den indirir — O4). Şef indirdi; implementer'ın makinesinde de var.
+`0×0` (→ `ContractViolation`) · `1×1` (tanıyıcıya gider) · çokgen görüntü dışına taşan (kırpılmaz, kaydırılır) · `NaN` puan (aynen, `float`) · `txts` ile `boxes` uzunluğu farklı (→ `OcrError`) · `txts` içinde `None` (→ `OcrError`) · `boxes` var `txts` `None` (→ `OcrError`) · dejenere çokgen (`w=0`).
 
----
+# Kabul kapısı — `real_check.py` (şefe ait; koş, yazma)
 
-# Yozlaşmış girdiler — hepsi test edilecek (sahte tanıyıcıyla)
-
-`0×0` görüntü (→ `ContractViolation`, tanıyıcı çağrılmaz) · `1×1` görüntü (tanıyıcıya gider, `[]` dönerse `[]`) · çokgen köşeleri görüntü dışına taşan (kutu **kırpılmaz**, olduğu gibi kaydırılır — kırpma normalizer'ın işi değil, ama **belgelenir**) · `NaN` puan (aynen geçer, `float`) · metin `None` (→ `OcrError`, rapidocr sözleşme dışı) · tanıyıcı `txts` ile `boxes` uzunluğu farklı (→ `OcrError`).
+Şefin üç fixture'ı, gerçek model, 8 kontrol: JAPAN 4/4 · CHINESE-on-JP <4 · KOREAN ≥0.95 · ENGLISH 4/4 · süreler · bbox iki noktada · model yok → `ModelMissingError` · **#8 (Y1): KR+JAPAN → ≥1 blok `confidence<0.5`**. Modeller diskte (şef indirdi).
 
 # Teslim
 
-`delivery.md` — `validate.py` şemasına uy; her kabul komutunun ham çıktısı `evidence/` altında **dolu**. K2/K3/K4/K6/K8'in "docstring'e yaz" maddeleri **hem** docstring'de **hem** `known_gaps`'te. Bu paket **bir** kırmızı takım geçişi görecek (§4.6/9); paketin kendisine güvenmeyin — sözleşme `src/contracts/interfaces.py`'dedir, çelişirse **sözleşme** kazanır ve `known_gaps`'e yazılır.
+`delivery.md` — `validate.py` şemasına uy; her komutun ham çıktısı `evidence/` altında **dolu**. K2/K3/K5/K6/K8/K11 docstring'de **ve** `known_gaps`'te. Sözleşme `src/contracts/interfaces.py`; paketle çelişirse **sözleşme** kazanır ve `known_gaps`'e yazılır. **Şefin kararıyla ölçümün çelişirse ölçümüne uy ve itirazını yaz** — T-005'te implementer bunu iki kez yaptı ve iki kez haklı çıktı.
