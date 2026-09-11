@@ -1,0 +1,15 @@
+==== T-009 TUR 1 IMPLEMENTER -- SEF SONDASI ====
+Sahiplik temiz (T-008 implementer'in eszamanli dosyalari haric). src diff +51/-21.
+BES KAPI: mypy Success · 119 passed · T-009 real_check TEMIZ ('.'=3, 15 kelime, 3 anahtar,
+  ~330 ms) · T-006 real_check TEMIZ (KR benzerlik 0.971 -> 1.000; 1 uyari: EN 365 ms,
+  esik 350, T-009'dan bagimsiz -- K5'te EN 376 olculmustu) · delivery KABUL.
+SEFIN MUTANTI (dosya adi v5 -> v4): birim 8 failed, T-009 kapi 3/3 IHLAL. YAKALANDI.
+IMPLEMENTER'IN OLCULU ITIRAZI: "surum v4'e geri -> kapi dusmeli" TUTMADI. Acik model_path
+  verilince kutuphane Rec.ocr_version'i dosya seciminde kullanmiyor; belirleyici DOSYA ADI
+  (T-006 tester A'nin lang_type bulgusuyla ayni sinif). Surum yalniz indirme yolunda secer.
+  JP'ye sizan v5: indirme yolunda ValueError, acik v4 dosyayla sessizce v4 -- gercek kapi
+  gormez, JAPAN v4 birim testi tek bekci. Docstring'de. SEF KABUL; paket K2 pozitif
+  kontrol tarifi ("_MODEL_DOSYALARI v4 mutanti") zaten dogru olandi.
+Bayatlayan tester dosyalari (T-006 A/B: 5 test + B kitinin 2 ikame noktasi): sahiplik disi,
+  acik kalem -- T-006 testerlarinin yukumlulugu.
+KARAR: KABUL EDILEBILIR. Bir tester (paket).

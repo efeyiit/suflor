@@ -1,0 +1,7 @@
+T-009 real_check -- Korece v5
+  IHLAL  [1] KR 17 blok, '.' sayisi 0 (>= 3; v4'te 0)
+  IHLAL  [2] uctan uca: 2 segment -> 6 kelime, bekliyor/dogu/gunes=(True, False, False)  (v4: 6 kelime, yalniz bekliyor)
+  IHLAL  [3] KR OCR medyan 1085 ms (<= 400; v4 ~1099)
+
+REAL_CHECK: 3 IHLAL
+exit=1

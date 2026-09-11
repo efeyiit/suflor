@@ -1,0 +1,7 @@
+T-009 real_check -- Korece v5
+  ok     [1] KR 17 blok, '.' sayisi 3 (>= 3; v4'te 0)
+  ok     [2] uctan uca: 2 segment -> 15 kelime, bekliyor/dogu/gunes=(True, True, True)  (v4: 6 kelime, yalniz bekliyor)
+  ok     [3] KR OCR medyan 338 ms (<= 400; v4 ~1099)
+
+REAL_CHECK: TEMIZ
+exit=0

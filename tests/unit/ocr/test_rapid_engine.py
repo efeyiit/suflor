@@ -59,10 +59,21 @@ DIL_TABLOSU: dict[OcrLanguage, tuple[str, str]] = {
 }
 MODEL_ADLARI: dict[OcrLanguage, tuple[str, str]] = {
     OcrLanguage.JAPAN: ("multi_PP-OCRv3_det_mobile.onnx", "japan_PP-OCRv4_rec_mobile.onnx"),
-    OcrLanguage.KOREAN: ("multi_PP-OCRv3_det_mobile.onnx", "korean_PP-OCRv4_rec_mobile.onnx"),
+    OcrLanguage.KOREAN: ("multi_PP-OCRv3_det_mobile.onnx", "korean_PP-OCRv5_rec_mobile.onnx"),  # T-009 K1
     OcrLanguage.CHINESE: ("ch_PP-OCRv4_det_mobile.onnx", "ch_PP-OCRv4_rec_mobile.onnx"),
     OcrLanguage.ENGLISH: ("ch_PP-OCRv4_det_mobile.onnx", "en_PP-OCRv4_rec_mobile.onnx"),
 }
+TESPIT_SURUMU = "PP-OCRv4"
+"""`Det.ocr_version` -- her dilde ayni (T-009 K1: det DEGISMEDI)."""
+TANIMA_SURUMU: dict[OcrLanguage, str] = {
+    OcrLanguage.JAPAN: "PP-OCRv4",  # v5 YOK (ValueError; T-009 K5)
+    OcrLanguage.KOREAN: "PP-OCRv5",  # v4 cumle sonu noktasini vermiyor (T-009 K1/K4)
+    OcrLanguage.CHINESE: "PP-OCRv4",
+    OcrLanguage.ENGLISH: "PP-OCRv4",  # v5 mumkun ama kapsam disi (T-009 K5)
+}
+"""`Rec.ocr_version` -- DILE OZEL (T-009 K1; kaynak: `.agents/tasks/T-009/olgular.txt` K4/K5)."""
+KOREAN_ESKI_REC = "korean_PP-OCRv4_rec_mobile.onnx"
+"""T-009 oncesi KOREAN rec dosyasi; artik ARANMAZ (negatif referans)."""
 
 
 # --- sahte ciktilar / fabrika ----------------------------------------------
@@ -1073,8 +1084,94 @@ def test_k11_dil_tablosu_alti_anahtar(tmp_path: Path, dil: OcrLanguage) -> None:
     for bolum in ("Det", "Rec"):
         assert p[f"{bolum}.engine_type"] == "onnxruntime"
         assert p[f"{bolum}.model_type"] == "mobile"
-        assert p[f"{bolum}.ocr_version"] == "PP-OCRv4"
+    assert p["Det.ocr_version"] == TESPIT_SURUMU
+    assert p["Rec.ocr_version"] == TANIMA_SURUMU[dil]  # T-009 K1: KOREAN v5, digerleri v4
     assert not any(k.startswith("Cls.") for k in p)  # cls yonetilmez (paketle geliyor)
+
+
+# --- T-009 K1: tanima surumu dile ozel (iki nokta: KOREAN v5 / JAPAN v4) ------
+
+
+def _params(tmp_path: Path, dil: OcrLanguage) -> dict[str, object]:
+    f = SahteFabrika()
+    motor(tmp_path, f, dil=dil).recognize(kare(), OcrPreset.DIALOGUE)
+    assert f.calls == 1
+    return f.son
+
+
+def test_k11_t009_korean_rec_v5_det_v4(tmp_path: Path) -> None:
+    """Nokta 1: KOREAN'da yalniz REC v5; DET v4 kalir (det degismedi, T-009 K1)."""
+    p = _params(tmp_path, OcrLanguage.KOREAN)
+    assert p["Rec.ocr_version"] == "PP-OCRv5"
+    assert p["Det.ocr_version"] == "PP-OCRv4"
+    assert p["Rec.lang_type"] == "korean" and p["Det.lang_type"] == "multi"  # dil tablosu bozulmadi
+
+
+def test_k11_t009_japan_ikisi_de_v4(tmp_path: Path) -> None:
+    """Nokta 2: JAPAN'da v5 YOK (gercek kutuphanede `ValueError`, T-009 K5); ikisi de v4."""
+    p = _params(tmp_path, OcrLanguage.JAPAN)
+    assert p["Rec.ocr_version"] == "PP-OCRv4"
+    assert p["Det.ocr_version"] == "PP-OCRv4"
+
+
+@pytest.mark.parametrize("dil", [OcrLanguage.CHINESE, OcrLanguage.ENGLISH])
+def test_k11_t009_chinese_english_v4_kalir(tmp_path: Path, dil: OcrLanguage) -> None:
+    """EN v5 mumkun ama KAPSAM DISI (T-009 K5, acik kalem); CH olculmedi -- ikisi v4."""
+    p = _params(tmp_path, dil)
+    assert p["Rec.ocr_version"] == "PP-OCRv4" and p["Det.ocr_version"] == "PP-OCRv4"
+
+
+def test_k11_t009_v5_yalniz_korean(tmp_path: Path) -> None:
+    """v5 alan TEK dil KOREAN; baska bir dile sizmis v5 gercek modelde `ValueError` olurdu (JP)."""
+    v5 = {dil for dil in OcrLanguage if _params(tmp_path, dil)["Rec.ocr_version"] == "PP-OCRv5"}
+    assert v5 == {OcrLanguage.KOREAN}
+
+
+def test_k11_t009_korean_model_yok_v5_adi_mesajda(tmp_path: Path) -> None:
+    """`allow_download=False` + bos `model_dir`: KOREAN icin v5 rec dosyasi ARANIR; mesajda v5 adi, v4 adi YOK."""
+    f = SahteFabrika()
+    m = RapidOcrEngine(language=OcrLanguage.KOREAN, allow_download=False, model_dir=tmp_path, recognizer_factory=f)
+    with pytest.raises(ModelMissingError) as ei:
+        m.recognize(kare(), OcrPreset.DIALOGUE)
+    mesaj = str(ei.value)
+    assert "korean_PP-OCRv5_rec_mobile.onnx" in mesaj
+    assert KOREAN_ESKI_REC not in mesaj
+    assert f.calls == 0
+    assert beklenen_model_dosyalari(OcrLanguage.KOREAN) == MODEL_ADLARI[OcrLanguage.KOREAN]
+
+
+def test_k11_t009_korean_yalniz_v4_dosyasi_varsa_yine_modelmissing(tmp_path: Path) -> None:
+    """Dizinde det + ESKI v4 rec var, v5 yok -> yine `ModelMissingError` (v4 dosyasina DUSULMEZ); mesajda yalniz v5 adi."""
+    det, _rec_v5 = MODEL_ADLARI[OcrLanguage.KOREAN]
+    (tmp_path / det).write_bytes(b"")
+    (tmp_path / KOREAN_ESKI_REC).write_bytes(b"")
+    f = SahteFabrika()
+    m = RapidOcrEngine(language=OcrLanguage.KOREAN, allow_download=False, model_dir=tmp_path, recognizer_factory=f)
+    with pytest.raises(ModelMissingError) as ei:
+        m.recognize(kare(), OcrPreset.DIALOGUE)
+    mesaj = str(ei.value)
+    assert "korean_PP-OCRv5_rec_mobile.onnx" in mesaj and det not in mesaj
+    assert f.calls == 0
+
+
+def test_k11_t009_korean_v5_dosyasi_varsa_acik_yol(tmp_path: Path) -> None:
+    """v5 dosyasi varsa `Rec.model_path` ona cozulur; v4 dosyasi dizinde OLMASA da."""
+    f = SahteFabrika()
+    det_yol, rec_yol = model_dosyalari(tmp_path, OcrLanguage.KOREAN)
+    assert rec_yol.name == "korean_PP-OCRv5_rec_mobile.onnx" and not (tmp_path / KOREAN_ESKI_REC).exists()
+    RapidOcrEngine(language=OcrLanguage.KOREAN, allow_download=False, model_dir=tmp_path, recognizer_factory=f).recognize(kare(), OcrPreset.DIALOGUE)
+    assert f.son["Rec.model_path"] == rec_yol and f.son["Det.model_path"] == det_yol
+    assert f.son["Rec.ocr_version"] == "PP-OCRv5"
+
+
+def test_k11_t009_docstring_tablosu_guncel() -> None:
+    """K11 docstring tablosu v4/v5 ayrimini ve K5 notlarini tasir (4.6/2: belge ile kod ayni seyi soyler)."""
+    doc = rapid_engine.__doc__ or ""
+    k11 = doc[doc.index("## K11") :]
+    assert "PP-OCRv5" in k11 and "korean_PP-OCRv5_rec_mobile.onnx" in k11
+    assert "T-009" in k11
+    assert "ValueError" in k11  # JAPAN'da v5 yok
+    assert "ENGLISH" in k11 and "kapsam" in k11.lower()  # EN v5 acik kalem notu
 
 
 def test_k11_params_anahtar_kumesi_sabit(tmp_path: Path) -> None:

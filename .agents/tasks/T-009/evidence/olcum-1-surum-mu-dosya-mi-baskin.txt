@@ -1,0 +1,23 @@
+[31m[ERROR] 2026-09-11 13:40:37,763 [RapidOCR] base.py:158: Unsupported configuration:
+  engine_type   = onnxruntime
+  ocr_version   = PP-OCRv5
+  task_type     = rec
+  lang_type     = japan
+  model_type     = mobile
+
+Please refer to the official model list for supported combinations:
+https://rapidai.github.io/RapidOCRDocs/main/model_list/
+
+Example valid usage:
+  from rapidocr import LangRec, OCRVersion, RapidOCR
+  engine = RapidOCR(params={'Rec.ocr_version': OCRVersion.PPOCRV5, 'Rec.lang_type': LangRec.CH, 'Rec.model_type': 'mobile'})[0m
+T-009 olcum-1 -- surum mu dosya mi baskin (dlg_KR, gercek model)
+  A  KOREAN allow_download=False Rec.ocr_version=PP-OCRv5 model_path=korean_PP-OCRv5_rec_mobile.onnx    -> 17 blok, '.'=3 (beklenen 3), medyan 341 ms
+  B  KOREAN allow_download=False Rec.ocr_version=PP-OCRv4 model_path=korean_PP-OCRv5_rec_mobile.onnx    -> 17 blok, '.'=3 (beklenen 3), medyan 385 ms
+  C  KOREAN allow_download=True  Rec.ocr_version=PP-OCRv5 model_path=YOK                                -> 17 blok, '.'=3 (beklenen 3), medyan 384 ms
+  D  KOREAN allow_download=True  Rec.ocr_version=PP-OCRv4 model_path=YOK                                -> 17 blok, '.'=0 (beklenen 0), medyan 1539 ms
+  E  JAPAN  allow_download=True  Rec.ocr_version=PP-OCRv5  -> ISTISNA OcrError (cause ValueError)
+  F  JAPAN  allow_download=False Rec.ocr_version=PP-OCRv5 model_path=japan_PP-OCRv4_rec_mobile.onnx     -> 4 blok, '.'=0 (beklenen -), medyan 325 ms
+
+OLCUM-1: A/B/C/D beklentileri TUTTU -- acik model_path baskin (B); surum indirme yolunda belirleyici (C/D)
+exit=0

@@ -1,0 +1,285 @@
+........................................................................ [ 50%]
+...........................F...................F.............F.F....F... [100%]
+================================== FAILURES ===================================
+______________ test_a5_k11_dort_dil_alti_anahtar_birebir[korean] ______________
+
+tmp_path = WindowsPath('C:/Users/pc/AppData/Local/Temp/pytest-of-pc/pytest-2323/test_a5_k11_dort_dil_alti_anah1')
+dil = 'korean'
+
+    @pytest.mark.parametrize("dil", ["japan", "korean", "chinese", "english"])
+    def test_a5_k11_dort_dil_alti_anahtar_birebir(tmp_path: Path, dil: str) -> None:
+        f = Fabrika()
+>       motor(tmp_path, f, dil=dil).recognize(kare(), OcrPreset.DIALOGUE)
+
+.agents\tasks\T-006\tester_A\test_a_sozlesme_sayisal.py:660: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+src\ocr\rapid_engine.py:715: in recognize
+    taniyici = self._taniyici_al()
+               ^^^^^^^^^^^^^^^^^^^
+src\ocr\rapid_engine.py:739: in _taniyici_al
+    params = self.parametreler()
+             ^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = <src.ocr.rapid_engine.RapidOcrEngine object at 0x000001E96565AD50>
+
+    def parametreler(self) -> dict[str, object]:
+        """Fabrikaya gidecek `params` sozlugu -- her cagrida TAZE kopya.
+    
+        `allow_download=False` ise model dosyalarini denetler ve eksikte
+        `ModelMissingError` firlatir (K6). Testler ve `real_check` bunu
+        fabrikasiz da gozlemleyebilsin diye PUBLIC'tir (KARAR: paket
+        sessizdi).
+        """
+        det_dil, rec_dil, rec_surumu = _dil_satiri(self._language)
+        p: dict[str, object] = {
+            "Global.text_score": 0.0,  # K5
+            "Global.use_cls": False,  # K3 / O3
+            "Global.log_level": "error",  # K7 (kurulum sirasi)
+            "EngineConfig.onnxruntime.intra_op_num_threads": self._threads,  # K3
+            "EngineConfig.onnxruntime.inter_op_num_threads": self._threads,  # K3
+            "Det.engine_type": _MOTOR,  # K11
+            "Det.ocr_version": _TESPIT_SURUMU,
+            "Det.model_type": _MODEL_TIPI,
+            "Det.lang_type": det_dil,
+            "Rec.engine_type": _MOTOR,
+            "Rec.ocr_version": rec_surumu,  # K11 / T-009 K1: dile ozel (KOREAN v5)
+            "Rec.model_type": _MODEL_TIPI,
+            "Rec.lang_type": rec_dil,
+        }
+        if self._allow_download:
+            if self._model_dir is not None:
+                p["Global.model_root_dir"] = self._model_dir
+            return p
+    
+        dizin = self._model_dir if self._model_dir is not None else varsayilan_model_dizini()
+        det_ad, rec_ad = beklenen_model_dosyalari(self._language)
+        det_yol, rec_yol = dizin / det_ad, dizin / rec_ad
+        eksik = [ad for ad, yol in ((det_ad, det_yol), (rec_ad, rec_yol)) if not yol.is_file()]
+        if eksik:
+>           raise ModelMissingError(
+                f"model dosyasi yok: {', '.join(eksik)} (dizin: {dizin}); "
+                "allow_download=False oldugu icin indirilmedi"
+            )
+E           src.contracts.errors.ModelMissingError: model dosyasi yok: korean_PP-OCRv5_rec_mobile.onnx (dizin: C:\Users\pc\AppData\Local\Temp\pytest-of-pc\pytest-2323\test_a5_k11_dort_dil_alti_anah1); allow_download=False oldugu icin indirilmedi
+
+src\ocr\rapid_engine.py:685: ModelMissingError
+____________ test_b3_sahte_fabrikayla_tam_kosum_yasak_kok_yuklemez ____________
+
+tmp_path = WindowsPath('C:/Users/pc/AppData/Local/Temp/pytest-of-pc/pytest-2323/test_b3_sahte_fabrikayla_tam_k0')
+
+    def test_b3_sahte_fabrikayla_tam_kosum_yasak_kok_yuklemez(tmp_path: Path) -> None:
+        f = Fabrika(dolu("a", "b"))
+        m = motor(tmp_path, f)
+        for dil in OcrLanguage:
+>           motor(tmp_path, Fabrika(), dil).recognize(kare(), OcrPreset.DIALOGUE)
+
+.agents\tasks\T-006\tester_B\test_mercek_B.py:277: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+src\ocr\rapid_engine.py:715: in recognize
+    taniyici = self._taniyici_al()
+               ^^^^^^^^^^^^^^^^^^^
+src\ocr\rapid_engine.py:739: in _taniyici_al
+    params = self.parametreler()
+             ^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = <src.ocr.rapid_engine.RapidOcrEngine object at 0x000001E9656A6EA0>
+
+    def parametreler(self) -> dict[str, object]:
+        """Fabrikaya gidecek `params` sozlugu -- her cagrida TAZE kopya.
+    
+        `allow_download=False` ise model dosyalarini denetler ve eksikte
+        `ModelMissingError` firlatir (K6). Testler ve `real_check` bunu
+        fabrikasiz da gozlemleyebilsin diye PUBLIC'tir (KARAR: paket
+        sessizdi).
+        """
+        det_dil, rec_dil, rec_surumu = _dil_satiri(self._language)
+        p: dict[str, object] = {
+            "Global.text_score": 0.0,  # K5
+            "Global.use_cls": False,  # K3 / O3
+            "Global.log_level": "error",  # K7 (kurulum sirasi)
+            "EngineConfig.onnxruntime.intra_op_num_threads": self._threads,  # K3
+            "EngineConfig.onnxruntime.inter_op_num_threads": self._threads,  # K3
+            "Det.engine_type": _MOTOR,  # K11
+            "Det.ocr_version": _TESPIT_SURUMU,
+            "Det.model_type": _MODEL_TIPI,
+            "Det.lang_type": det_dil,
+            "Rec.engine_type": _MOTOR,
+            "Rec.ocr_version": rec_surumu,  # K11 / T-009 K1: dile ozel (KOREAN v5)
+            "Rec.model_type": _MODEL_TIPI,
+            "Rec.lang_type": rec_dil,
+        }
+        if self._allow_download:
+            if self._model_dir is not None:
+                p["Global.model_root_dir"] = self._model_dir
+            return p
+    
+        dizin = self._model_dir if self._model_dir is not None else varsayilan_model_dizini()
+        det_ad, rec_ad = beklenen_model_dosyalari(self._language)
+        det_yol, rec_yol = dizin / det_ad, dizin / rec_ad
+        eksik = [ad for ad, yol in ((det_ad, det_yol), (rec_ad, rec_yol)) if not yol.is_file()]
+        if eksik:
+>           raise ModelMissingError(
+                f"model dosyasi yok: {', '.join(eksik)} (dizin: {dizin}); "
+                "allow_download=False oldugu icin indirilmedi"
+            )
+E           src.contracts.errors.ModelMissingError: model dosyasi yok: korean_PP-OCRv5_rec_mobile.onnx (dizin: C:\Users\pc\AppData\Local\Temp\pytest-of-pc\pytest-2323\test_b3_sahte_fabrikayla_tam_k0); allow_download=False oldugu icin indirilmedi
+
+src\ocr\rapid_engine.py:685: ModelMissingError
+_____ test_b5_modelmissing_kurulumda_ornek_tutulmaz_dosya_gelince_kurulur _____
+
+tmp_path = WindowsPath('C:/Users/pc/AppData/Local/Temp/pytest-of-pc/pytest-2323/test_b5_modelmissing_kurulumda0')
+
+    def test_b5_modelmissing_kurulumda_ornek_tutulmaz_dosya_gelince_kurulur(tmp_path: Path) -> None:
+        """Gercek senaryo: allow_download=False, model sonradan diske konur -> ayni motor kendini kurar."""
+        f = Fabrika(dolu("a"))
+        m = RapidOcrEngine(language=OcrLanguage.KOREAN, model_dir=tmp_path, allow_download=False, recognizer_factory=f)
+        with pytest.raises(ModelMissingError):
+            m.recognize(kare(), OcrPreset.DIALOGUE)
+        assert f.calls == 0
+        for ad in DOSYALAR[OcrLanguage.KOREAN]:
+            (tmp_path / ad).write_bytes(b"")
+>       assert len(m.recognize(kare(), OcrPreset.DIALOGUE)) == 1 and f.calls == 1
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.agents\tasks\T-006\tester_B\test_mercek_B.py:491: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+src\ocr\rapid_engine.py:715: in recognize
+    taniyici = self._taniyici_al()
+               ^^^^^^^^^^^^^^^^^^^
+src\ocr\rapid_engine.py:739: in _taniyici_al
+    params = self.parametreler()
+             ^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = <src.ocr.rapid_engine.RapidOcrEngine object at 0x000001E96565B860>
+
+    def parametreler(self) -> dict[str, object]:
+        """Fabrikaya gidecek `params` sozlugu -- her cagrida TAZE kopya.
+    
+        `allow_download=False` ise model dosyalarini denetler ve eksikte
+        `ModelMissingError` firlatir (K6). Testler ve `real_check` bunu
+        fabrikasiz da gozlemleyebilsin diye PUBLIC'tir (KARAR: paket
+        sessizdi).
+        """
+        det_dil, rec_dil, rec_surumu = _dil_satiri(self._language)
+        p: dict[str, object] = {
+            "Global.text_score": 0.0,  # K5
+            "Global.use_cls": False,  # K3 / O3
+            "Global.log_level": "error",  # K7 (kurulum sirasi)
+            "EngineConfig.onnxruntime.intra_op_num_threads": self._threads,  # K3
+            "EngineConfig.onnxruntime.inter_op_num_threads": self._threads,  # K3
+            "Det.engine_type": _MOTOR,  # K11
+            "Det.ocr_version": _TESPIT_SURUMU,
+            "Det.model_type": _MODEL_TIPI,
+            "Det.lang_type": det_dil,
+            "Rec.engine_type": _MOTOR,
+            "Rec.ocr_version": rec_surumu,  # K11 / T-009 K1: dile ozel (KOREAN v5)
+            "Rec.model_type": _MODEL_TIPI,
+            "Rec.lang_type": rec_dil,
+        }
+        if self._allow_download:
+            if self._model_dir is not None:
+                p["Global.model_root_dir"] = self._model_dir
+            return p
+    
+        dizin = self._model_dir if self._model_dir is not None else varsayilan_model_dizini()
+        det_ad, rec_ad = beklenen_model_dosyalari(self._language)
+        det_yol, rec_yol = dizin / det_ad, dizin / rec_ad
+        eksik = [ad for ad, yol in ((det_ad, det_yol), (rec_ad, rec_yol)) if not yol.is_file()]
+        if eksik:
+>           raise ModelMissingError(
+                f"model dosyasi yok: {', '.join(eksik)} (dizin: {dizin}); "
+                "allow_download=False oldugu icin indirilmedi"
+            )
+E           src.contracts.errors.ModelMissingError: model dosyasi yok: korean_PP-OCRv5_rec_mobile.onnx (dizin: C:\Users\pc\AppData\Local\Temp\pytest-of-pc\pytest-2323\test_b5_modelmissing_kurulumda0); allow_download=False oldugu icin indirilmedi
+
+src\ocr\rapid_engine.py:685: ModelMissingError
+_________ test_b5_iki_motor_ayni_fabrikayi_paylasirsa_durum_karismaz __________
+
+tmp_path = WindowsPath('C:/Users/pc/AppData/Local/Temp/pytest-of-pc/pytest-2323/test_b5_iki_motor_ayni_fabrika0')
+
+    def test_b5_iki_motor_ayni_fabrikayi_paylasirsa_durum_karismaz(tmp_path: Path) -> None:
+        f = Fabrika(dolu("x"))
+        a = motor(tmp_path, f, OcrLanguage.JAPAN, threads=2)
+        b = motor(tmp_path, f, OcrLanguage.KOREAN, threads=3)
+        assert a.recognize(kare(), OcrPreset.DIALOGUE)[0].text == "x"
+>       assert b.recognize(kare(), OcrPreset.DIALOGUE)[0].text == "x"
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.agents\tasks\T-006\tester_B\test_mercek_B.py:511: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+src\ocr\rapid_engine.py:715: in recognize
+    taniyici = self._taniyici_al()
+               ^^^^^^^^^^^^^^^^^^^
+src\ocr\rapid_engine.py:739: in _taniyici_al
+    params = self.parametreler()
+             ^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = <src.ocr.rapid_engine.RapidOcrEngine object at 0x000001E965659670>
+
+    def parametreler(self) -> dict[str, object]:
+        """Fabrikaya gidecek `params` sozlugu -- her cagrida TAZE kopya.
+    
+        `allow_download=False` ise model dosyalarini denetler ve eksikte
+        `ModelMissingError` firlatir (K6). Testler ve `real_check` bunu
+        fabrikasiz da gozlemleyebilsin diye PUBLIC'tir (KARAR: paket
+        sessizdi).
+        """
+        det_dil, rec_dil, rec_surumu = _dil_satiri(self._language)
+        p: dict[str, object] = {
+            "Global.text_score": 0.0,  # K5
+            "Global.use_cls": False,  # K3 / O3
+            "Global.log_level": "error",  # K7 (kurulum sirasi)
+            "EngineConfig.onnxruntime.intra_op_num_threads": self._threads,  # K3
+            "EngineConfig.onnxruntime.inter_op_num_threads": self._threads,  # K3
+            "Det.engine_type": _MOTOR,  # K11
+            "Det.ocr_version": _TESPIT_SURUMU,
+            "Det.model_type": _MODEL_TIPI,
+            "Det.lang_type": det_dil,
+            "Rec.engine_type": _MOTOR,
+            "Rec.ocr_version": rec_surumu,  # K11 / T-009 K1: dile ozel (KOREAN v5)
+            "Rec.model_type": _MODEL_TIPI,
+            "Rec.lang_type": rec_dil,
+        }
+        if self._allow_download:
+            if self._model_dir is not None:
+                p["Global.model_root_dir"] = self._model_dir
+            return p
+    
+        dizin = self._model_dir if self._model_dir is not None else varsayilan_model_dizini()
+        det_ad, rec_ad = beklenen_model_dosyalari(self._language)
+        det_yol, rec_yol = dizin / det_ad, dizin / rec_ad
+        eksik = [ad for ad, yol in ((det_ad, det_yol), (rec_ad, rec_yol)) if not yol.is_file()]
+        if eksik:
+>           raise ModelMissingError(
+                f"model dosyasi yok: {', '.join(eksik)} (dizin: {dizin}); "
+                "allow_download=False oldugu icin indirilmedi"
+            )
+E           src.contracts.errors.ModelMissingError: model dosyasi yok: korean_PP-OCRv5_rec_mobile.onnx (dizin: C:\Users\pc\AppData\Local\Temp\pytest-of-pc\pytest-2323\test_b5_iki_motor_ayni_fabrika0); allow_download=False oldugu icin indirilmedi
+
+src\ocr\rapid_engine.py:685: ModelMissingError
+______________ test_b6_eksik_iki_satir_yapisal_olarak_erisilemez ______________
+
+    def test_b6_eksik_iki_satir_yapisal_olarak_erisilemez() -> None:
+        """Kapsam raporunda eksik gorunen iki `raise ValueError` satiri: her enum uyesi tabloda,
+        uye olmayan deger tabloya varmadan `OcrLanguage(...)`da patlar."""
+        for dil in OcrLanguage:
+            assert rapid_engine._dil_satiri(dil) is not None
+>           assert rapid_engine.beklenen_model_dosyalari(dil) == DOSYALAR[dil]
+E           AssertionError: assert ('multi_PP-OC..._mobile.onnx') == ('multi_PP-OC..._mobile.onnx')
+E             
+E             At index 1 diff: 'korean_PP-OCRv5_rec_mobile.onnx' != 'korean_PP-OCRv4_rec_mobile.onnx'
+E             Use -v to get more diff
+
+.agents\tasks\T-006\tester_B\test_mercek_B.py:579: AssertionError
+=========================== short test summary info ===========================
+FAILED .agents/tasks/T-006/tester_A/test_a_sozlesme_sayisal.py::test_a5_k11_dort_dil_alti_anahtar_birebir[korean]
+FAILED .agents/tasks/T-006/tester_B/test_mercek_B.py::test_b3_sahte_fabrikayla_tam_kosum_yasak_kok_yuklemez
+FAILED .agents/tasks/T-006/tester_B/test_mercek_B.py::test_b5_modelmissing_kurulumda_ornek_tutulmaz_dosya_gelince_kurulur
+FAILED .agents/tasks/T-006/tester_B/test_mercek_B.py::test_b5_iki_motor_ayni_fabrikayi_paylasirsa_durum_karismaz
+FAILED .agents/tasks/T-006/tester_B/test_mercek_B.py::test_b6_eksik_iki_satir_yapisal_olarak_erisilemez
+5 failed, 139 passed in 0.96s
+exit=1

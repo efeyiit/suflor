@@ -216,20 +216,45 @@ tembel kurulum -> tanıma -> donusum. Kurulum (fabrika) hata verirse ornek
 TUTULMAZ; bir sonraki `recognize` kurulumu yeniden dener (K6 b). Olcu:
 `test_k10_*` (weakref: `close()` + `gc.collect()` sonrasi tanıyıcı olu).
 
-## K11 -- model tablosu dil basina SABIT
+## K11 -- model tablosu dil basina SABIT (T-009: tanima surumu DILE OZEL)
 
 Kutuphane varsayilani PP-OCRv6-small KULLANILMAZ (KOREAN'da `ValueError`,
 JAPAN'da 2x yavas, CH/EN/JAPAN ayni dosyaya cozulup K2 pozitif kontrolunu
 dusurur). Her dil icin gecilen tablo (`Det/Rec.engine_type="onnxruntime"`,
-`model_type="mobile"`, `ocr_version="PP-OCRv4"` ortak):
+`Det/Rec.model_type="mobile"`, `Det.ocr_version="PP-OCRv4"` ortak;
+`Rec.ocr_version` dile ozel):
 
-    JAPAN   Det.lang_type="multi"  Rec.lang_type="japan"
-    KOREAN  Det.lang_type="multi"  Rec.lang_type="korean"
-    CHINESE Det.lang_type="ch"     Rec.lang_type="ch"
-    ENGLISH Det.lang_type="ch"     Rec.lang_type="en"
+    JAPAN   Det.lang_type="multi"  Rec.lang_type="japan"   Rec.ocr_version="PP-OCRv4"
+    KOREAN  Det.lang_type="multi"  Rec.lang_type="korean"  Rec.ocr_version="PP-OCRv5"
+    CHINESE Det.lang_type="ch"     Rec.lang_type="ch"      Rec.ocr_version="PP-OCRv4"
+    ENGLISH Det.lang_type="ch"     Rec.lang_type="en"      Rec.ocr_version="PP-OCRv4"
 
 Det iki farkli: `multi` det Ingilizce'yi 22 kelime kutusuna boler, `ch`
 det Korece bosluklarini yitirir (KRT Y3).
+
+Neden KOREAN rec v5 (T-009 K1/K4): v4 Korece tanima modeli cumle sonu
+noktasini HIC vermiyor (dlg_KR: kaynakta 3 nokta, 17 blokta 0; tespit
+degil TANIMA -- uc det modelinde de kutu metnin sonuna kadar uzuyor).
+Noktasiz govde T-007'de bolunemez ve NMT icerik yitirir (6 kelime vs 15).
+v5 mobile ucunu de verir, ayni kelime dogrulugu (17/17), 3x hizli (332 vs
+1099 ms). Dosya: `korean_PP-OCRv5_rec_mobile.onnx` (`_MODEL_DOSYALARI`).
+`Det.ocr_version` her dilde v4 kalir (det degismedi).
+
+Neden digerleri v4 (T-009 K5): JAPAN'da v5 YOK (kutuphane `ValueError`);
+ENGLISH v5 mumkun (4/4, %25 hizli) ama KR'deki gibi olculmus bir kusur
+yok -- ACIK KALEM, T-009 kapsam disi; CHINESE olculmedi. Olcu: iki nokta
+(KOREAN v5 / JAPAN v4), `test_k11_t009_*`.
+
+Hangisi belirleyici (T-009 olcum-1, gercek model): `allow_download=False`
+yolunda motor `Rec.model_path`i ACIK verir ve kutuphane O dosyayi yukler;
+`Rec.ocr_version` dosya secimine KATILMAZ (v5 dosya + v4 etiketi -> yine
+3 nokta). Yani urun yolunda belirleyici olan `_MODEL_DOSYALARI`dir.
+`Rec.ocr_version` indirme yolunda (`allow_download=True`, model_path yok)
+dosyayi secer (v5 -> 3 nokta / 384 ms, v4 -> 0 nokta / 1539 ms); iki
+tablo bu yuzden TUTARLI tutulur. Sonucu: JAPAN'a sizan bir v5 indirme
+yolunda `ValueError` verir ama acik v4 dosya yoluyla SESSIZCE v4 kosar
+(4/4) -- urun yolunda JAPAN v4 birim testi (`test_k11_t009_japan_ikisi_de_v4`)
+tek bekcidir, gercek kapi onu goremez.
 
 Degerler `params`ta STRING tasinir; `_varsayilan_fabrika` bunlari kutuphane
 enum uyelerine cevirir (`LangDet("multi") is LangDet.MULTI` vb. -- olcum-2
@@ -239,7 +264,10 @@ sahte fabrika enum uyesi GOREMEZ (itiraz, `known_gaps`). Kutuphane
 `engine_type/model_type/ocr_version` icin enum ZORUNLU kilar (string ->
 `TypeError`, olcum-2 (b)); donusum bu yuzden fabrikanin icindedir ve gercek
 yolda `real_check.py` #1-#4 ile olculur. Olcu: `test_k11_*` (dort dil x
-alti anahtar; anahtar kumesi sabit).
+alti anahtar; anahtar kumesi sabit; `Rec.ocr_version` dil basina),
+`test_k11_t009_*` (KOREAN v5 / JAPAN v4 iki nokta; v5 dosya adi
+`ModelMissingError` mesajinda, v4 dosyasina dusulmez), T-009
+`real_check.py` #1-#3 (gercek modelde noktalar, uctan uca, sure).
 
 Windows tuzaklari (belgelenir)
 -------------------------------
@@ -326,21 +354,22 @@ _LOGGER_ADI: Final = "RapidOCR"
 
 _MOTOR: Final = "onnxruntime"
 _MODEL_TIPI: Final = "mobile"
-_OCR_SURUMU: Final = "PP-OCRv4"
+_TESPIT_SURUMU: Final = "PP-OCRv4"
+"""K11: `Det.ocr_version` -- her dilde ayni (T-009: yalniz tanima surumu dile ozel)."""
 _CLS_DOSYASI: Final = "ch_ppocr_mobile_v2.0_cls_mobile.onnx"
 """Yonetilmez (K6); yalniz belge: wheel ile gelir, `use_cls=False`."""
 
-_DIL_TABLOSU: Final[tuple[tuple[OcrLanguage, str, str], ...]] = (
-    (OcrLanguage.JAPAN, "multi", "japan"),
-    (OcrLanguage.KOREAN, "multi", "korean"),
-    (OcrLanguage.CHINESE, "ch", "ch"),
-    (OcrLanguage.ENGLISH, "ch", "en"),
+_DIL_TABLOSU: Final[tuple[tuple[OcrLanguage, str, str, str], ...]] = (
+    (OcrLanguage.JAPAN, "multi", "japan", "PP-OCRv4"),  # v5 YOK (ValueError, T-009 K5)
+    (OcrLanguage.KOREAN, "multi", "korean", "PP-OCRv5"),  # v4 noktayi vermiyor (T-009 K1/K4)
+    (OcrLanguage.CHINESE, "ch", "ch", "PP-OCRv4"),
+    (OcrLanguage.ENGLISH, "ch", "en", "PP-OCRv4"),  # v5 mumkun, kapsam disi (T-009 K5)
 )
-"""K11: `(dil, Det.lang_type, Rec.lang_type)` -- kutuphane enum DEGERLERI."""
+"""K11: `(dil, Det.lang_type, Rec.lang_type, Rec.ocr_version)` -- kutuphane enum DEGERLERI."""
 
 _MODEL_DOSYALARI: Final[tuple[tuple[OcrLanguage, str, str], ...]] = (
     (OcrLanguage.JAPAN, "multi_PP-OCRv3_det_mobile.onnx", "japan_PP-OCRv4_rec_mobile.onnx"),
-    (OcrLanguage.KOREAN, "multi_PP-OCRv3_det_mobile.onnx", "korean_PP-OCRv4_rec_mobile.onnx"),
+    (OcrLanguage.KOREAN, "multi_PP-OCRv3_det_mobile.onnx", "korean_PP-OCRv5_rec_mobile.onnx"),  # T-009 K1
     (OcrLanguage.CHINESE, "ch_PP-OCRv4_det_mobile.onnx", "ch_PP-OCRv4_rec_mobile.onnx"),
     (OcrLanguage.ENGLISH, "ch_PP-OCRv4_det_mobile.onnx", "en_PP-OCRv4_rec_mobile.onnx"),
 )
@@ -352,10 +381,11 @@ _MODEL_DOSYALARI: Final[tuple[tuple[OcrLanguage, str, str], ...]] = (
 # ---------------------------------------------------------------------------
 
 
-def _dil_satiri(language: OcrLanguage) -> tuple[str, str]:
-    for dil, det, rec in _DIL_TABLOSU:
+def _dil_satiri(language: OcrLanguage) -> tuple[str, str, str]:
+    """`(Det.lang_type, Rec.lang_type, Rec.ocr_version)` -- K11 satiri."""
+    for dil, det, rec, rec_surumu in _DIL_TABLOSU:
         if dil is language:
-            return det, rec
+            return det, rec, rec_surumu
     raise ValueError(f"tabloda olmayan dil: {language!r}")  # yapisal olarak erisilemez
 
 
@@ -626,7 +656,7 @@ class RapidOcrEngine(OcrEngine):
         fabrikasiz da gozlemleyebilsin diye PUBLIC'tir (KARAR: paket
         sessizdi).
         """
-        det_dil, rec_dil = _dil_satiri(self._language)
+        det_dil, rec_dil, rec_surumu = _dil_satiri(self._language)
         p: dict[str, object] = {
             "Global.text_score": 0.0,  # K5
             "Global.use_cls": False,  # K3 / O3
@@ -634,11 +664,11 @@ class RapidOcrEngine(OcrEngine):
             "EngineConfig.onnxruntime.intra_op_num_threads": self._threads,  # K3
             "EngineConfig.onnxruntime.inter_op_num_threads": self._threads,  # K3
             "Det.engine_type": _MOTOR,  # K11
-            "Det.ocr_version": _OCR_SURUMU,
+            "Det.ocr_version": _TESPIT_SURUMU,
             "Det.model_type": _MODEL_TIPI,
             "Det.lang_type": det_dil,
             "Rec.engine_type": _MOTOR,
-            "Rec.ocr_version": _OCR_SURUMU,
+            "Rec.ocr_version": rec_surumu,  # K11 / T-009 K1: dile ozel (KOREAN v5)
             "Rec.model_type": _MODEL_TIPI,
             "Rec.lang_type": rec_dil,
         }

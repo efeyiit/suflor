@@ -1,0 +1,52 @@
+T-009 mutant kiti -- ayna: C:\Users\pc\AppData\Local\Temp\scratch\C--Users-pc-Desktop-efe--eviri-uygulamas-\d52c967f-bd19-4db3-b5e9-77e6cd08b889\scratchpad\t009_ayna | gercek model: EVET
+TEMEL (mutantsiz): failed=0 passed=119 error=0
+TEMEL gercek T-009 real_check: exit=0
+       ok     [1] KR 17 blok, '.' sayisi 3 (>= 3; v4'te 0)
+       ok     [2] uctan uca: 2 segment -> 15 kelime, bekliyor/dogu/gunes=(True, True, True)  (v4: 6 kelime, yalniz bekliyor)
+       ok     [3] KR OCR medyan 325 ms (<= 400; v4 ~1099)
+       REAL_CHECK: TEMIZ
+M01      X (4)    YAKALA     KOREAN Rec.ocr_version v5 -> v4 geri (dosya adi v5)
+        dusen: test_k11_dil_tablosu_alti_anahtar[korean]
+        dusen: test_k11_t009_korean_rec_v5_det_v4
+        dusen: test_k11_t009_v5_yalniz_korean
+        dusen: test_k11_t009_korean_v5_dosyasi_varsa_acik_yol
+        gercek T-009 real_check: exit=0  GECTI (beklenen: GECER -- dosya yolu baskin)
+           ok     [1] KR 17 blok, '.' sayisi 3 (>= 3; v4'te 0)
+           ok     [2] uctan uca: 2 segment -> 15 kelime, bekliyor/dogu/gunes=(True, True, True)  (v4: 6 kelime, yalniz bekliyor)
+           ok     [3] KR OCR medyan 327 ms (<= 400; v4 ~1099)
+           REAL_CHECK: TEMIZ
+M02      X (7)    YAKALA     KOREAN rec dosya adi v5 -> v4 geri (surum v5)
+        dusen: test_k6_model_var_acik_yol_gecilir[korean]
+        dusen: test_k11_dil_tablosu_alti_anahtar[korean]
+        dusen: test_k11_t009_korean_rec_v5_det_v4
+        dusen: test_k11_t009_v5_yalniz_korean
+        dusen: test_k11_t009_korean_model_yok_v5_adi_mesajda
+        dusen: test_k11_t009_korean_yalniz_v4_dosyasi_varsa_yine_modelmissing
+        dusen: test_k11_t009_korean_v5_dosyasi_varsa_acik_yol
+        gercek T-009 real_check: exit=1  DUSTU (beklenen: DUSER)
+           IHLAL  [1] KR 17 blok, '.' sayisi 0 (>= 3; v4'te 0)
+           IHLAL  [2] uctan uca: 2 segment -> 6 kelime, bekliyor/dogu/gunes=(True, False, False)  (v4: 6 kelime, yalniz bekliyor)
+           IHLAL  [3] KR OCR medyan 1083 ms (<= 400; v4 ~1099)
+           REAL_CHECK: 3 IHLAL
+M01+M02  X (7)    YAKALA     IKISI v4 = T-009 oncesi kod (pozitif kontrol)
+        dusen: test_k6_model_var_acik_yol_gecilir[korean]
+        dusen: test_k11_dil_tablosu_alti_anahtar[korean]
+        dusen: test_k11_t009_korean_rec_v5_det_v4
+        dusen: test_k11_t009_v5_yalniz_korean
+        dusen: test_k11_t009_korean_model_yok_v5_adi_mesajda
+        dusen: test_k11_t009_korean_yalniz_v4_dosyasi_varsa_yine_modelmissing
+        dusen: test_k11_t009_korean_v5_dosyasi_varsa_acik_yol
+        gercek T-009 real_check: exit=1  DUSTU (beklenen: DUSER)
+           IHLAL  [1] KR 17 blok, '.' sayisi 0 (>= 3; v4'te 0)
+           IHLAL  [2] uctan uca: 2 segment -> 6 kelime, bekliyor/dogu/gunes=(True, False, False)  (v4: 6 kelime, yalniz bekliyor)
+           IHLAL  [3] KR OCR medyan 1091 ms (<= 400; v4 ~1099)
+           REAL_CHECK: 3 IHLAL
+M03      X (3)    YAKALA     JAPAN Rec.ocr_version v4 -> v5 (KOREAN da v5)
+        dusen: test_k11_dil_tablosu_alti_anahtar[japan]
+        dusen: test_k11_t009_japan_ikisi_de_v4
+        dusen: test_k11_t009_v5_yalniz_korean
+        gercek JAPAN kurulum: params Rec.ocr_version = PP-OCRv5 | SONUC: istisna YOK; 4 blok
+C-1      .        KACSIN     KONTROL: _DIL_TABLOSU satir sirasi (JAPAN<->KOREAN) esdeger
+
+4 davranis mutanti + 1 kontrol; beklenti tutmayan: 0 []
+exit=0
