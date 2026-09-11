@@ -1,0 +1,9 @@
+A  referans (Path(rapidocr.__file__).parent/'models'): C:\Users\pc\AppData\Local\Programs\Python\Python312\Lib\site-packages\rapidocr\models
+B  bariyer kuruldu: _T006Bariyer
+C  import rapidocr                                      -> RuntimeError: T-006 K1 bariyeri: birim testleri 'rapidocr' import edemez; 
+C  import rapidocr.inference_engine.base                -> RuntimeError: T-006 K1 bariyeri: birim testleri 'rapidocr' import edemez; 
+C  importlib.util.find_spec('rapidocr')                 -> RuntimeError: T-006 K1 bariyeri: birim testleri 'rapidocr' import edemez; 
+C  importlib.metadata.distribution('rapidocr').locate_file -> OK   C:\Users\pc\AppData\Local\Programs\Python\Python312\Lib\site-packages\rapidocr\models
+C  metadata yolu == referans yolu: True
+C  sys.modules'ta rapidocr var mı (metadata yolu yükledi mi): False
+C  modeller diskte: ['PP-OCRv6_det_small.onnx', 'PP-OCRv6_rec_small.onnx', 'ch_PP-OCRv4_det_mobile.onnx', 'ch_PP-OCRv4_rec_mobile.onnx', 'ch_ppocr_mobile_v2.0_cls_mobile.onnx', 'en_PP-OCRv4_rec_mobile.onnx', 'japan_PP-OCRv4_rec_mobile.onnx', 'korean_PP-OCRv4_rec_mobile.onnx', 'multi_PP-OCRv3_det_mobile.onnx']

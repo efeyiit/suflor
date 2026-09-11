@@ -1,0 +1,5 @@
+E   ImportError: cannot import name 'rapid_engine' from 'src.ocr' (C:\Users\pc\Desktop\efe\çeviri uygulaması\src\ocr\__init__.py)
+=========================== short test summary info ===========================
+ERROR tests/unit/ocr/test_rapid_engine.py
+!!!!!!!!!!!!!!!!!!! Interrupted: 1 error during collection !!!!!!!!!!!!!!!!!!!!
+1 error in 0.31s

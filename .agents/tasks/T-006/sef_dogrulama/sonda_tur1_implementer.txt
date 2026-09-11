@@ -1,0 +1,63 @@
+==== T-006 TUR 1 IMPLEMENTER TESLIMI -- SEF SONDASI ====
+
+SAHIPLIK  Yeni dosyalar: src/ocr/rapid_engine.py (694 satir), tests/unit/ocr/
+          test_rapid_engine.py (761 satir, 95 test), delivery.md, evidence/.
+          Yasak listeden hicbiri degismedi. Commit atilmamis (dogru).
+
+BES KABUL KOMUTU (sef kostu):
+  mypy --strict     Success: no issues found in 1 source file
+  birim             95 passed
+  real_check        TEMIZ (16/16)  -- kapi duzeltildikten sonra, asagiya bak
+  kapsam            %99 (188 ifade, 2 eksik)
+  tam takim         1085 passed (990 + 95)
+  delivery.md       KABUL EDILEBILIR, tur 1
+
+REAL_CHECK SONUCLARI (gercek model, sefin fixture'lari):
+  JAPAN    4/4 birebir     187 ms / 4 kutu
+  ENGLISH  4/4 birebir     235 ms / 4 kutu
+  KOREAN   benzerlik 0.971 691 ms / 17 kutu = 41 ms/kutu
+  CHINESE-on-JP 0/4        (K2 pozitif kontrolu ATESLIYOR)
+  KR+JAPAN 17 blok, 8'i <0.5 (K5 suzgec-kapali kaniti)
+  bbox iki noktada kaydirma tam (-2600,-50); tum alanlar type is int
+  model yok + allow_download=False -> ModelMissingError
+
+=========================================================================
+IMPLEMENTER'IN KAPIYA ITIRAZI: real_check'in 2 ihlali MOTORDA DEGIL KAPIDA
+=========================================================================
+Sef ikisini de kendi eliyle uretti; IKISI DE HAKLI. Iki kapi hatasi daha sefin:
+
+[SEF HATASI 13] okuma_sirasi: round(y/25) sabit kovasi satiri boluyor.
+  KR bloklarinin y'leri: [47,49,104,106,107,108,158,159,160,162,212,213,214,215]
+  Kova sinirina denk gelenler: 162 ve 212 (212->8, 213->9). Ayni satirin bir
+  kelimesi onceki satira kaciyor -> benzerlik 0.932. y-bosluguna gore
+  kumeleme (>20 px = yeni satir) -> 0.971 = sefin O5 sayisi.
+  DUZELTME: okuma_sirasi y-bosluk kumelemesiyle yeniden yazildi.
+
+[SEF HATASI 14] "[6a] ilk blok y<0 olmali" YAPISAL OLARAK IMKANSIZ.
+  JP fixture'inda ilk satir goruntu-yerel y=93. rect.y=-50 ile 93-50=43 >= 0.
+  Hicbir dogru uygulama bu kontrolu gecemezdi. Kaydirmanin gercek olcusu
+  [6c] iki-nokta farki (= -50) zaten gecmisti.
+  DUZELTME: y kosulu kaldirildi, x<0 (75-2600) kaldi.
+  SINIF: 4.6/10 -- olcunun ATESLEYEBILDIGI gosterilmeden yazildi.
+
+SEFIN MUTANT KAPISI (kum havuzu; ilk koşumda harness hatasi vardi, duzeltildi):
+  M1 Global.text_score satiri silindi   birim 3 failed  real_check DUSTU   YAKALANDI
+  M2 bbox kaydirmasi kaldirildi         birim 4 failed  real_check 2 IHLAL YAKALANDI
+     (ilk deneme docstring'e isabet etmisti -- sefin mutant hatasi, kod degismemisti)
+  M3 threads ust sinir denetimi silindi birim 2 failed                    YAKALANDI
+  M4 modul duzeyi 'from rapidocr import' pytest: 1 error during collection
+     (bariyer atesledi; harness "error"u "0 failed" okumustu -- sefin harness hatasi)
+     real_check GECTI -- dogru: real_check bariyersiz ayri surec, orada import serbest.
+
+IMPLEMENTER'IN PAKETE ITIRAZLARI (known_gaps'te):
+  1. K6 "adi canli cozucuyle bul" + K11 "enum'la karsilastir", K1 bariyeriyle
+     CELISIYOR (birim testte rapidocr'a dokunulamaz). Cozum: sabit ad tablosu
+     (cozucuyle birebir eslendi, evidence/olcum-2), params'ta string, enum
+     donusumu yalniz gercek fabrikada. SEF KABUL ETTI -- paket celiskiliydi.
+  2. Cls modeli silinmisse allow_download=False altinda kutuphane yine indiriyor
+     (olculdu). Belgelendi; v1'de kapatilmadi. Acik kalem.
+  3. Kararlar: allow_download=True + model_dir -> Global.model_root_dir;
+     tam sayi olmayan threads -> TypeError; rect alanlari numpy ise
+     ContractViolation; Protocol alanlari salt-okunur property. Makul.
+
+KARAR: Teslim KABUL EDILEBILIR. Tester turuna gidiyor (2 mercek, 4.6/9).

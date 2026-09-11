@@ -78,7 +78,24 @@ def kare(ad: str, rect: Rect) -> Frame:
 
 
 def okuma_sirasi(bloklar: list[TextBlock]) -> list[TextBlock]:
-    return sorted(bloklar, key=lambda b: (round(b.bbox.y / 25), b.bbox.x))
+    """Satır kümeleme y-BOŞLUĞUNA göre; sabit kova DEĞİL.
+
+    v1 `round(y/25)` kullanıyordu: aynı satırın kelimeleri y=212 ve 213'te kova
+    sınırına bölünüyor (212→8, 213→9), bir kelime satırın önüne kaçıyordu
+    (implementer tur 1'de ölçtü, şef doğruladı: KR 0.932 vs 0.971). Şimdi:
+    y'ye göre sırala, bir önceki satırın y'sinden 20 px'ten fazla uzaksa yeni
+    satır. Fixture'da satır aralığı 54 px, satır içi sapma ≤ 4 px.
+    """
+    if not bloklar:
+        return []
+    ys = sorted(bloklar, key=lambda b: b.bbox.y)
+    satirlar: list[list[TextBlock]] = [[ys[0]]]
+    for b in ys[1:]:
+        if b.bbox.y - satirlar[-1][0].bbox.y > 20:
+            satirlar.append([b])
+        else:
+            satirlar[-1].append(b)
+    return [b for satir in satirlar for b in sorted(satir, key=lambda b: b.bbox.x)]
 
 
 def bosluksuz(s: str) -> str:
@@ -146,8 +163,11 @@ def main() -> int:
     # --- 6. bbox ekran koordinatı, iki nokta ----------------------------------
     if b_jp:
         ilk = okuma_sirasi(b_jp)[0]
-        (tamam if ilk.bbox.x < 0 and ilk.bbox.y < 0 else ihlal)(
-            f"[6a] Frame.rect=(-2600,-50): ilk blok bbox=({ilk.bbox.x},{ilk.bbox.y}) negatif olmalı")
+        # v1 burada `y < 0` da istiyordu: YAPISAL OLARAK YANLIŞ — ilk satır görüntü-yerel
+        # y=93'te, rect.y=-50 ile 43 ≥ 0; hiçbir doğru uygulamada tutmazdı (implementer ölçtü,
+        # şef doğruladı). Kaydırmanın asıl ölçüsü [6c]'nin iki-nokta farkıdır.
+        (tamam if ilk.bbox.x < 0 else ihlal)(
+            f"[6a] Frame.rect=(-2600,-50): ilk blok bbox.x={ilk.bbox.x} negatif olmalı (görüntü-yerel x≈75)")
         (tamam if ilk.bbox.monitor_index == 0 else ihlal)(
             f"[6a] monitor_index frame'den taşındı: {ilk.bbox.monitor_index} (beklenen 0)")
         (tamam if bbox_tipleri_duz_int(b_jp) else ihlal)("[6a] tüm bbox alanları type is int, json'lanabilir")

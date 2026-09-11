@@ -1,0 +1,28 @@
+[32m[INFO] 2026-09-11 03:48:07,284 [RapidOCR] base.py:23: Using engine_name: onnxruntime[0m
+[32m[INFO] 2026-09-11 03:48:07,379 [RapidOCR] main.py:63: Using C:\Users\pc\AppData\Local\Programs\Python\Python312\Lib\site-packages\rapidocr\models\multi_PP-OCRv3_det_mobile.onnx[0m
+[32m[INFO] 2026-09-11 03:48:07,450 [RapidOCR] base.py:23: Using engine_name: onnxruntime[0m
+[32m[INFO] 2026-09-11 03:48:07,453 [RapidOCR] download_file.py:60: File exists and is valid: C:\Users\pc\AppData\Local\Programs\Python\Python312\Lib\site-packages\rapidocr\models\ch_ppocr_mobile_v2.0_cls_mobile.onnx[0m
+[32m[INFO] 2026-09-11 03:48:07,453 [RapidOCR] main.py:63: Using C:\Users\pc\AppData\Local\Programs\Python\Python312\Lib\site-packages\rapidocr\models\ch_ppocr_mobile_v2.0_cls_mobile.onnx[0m
+[32m[INFO] 2026-09-11 03:48:07,507 [RapidOCR] base.py:23: Using engine_name: onnxruntime[0m
+[32m[INFO] 2026-09-11 03:48:07,507 [RapidOCR] main.py:63: Using C:\Users\pc\AppData\Local\Programs\Python\Python312\Lib\site-packages\rapidocr\models\japan_PP-OCRv4_rec_mobile.onnx[0m
+1  kurulum ÖNCESİ logger seviyesi: INFO | propagate: False | handler sayısı: 1
+2  log_level PARAMS'TA YOK: kurulum 412 ms; kurulum SONRASI seviye: INFO (ERROR'a çekmiştik -> kütüphane sıfırladı mı?)
+3  log_level='error' PARAMS'TA: kurulum 356 ms; kurulum SONRASI seviye: ERROR
+4  det oturumu intra/inter: 8 8
+   rec oturumu intra/inter: 8 8
+   text_score: 0.0 | use_cls: False
+5  boş kare -> tip: RapidOCROutput | boxes: None | txts: None | scores: None | len: 0
+6  JP fixture -> tip: RapidOCROutput | boxes: ndarray float32 (4, 4, 2) | txts tipi: tuple | n: 4 | scores tipi: tuple | puan tipi: float | min puan: 0.978
+   girdi mutasyona uğradı mı: False | boxes köşe kesirli mi: False
+   ilk kutu (koordinatlar, metin değil): [[82.0, 95.0], [229.0, 93.0], [229.0, 115.0], [82.0, 116.0]]
+7  1x1      -> RapidOCROutput boxes=None
+7  5x5      -> RapidOCROutput boxes=None
+7  0x0      -> ZeroDivisionError: float division by zero
+7  h=0      -> ZeroDivisionError: float division by zero
+7  4 kanal  -> RapidOCROutput boxes=None
+7  2B gri   -> RapidOCROutput boxes=None
+7  float32  -> RapidOCROutput boxes=None
+8  Global.model_root_dir=boş tmp + cls açık yol yok -> KURULDU (cls indirildi?) ['ch_ppocr_mobile_v2.0_cls_mobile.onnx']
+8b Det.model_dir verildi, model_path yok -> kuruldu; tmp içeriği: ['ch_ppocr_mobile_v2.0_cls_mobile.onnx', 'multi_PP-OCRv3_det_mobile.onnx']
+9  KR+JAPAN text_score=0 -> n: 17 | <0.5 olan: 8 | min: 0.113
+   KR+JAPAN text_score=0.5 -> n: 9 (kütüphane varsayılanı; fark = sessizce elenen)

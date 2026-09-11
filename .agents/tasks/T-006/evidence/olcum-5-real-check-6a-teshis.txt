@@ -1,0 +1,7 @@
+rect=(     0,    0) -> ilk blok bbox=(    82,   93) w=147 h=23  y<0: False
+rect=( -2600,  -50) -> ilk blok bbox=( -2518,   43) w=147 h=23  y<0: False
+rect=( -2600,  -93) -> ilk blok bbox=( -2518,    0) w=147 h=23  y<0: False
+rect=( -2600,  -94) -> ilk blok bbox=( -2518,   -1) w=147 h=23  y<0: True
+rect=( -2600, -100) -> ilk blok bbox=( -2518,   -7) w=147 h=23  y<0: True
+Sonuç: görüntü-yerel ilk satır y=93; rect.y=-50 ile 43 → [6a]'nın y<0 koşulu bu fixture'da sağlanamaz;
+        rect.y<=-94 ile negatif oluyor → motor y'yi sıfıra sabitlemiyor (pozitif kontrol).

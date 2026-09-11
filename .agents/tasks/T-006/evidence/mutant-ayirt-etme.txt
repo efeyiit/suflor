@@ -1,0 +1,26 @@
+TABAN      : exit=0  95 passed in 0.34s
+MT-01     : YAKALANDI ok  2 failed, 93 passed in 0.38s             -- K5: text_score 0.0 -> 0.5 (kutuphane suzgeci ACIK)
+MT-02     : YAKALANDI ok  2 failed, 93 passed in 0.38s             -- K3: ust sinir kaldirildi (cpu ustu sessiz otomatik)
+MT-03     : YAKALANDI ok  1 error in 0.25s                         -- K7: logger seviyesi fabrikadan ONCE cekiliyor
+MT-03b    : YAKALANDI ok  2 failed, 93 passed in 0.38s             -- K7: kurulum sonrasi setLevel kaldirildi
+MT-04     : YAKALANDI ok  2 failed, 93 passed in 0.38s             -- K7: Global.log_level params'tan cikarildi
+MT-05     : YAKALANDI ok  4 failed, 91 passed in 0.39s             -- K4: floor/ceil yerine round
+MT-05c    : YAKALANDI ok  4 failed, 91 passed in 0.39s             -- K4: x1 ceil yerine round
+MT-05d    : YAKALANDI ok  4 failed, 91 passed in 0.40s             -- K4: y0 floor yerine round
+MT-05b    : YAKALANDI ok  4 failed, 91 passed in 0.39s             -- K4: ceil yerine floor (max kenar)
+MT-06     : YAKALANDI ok  4 failed, 91 passed in 0.39s             -- K4: y kaydirmasi yok
+MT-07     : YAKALANDI ok  19 failed, 76 passed in 0.52s            -- K6: fabrika model kontrolunden ONCE cagriliyor
+MT-08     : YAKALANDI ok  1 failed, 94 passed in 0.37s             -- K11: JAPAN det 'multi' -> 'ch'
+MT-08b    : YAKALANDI ok  1 failed, 94 passed in 0.36s             -- K11: ENGLISH rec 'en' -> 'ch'
+MT-09     : YAKALANDI ok  2 failed, 93 passed in 0.37s             -- K10: close() kapali bayragini koymuyor
+MT-10     : YAKALANDI ok  1 failed, 94 passed in 0.36s             -- K4: int() kesme (negatifte floor degil)
+MT-11     : YAKALANDI ok  3 failed, 92 passed in 0.38s             -- K3: inter_op anahtari threads yerine -1
+MT-12     : YAKALANDI ok  2 failed, 93 passed in 0.39s             -- K3: use_cls True
+MT-13     : YAKALANDI ok  1 failed, 94 passed in 0.37s             -- K5: metin strip ediliyor
+MT-14     : YAKALANDI ok  3 failed, 92 passed in 0.38s             -- K6: 0-boyut denetimi kaldirildi
+MT-15     : YAKALANDI ok  23 failed, 72 passed in 0.67s            -- K5: bos sonucta (boxes None) OcrError
+MT-16     : YAKALANDI ok  1 failed, 94 passed in 0.37s             -- K6: kutuphane istisnasi sarilmadan yayiliyor
+MT-17     : YAKALANDI ok  2 failed, 93 passed in 0.37s             -- K3: threads=None varsayilani 8 yerine -1
+MT-18     : YAKALANDI ok  6 failed, 89 passed in 0.41s             -- K6: allow_download=False'ta model_path gecilmiyor (root_dir ile)
+MT-KONTROL: KACTI     ok  95 passed in 0.28s                       -- davranis-esdeger: sozluk anahtar sirasi degisti (YAKALANMAMALI)
+MUTANT KITI: TEMIZ

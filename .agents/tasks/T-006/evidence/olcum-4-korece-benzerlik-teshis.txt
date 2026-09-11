@@ -1,0 +1,33 @@
+blok sayısı: 17
+A  blok geometrisi (ham sıra): idx | y | x | h | kova=round(y/25) | uzunluk | puan | Hangul?
+    0 |   47 | -2522 |  29 |   2 |  2 | 1.000 | True
+    1 |   49 | -2459 |  26 |   2 |  4 | 1.000 | True
+    2 |  104 | -2521 |  40 |   4 |  2 | 1.000 | True
+    3 |  106 | -2442 |  37 |   4 |  3 | 1.000 | True
+    4 |  107 | -2326 |  35 |   4 |  3 | 1.000 | True
+    5 |  108 | -2210 |  33 |   4 |  4 | 1.000 | True
+    6 |  108 | -2062 |  33 |   4 |  4 | 1.000 | True
+    7 |  162 | -2518 |  34 |   6 |  4 | 0.999 | True
+    8 |  159 | -2375 |  40 |   6 |  2 | 1.000 | True
+    9 |  159 | -2295 |  39 |   6 |  2 | 0.999 | True
+   10 |  158 | -2214 |  41 |   6 |  2 | 0.999 | True
+   11 |  160 | -2133 |  37 |   6 |  4 | 1.000 | True
+   12 |  214 | -2522 |  37 |   9 |  2 | 1.000 | True
+   13 |  212 | -2445 |  41 |   8 |  2 | 1.000 | True
+   14 |  213 | -2360 |  39 |   9 |  2 | 1.000 | True
+   15 |  215 | -2278 |  36 |   9 |  4 | 1.000 | True
+   16 |  215 | -2131 |  35 |   9 |  4 | 1.000 | True
+B  real_check okuma sırası ile benzerlik: 0.932  (okunan 50 kr, beklenen 53 kr)
+   opcode'lar (etiket, okunan aralık, beklenen aralık) — metin yok:
+     insert   okunan[22:22] beklenen[22:23]
+     insert   okunan[36:36] beklenen[37:40]
+     delete   okunan[38:40] beklenen[42:42]
+     insert   okunan[50:50] beklenen[52:53]
+C  kova y//60     benzerlik: 0.971
+C  merkez y//60   benzerlik: 0.699
+D  satır bazlı en iyi eşleşme (blokların kovaya göre birleşimi):
+   kova  2:  2 blok,  6 kr, en iyi satır benzerliği 1.000
+   kova  4:  5 blok, 16 kr, en iyi satır benzerliği 0.970
+   kova  6:  5 blok, 14 kr, en iyi satır benzerliği 0.966
+   kova  8:  1 blok,  2 kr, en iyi satır benzerliği 0.235
+   kova  9:  4 blok, 12 kr, en iyi satır benzerliği 0.889

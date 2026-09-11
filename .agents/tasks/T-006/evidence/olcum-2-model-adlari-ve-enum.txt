@@ -1,0 +1,24 @@
+(a) K11 tablosu -> get_model_url dosya adları
+    japan    det=multi  -> multi_PP-OCRv3_det_mobile.onnx   rec=japan   -> japan_PP-OCRv4_rec_mobile.onnx
+    korean   det=multi  -> multi_PP-OCRv3_det_mobile.onnx   rec=korean  -> korean_PP-OCRv4_rec_mobile.onnx
+    chinese  det=ch     -> ch_PP-OCRv4_det_mobile.onnx      rec=ch      -> ch_PP-OCRv4_rec_mobile.onnx
+    english  det=ch     -> ch_PP-OCRv4_det_mobile.onnx      rec=en      -> en_PP-OCRv4_rec_mobile.onnx
+(b) update_batch string kabulü
+    Det.engine_type    = 'onnxruntime'  -> TypeError: The value of Det.engine_type must be Enum Type.
+    Det.model_type     = 'mobile'       -> TypeError: The value of Det.model_type must be Enum Type.
+    Det.ocr_version    = 'PP-OCRv4'     -> TypeError: The value of Det.ocr_version must be Enum Type.
+    Det.lang_type      = 'multi'        -> KABUL  (cfg değeri tipi: str)
+    Rec.lang_type      = 'japan'        -> KABUL  (cfg değeri tipi: str)
+(c) string -> enum dönüşümü tablodaki üyeyi veriyor mu
+    LangDet('multi') is LangDet.MULTI      : True
+    LangDet('ch') is LangDet.CH            : True
+    LangRec('japan') is LangRec.JAPAN      : True
+    LangRec('korean') is LangRec.KOREAN    : True
+    LangRec('ch') is LangRec.CH            : True
+    LangRec('en') is LangRec.EN            : True
+    EngineType('onnxruntime') is ONNXRUNTIME: True
+    ModelType('mobile') is MOBILE           : True
+    OCRVersion('PP-OCRv4') is PPOCRV4       : True
+(d) cls dosya adı (paketle geliyor mu -> RECORD'da var, bkz. olcum-2 .txt sonu)
+    cls -> ch_ppocr_mobile_v2.0_cls_mobile.onnx
+    RECORD'daki model dosyaları: ['.gitkeep', 'PP-OCRv6_det_small.onnx', 'PP-OCRv6_rec_small.onnx', 'ch_ppocr_mobile_v2.0_cls_mobile.onnx']
