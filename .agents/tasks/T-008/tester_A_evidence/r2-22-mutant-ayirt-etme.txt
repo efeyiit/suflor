@@ -1,0 +1,61 @@
+ayna koku: C:\Users\pc\AppData\Local\Temp\scratch\C--Users-pc-Desktop-efe--eviri-uygulamas-\d52c967f-bd19-4db3-b5e9-77e6cd08b889\scratchpad\t008_testerA_mutant_tur2
+
+[K-0 kontrol (degisiklik yok)]
+    impl      76 passed in 0.33s
+    ret       6 passed in 0.12s
+    a1        84 passed in 0.49s
+    a2        26 passed in 1.15s
+
+[M-ilk: referans = satirin ILK blogu (tur 1 kodu)]
+    impl      5 failed, 71 passed in 0.53s
+    ret       3 failed, 3 passed in 0.33s
+    ret_dusen test_ret_buyuk_etiket_solda_satirlar_bozulmamali[kr_etiket_ortali_60_45_10], test_ret_buyuk_etiket_solda_satirlar_bozulmamali[kr_etiket_ortali_72_48_14], test_ret_buyuk_etiket_solda_satirlar_bozulmamali[kr_etiket_ortali_60_40_8]
+    a1        2 failed, 82 passed in 0.66s
+    a1_dusen  test_a1_uzun_kutu_koprusu_T_solda_iki_satir_ayri_T2_1, test_a1_uzun_kutu_solda_iki_kelimelik_satirlar_butun_T2_1
+    a2        12 failed, 14 passed in 1.19s
+    a2_dusen  test_r1_gercek_geometri_etiket_varyanti_satirlar_butun[3satir], test_r1_3satir_etiket_satir0a_yapisik_6_5_5, test_r2_sentetik_tarama_etiket_koprusu_satirlar_butun[sol], test_r2_sentetik_tarama_etiket_koprusu_satirlar_butun[sag], test_r2_sentetik_tarama_etiket_koprusu_satirlar_butun[orta], test_r3_sarkan_kisa_kutu_butunluk_bozulmasi_yalniz_satirlar_ic_iceyken, test_r3_sarkan_kisa_kutu_ayrilma_penceresi_tur2_vs_tur1_belgeli, test_r3_ust_konumlu_minik_kutu_yanlis_bolunme_sentetik_pozitif_kontrol, test_r3_yanlis_bolunme_esigi_titresim_yarim_h_minik[6-3], test_r3_yanlis_bolunme_esigi_titresim_yarim_h_minik[8-4], test_r3_yanlis_bolunme_esigi_titresim_yarim_h_minik[12-6], test_r3_yanlis_bolunme_esigi_titresim_yarim_h_minik[16-8]
+
+[M-enuzun: referans = EN UZUN blok]
+    impl      6 failed, 70 passed in 0.56s
+    ret       3 failed, 3 passed in 0.48s
+    ret_dusen test_ret_buyuk_etiket_solda_satirlar_bozulmamali[kr_etiket_ortali_60_45_10], test_ret_buyuk_etiket_solda_satirlar_bozulmamali[kr_etiket_ortali_72_48_14], test_ret_buyuk_etiket_solda_satirlar_bozulmamali[kr_etiket_ortali_60_40_8]
+    a1        2 failed, 82 passed in 0.82s
+    a1_dusen  test_a1_uzun_kutu_koprusu_T_solda_iki_satir_ayri_T2_1, test_a1_uzun_kutu_solda_iki_kelimelik_satirlar_butun_T2_1
+    a2        13 failed, 13 passed in 1.48s
+    a2_dusen  test_r1_gercek_geometri_etiket_varyanti_satirlar_butun[3satir], test_r1_3satir_etiket_satir0a_yapisik_6_5_5, test_r2_sentetik_tarama_etiket_koprusu_satirlar_butun[sol], test_r2_sentetik_tarama_etiket_koprusu_satirlar_butun[sag], test_r2_sentetik_tarama_etiket_koprusu_satirlar_butun[orta], test_r3_sarkan_kisa_kutu_butunluk_bozulmasi_yalniz_satirlar_ic_iceyken, test_r3_sarkan_kisa_kutu_ayrilma_penceresi_tur2_vs_tur1_belgeli, test_r3_ust_konumlu_minik_kutu_yanlis_bolunme_sentetik_pozitif_kontrol, test_r3_yanlis_bolunme_esigi_titresim_yarim_h_minik[6-3], test_r3_yanlis_bolunme_esigi_titresim_yarim_h_minik[8-4], test_r3_yanlis_bolunme_esigi_titresim_yarim_h_minik[12-6], test_r3_yanlis_bolunme_esigi_titresim_yarim_h_minik[16-8] ...
+
+[M-son: referans = SON eklenen blok]
+    impl      2 failed, 74 passed in 0.63s
+    ret       6 passed in 0.18s
+    a1        84 passed in 0.72s
+    a2        4 failed, 22 passed in 1.20s
+    a2_dusen  test_r2_sentetik_tarama_etiket_koprusu_satirlar_butun[sol], test_r2_sentetik_tarama_etiket_koprusu_satirlar_butun[sag], test_r2_sentetik_tarama_etiket_koprusu_satirlar_butun[orta], test_r4_satir_referansi_en_kisa_girdi_sirasindan_bagimsiz_uzun_kisa_bagli
+
+[M-le: bag `<=` (esit yukseklikte son kisa)]
+    impl      1 failed, 75 passed in 0.41s
+    ret       6 passed in 0.15s
+    a1        84 passed in 0.46s
+    a2        1 failed, 25 passed in 1.25s
+    a2_dusen  test_r2_sentetik_tarama_etiket_koprusu_satirlar_butun[orta]
+
+[M-xidx: satir ici sira (x, idx) -- y yok]
+    impl      2 failed, 74 passed in 0.47s
+    ret       6 passed in 0.16s
+    a1        2 failed, 82 passed in 0.33s
+    a1_dusen  test_a5_girdide_bag_yok_ama_cikti_anahtari_bagli_permutasyona_bagli_POZITIF_KONTROL, test_a5_rastgele_bagsiz_girdi_permutasyon_farki_yalniz_cikti_bagindan
+    a2        2 failed, 24 passed in 0.61s
+    a2_dusen  test_r4_t2_2_ayni_x_farkli_y_6_permutasyon_ayni, test_r4_k6_daraltilmis_cumle_fuzz_yukseklikler_degisken
+
+[M-xy: satir ici sira (x, y) -- idx yok]
+    impl      76 passed in 0.32s
+    ret       6 passed in 0.16s
+    a1        84 passed in 0.47s
+    a2        26 passed in 1.35s
+
+[K-04 kontrol: ana sirada -idx (bag ters) -- davranis-esdeger beklenir]
+    impl      76 passed in 0.41s
+    ret       6 passed in 0.17s
+    a1        84 passed in 0.64s
+    a2        26 passed in 1.53s
+
+exit=0

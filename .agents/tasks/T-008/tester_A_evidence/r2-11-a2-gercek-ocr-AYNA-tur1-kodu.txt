@@ -1,0 +1,122 @@
+AYNA TUR 1 KODU (referans = satirin ILK blogu, ef397e3~1) -- ayni fixture'lar; TESTER_A_KOK=C:/Users/pc/AppData/Local/Temp/scratch/C--Users-pc-Desktop-efe--eviri-uygulamas-/d52c967f-bd19-4db3-b5e9-77e6cd08b889/scratchpad/ayna_tur1
+Tester-A tur 2 -- gercek OCR: etiket varyantlari + 'en kisa referans' siniri
+
+[A] etiket koprusu varyantlari (KR font 30; etiket 60 px dikey ortali dy=-10, tur 1 ret geometrisi)
+  [r2_etiket_sagda] 11 kutu -> 2 blok; parca sayilari [6, 5]
+    etiket kutulari: [(608, 62, 119, 62)]; satir merkezleri [81, 126]
+    cizilen satir -> kelime kutusu: {0: 5, 1: 5}; kelimelerin dagildigi bloklar: {0: [0], 1: [1]}
+  [r2_etiket_sagda_etiketsiz] 10 kutu -> 2 blok; parca sayilari [5, 5]
+    cizilen satir -> kelime kutusu: {0: 5, 1: 5}; kelimelerin dagildigi bloklar: {0: [0], 1: [1]}
+  [r2_etiket_ortada_iki_taraf] 12 kutu -> 6 blok; parca sayilari [1, 2, 3, 1, 3, 2]
+    etiket kutulari: [(306, 62, 118, 63)]; satir merkezleri [81, 126]
+    cizilen satir -> kelime kutusu: {0: 6, 1: 5}; kelimelerin dagildigi bloklar: {0: [1, 2, 3], 1: [4, 5]}
+    YANLIS AYRILMA (izin 2): {0: [1, 2, 3]}
+  [r2_etiket_ortada_iki_taraf_etiketsiz] 10 kutu -> 4 blok; parca sayilari [2, 3, 3, 2]
+    cizilen satir -> kelime kutusu: {0: 5, 1: 5}; kelimelerin dagildigi bloklar: {0: [0, 1], 1: [2, 3]}
+  [r2_etiket_merdiven] 5 kutu -> 2 blok; parca sayilari [3, 2]
+    etiket kutulari: [(213, 59, 122, 67)]; satir merkezleri [81, 126]
+    cizilen satir -> kelime kutusu: {0: 2, 1: 2}; kelimelerin dagildigi bloklar: {0: [0], 1: [1]}
+  [r2_etiket_merdiven_etiketsiz] 4 kutu -> 2 blok; parca sayilari [2, 2]
+    cizilen satir -> kelime kutusu: {0: 2, 1: 2}; kelimelerin dagildigi bloklar: {0: [0], 1: [1]}
+  [r2_etiket_3satir] 16 kutu -> 2 blok; parca sayilari [11, 5]
+    etiket kutulari: [(49, 41, 210, 126)]; satir merkezleri [81, 126, 171]
+    YANLIS BIRLESME: blok 0 (x=49,y=41,w=750,h=126) cizilen satirlar [0, 1]; parca (satir,x): [(1, 277), (0, 278), (0, 348), (1, 438), (0, 450), (1, 507), (0, 554), (1, 579), (1, 653), (0, 685)]
+    cizilen satir -> kelime kutusu: {0: 5, 1: 5, 2: 5}; kelimelerin dagildigi bloklar: {0: [0], 1: [0], 2: [1]}
+  [r2_etiket_3satir_etiketsiz] 15 kutu -> 3 blok; parca sayilari [5, 5, 5]
+    cizilen satir -> kelime kutusu: {0: 5, 1: 5, 2: 5}; kelimelerin dagildigi bloklar: {0: [0], 1: [1], 2: [2]}
+  [r2_iki_etiket_sol_sag] 12 kutu -> 2 blok; parca sayilari [7, 5]
+    etiket kutulari: [(60, 59, 119, 66), (752, 62, 119, 62)]; satir merkezleri [81, 126]
+    cizilen satir -> kelime kutusu: {0: 5, 1: 5}; kelimelerin dagildigi bloklar: {0: [0], 1: [1]}
+  [r2_iki_etiket_sol_sag_etiketsiz] 10 kutu -> 2 blok; parca sayilari [5, 5]
+    cizilen satir -> kelime kutusu: {0: 5, 1: 5}; kelimelerin dagildigi bloklar: {0: [0], 1: [1]}
+  [r2_etiket_1p2_ust] 11 kutu -> 2 blok; parca sayilari [6, 5]
+    etiket kutulari: [(60, 66, 72, 40)]; satir merkezleri [81, 126]
+    cizilen satir -> kelime kutusu: {0: 5, 1: 5}; kelimelerin dagildigi bloklar: {0: [0], 1: [1]}
+  [r2_etiket_1p2_ust_etiketsiz] 10 kutu -> 2 blok; parca sayilari [5, 5]
+    cizilen satir -> kelime kutusu: {0: 5, 1: 5}; kelimelerin dagildigi bloklar: {0: [0], 1: [1]}
+  [r2_etiket_1p2_orta] 11 kutu -> 3 blok; parca sayilari [5, 1, 5]
+    etiket kutulari: [(60, 87, 72, 41)]; satir merkezleri [81, 126]
+    cizilen satir -> kelime kutusu: {0: 5, 1: 5}; kelimelerin dagildigi bloklar: {0: [0], 1: [2]}
+  [r2_etiket_1p2_orta_etiketsiz] 10 kutu -> 2 blok; parca sayilari [5, 5]
+    cizilen satir -> kelime kutusu: {0: 5, 1: 5}; kelimelerin dagildigi bloklar: {0: [0], 1: [1]}
+  [r2_etiket_1p5_ust] 11 kutu -> 2 blok; parca sayilari [6, 5]
+    etiket kutulari: [(62, 68, 86, 47)]; satir merkezleri [81, 126]
+    cizilen satir -> kelime kutusu: {0: 5, 1: 5}; kelimelerin dagildigi bloklar: {0: [0], 1: [1]}
+  [r2_etiket_1p5_ust_etiketsiz] 10 kutu -> 2 blok; parca sayilari [5, 5]
+    cizilen satir -> kelime kutusu: {0: 5, 1: 5}; kelimelerin dagildigi bloklar: {0: [0], 1: [1]}
+  [r2_etiket_1p5_orta] 11 kutu -> 3 blok; parca sayilari [5, 1, 5]
+    etiket kutulari: [(61, 82, 87, 48)]; satir merkezleri [81, 126]
+    cizilen satir -> kelime kutusu: {0: 5, 1: 5}; kelimelerin dagildigi bloklar: {0: [0], 1: [2]}
+  [r2_etiket_1p5_orta_etiketsiz] 10 kutu -> 2 blok; parca sayilari [5, 5]
+    cizilen satir -> kelime kutusu: {0: 5, 1: 5}; kelimelerin dagildigi bloklar: {0: [0], 1: [1]}
+
+[B] 'en kisa referans' siniri: satirin altina sarkan kisa kutu + dar satir araligi
+    kisa kutular (h<26): [(593, 82, 20, 17)]
+  [r2_sarkan_token_p36_s0] 15 kutu -> 3 blok; parca sayilari [6, 5, 4]
+    cizilen satir -> kelime kutusu: {0: 6, 1: 5, 2: 4}; kelimelerin dagildigi bloklar: {0: [0], 1: [1], 2: [2]}
+    kisa kutular (h<26): [(593, 86, 19, 18)]
+  [r2_sarkan_token_p36_s4] 15 kutu -> 3 blok; parca sayilari [6, 5, 4]
+    cizilen satir -> kelime kutusu: {0: 6, 1: 5, 2: 4}; kelimelerin dagildigi bloklar: {0: [0], 1: [1], 2: [2]}
+    kisa kutular (h<26): [(593, 90, 19, 17)]
+  [r2_sarkan_token_p36_s8] 15 kutu -> 3 blok; parca sayilari [6, 5, 4]
+    cizilen satir -> kelime kutusu: {0: 6, 1: 5, 2: 4}; kelimelerin dagildigi bloklar: {0: [0], 1: [1], 2: [2]}
+    kisa kutular (h<26): [(594, 95, 18, 16)]
+  [r2_sarkan_token_p36_s12] 15 kutu -> 4 blok; parca sayilari [5, 1, 5, 4]
+    cizilen satir -> kelime kutusu: {0: 5, 1: 6, 2: 4}; kelimelerin dagildigi bloklar: {0: [0], 1: [1, 2], 2: [3]}
+    YANLIS AYRILMA (izin 1): {1: [1, 2]}
+    kisa kutular (h<26): [(593, 82, 20, 17)]
+  [r2_sarkan_token_p40_s0] 16 kutu -> 3 blok; parca sayilari [6, 5, 5]
+    cizilen satir -> kelime kutusu: {0: 6, 1: 5, 2: 5}; kelimelerin dagildigi bloklar: {0: [0], 1: [1], 2: [2]}
+    kisa kutular (h<26): [(593, 86, 19, 17)]
+  [r2_sarkan_token_p40_s4] 16 kutu -> 3 blok; parca sayilari [6, 5, 5]
+    cizilen satir -> kelime kutusu: {0: 6, 1: 5, 2: 5}; kelimelerin dagildigi bloklar: {0: [0], 1: [1], 2: [2]}
+    kisa kutular (h<26): [(594, 91, 18, 15)]
+  [r2_sarkan_token_p40_s8] 16 kutu -> 3 blok; parca sayilari [6, 5, 5]
+    cizilen satir -> kelime kutusu: {0: 6, 1: 5, 2: 5}; kelimelerin dagildigi bloklar: {0: [0], 1: [1], 2: [2]}
+    kisa kutular (h<26): [(593, 94, 19, 17)]
+  [r2_sarkan_token_p40_s12] 16 kutu -> 4 blok; parca sayilari [5, 1, 5, 5]
+    cizilen satir -> kelime kutusu: {0: 5, 1: 6, 2: 5}; kelimelerin dagildigi bloklar: {0: [0], 1: [1, 2], 2: [3]}
+    YANLIS AYRILMA (izin 1): {1: [1, 2]}
+    kisa kutular (h<26): []
+  [r2_alt_cizgi_p34] 14 kutu -> 3 blok; parca sayilari [5, 5, 4]
+    cizilen satir -> kelime kutusu: {0: 5, 1: 5, 2: 4}; kelimelerin dagildigi bloklar: {0: [0], 1: [1], 2: [2]}
+    kisa kutular (h<26): []
+  [r2_alt_cizgi_p36] 14 kutu -> 3 blok; parca sayilari [5, 5, 4]
+    cizilen satir -> kelime kutusu: {0: 5, 1: 5, 2: 4}; kelimelerin dagildigi bloklar: {0: [0], 1: [1], 2: [2]}
+  [r2_latin_gjy_p36] 17 kutu -> 3 blok; parca sayilari [6, 6, 5]
+    cizilen satir -> kelime kutusu: {0: 6, 1: 6, 2: 5}; kelimelerin dagildigi bloklar: {0: [0], 1: [1], 2: [2]}
+    kisa kutular (h<26): []
+  [r2_uc_nokta_p36] 12 kutu -> 3 blok; parca sayilari [3, 5, 4]
+    cizilen satir -> kelime kutusu: {0: 3, 1: 5, 2: 4}; kelimelerin dagildigi bloklar: {0: [0], 1: [1], 2: [2]}
+    kisa kutular (h<26): [(386, 70, 14, 16)]
+  [r2_yildiz_p36] 13 kutu -> 3 blok; parca sayilari [4, 5, 4]
+    cizilen satir -> kelime kutusu: {0: 4, 1: 5, 2: 4}; kelimelerin dagildigi bloklar: {0: [0], 1: [1], 2: [2]}
+    kisa kutular (h<26): [(61, 69, 12, 13)]
+  [r2_tirnak_p36] 13 kutu -> 4 blok; parca sayilari [3, 1, 5, 4]
+    cizilen satir -> kelime kutusu: {0: 4, 1: 5, 2: 4}; kelimelerin dagildigi bloklar: {0: [0, 1], 1: [2], 2: [3]}
+    YANLIS AYRILMA (izin 1): {0: [0, 1]}
+    kisa kutular (h<26): []
+  [r2_tire_p36] 12 kutu -> 4 blok; parca sayilari [2, 1, 5, 4]
+    cizilen satir -> kelime kutusu: {0: 3, 1: 5, 2: 4}; kelimelerin dagildigi bloklar: {0: [0, 1], 1: [2], 2: [3]}
+    YANLIS AYRILMA (izin 1): {0: [0, 1]}
+    kisa kutular (h<26): []
+  [r2_en_gjy_quote_p36] 3 kutu -> 3 blok; parca sayilari [1, 1, 1]
+    cizilen satir -> kelime kutusu: {0: 1, 1: 1, 2: 1}; kelimelerin dagildigi bloklar: {0: [0], 1: [1], 2: [2]}
+
+[C] iki sutunlu KR menu, dar aralik: etiket (h~37) + kisa deger kutusu (rakam, h~27), pitch 40 ve 44
+  [r2_menu_dar_p40] 8 kutu -> 8 blok; parca sayilari [1, 1, 1, 1, 1, 1, 1, 1]
+    cizilen satir -> kelime kutusu: {0: 2, 1: 2, 2: 2, 3: 2}; kelimelerin dagildigi bloklar: {0: [0, 1], 1: [2, 3], 2: [4, 5], 3: [6, 7]}
+  [r2_menu_dar_p44] 8 kutu -> 8 blok; parca sayilari [1, 1, 1, 1, 1, 1, 1, 1]
+    cizilen satir -> kelime kutusu: {0: 2, 1: 2, 2: 2, 3: 2}; kelimelerin dagildigi bloklar: {0: [0, 1], 1: [2, 3], 2: [4, 5], 3: [6, 7]}
+
+NOTLAR:
+  - etiket ortada: satir 1'in kelimeleri etiketin iki yaninda -> K7 bosluk kurali 2 blok verir (izin 2, beklenen)
+
+A2 gercek OCR: 6 ihlal:
+  - r2_etiket_ortada_iki_taraf: satir kelimeleri >2 bloga dagildi {0: [1, 2, 3]}
+  - r2_etiket_3satir: 1 blok iki cizilen satiri birlestirdi
+  - r2_sarkan_token_p36_s12: satir kelimeleri >1 bloga dagildi {1: [1, 2]}
+  - r2_sarkan_token_p40_s12: satir kelimeleri >1 bloga dagildi {1: [1, 2]}
+  - r2_tirnak_p36: satir kelimeleri >1 bloga dagildi {0: [0, 1]}
+  - r2_tire_p36: satir kelimeleri >1 bloga dagildi {0: [0, 1]}
+exit=1

@@ -1,0 +1,85 @@
+Tester-A tur 2 -- gercek OCR: etiket varyantlari + 'en kisa referans' siniri
+
+[D] ust konumlu minik isaret kutusu (yanlis bolunme sinifi), KR font 30 ve 40, pitch 1.2 x font
+    minik kutular (h<18) -> (kutu, sonra islenen ayni-satir kelime sayisi, en kucuk ortusme payi px; <0 = bolunme): [((132, 70, 22, 13), 0, None), ((368, 69, 23, 14), 1, 6.5)]
+  [r2_minik_tm_f30] 12 kutu -> 6 blok; parca sayilari [1, 2, 2, 1, 1, 5]
+    kutular (x,y,w,h): [(61, 64, 60, 35), (166, 66, 91, 32), (270, 66, 87, 31), (406, 67, 115, 30), (538, 67, 115, 30), (368, 69, 23, 14), (132, 70, 22, 13), (363, 100, 61, 35), (292, 101, 60, 34), (435, 101, 119, 34), (61, 102, 149, 32), (221, 102, 62, 32)]
+    cizilen satir -> kelime kutusu: {0: 7, 1: 5}; kelimelerin dagildigi bloklar: {0: [0, 1, 2, 3, 4], 1: [5]}
+    YANLIS AYRILMA (izin 1): {0: [0, 1, 2, 3, 4]}
+    minik kutular (h<18) -> (kutu, sonra islenen ayni-satir kelime sayisi, en kucuk ortusme payi px; <0 = bolunme): []
+  [r2_minik_reg_f30] 12 kutu -> 2 blok; parca sayilari [7, 5]
+    kutular (x,y,w,h): [(62, 64, 61, 35), (168, 66, 91, 31), (273, 66, 87, 31), (412, 68, 115, 29), (546, 68, 113, 29), (132, 71, 23, 23), (373, 71, 22, 23), (363, 100, 61, 35), (292, 101, 60, 34), (435, 101, 119, 34), (61, 102, 149, 32), (221, 102, 61, 31)]
+    cizilen satir -> kelime kutusu: {0: 7, 1: 5}; kelimelerin dagildigi bloklar: {0: [0], 1: [1]}
+    minik kutular (h<18) -> (kutu, sonra islenen ayni-satir kelime sayisi, en kucuk ortusme payi px; <0 = bolunme): []
+  [r2_minik_derece_f30] 9 kutu -> 3 blok; parca sayilari [2, 2, 5]
+    kutular (x,y,w,h): [(60, 63, 187, 38), (258, 66, 91, 31), (381, 68, 115, 29), (515, 68, 114, 29), (291, 101, 61, 34), (364, 101, 59, 34), (435, 101, 119, 34), (222, 102, 61, 32), (62, 103, 147, 30)]
+    cizilen satir -> kelime kutusu: {0: 4, 1: 5}; kelimelerin dagildigi bloklar: {0: [0, 1], 1: [2]}
+    YANLIS AYRILMA (izin 1): {0: [0, 1]}
+    minik kutular (h<18) -> (kutu, sonra islenen ayni-satir kelime sayisi, en kucuk ortusme payi px; <0 = bolunme): []
+  [r2_minik_ust2_f30] 12 kutu -> 2 blok; parca sayilari [7, 5]
+    kutular (x,y,w,h): [(62, 64, 59, 35), (151, 66, 93, 32), (257, 66, 87, 31), (380, 67, 115, 30), (512, 67, 115, 30), (354, 68, 14, 21), (131, 70, 13, 20), (292, 101, 60, 34), (364, 101, 59, 34), (435, 101, 119, 34), (221, 102, 61, 31), (61, 103, 148, 30)]
+    cizilen satir -> kelime kutusu: {0: 7, 1: 5}; kelimelerin dagildigi bloklar: {0: [0], 1: [1]}
+    minik kutular (h<18) -> (kutu, sonra islenen ayni-satir kelime sayisi, en kucuk ortusme payi px; <0 = bolunme): []
+  [r2_minik_kesme_f30] 10 kutu -> 3 blok; parca sayilari [3, 2, 5]
+    kutular (x,y,w,h): [(61, 64, 61, 35), (121, 66, 118, 32), (252, 66, 88, 31), (505, 67, 114, 30), (373, 68, 113, 29), (292, 101, 60, 34), (364, 101, 60, 34), (435, 101, 119, 34), (221, 102, 61, 31), (62, 103, 147, 30)]
+    cizilen satir -> kelime kutusu: {0: 5, 1: 5}; kelimelerin dagildigi bloklar: {0: [0, 1], 1: [2]}
+    YANLIS AYRILMA (izin 1): {0: [0, 1]}
+    minik kutular (h<18) -> (kutu, sonra islenen ayni-satir kelime sayisi, en kucuk ortusme payi px; <0 = bolunme): []
+  [r2_minik_sapka_f30] 10 kutu -> 2 blok; parca sayilari [5, 5]
+    kutular (x,y,w,h): [(59, 62, 196, 39), (267, 66, 90, 31), (399, 68, 116, 29), (534, 68, 112, 29), (368, 72, 18, 19), (364, 101, 59, 34), (292, 102, 59, 32), (436, 102, 118, 32), (62, 103, 147, 30), (222, 103, 62, 31)]
+    cizilen satir -> kelime kutusu: {0: 5, 1: 5}; kelimelerin dagildigi bloklar: {0: [0], 1: [1]}
+    minik kutular (h<18) -> (kutu, sonra islenen ayni-satir kelime sayisi, en kucuk ortusme payi px; <0 = bolunme): []
+  [r2_minik_yildiz_f30] 11 kutu -> 3 blok; parca sayilari [4, 2, 5]
+    kutular (x,y,w,h): [(62, 64, 59, 35), (125, 66, 121, 32), (258, 66, 88, 31), (386, 67, 112, 30), (355, 68, 16, 18), (517, 68, 113, 29), (292, 101, 60, 34), (364, 101, 59, 34), (435, 101, 119, 34), (222, 102, 61, 32), (62, 103, 147, 30)]
+    cizilen satir -> kelime kutusu: {0: 6, 1: 5}; kelimelerin dagildigi bloklar: {0: [0, 1], 1: [2]}
+    YANLIS AYRILMA (izin 1): {0: [0, 1]}
+    minik kutular (h<18) -> (kutu, sonra islenen ayni-satir kelime sayisi, en kucuk ortusme payi px; <0 = bolunme): []
+  [r2_minik_cift_tirnak_f30] 8 kutu -> 2 blok; parca sayilari [3, 5]
+    kutular (x,y,w,h): [(60, 63, 187, 38), (257, 66, 240, 32), (515, 68, 113, 29), (291, 101, 61, 34), (364, 101, 59, 34), (435, 101, 119, 34), (61, 102, 148, 31), (222, 102, 61, 31)]
+    cizilen satir -> kelime kutusu: {0: 3, 1: 5}; kelimelerin dagildigi bloklar: {0: [0], 1: [1]}
+    minik kutular (h<24) -> (kutu, sonra islenen ayni-satir kelime sayisi, en kucuk ortusme payi px; <0 = bolunme): [((154, 73, 30, 18), 1, 9.0), ((468, 73, 31, 19), 0, None)]
+  [r2_minik_tm_f40] 12 kutu -> 6 blok; parca sayilari [2, 1, 2, 1, 1, 5]
+    kutular (x,y,w,h): [(688, 67, 160, 46), (64, 68, 75, 43), (201, 68, 119, 41), (336, 68, 116, 40), (518, 70, 153, 39), (154, 73, 30, 18), (468, 73, 31, 19), (369, 116, 78, 43), (464, 116, 76, 43), (557, 116, 157, 43), (62, 117, 196, 42), (275, 117, 80, 42)]
+    cizilen satir -> kelime kutusu: {0: 7, 1: 5}; kelimelerin dagildigi bloklar: {0: [0, 1, 2, 3, 4], 1: [5]}
+    YANLIS AYRILMA (izin 1): {0: [0, 1, 2, 3, 4]}
+    minik kutular (h<24) -> (kutu, sonra islenen ayni-satir kelime sayisi, en kucuk ortusme payi px; <0 = bolunme): []
+  [r2_minik_reg_f40] 12 kutu -> 3 blok; parca sayilari [2, 5, 5]
+    kutular (x,y,w,h): [(697, 64, 164, 53), (63, 68, 77, 43), (206, 68, 120, 42), (342, 70, 115, 38), (529, 71, 152, 37), (158, 75, 28, 27), (476, 75, 30, 29), (369, 116, 78, 43), (464, 116, 76, 42), (557, 116, 157, 43), (275, 117, 80, 42), (63, 118, 195, 40)]
+    cizilen satir -> kelime kutusu: {0: 7, 1: 5}; kelimelerin dagildigi bloklar: {0: [0, 1], 1: [2]}
+    YANLIS AYRILMA (izin 1): {0: [0, 1]}
+    minik kutular (h<24) -> (kutu, sonra islenen ayni-satir kelime sayisi, en kucuk ortusme payi px; <0 = bolunme): []
+  [r2_minik_derece_f40] 8 kutu -> 2 blok; parca sayilari [3, 5]
+    kutular (x,y,w,h): [(61, 66, 245, 47), (320, 68, 318, 41), (657, 69, 155, 41), (464, 116, 76, 42), (370, 117, 76, 41), (558, 117, 155, 41), (63, 118, 195, 40), (276, 118, 79, 40)]
+    cizilen satir -> kelime kutusu: {0: 3, 1: 5}; kelimelerin dagildigi bloklar: {0: [0], 1: [1]}
+    minik kutular (h<24) -> (kutu, sonra islenen ayni-satir kelime sayisi, en kucuk ortusme payi px; <0 = bolunme): []
+  [r2_minik_ust2_f40] 12 kutu -> 2 blok; parca sayilari [7, 5]
+    kutular (x,y,w,h): [(655, 67, 159, 45), (63, 68, 78, 43), (320, 68, 120, 41), (180, 69, 123, 40), (154, 71, 17, 27), (450, 71, 17, 27), (482, 71, 154, 37), (464, 116, 76, 43), (557, 116, 157, 43), (275, 117, 80, 42), (370, 117, 76, 42), (63, 118, 195, 40)]
+    cizilen satir -> kelime kutusu: {0: 7, 1: 5}; kelimelerin dagildigi bloklar: {0: [0], 1: [1]}
+    minik kutular (h<24) -> (kutu, sonra islenen ayni-satir kelime sayisi, en kucuk ortusme payi px; <0 = bolunme): []
+  [r2_minik_kesme_f40] 8 kutu -> 2 blok; parca sayilari [3, 5]
+    kutular (x,y,w,h): [(62, 67, 238, 45), (642, 67, 161, 46), (314, 69, 312, 40), (63, 117, 194, 41), (370, 117, 76, 40), (465, 117, 75, 41), (557, 117, 156, 41), (276, 118, 79, 40)]
+    cizilen satir -> kelime kutusu: {0: 3, 1: 5}; kelimelerin dagildigi bloklar: {0: [0], 1: [1]}
+    minik kutular (h<24) -> (kutu, sonra islenen ayni-satir kelime sayisi, en kucuk ortusme payi px; <0 = bolunme): []
+  [r2_minik_sapka_f40] 9 kutu -> 2 blok; parca sayilari [4, 5]
+    kutular (x,y,w,h): [(61, 66, 258, 47), (332, 68, 186, 41), (683, 69, 156, 41), (509, 71, 153, 37), (370, 116, 76, 43), (464, 116, 76, 43), (63, 117, 195, 41), (557, 117, 156, 41), (276, 118, 79, 40)]
+    cizilen satir -> kelime kutusu: {0: 4, 1: 5}; kelimelerin dagildigi bloklar: {0: [0], 1: [1]}
+    minik kutular (h<24) -> (kutu, sonra islenen ayni-satir kelime sayisi, en kucuk ortusme payi px; <0 = bolunme): []
+  [r2_minik_yildiz_f40] 10 kutu -> 2 blok; parca sayilari [5, 5]
+    kutular (x,y,w,h): [(657, 64, 164, 53), (132, 65, 176, 46), (321, 67, 158, 43), (64, 68, 79, 42), (488, 71, 154, 37), (463, 112, 78, 48), (63, 117, 195, 41), (275, 117, 80, 42), (370, 117, 76, 42), (557, 117, 156, 41)]
+    cizilen satir -> kelime kutusu: {0: 5, 1: 5}; kelimelerin dagildigi bloklar: {0: [0], 1: [1]}
+    minik kutular (h<24) -> (kutu, sonra islenen ayni-satir kelime sayisi, en kucuk ortusme payi px; <0 = bolunme): []
+  [r2_minik_cift_tirnak_f40] 8 kutu -> 2 blok; parca sayilari [3, 5]
+    kutular (x,y,w,h): [(61, 66, 246, 47), (656, 66, 162, 49), (320, 68, 320, 41), (464, 116, 76, 42), (370, 117, 76, 41), (558, 117, 155, 41), (63, 118, 195, 40), (276, 118, 79, 40)]
+    cizilen satir -> kelime kutusu: {0: 3, 1: 5}; kelimelerin dagildigi bloklar: {0: [0], 1: [1]}
+
+NOTLAR:
+  (yok)
+
+A2 gercek OCR: 6 ihlal:
+  - r2_minik_tm_f30: satir kelimeleri >1 bloga dagildi {0: [0, 1, 2, 3, 4]}
+  - r2_minik_derece_f30: satir kelimeleri >1 bloga dagildi {0: [0, 1]}
+  - r2_minik_kesme_f30: satir kelimeleri >1 bloga dagildi {0: [0, 1]}
+  - r2_minik_yildiz_f30: satir kelimeleri >1 bloga dagildi {0: [0, 1]}
+  - r2_minik_tm_f40: satir kelimeleri >1 bloga dagildi {0: [0, 1, 2, 3, 4]}
+  - r2_minik_reg_f40: satir kelimeleri >1 bloga dagildi {0: [0, 1]}
+exit=1

@@ -1,138 +1,162 @@
 ---
 task: T-008
 role: tester
-round: 1
+round: 2
 lens: "A — geometri (K2/K7), betik (K3), sözleşme (K5/K6/K8); gerçek OCR ayrı süreç"
-decision: ret
+decision: onay
 checks:
   - name: "taban: mypy --strict temiz"
     cmd: "python -m mypy --strict --explicit-package-bases src/ocr/satir_birlestirici.py"
     exit_code: 0
     result: gecti
-    evidence: tester_A_evidence/00-taban-mypy.txt
-  - name: "taban: implementer birim testleri 68 passed"
+    evidence: tester_A_evidence/r2-00-taban-mypy.txt
+  - name: "taban: implementer birim 76 passed"
     cmd: "python -m pytest tests/unit/ocr/test_satir_birlestirici.py -q -p no:cacheprovider"
     exit_code: 0
     result: gecti
-    evidence: tester_A_evidence/01-taban-birim.txt
-  - name: "taban: real_check TEMİZ (KR 17→4 [2,5,5,5]; JP/EN no-op; normalize 2 segment; tek-kelime 0; menü KR 13→9 EN 8→8; 1-em 4→4; saflık; 5.1 ms)"
+    evidence: tester_A_evidence/r2-01-taban-birim.txt
+  - name: "taban: real_check TEMİZ 15/15 (#1c 11→2 blok, en büyük 6; KR [2,5,5,5]; 1-em 4→4; 3.8 ms)"
     cmd: "python .agents/tasks/T-008/real_check.py"
     exit_code: 0
     result: gecti
-    evidence: tester_A_evidence/02-taban-real_check.txt
-  - name: "taban: tam takım 1427 passed"
-    cmd: "python -m pytest tests -q -p no:cacheprovider"
+    evidence: tester_A_evidence/r2-02-taban-real_check.txt
+  - name: "tur 1 ret dosyam tur 2 koduyla 6/6 (etiketli 3 + etiketsiz 3 pozitif kontrol)"
+    cmd: "python -m pytest .agents/tasks/T-008/tester_A/test_ret_a_uzun_kutu_koprusu.py -q -p no:cacheprovider"
     exit_code: 0
     result: gecti
-    evidence: tester_A_evidence/03-taban-pytest-tum.txt
-  - name: "tester-A: 84 kör test (A0 bariyer pozitif kontrolü, A1–A5), kendi bariyeri altında tek başına"
+    evidence: tester_A_evidence/r2-03-ret-6of6.txt
+  - name: "tur 1 84 testim, yeniden nişan ÖNCESİ: yalnız 2 `_SINIF` düşer, 82 geçer (dördüncü kırık yok)"
+    cmd: "python -m pytest .agents/tasks/T-008/tester_A/test_mercek_a.py -q -p no:cacheprovider  (yeniden nişan öncesi)"
+    exit_code: 1
+    result: gecti
+    evidence: tester_A_evidence/r2-04-mercek-a-tur1-hali-bayat.txt
+  - name: "2 `_SINIF` testi T2-1'e yeniden nişanlandı (`*_T2_1`): 84/84"
     cmd: "python -m pytest .agents/tasks/T-008/tester_A/test_mercek_a.py -q -p no:cacheprovider"
     exit_code: 0
     result: gecti
-    evidence: tester_A_evidence/testerA-mercek-a-pytest.txt
-  - name: "tester-A: şefin dizini + tester_A birlikte 391 passed (iki bariyer çakışmıyor)"
-    cmd: "python -m pytest tests/unit/ocr .agents/tasks/T-008/tester_A/test_mercek_a.py -q -p no:cacheprovider"
+    evidence: tester_A_evidence/r2-05-mercek-a-yeniden-nisan-84.txt
+  - name: "A2-1/A2-2 gerçek OCR (ayrı süreç, 46 fixture): etiket sağda/ortada/merdiven/3 satır/iki etiket/1.2×/1.5× HEPSİ temiz; sarkan token, alt çizgi, g/j/y, noktalama, dar menü — 7 'ihlal'in kaynağı r2-11 ile ayrıştırıldı (T2-1'e ait olan: sarkma 8 px token ayrı blok)"
+    cmd: "python -X utf8 .agents/tasks/T-008/tester_A/a6_tur2_gercek_ocr.py --geometri"
+    exit_code: 1
+    result: gecti
+    evidence: tester_A_evidence/r2-10-a2-gercek-ocr.txt
+  - name: "AYNI fixture'lar tur 1 koduyla (ayna, referans = ilk): 3 satırlık etiket [11,5] fermuar (T2-1 kapatıyor); tırnak/tire/ortada farkları iki kodda AYNI (K2 boşluk kuralı + tespitçi hayaleti, T2-1 dışı)"
+    cmd: "TESTER_A_KOK=<ayna_tur1> python -X utf8 .agents/tasks/T-008/tester_A/a6_tur2_gercek_ocr.py"
+    exit_code: 1
+    result: gecti
+    evidence: tester_A_evidence/r2-11-a2-gercek-ocr-AYNA-tur1-kodu.txt
+  - name: "A2-2 yanlış BÖLÜNME sınıfı gerçek OCR (üst konumlu minik işaret ™ ® ° ² ' ^ * \", font 30/40): minik kutular hep kelimelerden SONRA işleniyor, bölünme için ≥ 12 px titreşim gerekir (gözlenen ≤ 5) → erişilemez; parçalanmalar K2 `0.75×min(h)` kuralı"
+    cmd: "python -X utf8 .agents/tasks/T-008/tester_A/a6_tur2_gercek_ocr.py --geometri d"
+    exit_code: 1
+    result: gecti
+    evidence: tester_A_evidence/r2-12-a2-gercek-ocr-minik-isaret.txt
+  - name: "tur 2 sentetik ölçülerim 26/26: gerçek geometri 8 varyant + 2160 konfigürasyonluk tarama + sarkan kutu türetimi (1815 sahne: bozulma ⇒ aralık ≤ 0) + bölünme formülü + T2-2 + K6 fuzz 6000 + belge sınırları"
+    cmd: "python -m pytest .agents/tasks/T-008/tester_A/test_mercek_a_tur2.py -q -p no:cacheprovider -v"
     exit_code: 0
     result: gecti
-    evidence: tester_A_evidence/testerA-birlikte-pytest.txt
-  - name: "tester-A: yalnız kendi testlerinin kapsamı %100 (95/95 ifade)"
-    cmd: "python -m pytest .agents/tasks/T-008/tester_A/test_mercek_a.py -q -p no:cacheprovider --cov=src.ocr.satir_birlestirici --cov-report=term-missing"
+    evidence: tester_A_evidence/r2-20-mercek-a-tur2-pytest.txt
+  - name: "test dosyalarım mypy --strict temiz"
+    cmd: "python -m mypy --strict --explicit-package-bases .agents/tasks/T-008/tester_A/test_mercek_a.py .agents/tasks/T-008/tester_A/test_mercek_a_tur2.py .agents/tasks/T-008/tester_A/test_ret_a_uzun_kutu_koprusu.py"
     exit_code: 0
     result: gecti
-    evidence: tester_A_evidence/testerA-cov.txt
-  - name: "tester-A: test dosyaları mypy --strict temiz"
-    cmd: "python -m mypy --strict --explicit-package-bases .agents/tasks/T-008/tester_A/test_mercek_a.py .agents/tasks/T-008/tester_A/test_ret_a_uzun_kutu_koprusu.py"
+    evidence: tester_A_evidence/r2-21-testerA-mypy.txt
+  - name: "mutant kiti (ayna): tur 1 kodu impl 5/ret 3/a1 2/a2 12; en uzun 6/3/2/13; son eklenen 2/0/0/4; bağ `<=` 1/0/0/1; `(x,idx)` 2/0/2/2; kontroller `-idx` ve `(x,y)` 0 (davranış-eşdeğer)"
+    cmd: "python -X utf8 .agents/tasks/T-008/tester_A/mutant_kiti_tur2.py"
     exit_code: 0
     result: gecti
-    evidence: tester_A_evidence/testerA-mypy.txt
-  - name: "A6 gerçek OCR (ayrı süreç): T-006/T-008 fixture'ları + 20 kendi fixture'ım — 3 YANLIŞ BİRLEŞME/AYRILMA (solda iki satırı kaplayan büyük etiket, KR)"
+    evidence: tester_A_evidence/r2-22-mutant-ayirt-etme.txt
+  - name: "implementer'ın 4 yeniden nişanlanan testi ayırt ediyor (son→merdiven+k6 bağlı; `<=`→merdiven; `(x,idx)`→2; ilk→5) ve docstring'deki 12 test adı mevcut"
+    cmd: "(ayna dizinlerinde) python -m pytest tests/unit/ocr/test_satir_birlestirici.py -q -rf"
+    exit_code: 0
+    result: gecti
+    evidence: tester_A_evidence/r2-23-mutant-implementer-dusen-testler.txt
+  - name: "A2-4: tur 1 A6 raporum (30 fixture) tur 2 koduyla canlı — exit 0, yanlış birleşme yok"
     cmd: "python -X utf8 .agents/tasks/T-008/tester_A/a6_gercek_ocr.py"
-    exit_code: 1
-    result: kaldi
-    evidence: tester_A_evidence/a6-gercek-ocr.txt
-  - name: "RET kanıtı (sentetik, gerçek OCR geometrisi): etiketsiz 3/3 geçer (pozitif kontrol), etiketli 3/3 düşer"
-    cmd: "python -m pytest .agents/tasks/T-008/tester_A/test_ret_a_uzun_kutu_koprusu.py -q -p no:cacheprovider"
-    exit_code: 1
-    result: kaldi
-    evidence: tester_A_evidence/testerA-ret-uzun-kutu-pytest.txt
-  - name: "aday düzeltme prototipleri (ayna, depo src/ dokunulmadı): E → 68/68 + ret 6/6 geçer + gerçek OCR exit 0; D → implementer fixture'ını bozar"
-    cmd: "TESTER_A_KOK=<ayna_E> python -X utf8 .agents/tasks/T-008/tester_A/a6_gercek_ocr.py"
     exit_code: 0
     result: gecti
-    evidence: tester_A_evidence/a6-aday-E-gercek-ocr.txt
-  - name: "aday prototipleri birim sonuçları + diff'ler"
-    cmd: "(ayna_E / ayna_D içinde) python -m pytest tests/unit/ocr/test_satir_birlestirici.py -q; TESTER_A_KOK=<ayna> pytest tester_A"
+    evidence: tester_A_evidence/r2-30-a6-tur1-raporu-tur2-koduyla.txt
+  - name: "A2-4: canlı çıktı vs tur 1 E-prototipi çıktısı — 3 fixture'da GİRDİ (kutu kümesi) farklı (T-009 KR tanıma v5), gerisi birebir"
+    cmd: "diff <(tur1 E çıktısı) <(r2-30)  (CRLF normalize)"
+    exit_code: 1
+    result: gecti
+    evidence: tester_A_evidence/r2-31-a6-diff-vs-E-prototipi.txt
+  - name: "A2-4: tur 1 kanıt dosyasındaki 30 gerçek geometri tur 2 birleştiricisine yeniden beslendi — 30/30 AYNI (birleştirici E ile özdeş; farklar girdiden)"
+    cmd: "python -X utf8 .agents/tasks/T-008/tester_A/a6_gecmis_geometri_regresyon.py tester_A_evidence/a6-aday-E-gercek-ocr.txt"
     exit_code: 0
     result: gecti
-    evidence: tester_A_evidence/aday-duzeltme-prototipleri.txt
-blocking_issues:
-  - "B1 · Uzun kutu köprüsü GERÇEK OCR'da ürünü bozuyor: solda iki satırı kaplayan büyük etiket (2× font, dikey ortalı) + sağda iki KR satırı → tespitçi 11 kutu (etiket + 5 + 5) verir; birleştirici 3/3 fixture'da satır bütünlüğünü bozar — `kr_etiket_ortali_60_45_10`: 11 → 1 blok, iki satırın kelimeleri x sırasında İÇ İÇE (parça satırları [0,1,0,0,1,0,1,0,1,1,0]); `kr_etiket_ortali_72_48_14`: 11 → 9 blok; `kr_etiket_ortali_60_40_8`: 11 → 10 blok (kelime-kelime çeviri, S3 sınıfı). Aynı görüntü etiket karartılınca 10 → 2 blok DOĞRU. Sebep: etiket kutusu `(y,x)`-ilk blok olunca satır bölümlemesi (adım 3, 'satırın ilk bloğuyla örtüşme') iki satırı tek satıra toplar; satır içi `(x,y)` sıralaması iki satırın kelimelerini karıştırır. Docstring bu bölgeyi `[ÖLÇÜLMÜYOR] gerçek OCR'da (fixture yok)` bırakmıştı — fixture artık var (`tester_A/fixtures/kr_etiket_ortali_*.png`), sınıf ölçüldü. Yeniden üretim + ayırt etme ölçüsü + iki aday yön: `feedback-A.md`."
+    evidence: tester_A_evidence/r2-32-a6-tur1-geometrileri-tur2-koduyla.txt
+  - name: "şefin dizini + tester_A (3 dosya) birlikte 440 passed (bariyerler çakışmıyor)"
+    cmd: "python -m pytest tests/unit/ocr .agents/tasks/T-008/tester_A/test_mercek_a.py .agents/tasks/T-008/tester_A/test_mercek_a_tur2.py .agents/tasks/T-008/tester_A/test_ret_a_uzun_kutu_koprusu.py -q -p no:cacheprovider"
+    exit_code: 0
+    result: gecti
+    evidence: tester_A_evidence/r2-40-birlikte-pytest.txt
+  - name: "tam takım 1444 passed"
+    cmd: "python -m pytest tests -q -p no:cacheprovider"
+    exit_code: 0
+    result: gecti
+    evidence: tester_A_evidence/r2-41-taban-pytest-tum.txt
+  - name: "yalnız kendi 116 testimle kapsam %100 (100/100 ifade)"
+    cmd: "python -m pytest <tester_A 3 dosya> -q --cov=src.ocr.satir_birlestirici --cov-report=term-missing"
+    exit_code: 0
+    result: gecti
+    evidence: tester_A_evidence/r2-42-testerA-cov.txt
+blocking_issues: []
 ---
 
-# T-008 · Tester-A (mercek A) · tur 1 · **RET**
+# T-008 · Tester-A (mercek A) · tur 2 · **ONAY**
 
-Kör çalıştım: `packet.md` v2, `olgular.txt`, `krt-1.md`, modül docstring'i (garanti alanı), kod, `real_check.py`, `conftest.py`. Şefin talimatı gereği `delivery.md` `known_gaps`'i **bütün ölçümlerim bittikten sonra** okudum (aşağıda §7); kararımı değiştirmedi. `tester_B/` okunmadı.
+Tur 1 ret'imin (B1, uzun kutu köprüsü) düzeltmesi benim E prototipim temel alınarak yapıldı; bu tur sorum **"E sınıfı mı kapattı, fixture'ı mı?"** ve **"en kısa referans hangi yeni sınıfı açar?"** idi. İkisini de gerçek OCR (46 yeni fixture, ayrı süreç) + sentetik tarama + tur 1 kodunun aynası ile ölçtüm. `tester_B/` okunmadı; `delivery.md` yalnız şefin işaret ettiği `known_gaps` kalemleri için (4 yeniden nişan + M04) ve **ölçümlerimden sonra** okundu. Tur 1 verdict'im git tarihinde (`ef397e3`).
 
-## 1 · Taban şefinkiyle birebir (kendi elimle)
+## 1 · Taban şefinkiyle birebir
 
-mypy 0 · 68 passed · `real_check` TEMİZ (KR 17→4 `[2,5,5,5]`, JP/EN no-op, 2 segment, tek-kelime 0, menü KR 13→9 / EN 8→8, 1-em 4→4, saflık, 1000 blok 5.1 ms) · tam takım 1427. Teslim bu oturumda değişmedi (`fe01641`, md5 `ff3ddf2d…`).
+mypy 0 · 76 · `real_check` TEMİZ 15/15 (#1c 11→2 `[6,5]`) · tam takım 1444 · ret dosyam 6/6. Yeniden nişan öncesi 84 testimden **yalnız** 2 `_SINIF` düştü (82 geçti, dördüncü kırık yok); ikisi `*_T2_1` olarak yeniden nişanlandı (`T a`,`c` / `T a1 a2`,`c1 c2`) → 84/84.
 
-## 2 · A1 — K2 geometri, eşik sınırları (84 testin 30'u)
+## 2 · A2-1 — E sınıfı kapattı (fixture'ı değil)
 
-Ölçüldü, docstring'le **uyumlu**:
-- Dikey `0.49/0.50/0.51×h` → 2/1/1 blok (`>=`); yatay `74/75/76` (h=100) → 1/1/2 (`<=`); `min(h)` küçük kutuyla (`0.75×10=7.5`: 7 birleşir, 8 ayrılır); Y2 fixture'ı orijinal yükseklikle (`A b`, `C`).
-- Eşit `x` → yeni grup (iki yönde); çakışma −1/−h/−2h → komşu, bbox birleşimi doğru; iç içe kutu x ilerliyorsa birleşir (belgeli sınır), aynı x'te ayrı.
-- Yozlaşmış `(w,h) ∈ {(50,0),(0,20),(50,−5),(−5,20),(0,0),(−1,−1)}` → aynen geçer (`is`), araya girince `A B`'yi ayırmaz.
-- `monitor_index` / `dpi_scale` farkı → ayrı; aynı yüzey → birleşir; iki monitörde aynı koordinat → girdi indeksi sırası.
-- Zincir A–B, B–C komşu, A–C değil → tek blok. Dar satır aralığı: örtüşme 0.45h → iki satır korunur; 0.55h → çapraz birleşme (belgeli; gerçek düzende A6: 1.0×font pitch'te bile satırlar korundu, dolayısıyla ürün sınıfı değil).
-- **Uzun kutu köprüsü, T en solda ve en üstte:** `T(0,0,40,60) a(50,5) c(110,40)` → **`T a c` tek blok** (a ve c farklı satır); iki satır × iki kelime + T → `T a1 | a2 | c1 | c2` (T'siz `a1 a2 | c1 c2`). Implementer'ın fixture'ı T'yi **ortaya** koyuyordu (`a T`, `c` — doğru); T ilk blok olunca sınıf açılıyor. Sentetik kayıt `test_a1_uzun_kutu_*_SINIF`; gerçek OCR karşılığı §6 → **B1**.
+Gerçek OCR (r2-10, referans kanal = çizim parametreleri, etiket kutusu satır üyeliğinden muaf):
 
-## 3 · A2 — satır bölümleme vs satır içi sıralama
-
-- KR satır 3 (y 212/209/209/208/210) 120 permütasyonda tek blok, `line_boxes` x sırasında `[82,225,305,386,467]`; 17 kutu 20 karışık sırada `[2,5,5,5]`, y ve x sıralı. İtiraz 1'in gerekçesi (paket lafzı 17→9) kendi ölçümümle **tutuyor**.
-- Titreşim tam 0.5h → tek blok; > 0.5h → satırlar ayrılır (gerçek titreşim 1–4 px / 33–41 px, sınıf değil).
-- Satırın ilk bloğu kısa (h=12 tırnak) → `0.5×12=6` ile ölçülür, satır bütün; sonraki satırı çekmez.
-
-## 4 · A3 — K3 betik (21 satırlık tablo + boş parça)
-
-`unicodedata.name`: yarım genişlik katakana `ｶﾀｶﾅ`+`ｶﾅ` boşsuz; tam genişlik `ＨＰ`+`が` boşluk; Hangul Jamo / uyumluluk Jamo boşluk; uyumluluk ideografı `豈` CJK; emoji ve ZWJ dizisi harfsiz → LATIN → boşluk; `「マルクス」`+`と` boşsuz (ilk HARF マ); `第３章`+`開始` boşsuz; `村の`+`HP` → `村の HP`; `HPが`+`減った` → boşluk (K3 tanımı, belgeli); `ー` CJK, `々` LATIN (docstring `[ÖLÇÜLMÜYOR]`); harfsiz `。` iki yönde boşluk (belgeli sınır); ZWSP strip edilmez; iç `\n` korunur; baş/son boşluk strip. Boş/yalnız-boşluk/ideografik-boşluk parça metne katılmaz, kutu/`line_boxes` sayımına katılır, betik bağlamını taşımaz (`村`+``+`HP` → `村 HP`; `村`+``+`の` → `村の`). **Sapma yok.**
-
-## 5 · A4 / A5 — K5 alanlar, K6 okuma sırası
-
-- `confidence`: NaN başta/ortada/sonda → NaN-dışı min, hepsi NaN → NaN; `inf` → diğerinin min'i; `−inf`/negatif → aynen (aralık denetimi yok, belgeli); `[nan, inf] → inf`. bbox dört alan `type is int`, `json.dumps(asdict())` geçer; negatif koordinat + monitör 1 normal; tek parça `is` ve `line_boxes` dokunulmaz; **önceden birleşik girdi** (ikinci uygulama) → `line_boxes` parçaların bbox'ları, iç yapı kaybolur (K4/K5 belgeli). Girdi değişmez, çıktı deterministik, demet girdi kabul.
-- K6: 3×3 karışık 50 permütasyon aynı; bağlı `(y,x)` → girdi sırası; aynı satırda sağ grup `min y` küçükse önce (belgeli).
-- **K6 docstring cümlesi fazla geniş (yükümlülük, ret değil):** "`(y,x)` bağı olmayan girdide her permütasyon AYNI listeyi verir" — karşı örnek `C(0,0,10,30) A(0,10,10,20) B(20,0,10,20)`: girdide bağ yok, ama `A+B` birleşik bbox'ı `(0,0)` olur ve C ile **çıktı anahtarında** bağ doğar → `[C, A B]` vs `[A B, C]` (3000 rastgele girdide 1 kez, yalnız bu sınıftan; `test_a5_*POZITIF_KONTROL` ve fuzz testi sabitledi). Ürün etkisi yok (normalizer `(y,x)` ile yeniden sıralar); cümle "iki **çıktı** bloğunun `(y,x)`'i eşitse girdi sırasına bağlı" diye yazılmalı.
-
-## 6 · A6 — gerçek OCR, ayrı süreç (`a6_gercek_ocr.py`, 20 fixture)
-
-Referans kanal bağımsız (§4.6/8): çizilen satır merkezleri (çizim parametresi), uygulama çıktısından değil. Ölçü: hiçbir çıktı bloğu iki çizilen satırdan **kelime** kutusu içermez; tek sütunlu KR fixture'larda her satırın kelimeleri tek blokta.
-
-| Fixture | Kutu → blok | Sonuç |
+| varyant | tur 2 | tur 1 kodu (ayna, r2-11) |
 |---|---|---|
-| dlg_KR / JP / EN, menü KR/EN, 1-em | 17→4 `[2,5,5,5]` / 4→4 / 4→4 / 13→9 / 8→8 / 4→4 | taban; **iç içe/çakışan kutu çifti yok** (tespitçi vermiyor) |
-| KR dar satır aralığı 1.1×font | 15→3 `[5,5,5]` | doğru |
-| JP dar 1.1×font | 3→3 | no-op |
-| KR 1.0×font (aşırı dar; tespitçi tek uzun kutu + çakışan parça verdi) | 16→3 | doğru (şans: uzun kutu ilk blok değildi) |
-| EN iki sütun menü, boşluk 30/40 px (~1.0–1.4×h) | 8→8 | etiket|değer birleşmez |
-| KR tek uzun satır 2000 px (15 kelime) | 15→1 (w=1801) | doğru |
-| EN tek uzun satır | 1→1 | no-op |
-| KR büyük etiket solda, **üst hizalı** (4 varyant) | 3/3/3/2 blok | 3'ünde satırlar bütün + etiket ayrı; 72_48'de etiket satır 0'a yapıştı (kabul edilebilir) |
-| **KR büyük etiket solda, dikey ORTALI (3 varyant)** | **11→1 (iç içe) / 11→9 / 11→10** | **B1 — etiketsiz aynı görüntü 10→2 doğru** |
-| JP büyük etiket ortalı | 5→3 | etiket 3 kutuya bölündü ve kendi içinde birleşti; satırlar bütün (geometri: örtüşme 9 < 16 kurtardı) |
-| KR standart (üstte konuşmacı, pitch 1.6×) | 12→3 `[2,5,5]` | doğru |
+| etiket **sağda** | 11→2 `[6,5]` | aynı |
+| etiket **ortada**, iki tarafta kelime | satır 0 `[2]+[3]`, satır 1 `[2]+[3]` (K7 boşluk, beklenen) | aynı |
+| **merdiven** (satır 0 solda / satır 1 sağda) | 5→2 `[3,2]` | aynı |
+| etiket **3 satırı** kaplıyor | 16→3 `[6,5,5]` | **[11,5] — satır 0+1 fermuar** |
+| **iki etiket** sol+sağ | 12→2 `[7,5]` | aynı |
+| 1.2× üst / orta · 1.5× üst / orta | `[6,5]` / `[5,1,5]` / `[6,5]` / `[5,1,5]` | aynı |
 
-Fail koşulu ölçüldü: etiket kutusunun üstü satır 0'ın kutu üstünden **yukarıda** (etiket `(y,x)`-ilk blok olur) **ve** altı satır 1'in kutusuna `≥ 0.5×min(h)` sarkıyor. Dikey ortalı 2× etiket bu koşulu **her zaman** sağlar (üst hizalı etikette büyük fontun iç boşluğu üstü 2–6 px aşağı ittiği için 3/4 kurtuldu). Ürün düzeni: durum ekranı/başarım/liste satırı gibi "solda büyük etiket/sayı, sağda iki satır" — diyalog kutusu (ürünün ana yolu) etkilenmez, ama S3'ün (kelime-kelime çeviri) aynısı bu düzende geri geliyor; 60_45_10'da daha kötüsü: iki cümlenin kelimeleri karışık tek metin.
+Hepsinde etiketsiz kontrol `[5,5]`(`[5,5,5]`). Sentetik tarama (`test_r2_*`): etiket h ∈ {1.2…3.0}×h × dy 9 nokta × pitch {1.05…1.5}×h × 2/3 satır × sol/sağ/orta × ±3 px titreşim = **2160 konfigürasyon**, satır bütünlüğü hepsinde; köprü geometrisi 142/720'de gerçekten kuruluyor (pozitif). Tur 1 kodu bu taramanın üç konumunda da düşüyor (r2-22). Sınıf kapalı, yalnız düzeltme fixture'ında değil.
 
-**Aday yönler (ayna, `src/` dokunulmadı; mekanizma seçimi implementer'ın):** **E** — satır bölümlemesinde referans = satırın **en kısa** bloğu (bağ: ilk): implementer 68/68, benim ret dosyam 6/6, gerçek OCR **exit 0** (dlg_KR `[2,5,5,5]`, 1-em 4→4, etiketli 2–3 blok satırlar bütün). **D** — `h > 1.5×medyan` kutu yalnız geçer: ret dosyası geçer ama implementer'ın `a T | c` fixture'ını ve `min(h)` küçük-kutu sınırını bozar. Diff'ler ve sonuçlar `aday-duzeltme-prototipleri.txt`.
+`etiket ortada`'daki fazladan kutu (254,75,25,23) boş bölgede tespitçi hayaleti (görsel kontrol yapıldı); birleştirici onu yalıtıyor, iki kodda aynı.
 
-## 7 · `delivery.md` `known_gaps` ile tutarlılık (ölçümlerden SONRA okundu)
+## 3 · A2-2 — "referans = en kısa" ne zaman yanlış? (ölçüldü)
 
-İtiraz 1 (paket lafzı 17→9) ve İtiraz 2 (13–16×h menü 10.0'ı ayıramaz; 1-em fixture'ı gerekli) kendi ölçümlerimle **tutarlı**; `real_check` #4c bunu kapatmış. `[K2 — GRİ BÖLGE KAYDI]` uzun kutu köprüsünü "gerçek OCR'da fixture yok `[ÖLÇÜLMÜYOR]`" diye bırakıyor — **fixture artık var, sınıf ölçüldü** (§4.6/10: damga ölçüm değildir). KRT O2'nin çakışma sınırı önerisi pakete girmemişti; benim ölçümüm çakışma sınırının **yetmeyeceğini** de gösteriyor (x-ilerleyen ama satır 1'e ait kutu −147 px boşlukla birleşiyor; sınır konsa satırlar bu kez parçalanır — sorun grup değil **satır** bölümlemesinde).
+**(a) Sarkan kısa kutu → yanlış birleşme.** Türetim: p `[t0,t1]` satır 0'a katılmak için `a1−t0 ≥ 0.5h_p`, satır 1'in p ile örtüşmesi için `t1−b0 ≥ 0.5h_p`; toplamı `g ≤ 0`. Yani iki satır ancak kutuları **fiziksel iç içeyken** karışır. Tarama h_p 4–24 × sarkma 0–20 × aralık −6…8 (**1815 sahne**): bütünlük bozulan her sahnede aralık ≤ 0, pozitif kontrol var (`test_r3_sarkan_*_ic_iceyken`). Gerçek OCR pitch 1.05×h'de satır kutuları arası aralık **2 px** (>0) → sınıf gerçek düzende kapalı; alt çizgili metin, Latin g/j/y, "...", dar menü: temiz.
 
-## 8 · Yükümlülükler (ret dışı, karara yazılmalı)
+**(b) T2-1'in gerçek OCR'da ölçülen tek yan etkisi:** küçük fontlu (16 px) token satır altından **8 px** sarkınca tur 2 onu **ayrı blok** bırakıyor (en kısa kelime kutusuyla örtüşme 7 < 8.5), tur 1 satıra yapıştırıyordu (ilk kutuyla 9 ≥ 8.5); sarkma 0/4'te ikisi de yapıştırır, 12'de ikisi de ayırır (r2-10 [B1] p36/p40; sentetik `test_r3_*_penceresi_*`). Cümle bütün; ürün etkisi: 2 karakterlik ek işaret ayrı çevrilir. **Ürünü bozmaz.**
 
-1. K6 docstring cümlesi çıktı anahtarı üzerinden (§5).
-2. Gri bölge `[0.6, 0.95]×h` paketten geliyor `[ÖLÇÜLMÜYOR]` — hizalanmış (justified) metinde kelime boşluğu bu bölgeye girebilir; bu turda ölçülmedi.
-3. Düzeltme sonrası benim `test_a1_uzun_kutu_*_SINIF` iki testim (mevcut bozuk davranışı sabitliyor) **bayatlar** — düzeltme turunda `test_ret_a_uzun_kutu_koprusu.py` tek ölçü olur, o ikisini ben yeniden yazarım (§4.6/5).
+**(c) Üst konumlu minik kutu → yanlış BÖLÜNME (tur 2'ye özgü, sentetik).** Minik kutu (h_t) satıra katılıp referans olursa, ondan sonra işlenen aynı-satır kelimesi `titreşim > 0.5·h_t` ise satır ikiye bölünür (`test_r3_yanlis_bolunme_*`, formül 4 h_t'de doğrulandı; tur 1 kodu bölmez). Gerçek OCR (r2-12, ™ ® ° ² ' ^ * " font 30/40): minik kutular kelime üstünden 1–9 px **aşağıda** ve h ≥ 13 → hep kelimelerden **sonra** işleniyor; bölünme için ≥ 12 px titreşim gerekir, gözlenen ≤ 5. Erişilemedi → `[ÖLÇÜLMÜYOR]`-gerçek olarak belgeye girmeli (yükümlülük 1).
 
-`git status --short -- src tests` boş; `git commit` yok; ayna ağacı scratchpad'de.
+**(d) T2-1 dışı ama ölçüldü:** boşlukla ayrılmış tek işaret (™, `*`, `"`) kendi minik kutusunu alıyor ve K2'nin `0.75×min(h)` boşluk eşiği (≈10 px) kelime boşluğunun (11–12 px) altına düşüp satırı parçalıyor (™ f30: 5 blok). Paket kuralı, tur 1 ile **aynı** (r2-11/r2-12), bu turun değişikliği değil — yükümlülük 3.
+
+## 4 · A2-3 — T2-2 ve K6
+
+`p(0,0) q(0,10) r(55,10)` 6 permütasyon `["p","q r"]`; aynı x'te 3 kutu + sağ komşu 24 permütasyon aynı; `(x,idx)` mutantı 6 testle düşüyor (impl 2, benim 4). K6 daraltılmış cümle: 6000 rastgele girdi (h 4–60 karışık, T2-1 mantığını zorlar) — permütasyon farkı **yalnız** çıktı `(y,x)` bağında, küme aynı. Tutuyor.
+
+## 5 · A2-4 — regresyon
+
+116 kendi testim + 6 ret geçiyor; birlikte 440; tam takım 1444; kapsam yalnız benim testlerimle %100. Tur 1 A6 raporum tur 2 koduyla **exit 0**; E-prototipi çıktısıyla fark 3 fixture'da ve hepsi **girdi** farkı (T-009 KR tanıma v5 → boş metinli kutu elemesi değişti: `kr_dar_1p1` 15→16 kutu, `kr_dar_1p0` 16→17, `menu_KR` bir `/` kutusu yer değiştirdi); tur 1 kanıt dosyasındaki 30 geometri tur 2 koduna yeniden beslendiğinde **30/30 aynı** (r2-32). Birleştirici E ile özdeş.
+
+`known_gaps` kalemleri (ölçümlerden sonra okundu): 4 yeniden nişanlanan test ayırt ediyor (r2-23: son→merdiven+k6 bağlı, `<=`→merdiven, `(x,idx)`→2, ilk→5); M04 `-idx` benim kitimde de 0 düşürüyor — davranış-eşdeğer (bağlı çiftin işleme sırası ne üyeliği ne referansı değiştirir), **kontrol sınıflaması doğru**. Ek: `(x, y)` (idx'siz satır içi sıra) de 0 — kararlı sıralama + `(y,x,idx)` ön sıralı girdi nedeniyle eşdeğer; docstring'in `(x, y, idx)` ifadesinde idx etkisiz (not).
+
+## 6 · A2-5 — orantı ve karar
+
+Ret eşiği "ürünü bozan **ve** erişilebilir sınıf". Ölçülenler: köprü sınıfı gerçek OCR'da 7 varyant + 2160 sentetik konfigürasyonda kapalı; en kısa referansın yanlış birleşme sınıfı matematiksel olarak iç içe satır gerektiriyor ve 1.05×h'de bile yok; yanlış bölünme sınıfı sentetik-yalnız (gerçek marj ≥ 8 px); gerçek yan etki (8 px sarkan küçük token ayrı blok) cümleyi bozmuyor. **Onay.**
+
+## 7 · Yükümlülükler (karara yazılmalı; ret dışı)
+
+1. **Docstring "SINIR" paragrafı** (`[ÖLÇÜLMÜYOR] gerçek OCR'da … satır aralığı ≥ 10 px … fixture üretilemedi`) artık ölçüldü ve iki cümlesi dar/yanlış: (i) yanlış birleşme koşulu **aralık ≤ 0** (türetim + 1815 sahne), 1.05×h'de aralık 2 px ölçüldü ve temiz — "≥ 10 px" yerine "> 0"; (ii) "tespitçi noktalamayı kelime kutusuna dahil ediyor" bitişik noktalama için doğru, **boşlukla ayrılmış** işaret/küçük-font token ayrı kutu alıyor (r2-10 [B], r2-12 [D]); (iii) gerçek yan etki (8 px sarkan token ayrı blok, r2-10 [B1]) ve (iv) yanlış bölünme sınıfı (formül `titreşim > 0.5·h_minik`, gerçek marj ≥ 8 px, `[ÖLÇÜLMÜYOR]`-gerçek) yazılmalı. Ölçüler: `tester_A/test_mercek_a_tur2.py::test_r3_*`, fixture'lar `tester_A/fixtures/r2/`.
+2. **K6 cümlesi** "bağ yalnız çıktı SIRASINI etkiler, satır üyeliğini DEĞİL": aynı `(x,y)` farklı `w` çift tespitte **grup bölümlemesi** (küme) de girdi sırasına bağlı (`test_r5_ayni_x_y_farkli_w_*`: `['p','P r']` / `['P','p r']`). Satır üyeliği gerçekten aynı; cümle "grup bölümlemesi de" diye genişletilmeli. Sentetik-yalnız (gerçek tespitçi çift kutu vermiyor, A6 tur 1).
+3. **K2 `0.75×min(h)` boşluk kuralı minik işaret kutusunda satırı parçalıyor** (™/`*`/`"` h 13–19: eşik ≈ 10 px < 11–12 px kelime boşluğu; r2-12 ™ f30 → 5 blok). Paket kararı, tur 1 ile aynı, T2-1 dışı; ürün erişimi boşlukla ayrılmış tek işaretle sınırlı (nadir). Şef kararı/ileri görev için kayıt (ör. eşikte satır medyan h'si).
+4. Gri bölge `[0.6, 0.95]×h` (tur 1 yük. 2) bu turda da ölçülmedi — hizalanmış metin.
+
+`git status --short -- src tests` boş; `git commit` yok; ayna ağaçları scratchpad'de; metin basılmadı (yalnız geometri).

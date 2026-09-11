@@ -4,7 +4,10 @@ packet.md v2 + modül docstring'i + sentetik `TextBlock`.
 Bölümler: A0 bariyer · A1 K2 geometri/eşik sınırları · A2 satır bölümleme vs
 satır içi sıralama · A3 K3 betik · A4 K5 alanlar · A5 K6 okuma sırası.
 Ürünü bozan ölçülmüş sınıf (uzun kutu köprüsü, gerçek OCR geometrisi) AYRI
-dosyada: `test_ret_a_uzun_kutu_koprusu.py` (şu an KIRMIZI — ret kanıtı).
+dosyada: `test_ret_a_uzun_kutu_koprusu.py` (tur 1'de KIRMIZI — ret kanıtı; tur 2'de 6/6).
+
+TUR 2: iki `_SINIF` testi (bozuk davranışı sabitliyordu) T2-1'e göre yeniden nişanlandı
+(`*_T2_1`). Tur 2'nin yeni ölçüleri AYRI dosyada: `test_mercek_a_tur2.py`.
 """
 from __future__ import annotations
 
@@ -125,24 +128,25 @@ def test_a1_uzun_kutu_koprusu_T_ortada_implementer_fixture() -> None:
     assert metinler(cikti) == ["a T", "c"]
 
 
-def test_a1_uzun_kutu_koprusu_T_solda_iki_satiri_tek_bloga_alir_SINIF() -> None:
-    """AYNI fixture, T en solda ve en üstte: T(0,0,40,60) a(50,5) c(110,40) → 'T a c' TEK
-    blok — a ve c FARKLI satırlar. Docstring bunu `[ÖLÇÜLMÜYOR]` bırakıyor; sentetik
-    kayıt burada, gerçek OCR karşılığı `test_ret_a_uzun_kutu_koprusu.py` + `a6-gercek-ocr.txt`.
-    Bu test MEVCUT davranışı sabitler (pozitif kontrol: T'siz a ve c ayrı)."""
+def test_a1_uzun_kutu_koprusu_T_solda_iki_satir_ayri_T2_1() -> None:
+    """[TUR 2 YENİDEN NİŞAN — tur 1'de `_SINIF`: bozuk davranışı ('T a c' tek blok) sabitliyordu.]
+    T en solda ve en üstte: T(0,0,40,60) a(50,5) c(110,40). Satır referansı = EN KISA blok (T2-1):
+    a satıra girer girmez referans olur (h 20 < 60); c (40..60) a (5..25) ile örtüşmez → yeni satır.
+    → 'T a', 'c'. Pozitif kontrol: T'siz a ve c ayrı. Gerçek OCR karşılığı `test_ret_a_uzun_kutu_koprusu.py`."""
     ile = satirlari_birlestir([B(0, 0, 40, 60, "T"), B(50, 5, 50, 20, "a"), B(110, 40, 50, 20, "c")])
-    assert metinler(ile) == ["T a c"]
+    assert metinler(ile) == ["T a", "c"]
     siz = satirlari_birlestir([B(50, 5, 50, 20, "a"), B(110, 40, 50, 20, "c")])
     assert metinler(siz) == ["a", "c"]
 
 
-def test_a1_uzun_kutu_solda_iki_kelimelik_satirlari_parcalar_SINIF() -> None:
-    """T solda, sağında 2 satır × 2 kelime: T'siz 2 blok, T ile 4 blok ('T a1', 'a2', 'c1', 'c2') —
-    satırlar PARÇALANIR (kelime-kelime çeviri sınıfı S3). Mevcut davranış sabitlenir."""
+def test_a1_uzun_kutu_solda_iki_kelimelik_satirlar_butun_T2_1() -> None:
+    """[TUR 2 YENİDEN NİŞAN — tur 1'de `_SINIF`: parçalanmayı ('T a1','a2','c1','c2') sabitliyordu.]
+    T solda, sağında 2 satır × 2 kelime: T'siz 2 blok; T ile de 2 blok — etiket satır 1'e yapışık,
+    satır 2 bütün ('T a1 a2', 'c1 c2'). Referans ilk blok (tur 1) olsaydı 4 blok (S3 sınıfı)."""
     satirlar = [B(50, 5, 50, 20, "a1"), B(110, 5, 50, 20, "a2"), B(50, 40, 50, 20, "c1"), B(110, 40, 50, 20, "c2")]
     assert metinler(satirlari_birlestir(satirlar)) == ["a1 a2", "c1 c2"]
     ile = satirlari_birlestir([B(0, 0, 40, 60, "T")] + satirlar)
-    assert metinler(ile) == ["T a1", "a2", "c1", "c2"]
+    assert metinler(ile) == ["T a1 a2", "c1 c2"]
 
 
 @pytest.mark.parametrize("w, h", [(50, 0), (0, 20), (50, -5), (-5, 20), (0, 0), (-1, -1)])

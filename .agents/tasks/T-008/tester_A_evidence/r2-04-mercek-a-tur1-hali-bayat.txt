@@ -1,0 +1,31 @@
+        Bu test MEVCUT davranýþý sabitler (pozitif kontrol: T'siz a ve c ayrý)."""
+        ile = satirlari_birlestir([B(0, 0, 40, 60, "T"), B(50, 5, 50, 20, "a"), B(110, 40, 50, 20, "c")])
+>       assert metinler(ile) == ["T a c"]
+E       AssertionError: assert ['T a', 'c'] == ['T a c']
+E         
+E         At index 0 diff: 'T a' != 'T a c'
+E         Left contains one more item: 'c'
+E         Use -v to get more diff
+
+.agents\tasks\T-008\tester_A\test_mercek_a.py:134: AssertionError
+_______ test_a1_uzun_kutu_solda_iki_kelimelik_satirlari_parcalar_SINIF ________
+
+    def test_a1_uzun_kutu_solda_iki_kelimelik_satirlari_parcalar_SINIF() -> None:
+        """T solda, saðýnda 2 satýr × 2 kelime: T'siz 2 blok, T ile 4 blok ('T a1', 'a2', 'c1', 'c2') —
+        satýrlar PARÇALANIR (kelime-kelime çeviri sýnýfý S3). Mevcut davranýþ sabitlenir."""
+        satirlar = [B(50, 5, 50, 20, "a1"), B(110, 5, 50, 20, "a2"), B(50, 40, 50, 20, "c1"), B(110, 40, 50, 20, "c2")]
+        assert metinler(satirlari_birlestir(satirlar)) == ["a1 a2", "c1 c2"]
+        ile = satirlari_birlestir([B(0, 0, 40, 60, "T")] + satirlar)
+>       assert metinler(ile) == ["T a1", "a2", "c1", "c2"]
+E       AssertionError: assert ['T a1 a2', 'c1 c2'] == ['T a1', 'a2', 'c1', 'c2']
+E         
+E         At index 0 diff: 'T a1 a2' != 'T a1'
+E         Right contains 2 more items, first extra item: 'c1'
+E         Use -v to get more diff
+
+.agents\tasks\T-008\tester_A\test_mercek_a.py:145: AssertionError
+=========================== short test summary info ===========================
+FAILED .agents/tasks/T-008/tester_A/test_mercek_a.py::test_a1_uzun_kutu_koprusu_T_solda_iki_satiri_tek_bloga_alir_SINIF
+FAILED .agents/tasks/T-008/tester_A/test_mercek_a.py::test_a1_uzun_kutu_solda_iki_kelimelik_satirlari_parcalar_SINIF
+2 failed, 82 passed in 0.61s
+exit=1

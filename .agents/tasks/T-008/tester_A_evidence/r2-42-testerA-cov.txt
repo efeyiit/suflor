@@ -1,0 +1,9 @@
+______________ coverage: platform win32, python 3.12.10-final-0 _______________
+
+Name                            Stmts   Miss  Cover   Missing
+-------------------------------------------------------------
+src\ocr\satir_birlestirici.py     100      0   100%
+-------------------------------------------------------------
+TOTAL                             100      0   100%
+116 passed in 6.32s
+exit=0

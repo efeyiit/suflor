@@ -1,0 +1,18 @@
+== M_son == (implementer 76, dusenler)
+FAILED tests/unit/ocr/test_satir_birlestirici.py::test_k2_satir_bolumleme_satirin_referansiyla_bir_oncekiyle_degil
+FAILED tests/unit/ocr/test_satir_birlestirici.py::test_k6_bagli_durumda_satir_referansi_en_kisa_girdi_sirasindan_bagimsiz
+2 failed, 74 passed in 0.36s
+== M_le == (implementer 76, dusenler)
+FAILED tests/unit/ocr/test_satir_birlestirici.py::test_k2_satir_bolumleme_satirin_referansiyla_bir_oncekiyle_degil
+1 failed, 75 passed in 0.37s
+== M_xidx == (implementer 76, dusenler)
+FAILED tests/unit/ocr/test_satir_birlestirici.py::test_k6_ayni_x_farkli_y_satir_ici_sira_y_ile_permutasyonlar_ayni
+FAILED tests/unit/ocr/test_satir_birlestirici.py::test_k6_cikti_anahtarinda_bag_girdi_sirasina_bagli_sinir
+2 failed, 74 passed in 0.48s
+== M_ilk == (implementer 76, dusenler)
+FAILED tests/unit/ocr/test_satir_birlestirici.py::test_k2_uzun_kutu_koprusu_solda_sentetik_iki_satir_ayri_bloklar[satir2-x+5-fermuar]
+FAILED tests/unit/ocr/test_satir_birlestirici.py::test_k2_uzun_kutu_koprusu_solda_sentetik_iki_satir_ayri_bloklar[satir2-x-ayni]
+FAILED tests/unit/ocr/test_satir_birlestirici.py::test_k2_uzun_kutu_koprusu_solda_sentetik_iki_satir_ayri_bloklar[satir2-x+12]
+FAILED tests/unit/ocr/test_satir_birlestirici.py::test_k2_uzun_kutu_koprusu_gercek_geometri_11_kutu_iki_blok_6_5
+FAILED tests/unit/ocr/test_satir_birlestirici.py::test_k2_satir_referansi_en_kisa_blok_kisa_alt_kutu_siniri_sabitlendi
+5 failed, 71 passed in 0.61s

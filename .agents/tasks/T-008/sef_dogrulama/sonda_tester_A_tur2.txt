@@ -1,0 +1,8 @@
+==== T-008 TESTER A, TUR 2 -- SEF SONDASI ====
+Karar: ONAY. validate KABUL EDILEBILIR. Sahiplik temiz. A takimi yesil (2 _SINIF yeniden nisanlandi).
+A2-1: gercek OCR 7 varyant (sag/orta/merdiven/3 satir/iki etiket/1.2x/1.5x) temiz; tur 1 kodu
+  aynada 3-satirlik etikette [11,5] fermuar -> sinif kapali, fixture'a ozgu degil. 2160 sentetik.
+A2-2: en kisa referansin siniri: yalniz fiziksel ic ice satirlarda (aralik <= 0); gercek 1.05xh'de
+  aralik 2 px -> kapali. Tek yan etki: 8 px sarkan minik token ayri blok kalir (cumle butun).
+Yukumlulukler: docstring SINIR paragrafi olculmus degerlerle; K6 cumlesi; min(h) minik isaret.
+KARAR: A'nin onayi KABUL EDILEBILIR. B bekleniyor.
