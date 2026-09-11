@@ -1,0 +1,43 @@
+[A] saglayici gercek model, 7 istek + close x2
+    exit=0  stdout=0 bayt  stderr=0 bayt
+    jp4_duvar_ms: 915.654700002051
+    jp4_latency_ms: 357.75189999549184
+    jp4_bos_olmayan: 4
+    kr_tek_segment_cumle: 2
+    en_bekliyor: True
+    jp_yt_ikisi_var: True
+    bos_istek: True
+    gecis_aynen: True
+    rakam_only_cikti_uzunluk: [2, 4]
+    kapali_sonrasi: ProviderUnavailable
+
+[B] pozitif kontrol: os.write(2, b'x')
+    exit=0  stdout=0 bayt  stderr=1 bayt
+
+[C] pozitif kontrol: CT2 log DEBUG + ayni akis
+    exit=0  stdout=0 bayt  stderr=2053 bayt
+    ct2_log_level_once: 30
+    ct2_log_level_sonra: 10
+    jp4_duvar_ms: 871.0764999996172
+    jp4_latency_ms: 361.04530000011437
+    jp4_bos_olmayan: 4
+    kr_tek_segment_cumle: 2
+    en_bekliyor: True
+    jp_yt_ikisi_var: True
+    bos_istek: True
+    gecis_aynen: True
+    rakam_only_cikti_uzunluk: [2, 4]
+    kapali_sonrasi: ProviderUnavailable
+    yorum: CT2 C++ logu DEBUG'da stderr'e DUSUYOR -> A'daki 0 anlamli (seviye WARNING'de kaldi)
+
+[D] sentencepiece/CT2 gercekcilik olgulari
+    exit=0  stdout=0 bayt  stderr=0 bayt
+    ct2_log_level_varsayilan: 30
+    sp: [{'karakter': 16, 'parca': 9, 'ilk_parca_alt_cizgi': True, 'roundtrip': True, 'roundtrip_strip': True}, {'karakter': 21, 'parca': 7, 'ilk_parca_alt_cizgi': True, 'roundtrip': True, 'roundtrip_strip': True}, {'karakter': 37, 'parca': 8, 'ilk_parca_alt_cizgi': True, 'roundtrip': True, 'roundtrip_strip': True}, {'karakter': 2, 'parca': 2, 'ilk_parca_alt_cizgi': True, 'roundtrip': True, 'roundtrip_strip': True}, {'karakter': 6, 'parca': 2, 'ilk_parca_alt_cizgi': True, 'roundtrip': True, 'roundtrip_strip': True}, {'karakter': 41, 'parca': 18, 'ilk_parca_alt_cizgi': True, 'roundtrip': True, 'roundtrip_strip': True}]
+    sp_bos_encode: []
+    sp_bos_decode: 
+    translate_batch_ilk_satir_uzunluk: 1185
+    translate_batch_parametreleri: ['asynchronous', 'batch_type', 'beam_size', 'callback', 'coverage_penalty', 'disable_unk', 'end_token', 'length_penalty', 'max_batch_size', 'max_decoding_length', 'max_input_length', 'min_alternative_expansion_prob', 'min_decoding_length', 'no_repeat_ngram_size', 'num_hypotheses', 'patience', 'prefix_bias_beta', 'repetition_penalty', 'replace_unknowns', 'return_alternatives', 'return_attention', 'return_end_token', 'return_logits_vocab', 'return_scores', 'sampling_temperature', 'sampling_topk', 'sampling_topp', 'source', 'suppress_sequences', 'target_prefix', 'use_vmap']
+
+B4 SONUC: TEMIZ
+exit=0

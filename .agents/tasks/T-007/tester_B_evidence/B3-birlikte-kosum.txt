@@ -1,0 +1,40 @@
+=== sefin bariyeri ONCE (tests/unit/translate sonra tester_B) ===
+269 passed in 1.05s
+
+=== tester_B ONCE ===
+269 passed in 1.06s
+
+=== her iki sirada: bariyer pozitif kontrolleri (sef + tester-B) ve meta_path[0] testi ===
+tests/unit/translate/test_conftest_bariyer.py::test_bariyer_gercekten_atesliyor[ctranslate2] PASSED [  8%]
+tests/unit/translate/test_conftest_bariyer.py::test_bariyer_gercekten_atesliyor[sentencepiece] PASSED [ 16%]
+tests/unit/translate/test_conftest_bariyer.py::test_bariyer_gercekten_atesliyor[ctranslate2.converters] PASSED [ 25%]
+.agents/tasks/T-007/tester_B/test_mercek_B.py::test_b3_kendi_bariyerim_import_module_yolunu_kesiyor[ctranslate2] PASSED [ 33%]
+.agents/tasks/T-007/tester_B/test_mercek_B.py::test_b3_kendi_bariyerim_import_module_yolunu_kesiyor[sentencepiece] PASSED [ 41%]
+.agents/tasks/T-007/tester_B/test_mercek_B.py::test_b3_kendi_bariyerim_import_module_yolunu_kesiyor[ctranslate2.converters] PASSED [ 50%]
+.agents/tasks/T-007/tester_B/test_mercek_B.py::test_b3_kendi_bariyerim_import_module_yolunu_kesiyor[sentencepiece._sentencepiece] PASSED [ 58%]
+.agents/tasks/T-007/tester_B/test_mercek_B.py::test_b3_dunder_import_yolu_da_kesiliyor[ctranslate2] PASSED [ 66%]
+.agents/tasks/T-007/tester_B/test_mercek_B.py::test_b3_dunder_import_yolu_da_kesiliyor[sentencepiece] PASSED [ 75%]
+.agents/tasks/T-007/tester_B/test_mercek_B.py::test_b3_sys_modules_onceden_dolu_kacisi_gercekten_kor_birakir PASSED [ 83%]
+.agents/tasks/T-007/tester_B/test_mercek_B.py::test_b3_spec_from_file_location_kacisi_olculur PASSED [ 91%]
+.agents/tasks/T-007/tester_B/test_mercek_B.py::test_b3_bariyer_meta_path_basinda PASSED [100%]
+===================== 12 passed, 257 deselected in 0.13s ======================
+-- ters sira --
+.agents/tasks/T-007/tester_B/test_mercek_B.py::test_b3_kendi_bariyerim_import_module_yolunu_kesiyor[ctranslate2] PASSED [  8%]
+.agents/tasks/T-007/tester_B/test_mercek_B.py::test_b3_kendi_bariyerim_import_module_yolunu_kesiyor[sentencepiece] PASSED [ 16%]
+.agents/tasks/T-007/tester_B/test_mercek_B.py::test_b3_kendi_bariyerim_import_module_yolunu_kesiyor[ctranslate2.converters] PASSED [ 25%]
+.agents/tasks/T-007/tester_B/test_mercek_B.py::test_b3_kendi_bariyerim_import_module_yolunu_kesiyor[sentencepiece._sentencepiece] PASSED [ 33%]
+.agents/tasks/T-007/tester_B/test_mercek_B.py::test_b3_dunder_import_yolu_da_kesiliyor[ctranslate2] PASSED [ 41%]
+.agents/tasks/T-007/tester_B/test_mercek_B.py::test_b3_dunder_import_yolu_da_kesiliyor[sentencepiece] PASSED [ 50%]
+.agents/tasks/T-007/tester_B/test_mercek_B.py::test_b3_sys_modules_onceden_dolu_kacisi_gercekten_kor_birakir PASSED [ 58%]
+.agents/tasks/T-007/tester_B/test_mercek_B.py::test_b3_spec_from_file_location_kacisi_olculur PASSED [ 66%]
+.agents/tasks/T-007/tester_B/test_mercek_B.py::test_b3_bariyer_meta_path_basinda PASSED [ 75%]
+tests/unit/translate/test_conftest_bariyer.py::test_bariyer_gercekten_atesliyor[ctranslate2] PASSED [ 83%]
+tests/unit/translate/test_conftest_bariyer.py::test_bariyer_gercekten_atesliyor[sentencepiece] PASSED [ 91%]
+tests/unit/translate/test_conftest_bariyer.py::test_bariyer_gercekten_atesliyor[ctranslate2.converters] PASSED [100%]
+===================== 12 passed, 257 deselected in 0.13s ======================
+
+=== hangi bariyer meta_path[0]'da (her iki sira) ===
+269 passed in 0.99s
+toplama sonu: meta_path bariyerleri=['[0] TesterBBariyer', '[1] _T007Bariyer']  yasak sys.modules=[]  toplanan=269
+269 passed in 1.06s
+toplama sonu: meta_path bariyerleri=['[0] _T007Bariyer', '[1] TesterBBariyer']  yasak sys.modules=[]  toplanan=269

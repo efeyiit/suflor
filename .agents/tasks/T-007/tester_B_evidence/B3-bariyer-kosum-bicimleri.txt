@@ -1,0 +1,48 @@
+=== python -m pytest tests -q -p no:cacheprovider -p tb_gozlem_plugin  (depo kokunden) ===
+1314 passed in 4.38s
+oturum basi: meta_path bariyerleri=[]  yasak sys.modules=[]  cwd=C:\Users\pc\Desktop\efe\çeviri uygulaması
+toplama sonu: meta_path bariyerleri=['[0] _T007Bariyer', '[1] _T006Bariyer']  yasak sys.modules=[]  toplanan=1314
+translate testleri: {'toplam': 214, 'bariyer_basta': 214, 'bariyer_yok': 0}
+oturum sonu: meta_path bariyerleri=['[0] _T007Bariyer', '[1] _T006Bariyer']  yasak sys.modules=[]  exit=0
+
+=== python -m pytest tests/unit -q -p no:cacheprovider -p tb_gozlem_plugin  (depo kokunden) ===
+1314 passed in 4.77s
+oturum basi: meta_path bariyerleri=[]  yasak sys.modules=[]  cwd=C:\Users\pc\Desktop\efe\çeviri uygulaması
+toplama sonu: meta_path bariyerleri=['[0] _T007Bariyer', '[1] _T006Bariyer']  yasak sys.modules=[]  toplanan=1314
+translate testleri: {'toplam': 214, 'bariyer_basta': 214, 'bariyer_yok': 0}
+oturum sonu: meta_path bariyerleri=['[0] _T007Bariyer', '[1] _T006Bariyer']  yasak sys.modules=[]  exit=0
+
+=== python -m pytest tests/unit/translate -q -p no:cacheprovider -p tb_gozlem_plugin  (depo kokunden) ===
+214 passed in 1.53s
+oturum basi: meta_path bariyerleri=['[0] _T007Bariyer']  yasak sys.modules=[]  cwd=C:\Users\pc\Desktop\efe\çeviri uygulaması
+toplama sonu: meta_path bariyerleri=['[0] _T007Bariyer']  yasak sys.modules=[]  toplanan=214
+translate testleri: {'toplam': 214, 'bariyer_basta': 214, 'bariyer_yok': 0}
+oturum sonu: meta_path bariyerleri=['[0] _T007Bariyer']  yasak sys.modules=[]  exit=0
+
+=== python -m pytest tests/unit/translate/test_local_nmt.py -q -p no:cacheprovider -p tb_gozlem_plugin  (depo kokunden) ===
+210 passed in 1.04s
+oturum basi: meta_path bariyerleri=['[0] _T007Bariyer']  yasak sys.modules=[]  cwd=C:\Users\pc\Desktop\efe\çeviri uygulaması
+toplama sonu: meta_path bariyerleri=['[0] _T007Bariyer']  yasak sys.modules=[]  toplanan=210
+translate testleri: {'toplam': 210, 'bariyer_basta': 210, 'bariyer_yok': 0}
+oturum sonu: meta_path bariyerleri=['[0] _T007Bariyer']  yasak sys.modules=[]  exit=0
+
+=== tests/unit/translate dizininden 'python -m pytest .' ===
+1 error in 0.14s
+oturum basi: meta_path bariyerleri=['[0] _T007Bariyer']  yasak sys.modules=[]  cwd=C:\Users\pc\Desktop\efe\çeviri uygulaması\tests\unit\translate
+toplama sonu: meta_path bariyerleri=['[0] _T007Bariyer']  yasak sys.modules=[]  toplanan=4
+translate testleri: {'toplam': 0, 'bariyer_basta': 0, 'bariyer_yok': 0}
+oturum sonu: meta_path bariyerleri=['[0] _T007Bariyer']  yasak sys.modules=[]  exit=2
+
+=== -p no:cacheprovider olmadan, paketin birebir komutu #2 + gozlem ===
+210 passed in 0.99s
+oturum basi: meta_path bariyerleri=['[0] _T007Bariyer']  yasak sys.modules=[]  cwd=C:\Users\pc\Desktop\efe\çeviri uygulaması
+toplama sonu: meta_path bariyerleri=['[0] _T007Bariyer']  yasak sys.modules=[]  toplanan=210
+translate testleri: {'toplam': 210, 'bariyer_basta': 210, 'bariyer_yok': 0}
+oturum sonu: meta_path bariyerleri=['[0] _T007Bariyer']  yasak sys.modules=[]  exit=0
+
+=== NOT: tests/unit/translate dizininden kosumdaki '1 error' (bilgi, bariyer degil) ===
+ImportError while importing test module 'tests/unit/translate/test_local_nmt.py'
+    from src.contracts.errors import ContractViolation, ModelMissingError, ProviderUnavailable
+E   ModuleNotFoundError: No module named 'src'
+-> translate/conftest.py depo kokunu sys.path'e EKLEMIYOR (contracts/ ve ocr/ conftest'leri ekliyor); paketin kabul komutlari
+   depo kokunden kosuldugu icin kapiyi etkilemez. Bariyer bu durumda da meta_path[0]'da (yukaridaki gozlem).

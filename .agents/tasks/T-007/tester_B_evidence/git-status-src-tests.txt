@@ -1,0 +1,42 @@
+git status --short -- src tests .agents/tasks/T-007/real_check.py .agents/tasks/T-007/packet.md tests/unit/translate/conftest.py
+(bos olmali) exit=0
+
+git diff --stat HEAD -- src tests:
+(bos)
+
+tester_B dosyalari:
+.agents/tasks/T-007/tester_B:
+total 120
+drwxr-xr-x 1 pc 197121     0 Sep 11 09:46 .
+drwxr-xr-x 1 pc 197121     0 Sep 11 09:38 ..
+drwxr-xr-x 1 pc 197121     0 Sep 11 09:44 __pycache__
+-rw-r--r-- 1 pc 197121  4375 Sep 11 09:40 b1c_kacan_mutant_gercek_model.py
+-rw-r--r-- 1 pc 197121  5445 Sep 11 09:35 b2_totoloji_tarama.py
+-rw-r--r-- 1 pc 197121  7306 Sep 11 09:36 b4_gercek_surec_sondasi.py
+-rw-r--r-- 1 pc 197121   575 Sep 11 09:29 conftest.py
+-rw-r--r-- 1 pc 197121  6017 Sep 11 09:46 mercekB_ayirt_etme.py
+-rw-r--r-- 1 pc 197121 30999 Sep 11 09:43 mutant_kiti.py
+-rw-r--r-- 1 pc 197121  2047 Sep 11 09:29 tb_bariyer.py
+-rw-r--r-- 1 pc 197121  2303 Sep 11 09:36 tb_gozlem_plugin.py
+-rw-r--r-- 1 pc 197121 32363 Sep 11 09:38 test_mercek_B.py
+
+.agents/tasks/T-007/tester_B_evidence:
+total 151
+drwxr-xr-x 1 pc 197121     0 Sep 11 09:47 .
+drwxr-xr-x 1 pc 197121     0 Sep 11 09:38 ..
+-rw-r--r-- 1 pc 197121  7606 Sep 11 09:47 B-mercek-testleri-tek-basina.txt
+-rw-r--r-- 1 pc 197121  3830 Sep 11 09:44 B1-mutant-kiti-K3-07-duzeltilmis.txt
+-rw-r--r-- 1 pc 197121 86447 Sep 11 09:42 B1-mutant-kiti.txt
+-rw-r--r-- 1 pc 197121   904 Sep 11 09:40 B1b-kacan-mutant-urun-etkisi.txt
+-rw-r--r-- 1 pc 197121  2553 Sep 11 09:46 B1b-mercekB-ayirt-etme.txt
+-rw-r--r-- 1 pc 197121  1934 Sep 11 09:46 B1c-kacan-mutant-gercek-model.txt
+-rw-r--r-- 1 pc 197121   836 Sep 11 09:35 B2-totoloji-tarama.txt
+-rw-r--r-- 1 pc 197121  3604 Sep 11 09:37 B3-bariyer-kosum-bicimleri.txt
+-rw-r--r-- 1 pc 197121   848 Sep 11 09:33 B3-birlikte-kosum.txt
+-rw-r--r-- 1 pc 197121  2506 Sep 11 09:47 B4-gercek-surec-sondasi.txt
+-rw-r--r-- 1 pc 197121   212 Sep 11 09:47 git-status-src-tests.txt
+-rw-r--r-- 1 pc 197121    50 Sep 11 09:18 taban-1-mypy.txt
+-rw-r--r-- 1 pc 197121   271 Sep 11 09:18 taban-2-pytest.txt
+-rw-r--r-- 1 pc 197121   998 Sep 11 09:18 taban-3-real_check-cp1254.txt
+-rw-r--r-- 1 pc 197121   779 Sep 11 09:19 taban-4-kapsam.txt
+-rw-r--r-- 1 pc 197121  1568 Sep 11 09:19 taban-5-tum-takim.txt

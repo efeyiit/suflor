@@ -1,0 +1,15 @@
+==== T-007 TESTER B (mercek B) -- SEF SONDASI ====
+Karar: RET. validate KABUL EDILEBILIR (17 kontrol). Sahiplik temiz.
+B1 kit: 53 davranis mutanti -> 49 yakalandi, 4 kacti; 6/6 kontrol kacti.
+
+BLOKE K3-03 (? terminatorden cikarildi) -> SEF URETTI:
+  mypy Success · birim 210 passed · real_check TEMIZ · tam takim 1314  = BES KAPI YESIL
+  Urun etkisi (gercek model): "Are you ready? The village elder..." -> 1 parca,
+  cikti 27 karakter, "hazir" YOK. Ilk cumle kayip. KRT-1 Y1 sinifi, tek karakterde.
+  Sebep: teslim testlerinde ? ve ！ hic ayirt edici konumda degil.
+  4.6/7 -- olcu parametre uzayinin (alti isaret) her noktasinda kosmali.
+KESKINLIK: hata mesajina motor ciktisi sizmasi olculmuyor; pozitif kontrollerde
+  match= yok. Ikisi de tur 2'de.
+B3/B4/B5/B6: bariyer 4 kosum biciminde meta_path[0]; gercek modelle stdout/stderr
+  0 bayt; omur 22 test; kapsam %100 gercek. Kabul.
+KARAR: B'nin RET'i KABUL. Tur 2: sef_karari-tur2.md (T2-1 bloke, T2-2 A'nin K-1'i, T2-3 keskinlik).

@@ -1,0 +1,74 @@
+davranis mutanti: 53  yakalanan: 49  kacan: ['K3-03', 'K3-05', 'K10-08', 'K10-09']
+kontrol mutanti: 6  kacan (dogru): 6  yakalanan (yanlis pozitif): []
+kapi basina yakalama (davranis mutantlari):
+  G1-mypy     2 / 53
+  G2-birim   49 / 53
+  G3-real    10 / 53
+  G4-kapsam  49 / 53
+  G5-tum     49 / 53
+yalniz birim kapilarinin (G2/G4/G5) yakaladigi, mypy ve real_check'in kor oldugu: 37
+real_check'in de yakaladigi: ['K3-01', 'K3-04', 'K3-11', 'K4-04', 'K4-05', 'K4-06', 'K4-07', 'K5-04', 'K6-05', 'K7-01']
+mypy'nin yakaladigi: ['K8-04', 'K1-01']
+
+| mutant | G1 | G2 | G3 | G4 | G5 |
+|---|---|---|---|---|---|
+| K3-01 | . | X | X | X | X |
+| K3-02 | . | X | . | X | X |
+| K3-03 | . | . | . | . | . |
+| K3-04 | . | X | X | X | X |
+| K3-05 | . | . | . | . | . |
+| K3-06 | . | X | . | X | X |
+| K3-07 | . | X | . | X | X |
+| K3-08 | . | X | . | X | X |
+| K3-09 | . | X | . | X | X |
+| K3-10 | . | X | . | X | X |
+| K3-11 | . | X | X | X | X |
+| K2-01 | . | X | . | X | X |
+| K2-02 | . | X | . | X | X |
+| K2-03 | . | X | . | X | X |
+| K4-01 | . | X | . | X | X |
+| K4-02 | . | X | . | X | X |
+| K4-03 | . | X | . | X | X |
+| K4-04 | . | X | X | X | X |
+| K4-05 | . | X | X | X | X |
+| K4-06 | . | X | X | X | X |
+| K4-07 | . | X | X | X | X |
+| K5-01 | . | X | . | X | X |
+| K5-02 | . | X | . | X | X |
+| K5-03 | . | X | . | X | X |
+| K5-04 | . | X | X | X | X |
+| K6-01 | . | X | . | X | X |
+| K6-02 | . | X | . | X | X |
+| K6-03 | . | X | . | X | X |
+| K6-04 | . | X | . | X | X |
+| K6-05 | . | X | X | X | X |
+| K6-06 | . | X | . | X | X |
+| K6-07 | . | X | . | X | X |
+| K6-08 | . | X | . | X | X |
+| K7-01 | . | X | X | X | X |
+| K7-02 | . | X | . | X | X |
+| K8-01 | . | X | . | X | X |
+| K8-02 | . | X | . | X | X |
+| K8-03 | . | X | . | X | X |
+| K8-04 | X | X | . | X | X |
+| K8-05 | . | X | . | X | X |
+| K8-06 | . | X | . | X | X |
+| K9-01 | . | X | . | X | X |
+| K9-02 | . | X | . | X | X |
+| K10-01 | . | X | . | X | X |
+| K10-02 | . | X | . | X | X |
+| K10-03 | . | X | . | X | X |
+| K10-04 | . | X | . | X | X |
+| K10-05 | . | X | . | X | X |
+| K10-06 | . | X | . | X | X |
+| K10-07 | . | X | . | X | X |
+| K10-08 | . | . | . | . | . |
+| K10-09 | . | . | . | . | . |
+| K1-01 | X | X | . | X | X |
+| C01 | . | . | . | . | . |
+| C02 | . | . | . | . | . |
+| C03 | . | . | . | . | . |
+| C04 | . | . | . | . | . |
+| C05 | . | . | . | . | . |
+| C06 | . | . | . | . | . |
+(K3-07: duzeltilmis kosum; ilk kosum regex'i bozan gecersiz mutantti -- kit hatasi, B1-mutant-kiti.txt'te [.XXXX] re.error ile gorunur)

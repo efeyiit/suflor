@@ -1,0 +1,10 @@
+ornek                                             tam-kume  '?'-eksik  'FULLWIDTH-!'-eksik
+KR 3 cumle (KRT Y1'in kendi ornegi: !, ?, .)              3          2                    3
+EN 2 cumle (?, .)                                         2          1                    2
+JP 2 cumle (KRT Y2 ornegi: ！？ ardisik + ？)                2          2                    2
+JP 2 cumle (！, 。)                                         2          2                    1
+JP 3 cumle (！, ？, 。)                                      3          3                    2
+
+Parca sayisi dusen her satir = C6/C8 kaynasmasi (tek girdide 2. cumle erir / ilk cumle kaybolur; KRT Y1 olctu).
+Teslim testlerinde '?' ve U+FF01 hicbir girdide AYIRT EDICI konumda degil: 'what?!' ve 'c! e?' sonda/ardisik,
+'A。？！' ise Y2 suzgeciyle ('！' parcasi alnum degil) yutuluyor -> alti isaretin ikisi olculmuyor.

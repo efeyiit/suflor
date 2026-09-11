@@ -1,0 +1,32 @@
+ayna agaci: C:\Users\pc\AppData\Local\Temp\scratch\C--Users-pc-Desktop-efe--eviri-uygulamas-\d52c967f-bd19-4db3-b5e9-77e6cd08b889\scratchpad\t007_tester_B_mutroot   (depo YAZILMAZ; models/ 4 dosya kopyalandi)
+kapilar PYTHONIOENCODING'siz (cp1254) kosar; real_check yalniz ASCII basar
+
+TABAN (mutasyonsuz ayna):
+  G1-mypy    exit=0     2.1s  Success: no issues found in 1 source file
+  G2-birim   exit=0     1.3s  210 passed in 0.97s
+  G3-real    exit=0     5.5s  REAL_CHECK: TEMIZ (0 uyari)
+  G4-kapsam  exit=0     1.9s  210 passed in 1.27s
+  G5-tum     exit=0     5.4s  1314 passed in 4.99s
+
+MUTANT KITI -- her mutant icin hangi kapi YAKALAR (X) / KACIRIR (.)
+kapilar: G1-mypy | G2-birim | G3-real | G4-kapsam | G5-tum
+
+K3-07   [.X.XX] YAKALANDI   (beklenen: G2 G4 G5)
+        K3: kapanis kumesinden `」` (U+300D) EKSIK -- JP tirnak kapanisi cumleye DAHIL EDILMEZ, sonraki parcanin basina yapisir
+        hedef: K3 kapanis
+        urun etkisi: `「A。」B。` -> `「A。`, `」B。`: `」` yanlis cumleye gider. (Ilk surum bos kume idi -> regex `[]` re.error: kit hatasi, duzeltildi; ilk kosum B1-mutant-kiti.txt'te)
+        | G2-birim: E           AssertionError: ('jpn_Jpan', 'A.\u300dB.')
+        | G4-kapsam: E           AssertionError: ('jpn_Jpan', 'A.\u300dB.')
+        | G5-tum: E           AssertionError: ('jpn_Jpan', 'A.\u300dB.')
+        | G2-birim dusen 5: tests/unit/translate/test_local_nmt.py::test_k3b_bolme_noktalamaya_gore_dile_gore_degil[A.\u300dB.-parcalar7]; tests/unit/translate/test_local_nmt.py::test_k3b_bolme_noktalamaya_gore_dile_gore_degil[A. \u300d B.-parcalar8]; tests/unit/translate/test_local_nmt.py::test_k3b_bolme_noktalamaya_gore_dile_gore_degil[\u300cA\u3002\u300d\u300cB\u3002\u300d-parcalar9]; tests/unit/translate/test_local_nmt.py::test_k3c_parca_suzgeci_harf_rakam_olmayan_modele_gitmez_aynen_gecer[\u300cA\u3002\u300d-gonderilen1-\u3; tests/unit/translate/test_local_nmt.py::test_k3c_parca_suzgeci_harf_rakam_olmayan_modele_gitmez_aynen_gecer[A\u3002 \u300d B\u3002-gonderilen10
+        | G4-kapsam dusen 5: tests/unit/translate/test_local_nmt.py::test_k3b_bolme_noktalamaya_gore_dile_gore_degil[A.\u300dB.-parcalar7]; tests/unit/translate/test_local_nmt.py::test_k3b_bolme_noktalamaya_gore_dile_gore_degil[A. \u300d B.-parcalar8]; tests/unit/translate/test_local_nmt.py::test_k3b_bolme_noktalamaya_gore_dile_gore_degil[\u300cA\u3002\u300d\u300cB\u3002\u300d-parcalar9]; tests/unit/translate/test_local_nmt.py::test_k3c_parca_suzgeci_harf_rakam_olmayan_modele_gitmez_aynen_gecer[\u300cA\u3002\u300d-gonderilen1-\u3; tests/unit/translate/test_local_nmt.py::test_k3c_parca_suzgeci_harf_rakam_olmayan_modele_gitmez_aynen_gecer[A\u3002 \u300d B\u3002-gonderilen10
+        | G5-tum dusen 5: tests/unit/translate/test_local_nmt.py::test_k3b_bolme_noktalamaya_gore_dile_gore_degil[A.\u300dB.-parcalar7]; tests/unit/translate/test_local_nmt.py::test_k3b_bolme_noktalamaya_gore_dile_gore_degil[A. \u300d B.-parcalar8]; tests/unit/translate/test_local_nmt.py::test_k3b_bolme_noktalamaya_gore_dile_gore_degil[\u300cA\u3002\u300d\u300cB\u3002\u300d-parcalar9]; tests/unit/translate/test_local_nmt.py::test_k3c_parca_suzgeci_harf_rakam_olmayan_modele_gitmez_aynen_gecer[\u300cA\u3002\u300d-gonderilen1-\u3; tests/unit/translate/test_local_nmt.py::test_k3c_parca_suzgeci_harf_rakam_olmayan_modele_gitmez_aynen_gecer[A\u3002 \u300d B\u3002-gonderilen10
+
+=== MARKDOWN TABLOSU ===
+| # | mutant | hedef | G1-mypy | G2-birim | G3-real | G4-kapsam | G5-tum |
+|---|---|---|---|---|---|---|---|
+| K3-07 | K3: kapanis kumesinden `」` (U+300D) EKSIK -- JP tirnak kapanisi cumleye DAHIL EDILMEZ, sonraki parcanin basina yapisir | K3 kapanis | . | X | . | X | X |
+
+Kacan (kontrol olmayan) mutant yok.
+Kontrol mutantlarinin hepsi kacti (yanlis pozitif yok).
+Tahminden sapan yok.

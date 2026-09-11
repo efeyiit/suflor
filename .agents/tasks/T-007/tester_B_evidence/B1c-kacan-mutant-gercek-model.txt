@@ -1,0 +1,17 @@
+ayna agaci: C:\Users\pc\AppData\Local\Temp\scratch\C--Users-pc-Desktop-efe--eviri-uygulamas-\d52c967f-bd19-4db3-b5e9-77e6cd08b889\scratchpad\t007_tester_B_ayirt; model: depodaki models/ (mutlak yol)
+--- MUTASYONSUZ (teslim) (exit=0) ---
+  kor_Hang  kaynak  36 kr | modele giden parca 3 | cikti cumle 3 | anahtar {'bekle': True, 'gidiyor': True, 'ihtiyar': True}
+  eng_Latn  kaynak  52 kr | modele giden parca 2 | cikti cumle 3 | anahtar {'hazir': True, 'bekliyor': True, 'ihtiyar': True}
+  jpn_Jpan  kaynak  20 kr | modele giden parca 2 | cikti cumle 2 | anahtar {'dur': True, 'bekliyor': True, 'ihtiyar': True}
+  jpn_Jpan  kaynak  11 kr | modele giden parca 2 | cikti cumle 2 | anahtar {'bekle': False, 'gidiyor': True, 'gercekten': False}
+--- K3-03: K3 (Y1): terminator kumesinden `ASCII soru` ('?') EKSIK (exit=0) ---
+  kor_Hang  kaynak  36 kr | modele giden parca 2 | cikti cumle 3 | anahtar {'bekle': True, 'gidiyor': True, 'ihtiyar': True}
+  eng_Latn  kaynak  52 kr | modele giden parca 1 | cikti cumle 1 | anahtar {'hazir': False, 'bekliyor': True, 'ihtiyar': True}
+  jpn_Jpan  kaynak  20 kr | modele giden parca 2 | cikti cumle 2 | anahtar {'dur': True, 'bekliyor': True, 'ihtiyar': True}
+  jpn_Jpan  kaynak  11 kr | modele giden parca 2 | cikti cumle 2 | anahtar {'bekle': False, 'gidiyor': True, 'gercekten': False}
+--- K3-05: K3 (Y1): terminator kumesinden `CJK unlem` ('！') EKSIK (exit=0) ---
+  kor_Hang  kaynak  36 kr | modele giden parca 3 | cikti cumle 3 | anahtar {'bekle': True, 'gidiyor': True, 'ihtiyar': True}
+  eng_Latn  kaynak  52 kr | modele giden parca 2 | cikti cumle 3 | anahtar {'hazir': True, 'bekliyor': True, 'ihtiyar': True}
+  jpn_Jpan  kaynak  20 kr | modele giden parca 1 | cikti cumle 1 | anahtar {'dur': False, 'bekliyor': True, 'ihtiyar': True}
+  jpn_Jpan  kaynak  11 kr | modele giden parca 1 | cikti cumle 1 | anahtar {'bekle': False, 'gidiyor': True, 'gercekten': False}
+exit=0

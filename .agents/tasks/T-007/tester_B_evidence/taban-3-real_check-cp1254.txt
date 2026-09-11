@@ -1,0 +1,17 @@
+T-007 real_check -- gercek model
+  ok     [1] JP 4 cumle -> 4 ceviri, bos olan 0
+  ok     [1] provider_id='local-nmt-nllb200-600m-int8'
+  ok     [1] latency_ms=354 partial=False from_cache=False
+  ok     [2] EN: 'bekliyor' var, 'degirmen' var
+  ok     [3] JP paragraf tek segment -> 3 cumle, anahtarlar ihtiyar/dogu/gunes = (True, True, True)  (tek girdide 2. cumle eriyordu)
+  ok     [4] KR 2 cumle TEK segment -> 2 cumle, bekliyor=True dogu=True  (ASCII nokta bolunmezse 2. cumle kaybolur)
+  ok     [4b] '...' (JP) -> aynen mi: True  (v1'de 'Hayir, hayir.' uyduruluyordu)
+  ok     [5] JP yer tutucu: {0} var, {1} var  (C9: model dusurur, saglayici onarir)
+  ok     [5] EN yer tutucu: korundu
+  ok     [6] JP 4 cumle tek batch beam=4: medyan 315 ms (esik 350 = olculen 307-316 + pay; uyari)
+  ok     [7] ASCII-disi model_dir -> calisti
+  ok     [8] source_lang=None -> ProviderUnavailable
+  ok     [8] bos model_dir -> 'MME' (MME bekleniyordu) 
+
+REAL_CHECK: TEMIZ (0 uyari)
+exit=0
