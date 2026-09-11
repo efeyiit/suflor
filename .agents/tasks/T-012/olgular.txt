@@ -1,0 +1,14 @@
+T-012 ON OLCUM -- demo/kabuk.py, gercek ekran
+
+U0 birincil ekran availableGeometry: x=0 y=0 w=2560 h=1392 dpr=1.0
+U1 QSystemTrayIcon.isSystemTrayAvailable = True
+U2 kenara al: ana pencere gorunur=False sekme gorunur=True sekme geometri=(2534,670,26,52) ekran sag kenari=2559
+U2 sekme sag kenara bitisik=True dikey orta=True
+U2 bayraklar: Tool=True Frameless=True StaysOnTop=True NoFocus=True translucent=True
+U5 odak: sekme gosterilince aktif pencere = None (None beklenir: oyunun odagi calinmaz)
+U3 imlec ustunde: acildi=True sure=145 ms (ayar 120) panel geometri=(2360,630,200,132) sag kenara bitisik=True
+U3 imlec ayrilinca: kapandi=True sure=478 ms (ayar 450)
+U6 asagi surukleme sonrasi y=1340 alt sinir=1340 (esit beklenir); acik=False
+U4 sag tik: ana pencere gorunur=True sekme gorunur=False
+U1 tepsiye al: ana pencere gorunur=False tepsi ikonu gorunur=True sekme gorunur=False
+U1 goster: ana pencere gorunur=True
