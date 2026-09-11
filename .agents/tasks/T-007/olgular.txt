@@ -1,0 +1,53 @@
+==== T-007 (YEREL NMT CEVIRI SAGLAYICISI) -- SEFIN ON OLCUMLERI ====
+Makine: 32 cekirdek, ctranslate2 4.8.2, sentencepiece 0.2.2. Hepsi bu makinede kosuldu.
+
+[C1] MODEL: NLLB-200-distilled-600M, CT2 int8
+  Kaynak (OLCUM ICIN): JustFrederik/nllb-200-distilled-600M-ct2-int8 (HF, 9385 indirme)
+    model.bin 622.6 MB + sentencepiece.bpe.model 4.9 MB + shared_vocabulary.txt 2.6 MB
+    Toplam 647 MB -- tasarimin "~600 MB" ongorusu TUTUYOR.
+  Bu bir TOPLULUK donusumu. Uretimde resmi facebook/nllb-200-distilled-600M'den
+  kendi donusumumuz + checksum gerekir (ModelManager, tasarim 13). Simdilik olcum.
+  Indirme 35 s (bu baglantida). Model yukleme 471 ms. CPU int8 destekleniyor.
+
+[C2] HIZ (8 intra_threads, beam=4, tur_Latn hedef):
+  JP -> TR  4 cumle toplu  311 ms  =  78 ms/cumle
+  KR -> TR  2 cumle toplu  212 ms  = 106 ms/cumle
+  EN -> TR  2 cumle toplu  266 ms  = 133 ms/cumle
+  TEK cumle JP->TR: beam=4 151 ms · beam=1 (greedy) 115 ms
+  Tasarim 4.2'nin "satir basina 50-150 ms" iddiasi TUTUYOR.
+  Toplu ceviri cumle basina belirgin ucuz -> Mod 2'de segmentler toplanip
+  tek batch'te gonderilmeli; tek tek gonderim 2x pahali.
+
+[C3] KALITE -- durust degerlendirme (sefin okumasi; altin set YOK, T-0xx'te olculur)
+  JP 村の長老があなたを待っています。  -> "Köyün ihtiyarları seni bekliyor."
+       anlam DOGRU; tekil/cogul hatasi (ihtiyarlari -> ihtiyari).
+  JP 長老マルクス                       -> "İhtiyar Marks."
+       ad "Marcus" yerine "Marks" -- KATMAN 0 (sozluk) tam olarak bunun icin.
+  JP 水車小屋を過ぎて東の道を行きなさい。 -> "Su arabası kulübesinden geçip doğuya doğru yürüyün."
+       水車小屋 = su degirmeni kulubesi; "su arabasi" YANLIS. Anlam kismen kayip.
+  JP 日が暮れたら道を外れないように。   -> "Güneş batınca yolumuzu terk etmemek için."
+       anlam tasindi, dil bozuk ("...icin" cumle sonu yanlis).
+  KR 마을 장로가 당신을 기다리고 있습니다. -> "Köy ihtiyarı sizi bekliyor."   IYI
+  KR 방앗간을 지나 동쪽 길로 가십시오.  -> "Doğu'ya doğru Doğu'ya doğru yürüyün."
+       TEKRAR HATASI + degirmen kayip. KOTU. (NMT'nin bilinen dejenerasyonu;
+       repetition_penalty / no_repeat_ngram_size CT2'de var, olculmeli.)
+  EN -> TR: iki cumle de iyi.
+  SONUC: tasarim 4.2'nin "cumle cumle cevirir, deyimlerde tokezler" uyarisi
+  DOGRULANDI. EN->TR kabul edilebilir; JP/KR->TR tek basina YETMEZ, Katman 0
+  (sozluk) ve Katman 2 (LLM) tasarimi bosuna degil.
+
+[C4] API OLGULARI
+  ctranslate2.Translator(path, device="cpu", compute_type="int8", inter_threads, intra_threads)
+  translate_batch(tokens, target_prefix=[[hedef_dil]]*n, beam_size, max_decoding_length)
+  Kaynak dil belirteci token dizisinin BASINA konur ("jpn_Jpan", ...), "</s>" sona.
+  Cikti: hypotheses[0] -- ilk token hedef dil belirteci, ATILIR (sp.decode(...[1:])).
+  Dil kodlari NLLB'nin kendi kodlari: jpn_Jpan kor_Hang eng_Latn zho_Hans tur_Latn.
+
+== PAKETE GIRECEK SONUCLAR ==
+  1. LocalNmtProvider CT2 + NLLB-600M-int8 uzerine; dil kodu esleme tablosu sabit.
+  2. Batch zorunlu: translate(request) segmentleri TEK translate_batch'te gonderir.
+  3. Tekrar dejenerasyonu icin CT2 parametreleri (repetition_penalty vb.) OLCULECEK
+     -- tahminle yazilmaz. KR ornegi pozitif kontrol.
+  4. Kalite altin seti gerekiyor (tasarim 12); su an yalniz sefin gozu var.
+  5. Model kaynagi: topluluk donusumu OLCUM icin kabul; uretim icin ModelManager +
+     resmi donusum ayri gorev. "Ilk acilista cevrimdisi" iddiasi burada da tutmuyor.
