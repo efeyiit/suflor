@@ -1,0 +1,13 @@
+==== T-007 TESTER A (mercek A) -- SEF SONDASI ====
+Karar: ONAY. validate KABUL EDILEBILIR (10 kontrol). Sahiplik temiz.
+A'nin takimi: tek 265, urunle 479 (bariyer match="K1 bariyeri" -- T-006 dersi uygulanmis).
+A2/A3/A5/A6 iddialarindan ornekler A'nin kanitlarinda; sef K-1'i gercek modelle uretti:
+
+K-1 YALNIZ-YER-TUTUCU CUMLE -> SEF URETTI, DOGRU, URUNU ETKILER:
+  modele_gider('{PLAYER}!') = True  -> "- Hayır, hayır. {PLAYER}"   UYDURMA + ek
+  modele_gider('{0}!')      = True  -> "- Hayır, hayır! {0}"        UYDURMA
+  modele_gider('{0}。')      = True  -> "{0}♪"                        (nota isareti uydurma)
+  Sebep: suzgec harf/rakam ariyor; "{PLAYER}" icinde harf var. Yer tutucular
+  cikarildiktan sonra suzulmeli (A'nin onerisi, tek satir). Oyun metninde
+  "{PLAYER}!" / "{0}!" cok yaygin (hitap) -> tur 2'ye BLOKE OLMAYAN ama zorunlu.
+K-2 ASCII tirnak simetrisi, K-3 U+FF0E: kayit, decision.md acik kalem.

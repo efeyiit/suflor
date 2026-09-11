@@ -1,0 +1,35 @@
+Tester-A mutant kiti: 31 mutant (30 yakalanmali + 1 kontrol)
+  ok     MA-00 kimlik sabiti degisti (kopya yukleniyor mu): 1 failed, 82 passed in 0.52s | ilk dusen: test_a2_bos_istek_bos_demet_latency_sifir_veya_pozitif_motor_yok
+  ok     MA-01 Y1: ASCII nokta terminator degil: 1 failed, 6 passed in 0.24s | ilk dusen: test_a1_bolme_tablosu_parca_giden_kayipsiz['A. B.']
+  ok     MA-02 Y1: v1 kurali (yalniz CJK): 1 failed, 6 passed in 0.24s | ilk dusen: test_a1_bolme_tablosu_parca_giden_kayipsiz['A. B.']
+  ok     MA-03 Y2: suzgec yok: 1 failed, 13 passed in 0.24s | ilk dusen: test_a1_bolme_tablosu_parca_giden_kayipsiz['...']
+  ok     MA-04 Y2: rakam sayilmaz: 1 failed, 8 passed in 0.25s | ilk dusen: test_a1_bolme_tablosu_parca_giden_kayipsiz['3.5 km.']
+  ok     MA-05 K2: ensure_aligned cagrisi yok: 1 failed, 81 passed in 0.42s | ilk dusen: test_a2_ensure_aligned_davranissal_olarak_cagriliyor
+  ok     MA-06 K2: cumle sayimi yok: 1 failed, 71 passed in 0.41s | ilk dusen: test_a2_cumle_sayisi_tutmayan_hipotez_contractviolation[metinler0-3]
+  ok     MA-07 K3: kapanis isaretleri dahil degil: 1 failed, 10 passed in 0.24s | ilk dusen: test_a1_bolme_tablosu_parca_giden_kayipsiz['\u300cA\u3002\u300dB\u3002']
+  ok     MA-08 K3: birlestirme bosluksuz: 1 failed, 36 passed in 0.34s | ilk dusen: test_a1_saglayici_uzerinden_giden_sayi_ve_cikti_bilesimi['A. B.']
+  ok     MA-09 K3: gecis segmenti bos doner: 1 failed, 43 passed in 0.30s | ilk dusen: test_a1_saglayici_uzerinden_giden_sayi_ve_cikti_bilesimi['...']
+  ok     MA-10 K3: strip yok: 1 failed, 6 passed in 0.24s | ilk dusen: test_a1_bolme_tablosu_parca_giden_kayipsiz['A. B.']
+  ok     MA-11 K4: harf duyarli: 1 failed, 36 passed in 0.29s | ilk dusen: test_a1_saglayici_uzerinden_giden_sayi_ve_cikti_bilesimi['A. B.']
+  ok     MA-12 K4: ISO kodu tabloda yok: 1 failed, 93 passed in 0.47s | ilk dusen: test_a2_segments_listesi_de_hizalanir
+  ok     MA-13 K4: kaynak belirteci SONA: 1 failed, 36 passed in 0.38s | ilk dusen: test_a1_saglayici_uzerinden_giden_sayi_ve_cikti_bilesimi['A. B.']
+  ok     MA-14 K4: target_prefix tek satir: 1 failed, 94 passed in 0.50s | ilk dusen: test_a3_uc_bicim_bes_harf_hali_ilk_token_son_prefix_her_satirda[0-jpn_Jpan]
+  ok     MA-15 K4: detected_lang None: 1 failed, 94 passed in 0.45s | ilk dusen: test_a3_uc_bicim_bes_harf_hali_ilk_token_son_prefix_her_satirda[0-jpn_Jpan]
+  ok     MA-16 K4: hedef 'en' kabul: 1 failed, 156 passed in 1.08s | ilk dusen: test_a3_tablo_disi_hedef_provider_unavailable_fabrika_sifir[en]
+  ok     MA-17 K5: sayim yerine in (gereken=1): 1 failed, 175 passed in 1.12s | ilk dusen: test_a4_kaynakta_iki_ciktida_bir_bir_eklenir
+  ok     MA-18 K5: kosulsuz ekleme: 1 failed, 175 passed in 0.87s | ilk dusen: test_a4_kaynakta_iki_ciktida_bir_bir_eklenir
+  ok     MA-19 K5: onarim yok: 1 failed, 175 passed in 0.77s | ilk dusen: test_a4_kaynakta_iki_ciktida_bir_bir_eklenir
+  ok     MA-20 K5: bos yer tutucu atlanmaz: 1 failed, 189 passed in 0.79s | ilk dusen: test_a4_sayim_mantigi_tablosu[{0} x.-ph12-t-t {0}]
+  ok     MA-21 K2: hedef belirteci kosulsuz atilir: 1 failed, 91 passed in 0.51s | ilk dusen: test_a2_hedef_belirteci_yoksa_ilk_token_korunur
+  ok     MA-22 K8: np.int64 duzlestirilmez: 1 failed, 198 passed in 0.85s | ilk dusen: test_a6_threads_integral_duz_int_olarak_gecer[threads0]
+  ok     MA-23 K8: beam_size=0 kabul: 1 failed, 219 passed in 0.91s | ilk dusen: test_a6_beam_size_sifir_negatif_valueerror[0]
+  ok     MA-24 K8: rp nan kabul: 1 failed, 232 passed in 1.15s | ilk dusen: test_a6_repetition_penalty_nan_inf_ve_birden_kucuk_valueerror[nan0]
+  ok     MA-25 K8: rp 1.0 iken de gecilir: 1 failed, 246 passed in 1.27s | ilk dusen: test_a6_repetition_penalty_bir_hic_gecilmez[1]
+  ok     MA-26 K9: latency int: 1 failed, 82 passed in 0.53s | ilk dusen: test_a2_bos_istek_bos_demet_latency_sifir_veya_pozitif_motor_yok
+  ok     MA-27 K2: bos istekte translations liste: 1 failed, 81 passed in 0.73s | ilk dusen: test_a2_ensure_aligned_davranissal_olarak_cagriliyor
+  ok     MA-28 K4: source_lang=None kabul (JAPAN varsayilan): 1 failed, 106 passed in 0.87s | ilk dusen: test_a3_tablo_disi_kaynak_provider_unavailable_fabrika_sifir[None]
+  ok     MA-29 K3: bos segment cikti None: 1 failed, 46 passed in 0.52s | ilk dusen: test_a1_saglayici_uzerinden_giden_sayi_ve_cikti_bilesimi['']
+  ok     MA-99 KONTROL: hata mesaji metni degisti (davranis esdeger): 265 passed in 1.02s (yakalanmamali)
+
+MUTANT-A: 30/30 yakalandi; kontrol temiz
+exit=0

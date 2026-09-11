@@ -1,0 +1,34 @@
+Tester-A A5 -- gercek model, ayri surec
+  ok     [4a] ilk cagri kurulum haric: duvar=855 ms latency_ms=284 ms fark=571 ms
+  ok     [1] JP 2 cumle: tuple=1 n=1 str=1 bos_degil=1 kimlik=1 latency_float=1 latency_ge0=1 from_cache_False=1 partial_False=1 detected=1 uzunluklar=[32, 51]
+  ok     [1] KR 2 cumle: tuple=1 n=1 str=1 bos_degil=1 kimlik=1 latency_float=1 latency_ge0=1 from_cache_False=1 partial_False=1 detected=1 uzunluklar=[27, 36]
+  ok     [1] ZH 2 cumle: tuple=1 n=1 str=1 bos_degil=1 kimlik=1 latency_float=1 latency_ge0=1 from_cache_False=1 partial_False=1 detected=1 uzunluklar=[26, 67]
+  ok     [1] EN 2 cumle: tuple=1 n=1 str=1 bos_degil=1 kimlik=1 latency_float=1 latency_ge0=1 from_cache_False=1 partial_False=1 detected=1 uzunluklar=[27, 61]
+  ok     [2] JP 3 bicim x 2 harf = 6 kod ayni cikti: ayni=True detected=[True, True, True]
+  ok     [2] KR 3 bicim x 2 harf = 6 kod ayni cikti: ayni=True detected=[True, True, True]
+  ok     [2] ZH 3 bicim x 2 harf = 6 kod ayni cikti: ayni=True detected=[True, True, True]
+  ok     [2] EN 3 bicim x 2 harf = 6 kod ayni cikti: ayni=True detected=[True, True, True]
+  ok     [2] deterministik (ayni girdi iki kez): ayni=True
+  rapor  [3] beam=1 vs beam=4: 8 cumlenin 6 tanesi farkli; tek cumle latency medyan beam1=147 ms beam4=190 ms
+  ok     [4] 50 segment tek batch hizali + latency tutarli: n=50 latency_ms medyan=2852 ms (57 ms/cumle) duvar-latency farki maks=0.01 ms
+  rapor  [5a] yalniz yer tutucu cumlesi `{0}.` (EN): parca=2 cikti_uzunluk=18 bos=False tirnak_kaynak=0 tirnak_cikti=0 uydurma_isareti=False yer_tutucu_hepsi_var=True rakamlar_korundu=True
+  rapor  [5b] `{PLAYER}! Wait!` (EN): parca=2 cikti_uzunluk=38 bos=False tirnak_kaynak=0 tirnak_cikti=0 uydurma_isareti=True yer_tutucu_hepsi_var=True rakamlar_korundu=True
+  rapor  [5b2] `{PLAYER}!` TEK BASINA (EN): parca=1 cikti_uzunluk=24 bos=False tirnak_kaynak=0 tirnak_cikti=0 uydurma_isareti=True yer_tutucu_hepsi_var=True rakamlar_korundu=True
+  rapor  [5b3] `Wait!` TEK BASINA (EN): parca=1 cikti_uzunluk=13 bos=False tirnak_kaynak=0 tirnak_cikti=0 uydurma_isareti=False yer_tutucu_hepsi_var=True rakamlar_korundu=True
+  rapor  [5b4] `{0}!` TEK BASINA (EN): parca=1 cikti_uzunluk=19 bos=False tirnak_kaynak=0 tirnak_cikti=0 uydurma_isareti=True yer_tutucu_hepsi_var=True rakamlar_korundu=True
+  rapor  [5b5] `{0}` TEK BASINA, terminatorsuz (EN): parca=1 cikti_uzunluk=7 bos=False tirnak_kaynak=0 tirnak_cikti=0 uydurma_isareti=False yer_tutucu_hepsi_var=True rakamlar_korundu=True
+  rapor  [5b6] `%s!` TEK BASINA (EN): parca=1 cikti_uzunluk=3 bos=False tirnak_kaynak=0 tirnak_cikti=0 uydurma_isareti=False yer_tutucu_hepsi_var=True rakamlar_korundu=True
+  rapor  [5c] `{0}` + JP nokta tek basina (JP): parca=1 cikti_uzunluk=19 bos=False tirnak_kaynak=0 tirnak_cikti=0 uydurma_isareti=True yer_tutucu_hepsi_var=True rakamlar_korundu=True
+  rapor  [5d] ASCII tirnak yapismasi `A. "B."` (EN): parca=2 cikti_uzunluk=32 bos=False tirnak_kaynak=2 tirnak_cikti=2 uydurma_isareti=False yer_tutucu_hepsi_var=True rakamlar_korundu=True
+  rapor  [5e] ayni metin onceden dogru bolunmus 2 segment (EN): [16, 14]
+  rapor  [5f] `3.5 km.` (EN): parca=3 cikti_uzunluk=33 bos=False tirnak_kaynak=0 tirnak_cikti=0 uydurma_isareti=False yer_tutucu_hepsi_var=True rakamlar_korundu=True
+  rapor  [5g] `Dr. Smith.` (EN): parca=2 cikti_uzunluk=25 bos=False tirnak_kaynak=0 tirnak_cikti=0 uydurma_isareti=False yer_tutucu_hepsi_var=True rakamlar_korundu=True
+  rapor  [5h] tek rakam `5` (EN): parca=1 cikti_uzunluk=1 bos=False tirnak_kaynak=0 tirnak_cikti=0 uydurma_isareti=False yer_tutucu_hepsi_var=True rakamlar_korundu=True
+  rapor  [5i] tam genislik nokta U+FF0E `A.B.` (JP, bolunmez): parca=1 cikti_uzunluk=84 bos=False tirnak_kaynak=0 tirnak_cikti=0 uydurma_isareti=False yer_tutucu_hepsi_var=True rakamlar_korundu=True
+  rapor  [5j] KR unlem/soru `A! B?` (KR): parca=2 cikti_uzunluk=34 bos=False tirnak_kaynak=0 tirnak_cikti=0 uydurma_isareti=False yer_tutucu_hepsi_var=True rakamlar_korundu=True
+  rapor  [5k] U+FF0E ile 2 cumle TEK parca: cumle=2 bekliyor=True dogu=True | ayni cumleler U+3002 ile (2 parca): cumle=2 bekliyor=True dogu=True
+  rapor  [5l] yapismis ilk parca `A. "` -> cikti tirnak sayisi=1 sonda_tirnak=True | ikinci parca `B."` -> tirnak=1 basta=False sonda=False | dogru `"B."` -> tirnak=2 basta=True sonda=False
+  rapor  [5m] 8 kisa girdi -> bos cikti sayisi=0 uzunluklar=[1, 2, 1, 2, 5, 8, 2, 8]
+
+A5: TEMIZ
+exit=0

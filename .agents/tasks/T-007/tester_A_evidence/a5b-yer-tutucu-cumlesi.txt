@@ -1,0 +1,12 @@
+Tester-A A5b -- yalniz yer tutucu cumlesi sinifi, gercek model
+  [1] eng_Latn yer tutuculu: uzunluk= 38 uydurma=True  yt_var=True  | gercek adli: uzunluk= 21 uydurma=False
+  [2] eng_Latn yer tutuculu: uzunluk= 37 uydurma=True  yt_var=True  | gercek adli: uzunluk= 27 uydurma=False
+  [3] eng_Latn yer tutuculu: uzunluk= 19 uydurma=False yt_var=True  | gercek adli: uzunluk= 21 uydurma=False
+  [4] eng_Latn yer tutuculu: uzunluk= 33 uydurma=False yt_var=True  | gercek adli: uzunluk= 33 uydurma=False
+  [5] eng_Latn yer tutuculu: uzunluk= 22 uydurma=False yt_var=True  | gercek adli: uzunluk= 25 uydurma=False
+  [6] jpn_Jpan yer tutuculu: uzunluk= 31 uydurma=True  yt_var=True  | gercek adli: uzunluk= 27 uydurma=True 
+  [7] jpn_Jpan yer tutuculu: uzunluk= 32 uydurma=True  yt_var=True  | gercek adli: uzunluk= 33 uydurma=True 
+  [8] kor_Hang yer tutuculu: uzunluk= 29 uydurma=True  yt_var=True  | gercek adli: uzunluk= 17 uydurma=False
+
+A5b: 8 kalip -> yer tutuculu 5 uydurma, gercek adli 2 uydurma (bulgu: keskinlik, known_gaps)
+exit=0
