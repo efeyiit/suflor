@@ -36,3 +36,20 @@ NMT (NLLB/CT2) kisit ALAMAZ; T-007 C9: yer tutucu JP'de kayboluyor. Soru: terim 
     mi, yoksa ayri bir on-islemci mi? T-007 dondurulmus (255 test) -> ON-ISLEMCI
     (src/translate/sozluk_uygula.py): segment listesi + hits -> gomulu segment listesi.
     T-007 degismez, hits'i yine okumaz.
+
+[G4] GENIS OLCUM: 21 ornek (JP 10, KR 11), 5 terim (Marcus, Ayla, Kılıç, Değirmen, Han)
+  terim korunmadi: 0/21 · Ingilizce'ye kayma (kelime orani >= 1/3): 0/21
+  Latin ada bitisik UNVAN sizmasi: "장로 Marcus" -> "Elder Marcus" (1/21; ham "İhtiyar Marcus"
+  idi). Onlem: unvanlar da sozluge girer (장로 -> İhtiyar) -> ikisi de gomulur.
+  Turkce ek: model kesme isaretiyle ekliyor (Değirmen'de, Kılıç'ı, Han'ın) -- ozel ad icin
+  dogru. Cins isimler icin kucuk harf girdisi ("değirmen") ayrica olculmeli (paket).
+  Kaynak ek korunumu: KR 방앗간을 -> Değirmen을 (ek kaynakta kaldi) -> model dogru cekim
+  uretti ("Değirmen'den geçin"). JP 水車小屋を -> Değirmenを ayni. Bu YONTEM: terimi
+  degistir, kalan karakterleri (ek/parcacik) DOKUNMADAN birak.
+== PAKETE GIRECEK SONUCLAR ==
+  1. GlossaryStore: oyun profili JSON'u -> {kaynak: hedef, buyuk_harf?}; lookup(text)->TermHit.
+  2. Gomme on-islemcisi (T-007'den once, T-007 dondurulmus): en uzun eslesme once,
+     ortusmesiz, alt dize (JP/ZH/KR ekler bitisik) / EN kelime siniri; kalan ek aynen.
+  3. glossary_hits sozlesmeye uygun doldurulur (start/end, segment_index).
+  4. Kalite altin seti hala yok: bu gorev "terim korunur ve kaynak ek bozulmaz" garanti
+     eder; ceviri kalitesi [OLCULMUYOR] (G1/G4 rapor).
