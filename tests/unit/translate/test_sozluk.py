@@ -2,9 +2,13 @@
 
 Sozluk her testte `tmp_path` altina JSON olarak yazilir ve `GlossaryStore`
 ile yuklenir; `.agents/` altindaki fixture OKUNMAZ. Referanslar BAGIMSIZ
-kanaldan (PROTOKOL 4.6/8): paket v2'nin K1-K7 OLCU satirlari, olgular G5/G6
-ve fixture v2'nin terim listesi burada SABIT yazilidir -- modulun kendi
-tablolarindan (parcacik/ek kumesi, terminator kumesi) TURETILMEZ.
+kanaldan (PROTOKOL 4.6/8): paket v3'un K1-K7 OLCU satirlari, olgular G5/G6
+ve kapinin fixture listeleri (v2 unvanli, v3 adlar-yalniz) burada SABIT
+yazilidir -- modulun kendi tablolarindan (parcacik/ek/saygi kumesi, betik
+araliklari, terminator kumesi) TURETILMEZ. Tur 2 (paket v3, ▲) testleri
+dosyanin sonunda ayri bolumlerdedir: zincir kurali, betik gecisi, JP saygi /
+KR ek listeleri, trie-IGNORECASE denkligi, K2 NFC + ContractViolation, K6
+kaynak terminatoru / hedef Cc / kaynak <= 100, K5 hit yogunlugu.
 
 Her OLCU ornegi AYRI test kimligiyle gorunur (`pytest.param(..., id=)`):
 T-007'de "4/6 nokta" dersi -- tek parametrize icinde kaybolan ornek
@@ -47,7 +51,24 @@ FIXTURE_V2: tuple[tuple[str, str], ...] = (
     ("水車小屋", "Değirmen"), ("방앗간", "Değirmen"), ("mill", "Değirmen"),
     ("長老", "İhtiyar"), ("장로", "İhtiyar"), ("elder", "İhtiyar"),
 )
-"""Kapinin fixture v2 terim listesi -- yalniz motorun YANLIS cevirdigi terimler (Y3)."""
+"""Tur-1 kapisinin fixture v2 listesi -- UNVANLI sozluk (`長老/장로/elder`, `mill`). Tur 2'de kapi
+fixture v3'e gecti (unvan ve `mill` cikti, asagida); v2 burada unvan+ad zinciri ve Latin bilesik
+testleri icin 'yazarin ikisini de istedigi' sozluk olarak kalir."""
+
+FIXTURE_V3: tuple[tuple[str, str], ...] = (
+    ("マルクス", "Marcus"), ("마르쿠스", "Marcus"), ("Marcus", "Marcus"),
+    ("アイラ", "Ayla"), ("아일라", "Ayla"),
+    ("水車小屋", "Değirmen"), ("방앗간", "Değirmen"),
+)
+"""Kapinin fixture v3 listesi (paket v3, K4): yalniz adlar + motorun bilmedigi bilesikler; `Marcus->Marcus` kimlik cipasi."""
+
+JP_SAYGI_EKLERI: tuple[str, ...] = ("さん", "様", "殿", "君", "ちゃん", "達", "たち", "って", "だ", "から", "まで", "より", "か", "よ", "ね")
+"""K1 v3 (Y-B2): JP saygi/kopula ekleri, sagda -- paket K1 metninden SABIT."""
+
+KR_EKLER_TUR2: tuple[str, ...] = (
+    "에게", "한테", "께", "님", "씨", "야", "아", "랑", "이랑", "들", "처럼", "보다", "마다", "밖에", "조차", "라고", "라면", "입니다", "이다",
+)
+"""K1 v3 (Y-B2): KR ek listesine eklenen 19 ek -- paket K1 metninden SABIT."""
 
 TERMINATORLER: tuple[str, ...] = (".", "!", "?", "。", "！", "？")
 """K6: hedefte yasak cumle sonu kumesi -- T-007 K3 kumesiyle ayni; paket metninden SABIT."""
@@ -237,19 +258,19 @@ def test_k1_검은_옷_izinle_bilinen_sinir_eslesir(tmp_path: Path) -> None:
 
 
 def test_k1_bitisik_iki_terim_長老マルクス_iki_hit(tmp_path: Path) -> None:
-    """G6 ek kural: sozlukteki baska terimin baslangici/bitisi sinirdir -> unvan + ad ikisi de eslesir."""
+    """Unvan + ad bitisik: v3'te Han|Katakana betik gecisi ikisine de gercek sinir verir -> iki hit (zincire gerek kalmaz)."""
     hits = fixture_store(tmp_path).lookup("長老マルクス")
     assert araliklar(hits) == [(0, 2), (2, 6)]
     assert [h.target_term for h in hits] == ["İhtiyar", "Marcus"]
 
 
 def test_k1_bitisik_iki_terim_ters_sirada_マルクス長老_iki_hit(tmp_path: Path) -> None:
-    """Komsu terim siniri isleme sirasindan bagimsiz: uzun terim once islenirken kisa komsu henuz kabul edilmemis olsa da sinirdir."""
+    """Ters sira da iki hit: Katakana|Han gecisi her iki adayin ic ucunda gercek sinirdir; isleme sirasindan bagimsiz."""
     assert araliklar(fixture_store(tmp_path).lookup("マルクス長老")) == [(0, 4), (4, 6)]
 
 
 def test_k1_komsu_terim_siniri_yalniz_sozluk_terimi_icin(tmp_path: Path) -> None:
-    """Pozitif kontrol: bitisik parca sozlukte DEGILSE sinir olusmaz (`長老会` -> hit yok)."""
+    """Pozitif kontrol: bitisik parca sozlukte DEGILSE ve ayni betikteyse (Han|Han) sinir olusmaz (`長老会` -> hit yok)."""
     assert fixture_store(tmp_path).lookup("長老会") == []
 
 
@@ -387,10 +408,15 @@ def test_k1_terim_icermeyen_metin_bos_liste(tmp_path: Path) -> None:
 
 
 def test_k1_yer_tutucu_ucu_sinirdir(tmp_path: Path) -> None:
-    """Korunan aralik (yer tutucu) ucu sinir sayilir: `%sマルクス` -> hit; bildirilmemisken `s` harf -> hit YOK."""
+    """Korunan aralik (yer tutucu) ucu sinir sayilir: `%sMarcus` + `("%s",)` -> hit; bildirilmemisken `s`|`M` ayni betik -> hit YOK.
+
+    Tur 1'de ornek `%sマルクス`ti; v3 betik gecisi (Latin|Katakana) onu yer tutucu bildirimi olmadan da
+    eslestirir (asagidaki pozitif kontrol), bu yuzden olcu ayni betikli Latin ornegine tasindi.
+    """
     s = fixture_store(tmp_path)
-    assert araliklar(s.lookup("%sマルクス", ("%s",))) == [(2, 6)]
-    assert s.lookup("%sマルクス") == []
+    assert araliklar(s.lookup("%sMarcus", ("%s",))) == [(2, 8)]
+    assert s.lookup("%sMarcus") == []
+    assert araliklar(s.lookup("%sマルクス")) == [(2, 6)]  # betik gecisi: bildirim gerekmez
 
 
 def test_k1_kaynakta_kelime_siniri_metakarakteri_yok() -> None:
@@ -745,7 +771,7 @@ def test_k5_yukleme_io_su_yalniz_yukleyicide_ast() -> None:
 
 
 def test_k5_modul_importlari_stdlib_ve_sozlesme() -> None:
-    izinli_kokler = {"__future__", "dataclasses", "json", "re", "unicodedata", "collections", "pathlib", "typing", "src"}
+    izinli_kokler = {"__future__", "bisect", "dataclasses", "json", "re", "unicodedata", "collections", "pathlib", "typing", "src"}
     assert _import_kokleri(_modul_agaci()) <= izinli_kokler
     for d in _modul_agaci().body:
         if isinstance(d, ast.ImportFrom) and (d.module or "").startswith("src."):
@@ -1187,3 +1213,568 @@ def test_uyum_termhit_alanlari_sozlesmeyle_ayni(tmp_path: Path) -> None:
 
 def test_uyum_public_api() -> None:
     assert set(sozluk.__all__) == {"GlossaryStore", "SozlukTerimi", "terimleri_gom", "ilk_harfi_buyut"}
+
+
+# ===========================================================================
+# TUR 2 (paket v3, ▲) -- K1 zincir kurali
+# ===========================================================================
+
+
+def fixture_v3_store(tmp_path: Path) -> GlossaryStore:
+    return store(tmp_path, FIXTURE_V3, "v3.json")
+
+
+def test_k1_zincir_windmills_dis_uc_sinir_degil_sifir_hit(tmp_path: Path) -> None:
+    """Tester-A O-A3 / kapi v4 #6a: `wind`+`mill`+`s` zinciri sag dis ucta `s` -> hicbir uye eslesmez (tur 1: `Rüzgarmills`)."""
+    s = store(tmp_path, [("wind", "Rüzgar"), ("mill", "Değirmen")])
+    assert s.lookup("The windmills turn.") == []
+    assert s.lookup("windmills") == []
+
+
+def test_k1_zincir_millstones_sifir_hit_millstone_iki_hit(tmp_path: Path) -> None:
+    """Tester-B O-B5: `millstones` -> 0 (dis uc `s`); pozitif kontrol `millstone` -> 2 (iki dis uc metin ucu)."""
+    s = store(tmp_path, [("mill", "Değirmen"), ("stone", "Taş")])
+    assert s.lookup("millstones") == []
+    assert s.lookup("the millstones.") == []
+    assert araliklar(s.lookup("millstone")) == [(0, 4), (4, 9)]
+
+
+def test_k1_zincir_windmill_iki_hit(tmp_path: Path) -> None:
+    """Kapi v4 #6a: `windmill` = `wind`+`mill`, iki dis uc gercek sinir -> ikisi de eslesir (yazar ikisini de istedi)."""
+    s = store(tmp_path, [("wind", "Rüzgar"), ("mill", "Değirmen")])
+    hits = s.lookup("The windmill turns.")
+    assert araliklar(hits) == [(4, 8), (8, 12)]
+    assert [h.target_term for h in hits] == ["Rüzgar", "Değirmen"]
+    assert araliklar(s.lookup("windmill")) == [(0, 4), (4, 8)]
+
+
+def test_k1_zincir_uc_uye_長老マルクスアイラ_uc_hit(tmp_path: Path) -> None:
+    """Uc bitisik terim (unvanli sozluk): zincirin dis uclari metin uclari -> uc hit, start artan."""
+    hits = fixture_store(tmp_path).lookup("長老マルクスアイラ")
+    assert araliklar(hits) == [(0, 2), (2, 6), (6, 9)]
+    assert [h.target_term for h in hits] == ["İhtiyar", "Marcus", "Ayla"]
+
+
+def test_k1_zincir_ad_ad_マルクスアイラ_iki_hit_fixture_v3(tmp_path: Path) -> None:
+    """Kapi v4 #6a: adlar-yalniz sozlukte iki ad bitisik (Katakana|Katakana, betik gecisi YOK) -> zincirle iki hit."""
+    hits = fixture_v3_store(tmp_path).lookup("マルクスアイラ")
+    assert araliklar(hits) == [(0, 4), (4, 7)]
+    assert [h.target_term for h in hits] == ["Marcus", "Ayla"]
+
+
+def test_k1_zincir_reddedilen_aday_komsuya_sinir_vermez(tmp_path: Path) -> None:
+    """Paket K1 v3: reddedilen aday hicbir komsuya sinir veremez -- JP karsiligi (Tester-A test_c4: `水車小屋町` -> tur 1'de `SuArabasi小屋町`)."""
+    s = store(tmp_path, [("水車", "Su Çarkı"), ("小屋", "Kulübe")])
+    assert s.lookup("水車小屋町") == []  # `小屋`+`町` Han|Han -> `小屋` duser, `水車` onun basini sinir sayamaz
+    assert araliklar(s.lookup("水車小屋")) == [(0, 2), (2, 4)]  # pozitif kontrol: dis uclar metin ucu
+
+
+def test_k1_zincir_uzun_uye_oncelikli(tmp_path: Path) -> None:
+    """Zincir icinde de en uzun aday kazanir: `old`+`millhouse` (2 hit), `mill`+`house` degil."""
+    s = store(tmp_path, [("old", "Eski"), ("mill", "Değirmen"), ("house", "Ev"), ("millhouse", "Değirmen Evi")])
+    hits = s.lookup("oldmillhouse")
+    assert araliklar(hits) == [(0, 3), (3, 12)]
+    assert hits[1].target_term == "Değirmen Evi"
+
+
+def test_k1_zincir_icinde_en_uzun_aday_oncelikli_kok_esit_uzunlukta(tmp_path: Path) -> None:
+    """Kok aday (`xxxx`) zincir alternatifleriyle ESIT uzunlukta: sag zincirde `abcd` (4) `ab`+`cd` (2+2) yerine secilir -> 2 hit.
+
+    Zincir aramasi kisa adayi once deneseydi `ab`+`cd` yolu bulunur ve 3 hit donerdi (mutant M44).
+    """
+    s = store(tmp_path, [("xxxx", "X"), ("yyyyy", "Y"), ("abcd", "ABCD"), ("ab", "AB"), ("cd", "CD")])
+    hits = s.lookup("xxxxabcd")
+    assert araliklar(hits) == [(0, 4), (4, 8)]
+    assert [h.target_term for h in hits] == ["X", "ABCD"]
+    hits2 = s.lookup("abcdyyyyy")  # kok `yyyyy` (5) once islenir; SOL zincirde de en uzun (`abcd`) once
+    assert araliklar(hits2) == [(0, 4), (4, 9)] and [h.target_term for h in hits2] == ["ABCD", "Y"]
+
+
+@pytest.mark.parametrize(
+    "terimler",
+    [
+        pytest.param([("wind", "Rüzgar"), ("millhouse", "Değirmen Evi")], id="uzun-uye-sagda"),
+        pytest.param([("windmill", "Yel Değirmeni"), ("house", "Ev")], id="uzun-uye-solda"),
+    ],
+)
+def test_k1_zincir_isleme_sirasindan_bagimsiz(tmp_path: Path, terimler: list[tuple[str, str]]) -> None:
+    """Uzun uye once islenirken kisa komsu henuz kabul edilmemistir; zincir arama komsuyu bulur -> iki hit."""
+    assert len(store(tmp_path, terimler).lookup("windmillhouse")) == 2
+
+
+def test_k1_zincir_yer_tutucu_ile_ortusen_aday_uye_olamaz(tmp_path: Path) -> None:
+    """Korunan aralikla ortusen aday zincire giremez; korunan araligin ucu ise gercek sinirdir (K3)."""
+    s = store(tmp_path, [("wind", "Rüzgar"), ("mill", "Değirmen")])
+    assert araliklar(s.lookup("windmill", ("mill",))) == [(0, 4)]  # `mill` korunan, ucu (4) `wind`e sinir
+    assert s.lookup("windmill", ("ill",)) == []  # `mill` korunanla ortusur; `wind`in sagi `m` -> sinir yok
+
+
+def test_k1_zincir_binlerce_uye_ozyineleme_yok(tmp_path: Path) -> None:
+    """3000 uyeli zincir: dis uclar gecerliyse hepsi, sag dis uc `x` ise hicbiri; `RecursionError` yok."""
+    s = store(tmp_path, [("Marcus", "Marcus")])
+    hits = s.lookup("Marcus" * 3000)
+    assert len(hits) == 3000 and araliklar(hits)[:2] == [(0, 6), (6, 12)]
+    assert s.lookup("Marcus" * 3000 + "x") == []
+    assert s.lookup("x" + "Marcus" * 3000) == []
+
+
+def test_k1_zincir_geri_izleme_uzun_dal_olu_kisa_alternatif_basarili(tmp_path: Path) -> None:
+    """DFS geri izler: 3. konumda en uzun aday (`abc`) `z` onunde olur, kisa alternatif (`ab`) `cz` ile gercek sinira ulasir -> uc hit."""
+    s = store(tmp_path, [("abc", "X"), ("ab", "Y"), ("cz", "Z")])
+    hits = s.lookup("abcabcz")
+    assert araliklar(hits) == [(0, 3), (3, 5), (5, 7)]
+    assert [h.target_term for h in hits] == ["X", "Y", "Z"]
+    assert s.lookup("abcabcq") == []  # pozitif kontrol: hicbir dal sinira ulasmazsa hicbiri
+
+
+@pytest.mark.parametrize(
+    ("terimler", "metin", "beklenen"),
+    [
+        pytest.param([("ひかり", "Hikari"), ("はな", "Hana")], "ひかりはな", [(0, 3), (3, 5)], id="sol-komsu-once-kabul-parcacikla"),
+        pytest.param([("(mill)", "Değirmen"), ("stonesx", "Taş")], "(mill)stonesx", [(0, 6), (6, 13)], id="sag-komsu-once-kabul-noktalamayla"),
+    ],
+)
+def test_k1_zincir_kabul_edilmis_komsunun_ucu_sinirdir(tmp_path: Path, terimler: list[tuple[str, str]], metin: str, beklenen: list[tuple[int, int]]) -> None:
+    """Komsu once tek basina kabul edilmisse (kendi dis ucu gercek), ucu sonradan islenen bitisik adaya sinir verir:
+    `ひかり`+`は`(parcacik) kabul -> `はな` solunu ondan alir; `stonesx` (`)` solu) kabul -> `(mill)` sagini ondan alir."""
+    assert araliklar(store(tmp_path, terimler).lookup(metin)) == beklenen
+
+
+def test_k1_zincir_ayni_terim_bitisik_iki_gecis(tmp_path: Path) -> None:
+    assert araliklar(fixture_v3_store(tmp_path).lookup("MarcusMarcus")) == [(0, 6), (6, 12)]
+
+
+def test_k1_zincir_orta_uye_yer_tutucuyla_kirilir(tmp_path: Path) -> None:
+    """Zincirin ortasindaki uye korunan aralikla ortusuyorsa zincir orada kirilir; kalan parcalar kendi dis uclariyla degerlendirilir."""
+    s = store(tmp_path, [("wind", "Rüzgar"), ("mill", "Değirmen"), ("house", "Ev")])
+    assert araliklar(s.lookup("windmillhouse")) == [(0, 4), (4, 8), (8, 13)]
+    assert araliklar(s.lookup("windmillhouse", ("mill",))) == [(0, 4), (8, 13)]  # yt uclari (4, 8) sinir
+
+
+# ===========================================================================
+# TUR 2 -- K1 betik gecisi
+# ===========================================================================
+
+
+@pytest.mark.parametrize(
+    ("terimler", "metin", "aralik"),
+    [
+        pytest.param(FIXTURE_V3, "長老マルクス", (2, 6), id="Han|Katakana-長老マルクス-unvan-sozlukte-yok"),
+        pytest.param(FIXTURE_V3, "マルクス様", (0, 4), id="Katakana|Han-マルクス様"),
+        pytest.param(FIXTURE_V3, "マルクスさん", (0, 4), id="Katakana|Hiragana-マルクスさん"),
+        pytest.param(FIXTURE_V3, "マルクスたち", (0, 4), id="Katakana|Hiragana-マルクスたち"),
+        pytest.param(FIXTURE_V3, "長老Marcus", (2, 8), id="Han|Latin-長老Marcus"),
+        pytest.param(FIXTURE_V3, "Marcus様", (0, 6), id="Latin|Han-Marcus様"),
+        pytest.param([("Marcus", "Marcus")], "마르쿠스Marcus", (4, 10), id="Hangul|Latin-마르쿠스Marcus-yalniz-Marcus-sozlukte"),
+    ],
+)
+def test_k1_betik_gecisi_pozitif_eslesir(tmp_path: Path, terimler: Sequence[tuple[str, str]], metin: str, aralik: tuple[int, int]) -> None:
+    """Paket K1 v3: terimin ucu ile komsusu FARKLI betik sinifindaysa sinirdir (kimlik cipasi gerekmez)."""
+    hits = store(tmp_path, terimler).lookup(metin)
+    assert araliklar(hits) == [aralik]
+    assert hits[0].source_term == metin[aralik[0]:aralik[1]]
+
+
+@pytest.mark.parametrize(
+    ("terimler", "metin"),
+    [
+        pytest.param(FIXTURE_V3, "マルクスタウン", id="Katakana|Katakana-マルクスタウン"),
+        pytest.param(FIXTURE_V3, "Marcus2", id="Latin|rakam-Marcus2"),
+        pytest.param(FIXTURE_V3, "Marcuss", id="Latin|Latin-Marcuss"),
+        pytest.param([("wind", "Rüzgar"), ("mill", "Değirmen")], "windmills", id="Latin-zincir-windmills"),
+        pytest.param([izinli("村", "Köy")], "村人", id="Han|Han-村人"),
+        pytest.param([izinli("剣", "Kılıç")], "剣士", id="Han|Han-剣士"),
+        pytest.param([izinli("村", "Köy")], "中村", id="Han|Han-中村-sol"),
+        pytest.param([izinli("검", "Kılıç")], "검사", id="Hangul|Hangul-검사"),
+        pytest.param(FIXTURE_V3, "방앗간집", id="Hangul|Hangul-방앗간집"),
+    ],
+)
+def test_k1_betik_gecisi_negatif_sinif_ici_komsu_sinir_degil(tmp_path: Path, terimler: Sequence[object], metin: str) -> None:
+    assert store(tmp_path, terimler).lookup(metin) == []
+
+
+BETIK_TERIMLERI: dict[str, tuple[str, str]] = {
+    "Han": ("水車", "Su Çarkı"),
+    "Hiragana": ("ひかり", "Hikari"),
+    "Katakana": ("マルクス", "Marcus"),
+    "Hangul": ("마르쿠스", "Marcus"),
+    "diger": ("Marcus", "Marcus"),
+}
+BETIK_KOMSULARI: dict[str, str] = {"Han": "山", "Hiragana": "ら", "Katakana": "タ", "Hangul": "집", "diger": "x"}
+"""Bes betik sinifi icin temsilci komsu: parcacik/ek/saygi listelerinde OLMAYAN, harf/kana/kanji/hece karakterler."""
+
+
+@pytest.mark.parametrize("taraf", ["sol", "sag"])
+@pytest.mark.parametrize("komsu", list(BETIK_KOMSULARI))
+@pytest.mark.parametrize("terim", list(BETIK_TERIMLERI))
+def test_k1_betik_siniflari_ciftler_halinde(tmp_path: Path, terim: str, komsu: str, taraf: str) -> None:
+    """5x5 sinif matrisi, iki taraf: farkli sinif -> sinir (hit), ayni sinif -> sinir degil (hit yok)."""
+    kaynak, hedef = BETIK_TERIMLERI[terim]
+    s = store(tmp_path, [(kaynak, hedef)])
+    metin = kaynak + BETIK_KOMSULARI[komsu] if taraf == "sag" else BETIK_KOMSULARI[komsu] + kaynak
+    beklenen = [(0, len(kaynak))] if taraf == "sag" else [(1, 1 + len(kaynak))]
+    assert araliklar(s.lookup(metin)) == (beklenen if terim != komsu else [])
+
+
+def test_k1_betik_gecisi_マルクス山_eslesir_paket_celiskisi(tmp_path: Path) -> None:
+    """PAKET ILE OLCUM CELISKISI: paket `マルクス山`i saygi listesinin negatif kontrolu olarak 'eslesmez' yazar;
+    ayni paketin betik gecisi kurali Katakana|Han'i (`マルクス様` ile ayni cift) SINIR sayar. Iki kural birlikte
+    tutamaz; kapi #6b'nin arkasindaki betik kurali izlendi: `マルクス山` -> `Marcus山` ('Marcus Dagi' -- ad + kanji
+    siniflandirici, `ゴブリン王`/`エルフ族` sinifi). Saygi listesinin dogru negatif kontrolu ayni betikli
+    orneklerdir (`test_k1_jp_saygi_listesi_negatif_kontrol`)."""
+    assert araliklar(fixture_v3_store(tmp_path).lookup("マルクス山")) == [(0, 4)]
+
+
+@pytest.mark.parametrize(
+    ("metin", "aralik"),
+    [
+        pytest.param("マルクス♪", [(0, 4)], id="Katakana|So-sinir"),
+        pytest.param("Marcus♪", [], id="Latin|So-ayni-sinif-diger"),
+        pytest.param("Marcus$1", [], id="Latin|Sc-ayni-sinif-diger"),
+    ],
+)
+def test_k1_betik_gecisi_sembol_komsusu_asimetrik_belgeli(tmp_path: Path, metin: str, aralik: list[tuple[int, int]]) -> None:
+    """Sembol (`S*`) 'diger' sinifindadir: CJK terim + sembol betik gecisiyle sinir, Latin terim + sembol degil (docstring K1)."""
+    assert araliklar(fixture_v3_store(tmp_path).lookup(metin)) == aralik
+
+
+@pytest.mark.parametrize(
+    ("metin", "aralik"),
+    [
+        pytest.param("アイラー", [], id="Katakana+ー-uzatma-isareti-ayni-sinif"),
+        pytest.param("マルクスｽ", [], id="Katakana+yarim-genislik-katakana"),
+        pytest.param("마르쿠스ㄴ", [], id="Hangul+uyumluluk-jamo"),
+        pytest.param("Marcusｓ", [], id="Latin+tam-genislik-latin-diger"),
+        pytest.param("マルクス̵", [], id="Katakana+birlestirici-isaret-Mn-sinir-degil"),
+        pytest.param("マルクス゚", [], id="Katakana+birlestirici-ses-isareti-U+309A-sinir-degil"),
+        pytest.param("水車小屋々", [], id="Han+々-ideografik-tekrar-Han"),
+        pytest.param("マルクス・アイラ", [(0, 4), (5, 8)], id="Katakana-orta-nokta-Po-sinir"),
+    ],
+)
+def test_k1_betik_siniflandirma_kenar_karakterleri(tmp_path: Path, metin: str, aralik: list[tuple[int, int]]) -> None:
+    """Betik araliklarinin kenarlari: uzatma isareti/yarim genislik/uyumluluk jamo sinif ici; birlestirici isaret sagda sinir DEGIL."""
+    assert araliklar(fixture_v3_store(tmp_path).lookup(metin)) == aralik
+
+
+# ===========================================================================
+# TUR 2 -- K1 JP saygi ekleri (her ek ayri kimlik) ve KR ek listesi genislemesi
+# ===========================================================================
+
+
+@pytest.mark.parametrize("ek", JP_SAYGI_EKLERI)
+def test_k1_her_jp_saygi_eki_katakana_ad(tmp_path: Path, ek: str) -> None:
+    """Paket olcusu (Y-B2): `マルクス` + listedeki HER ek -> eslesir (tur 1: 0 hit -> modelde 'Bay Marks')."""
+    assert araliklar(fixture_v3_store(tmp_path).lookup("マルクス" + ek)) == [(0, 4)]
+
+
+@pytest.mark.parametrize("ek", JP_SAYGI_EKLERI)
+def test_k1_her_jp_saygi_eki_ayni_betikte_listeden_gelir(tmp_path: Path, ek: str) -> None:
+    """Listenin YUK TASIDIGI olcu: terim ile ek AYNI betikte (Han+Han: `長老様`; Hiragana+Hiragana: `ひかりさん`) --
+    betik gecisi yardim edemez, eslesme yalniz listeden gelir (mutant: liste bos -> bu test duser)."""
+    if unicodedata.name(ek[0]).startswith("CJK UNIFIED"):
+        s = store(tmp_path, [("長老", "İhtiyar")])
+        assert araliklar(s.lookup("長老" + ek)) == [(0, 2)]
+        assert araliklar(s.lookup("長老" + ek + "が")) == [(0, 2)]
+    else:
+        s = store(tmp_path, [("ひかり", "Hikari")])
+        assert araliklar(s.lookup("ひかり" + ek)) == [(0, 3)]
+        assert araliklar(s.lookup("ひかり" + ek + "が")) == [(0, 3)]
+
+
+@pytest.mark.parametrize(
+    ("terimler", "metin"),
+    [
+        pytest.param([("長老", "İhtiyar")], "長老山", id="Han-長老山-listede-yok"),
+        pytest.param([("長老", "İhtiyar")], "長老様子", id="Han-長老様子-ekten-sonra-sinir-yok"),
+        pytest.param([("ひかり", "Hikari")], "ひかりこ", id="Hiragana-ひかりこ-listede-yok"),  # `や` parcacik oldugu icin `やま` negatif OLAMAZ
+        pytest.param([("ひかり", "Hikari")], "ひかりさんご", id="Hiragana-ひかりさんご-ekten-sonra-sinir-yok"),
+        pytest.param([("ひかり", "Hikari")], "ひかりかわ", id="Hiragana-ひかりかわ-ekten-sonra-sinir-yok"),
+    ],
+)
+def test_k1_jp_saygi_listesi_negatif_kontrol(tmp_path: Path, terimler: list[tuple[str, str]], metin: str) -> None:
+    """Ek listesi bilesik uretmez: listede olmayan kanji/kana ya da ekten sonra sinir yoksa hit YOK (ayni betikte)."""
+    assert store(tmp_path, terimler).lookup(metin) == []
+
+
+def test_k1_jp_saygi_eki_parcacik_zinciri_マルクスさんが(tmp_path: Path) -> None:
+    """`マルクスさんが来た。` (kapi v4 #5a): ek + parcacik -> bir hit."""
+    hits = fixture_v3_store(tmp_path).lookup("マルクスさんが来た。")
+    assert araliklar(hits) == [(0, 4)]
+
+
+def test_k1_jp_saygi_eki_zinciri_iki_ek(tmp_path: Path) -> None:
+    """Saygi ekleri de KR ekleri gibi zincirlenir (en fazla iki): `ひかりさんたち`, `ひかりだから` evet; uc ek (`ひかりだからね`) hayir (belgeli sinir)."""
+    s = store(tmp_path, [("ひかり", "Hikari")])
+    assert araliklar(s.lookup("ひかりさんたち")) == [(0, 3)]
+    assert araliklar(s.lookup("ひかりさんたちは")) == [(0, 3)]
+    assert araliklar(s.lookup("ひかりだから")) == [(0, 3)]
+    assert s.lookup("ひかりだからね") == []
+
+
+@pytest.mark.parametrize("ek", KR_EKLER_TUR2)
+def test_k1_her_yeni_kr_ek_tek_basina_sinir(tmp_path: Path, ek: str) -> None:
+    """Paket olcusu (Y-B2): `마르쿠스` + listeye eklenen HER ek -> eslesir (tur 1: 0 hit -> modelde 'Markos'a')."""
+    assert araliklar(fixture_v3_store(tmp_path).lookup("마르쿠스" + ek)) == [(0, 4)]
+
+
+def test_k1_kr_ek_에게_listeden_gelir_zincirle_degil(tmp_path: Path) -> None:
+    """Tester-B: `에`+`게` zinciri kurtarmaz (`게` ek degil); `에게` listede oldugu icin eslesir; `에게게` (zincir tuzagi) eslesmez."""
+    s = fixture_v3_store(tmp_path)
+    assert araliklar(s.lookup("마르쿠스에게 말했습니다.")) == [(0, 4)]
+    assert s.lookup("마르쿠스에게게") == []
+
+
+def test_k1_kr_ek_zinciri_장로님이_iki_ek_eslesir(tmp_path: Path) -> None:
+    s = store(tmp_path, [("장로", "İhtiyar")])
+    assert araliklar(s.lookup("장로님이 오셨다.")) == [(0, 2)]
+    assert araliklar(s.lookup("장로님께서")) == [(0, 2)]
+
+
+def test_k1_kr_ek_zinciri_마르쿠스들이다_iki_ek_eslesir_paket_sayimi(tmp_path: Path) -> None:
+    """PAKET ILE OLCUM CELISKISI: paket `마르쿠스들이다`yi '3 ek -> eslesmez' yazar; `이다` (kopula) listede TEK ektir,
+    zincir `들`+`이다` = 2 <= sinir -> eslesir ('onlar Marcus'lardir' -- dogru davranis). Gercek uc-ek negatifi asagida."""
+    assert araliklar(fixture_v3_store(tmp_path).lookup("마르쿠스들이다")) == [(0, 4)]
+
+
+@pytest.mark.parametrize(
+    "metin",
+    [
+        pytest.param("마르쿠스들에게는", id="들+에게+는"),
+        pytest.param("마르쿠스님에게는", id="님+에게+는-bilinen-sinir"),
+        pytest.param("마르쿠스들한테도", id="들+한테+도"),
+    ],
+)
+def test_k1_kr_ek_zinciri_uc_ek_eslesmez_bilinen_sinir(tmp_path: Path, metin: str) -> None:
+    """Zincir <= 2 (paket K1, degismedi): saygi + yonelme + konu (`님에게는`) uc ek -> hit YOK; docstring'de bilinen sinir."""
+    assert fixture_v3_store(tmp_path).lookup(metin) == []
+
+
+@pytest.mark.parametrize(
+    "metin",
+    [
+        pytest.param("마르쿠스아침", id="아+침-sabah"),
+        pytest.param("방앗간들판", id="들+판-tarla"),
+        pytest.param("마르쿠스씨앗", id="씨+앗-tohum"),
+        pytest.param("마르쿠스야채", id="야+채-sebze"),
+        pytest.param("마르쿠스님프", id="님+프"),
+    ],
+)
+def test_k1_kr_yeni_ek_listesi_bilesik_negatif_kontrol(tmp_path: Path, metin: str) -> None:
+    """Tek heceli yeni ekler (`아 야 들 씨 님`) kelime basi da olabilir: ekten sonra sinir yoksa hit YOK (G6 'ekten sonra da sinir')."""
+    assert fixture_v3_store(tmp_path).lookup(metin) == []
+
+
+# ===========================================================================
+# TUR 2 -- K1 trie anahtari / IGNORECASE denkligi (Tester-A O-A1)
+# ===========================================================================
+
+
+@pytest.mark.parametrize("sira", ["Maßen-once", "Maẞer-once"])
+def test_k1_trie_anahtari_coklu_kodpoint_casefold_sinifi_json_sirasindan_bagimsiz(tmp_path: Path, sira: str) -> None:
+    """`ß`/`ẞ` IGNORECASE'de denk; tur 1'de trie'de ayri dala dustugu icin `Maẞer` yalniz bir JSON sirasinda bulunuyordu."""
+    terimler = [("Maßen", "Masen"), ("Maẞer", "Maser"), ("Maße", "Mase")]
+    if sira == "Maẞer-once":
+        terimler = [terimler[1], terimler[0], terimler[2]]
+    s = store(tmp_path, terimler)
+    assert araliklar(s.lookup("Maẞer geht")) == [(0, 5)]
+    assert araliklar(s.lookup("Maßer geht")) == [(0, 5)]
+    assert s.lookup("Maẞer geht")[0].target_term == "Maser"
+    assert araliklar(s.lookup("Maẞen geht")) == [(0, 5)]
+    assert araliklar(s.lookup("Maße geht")) == [(0, 4)]
+    assert s.lookup("MASSER geht") == []  # IGNORECASE `ß`~`ss` demez; pozitif kontrol
+
+
+@pytest.mark.parametrize(
+    ("a", "b"),
+    [
+        pytest.param("ΐ", "ΐ", id="U+0390~U+1FD3-iota-dialytika-tonos-NFC-tekil"),
+        pytest.param("ΰ", "ΰ", id="U+03B0~U+1FE3-upsilon-dialytika-tonos-NFC-tekil"),
+        pytest.param("ﬅ", "ﬆ", id="U+FB05~U+FB06-st-ligaturleri-YUK-TASIYAN"),
+    ],
+)
+def test_k1_trie_anahtari_ikisi_de_kucuk_harf_olan_ignorecase_ciftleri_ayni_dal(tmp_path: Path, a: str, b: str) -> None:
+    """IGNORECASE'in ozel tablosuyla denk sayilan, ikisi de KUCUK harf ciftler: `lower()` temsilcisi ayirirdi
+    (tum Unicode olcumu: 3 cift), kanonik anahtar (casefold) tek dala indirir. `{a+ab, b+ac, a+a}` sozlugunde
+    metindeki `b+ac` bulunmali; ayrik dalda ilk dal `a+a`da durur ve `b+ac` kacar. Yunan ciftlerini K6 NFC
+    (U+1FD3 -> U+0390 tekil ayristirma) zaten birlestirir; yuk tasiyan ornek `ﬅ`/`ﬆ`dir (mutant M24c)."""
+    assert re.fullmatch(re.escape(a), b, re.IGNORECASE)  # tuzak gercekten kurulu
+    s = store(tmp_path, [(a + "ab", "AB"), (b + "ac", "AC"), (a + "a", "A")])
+    assert [(h.start, h.end, h.target_term) for h in s.lookup(b + "ac x")] == [(0, 3, "AC")]
+    assert [(h.start, h.end, h.target_term) for h in s.lookup(a + "ac x")] == [(0, 3, "AC")]
+    assert [(h.start, h.end, h.target_term) for h in s.lookup(b + "a x")] == [(0, 2, "A")]
+
+
+def test_k1_trie_anahtari_yunan_iota_subscript_ayni_dal(tmp_path: Path) -> None:
+    """`ᾈ` (U+1F88) ~ `ᾀ` (U+1F80): casefold iki kodpoint; kucuk harf temsilcisi tek dalda toplar."""
+    s = store(tmp_path, [("ᾈβγ", "A"), ("ᾀβδ", "B"), ("ᾈβ", "C")])
+    assert [h.target_term for h in s.lookup("ᾀβδ x")] == ["B"]
+    assert [h.target_term for h in s.lookup("ᾈβδ x")] == ["B"]
+    assert [h.target_term for h in s.lookup("ᾀβγ x")] == ["A"]
+
+
+# ===========================================================================
+# TUR 2 -- K2 NFC (text + placeholders) ve Segment kaynakli ContractViolation
+# ===========================================================================
+
+
+def test_k2_nfd_segment_ve_nfd_yer_tutucu_ciktida_nfc_ve_alt_dize(tmp_path: Path) -> None:
+    """Tester-A O-A4 / Tester-B O-B2: hit'li segmentte `text` VE `placeholders` NFC; her yer tutucu ciktida `text`in alt dizesi (sayim 1)."""
+    yt = "{Değirmen}"
+    nfd_yt = unicodedata.normalize("NFD", yt)
+    nfd_metin = unicodedata.normalize("NFD", yt + "はマルクスの家です。")
+    assert nfd_yt != yt and nfd_metin.count(nfd_yt) == 1
+    segs = (seg(nfd_metin, placeholders=(nfd_yt,)),)
+    hits = fixture_v3_store(tmp_path).lookup_segments(segs)
+    assert len(hits) == 1
+    out = terimleri_gom(segs, hits)[0]
+    assert unicodedata.is_normalized("NFC", out.text)
+    assert out.placeholders == (yt,)
+    assert all(unicodedata.is_normalized("NFC", p) for p in out.placeholders)
+    assert out.text.count(out.placeholders[0]) == 1
+    assert out.text == yt + "はMarcusの家です。"
+    assert (out.bbox, out.speaker, out.source_blocks) == (segs[0].bbox, None, ())
+
+
+def test_k2_hitsiz_nfd_segment_normalize_edilmez_ayni_nesne(tmp_path: Path) -> None:
+    nfd_metin = unicodedata.normalize("NFD", "{Değirmen}は家です。")
+    segs = (seg(nfd_metin, placeholders=(unicodedata.normalize("NFD", "{Değirmen}"),)), seg("Marcus"))
+    out = terimleri_gom(segs, (hit("Marcus", "Marcus", 0, 6, idx=1),))
+    assert out[0] is segs[0]
+    assert not unicodedata.is_normalized("NFC", out[0].text)
+
+
+def test_k2_placeholders_tuple_ve_eleman_sayisi_korunur(tmp_path: Path) -> None:
+    """NFC'leme yapisal degil: bos dize ve sira korunur, tip tuple kalir."""
+    segs = (seg("Marcus {0}", placeholders=("", "{0}", "{0}")),)
+    out = terimleri_gom(segs, (hit("Marcus", "Marcus", 0, 6),))
+    assert out[0].placeholders == ("", "{0}", "{0}") and isinstance(out[0].placeholders, tuple)
+
+
+@pytest.mark.parametrize(
+    "kotu",
+    [pytest.param("{0}", id="duz-str"), pytest.param((1,), id="int-oge"), pytest.param(("{0}", None), id="None-oge"), pytest.param(5, id="int")],
+)
+def test_k2_segment_placeholders_bicim_hatasi_contract_violation(tmp_path: Path, kotu: object) -> None:
+    """Tester-B O-B4: Segment'ten turetilen bicim hatasi `ContractViolation` (TranslatorError), `TypeError` DEGIL -- pipeline yakalayabilsin."""
+    bozuk = Segment(text="Marcus", bbox=BBOX, placeholders=kotu)  # type: ignore[arg-type]
+    s = fixture_v3_store(tmp_path)
+    with pytest.raises(ContractViolation):
+        s.lookup_segments((bozuk,))
+    with pytest.raises(ContractViolation):
+        terimleri_gom((bozuk,), (hit("Marcus", "Marcus", 0, 6),))
+
+
+def test_k2_lookup_dogrudan_cagrida_typeerror_kalir(tmp_path: Path) -> None:
+    with pytest.raises(TypeError):
+        fixture_v3_store(tmp_path).lookup("Marcus", "{0}")  # `str` tip olarak `Sequence[str]`dir; calisma zamaninda reddedilir
+
+
+# ===========================================================================
+# TUR 2 -- K4 kimlik cipasi
+# ===========================================================================
+
+
+def test_k4_kimlik_girdisi_hit_uretir_metni_degistirmez(tmp_path: Path) -> None:
+    """`Marcus -> Marcus` gecerli: hit var, `terimleri_gom` ciktisi metin-esit (nesne yeni); cagiran `source_term != target_term` ile suzer."""
+    segs = (seg("Marcusが待っています。"),)
+    hits = fixture_v3_store(tmp_path).lookup_segments(segs)
+    assert [(h.source_term, h.target_term) for h in hits] == [("Marcus", "Marcus")]
+    out = terimleri_gom(segs, hits)
+    assert out[0].text == segs[0].text and out[0] == segs[0]
+    assert [h for h in hits if h.source_term != h.target_term] == []
+
+
+def test_k4_kimlik_cipasi_gerekmez_betik_gecisi_yeter(tmp_path: Path) -> None:
+    """Paket K1 v3: `長老Marcus` -> `Marcus` sozlukte yokken de `長老` (Han|Latin) eslesir; kimlik girdisi artik sinir icin sart degil."""
+    s = store(tmp_path, [("長老", "İhtiyar")])
+    assert araliklar(s.lookup("長老Marcus")) == [(0, 2)]
+
+
+# ===========================================================================
+# TUR 2 -- K5 hit yogunlugu (Tester-A D-A1)
+# ===========================================================================
+
+
+def _medyan_ms(f: Any, n: int = 5) -> float:
+    sureler: list[float] = []
+    for _ in range(n):
+        t0 = time.perf_counter()
+        f()
+        sureler.append((time.perf_counter() - t0) * 1000)
+    return statistics.median(sureler)
+
+
+def test_k5_sure_8000_hit_tek_segment_60ms_alti(tmp_path: Path) -> None:
+    """K5 v3: 8000 hit'lik tek segment (bosluklu) < 60 ms -- tur 1'de kabul listesi dogrusal taraniyordu (472 ms)."""
+    s = fixture_v3_store(tmp_path)
+    metin = "Marcus " * 8000
+    assert len(s.lookup(metin)) == 8000
+    medyan = _medyan_ms(lambda: s.lookup(metin))
+    assert medyan < 60 * _izleyici_payi(), f"medyan {medyan:.1f} ms (izleyici payi x{_izleyici_payi():.0f})"
+
+
+def test_k5_sure_8000_uyeli_zincir_60ms_alti(tmp_path: Path) -> None:
+    """Zincir arama da hit sayisinda dogrusal: 8000 bitisik uye (gecerli) ve 8000 uyeli basarisiz zincir (`x` ile) < 60 ms."""
+    s = fixture_v3_store(tmp_path)
+    gecerli = "Marcus" * 8000
+    olu = "Marcus" * 8000 + "x"
+    assert len(s.lookup(gecerli)) == 8000 and s.lookup(olu) == []
+    m1 = _medyan_ms(lambda: s.lookup(gecerli))
+    m2 = _medyan_ms(lambda: s.lookup(olu))
+    assert m1 < 60 * _izleyici_payi() and m2 < 60 * _izleyici_payi(), f"gecerli {m1:.1f} ms, olu {m2:.1f} ms"
+
+
+def test_k5_sure_8000_hit_gom_60ms_alti(tmp_path: Path) -> None:
+    s = fixture_v3_store(tmp_path)
+    segs = (seg("Marcus " * 8000, placeholders=("{0}",)),)
+    hits = s.lookup_segments(segs)
+    assert len(hits) == 8000
+    medyan = _medyan_ms(lambda: terimleri_gom(segs, hits))
+    assert medyan < 60 * _izleyici_payi(), f"medyan {medyan:.1f} ms"
+
+
+# ===========================================================================
+# TUR 2 -- K6 kaynak terminatoru, hedef kontrol karakteri, kaynak <= 100 kodpoint
+# ===========================================================================
+
+
+@pytest.mark.parametrize("terminator", TERMINATORLER, ids=[f"U+{ord(t):04X}" for t in TERMINATORLER])
+def test_k6_kaynakta_her_terminator_red(tmp_path: Path, terminator: str) -> None:
+    """Tester-B O-B1: `マルクス。 -> Marcus` semadan gecince gomme cumle sinirini yutuyordu; kaynakta da yasak, mesajda terim."""
+    with pytest.raises(ValueError, match="マルクス"):
+        store(tmp_path, [("マルクス" + terminator, "Marcus")])
+    with pytest.raises(ValueError, match="Marcus"):
+        store(tmp_path, [("Marcus" + terminator, "Marcus")])
+
+
+def test_k6_kaynakta_terminator_ortada_da_red(tmp_path: Path) -> None:
+    with pytest.raises(ValueError, match=re.escape("Mr. Marcus")):
+        store(tmp_path, [("Mr. Marcus", "Bay Marcus")])
+
+
+@pytest.mark.parametrize("kontrol", ["\n", "\t", "\r", "\x00", "\x7f", "\x85"], ids=["LF", "TAB", "CR", "NUL", "DEL", "NEL"])
+def test_k6_hedefte_her_kontrol_karakteri_red(tmp_path: Path, kontrol: str) -> None:
+    """Tester-A D-A4: hedefte `Cc` (`\\n` T-007 satir bolmesine gider) -> ValueError, mesajda kaynak terim."""
+    assert unicodedata.category(kontrol) == "Cc"
+    with pytest.raises(ValueError, match="マルクス"):
+        store(tmp_path, [("マルクス", "Mar" + kontrol + "cus")])
+
+
+def test_k6_hedefte_bosluk_ve_bicim_karakteri_kabul(tmp_path: Path) -> None:
+    """Kumenin siniri (pozitif kontrol): bosluk (`Zs`) ve bicim karakteri (`Cf`, ZWJ) `Cc` degildir, kabul."""
+    s = store(tmp_path, [("水車小屋", "eski değirmen"), ("マルクス", "Mar‍cus")])
+    assert [t.hedef for t in s.terimler] == ["Eski değirmen", "Mar‍cus"]
+
+
+def test_k6_kaynak_100_kodpoint_kabul_101_red(tmp_path: Path) -> None:
+    yuz = "あ" * 100
+    s = store(tmp_path, [(yuz, "Yüz")])
+    assert araliklar(s.lookup(yuz + "が")) == [(0, 100)]
+    with pytest.raises(ValueError, match="101"):
+        store(tmp_path, [("あ" * 101, "Yüzbir")], "b.json")
+
+
+def test_k6_kaynak_2000_kodpoint_valueerror_recursionerror_degil(tmp_path: Path) -> None:
+    """Tester-A O-A2: tur 1'de >= 996 kodpoint `RecursionError` (trie govdesi ozyineli); v3: sema reddi."""
+    with pytest.raises(ValueError, match="2000"):
+        store(tmp_path, [("a" * 2000, "Uzun")])

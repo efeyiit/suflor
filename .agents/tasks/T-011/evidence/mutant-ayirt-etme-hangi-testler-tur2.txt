@@ -1,0 +1,618 @@
+T-011 mutantlari (tur 2) -- dusen testler (ayna agaci)
+
+
+M01 (K1: sinir kurali tamamen kaldirildi (alt dize esleme)) [-k 'not test_k5_sure']: 69 dusen
+    test_k1_sinir_negatif_eslesmez[JP-\u6751\u4eba-bilesik-kanji]
+    test_k1_sinir_negatif_eslesmez[JP-\u5263\u58eb-bilesik-kanji]
+    test_k1_sinir_negatif_eslesmez[KR-\uac80\uc0ac-bilesik-hece]
+    test_k1_sinir_negatif_eslesmez[KR-\ubc29\uc557\uac04\uc9d1-bilesik]
+    test_k1_sinir_negatif_eslesmez[JP-\u771f\u5263\u306b-on-bilesik]
+    test_k1_sinir_negatif_eslesmez[JP-\u4e2d\u6751-soyadi]
+    test_k1_sinir_negatif_eslesmez[EN-windmill-on-bilesik]
+    test_k1_sinir_negatif_eslesmez[EN-millstone-son-bilesik]
+    test_k1_sinir_negatif_eslesmez[EN-elders-cogul]
+    test_k1_sinir_negatif_eslesmez[KR-\ubc29\uc557\uac04\ub3c4\ub451-ek-baska-kelimenin-basi]
+    test_k1_sinir_negatif_eslesmez[KR-\uc758\uc7a5\ub85c-sol-hece]
+    test_k1_sinir_negatif_eslesmez[JP-\u30de\u30eb\u30af\u30b9\u30de\u30f3-katakana-devam]
+    test_k1_sinir_negatif_eslesmez[EN-Marcus2-rakam-devam]
+    test_k1_kr_ek_kumesi_disi_hece_sinir_degil
+    test_k1_kr_ek_zinciri_iki_ekle_sinirli
+    test_k1_komsu_terim_siniri_yalniz_sozluk_terimi_icin
+    test_k1_en_uzun_once_uzun_reddedilince_ayni_konumdaki_kisa_denenir
+    test_k1_cjk_kismi_ortusme_sinirsiz_ikisi_de_duser
+    test_k1_yer_tutucu_ucu_sinirdir
+    test_k6_kisa_terim_izni_ile_tek_hece_kabul
+    test_k1_zincir_windmills_dis_uc_sinir_degil_sifir_hit
+    test_k1_zincir_millstones_sifir_hit_millstone_iki_hit
+    test_k1_zincir_reddedilen_aday_komsuya_sinir_vermez
+    test_k1_zincir_yer_tutucu_ile_ortusen_aday_uye_olamaz
+    test_k1_zincir_binlerce_uye_ozyineleme_yok
+    test_k1_zincir_geri_izleme_uzun_dal_olu_kisa_alternatif_basarili
+    test_k1_betik_gecisi_negatif_sinif_ici_komsu_sinir_degil[Katakana|Katakana-\u30de\u30eb\u30af\u30b9\u30bf\u30a6\u30f3]
+    test_k1_betik_gecisi_negatif_sinif_ici_komsu_sinir_degil[Latin|rakam-Marcus2]
+    test_k1_betik_gecisi_negatif_sinif_ici_komsu_sinir_degil[Latin|Latin-Marcuss]
+    test_k1_betik_gecisi_negatif_sinif_ici_komsu_sinir_degil[Latin-zincir-windmills]
+    test_k1_betik_gecisi_negatif_sinif_ici_komsu_sinir_degil[Han|Han-\u6751\u4eba]
+    test_k1_betik_gecisi_negatif_sinif_ici_komsu_sinir_degil[Han|Han-\u5263\u58eb]
+    test_k1_betik_gecisi_negatif_sinif_ici_komsu_sinir_degil[Han|Han-\u4e2d\u6751-sol]
+    test_k1_betik_gecisi_negatif_sinif_ici_komsu_sinir_degil[Hangul|Hangul-\uac80\uc0ac]
+    test_k1_betik_gecisi_negatif_sinif_ici_komsu_sinir_degil[Hangul|Hangul-\ubc29\uc557\uac04\uc9d1]
+    test_k1_betik_siniflari_ciftler_halinde[Han-Han-sol]
+    test_k1_betik_siniflari_ciftler_halinde[Han-Han-sag]
+    test_k1_betik_siniflari_ciftler_halinde[Hiragana-Hiragana-sol]
+    test_k1_betik_siniflari_ciftler_halinde[Hiragana-Hiragana-sag]
+    test_k1_betik_siniflari_ciftler_halinde[Katakana-Katakana-sol]
+    test_k1_betik_siniflari_ciftler_halinde[Katakana-Katakana-sag]
+    test_k1_betik_siniflari_ciftler_halinde[Hangul-Hangul-sol]
+    test_k1_betik_siniflari_ciftler_halinde[Hangul-Hangul-sag]
+    test_k1_betik_siniflari_ciftler_halinde[diger-diger-sol]
+    test_k1_betik_siniflari_ciftler_halinde[diger-diger-sag]
+    test_k1_betik_gecisi_sembol_komsusu_asimetrik_belgeli[Latin|So-ayni-sinif-diger]
+    test_k1_betik_gecisi_sembol_komsusu_asimetrik_belgeli[Latin|Sc-ayni-sinif-diger]
+    test_k1_betik_siniflandirma_kenar_karakterleri[Katakana+\u30fc-uzatma-isareti-ayni-sinif]
+    test_k1_betik_siniflandirma_kenar_karakterleri[Katakana+yarim-genislik-katakana]
+    test_k1_betik_siniflandirma_kenar_karakterleri[Hangul+uyumluluk-jamo]
+    test_k1_betik_siniflandirma_kenar_karakterleri[Latin+tam-genislik-latin-diger]
+    test_k1_betik_siniflandirma_kenar_karakterleri[Katakana+birlestirici-isaret-Mn-sinir-degil]
+    test_k1_betik_siniflandirma_kenar_karakterleri[Katakana+birlestirici-ses-isareti-U+309A-sinir-degil]
+    test_k1_betik_siniflandirma_kenar_karakterleri[Han+\u3005-ideografik-tekrar-Han]
+    test_k1_jp_saygi_listesi_negatif_kontrol[Han-\u9577\u8001\u5c71-listede-yok]
+    test_k1_jp_saygi_listesi_negatif_kontrol[Han-\u9577\u8001\u69d8\u5b50-ekten-sonra-sinir-yok]
+    test_k1_jp_saygi_listesi_negatif_kontrol[Hiragana-\u3072\u304b\u308a\u3053-listede-yok]
+    test_k1_jp_saygi_listesi_negatif_kontrol[Hiragana-\u3072\u304b\u308a\u3055\u3093\u3054-ekten-sonra-sinir-yok]
+    test_k1_jp_saygi_listesi_negatif_kontrol[Hiragana-\u3072\u304b\u308a\u304b\u308f-ekten-sonra-sinir-yok]
+    test_k1_jp_saygi_eki_zinciri_iki_ek
+    test_k1_kr_ek_에게_listeden_gelir_zincirle_degil
+    test_k1_kr_ek_zinciri_uc_ek_eslesmez_bilinen_sinir[\ub4e4+\uc5d0\uac8c+\ub294]
+    test_k1_kr_ek_zinciri_uc_ek_eslesmez_bilinen_sinir[\ub2d8+\uc5d0\uac8c+\ub294-bilinen-sinir]
+    test_k1_kr_ek_zinciri_uc_ek_eslesmez_bilinen_sinir[\ub4e4+\ud55c\ud14c+\ub3c4]
+    test_k1_kr_yeni_ek_listesi_bilesik_negatif_kontrol[\uc544+\uce68-sabah]
+    test_k1_kr_yeni_ek_listesi_bilesik_negatif_kontrol[\ub4e4+\ud310-tarla]
+    test_k1_kr_yeni_ek_listesi_bilesik_negatif_kontrol[\uc528+\uc557-tohum]
+    test_k1_kr_yeni_ek_listesi_bilesik_negatif_kontrol[\uc57c+\ucc44-sebze]
+    test_k1_kr_yeni_ek_listesi_bilesik_negatif_kontrol[\ub2d8+\ud504]
+
+M02 (K1: en-uzun-once TERS (kisa once)) [-k 'not test_k5_sure']: 5 dusen
+    test_k1_en_uzun_once_kisa_terim_gecerli_sinirda_da_atlanir
+    test_k1_en_uzun_once_harf_durumu_farkli_onek_terimleri
+    test_k1_en_uzun_once_soldan_tarama_degil_old_mill_house
+    test_k1_zincir_uzun_uye_oncelikli
+    test_k1_zincir_icinde_en_uzun_aday_oncelikli_kok_esit_uzunlukta
+
+M03 (K1: JP parcacik kumesi sinir degil) [-k 'not test_k5_sure']: 13 dusen
+    test_k1_her_jp_saygi_eki_ayni_betikte_listeden_gelir[\u3055\u3093]
+    test_k1_her_jp_saygi_eki_ayni_betikte_listeden_gelir[\u3061\u3083\u3093]
+    test_k1_her_jp_saygi_eki_ayni_betikte_listeden_gelir[\u305f\u3061]
+    test_k1_her_jp_saygi_eki_ayni_betikte_listeden_gelir[\u3063\u3066]
+    test_k1_her_jp_saygi_eki_ayni_betikte_listeden_gelir[\u3060]
+    test_k1_her_jp_saygi_eki_ayni_betikte_listeden_gelir[\u304b\u3089]
+    test_k1_her_jp_saygi_eki_ayni_betikte_listeden_gelir[\u307e\u3067]
+    test_k1_her_jp_saygi_eki_ayni_betikte_listeden_gelir[\u3088\u308a]
+    test_k1_her_jp_saygi_eki_ayni_betikte_listeden_gelir[\u304b]
+    test_k1_her_jp_saygi_eki_ayni_betikte_listeden_gelir[\u3088]
+    test_k1_her_jp_saygi_eki_ayni_betikte_listeden_gelir[\u306d]
+    test_k1_jp_saygi_eki_zinciri_iki_ek
+    test_k6_kaynak_100_kodpoint_kabul_101_red
+
+M04 (K1: ek kurali (KR + JP saygi) kaldirildi) [-k 'not test_k5_sure']: 69 dusen
+    test_k1_sinir_pozitif_eslesir[KR-\uac80\uc744-ek-\uc744]
+    test_k1_sinir_pozitif_eslesir[KR-\ubc29\uc557\uac04\uc5d0\uc11c-ek-\uc5d0\uc11c]
+    test_k1_sinir_pozitif_eslesir[KR-\ubc29\uc557\uac04\uc744-\uc9c0\ub098-ek+bosluk]
+    test_k1_sinir_pozitif_eslesir[KR-\ubc29\uc557\uac04\uc5d0\uc11c\ub294-ek-zinciri]
+    test_k1_sinir_pozitif_eslesir[KR-\ubc29\uc557\uac04\uae4c\uc9c0\ub294-ek-zinciri+nokta]
+    test_k1_her_kr_ek_tek_basina_sinir[\uc744]
+    test_k1_her_kr_ek_tek_basina_sinir[\ub97c]
+    test_k1_her_kr_ek_tek_basina_sinir[\uc774]
+    test_k1_her_kr_ek_tek_basina_sinir[\uac00]
+    test_k1_her_kr_ek_tek_basina_sinir[\uc740]
+    test_k1_her_kr_ek_tek_basina_sinir[\ub294]
+    test_k1_her_kr_ek_tek_basina_sinir[\uc5d0]
+    test_k1_her_kr_ek_tek_basina_sinir[\uc5d0\uc11c]
+    test_k1_her_kr_ek_tek_basina_sinir[\uc73c\ub85c]
+    test_k1_her_kr_ek_tek_basina_sinir[\ub85c]
+    test_k1_her_kr_ek_tek_basina_sinir[\uc640]
+    test_k1_her_kr_ek_tek_basina_sinir[\uacfc]
+    test_k1_her_kr_ek_tek_basina_sinir[\ub3c4]
+    test_k1_her_kr_ek_tek_basina_sinir[\uc758]
+    test_k1_her_kr_ek_tek_basina_sinir[\ub9cc]
+    test_k1_her_kr_ek_tek_basina_sinir[\uaed8\uc11c]
+    test_k1_her_kr_ek_tek_basina_sinir[\ubd80\ud130]
+    test_k1_her_kr_ek_tek_basina_sinir[\uae4c\uc9c0]
+    test_k1_kr_ek_kumesi_disi_hece_sinir_degil
+    test_k1_kr_ek_zinciri_iki_ekle_sinirli
+    test_k1_검은_옷_izinle_bilinen_sinir_eslesir
+    test_k2_ek_korunur_방앗간을_지나
+    test_k2_g1_cumleleri_lookup_gom_zinciri[KR-\ubc29\uc557\uac04\uc744]
+    test_k6_nfd_sozluk_nfc_metin_eslesir
+    test_k6_nfd_metin_nfc_sozlukle_eslesir_indeks_nfc_metne_gore
+    test_k6_nfd_segment_gomme_dogru_yerde
+    test_k1_her_jp_saygi_eki_ayni_betikte_listeden_gelir[\u3055\u3093]
+    test_k1_her_jp_saygi_eki_ayni_betikte_listeden_gelir[\u69d8]
+    test_k1_her_jp_saygi_eki_ayni_betikte_listeden_gelir[\u6bbf]
+    test_k1_her_jp_saygi_eki_ayni_betikte_listeden_gelir[\u541b]
+    test_k1_her_jp_saygi_eki_ayni_betikte_listeden_gelir[\u3061\u3083\u3093]
+    test_k1_her_jp_saygi_eki_ayni_betikte_listeden_gelir[\u9054]
+    test_k1_her_jp_saygi_eki_ayni_betikte_listeden_gelir[\u305f\u3061]
+    test_k1_her_jp_saygi_eki_ayni_betikte_listeden_gelir[\u3063\u3066]
+    test_k1_her_jp_saygi_eki_ayni_betikte_listeden_gelir[\u3060]
+    test_k1_her_jp_saygi_eki_ayni_betikte_listeden_gelir[\u304b\u3089]
+    test_k1_her_jp_saygi_eki_ayni_betikte_listeden_gelir[\u307e\u3067]
+    test_k1_her_jp_saygi_eki_ayni_betikte_listeden_gelir[\u3088\u308a]
+    test_k1_her_jp_saygi_eki_ayni_betikte_listeden_gelir[\u304b]
+    test_k1_her_jp_saygi_eki_ayni_betikte_listeden_gelir[\u3088]
+    test_k1_her_jp_saygi_eki_ayni_betikte_listeden_gelir[\u306d]
+    test_k1_jp_saygi_eki_zinciri_iki_ek
+    test_k1_her_yeni_kr_ek_tek_basina_sinir[\uc5d0\uac8c]
+    test_k1_her_yeni_kr_ek_tek_basina_sinir[\ud55c\ud14c]
+    test_k1_her_yeni_kr_ek_tek_basina_sinir[\uaed8]
+    test_k1_her_yeni_kr_ek_tek_basina_sinir[\ub2d8]
+    test_k1_her_yeni_kr_ek_tek_basina_sinir[\uc528]
+    test_k1_her_yeni_kr_ek_tek_basina_sinir[\uc57c]
+    test_k1_her_yeni_kr_ek_tek_basina_sinir[\uc544]
+    test_k1_her_yeni_kr_ek_tek_basina_sinir[\ub791]
+    test_k1_her_yeni_kr_ek_tek_basina_sinir[\uc774\ub791]
+    test_k1_her_yeni_kr_ek_tek_basina_sinir[\ub4e4]
+    test_k1_her_yeni_kr_ek_tek_basina_sinir[\ucc98\ub7fc]
+    test_k1_her_yeni_kr_ek_tek_basina_sinir[\ubcf4\ub2e4]
+    test_k1_her_yeni_kr_ek_tek_basina_sinir[\ub9c8\ub2e4]
+    test_k1_her_yeni_kr_ek_tek_basina_sinir[\ubc16\uc5d0]
+    test_k1_her_yeni_kr_ek_tek_basina_sinir[\uc870\ucc28]
+    test_k1_her_yeni_kr_ek_tek_basina_sinir[\ub77c\uace0]
+    test_k1_her_yeni_kr_ek_tek_basina_sinir[\ub77c\uba74]
+    test_k1_her_yeni_kr_ek_tek_basina_sinir[\uc785\ub2c8\ub2e4]
+    test_k1_her_yeni_kr_ek_tek_basina_sinir[\uc774\ub2e4]
+    test_k1_kr_ek_에게_listeden_gelir_zincirle_degil
+    test_k1_kr_ek_zinciri_장로님이_iki_ek_eslesir
+    test_k1_kr_ek_zinciri_마르쿠스들이다_iki_ek_eslesir_paket_sayimi
+
+M05 (K1 (KRT O2): metin casefold'lanip aranir (indeks kayar, source_term degisir)) [-k 'not test_k5_sure']: 29 dusen
+    test_k1_sinir_pozitif_eslesir[Latin+JP-Marcus\u304c-parcacik]
+    test_k1_sinir_pozitif_eslesir[Latin+KR-Marcus\uac00-ek]
+    test_k1_sinir_pozitif_eslesir[EN-Marcus-metin-ucu]
+    test_k1_sinir_pozitif_eslesir[EN-Mill's-kesme-Po]
+    test_k1_sinir_pozitif_eslesir[EN-tipografik-tirnak-Pi/Pf]
+    test_k1_sinir_pozitif_eslesir[EN-ideografik-bosluk-Zs]
+    test_k1_sinir_pozitif_eslesir[EN-satir-sonu]
+    test_k1_latin_buyuk_kucuk_duyarsiz[MARCUS]
+    test_k1_latin_buyuk_kucuk_duyarsiz[Marcus]
+    test_k1_latin_buyuk_kucuk_duyarsiz[mArCuS]
+    test_k1_casefold_tuzagi_İstanbul_indeksler_orijinal_metne_gore
+    test_k1_turkce_noktali_I_sinifi_karsilikli_eslesir
+    test_k1_lookup_segments_segment_index_doldurur
+    test_k2_g1_cumleleri_lookup_gom_zinciri[EN-elder-Marcus-mill]
+    test_k3_yer_tutucu_icinde_terim_eslesmez_pozitif_kontrol
+    test_k3_yer_tutucunun_tum_gecisleri_korunur
+    test_k3_yer_tutucu_ayni_dizeyi_birden_fazla_kez_bildirmek_zararsiz
+    test_k5_hicbir_kanala_metin_yazilmaz_davranis
+    test_uyum_termhit_alanlari_sozlesmeyle_ayni
+    test_k1_betik_gecisi_pozitif_eslesir[Han|Latin-\u9577\u8001Marcus]
+    test_k1_betik_gecisi_pozitif_eslesir[Latin|Han-Marcus\u69d8]
+    test_k1_betik_gecisi_pozitif_eslesir[Hangul|Latin-\ub9c8\ub974\ucfe0\uc2a4Marcus-yalniz-Marcus-sozlukte]
+    test_k1_trie_anahtari_coklu_kodpoint_casefold_sinifi_json_sirasindan_bagimsiz[Ma\xdfen-once]
+    test_k1_trie_anahtari_coklu_kodpoint_casefold_sinifi_json_sirasindan_bagimsiz[Ma\u1e9eer-once]
+    test_k1_trie_anahtari_ikisi_de_kucuk_harf_olan_ignorecase_ciftleri_ayni_dal[U+0390~U+1FD3-iota-dialytika-tonos-NFC-tekil]
+    test_k1_trie_anahtari_ikisi_de_kucuk_harf_olan_ignorecase_ciftleri_ayni_dal[U+03B0~U+1FE3-upsilon-dialytika-tonos-NFC-tekil]
+    test_k1_trie_anahtari_ikisi_de_kucuk_harf_olan_ignorecase_ciftleri_ayni_dal[U+FB05~U+FB06-st-ligaturleri-YUK-TASIYAN]
+    test_k1_trie_anahtari_yunan_iota_subscript_ayni_dal
+    test_k4_kimlik_girdisi_hit_uretir_metni_degistirmez
+
+M06 (K6: NFC kaldirildi) [-k 'not test_k5_sure']: 8 dusen
+    test_k6_sema_reddi_valueerror_mesajda_terim[tek-hece-NFD-jamo-NFC-sonrasi-tek]
+    test_k6_tekrar_eden_kaynak_red[NFC-NFD-ayni-terim]
+    test_k6_nfd_sozluk_nfc_metin_eslesir
+    test_k6_nfd_metin_nfc_sozlukle_eslesir_indeks_nfc_metne_gore
+    test_k6_nfd_segment_gomme_dogru_yerde
+    test_k6_nfd_source_term_tasiyan_hit_gomde_kabul
+    test_k6_nfd_hedef_nfc_gomulur
+    test_k2_nfd_segment_ve_nfd_yer_tutucu_ciktida_nfc_ve_alt_dize
+
+M07 (K2: start-ARTAN uygulama (indeksler kayar)) [-k 'not test_k5_sure']: 8 dusen
+    test_k2_g1_cumleleri_lookup_gom_zinciri[JP-\u9577\u8001\u30de\u30eb\u30af\u30b9]
+    test_k2_g1_cumleleri_lookup_gom_zinciri[KR-\uc7a5\ub85c-\ub9c8\ub974\ucfe0\uc2a4]
+    test_k2_g1_cumleleri_lookup_gom_zinciri[EN-elder-Marcus-mill]
+    test_k2_iki_hit_basta_ve_sonda_start_azalan_uygulama
+    test_k2_ayni_segmentte_uc_hit_farkli_uzunluklar
+    test_k2_bitisik_hitler_ortusme_degil
+    test_k4_gom_zaten_buyuk_aynen
+    test_k5_hicbir_kanala_metin_yazilmaz_davranis
+
+M08 (K4: gomde buyuk harf kapali) [-k 'not test_k5_sure']: 1 dusen
+    test_k4_gom_elle_kurulan_kucuk_hedef_buyuk_gomulur
+
+M09 (K4: yuklemede buyuk harf kapali (TermHit.target_term kucuk)) [-k 'not test_k5_sure']: 4 dusen
+    test_k4_lookup_target_term_buyuk
+    test_k4_terimler_ozelliginde_hedef_buyuk
+    test_k6_nfd_hedef_nfc_gomulur
+    test_k6_hedefte_bosluk_ve_bicim_karakteri_kabul
+
+M10 (K3: lookup placeholders yoksayildi) [-k 'not test_k5_sure']: 8 dusen
+    test_k1_yer_tutucu_ucu_sinirdir
+    test_k1_lookup_segments_segment_index_doldurur
+    test_k3_yer_tutucu_icinde_terim_eslesmez_pozitif_kontrol
+    test_k3_yer_tutucunun_tum_gecisleri_korunur
+    test_k3_yer_tutucu_ile_kismen_ortusen_aday_eslesmez
+    test_k3_yer_tutucu_ayni_dizeyi_birden_fazla_kez_bildirmek_zararsiz
+    test_k1_zincir_yer_tutucu_ile_ortusen_aday_uye_olamaz
+    test_k1_zincir_orta_uye_yer_tutucuyla_kirilir
+
+M11 (K7: segment_index None SESSIZCE yutuldu (hit atlanir)) [-k 'not test_k5_sure']: 3 dusen
+    test_k2_hata_mesajlari_metin_tasimaz[segment_index-None]
+    test_k7_segment_index_gecersiz_contract_violation[None]
+    test_k7_gecersiz_indeks_diger_hitler_dogruyken_de_ihlal
+
+M12 (K6: tek kodpoint sema kontrolu kaldirildi) [-k 'not test_k5_sure']: 9 dusen
+    test_k1_검은_옷_izinsiz_sema_reddi_eslesme_yok
+    test_k6_sema_reddi_valueerror_mesajda_terim[tek-hangul-hecesi-\uac80]
+    test_k6_sema_reddi_valueerror_mesajda_terim[tek-kanji-\u6751]
+    test_k6_sema_reddi_valueerror_mesajda_terim[tek-kanji-\u5263]
+    test_k6_sema_reddi_valueerror_mesajda_terim[tek-hece-NFD-jamo-NFC-sonrasi-tek]
+    test_k6_sema_reddi_valueerror_mesajda_terim[tek-katakana]
+    test_k6_sema_reddi_valueerror_mesajda_terim[tek-latin-harf]
+    test_k6_kisa_terim_izni_false_acikca_red
+    test_k6_ilk_hata_terimi_bildirilir_sira_korunur
+
+M13 (K6: hedefte terminator kontrolu kaldirildi) [-k 'not test_k5_sure']: 8 dusen
+    test_k6_sema_reddi_valueerror_mesajda_terim[hedef-nokta-St.-Marcus]
+    test_k6_sema_reddi_valueerror_mesajda_terim[hedef-unlem]
+    test_k6_hedefte_her_terminator_tek_basina_red[U+002E]
+    test_k6_hedefte_her_terminator_tek_basina_red[U+0021]
+    test_k6_hedefte_her_terminator_tek_basina_red[U+003F]
+    test_k6_hedefte_her_terminator_tek_basina_red[U+3002]
+    test_k6_hedefte_her_terminator_tek_basina_red[U+FF01]
+    test_k6_hedefte_her_terminator_tek_basina_red[U+FF1F]
+
+M14 (K6: hedefte {} kontrolu kaldirildi) [-k 'not test_k5_sure']: 3 dusen
+    test_k6_sema_reddi_valueerror_mesajda_terim[hedef-yer-tutucu-{0}]
+    test_k6_sema_reddi_valueerror_mesajda_terim[hedef-kapanan-suslu]
+    test_k6_sema_reddi_valueerror_mesajda_terim[hedef-acilan-suslu]
+
+M15 (K6: tekrar eden kaynak kontrolu kaldirildi) [-k 'not test_k5_sure']: 5 dusen
+    test_k5_hicbir_kanala_metin_yazilmaz_davranis
+    test_k6_tekrar_eden_kaynak_red[birebir]
+    test_k6_tekrar_eden_kaynak_red[buyuk-kucuk]
+    test_k6_tekrar_eden_kaynak_red[turkce-\u0130-sinifi]
+    test_k6_tekrar_eden_kaynak_red[NFC-NFD-ayni-terim]
+
+M16 (K2: ortusen hit denetimi kaldirildi) [-k 'not test_k5_sure']: 3 dusen
+    test_k2_ortusen_hitler_contract_violation
+    test_k2_kismen_ortusen_hitler_contract_violation
+    test_k2_hata_mesajlari_metin_tasimaz[ortusme]
+
+M17 (K2: text[start:end] == source_term denetimi kaldirildi) [-k 'not test_k5_sure']: 4 dusen
+    test_k2_tutarsiz_source_term_contract_violation
+    test_k2_source_term_buyuk_kucuk_farki_da_tutarsizliktir
+    test_k2_hata_mesajlari_metin_tasimaz[tutarsiz-source]
+    test_k5_hicbir_kanala_metin_yazilmaz_davranis
+
+M18 (K3: gomde yer tutucu ortusme denetimi kaldirildi) [-k 'not test_k5_sure']: 1 dusen
+    test_k3_gom_yer_tutucuyla_ortusen_hit_contract_violation
+
+M19 (K2: bos hits -> kopya nesneler (is bozulur)) [-k 'not test_k5_sure']: 1 dusen
+    test_k2_bos_hits_ayni_segment_nesneleri_is
+
+M20 (K1: zincir aramasi kapali (komsu terim hicbir zaman sinir vermez)) [-k 'not test_k5_sure']: 13 dusen
+    test_k1_zincir_millstones_sifir_hit_millstone_iki_hit
+    test_k1_zincir_windmill_iki_hit
+    test_k1_zincir_uc_uye_長老マルクスアイラ_uc_hit
+    test_k1_zincir_ad_ad_マルクスアイラ_iki_hit_fixture_v3
+    test_k1_zincir_reddedilen_aday_komsuya_sinir_vermez
+    test_k1_zincir_uzun_uye_oncelikli
+    test_k1_zincir_icinde_en_uzun_aday_oncelikli_kok_esit_uzunlukta
+    test_k1_zincir_isleme_sirasindan_bagimsiz[uzun-uye-sagda]
+    test_k1_zincir_isleme_sirasindan_bagimsiz[uzun-uye-solda]
+    test_k1_zincir_binlerce_uye_ozyineleme_yok
+    test_k1_zincir_geri_izleme_uzun_dal_olu_kisa_alternatif_basarili
+    test_k1_zincir_ayni_terim_bitisik_iki_gecis
+    test_k1_zincir_orta_uye_yer_tutucuyla_kirilir
+
+M21 (K1: donus start-artan siralanmaz (islem sirasi)) [-k 'not test_k5_sure']: 6 dusen
+    test_k1_bitisik_iki_terim_長老マルクス_iki_hit
+    test_k1_장로_마르쿠스_iki_hit_start_artan
+    test_k1_lookup_segments_segment_index_doldurur
+    test_k1_zincir_uc_uye_長老マルクスアイラ_uc_hit
+    test_k1_zincir_kabul_edilmis_komsunun_ucu_sinirdir[sag-komsu-once-kabul-noktalamayla]
+    test_k1_zincir_orta_uye_yer_tutucuyla_kirilir
+
+M22 (K1: ek zinciri derinligi 1 (iki ek ust uste eslesmez)) [-k 'not test_k5_sure']: 6 dusen
+    test_k1_sinir_pozitif_eslesir[KR-\ubc29\uc557\uac04\uc5d0\uc11c\ub294-ek-zinciri]
+    test_k1_sinir_pozitif_eslesir[KR-\ubc29\uc557\uac04\uae4c\uc9c0\ub294-ek-zinciri+nokta]
+    test_k1_kr_ek_zinciri_iki_ekle_sinirli
+    test_k1_jp_saygi_eki_zinciri_iki_ek
+    test_k1_kr_ek_zinciri_장로님이_iki_ek_eslesir
+    test_k1_kr_ek_zinciri_마르쿠스들이다_iki_ek_eslesir_paket_sayimi
+
+M23 (K1/K3: yer tutucu ucu sinir degil (%s + Latin ad)) [-k 'not test_k5_sure']: 3 dusen
+    test_k1_yer_tutucu_ucu_sinirdir
+    test_k1_zincir_yer_tutucu_ile_ortusen_aday_uye_olamaz
+    test_k1_zincir_orta_uye_yer_tutucuyla_kirilir
+
+M24 (K1: trie anahtari harf durumunu katlamaz (Marcus / marcus aurelius ayri dal)) [-k 'not test_k5_sure']: 4 dusen
+    test_k1_en_uzun_once_harf_durumu_farkli_onek_terimleri
+    test_k1_trie_anahtari_coklu_kodpoint_casefold_sinifi_json_sirasindan_bagimsiz[Ma\xdfen-once]
+    test_k1_trie_anahtari_ikisi_de_kucuk_harf_olan_ignorecase_ciftleri_ayni_dal[U+FB05~U+FB06-st-ligaturleri-YUK-TASIYAN]
+    test_k1_trie_anahtari_yunan_iota_subscript_ayni_dal
+
+M24b (K1 v3: trie anahtari tur-1 kurali (coklu kodpointe katlanan karakter kendisi: ss/eszett ayri dal)) [-k 'not test_k5_sure']: 3 dusen
+    test_k1_trie_anahtari_coklu_kodpoint_casefold_sinifi_json_sirasindan_bagimsiz[Ma\xdfen-once]
+    test_k1_trie_anahtari_ikisi_de_kucuk_harf_olan_ignorecase_ciftleri_ayni_dal[U+FB05~U+FB06-st-ligaturleri-YUK-TASIYAN]
+    test_k1_trie_anahtari_yunan_iota_subscript_ayni_dal
+
+M24c (K1 v3: trie anahtari `ch.lower()` temsilcisi (tasarim adayi; olcumde 3 cift ayristi -- birim testi yakaliyor mu?)) [-k 'not test_k5_sure']: 1 dusen
+    test_k1_trie_anahtari_ikisi_de_kucuk_harf_olan_ignorecase_ciftleri_ayni_dal[U+FB05~U+FB06-st-ligaturleri-YUK-TASIYAN]
+
+M25 (K1: onek tablosu kullanilmaz (konum basina yalniz en uzun aday)) [-k 'not test_k5_sure']: 2 dusen
+    test_k1_en_uzun_once_uzun_reddedilince_ayni_konumdaki_kisa_denenir
+    test_k1_zincir_geri_izleme_uzun_dal_olu_kisa_alternatif_basarili
+
+M26 (K1 (G6): ekten SONRA sinir sarti kaldirildi (ek+devam eden hece eslesir)) [-k 'not test_k5_sure']: 15 dusen
+    test_k1_sinir_negatif_eslesmez[KR-\ubc29\uc557\uac04\ub3c4\ub451-ek-baska-kelimenin-basi]
+    test_k1_kr_ek_zinciri_iki_ekle_sinirli
+    test_k1_jp_saygi_listesi_negatif_kontrol[Han-\u9577\u8001\u69d8\u5b50-ekten-sonra-sinir-yok]
+    test_k1_jp_saygi_listesi_negatif_kontrol[Hiragana-\u3072\u304b\u308a\u3055\u3093\u3054-ekten-sonra-sinir-yok]
+    test_k1_jp_saygi_listesi_negatif_kontrol[Hiragana-\u3072\u304b\u308a\u304b\u308f-ekten-sonra-sinir-yok]
+    test_k1_jp_saygi_eki_zinciri_iki_ek
+    test_k1_kr_ek_에게_listeden_gelir_zincirle_degil
+    test_k1_kr_ek_zinciri_uc_ek_eslesmez_bilinen_sinir[\ub4e4+\uc5d0\uac8c+\ub294]
+    test_k1_kr_ek_zinciri_uc_ek_eslesmez_bilinen_sinir[\ub2d8+\uc5d0\uac8c+\ub294-bilinen-sinir]
+    test_k1_kr_ek_zinciri_uc_ek_eslesmez_bilinen_sinir[\ub4e4+\ud55c\ud14c+\ub3c4]
+    test_k1_kr_yeni_ek_listesi_bilesik_negatif_kontrol[\uc544+\uce68-sabah]
+    test_k1_kr_yeni_ek_listesi_bilesik_negatif_kontrol[\ub4e4+\ud310-tarla]
+    test_k1_kr_yeni_ek_listesi_bilesik_negatif_kontrol[\uc528+\uc557-tohum]
+    test_k1_kr_yeni_ek_listesi_bilesik_negatif_kontrol[\uc57c+\ucc44-sebze]
+    test_k1_kr_yeni_ek_listesi_bilesik_negatif_kontrol[\ub2d8+\ud504]
+
+M27 (K1: SOL sinir kurali kaldirildi (on-bilesikler: windmill vb.)) [-k 'not test_k5_sure']: 13 dusen
+    test_k1_sinir_negatif_eslesmez[JP-\u771f\u5263\u306b-on-bilesik]
+    test_k1_sinir_negatif_eslesmez[JP-\u4e2d\u6751-soyadi]
+    test_k1_sinir_negatif_eslesmez[EN-windmill-on-bilesik]
+    test_k1_sinir_negatif_eslesmez[KR-\uc758\uc7a5\ub85c-sol-hece]
+    test_k1_cjk_kismi_ortusme_sinirsiz_ikisi_de_duser
+    test_k1_yer_tutucu_ucu_sinirdir
+    test_k1_zincir_binlerce_uye_ozyineleme_yok
+    test_k1_betik_gecisi_negatif_sinif_ici_komsu_sinir_degil[Han|Han-\u4e2d\u6751-sol]
+    test_k1_betik_siniflari_ciftler_halinde[Han-Han-sol]
+    test_k1_betik_siniflari_ciftler_halinde[Hiragana-Hiragana-sol]
+    test_k1_betik_siniflari_ciftler_halinde[Katakana-Katakana-sol]
+    test_k1_betik_siniflari_ciftler_halinde[Hangul-Hangul-sol]
+    test_k1_betik_siniflari_ciftler_halinde[diger-diger-sol]
+
+M28 (K1: SAG sinir kurali kaldirildi (son-bilesikler: elders vb.)) [-k 'not test_k5_sure']: 58 dusen
+    test_k1_sinir_negatif_eslesmez[JP-\u6751\u4eba-bilesik-kanji]
+    test_k1_sinir_negatif_eslesmez[JP-\u5263\u58eb-bilesik-kanji]
+    test_k1_sinir_negatif_eslesmez[KR-\uac80\uc0ac-bilesik-hece]
+    test_k1_sinir_negatif_eslesmez[KR-\ubc29\uc557\uac04\uc9d1-bilesik]
+    test_k1_sinir_negatif_eslesmez[EN-millstone-son-bilesik]
+    test_k1_sinir_negatif_eslesmez[EN-elders-cogul]
+    test_k1_sinir_negatif_eslesmez[KR-\ubc29\uc557\uac04\ub3c4\ub451-ek-baska-kelimenin-basi]
+    test_k1_sinir_negatif_eslesmez[JP-\u30de\u30eb\u30af\u30b9\u30de\u30f3-katakana-devam]
+    test_k1_sinir_negatif_eslesmez[EN-Marcus2-rakam-devam]
+    test_k1_kr_ek_kumesi_disi_hece_sinir_degil
+    test_k1_kr_ek_zinciri_iki_ekle_sinirli
+    test_k1_komsu_terim_siniri_yalniz_sozluk_terimi_icin
+    test_k1_en_uzun_once_uzun_reddedilince_ayni_konumdaki_kisa_denenir
+    test_k1_cjk_kismi_ortusme_sinirsiz_ikisi_de_duser
+    test_k6_kisa_terim_izni_ile_tek_hece_kabul
+    test_k1_zincir_windmills_dis_uc_sinir_degil_sifir_hit
+    test_k1_zincir_millstones_sifir_hit_millstone_iki_hit
+    test_k1_zincir_reddedilen_aday_komsuya_sinir_vermez
+    test_k1_zincir_yer_tutucu_ile_ortusen_aday_uye_olamaz
+    test_k1_zincir_binlerce_uye_ozyineleme_yok
+    test_k1_zincir_geri_izleme_uzun_dal_olu_kisa_alternatif_basarili
+    test_k1_betik_gecisi_negatif_sinif_ici_komsu_sinir_degil[Katakana|Katakana-\u30de\u30eb\u30af\u30b9\u30bf\u30a6\u30f3]
+    test_k1_betik_gecisi_negatif_sinif_ici_komsu_sinir_degil[Latin|rakam-Marcus2]
+    test_k1_betik_gecisi_negatif_sinif_ici_komsu_sinir_degil[Latin|Latin-Marcuss]
+    test_k1_betik_gecisi_negatif_sinif_ici_komsu_sinir_degil[Latin-zincir-windmills]
+    test_k1_betik_gecisi_negatif_sinif_ici_komsu_sinir_degil[Han|Han-\u6751\u4eba]
+    test_k1_betik_gecisi_negatif_sinif_ici_komsu_sinir_degil[Han|Han-\u5263\u58eb]
+    test_k1_betik_gecisi_negatif_sinif_ici_komsu_sinir_degil[Hangul|Hangul-\uac80\uc0ac]
+    test_k1_betik_gecisi_negatif_sinif_ici_komsu_sinir_degil[Hangul|Hangul-\ubc29\uc557\uac04\uc9d1]
+    test_k1_betik_siniflari_ciftler_halinde[Han-Han-sag]
+    test_k1_betik_siniflari_ciftler_halinde[Hiragana-Hiragana-sag]
+    test_k1_betik_siniflari_ciftler_halinde[Katakana-Katakana-sag]
+    test_k1_betik_siniflari_ciftler_halinde[Hangul-Hangul-sag]
+    test_k1_betik_siniflari_ciftler_halinde[diger-diger-sag]
+    test_k1_betik_gecisi_sembol_komsusu_asimetrik_belgeli[Latin|So-ayni-sinif-diger]
+    test_k1_betik_gecisi_sembol_komsusu_asimetrik_belgeli[Latin|Sc-ayni-sinif-diger]
+    test_k1_betik_siniflandirma_kenar_karakterleri[Katakana+\u30fc-uzatma-isareti-ayni-sinif]
+    test_k1_betik_siniflandirma_kenar_karakterleri[Katakana+yarim-genislik-katakana]
+    test_k1_betik_siniflandirma_kenar_karakterleri[Hangul+uyumluluk-jamo]
+    test_k1_betik_siniflandirma_kenar_karakterleri[Latin+tam-genislik-latin-diger]
+    test_k1_betik_siniflandirma_kenar_karakterleri[Katakana+birlestirici-isaret-Mn-sinir-degil]
+    test_k1_betik_siniflandirma_kenar_karakterleri[Katakana+birlestirici-ses-isareti-U+309A-sinir-degil]
+    test_k1_betik_siniflandirma_kenar_karakterleri[Han+\u3005-ideografik-tekrar-Han]
+    test_k1_jp_saygi_listesi_negatif_kontrol[Han-\u9577\u8001\u5c71-listede-yok]
+    test_k1_jp_saygi_listesi_negatif_kontrol[Han-\u9577\u8001\u69d8\u5b50-ekten-sonra-sinir-yok]
+    test_k1_jp_saygi_listesi_negatif_kontrol[Hiragana-\u3072\u304b\u308a\u3053-listede-yok]
+    test_k1_jp_saygi_listesi_negatif_kontrol[Hiragana-\u3072\u304b\u308a\u3055\u3093\u3054-ekten-sonra-sinir-yok]
+    test_k1_jp_saygi_listesi_negatif_kontrol[Hiragana-\u3072\u304b\u308a\u304b\u308f-ekten-sonra-sinir-yok]
+    test_k1_jp_saygi_eki_zinciri_iki_ek
+    test_k1_kr_ek_에게_listeden_gelir_zincirle_degil
+    test_k1_kr_ek_zinciri_uc_ek_eslesmez_bilinen_sinir[\ub4e4+\uc5d0\uac8c+\ub294]
+    test_k1_kr_ek_zinciri_uc_ek_eslesmez_bilinen_sinir[\ub2d8+\uc5d0\uac8c+\ub294-bilinen-sinir]
+    test_k1_kr_ek_zinciri_uc_ek_eslesmez_bilinen_sinir[\ub4e4+\ud55c\ud14c+\ub3c4]
+    test_k1_kr_yeni_ek_listesi_bilesik_negatif_kontrol[\uc544+\uce68-sabah]
+    test_k1_kr_yeni_ek_listesi_bilesik_negatif_kontrol[\ub4e4+\ud310-tarla]
+    test_k1_kr_yeni_ek_listesi_bilesik_negatif_kontrol[\uc528+\uc557-tohum]
+    test_k1_kr_yeni_ek_listesi_bilesik_negatif_kontrol[\uc57c+\ucc44-sebze]
+    test_k1_kr_yeni_ek_listesi_bilesik_negatif_kontrol[\ub2d8+\ud504]
+
+M29 (K2: start == end (bos aralik) kabul) [-k 'not test_k5_sure']: 1 dusen
+    test_k2_aralik_disi_contract_violation[start==end-bos-aralik]
+
+M30 (K4: Turkce i -> noktali buyuk I kurali kaldirildi) [-k 'not test_k5_sure']: 1 dusen
+    test_k4_ilk_harfi_buyut[turkce-i->\u0130]
+
+M31 (K1: lookup_segments segment_index doldurmaz) [-k 'not test_k5_sure']: 6 dusen
+    test_k1_lookup_segments_segment_index_doldurur
+    test_k5_terim_sayisiyla_dogrusal_degil_tek_gecis
+    test_k5_hicbir_kanala_metin_yazilmaz_davranis
+    test_k6_nfd_segment_gomme_dogru_yerde
+    test_k2_nfd_segment_ve_nfd_yer_tutucu_ciktida_nfc_ve_alt_dize
+    test_k4_kimlik_girdisi_hit_uretir_metni_degistirmez
+
+M32 (K1/K2: bitmap denetimi bitisik araligi ortusme sayar (end + 1)) [-k 'not test_k5_sure']: 8 dusen
+    test_k1_bitisik_iki_terim_長老マルクス_iki_hit
+    test_k1_lookup_segments_segment_index_doldurur
+    test_k2_g1_cumleleri_lookup_gom_zinciri[JP-\u9577\u8001\u30de\u30eb\u30af\u30b9]
+    test_k5_terim_sayisiyla_dogrusal_degil_tek_gecis
+    test_k1_zincir_uc_uye_長老マルクスアイラ_uc_hit
+    test_k1_zincir_yer_tutucu_ile_ortusen_aday_uye_olamaz
+    test_k1_zincir_kabul_edilmis_komsunun_ucu_sinirdir[sag-komsu-once-kabul-noktalamayla]
+    test_k1_zincir_orta_uye_yer_tutucuyla_kirilir
+
+M33 (K1 v3: ZINCIR kurali kaldirildi -- komsu adayin VARLIGI sinir verir (tur 1 mekanizmasi; windmills -> wind)) [-k 'not test_k5_sure']: 7 dusen
+    test_k1_zincir_windmills_dis_uc_sinir_degil_sifir_hit
+    test_k1_zincir_millstones_sifir_hit_millstone_iki_hit
+    test_k1_zincir_reddedilen_aday_komsuya_sinir_vermez
+    test_k1_zincir_yer_tutucu_ile_ortusen_aday_uye_olamaz
+    test_k1_zincir_binlerce_uye_ozyineleme_yok
+    test_k1_zincir_geri_izleme_uzun_dal_olu_kisa_alternatif_basarili
+    test_k1_betik_gecisi_negatif_sinif_ici_komsu_sinir_degil[Latin-zincir-windmills]
+
+M34 (K1 v3: BETIK GECISI kaldirildi (her karakter DIGER sinifi)) [-k 'not test_k5_sure']: 47 dusen
+    test_k1_yer_tutucu_ucu_sinirdir
+    test_k1_betik_gecisi_pozitif_eslesir[Han|Katakana-\u9577\u8001\u30de\u30eb\u30af\u30b9-unvan-sozlukte-yok]
+    test_k1_betik_gecisi_pozitif_eslesir[Han|Latin-\u9577\u8001Marcus]
+    test_k1_betik_gecisi_pozitif_eslesir[Hangul|Latin-\ub9c8\ub974\ucfe0\uc2a4Marcus-yalniz-Marcus-sozlukte]
+    test_k1_betik_siniflari_ciftler_halinde[Han-Hiragana-sol]
+    test_k1_betik_siniflari_ciftler_halinde[Han-Hiragana-sag]
+    test_k1_betik_siniflari_ciftler_halinde[Han-Katakana-sol]
+    test_k1_betik_siniflari_ciftler_halinde[Han-Katakana-sag]
+    test_k1_betik_siniflari_ciftler_halinde[Han-Hangul-sol]
+    test_k1_betik_siniflari_ciftler_halinde[Han-Hangul-sag]
+    test_k1_betik_siniflari_ciftler_halinde[Han-diger-sol]
+    test_k1_betik_siniflari_ciftler_halinde[Han-diger-sag]
+    test_k1_betik_siniflari_ciftler_halinde[Hiragana-Han-sol]
+    test_k1_betik_siniflari_ciftler_halinde[Hiragana-Han-sag]
+    test_k1_betik_siniflari_ciftler_halinde[Hiragana-Katakana-sol]
+    test_k1_betik_siniflari_ciftler_halinde[Hiragana-Katakana-sag]
+    test_k1_betik_siniflari_ciftler_halinde[Hiragana-Hangul-sol]
+    test_k1_betik_siniflari_ciftler_halinde[Hiragana-Hangul-sag]
+    test_k1_betik_siniflari_ciftler_halinde[Hiragana-diger-sol]
+    test_k1_betik_siniflari_ciftler_halinde[Hiragana-diger-sag]
+    test_k1_betik_siniflari_ciftler_halinde[Katakana-Han-sol]
+    test_k1_betik_siniflari_ciftler_halinde[Katakana-Han-sag]
+    test_k1_betik_siniflari_ciftler_halinde[Katakana-Hiragana-sol]
+    test_k1_betik_siniflari_ciftler_halinde[Katakana-Hiragana-sag]
+    test_k1_betik_siniflari_ciftler_halinde[Katakana-Hangul-sol]
+    test_k1_betik_siniflari_ciftler_halinde[Katakana-Hangul-sag]
+    test_k1_betik_siniflari_ciftler_halinde[Katakana-diger-sol]
+    test_k1_betik_siniflari_ciftler_halinde[Katakana-diger-sag]
+    test_k1_betik_siniflari_ciftler_halinde[Hangul-Han-sol]
+    test_k1_betik_siniflari_ciftler_halinde[Hangul-Han-sag]
+    test_k1_betik_siniflari_ciftler_halinde[Hangul-Hiragana-sol]
+    test_k1_betik_siniflari_ciftler_halinde[Hangul-Hiragana-sag]
+    test_k1_betik_siniflari_ciftler_halinde[Hangul-Katakana-sol]
+    test_k1_betik_siniflari_ciftler_halinde[Hangul-Katakana-sag]
+    test_k1_betik_siniflari_ciftler_halinde[Hangul-diger-sol]
+    test_k1_betik_siniflari_ciftler_halinde[Hangul-diger-sag]
+    test_k1_betik_siniflari_ciftler_halinde[diger-Han-sol]
+    test_k1_betik_siniflari_ciftler_halinde[diger-Han-sag]
+    test_k1_betik_siniflari_ciftler_halinde[diger-Hiragana-sol]
+    test_k1_betik_siniflari_ciftler_halinde[diger-Hiragana-sag]
+    test_k1_betik_siniflari_ciftler_halinde[diger-Katakana-sol]
+    test_k1_betik_siniflari_ciftler_halinde[diger-Katakana-sag]
+    test_k1_betik_siniflari_ciftler_halinde[diger-Hangul-sol]
+    test_k1_betik_siniflari_ciftler_halinde[diger-Hangul-sag]
+    test_k1_betik_gecisi_マルクス山_eslesir_paket_celiskisi
+    test_k1_betik_gecisi_sembol_komsusu_asimetrik_belgeli[Katakana|So-sinir]
+    test_k4_kimlik_cipasi_gerekmez_betik_gecisi_yeter
+
+M35 (K1 v3: JP saygi/kopula listesi BOS) [-k 'not test_k5_sure']: 16 dusen
+    test_k1_her_jp_saygi_eki_ayni_betikte_listeden_gelir[\u3055\u3093]
+    test_k1_her_jp_saygi_eki_ayni_betikte_listeden_gelir[\u69d8]
+    test_k1_her_jp_saygi_eki_ayni_betikte_listeden_gelir[\u6bbf]
+    test_k1_her_jp_saygi_eki_ayni_betikte_listeden_gelir[\u541b]
+    test_k1_her_jp_saygi_eki_ayni_betikte_listeden_gelir[\u3061\u3083\u3093]
+    test_k1_her_jp_saygi_eki_ayni_betikte_listeden_gelir[\u9054]
+    test_k1_her_jp_saygi_eki_ayni_betikte_listeden_gelir[\u305f\u3061]
+    test_k1_her_jp_saygi_eki_ayni_betikte_listeden_gelir[\u3063\u3066]
+    test_k1_her_jp_saygi_eki_ayni_betikte_listeden_gelir[\u3060]
+    test_k1_her_jp_saygi_eki_ayni_betikte_listeden_gelir[\u304b\u3089]
+    test_k1_her_jp_saygi_eki_ayni_betikte_listeden_gelir[\u307e\u3067]
+    test_k1_her_jp_saygi_eki_ayni_betikte_listeden_gelir[\u3088\u308a]
+    test_k1_her_jp_saygi_eki_ayni_betikte_listeden_gelir[\u304b]
+    test_k1_her_jp_saygi_eki_ayni_betikte_listeden_gelir[\u3088]
+    test_k1_her_jp_saygi_eki_ayni_betikte_listeden_gelir[\u306d]
+    test_k1_jp_saygi_eki_zinciri_iki_ek
+
+M36 (K1 v3: KR yeni ek listesi (19 ek) BOS) [-k 'not test_k5_sure']: 22 dusen
+    test_k1_her_yeni_kr_ek_tek_basina_sinir[\uc5d0\uac8c]
+    test_k1_her_yeni_kr_ek_tek_basina_sinir[\ud55c\ud14c]
+    test_k1_her_yeni_kr_ek_tek_basina_sinir[\uaed8]
+    test_k1_her_yeni_kr_ek_tek_basina_sinir[\ub2d8]
+    test_k1_her_yeni_kr_ek_tek_basina_sinir[\uc528]
+    test_k1_her_yeni_kr_ek_tek_basina_sinir[\uc57c]
+    test_k1_her_yeni_kr_ek_tek_basina_sinir[\uc544]
+    test_k1_her_yeni_kr_ek_tek_basina_sinir[\ub791]
+    test_k1_her_yeni_kr_ek_tek_basina_sinir[\uc774\ub791]
+    test_k1_her_yeni_kr_ek_tek_basina_sinir[\ub4e4]
+    test_k1_her_yeni_kr_ek_tek_basina_sinir[\ucc98\ub7fc]
+    test_k1_her_yeni_kr_ek_tek_basina_sinir[\ubcf4\ub2e4]
+    test_k1_her_yeni_kr_ek_tek_basina_sinir[\ub9c8\ub2e4]
+    test_k1_her_yeni_kr_ek_tek_basina_sinir[\ubc16\uc5d0]
+    test_k1_her_yeni_kr_ek_tek_basina_sinir[\uc870\ucc28]
+    test_k1_her_yeni_kr_ek_tek_basina_sinir[\ub77c\uace0]
+    test_k1_her_yeni_kr_ek_tek_basina_sinir[\ub77c\uba74]
+    test_k1_her_yeni_kr_ek_tek_basina_sinir[\uc785\ub2c8\ub2e4]
+    test_k1_her_yeni_kr_ek_tek_basina_sinir[\uc774\ub2e4]
+    test_k1_kr_ek_에게_listeden_gelir_zincirle_degil
+    test_k1_kr_ek_zinciri_장로님이_iki_ek_eslesir
+    test_k1_kr_ek_zinciri_마르쿠스들이다_iki_ek_eslesir_paket_sayimi
+
+M37 (K2 v3: gomde placeholders NFC'lenmez (aynen kopyalanir)) [-k 'not test_k5_sure']: 1 dusen
+    test_k2_nfd_segment_ve_nfd_yer_tutucu_ciktida_nfc_ve_alt_dize
+
+M38 (K6 v3: kaynakta terminator kontrolu kaldirildi) [-k 'not test_k5_sure']: 7 dusen
+    test_k6_kaynakta_her_terminator_red[U+002E]
+    test_k6_kaynakta_her_terminator_red[U+0021]
+    test_k6_kaynakta_her_terminator_red[U+003F]
+    test_k6_kaynakta_her_terminator_red[U+3002]
+    test_k6_kaynakta_her_terminator_red[U+FF01]
+    test_k6_kaynakta_her_terminator_red[U+FF1F]
+    test_k6_kaynakta_terminator_ortada_da_red
+
+M39 (K6 v3: hedefte kontrol karakteri (Cc) kontrolu kaldirildi) [-k 'not test_k5_sure']: 6 dusen
+    test_k6_hedefte_her_kontrol_karakteri_red[LF]
+    test_k6_hedefte_her_kontrol_karakteri_red[TAB]
+    test_k6_hedefte_her_kontrol_karakteri_red[CR]
+    test_k6_hedefte_her_kontrol_karakteri_red[NUL]
+    test_k6_hedefte_her_kontrol_karakteri_red[DEL]
+    test_k6_hedefte_her_kontrol_karakteri_red[NEL]
+
+M40 (K6 v3: kaynak <= 100 kodpoint kontrolu kaldirildi (2000 kodpoint -> RecursionError)) [-k 'not test_k5_sure']: 2 dusen
+    test_k6_kaynak_100_kodpoint_kabul_101_red
+    test_k6_kaynak_2000_kodpoint_valueerror_recursionerror_degil
+
+M41 (K2 v3: Segment placeholders bicim hatasi TypeError kalir (ContractViolation'a sarilmaz)) [-k 'not test_k5_sure']: 4 dusen
+    test_k2_segment_placeholders_bicim_hatasi_contract_violation[duz-str]
+    test_k2_segment_placeholders_bicim_hatasi_contract_violation[int-oge]
+    test_k2_segment_placeholders_bicim_hatasi_contract_violation[None-oge]
+    test_k2_segment_placeholders_bicim_hatasi_contract_violation[int]
+
+M42 (K1 v3: sagdaki birlestirici isaret (M*) sinir sayilir) [-k 'not test_k5_sure']: 2 dusen
+    test_k1_betik_siniflandirma_kenar_karakterleri[Katakana+birlestirici-isaret-Mn-sinir-degil]
+    test_k1_betik_siniflandirma_kenar_karakterleri[Katakana+birlestirici-ses-isareti-U+309A-sinir-degil]
+
+M43 (K1 v3: kabul edilmis komsunun ucu sinir DEGIL (yalniz gercek sinir)) [-k 'not test_k5_sure']: 2 dusen
+    test_k1_zincir_kabul_edilmis_komsunun_ucu_sinirdir[sol-komsu-once-kabul-parcacikla]
+    test_k1_zincir_kabul_edilmis_komsunun_ucu_sinirdir[sag-komsu-once-kabul-noktalamayla]
+
+M44 (K1 v3: zincir icinde kisa aday once denenir (en uzun once degil)) [-k 'not test_k5_sure']: 1 dusen
+    test_k1_zincir_icinde_en_uzun_aday_oncelikli_kok_esit_uzunlukta
+
+M45 (K5 v3: bitmap yerine DOGRUSAL kabul listesi (tur 1 `_ortusur`) -- sure testleri HARIC: davranis ayni, KACMALI) [-k 'not test_k5_sure']: 0 dusen
+
+M45s (K5 v3: ayni dogrusal mutant, YALNIZ sure testleri (test_k5_sure_*) -- yakaliyor mu?) [-k 'test_k5_sure']: 2 dusen
+    test_k5_sure_8000_hit_tek_segment_60ms_alti
+    test_k5_sure_8000_uyeli_zincir_60ms_alti
+
+C-1 (KONTROL: aday siralamasi acik anahtarla (ayni tuple) -- esdeger) [-k 'not test_k5_sure']: 0 dusen
+
+C-2 (KONTROL: bitmap denetimi dilimle (`1 in dolu[s:e]`) -- esdeger) [-k 'not test_k5_sure']: 0 dusen
+
+C-3 (KONTROL: ek dongusu kisa once -- ozyineli tarama sirayi anlamsiz kilar, esdeger) [-k 'not test_k5_sure']: 0 dusen
+
+C-4 (KONTROL: olu-konum hafizasi kapali (yalniz hiz; davranis esdeger)) [-k 'not test_k5_sure']: 0 dusen
+
+C-5 (KONTROL: zincir aramada once SAG sonra SOL adimlanir -- esdeger) [-k 'not test_k5_sure']: 0 dusen

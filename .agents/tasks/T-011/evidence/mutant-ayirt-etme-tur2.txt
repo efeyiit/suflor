@@ -1,0 +1,60 @@
+T-011 mutant kiti (tur 2) -- ayna: <gecici dizin>/t011_ayna_tur2
+TEMEL (mutantsiz; sure testleri haric): failed=0 passed=448 error=0
+TEMEL (mutantsiz; yalniz sure testleri): failed=0 passed=5 error=0
+ad    sonuc    beklenen   aciklama
+M01   X (69)   YAKALA     K1: sinir kurali tamamen kaldirildi (alt dize esleme)
+M02   X (5)    YAKALA     K1: en-uzun-once TERS (kisa once)
+M03   X (13)   YAKALA     K1: JP parcacik kumesi sinir degil
+M04   X (69)   YAKALA     K1: ek kurali (KR + JP saygi) kaldirildi
+M05   X (29)   YAKALA     K1 (KRT O2): metin casefold'lanip aranir (indeks kayar, source_term degisir)
+M06   X (8)    YAKALA     K6: NFC kaldirildi
+M07   X (8)    YAKALA     K2: start-ARTAN uygulama (indeksler kayar)
+M08   X (1)    YAKALA     K4: gomde buyuk harf kapali
+M09   X (4)    YAKALA     K4: yuklemede buyuk harf kapali (TermHit.target_term kucuk)
+M10   X (8)    YAKALA     K3: lookup placeholders yoksayildi
+M11   X (3)    YAKALA     K7: segment_index None SESSIZCE yutuldu (hit atlanir)
+M12   X (9)    YAKALA     K6: tek kodpoint sema kontrolu kaldirildi
+M13   X (8)    YAKALA     K6: hedefte terminator kontrolu kaldirildi
+M14   X (3)    YAKALA     K6: hedefte {} kontrolu kaldirildi
+M15   X (5)    YAKALA     K6: tekrar eden kaynak kontrolu kaldirildi
+M16   X (3)    YAKALA     K2: ortusen hit denetimi kaldirildi
+M17   X (4)    YAKALA     K2: text[start:end] == source_term denetimi kaldirildi
+M18   X (1)    YAKALA     K3: gomde yer tutucu ortusme denetimi kaldirildi
+M19   X (1)    YAKALA     K2: bos hits -> kopya nesneler (is bozulur)
+M20   X (13)   YAKALA     K1: zincir aramasi kapali (komsu terim hicbir zaman sinir vermez)
+M21   X (6)    YAKALA     K1: donus start-artan siralanmaz (islem sirasi)
+M22   X (6)    YAKALA     K1: ek zinciri derinligi 1 (iki ek ust uste eslesmez)
+M23   X (3)    YAKALA     K1/K3: yer tutucu ucu sinir degil (%s + Latin ad)
+M24   X (4)    YAKALA     K1: trie anahtari harf durumunu katlamaz (Marcus / marcus aurelius ayri dal)
+M24b  X (3)    YAKALA     K1 v3: trie anahtari tur-1 kurali (coklu kodpointe katlanan karakter kendisi: ss/eszett ayri dal)
+M24c  X (1)    YAKALA     K1 v3: trie anahtari `ch.lower()` temsilcisi (tasarim adayi; olcumde 3 cift ayristi -- birim testi yakaliyor mu?)
+M25   X (2)    YAKALA     K1: onek tablosu kullanilmaz (konum basina yalniz en uzun aday)
+M26   X (15)   YAKALA     K1 (G6): ekten SONRA sinir sarti kaldirildi (ek+devam eden hece eslesir)
+M27   X (13)   YAKALA     K1: SOL sinir kurali kaldirildi (on-bilesikler: windmill vb.)
+M28   X (58)   YAKALA     K1: SAG sinir kurali kaldirildi (son-bilesikler: elders vb.)
+M29   X (1)    YAKALA     K2: start == end (bos aralik) kabul
+M30   X (1)    YAKALA     K4: Turkce i -> noktali buyuk I kurali kaldirildi
+M31   X (6)    YAKALA     K1: lookup_segments segment_index doldurmaz
+M32   X (8)    YAKALA     K1/K2: bitmap denetimi bitisik araligi ortusme sayar (end + 1)
+M33   X (7)    YAKALA     K1 v3: ZINCIR kurali kaldirildi -- komsu adayin VARLIGI sinir verir (tur 1 mekanizmasi; windmills -> wind)
+M34   X (47)   YAKALA     K1 v3: BETIK GECISI kaldirildi (her karakter DIGER sinifi)
+M35   X (16)   YAKALA     K1 v3: JP saygi/kopula listesi BOS
+M36   X (22)   YAKALA     K1 v3: KR yeni ek listesi (19 ek) BOS
+M37   X (1)    YAKALA     K2 v3: gomde placeholders NFC'lenmez (aynen kopyalanir)
+M38   X (7)    YAKALA     K6 v3: kaynakta terminator kontrolu kaldirildi
+M39   X (6)    YAKALA     K6 v3: hedefte kontrol karakteri (Cc) kontrolu kaldirildi
+M40   X (2)    YAKALA     K6 v3: kaynak <= 100 kodpoint kontrolu kaldirildi (2000 kodpoint -> RecursionError)
+M41   X (4)    YAKALA     K2 v3: Segment placeholders bicim hatasi TypeError kalir (ContractViolation'a sarilmaz)
+M42   X (2)    YAKALA     K1 v3: sagdaki birlestirici isaret (M*) sinir sayilir
+M43   X (2)    YAKALA     K1 v3: kabul edilmis komsunun ucu sinir DEGIL (yalniz gercek sinir)
+M44   X (1)    YAKALA     K1 v3: zincir icinde kisa aday once denenir (en uzun once degil)
+M45   .        KACSIN     K5 v3: bitmap yerine DOGRUSAL kabul listesi (tur 1 `_ortusur`) -- sure testleri HARIC: davranis ayni, KACMALI
+M45s  X (2)    YAKALA     K5 v3: ayni dogrusal mutant, YALNIZ sure testleri (test_k5_sure_*) -- yakaliyor mu?
+C-1   .        KACSIN     KONTROL: aday siralamasi acik anahtarla (ayni tuple) -- esdeger
+C-2   .        KACSIN     KONTROL: bitmap denetimi dilimle (`1 in dolu[s:e]`) -- esdeger
+C-3   .        KACSIN     KONTROL: ek dongusu kisa once -- ozyineli tarama sirayi anlamsiz kilar, esdeger
+C-4   .        KACSIN     KONTROL: olu-konum hafizasi kapali (yalniz hiz; davranis esdeger)
+C-5   .        KACSIN     KONTROL: zincir aramada once SAG sonra SOL adimlanir -- esdeger
+
+47 davranis mutanti + 6 kontrol/bilgi; beklenti tutmayan: 0 []
+dusen test adlari: mutant-ayirt-etme-hangi-testler-tur2.txt

@@ -1,0 +1,21 @@
+python 3.12.10; taranan kodpoint: 0x110000; IGNORECASE denk cift: 1514
+_anahtar (kanonik) FARKLI olan denk cift: 0
+_trie_anahtari (v3 = kanonik anahtar) FARKLI olan denk cift: 0
+TERS YON -- ayni trie anahtarinda toplanan ama IGNORECASE'de denk OLMAYAN cift: 0 (1427 cok uyeli dal)
+POZITIF KONTROL 1 -- tur-1 trie anahtari (`k if len(k)==1 else ch`) FARKLI olan denk cift: 34
+  U+0390 ~ U+1FD3
+  U+03B0 ~ U+1FE3
+  U+1E9E ~ U+00DF
+  U+1F88 ~ U+1F80
+  U+1F89 ~ U+1F81
+  U+1F8A ~ U+1F82
+  U+1F8B ~ U+1F83
+  U+1F8C ~ U+1F84
+POZITIF KONTROL 2 -- reddedilen aday `ch.lower()` temsilcisi FARKLI olan denk cift: 6
+  U+0390 ~ U+1FD3
+  U+03B0 ~ U+1FE3
+  U+1FD3 ~ U+0390
+  U+1FE3 ~ U+03B0
+  U+FB05 ~ U+FB06
+  U+FB06 ~ U+FB05
+SONUC: v3 trie anahtari IGNORECASE denkligini iki yonde tam kapsar; tur-1 anahtari ve lower() temsilcisi ayrisiyordu (kontroller atesledi)

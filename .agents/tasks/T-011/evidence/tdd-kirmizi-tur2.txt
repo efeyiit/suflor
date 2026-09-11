@@ -1,0 +1,637 @@
+# TDD KIRMIZI FAZ (tur 2): yeni testler (zincir/betik gecisi/JP saygi/KR ek/ss-trie/K2 NFC+CV/K6 kaynak terminator+Cc+100/K5 8000 hit) TUR-1 KODU uzerinde.
+# Komut: python -m pytest tests/unit/translate/test_sozluk.py -q -p no:cacheprovider --no-header -rf --tb=line ; sozluk.py = tur 1 teslimi (commit 3e0e638), test_sozluk.py = tur 2 surumu; exit=1
+........................................................................ [ 16%]
+.................F...................................................... [ 32%]
+........................................................................ [ 48%]
+........................................FF...F...FF..FFFFFFF...F.......F [ 64%]
+FFFFFFFFF..FFFFFFFFFF..FFFFFFFFFF..FFFFFFFFFF..FF..........FFFFFFFFFFFFF [ 80%]
+FFFFFFFFFFFFFFFFF..F..FFFFFFFFFFFFFFFFFFFFFFFF........F.FF..FFFF..FFF.FF [ 96%]
+FFFFFFFFFFF.FF                                                           [100%]
+================================== FAILURES ===================================
+E   assert [] == [(2, 6)]
+      
+      Right contains one more item: (2, 6)
+      Use -v to get more diff
+E   AssertionError: assert [TermHit(sour...e, note=None)] == []
+      
+      Left contains one more item: TermHit(source_term='wind', target_term='Rüzgar', start=4, end=8, segment_index=None, note=None)
+      Use -v to get more diff
+E   AssertionError: assert [TermHit(sour...e, note=None)] == []
+      
+      Left contains one more item: TermHit(source_term='mill', target_term='Deðirmen', start=0, end=4, segment_index=None, note=None)
+      Use -v to get more diff
+E   AssertionError: assert [TermHit(sour...e, note=None)] == []
+      
+      Left contains one more item: TermHit(source_term='\u6c34\u8eca', target_term='Su \xc7ark\u0131', start=0, end=2, segment_index=None, note=None)
+      Use -v to get more diff
+E   AssertionError: assert [TermHit(sour...e, note=None)] == []
+      
+      Left contains one more item: TermHit(source_term='wind', target_term='Rüzgar', start=0, end=4, segment_index=None, note=None)
+      Use -v to get more diff
+E   AssertionError: assert [TermHit(sour...te=None), ...] == []
+      
+      Left contains 2999 more items, first extra item: TermHit(source_term='Marcus', target_term='Marcus', start=0, end=6, segment_index=None, note=None)
+      Use -v to get more diff
+E   assert [] == [(2, 6)]
+      
+      Right contains one more item: (2, 6)
+      Use -v to get more diff
+E   assert [] == [(0, 4)]
+      
+      Right contains one more item: (0, 4)
+      Use -v to get more diff
+E   assert [] == [(0, 4)]
+      
+      Right contains one more item: (0, 4)
+      Use -v to get more diff
+E   assert [] == [(0, 4)]
+      
+      Right contains one more item: (0, 4)
+      Use -v to get more diff
+E   assert [] == [(2, 8)]
+      
+      Right contains one more item: (2, 8)
+      Use -v to get more diff
+E   assert [] == [(0, 6)]
+      
+      Right contains one more item: (0, 6)
+      Use -v to get more diff
+E   assert [] == [(4, 10)]
+      
+      Right contains one more item: (4, 10)
+      Use -v to get more diff
+E   AssertionError: assert [TermHit(sour...e, note=None)] == []
+      
+      Left contains one more item: TermHit(source_term='wind', target_term='Rüzgar', start=0, end=4, segment_index=None, note=None)
+      Use -v to get more diff
+E   assert [] == [(1, 3)]
+      
+      Right contains one more item: (1, 3)
+      Use -v to get more diff
+E   assert [] == [(0, 2)]
+      
+      Right contains one more item: (0, 2)
+      Use -v to get more diff
+E   assert [] == [(1, 3)]
+      
+      Right contains one more item: (1, 3)
+      Use -v to get more diff
+E   assert [] == [(0, 2)]
+      
+      Right contains one more item: (0, 2)
+      Use -v to get more diff
+E   assert [] == [(1, 3)]
+      
+      Right contains one more item: (1, 3)
+      Use -v to get more diff
+E   assert [] == [(0, 2)]
+      
+      Right contains one more item: (0, 2)
+      Use -v to get more diff
+E   assert [] == [(1, 3)]
+      
+      Right contains one more item: (1, 3)
+      Use -v to get more diff
+E   assert [] == [(0, 2)]
+      
+      Right contains one more item: (0, 2)
+      Use -v to get more diff
+E   assert [] == [(1, 4)]
+      
+      Right contains one more item: (1, 4)
+      Use -v to get more diff
+E   assert [] == [(0, 3)]
+      
+      Right contains one more item: (0, 3)
+      Use -v to get more diff
+E   assert [] == [(1, 4)]
+      
+      Right contains one more item: (1, 4)
+      Use -v to get more diff
+E   assert [] == [(0, 3)]
+      
+      Right contains one more item: (0, 3)
+      Use -v to get more diff
+E   assert [] == [(1, 4)]
+      
+      Right contains one more item: (1, 4)
+      Use -v to get more diff
+E   assert [] == [(0, 3)]
+      
+      Right contains one more item: (0, 3)
+      Use -v to get more diff
+E   assert [] == [(1, 4)]
+      
+      Right contains one more item: (1, 4)
+      Use -v to get more diff
+E   assert [] == [(0, 3)]
+      
+      Right contains one more item: (0, 3)
+      Use -v to get more diff
+E   assert [] == [(1, 5)]
+      
+      Right contains one more item: (1, 5)
+      Use -v to get more diff
+E   assert [] == [(0, 4)]
+      
+      Right contains one more item: (0, 4)
+      Use -v to get more diff
+E   assert [] == [(1, 5)]
+      
+      Right contains one more item: (1, 5)
+      Use -v to get more diff
+E   assert [] == [(0, 4)]
+      
+      Right contains one more item: (0, 4)
+      Use -v to get more diff
+E   assert [] == [(1, 5)]
+      
+      Right contains one more item: (1, 5)
+      Use -v to get more diff
+E   assert [] == [(0, 4)]
+      
+      Right contains one more item: (0, 4)
+      Use -v to get more diff
+E   assert [] == [(1, 5)]
+      
+      Right contains one more item: (1, 5)
+      Use -v to get more diff
+E   assert [] == [(0, 4)]
+      
+      Right contains one more item: (0, 4)
+      Use -v to get more diff
+E   assert [] == [(1, 5)]
+      
+      Right contains one more item: (1, 5)
+      Use -v to get more diff
+E   assert [] == [(0, 4)]
+      
+      Right contains one more item: (0, 4)
+      Use -v to get more diff
+E   assert [] == [(1, 5)]
+      
+      Right contains one more item: (1, 5)
+      Use -v to get more diff
+E   assert [] == [(0, 4)]
+      
+      Right contains one more item: (0, 4)
+      Use -v to get more diff
+E   assert [] == [(1, 5)]
+      
+      Right contains one more item: (1, 5)
+      Use -v to get more diff
+E   assert [] == [(0, 4)]
+      
+      Right contains one more item: (0, 4)
+      Use -v to get more diff
+E   assert [] == [(1, 5)]
+      
+      Right contains one more item: (1, 5)
+      Use -v to get more diff
+E   assert [] == [(0, 4)]
+      
+      Right contains one more item: (0, 4)
+      Use -v to get more diff
+E   assert [] == [(1, 7)]
+      
+      Right contains one more item: (1, 7)
+      Use -v to get more diff
+E   assert [] == [(0, 6)]
+      
+      Right contains one more item: (0, 6)
+      Use -v to get more diff
+E   assert [] == [(1, 7)]
+      
+      Right contains one more item: (1, 7)
+      Use -v to get more diff
+E   assert [] == [(0, 6)]
+      
+      Right contains one more item: (0, 6)
+      Use -v to get more diff
+E   assert [] == [(1, 7)]
+      
+      Right contains one more item: (1, 7)
+      Use -v to get more diff
+E   assert [] == [(0, 6)]
+      
+      Right contains one more item: (0, 6)
+      Use -v to get more diff
+E   assert [] == [(1, 7)]
+      
+      Right contains one more item: (1, 7)
+      Use -v to get more diff
+E   assert [] == [(0, 6)]
+      
+      Right contains one more item: (0, 6)
+      Use -v to get more diff
+E   assert [] == [(0, 4)]
+      
+      Right contains one more item: (0, 4)
+      Use -v to get more diff
+E   assert [] == [(0, 4)]
+      
+      Right contains one more item: (0, 4)
+      Use -v to get more diff
+E   assert [] == [(0, 4)]
+      
+      Right contains one more item: (0, 4)
+      Use -v to get more diff
+E   assert [] == [(0, 4)]
+      
+      Right contains one more item: (0, 4)
+      Use -v to get more diff
+E   assert [] == [(0, 4)]
+      
+      Right contains one more item: (0, 4)
+      Use -v to get more diff
+E   assert [] == [(0, 4)]
+      
+      Right contains one more item: (0, 4)
+      Use -v to get more diff
+E   assert [] == [(0, 4)]
+      
+      Right contains one more item: (0, 4)
+      Use -v to get more diff
+E   assert [] == [(0, 4)]
+      
+      Right contains one more item: (0, 4)
+      Use -v to get more diff
+E   assert [] == [(0, 4)]
+      
+      Right contains one more item: (0, 4)
+      Use -v to get more diff
+E   assert [] == [(0, 4)]
+      
+      Right contains one more item: (0, 4)
+      Use -v to get more diff
+E   assert [] == [(0, 4)]
+      
+      Right contains one more item: (0, 4)
+      Use -v to get more diff
+E   assert [] == [(0, 4)]
+      
+      Right contains one more item: (0, 4)
+      Use -v to get more diff
+E   assert [] == [(0, 4)]
+      
+      Right contains one more item: (0, 4)
+      Use -v to get more diff
+E   assert [] == [(0, 4)]
+      
+      Right contains one more item: (0, 4)
+      Use -v to get more diff
+E   assert [] == [(0, 4)]
+      
+      Right contains one more item: (0, 4)
+      Use -v to get more diff
+E   assert [] == [(0, 4)]
+      
+      Right contains one more item: (0, 4)
+      Use -v to get more diff
+E   assert [] == [(0, 4)]
+      
+      Right contains one more item: (0, 4)
+      Use -v to get more diff
+E   assert [] == [(0, 3)]
+      
+      Right contains one more item: (0, 3)
+      Use -v to get more diff
+E   assert [] == [(0, 2)]
+      
+      Right contains one more item: (0, 2)
+      Use -v to get more diff
+E   assert [] == [(0, 2)]
+      
+      Right contains one more item: (0, 2)
+      Use -v to get more diff
+E   assert [] == [(0, 2)]
+      
+      Right contains one more item: (0, 2)
+      Use -v to get more diff
+E   assert [] == [(0, 3)]
+      
+      Right contains one more item: (0, 3)
+      Use -v to get more diff
+E   assert [] == [(0, 2)]
+      
+      Right contains one more item: (0, 2)
+      Use -v to get more diff
+E   assert [] == [(0, 3)]
+      
+      Right contains one more item: (0, 3)
+      Use -v to get more diff
+E   assert [] == [(0, 3)]
+      
+      Right contains one more item: (0, 3)
+      Use -v to get more diff
+E   assert [] == [(0, 3)]
+      
+      Right contains one more item: (0, 3)
+      Use -v to get more diff
+E   assert [] == [(0, 3)]
+      
+      Right contains one more item: (0, 3)
+      Use -v to get more diff
+E   assert [] == [(0, 3)]
+      
+      Right contains one more item: (0, 3)
+      Use -v to get more diff
+E   assert [] == [(0, 3)]
+      
+      Right contains one more item: (0, 3)
+      Use -v to get more diff
+E   assert [] == [(0, 3)]
+      
+      Right contains one more item: (0, 3)
+      Use -v to get more diff
+E   assert [] == [(0, 3)]
+      
+      Right contains one more item: (0, 3)
+      Use -v to get more diff
+E   assert [] == [(0, 3)]
+      
+      Right contains one more item: (0, 3)
+      Use -v to get more diff
+E   AssertionError: assert [TermHit(sour...e, note=None)] == []
+      
+      Left contains one more item: TermHit(source_term='\u3072\u304b\u308a', target_term='Hikari', start=0, end=3, segment_index=None, note=None)
+      Use -v to get more diff
+E   assert [] == [(0, 4)]
+      
+      Right contains one more item: (0, 4)
+      Use -v to get more diff
+E   assert [] == [(0, 3)]
+      
+      Right contains one more item: (0, 3)
+      Use -v to get more diff
+E   assert [] == [(0, 4)]
+      
+      Right contains one more item: (0, 4)
+      Use -v to get more diff
+E   assert [] == [(0, 4)]
+      
+      Right contains one more item: (0, 4)
+      Use -v to get more diff
+E   assert [] == [(0, 4)]
+      
+      Right contains one more item: (0, 4)
+      Use -v to get more diff
+E   assert [] == [(0, 4)]
+      
+      Right contains one more item: (0, 4)
+      Use -v to get more diff
+E   assert [] == [(0, 4)]
+      
+      Right contains one more item: (0, 4)
+      Use -v to get more diff
+E   assert [] == [(0, 4)]
+      
+      Right contains one more item: (0, 4)
+      Use -v to get more diff
+E   assert [] == [(0, 4)]
+      
+      Right contains one more item: (0, 4)
+      Use -v to get more diff
+E   assert [] == [(0, 4)]
+      
+      Right contains one more item: (0, 4)
+      Use -v to get more diff
+E   assert [] == [(0, 4)]
+      
+      Right contains one more item: (0, 4)
+      Use -v to get more diff
+E   assert [] == [(0, 4)]
+      
+      Right contains one more item: (0, 4)
+      Use -v to get more diff
+E   assert [] == [(0, 4)]
+      
+      Right contains one more item: (0, 4)
+      Use -v to get more diff
+E   assert [] == [(0, 4)]
+      
+      Right contains one more item: (0, 4)
+      Use -v to get more diff
+E   assert [] == [(0, 4)]
+      
+      Right contains one more item: (0, 4)
+      Use -v to get more diff
+E   assert [] == [(0, 4)]
+      
+      Right contains one more item: (0, 4)
+      Use -v to get more diff
+E   assert [] == [(0, 4)]
+      
+      Right contains one more item: (0, 4)
+      Use -v to get more diff
+E   assert [] == [(0, 4)]
+      
+      Right contains one more item: (0, 4)
+      Use -v to get more diff
+E   assert [] == [(0, 4)]
+      
+      Right contains one more item: (0, 4)
+      Use -v to get more diff
+E   assert [] == [(0, 4)]
+      
+      Right contains one more item: (0, 4)
+      Use -v to get more diff
+E   assert [] == [(0, 4)]
+      
+      Right contains one more item: (0, 4)
+      Use -v to get more diff
+E   assert [] == [(0, 4)]
+      
+      Right contains one more item: (0, 4)
+      Use -v to get more diff
+E   assert [] == [(0, 2)]
+      
+      Right contains one more item: (0, 2)
+      Use -v to get more diff
+E   assert [] == [(0, 4)]
+      
+      Right contains one more item: (0, 4)
+      Use -v to get more diff
+E   assert [] == [(0, 5)]
+      
+      Right contains one more item: (0, 5)
+      Use -v to get more diff
+E   AssertionError: assert [] == ['B']
+      
+      Right contains one more item: 'B'
+      Use -v to get more diff
+E   AssertionError: assert ('{Deg\u0306irmen}',) == ('{De\u011firmen}',)
+      
+      At index 0 diff: '{Deg\u0306irmen}' != '{De\u011firmen}'
+      Use -v to get more diff
+E   TypeError: placeholders bir str dizisi olmali, gelen: str
+E   TypeError: placeholders ogesi str olmali, gelen: int
+E   TypeError: placeholders ogesi str olmali, gelen: NoneType
+E   TypeError: placeholders bir str dizisi olmali, gelen: int
+E   assert [] == [(0, 2)]
+      
+      Right contains one more item: (0, 2)
+      Use -v to get more diff
+E   AssertionError: medyan 431.0 ms (izleyici payi x1)
+    assert 431.04830000083894 < (60 * 1.0)
+     +  where 1.0 = _izleyici_payi()
+E   AssertionError: assert (8000 == 8000 and [TermHit(sour...te=None), ...] == []
+     +  where 8000 = len([TermHit(source_term='Marcus', target_term='Marcus', start=0, end=6, segment_index=None, note=None), TermHit(source_te... note=None), TermHit(source_term='Marcus', target_term='Marcus', start=30, end=36, segment_index=None, note=None), ...])
+     +    where [TermHit(source_term='Marcus', target_term='Marcus', start=0, end=6, segment_index=None, note=None), TermHit(source_te... note=None), TermHit(source_term='Marcus', target_term='Marcus', start=30, end=36, segment_index=None, note=None), ...] = lookup('MarcusMarcusMarcusMarcusMarcusMarcusMarcusMarcusMarcusMarcusMarcusMarcusMarcusMarcusMarcusMarcusMarcusMarcusMarcusMar...rcusMarcusMarcusMarcusMarcusMarcusMarcusMarcusMarcusMarcusMarcusMarcusMarcusMarcusMarcusMarcusMarcusMarcusMarcusMarcus')
+     +      where lookup = GlossaryStore(terim_sayisi=7, dosya='v3.json').lookup
+      
+      Left contains 7999 more items, first extra item: TermHit(source_term='Marcus', target_term='Marcus', start=0, end=6, segment_index=None, note=None)
+      Use -v to get more diff)
+E   Failed: DID NOT RAISE ValueError
+E   Failed: DID NOT RAISE ValueError
+E   Failed: DID NOT RAISE ValueError
+E   Failed: DID NOT RAISE ValueError
+E   Failed: DID NOT RAISE ValueError
+E   Failed: DID NOT RAISE ValueError
+E   Failed: DID NOT RAISE ValueError
+E   Failed: DID NOT RAISE ValueError
+E   Failed: DID NOT RAISE ValueError
+E   Failed: DID NOT RAISE ValueError
+E   Failed: DID NOT RAISE ValueError
+E   Failed: DID NOT RAISE ValueError
+E   Failed: DID NOT RAISE ValueError
+E   Failed: DID NOT RAISE ValueError
+E   RecursionError: maximum recursion depth exceeded
+=========================== short test summary info ===========================
+FAILED tests/unit/translate/test_sozluk.py::test_k1_yer_tutucu_ucu_sinirdir
+FAILED tests/unit/translate/test_sozluk.py::test_k1_zincir_windmills_dis_uc_sinir_degil_sifir_hit
+FAILED tests/unit/translate/test_sozluk.py::test_k1_zincir_millstones_sifir_hit_millstone_iki_hit
+FAILED tests/unit/translate/test_sozluk.py::test_k1_zincir_reddedilen_aday_komsuya_sinir_vermez
+FAILED tests/unit/translate/test_sozluk.py::test_k1_zincir_yer_tutucu_ile_ortusen_aday_uye_olamaz
+FAILED tests/unit/translate/test_sozluk.py::test_k1_zincir_binlerce_uye_ozyineleme_yok
+FAILED tests/unit/translate/test_sozluk.py::test_k1_betik_gecisi_pozitif_eslesir[Han|Katakana-\u9577\u8001\u30de\u30eb\u30af\u30b9-unvan-sozlukte-yok]
+FAILED tests/unit/translate/test_sozluk.py::test_k1_betik_gecisi_pozitif_eslesir[Katakana|Han-\u30de\u30eb\u30af\u30b9\u69d8]
+FAILED tests/unit/translate/test_sozluk.py::test_k1_betik_gecisi_pozitif_eslesir[Katakana|Hiragana-\u30de\u30eb\u30af\u30b9\u3055\u3093]
+FAILED tests/unit/translate/test_sozluk.py::test_k1_betik_gecisi_pozitif_eslesir[Katakana|Hiragana-\u30de\u30eb\u30af\u30b9\u305f\u3061]
+FAILED tests/unit/translate/test_sozluk.py::test_k1_betik_gecisi_pozitif_eslesir[Han|Latin-\u9577\u8001Marcus]
+FAILED tests/unit/translate/test_sozluk.py::test_k1_betik_gecisi_pozitif_eslesir[Latin|Han-Marcus\u69d8]
+FAILED tests/unit/translate/test_sozluk.py::test_k1_betik_gecisi_pozitif_eslesir[Hangul|Latin-\ub9c8\ub974\ucfe0\uc2a4Marcus-yalniz-Marcus-sozlukte]
+FAILED tests/unit/translate/test_sozluk.py::test_k1_betik_gecisi_negatif_sinif_ici_komsu_sinir_degil[Latin-zincir-windmills]
+FAILED tests/unit/translate/test_sozluk.py::test_k1_betik_siniflari_ciftler_halinde[Han-Hiragana-sol]
+FAILED tests/unit/translate/test_sozluk.py::test_k1_betik_siniflari_ciftler_halinde[Han-Hiragana-sag]
+FAILED tests/unit/translate/test_sozluk.py::test_k1_betik_siniflari_ciftler_halinde[Han-Katakana-sol]
+FAILED tests/unit/translate/test_sozluk.py::test_k1_betik_siniflari_ciftler_halinde[Han-Katakana-sag]
+FAILED tests/unit/translate/test_sozluk.py::test_k1_betik_siniflari_ciftler_halinde[Han-Hangul-sol]
+FAILED tests/unit/translate/test_sozluk.py::test_k1_betik_siniflari_ciftler_halinde[Han-Hangul-sag]
+FAILED tests/unit/translate/test_sozluk.py::test_k1_betik_siniflari_ciftler_halinde[Han-diger-sol]
+FAILED tests/unit/translate/test_sozluk.py::test_k1_betik_siniflari_ciftler_halinde[Han-diger-sag]
+FAILED tests/unit/translate/test_sozluk.py::test_k1_betik_siniflari_ciftler_halinde[Hiragana-Han-sol]
+FAILED tests/unit/translate/test_sozluk.py::test_k1_betik_siniflari_ciftler_halinde[Hiragana-Han-sag]
+FAILED tests/unit/translate/test_sozluk.py::test_k1_betik_siniflari_ciftler_halinde[Hiragana-Katakana-sol]
+FAILED tests/unit/translate/test_sozluk.py::test_k1_betik_siniflari_ciftler_halinde[Hiragana-Katakana-sag]
+FAILED tests/unit/translate/test_sozluk.py::test_k1_betik_siniflari_ciftler_halinde[Hiragana-Hangul-sol]
+FAILED tests/unit/translate/test_sozluk.py::test_k1_betik_siniflari_ciftler_halinde[Hiragana-Hangul-sag]
+FAILED tests/unit/translate/test_sozluk.py::test_k1_betik_siniflari_ciftler_halinde[Hiragana-diger-sol]
+FAILED tests/unit/translate/test_sozluk.py::test_k1_betik_siniflari_ciftler_halinde[Hiragana-diger-sag]
+FAILED tests/unit/translate/test_sozluk.py::test_k1_betik_siniflari_ciftler_halinde[Katakana-Han-sol]
+FAILED tests/unit/translate/test_sozluk.py::test_k1_betik_siniflari_ciftler_halinde[Katakana-Han-sag]
+FAILED tests/unit/translate/test_sozluk.py::test_k1_betik_siniflari_ciftler_halinde[Katakana-Hiragana-sol]
+FAILED tests/unit/translate/test_sozluk.py::test_k1_betik_siniflari_ciftler_halinde[Katakana-Hiragana-sag]
+FAILED tests/unit/translate/test_sozluk.py::test_k1_betik_siniflari_ciftler_halinde[Katakana-Hangul-sol]
+FAILED tests/unit/translate/test_sozluk.py::test_k1_betik_siniflari_ciftler_halinde[Katakana-Hangul-sag]
+FAILED tests/unit/translate/test_sozluk.py::test_k1_betik_siniflari_ciftler_halinde[Katakana-diger-sol]
+FAILED tests/unit/translate/test_sozluk.py::test_k1_betik_siniflari_ciftler_halinde[Katakana-diger-sag]
+FAILED tests/unit/translate/test_sozluk.py::test_k1_betik_siniflari_ciftler_halinde[Hangul-Han-sol]
+FAILED tests/unit/translate/test_sozluk.py::test_k1_betik_siniflari_ciftler_halinde[Hangul-Han-sag]
+FAILED tests/unit/translate/test_sozluk.py::test_k1_betik_siniflari_ciftler_halinde[Hangul-Hiragana-sol]
+FAILED tests/unit/translate/test_sozluk.py::test_k1_betik_siniflari_ciftler_halinde[Hangul-Hiragana-sag]
+FAILED tests/unit/translate/test_sozluk.py::test_k1_betik_siniflari_ciftler_halinde[Hangul-Katakana-sol]
+FAILED tests/unit/translate/test_sozluk.py::test_k1_betik_siniflari_ciftler_halinde[Hangul-Katakana-sag]
+FAILED tests/unit/translate/test_sozluk.py::test_k1_betik_siniflari_ciftler_halinde[Hangul-diger-sol]
+FAILED tests/unit/translate/test_sozluk.py::test_k1_betik_siniflari_ciftler_halinde[Hangul-diger-sag]
+FAILED tests/unit/translate/test_sozluk.py::test_k1_betik_siniflari_ciftler_halinde[diger-Han-sol]
+FAILED tests/unit/translate/test_sozluk.py::test_k1_betik_siniflari_ciftler_halinde[diger-Han-sag]
+FAILED tests/unit/translate/test_sozluk.py::test_k1_betik_siniflari_ciftler_halinde[diger-Hiragana-sol]
+FAILED tests/unit/translate/test_sozluk.py::test_k1_betik_siniflari_ciftler_halinde[diger-Hiragana-sag]
+FAILED tests/unit/translate/test_sozluk.py::test_k1_betik_siniflari_ciftler_halinde[diger-Katakana-sol]
+FAILED tests/unit/translate/test_sozluk.py::test_k1_betik_siniflari_ciftler_halinde[diger-Katakana-sag]
+FAILED tests/unit/translate/test_sozluk.py::test_k1_betik_siniflari_ciftler_halinde[diger-Hangul-sol]
+FAILED tests/unit/translate/test_sozluk.py::test_k1_betik_siniflari_ciftler_halinde[diger-Hangul-sag]
+FAILED tests/unit/translate/test_sozluk.py::test_k1_betik_gecisi_\u30de\u30eb\u30af\u30b9\u5c71_eslesir_paket_celiskisi
+FAILED tests/unit/translate/test_sozluk.py::test_k1_betik_gecisi_sembol_komsusu_asimetrik_belgeli[Katakana|So-sinir]
+FAILED tests/unit/translate/test_sozluk.py::test_k1_her_jp_saygi_eki_katakana_ad[\u3055\u3093]
+FAILED tests/unit/translate/test_sozluk.py::test_k1_her_jp_saygi_eki_katakana_ad[\u69d8]
+FAILED tests/unit/translate/test_sozluk.py::test_k1_her_jp_saygi_eki_katakana_ad[\u6bbf]
+FAILED tests/unit/translate/test_sozluk.py::test_k1_her_jp_saygi_eki_katakana_ad[\u541b]
+FAILED tests/unit/translate/test_sozluk.py::test_k1_her_jp_saygi_eki_katakana_ad[\u3061\u3083\u3093]
+FAILED tests/unit/translate/test_sozluk.py::test_k1_her_jp_saygi_eki_katakana_ad[\u9054]
+FAILED tests/unit/translate/test_sozluk.py::test_k1_her_jp_saygi_eki_katakana_ad[\u305f\u3061]
+FAILED tests/unit/translate/test_sozluk.py::test_k1_her_jp_saygi_eki_katakana_ad[\u3063\u3066]
+FAILED tests/unit/translate/test_sozluk.py::test_k1_her_jp_saygi_eki_katakana_ad[\u3060]
+FAILED tests/unit/translate/test_sozluk.py::test_k1_her_jp_saygi_eki_katakana_ad[\u304b\u3089]
+FAILED tests/unit/translate/test_sozluk.py::test_k1_her_jp_saygi_eki_katakana_ad[\u307e\u3067]
+FAILED tests/unit/translate/test_sozluk.py::test_k1_her_jp_saygi_eki_katakana_ad[\u3088\u308a]
+FAILED tests/unit/translate/test_sozluk.py::test_k1_her_jp_saygi_eki_katakana_ad[\u304b]
+FAILED tests/unit/translate/test_sozluk.py::test_k1_her_jp_saygi_eki_katakana_ad[\u3088]
+FAILED tests/unit/translate/test_sozluk.py::test_k1_her_jp_saygi_eki_katakana_ad[\u306d]
+FAILED tests/unit/translate/test_sozluk.py::test_k1_her_jp_saygi_eki_ayni_betikte_listeden_gelir[\u3055\u3093]
+FAILED tests/unit/translate/test_sozluk.py::test_k1_her_jp_saygi_eki_ayni_betikte_listeden_gelir[\u69d8]
+FAILED tests/unit/translate/test_sozluk.py::test_k1_her_jp_saygi_eki_ayni_betikte_listeden_gelir[\u6bbf]
+FAILED tests/unit/translate/test_sozluk.py::test_k1_her_jp_saygi_eki_ayni_betikte_listeden_gelir[\u541b]
+FAILED tests/unit/translate/test_sozluk.py::test_k1_her_jp_saygi_eki_ayni_betikte_listeden_gelir[\u3061\u3083\u3093]
+FAILED tests/unit/translate/test_sozluk.py::test_k1_her_jp_saygi_eki_ayni_betikte_listeden_gelir[\u9054]
+FAILED tests/unit/translate/test_sozluk.py::test_k1_her_jp_saygi_eki_ayni_betikte_listeden_gelir[\u305f\u3061]
+FAILED tests/unit/translate/test_sozluk.py::test_k1_her_jp_saygi_eki_ayni_betikte_listeden_gelir[\u3063\u3066]
+FAILED tests/unit/translate/test_sozluk.py::test_k1_her_jp_saygi_eki_ayni_betikte_listeden_gelir[\u3060]
+FAILED tests/unit/translate/test_sozluk.py::test_k1_her_jp_saygi_eki_ayni_betikte_listeden_gelir[\u304b\u3089]
+FAILED tests/unit/translate/test_sozluk.py::test_k1_her_jp_saygi_eki_ayni_betikte_listeden_gelir[\u307e\u3067]
+FAILED tests/unit/translate/test_sozluk.py::test_k1_her_jp_saygi_eki_ayni_betikte_listeden_gelir[\u3088\u308a]
+FAILED tests/unit/translate/test_sozluk.py::test_k1_her_jp_saygi_eki_ayni_betikte_listeden_gelir[\u304b]
+FAILED tests/unit/translate/test_sozluk.py::test_k1_her_jp_saygi_eki_ayni_betikte_listeden_gelir[\u3088]
+FAILED tests/unit/translate/test_sozluk.py::test_k1_her_jp_saygi_eki_ayni_betikte_listeden_gelir[\u306d]
+FAILED tests/unit/translate/test_sozluk.py::test_k1_jp_saygi_listesi_negatif_kontrol[Hiragana-\u3072\u304b\u308a\u3084\u307e-listede-yok]
+FAILED tests/unit/translate/test_sozluk.py::test_k1_jp_saygi_eki_parcacik_zinciri_\u30de\u30eb\u30af\u30b9\u3055\u3093\u304c
+FAILED tests/unit/translate/test_sozluk.py::test_k1_jp_saygi_eki_zinciri_iki_ek
+FAILED tests/unit/translate/test_sozluk.py::test_k1_her_yeni_kr_ek_tek_basina_sinir[\uc5d0\uac8c]
+FAILED tests/unit/translate/test_sozluk.py::test_k1_her_yeni_kr_ek_tek_basina_sinir[\ud55c\ud14c]
+FAILED tests/unit/translate/test_sozluk.py::test_k1_her_yeni_kr_ek_tek_basina_sinir[\uaed8]
+FAILED tests/unit/translate/test_sozluk.py::test_k1_her_yeni_kr_ek_tek_basina_sinir[\ub2d8]
+FAILED tests/unit/translate/test_sozluk.py::test_k1_her_yeni_kr_ek_tek_basina_sinir[\uc528]
+FAILED tests/unit/translate/test_sozluk.py::test_k1_her_yeni_kr_ek_tek_basina_sinir[\uc57c]
+FAILED tests/unit/translate/test_sozluk.py::test_k1_her_yeni_kr_ek_tek_basina_sinir[\uc544]
+FAILED tests/unit/translate/test_sozluk.py::test_k1_her_yeni_kr_ek_tek_basina_sinir[\ub791]
+FAILED tests/unit/translate/test_sozluk.py::test_k1_her_yeni_kr_ek_tek_basina_sinir[\uc774\ub791]
+FAILED tests/unit/translate/test_sozluk.py::test_k1_her_yeni_kr_ek_tek_basina_sinir[\ub4e4]
+FAILED tests/unit/translate/test_sozluk.py::test_k1_her_yeni_kr_ek_tek_basina_sinir[\ucc98\ub7fc]
+FAILED tests/unit/translate/test_sozluk.py::test_k1_her_yeni_kr_ek_tek_basina_sinir[\ubcf4\ub2e4]
+FAILED tests/unit/translate/test_sozluk.py::test_k1_her_yeni_kr_ek_tek_basina_sinir[\ub9c8\ub2e4]
+FAILED tests/unit/translate/test_sozluk.py::test_k1_her_yeni_kr_ek_tek_basina_sinir[\ubc16\uc5d0]
+FAILED tests/unit/translate/test_sozluk.py::test_k1_her_yeni_kr_ek_tek_basina_sinir[\uc870\ucc28]
+FAILED tests/unit/translate/test_sozluk.py::test_k1_her_yeni_kr_ek_tek_basina_sinir[\ub77c\uace0]
+FAILED tests/unit/translate/test_sozluk.py::test_k1_her_yeni_kr_ek_tek_basina_sinir[\ub77c\uba74]
+FAILED tests/unit/translate/test_sozluk.py::test_k1_her_yeni_kr_ek_tek_basina_sinir[\uc785\ub2c8\ub2e4]
+FAILED tests/unit/translate/test_sozluk.py::test_k1_her_yeni_kr_ek_tek_basina_sinir[\uc774\ub2e4]
+FAILED tests/unit/translate/test_sozluk.py::test_k1_kr_ek_\uc5d0\uac8c_listeden_gelir_zincirle_degil
+FAILED tests/unit/translate/test_sozluk.py::test_k1_kr_ek_zinciri_\uc7a5\ub85c\ub2d8\uc774_iki_ek_eslesir
+FAILED tests/unit/translate/test_sozluk.py::test_k1_kr_ek_zinciri_\ub9c8\ub974\ucfe0\uc2a4\ub4e4\uc774\ub2e4_iki_ek_eslesir_paket_sayimi
+FAILED tests/unit/translate/test_sozluk.py::test_k1_trie_anahtari_coklu_kodpoint_casefold_sinifi_json_sirasindan_bagimsiz[Ma\xdfen-once]
+FAILED tests/unit/translate/test_sozluk.py::test_k1_trie_anahtari_yunan_iota_subscript_ayni_dal
+FAILED tests/unit/translate/test_sozluk.py::test_k2_nfd_segment_ve_nfd_yer_tutucu_ciktida_nfc_ve_alt_dize
+FAILED tests/unit/translate/test_sozluk.py::test_k2_segment_placeholders_bicim_hatasi_contract_violation[duz-str]
+FAILED tests/unit/translate/test_sozluk.py::test_k2_segment_placeholders_bicim_hatasi_contract_violation[int-oge]
+FAILED tests/unit/translate/test_sozluk.py::test_k2_segment_placeholders_bicim_hatasi_contract_violation[None-oge]
+FAILED tests/unit/translate/test_sozluk.py::test_k2_segment_placeholders_bicim_hatasi_contract_violation[int]
+FAILED tests/unit/translate/test_sozluk.py::test_k4_kimlik_cipasi_gerekmez_betik_gecisi_yeter
+FAILED tests/unit/translate/test_sozluk.py::test_k5_sure_8000_hit_tek_segment_60ms_alti
+FAILED tests/unit/translate/test_sozluk.py::test_k5_sure_8000_uyeli_zincir_60ms_alti
+FAILED tests/unit/translate/test_sozluk.py::test_k6_kaynakta_her_terminator_red[U+002E]
+FAILED tests/unit/translate/test_sozluk.py::test_k6_kaynakta_her_terminator_red[U+0021]
+FAILED tests/unit/translate/test_sozluk.py::test_k6_kaynakta_her_terminator_red[U+003F]
+FAILED tests/unit/translate/test_sozluk.py::test_k6_kaynakta_her_terminator_red[U+3002]
+FAILED tests/unit/translate/test_sozluk.py::test_k6_kaynakta_her_terminator_red[U+FF01]
+FAILED tests/unit/translate/test_sozluk.py::test_k6_kaynakta_her_terminator_red[U+FF1F]
+FAILED tests/unit/translate/test_sozluk.py::test_k6_kaynakta_terminator_ortada_da_red
+FAILED tests/unit/translate/test_sozluk.py::test_k6_hedefte_her_kontrol_karakteri_red[LF]
+FAILED tests/unit/translate/test_sozluk.py::test_k6_hedefte_her_kontrol_karakteri_red[TAB]
+FAILED tests/unit/translate/test_sozluk.py::test_k6_hedefte_her_kontrol_karakteri_red[CR]
+FAILED tests/unit/translate/test_sozluk.py::test_k6_hedefte_her_kontrol_karakteri_red[NUL]
+FAILED tests/unit/translate/test_sozluk.py::test_k6_hedefte_her_kontrol_karakteri_red[DEL]
+FAILED tests/unit/translate/test_sozluk.py::test_k6_hedefte_her_kontrol_karakteri_red[NEL]
+FAILED tests/unit/translate/test_sozluk.py::test_k6_kaynak_100_kodpoint_kabul_101_red
+FAILED tests/unit/translate/test_sozluk.py::test_k6_kaynak_2000_kodpoint_valueerror_recursionerror_degil
+136 failed, 310 passed in 27.34s

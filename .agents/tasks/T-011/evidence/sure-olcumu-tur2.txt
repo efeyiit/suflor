@@ -1,0 +1,26 @@
+T-011 K5 sure olcumu (tur 2) -- python 3.12.10, 7 kosum medyani (ms)
+== 1. 1000 segment x terim sayisi ==
+  yukleme fixture v3 (  7 terim):    8.0 ms
+  yukleme   50 terim ( 50 terim):    3.7 ms
+  yukleme  500 terim (500 terim):    9.7 ms
+  JP x fixture v3: lookup_segments+gom   11.8 ms | kapi yolu (lookup+replace+gom)   14.2 ms | hit 2000 | butce 50
+  JP x   50 terim: lookup_segments+gom   11.7 ms | kapi yolu (lookup+replace+gom)   14.2 ms | hit 2000 | butce 50
+  JP x  500 terim: lookup_segments+gom   11.9 ms | kapi yolu (lookup+replace+gom)   15.1 ms | hit 2000 | butce 50
+  EN x fixture v3: lookup_segments+gom    7.3 ms | kapi yolu (lookup+replace+gom)    9.2 ms | hit 1000 | butce 50
+  EN x   50 terim: lookup_segments+gom    8.1 ms | kapi yolu (lookup+replace+gom)    9.3 ms | hit 1000 | butce 50
+  EN x  500 terim: lookup_segments+gom    8.1 ms | kapi yolu (lookup+replace+gom)    9.1 ms | hit 1000 | butce 50
+== 2. hit yogunlugu: tek segment, 2x hit -> sure orani (dogrusal ~2x; tur 1 karesel 3.2-3.9x) ==
+  hit=  500 len=  3500 medyan     1.1 ms  (onceki 2x hit'e oran: -)
+  hit= 1000 len=  7000 medyan     2.3 ms  (onceki 2x hit'e oran: 2.16x)
+  hit= 2000 len= 14000 medyan     4.6 ms  (onceki 2x hit'e oran: 1.97x)
+  hit= 4000 len= 28000 medyan     9.4 ms  (onceki 2x hit'e oran: 2.04x)
+  hit= 8000 len= 56000 medyan    21.2 ms  (onceki 2x hit'e oran: 2.25x)
+  gom 8000 hit tek segment: medyan 27.0 ms
+== 3. zincir aramasi (8000 uye) ==
+  gecerli zincir                     hit= 8000 medyan    24.3 ms
+  sag ucu olu (+x)                   hit=    0 medyan    23.3 ms
+  sol ucu olu (x+)                   hit=    0 medyan    20.0 ms
+  iki ucu olu                        hit=    0 medyan    20.6 ms
+  ortadan noktalama, sag yarisi olu  hit= 4000 medyan    23.9 ms
+  onek zinciri a2..a11 + a*10000     hit=  910 medyan    59.6 ms (tur 1: 909 hit 850 ms)
+  ayni, sag ucu olu (+b)             hit=    0 medyan   152.5 ms (tur 1: 909 hit 850 ms)

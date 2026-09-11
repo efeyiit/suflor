@@ -1,0 +1,185 @@
+# python -m pytest .agents/tasks/T-011/tester_A .agents/tasks/T-011/tester_B -q -p no:cacheprovider --import-mode=importlib -rfEx --tb=line  (tur 2 kodu uzerinde; exit=1)
+............F.......FF.......F.F..............................F....F.... [ 28%]
+.................F...F...............................F.................. [ 56%]
+........F..F..FF.F..F...........F..FFFFF..FFFFFFFFFFFFFFFFFF...FF....... [ 85%]
+...x...........................F.F...F                                   [100%]
+================================== FAILURES ===================================
+E   assert [] == [(0, 3)]
+      
+      Right contains one more item: (0, 3)
+      Use -v to get more diff
+E   assert [(1, 5)] == []
+      
+      Left contains one more item: (1, 5)
+      Use -v to get more diff
+E   assert [(0, 4)] == []
+      
+      Left contains one more item: (0, 4)
+      Use -v to get more diff
+E   assert [(0, 2), (2, 6)] == [(0, 2)]
+      
+      Left contains one more item: (2, 6)
+      Use -v to get more diff
+E   assert [(3, 7)] == []
+      
+      Left contains one more item: (3, 7)
+      Use -v to get more diff
+E   AssertionError: assert ('{\xdcnl\xfc}',) == ('{U\u0308nlu\u0308}',)
+      
+      At index 0 diff: '{\xdcnl\xfc}' != '{U\u0308nlu\u0308}'
+      Use -v to get more diff
+E   AssertionError: assert [TermHit(sour...e, note=None)] == []
+      
+      Left contains one more item: TermHit(source_term='\u30de\u30eb\u30af\u30b9', target_term='Marcus', start=1, end=5, segment_index=None, note=None)
+      Use -v to get more diff
+E   ValueError: sozluk semasi: terim 'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa': kaynak 300 kodpoint, en fazla 100 olabilir
+E   AssertionError: (0.00238389999140054, 0.010410999995656312)
+    assert (0.010410999995656312 / 0.00238389999140054) > 6
+E   ValueError: sozluk semasi: terim 'ab': hedef kontrol karakteri iceremez (U+000A); satir bolmesine gider
+E   assert ([] == [(0, 4)]
+      
+      Right contains one more item: (0, 4)
+      Use -v to get more diff)
+E   AssertionError: assert [TermHit(sour...e, note=None)] == []
+      
+      Left contains one more item: TermHit(source_term='Ma\u1e9eer', target_term='Masser', start=0, end=5, segment_index=None, note=None)
+      Use -v to get more diff
+E   AssertionError: assert [TermHit(sour...e, note=None)] == []
+      
+      Left contains one more item: TermHit(source_term='\u1f80\u03b2\u03b4', target_term='B', start=0, end=3, segment_index=None, note=None)
+      Use -v to get more diff
+E   ValueError: sozluk semasi: terim '.x': kaynak cumle sonu isareti iceremez (.!?\u3002\uff01\uff1f); gomme cumle sinirini yutar
+E   assert [] == [(0, 2)]
+      
+      Right contains one more item: (0, 2)
+      Use -v to get more diff
+E   AssertionError: assert '\u9577\u8001Marcus\u304cDe\u011firmen\u3067\u5f85\u3063\u3066\u3044\u307e\u3059\u3002' == '\u0130htiyarMarcu...irmen\u3067\u5f85\u3063\u3066\u3044\u307e\u3059\u3002'
+      
+      - \u0130htiyarMarcus\u304cDe\u011firmen\u3067\u5f85\u3063\u3066\u3044\u307e\u3059\u3002
+      ? ^^^^^^^
+      + \u9577\u8001Marcus\u304cDe\u011firmen\u3067\u5f85\u3063\u3066\u3044\u307e\u3059\u3002
+      ? ^^
+E   ValueError: sozluk semasi: terim '\u30de\u30eb\u30af\u30b9\u3002': kaynak cumle sonu isareti iceremez (.!?\u3002\uff01\uff1f); gomme cumle sinirini yutar
+E   AssertionError: assert ['Marcus'] == ['Ýhtiyar', 'Marcus']
+      
+      At index 0 diff: 'Marcus' != 'Ýhtiyar'
+      Right contains one more item: 'Marcus'
+      Use -v to get more diff
+E   AssertionError: assert [] == ['Ýhtiyar']
+      
+      Right contains one more item: 'Ýhtiyar'
+      Use -v to get more diff
+E   AssertionError: assert ['Marcus'] == ['Ýhtiyar']
+      
+      At index 0 diff: 'Marcus' != 'Ýhtiyar'
+      Use -v to get more diff
+E   AssertionError: assert [] == ['Ýhtiyar']
+      
+      Right contains one more item: 'Ýhtiyar'
+      Use -v to get more diff
+E   AssertionError: assert ['Deðirmen', 'Marcus'] == ['Deðirmen']
+      
+      Left contains one more item: 'Marcus'
+      Use -v to get more diff
+E   AssertionError: assert ('{De\u011firmen}',) == ('{Deg\u0306irmen}',)
+      
+      At index 0 diff: '{De\u011firmen}' != '{Deg\u0306irmen}'
+      Use -v to get more diff
+E   assert 0 == 1
+     +  where 0 = len(())
+E   AssertionError: assert 0 == 17
+     +  where 0 = len([])
+     +  and   17 = len(['\u30de\u30eb\u30af\u30b9\u3055\u3093', '\u30de\u30eb\u30af\u30b9\u69d8', '\u30de\u30eb\u30af\u30b9\u6bbf', '\u30de\u30eb\u30af\u30b9\u541b', '\u30de\u30eb\u30af\u30b9\u3061\u3083\u3093', '\u30de\u30eb\u30af\u30b9\u9054', ...])
+E   AssertionError: assert 3 == 21
+     +  where 3 = len(['\ub9c8\ub974\ucfe0\uc2a4\uc778\uac00', '\uc7a5\ub85c\ub2d8', '\uc7a5\ub85c\uc5d0\uac8c'])
+     +  and   21 = len(['\ub9c8\ub974\ucfe0\uc2a4\ub2d8', '\ub9c8\ub974\ucfe0\uc2a4\uc528', '\ub9c8\ub974\ucfe0\uc2a4\uc57c', '\ub9c8\ub974\ucfe0\uc2a4\uc544', '\ub9c8\ub974\ucfe0\uc2a4\uc5d0\uac8c', '\ub9c8\ub974\ucfe0\uc2a4\ud55c\ud14c', ...])
+E   assert 5 == 7
+     +  where 5 = sum(<generator object test_b7_sembol_kategorisi_sinir_degil_hit_duser.<locals>.<genexpr> at 0x000001DCCAC36A70>)
+E   assert 5 == 7
+     +  where 5 = sum(<generator object test_b7_sembol_kategorisi_sinir_degil_hit_duser.<locals>.<genexpr> at 0x000001DCF91131F0>)
+E   assert 5 == 7
+     +  where 5 = sum(<generator object test_b7_sembol_kategorisi_sinir_degil_hit_duser.<locals>.<genexpr> at 0x000001DCF9113880>)
+E   assert 5 == 7
+     +  where 5 = sum(<generator object test_b7_sembol_kategorisi_sinir_degil_hit_duser.<locals>.<genexpr> at 0x000001DCF91116C0>)
+E   assert 5 == 7
+     +  where 5 = sum(<generator object test_b7_sembol_kategorisi_sinir_degil_hit_duser.<locals>.<genexpr> at 0x000001DCF9112890>)
+E   assert 5 == 7
+     +  where 5 = sum(<generator object test_b7_sembol_kategorisi_sinir_degil_hit_duser.<locals>.<genexpr> at 0x000001DCF9113C40>)
+E   assert 5 == 7
+     +  where 5 = sum(<generator object test_b7_sembol_kategorisi_sinir_degil_hit_duser.<locals>.<genexpr> at 0x000001DCCAC36A70>)
+E   assert 5 == 7
+     +  where 5 = sum(<generator object test_b7_sembol_kategorisi_sinir_degil_hit_duser.<locals>.<genexpr> at 0x000001DCF91132E0>)
+E   assert 5 == 7
+     +  where 5 = sum(<generator object test_b7_sembol_kategorisi_sinir_degil_hit_duser.<locals>.<genexpr> at 0x000001DCF91134C0>)
+E   assert 5 == 7
+     +  where 5 = sum(<generator object test_b7_sembol_kategorisi_sinir_degil_hit_duser.<locals>.<genexpr> at 0x000001DCF9112F20>)
+E   assert 5 == 7
+     +  where 5 = sum(<generator object test_b7_sembol_kategorisi_sinir_degil_hit_duser.<locals>.<genexpr> at 0x000001DCF91131F0>)
+E   assert 5 == 7
+     +  where 5 = sum(<generator object test_b7_sembol_kategorisi_sinir_degil_hit_duser.<locals>.<genexpr> at 0x000001DCF9113F10>)
+E   assert 5 == 7
+     +  where 5 = sum(<generator object test_b7_sembol_kategorisi_sinir_degil_hit_duser.<locals>.<genexpr> at 0x000001DCCAC36A70>)
+E   assert 5 == 7
+     +  where 5 = sum(<generator object test_b7_sembol_kategorisi_sinir_degil_hit_duser.<locals>.<genexpr> at 0x000001DCF9113880>)
+E   TypeError: placeholders bir str dizisi olmali, gelen: str
+
+The above exception was the direct cause of the following exception:
+E   src.contracts.errors.ContractViolation: segments[0].placeholders bicimi gecersiz: placeholders bir str dizisi olmali, gelen: str
+E   TypeError: placeholders bir str dizisi olmali, gelen: str
+
+The above exception was the direct cause of the following exception:
+E   src.contracts.errors.ContractViolation: segments[0].placeholders bicimi gecersiz: placeholders bir str dizisi olmali, gelen: str
+E   ValueError: sozluk semasi: terim '\u30de\u30eb\u30af\u30b9\u3002': kaynak cumle sonu isareti iceremez (.!?\u3002\uff01\uff1f); gomme cumle sinirini yutar
+E   assert ('terim_sayisi=11' in "GlossaryStore(terim_sayisi=7, dosya='sozluk_ornek.json')")
+E   assert ((TermHit(sour... (\u9577\u8001Marcus)')) == (TermHit(sour... (\u9577\u8001Marcus)'))
+      
+      Use -v to get more diff and 6 == 10)
+     +  where 6 = len((TermHit(source_term='\u30de\u30eb\u30af\u30b9', target_term='Marcus', start=2, end=6, segment_index=0, note="karakter ad\u0131; model 'Marks/M...erm='Marcus', target_term='Marcus', start=10, end=16, segment_index=5, note='kimlik girdisi: s\u0131n\u0131r \xe7\u0131pas\u0131 (\u9577\u8001Marcus)')))
+=========================== short test summary info ===========================
+FAILED .agents/tasks/T-011/tester_A/test_mercek_a.py::test_a1_kr_ek_simetrisi_ve_zinciri[\ubc29\uc557\uac04\uc744\ub9c8\ub974\ucfe0\uc2a4-beklenen12]
+FAILED .agents/tasks/T-011/tester_A/test_mercek_a.py::test_a1_jp_parcacik_ve_komsu_terim[\u6751\u30de\u30eb\u30af\u30b9-beklenen2]
+FAILED .agents/tasks/T-011/tester_A/test_mercek_a.py::test_a1_jp_parcacik_ve_komsu_terim[\u30de\u30eb\u30af\u30b9\u6751-beklenen3]
+FAILED .agents/tasks/T-011/tester_A/test_mercek_a.py::test_a1_jp_parcacik_ve_komsu_terim[\u9577\u8001\u30de\u30eb\u30af\u30b9\u6751-beklenen11]
+FAILED .agents/tasks/T-011/tester_A/test_mercek_a.py::test_a1_jp_parcacik_ve_komsu_terim[\u6751\u9577\u8001\u30de\u30eb\u30af\u30b9\u6751-beklenen13]
+FAILED .agents/tasks/T-011/tester_A/test_mercek_a.py::test_bulgu_a4_gom_nfd_segment_placeholders_text_iliskisi_bozulur
+FAILED .agents/tasks/T-011/tester_A/test_mercek_a.py::test_bulgu_a5_emoji_ve_sembol_komsusu_sinir_degil
+FAILED .agents/tasks/T-011/tester_A/test_mercek_a.py::test_bulgu_a7_uzun_kaynak_terim_recursion_error
+FAILED .agents/tasks/T-011/tester_A/test_mercek_a.py::test_bulgu_a7_maliyet_hit_sayisinda_karesel
+FAILED .agents/tasks/T-011/tester_A/test_mercek_a.py::test_bulgu_a8_hedefte_yeni_satir_ve_yer_tutucu_benzeri_kabul
+FAILED .agents/tasks/T-011/tester_A/test_mercek_a.py::test_bulgu_b1_windmills_komsu_reddedilse_de_sinir_verir_kismi_kelime_gomulur
+FAILED .agents/tasks/T-011/tester_A/test_mercek_a.py::test_bulgu_c1_eszett_dal_ayrismasi_aday_kumesi_tam_degil_json_sirasina_bagli[0]
+FAILED .agents/tasks/T-011/tester_A/test_mercek_a.py::test_bulgu_c1_yunan_iota_subscript_ayni_sinif
+FAILED .agents/tasks/T-011/tester_A/test_mercek_a.py::test_c2_regex_ozel_ilk_karakterli_terimler_kacmaz
+FAILED .agents/tasks/T-011/tester_A/test_mercek_a.py::test_c4_jp_komsu_terim_reddedilse_de_sinir_verir_bilesik_parcalanir
+FAILED .agents/tasks/T-011/tester_B/test_mercek_b.py::test_b1_list_tuple_generator_girdi_ayni_cikti
+FAILED .agents/tasks/T-011/tester_B/test_mercek_b.py::test_b3_kaynak_terimde_terminator_sema_kabul_eder_ve_gomme_cumle_sinirini_yutar
+FAILED .agents/tasks/T-011/tester_B/test_mercek_b.py::test_b6_kimlik_terim_komsu_sinir_cipasi_olarak_ise_yarar
+FAILED .agents/tasks/T-011/tester_B/test_mercek_b.py::test_b6_reddedilen_komsu_aday_da_sinirdir_kismi_gomme[\u9577\u8001Marcusa-beklenen0]
+FAILED .agents/tasks/T-011/tester_B/test_mercek_b.py::test_b6_reddedilen_komsu_aday_da_sinirdir_kismi_gomme[\u9577\u8001\u30de\u30eb\u30af\u30b9\u69d8-beklenen1]
+FAILED .agents/tasks/T-011/tester_B/test_mercek_b.py::test_b6_reddedilen_komsu_aday_da_sinirdir_kismi_gomme[\uc7a5\ub85c\ub9c8\ub974\ucfe0\uc2a4\ub2d8-beklenen2]
+FAILED .agents/tasks/T-011/tester_B/test_mercek_b.py::test_b6_reddedilen_komsu_aday_da_sinirdir_kismi_gomme[\u6c34\u8eca\u5c0f\u5c4b\u30de\u30eb\u30af\u30b9\u69d8-beklenen3]
+FAILED .agents/tasks/T-011/tester_B/test_mercek_b.py::test_b6_nfd_yer_tutucu_gom_sonrasi_metnin_alt_dizesi_degil_t007_onarimi_kopya_ekler
+FAILED .agents/tasks/T-011/tester_B/test_mercek_b.py::test_b6_hit_indeksleri_nfc_metne_gore_nfd_segment_text_ile_kayar
+FAILED .agents/tasks/T-011/tester_B/test_mercek_b.py::test_b7_jp_saygi_eki_ve_kopula_sinir_degil_17_17_kacak
+FAILED .agents/tasks/T-011/tester_B/test_mercek_b.py::test_b7_kr_ek_listesi_disi_ekler_sinir_degil_21_21_kacak
+FAILED .agents/tasks/T-011/tester_B/test_mercek_b.py::test_b7_sembol_kategorisi_sinir_degil_hit_duser[\u266a]
+FAILED .agents/tasks/T-011/tester_B/test_mercek_b.py::test_b7_sembol_kategorisi_sinir_degil_hit_duser[\uff5e]
+FAILED .agents/tasks/T-011/tester_B/test_mercek_b.py::test_b7_sembol_kategorisi_sinir_degil_hit_duser[\u2665]
+FAILED .agents/tasks/T-011/tester_B/test_mercek_b.py::test_b7_sembol_kategorisi_sinir_degil_hit_duser[\u2606]
+FAILED .agents/tasks/T-011/tester_B/test_mercek_b.py::test_b7_sembol_kategorisi_sinir_degil_hit_duser[\u2192]
+FAILED .agents/tasks/T-011/tester_B/test_mercek_b.py::test_b7_sembol_kategorisi_sinir_degil_hit_duser[\uff0b]
+FAILED .agents/tasks/T-011/tester_B/test_mercek_b.py::test_b7_sembol_kategorisi_sinir_degil_hit_duser[\u2661]
+FAILED .agents/tasks/T-011/tester_B/test_mercek_b.py::test_b7_sembol_kategorisi_sinir_degil_hit_duser[\u2605]
+FAILED .agents/tasks/T-011/tester_B/test_mercek_b.py::test_b7_sembol_kategorisi_sinir_degil_hit_duser[\u266b]
+FAILED .agents/tasks/T-011/tester_B/test_mercek_b.py::test_b7_sembol_kategorisi_sinir_degil_hit_duser[\xa9]
+FAILED .agents/tasks/T-011/tester_B/test_mercek_b.py::test_b7_sembol_kategorisi_sinir_degil_hit_duser[\u2122]
+FAILED .agents/tasks/T-011/tester_B/test_mercek_b.py::test_b7_sembol_kategorisi_sinir_degil_hit_duser[\xb0]
+FAILED .agents/tasks/T-011/tester_B/test_mercek_b.py::test_b7_sembol_kategorisi_sinir_degil_hit_duser[\uff04]
+FAILED .agents/tasks/T-011/tester_B/test_mercek_b.py::test_b7_sembol_kategorisi_sinir_degil_hit_duser[\uffe5]
+FAILED .agents/tasks/T-011/tester_B/test_mercek_b.py::test_b8_typeerror_siniflari_translatorerror_degil_pipeline_yakalamaz[<lambda>-lookup_segments Segment.placeholders str]
+FAILED .agents/tasks/T-011/tester_B/test_mercek_b.py::test_b8_typeerror_siniflari_translatorerror_degil_pipeline_yakalamaz[<lambda>-gom Segment.placeholders str]
+FAILED .agents/tasks/T-011/tester_B/test_mercek_b.py::test_b9_hedef_kaynagi_iceren_veya_kaynak_hedefi_iceren_kayit_semada_serbest
+FAILED .agents/tasks/T-011/tester_B/test_mercek_b.py::test_bx_docstring_repr_terim_basmaz
+FAILED .agents/tasks/T-011/tester_B/test_mercek_b.py::test_bk_real_check_kapi_yolu_ile_lookup_segments_ayni_hit_kumesi
+XFAIL .agents/tasks/T-011/tester_B/test_mercek_b.py::test_b9_k1_paket_negatifleri_eslesmez[\\uac80\\uc740 \\uc637] - paketin belgeli bilinen siniri: `\uac80`+ek `\uc740` kuraldan gecer (K1)
+45 failed, 208 passed, 1 xfailed in 1.29s
