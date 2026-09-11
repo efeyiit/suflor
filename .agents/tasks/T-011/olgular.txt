@@ -1,0 +1,38 @@
+==== T-011 (TERIM SOZLUGU -- KATMAN 0) -- SEFIN ON OLCUMLERI ====
+Tasarim 4.1: oyun basina terim sozlugu, "motora zorunlu kisit olarak enjekte edilir".
+NMT (NLLB/CT2) kisit ALAMAZ; T-007 C9: yer tutucu JP'de kayboluyor. Soru: terim nasil girer?
+
+[G1] STRATEJI (d) OLCULDU: terimi KAYNAGA hedef bicimiyle gom -> 6/6 korundu (sef, 15:0x)
+  JP 長老マルクス          -> "İhtiyar Marks."           | 長老Marcus  -> "Yaşlı Marcus."
+  JP マルクスがあなたを…     -> "Marks seni bekliyor."      | Marcusが… -> "Marcus seni bekliyor."
+  JP 水車小屋を過ぎて…      -> "Su arabası kulübesinden…"  | Değirmenを… -> "Değirmen'i geçerek doğuya doğru yürüyün."
+  KR 장로 마르쿠스          -> "İhtiyar Marcus"           | 장로 Marcus -> "Elder Marcus"   (!)
+  KR 방앗간을 지나 동쪽…     -> "Doğu'ya doğru Doğu'ya doğru yürüyün." | Değirmen을… -> "Değirmen'den geçin ve doğuya doğru gidin."
+  EN …by the mill.         -> "değirmenin yanında"       | …by the Değirmen. -> "Değirmen'in yanında"
+  SONUC: (1) ad korunuyor; (2) BILINMEYEN kelime yerine hedef terim gecince ceviri
+  DUZELIYOR (su arabasi -> degirmen) ve TEKRAR DEJENERASYONU KAYBOLUYOR (KR): C7'deki
+  ceza parametresi gereksiz, sorun tetikleyici kelimeydi. (3) Turkce ek: model
+  "Değirmen'i / 'den / 'in" ozel-ad kesme isaretiyle ekliyor -- ad icin dogru, cins
+  isim icin ("degirmen") ideal degil; sozluk girdisine buyuk/kucuk harf bayragi gerekir.
+
+[G2] RISK: Latin belirtec cikti dilini kaydirabiliyor
+  KR "장로 Marcus" -> "Elder Marcus" (Ingilizce 'Elder' sizdi; ham "İhtiyar Marcus" idi).
+  6 ornekte 1 kez. Olculecek: daha genis ornek (20+), kaydirma orani; onlem adaylari:
+  (a) terimi Turkce hedef yerine kaynak-betik cevriyaziyla gom (KR'de Latin yerine
+  hangul?) -- anlamsiz; (b) target_prefix'e "tur_Latn" zaten var; (c) cikti dili
+  denetimi: ciktida ASCII-agir Ingilizce kelime orani esigi -> yeniden cevir (kisit yok).
+
+[G3] TASARIM SORULARI (paketten once olculecek)
+  - Esleme: kaynak terim metinde NASIL bulunur? JP/ZH bosluksuz -> alt dize; KR/EN kelime
+    siniri + ekler (방앗간을 = 방앗간 + 을; Turkce'de "değirmen'den"). Kaynak tarafinda
+    ek ayirma: KR/JP icin en uzun eslesme + kalan eki koru (방앗간을 -> Değirmen을) --
+    G1'de tam bu yapildi ve calisti.
+  - Buyuk/kucuk: Marcus (ad, buyuk) vs degirmen (cins, kucuk) -> girdi bayragi.
+  - Sozluk nerede: oyun profili basina JSON (tasarim 10 ProfileStore); bu gorev yalniz
+    GlossaryStore (lookup(text) -> list[TermHit]) + uygulama (segment kaynagina gomme).
+  - TermHit sozlesmesi var (contracts): source_term, target_term, start, end, note.
+    Pipeline TermHit'i TranslationRequest.glossary_hits'e koyar; T-007 bunu okumuyor
+    (K5 [OLCULMUYOR]). Uygulama noktasi: T-007'ye "glossary_hits varsa kaynagi gom"
+    mi, yoksa ayri bir on-islemci mi? T-007 dondurulmus (255 test) -> ON-ISLEMCI
+    (src/translate/sozluk_uygula.py): segment listesi + hits -> gomulu segment listesi.
+    T-007 degismez, hits'i yine okumaz.
