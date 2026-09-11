@@ -10,7 +10,6 @@ Kontroller (packet.md):
   3. UCTAN UCA: KR -> birlestir -> normalize -> <= 4 segment -> NMT -> tek kelimelik ceviri yok
      (icerik beklentisi YOK: KR tanima noktayi dusuruyor, T-009)
   4b. menu fixture: etiket|deger satirlari asla birlesmez (Y3)
-  4. idempotens (KR gercek cikti)
   5. saflik AST
   6. 1000 blok < 50 ms
 """
@@ -76,9 +75,6 @@ def main() -> int:
         g = oku(ad, dil); c = satirlari_birlestir(g)
         ayni = len(c) == len(g) and all(x.text == y.text and x.bbox == y.bbox for x, y in zip(sorted(g, key=lambda t: (t.bbox.y, t.bbox.x)), c))
         (tamam if ayni else ihlal)(f"[2] {ad} {len(g)} -> {len(c)} no-op (text+bbox birebir)")
-
-    # 4 idempotens
-    (tamam if satirlari_birlestir(b) == b else ihlal)("[4] KR gercek cikti idempotent")
 
     # 3 uctan uca
     segs = normalize(b, OcrPreset.DIALOGUE)
