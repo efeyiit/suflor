@@ -71,6 +71,15 @@ def main() -> int:
     (tamam if all(" " in x.text for x in b) else ihlal)("[1] her satir bosluklu birlesmis")
     (tamam if all(type(v) is int for x in b for v in (x.bbox.x, x.bbox.y, x.bbox.w, x.bbox.h)) else ihlal)("[1] bbox alanlari int")
 
+    # 1c etiket koprusu (Tester-A ret, tur 1): 2x etiket iki satira sarkar; v1 11 -> 1 blok veriyordu
+    from src.ocr.rapid_engine import RapidOcrEngine as _RE1
+    img = np.array(Image.open(KOK / ".agents" / "tasks" / "T-008" / "fixtures" / "etiket_kopru_KR.png").convert("RGB"))[:, :, ::-1].copy()
+    kb = _RE1(language=OcrLanguage.KOREAN, threads=8).recognize(Frame(image=img, rect=Rect(0, 0, img.shape[1], img.shape[0]), captured_at=0.0, seq=0), OcrPreset.DIALOGUE)
+    kc = satirlari_birlestir(kb)
+    enb = max((len(x.line_boxes) or 1) for x in kc) if kc else 0
+    (tamam if len(kb) == 11 and len(kc) >= 2 and enb <= 6 else ihlal)(
+        f"[1c] etiket koprusu: {len(kb)} kutu -> {len(kc)} blok, en buyuk blok {enb} parca (>= 2 blok, <= 6 parca; v1: 1 blok/11 parca)")
+
     # 2 JP / EN no-op
     for ad, dil in (("JP", OcrLanguage.JAPAN), ("EN", OcrLanguage.ENGLISH)):
         g = oku(ad, dil); c = satirlari_birlestir(g)

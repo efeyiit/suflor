@@ -1,0 +1,19 @@
+==== T-008 TESTER A (mercek A) -- SEF SONDASI ====
+Karar: RET. validate KABUL EDILEBILIR (12 kontrol). Sahiplik temiz. A'nin takimi 84 + 6 ret.
+
+BLOKE B1: UZUN KUTU KOPRUSU -> SEF URETTI (gercek OCR):
+  A'nin fixture'i kr_etiket_ortali_60_45_10.png (2x font dikey ortali etiket + 2 KR satiri):
+    tespit 11 kutu -> birlestirici 1 BLOK (11 parca; iki satir ic ice)
+  Kok: etiket (y,x)-ilk blok; satir bolumleme "satirin ILK bloguyla ortusme" diyor;
+  etiket iki satira sarktigi icin ikisi de "ayni satir" sayiliyor.
+  KRT-1 O2 "uzun kutu koprusu" demisti; paket [OLCULMUYOR] (fixture yok) birakmisti.
+  SEF HATASI: fixture uretmek 10 dakikaydi; A uretti. 4.6/10'un bir baska yuzu:
+  "olculmuyor" damgasi olculebilir bir sinifi ortmemeli.
+
+A'NIN ADAY E (referans = satirin EN KISA blogu) -> SEF KUM HAVUZUNDA DOGRULADI:
+  mypy Success · implementer 68/68 · A ret 6/6 · real_check TEMIZ · kopru 11 -> 2 blok [6,5]
+  (etiket 1. satira katiliyor -- kabul edilebilir; etiket ayri blok olmasi K7/menu sinifi)
+  ADAY D (uzun kutu izolasyonu) implementer fixture'ini bozuyor (A olctu) -> E.
+
+A6 gercek OCR raporu: dar aralik, EN iki sutun, 2000px satir dogru. Betik tablosu sapma yok.
+KARAR: A'nin RET'i KABUL. Tur 2: ADAY E + kopru fixture'i birim teste + docstring.

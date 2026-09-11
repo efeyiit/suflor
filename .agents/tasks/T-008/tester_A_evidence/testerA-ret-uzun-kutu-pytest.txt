@@ -1,0 +1,109 @@
+...FFF                                                                   [100%]
+================================== FAILURES ===================================
+_ test_ret_buyuk_etiket_solda_satirlar_bozulmamali[kr_etiket_ortali_60_45_10] _
+
+ad = 'kr_etiket_ortali_60_45_10', merkezler = [81, 126]
+etiket = (57, 55, 125, 72)
+kelimeler = [(609, 64, 120, 35), (206, 65, 59, 34), (277, 66, 87, 31), (378, 66, 87, 32), (481, 68, 113, 28), (508, 109, 59, 35), ...]
+
+    @pytest.mark.parametrize("ad, merkezler, etiket, kelimeler", GERCEK_GEOMETRI, ids=[g[0] for g in GERCEK_GEOMETRI])
+    def test_ret_buyuk_etiket_solda_satirlar_bozulmamali(
+        ad: str, merkezler: list[int], etiket: tuple[int, int, int, int], kelimeler: list[tuple[int, int, int, int]]
+    ) -> None:
+        """Etiketle: (a) her satırın 5 kelimesi tek blokta, (b) hiçbir blok iki satırdan kelime
+        içermez. ŞU AN DÜŞER: 60_45_10 → tek blok (iki satır iç içe); 72_48_14 → 9 blok;
+        60_40_8 → 10 blok."""
+        bl = [_blok(*etiket, "ETIKET")] + [_blok(*k, f"w{i}") for i, k in enumerate(kelimeler)]
+        kelime_kutulari = {Rect(*k) for k in kelimeler}
+        cikti = satirlari_birlestir(bl)
+        yer = _kelime_bloklari(cikti, kelime_kutulari)
+        assert len(yer) == len(kelimeler), "her kelime kutusu çıktıda bir kez"
+        satir_blok: dict[int, set[int]] = {}
+        for r, i in yer.items():
+            satir_blok.setdefault(_cizilen_satir(r, merkezler), set()).add(i)
+        ozet = {s: sorted(v) for s, v in sorted(satir_blok.items())}
+        # (a) her çizilen satırın kelimeleri TEK blokta
+        assert all(len(v) == 1 for v in satir_blok.values()), (
+            f"{ad}: satır -> bloklar {ozet}; toplam {len(cikti)} blok, parça sayıları "
+            f"{[len(c.line_boxes) or 1 for c in cikti]} (satırlar parçalandı)"
+        )
+        # (b) iki satır aynı blokta değil
+>       assert satir_blok[0].isdisjoint(satir_blok[1]), (
+            f"{ad}: iki satır aynı blokta {ozet}; blok parça sayıları {[len(c.line_boxes) or 1 for c in cikti]}"
+        )
+E       AssertionError: kr_etiket_ortali_60_45_10: iki satır aynı blokta {0: [0], 1: [0]}; blok parça sayıları [11]
+E       assert False
+E        +  where False = <built-in method isdisjoint of set object at 0x000001EBBE65B840>({0})
+E        +    where <built-in method isdisjoint of set object at 0x000001EBBE65B840> = {0}.isdisjoint
+
+.agents\tasks\T-008\tester_A\test_ret_a_uzun_kutu_koprusu.py:111: AssertionError
+_ test_ret_buyuk_etiket_solda_satirlar_bozulmamali[kr_etiket_ortali_72_48_14] _
+
+ad = 'kr_etiket_ortali_72_48_14', merkezler = [81, 129]
+etiket = (57, 56, 149, 81)
+kelimeler = [(230, 65, 59, 34), (300, 65, 88, 33), (634, 65, 119, 34), (403, 66, 86, 31), (504, 67, 114, 30), (531, 112, 61, 36), ...]
+
+    @pytest.mark.parametrize("ad, merkezler, etiket, kelimeler", GERCEK_GEOMETRI, ids=[g[0] for g in GERCEK_GEOMETRI])
+    def test_ret_buyuk_etiket_solda_satirlar_bozulmamali(
+        ad: str, merkezler: list[int], etiket: tuple[int, int, int, int], kelimeler: list[tuple[int, int, int, int]]
+    ) -> None:
+        """Etiketle: (a) her satırın 5 kelimesi tek blokta, (b) hiçbir blok iki satırdan kelime
+        içermez. ŞU AN DÜŞER: 60_45_10 → tek blok (iki satır iç içe); 72_48_14 → 9 blok;
+        60_40_8 → 10 blok."""
+        bl = [_blok(*etiket, "ETIKET")] + [_blok(*k, f"w{i}") for i, k in enumerate(kelimeler)]
+        kelime_kutulari = {Rect(*k) for k in kelimeler}
+        cikti = satirlari_birlestir(bl)
+        yer = _kelime_bloklari(cikti, kelime_kutulari)
+        assert len(yer) == len(kelimeler), "her kelime kutusu çıktıda bir kez"
+        satir_blok: dict[int, set[int]] = {}
+        for r, i in yer.items():
+            satir_blok.setdefault(_cizilen_satir(r, merkezler), set()).add(i)
+        ozet = {s: sorted(v) for s, v in sorted(satir_blok.items())}
+        # (a) her çizilen satırın kelimeleri TEK blokta
+>       assert all(len(v) == 1 for v in satir_blok.values()), (
+            f"{ad}: satır -> bloklar {ozet}; toplam {len(cikti)} blok, parça sayıları "
+            f"{[len(c.line_boxes) or 1 for c in cikti]} (satırlar parçalandı)"
+        )
+E       AssertionError: kr_etiket_ortali_72_48_14: satır -> bloklar {0: [0, 1, 2, 3, 4], 1: [5, 6, 7, 8]}; toplam 9 blok, parça sayıları [2, 1, 1, 1, 1, 2, 1, 1, 1] (satırlar parçalandı)
+E       assert False
+E        +  where False = all(<generator object test_ret_buyuk_etiket_solda_satirlar_bozulmamali.<locals>.<genexpr> at 0x000001EBBE68A190>)
+
+.agents\tasks\T-008\tester_A\test_ret_a_uzun_kutu_koprusu.py:106: AssertionError
+_ test_ret_buyuk_etiket_solda_satirlar_bozulmamali[kr_etiket_ortali_60_40_8] __
+
+ad = 'kr_etiket_ortali_60_40_8', merkezler = [81, 121]
+etiket = (59, 62, 121, 67)
+kelimeler = [(609, 64, 120, 35), (206, 65, 59, 34), (276, 66, 88, 32), (379, 66, 86, 32), (481, 68, 113, 28), (365, 105, 62, 34), ...]
+
+    @pytest.mark.parametrize("ad, merkezler, etiket, kelimeler", GERCEK_GEOMETRI, ids=[g[0] for g in GERCEK_GEOMETRI])
+    def test_ret_buyuk_etiket_solda_satirlar_bozulmamali(
+        ad: str, merkezler: list[int], etiket: tuple[int, int, int, int], kelimeler: list[tuple[int, int, int, int]]
+    ) -> None:
+        """Etiketle: (a) her satırın 5 kelimesi tek blokta, (b) hiçbir blok iki satırdan kelime
+        içermez. ŞU AN DÜŞER: 60_45_10 → tek blok (iki satır iç içe); 72_48_14 → 9 blok;
+        60_40_8 → 10 blok."""
+        bl = [_blok(*etiket, "ETIKET")] + [_blok(*k, f"w{i}") for i, k in enumerate(kelimeler)]
+        kelime_kutulari = {Rect(*k) for k in kelimeler}
+        cikti = satirlari_birlestir(bl)
+        yer = _kelime_bloklari(cikti, kelime_kutulari)
+        assert len(yer) == len(kelimeler), "her kelime kutusu çıktıda bir kez"
+        satir_blok: dict[int, set[int]] = {}
+        for r, i in yer.items():
+            satir_blok.setdefault(_cizilen_satir(r, merkezler), set()).add(i)
+        ozet = {s: sorted(v) for s, v in sorted(satir_blok.items())}
+        # (a) her çizilen satırın kelimeleri TEK blokta
+>       assert all(len(v) == 1 for v in satir_blok.values()), (
+            f"{ad}: satır -> bloklar {ozet}; toplam {len(cikti)} blok, parça sayıları "
+            f"{[len(c.line_boxes) or 1 for c in cikti]} (satırlar parçalandı)"
+        )
+E       AssertionError: kr_etiket_ortali_60_40_8: satır -> bloklar {0: [1, 2, 3, 4, 5], 1: [6, 7, 8, 9]}; toplam 10 blok, parça sayıları [1, 1, 1, 1, 1, 1, 1, 1, 2, 1] (satırlar parçalandı)
+E       assert False
+E        +  where False = all(<generator object test_ret_buyuk_etiket_solda_satirlar_bozulmamali.<locals>.<genexpr> at 0x000001EBBE68BD30>)
+
+.agents\tasks\T-008\tester_A\test_ret_a_uzun_kutu_koprusu.py:106: AssertionError
+=========================== short test summary info ===========================
+FAILED .agents/tasks/T-008/tester_A/test_ret_a_uzun_kutu_koprusu.py::test_ret_buyuk_etiket_solda_satirlar_bozulmamali[kr_etiket_ortali_60_45_10]
+FAILED .agents/tasks/T-008/tester_A/test_ret_a_uzun_kutu_koprusu.py::test_ret_buyuk_etiket_solda_satirlar_bozulmamali[kr_etiket_ortali_72_48_14]
+FAILED .agents/tasks/T-008/tester_A/test_ret_a_uzun_kutu_koprusu.py::test_ret_buyuk_etiket_solda_satirlar_bozulmamali[kr_etiket_ortali_60_40_8]
+3 failed, 3 passed in 0.27s
+exit=1

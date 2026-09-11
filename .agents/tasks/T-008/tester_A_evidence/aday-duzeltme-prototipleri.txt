@@ -1,0 +1,49 @@
+ADAY DUZELTME PROTOTIPLERI (tester-A aynasi; depo src/ DOKUNULMADI). Yalniz yon gostermek icin; mekanizma secimi implementer/sefin.
+
+== ADAY E: _satirlara_bol referansi = satirin EN KISA blogu (bag: ilk). diff (depo -> ayna):
+293a294
+>     referans: Rect | None = None
+295c296
+<         if satirlar and _dikey_ortusme_yeterli(satirlar[-1][0][1].bbox, oge[1].bbox):
+---
+>         if satirlar and referans is not None and _dikey_ortusme_yeterli(referans, oge[1].bbox):
+296a298,300
+>             # ADAY E (tester-A prototipi): referans = satirin EN KISA blogu (bag: ilk)
+>             if oge[1].bbox.h < referans.h:
+>                 referans = oge[1].bbox
+298a303
+>             referans = oge[1].bbox
+
+-- ADAY E: implementer 68 (ayna icinde):
+68 passed in 0.22s
+-- ADAY E: tester-A test_mercek_a + test_ret (TESTER_A_KOK=ayna_E):
+FAILED ::test_a1_uzun_kutu_koprusu_T_solda_iki_satiri_tek_bloga_alir_SINIF - ...
+FAILED ::test_a1_uzun_kutu_solda_iki_kelimelik_satirlari_parcalar_SINIF - Ass...
+2 failed, 88 passed in 0.64s
+   (dusen 2 test MEVCUT bozuk davranisi sabitleyen _SINIF testleridir; duzeltmede yeniden yazilir; 6 ret testi GECER)
+-- ADAY E: gercek OCR: tester_A_evidence/a6-aday-E-gercek-ocr.txt (exit 0; dlg_KR [2,5,5,5], 1-em 4->4, etiketli 2-3 blok satirlar butun)
+
+== ADAY D: h > 1.5 x yuzey medyani olan kutu yalniz gecer. diff:
+257a258,268
+>         # ADAY D (tester-A prototipi): yuzey medyan h'sinin 1.5 katindan uzun kutu satir
+>         # referansi olamaz ve hicbir seyle birlesmez -- aynen gecer.
+>         hler = sorted(b.bbox.h for _, b in yuzey)
+>         medyan = hler[len(hler) // 2] if len(hler) % 2 else (hler[len(hler) // 2 - 1] + hler[len(hler) // 2]) / 2
+>         kalan = []
+>         for idx, blok in yuzey:
+>             if blok.bbox.h > 1.5 * medyan:
+>                 sonuc.append(((blok.bbox.y, blok.bbox.x, idx), blok))
+>             else:
+>                 kalan.append((idx, blok))
+>         yuzey = kalan
+
+-- ADAY D: implementer 68:
+FAILED tests/unit/ocr/test_satir_birlestirici.py::test_k2_grup_icinde_dikey_ortusme_grubun_ilk_bloguyla
+1 failed, 67 passed in 0.36s
+-- ADAY D: tester-A:
+FAILED ::test_a1_yatay_esik_min_h_kucuk_kutuyla[7-1] - AssertionError: assert...
+FAILED ::test_a1_uzun_kutu_koprusu_T_ortada_implementer_fixture - AssertionEr...
+FAILED ::test_a1_uzun_kutu_koprusu_T_solda_iki_satiri_tek_bloga_alir_SINIF - ...
+FAILED ::test_a1_uzun_kutu_solda_iki_kelimelik_satirlari_parcalar_SINIF - Ass...
+4 failed, 86 passed in 0.68s
+   -> D implementer'in 'a T'/'c' fixture'ini ve min(h) kucuk-kutu sinirini bozar; E bozmaz. E tercih edilir ama zorunlu degil.
