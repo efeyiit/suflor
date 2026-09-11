@@ -9,7 +9,9 @@ ortusmez) -> 16 segment -> kelime kelime ceviri. Satir-duzeyi girdide
 (JP/EN: 4 kutu, 1 kutu/satir) ETKISIZDIR (birebir gecer).
 
 Bu docstring, gorev paketindeki (T-008 packet.md surum 2) K1-K8
-kararlarinin bu modulde nasil uygulandigini belgeler. Her kararin yaninda
+kararlarinin ve tur 2 sef kararinin (`sef_karari-tur2.md`: T2-1 satir
+referansi, T2-2 ayni-x cifti, T2-3 belge) bu modulde nasil uygulandigini
+belgeler. Her kararin yaninda
 onu olcen test adi vardir (`tests/unit/ocr/test_satir_birlestirici.py`)
 ya da `[ÖLÇÜLMÜYOR]` damgasi. Tester `known_gaps`i OKUMAZ; garanti alani
 burasidir.
@@ -54,7 +56,7 @@ kutu ise BIRLESIR ve metin cogalir (S6'nin "yapisal olarak imkansiz"
 cumlesi GERI CEKILDI -- bilinen sinir, `test_k2_ic_ice_*` ile
 SABITLENDI). Satir gecisi (satir sonu -> sonraki satirin basi) cogunlukla
 negatiftir ama her zaman degil; uzun kutu koprusu icin bkz. asagida
-"grup icinde dikey referans".
+"satir referansi ve uzun kutu koprusu".
 
 ALGORITMA -- ITIRAZ (paket v2 K2'nin lafzindan sapma, olculdu):
 Paket "girdi `(y, x, idx)` ile siralanir; TEK GECIS: her blok acik grubun
@@ -72,12 +74,15 @@ degismezleri su yapiyla gerceklestirir (hepsi `O(n log n)`):
      indeksi, `(y,x)` baglarini cozer -- K6).
   2. Yozlasmis kutulari ayir (aynen gecerler). Kalanlari
      `(monitor_index, dpi_scale)` yuzeylerine ayir.
-  3. SATIR BOLUMLEME (yuzey basina, tek gecis): blok, acik satirin ILK
-     bloguyla dikey ortusuyorsa (`>= 0.5 * min(h_ilk, h_blok)`) satira
-     eklenir; aksi halde yeni satir acilir. Uyelik SATIRIN ILK BLOGUYLA
-     olculur, bir oncekiyle degil: merdiven (her kutu bir oncekiyle
-     ortusur, ilkiyle ortusmez) tek satir DEGILDIR
-     (`test_k2_satir_bolumleme_satirin_ilk_bloguna_gore`).
+  3. SATIR BOLUMLEME (yuzey basina, tek gecis): blok, acik satirin
+     REFERANSIYLA dikey ortusuyorsa (`>= 0.5 * min(h_ref, h_blok)`)
+     satira eklenir; aksi halde yeni satir acilir. REFERANS = satirdaki
+     EN KISA blok (bag: `(y,x,idx)` sirasinda ilk); satira katilan blok
+     daha kisaysa referans o olur (T2-1, tur 2 -- tur 1'de referans
+     satirin ILK bloguydu, asagida "satir referansi ve uzun kutu
+     koprusu"). Uyelik referansla olculur, bir oncekiyle degil: merdiven
+     (her kutu bir oncekiyle ortusur, referansla ortusmez) tek satir
+     DEGILDIR (`test_k2_satir_bolumleme_satirin_referansiyla_bir_oncekiyle_degil`).
   4. Satir icinde `(x, y, idx)` ile sirala; tek gecis: blok, acik grubun
      ILK bloguyla dikey ortusuyor (`>= 0.5 * min(h)`) VE grubun SON
      bloguna gore `x` ilerliyor VE bosluk `<= 0.75 * min(h_son, h_blok)`
@@ -87,14 +92,39 @@ degismezleri su yapiyla gerceklestirir (hepsi `O(n log n)`):
   5. Her grup tek `TextBlock` (K5); cikti `(y, x, en kucuk girdi
      indeksi)` ile siralanir (K6).
 
+Satir referansi ve uzun kutu koprusu (T2-1, OLCULDU): iki satiri dikey
+kaplayan bir kutu (2x etiket / konusmacinin adi, solda, dikey ortali) `y`'si
+en kucuk oldugu icin `(y,x)` sirasinda satirin ILK blogudur; referans o
+kalsaydi iki satirin butun kelimeleri onunla ortusur, TEK satira toplanir
+ve satir ici x sirasi iki satiri ic ice gecirirdi (gercek OCR
+`fixtures/etiket_kopru_KR.png`: 11 kutu -> 1 blok, 11 parca; tur 1,
+Tester-A/B ret). Referans EN KISA blok olunca satirin ilk kelimesi
+katilir katilmaz referans olur ve sonraki satir onunla ortusmez: 11 -> 2
+blok `[6, 5]` (etiket satir 0'a yapisik). Olcu: gercek geometri gomulu
+`test_k2_uzun_kutu_koprusu_gercek_geometri_11_kutu_iki_blok_6_5`
+(+ etiketsiz pozitif kontrol `[5, 5]`), sentetik
+`test_k2_uzun_kutu_koprusu_solda_sentetik_iki_satir_ayri_bloklar` (x
+kaydirmasi 5/0/12), `real_check.py` #1c (gercek motor: >= 2 blok, en
+buyuk <= 6 parca). Referans "ilk" ya da "en uzun" olsaydi ikisi de duser.
+SINIR (secilen kuralin kendi siniri): satirin ALTINA sarkan kisa bir kutu
+(orn. h=12 noktalama) referans olursa, bir sonraki satir onunla `>= 0.5 *
+h_kisa` ortusecek kadar yakinken (satirlar birbirine girmis) ayni satira
+girer ve satirlar karisir -- sentetik SABITLENDI
+(`test_k2_satir_referansi_en_kisa_blok_kisa_alt_kutu_siniri_sabitlendi`:
+aralik 27 butun, 26 karisik); gercek OCR'da `[ÖLÇÜLMÜYOR]`: tespitci
+noktalamayi kelime kutusuna dahil ediyor (dlg_KR 17 kutu, ayri noktalama
+kutusu yok) ve satirlar birbirine girmiyor (satir araligi >= 10 px), bu
+sinifta fixture uretilemedi.
+
 Grup icinde dikey referans: adim 4'te dikey ortusme GRUBUN ilk bloguyla
-olculur (paketin lafzi). Uzun kutu koprusu T(60,0,40,60) a(0,5,50,20)
-c(110,40,50,20): ucu ayni satirda (T referans), x sirasinda a-T
-birlesir, c grubun ilk blogu a ile ortusmez (-15) -> ayri
-(`test_k2_grup_icinde_dikey_ortusme_grubun_ilk_bloguyla`). Cok satiri
-tek kutuda veren bir tespit yine de o satirlari ayni SATIRA toplayabilir
-(adim 3) -- ciktinin gruplari bu durumda kutu geometrisine bagli,
-`[ÖLÇÜLMÜYOR]` gercek OCR'da (fixture yok).
+olculur (paketin lafzi; degismedi). Satir uyeligi en kisa blokla olculdugu
+icin ayni satirdaki iki blok birbiriyle ortusmeyebilir; grup referansi
+bunu ayirir: A(0,0,50,20) S(55,11,40,18) B(100,20,50,20) -> "A S", "B"
+(`test_k2_grup_icinde_dikey_ortusme_grubun_ilk_bloguyla_satir_ici_merdiven`).
+Uzun kutu SOLDA grubun ilk bloguysa satir ici y titresimi onu bolmez:
+T(0,0,40,60) a b c -> tek blok
+(`test_k2_grup_icinde_dikey_ortusme_grubun_ilk_bloguyla_uzun_kutu_solda`;
+referans SON blok olsaydi c ayri kalirdi).
 
 Esik 0.75 (KRT Y3): KR kelime boslugu en cok `0.57 x h` (S6), gercek
 1-em bosluk sinifi `0.78-1.14 x h` (kendi olcumum, `evidence/olcum-2-*`:
@@ -120,8 +150,10 @@ Olcu: `test_k2_*` -- ortusme 0.49/0.50/0.51 (sinirda `>=`), bosluk
 (orijinal h), cakisma (-5) komsu, `monitor_index` 0/1, `dpi_scale`,
 yozlasmis (w/h sifir ve negatif, araya girince komsulugu bozmaz),
 zincir, cift tespit, ic ice, iki satir, y-titresimli satir 3 (itiraz),
-KR 17 -> [2,5,5,5], merdiven, uzun kutu koprusu. Gercek OCR:
-`real_check.py` #1 (KR 17 -> 4, `[2,5,5,5]`), #2 (JP/EN no-op), #4b
+KR 17 -> [2,5,5,5], merdiven, uzun kutu koprusu (gercek geometri 11 ->
+[6,5], sentetik 3 kaydirma, satir ici merdiven, kisa alt kutu siniri).
+Gercek OCR: `real_check.py` #1 (KR 17 -> 4, `[2,5,5,5]`), #1c (etiket
+koprusu 11 -> >= 2 blok, en buyuk <= 6 parca), #2 (JP/EN no-op), #4b
 (menu: etiket|deger 13.1-16.3 x h birlesmez -- yalniz `>= 13.1` esikleri
 eler, bkz. KAPI NOTU); olcum 2 (1-em sinifi, dort fixture).
 
@@ -173,18 +205,26 @@ negatif koordinat).
 
 Cikti `(bbox.y, bbox.x)` artan; bag, parcalarin EN KUCUK girdi
 indeksiyle cozulur (yozlasmis/tek blokta kendi indeksi). Girdi sirasi
-onemsizdir: `(y,x)` bagi olmayan girdide her permutasyon AYNI listeyi
-verir (17 KR kutusu 5 karisik sirada; 4 kutu 24 permutasyon). Iki
-kutu ayni `(y,x)`'teyse cikti girdi sirasina baglidir -- K6'nin siniri,
-`test_k6_bagli_durum_*` ile SABITLENDI (monitorler arasi bagda da girdi
-indeksi, isleme sirasi degil; bagli iki kutudan girdide ONCE gelen
-satirin referans blogu olur -- yukseklikleri farkliysa sonraki
-kutularin satir uyeligi buna baglidir,
-`test_k6_bagli_durumda_satir_referansi_ilk_girdi_blogu`). Ayni
-satirdaki iki grubun sirasi da `(y,x)`'e goredir: sagdaki grubun
-`min y` daha kucukse ONCE gelir
-(`test_k6_cikti_y_x_sirasinda_satir_icinde_de`; normalizer zaten
-`(y,x)` ile yeniden siralar). Olcu: `test_k6_*`.
+onemsizdir: iki CIKTI blogunun `(y,x)`'i esit olmadikca her permutasyon
+AYNI listeyi verir (17 KR kutusu 5 karisik sirada; 4 kutu 24
+permutasyon; ayni-x/farkli-y cifti 6 permutasyon, T2-2). K6'nin SINIRI
+(daraltildi, T2-3): iki cikti blogunun `(y,x)`'i esitse siralari girdi
+sirasina baglidir; bu bag girdide ayni `(y,x)`'te iki kutu olmasa da
+dogabilir -- birlesik bbox'in `(min y, min x)`'i baska bir kutuyla
+cakisir (C(0,0,10,30) A(0,10,10,20) B(20,0,10,20): `[C, A B]` /
+`[A B, C]`, `test_k6_cikti_anahtarinda_bag_girdi_sirasina_bagli_sinir`).
+Urun etkisi yok: normalizer `(y,x)` ile yeniden siralar. Bag yalniz
+cikti SIRASINI etkiler, satir uyeligini DEGIL: satir referansi en kisa
+blok oldugu icin bagli iki kutudan hangisinin once geldigi referansi
+degistirmez (`test_k6_bagli_durumda_satir_referansi_en_kisa_girdi_sirasindan_bagimsiz`;
+monitorler arasi bagda da girdi indeksi, isleme sirasi degil). Satir
+ici siralama `(x, y, idx)`: ayni `x`'teki iki kutu `y` ile siralanir --
+acik grup her girdi sirasinda ayni kalir
+(`test_k6_ayni_x_farkli_y_satir_ici_sira_y_ile_permutasyonlar_ayni`;
+`(x, idx)` girdi sirasina bagli cikti verirdi). Ayni satirdaki iki
+grubun sirasi da `(y,x)`'e goredir: sagdaki grubun `min y` daha kucukse
+ONCE gelir (`test_k6_cikti_y_x_sirasinda_satir_icinde_de`). Olcu:
+`test_k6_*`.
 
 ## K7 -- iki sutunlu duzen
 
@@ -288,14 +328,22 @@ def _yatay_komsu(son: Rect, aday: Rect) -> bool:
 def _satirlara_bol(
     yuzey: Sequence[tuple[int, TextBlock]],
 ) -> list[list[tuple[int, TextBlock]]]:
-    """K2 adim 3: `(y,x,idx)` sirali bloklari, satirin ILK bloguyla dikey
-    ortusmeye gore satirlara boler (tek gecis)."""
+    """K2 adim 3: `(y,x,idx)` sirali bloklari, satirin REFERANSIYLA dikey
+    ortusmeye gore satirlara boler (tek gecis). Referans = satirdaki EN KISA
+    blok (bag: ilk); satira katilan blok daha kisaysa referans o olur (T2-1:
+    iki satira sarkan uzun kutu referans kalirsa iki satir tek satir sayilir).
+    """
     satirlar: list[list[tuple[int, TextBlock]]] = []
+    referans: Rect | None = None
     for oge in yuzey:
-        if satirlar and _dikey_ortusme_yeterli(satirlar[-1][0][1].bbox, oge[1].bbox):
+        kutu = oge[1].bbox
+        if referans is not None and _dikey_ortusme_yeterli(referans, kutu):
             satirlar[-1].append(oge)
+            if kutu.h < referans.h:
+                referans = kutu
         else:
             satirlar.append([oge])
+            referans = kutu
     return satirlar
 
 

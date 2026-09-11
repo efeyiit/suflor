@@ -1,0 +1,9 @@
+==== T-008 TUR 2 IMPLEMENTER -- SEF SONDASI ====
+Sahiplik temiz. BES KAPI: mypy Success · 76 passed · real_check TEMIZ (#1c: 11 -> 2 blok [6,5]) ·
+  %100 · tam takim 1444 · delivery KABUL. A ret 6/6, B ret 4/4 GECIYOR.
+A+B birlikte 4 kirik, dordu de adlandirilmis bayatlama:
+  A: test_a1_*_SINIF x2 (bozuk davranisi sabitliyordu, A "duzeltmede yeniden yazilir" demisti)
+  B: test_b2_teslim_68_test_topluyor, test_b5_*_68_68 (sayi pini, simdi 76)
+Implementer'in olculu notu: tur 1 M04 (-idx) T2-1 sonrasi davranis-esdeger oldu -> kontrol.
+  Kabul; tur 1 "M04 1 testle yakalanir" cumlesi gecersiz, teslimde yazili.
+KARAR: KABUL EDILEBILIR. A ve B tur 2 (yeniden nisan + dogrulama).

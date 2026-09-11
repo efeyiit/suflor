@@ -1,0 +1,29 @@
+Tur 2 mutantlari -- dusen testler (ayna agaci)
+
+M17 (son eklenen): 2 dusen
+    test_k2_satir_bolumleme_satirin_referansiyla_bir_oncekiyle_degil
+    test_k6_bagli_durumda_satir_referansi_en_kisa_girdi_sirasindan_bagimsiz
+
+M21 (E geri alinmis: ilk blok): 5 dusen
+    test_k2_uzun_kutu_koprusu_solda_sentetik_iki_satir_ayri_bloklar[satir2-x+5-fermuar]
+    test_k2_uzun_kutu_koprusu_solda_sentetik_iki_satir_ayri_bloklar[satir2-x-ayni]
+    test_k2_uzun_kutu_koprusu_solda_sentetik_iki_satir_ayri_bloklar[satir2-x+12]
+    test_k2_uzun_kutu_koprusu_gercek_geometri_11_kutu_iki_blok_6_5
+    test_k2_satir_referansi_en_kisa_blok_kisa_alt_kutu_siniri_sabitlendi
+
+M22 (en uzun): 6 dusen
+    test_k2_uzun_kutu_koprusu_solda_sentetik_iki_satir_ayri_bloklar[satir2-x+5-fermuar]
+    test_k2_uzun_kutu_koprusu_solda_sentetik_iki_satir_ayri_bloklar[satir2-x-ayni]
+    test_k2_uzun_kutu_koprusu_solda_sentetik_iki_satir_ayri_bloklar[satir2-x+12]
+    test_k2_uzun_kutu_koprusu_gercek_geometri_11_kutu_iki_blok_6_5
+    test_k2_satir_referansi_en_kisa_blok_kisa_alt_kutu_siniri_sabitlendi
+    test_k6_bagli_durumda_satir_referansi_en_kisa_girdi_sirasindan_bagimsiz
+
+M23 ((x, idx) y'siz): 2 dusen
+    test_k6_ayni_x_farkli_y_satir_ici_sira_y_ile_permutasyonlar_ayni
+    test_k6_cikti_anahtarinda_bag_girdi_sirasina_bagli_sinir
+
+M24 (bag: <=): 1 dusen
+    test_k2_satir_bolumleme_satirin_referansiyla_bir_oncekiyle_degil
+
+C-3 (-idx ilk siralama): 0 dusen

@@ -93,6 +93,54 @@ def _satir3() -> list[TextBlock]:
     return [_blok(x, y, w, h, text=f"s{i}") for i, (x, y, w, h) in enumerate(KR_GEOMETRI[7:12])]
 
 
+# Gercek ETIKET KOPRUSU fixture'inin GEOMETRISI (`T-008/fixtures/etiket_kopru_KR.png`,
+# gercek OCR, kaynak `evidence/geometri-etiket-kopru-tur2.txt`; metin yok). 11 kutu:
+# indeks 0 = iki satiri dikey kaplayan 2x etiket (solda, dikey ortali), 1..5 = satir 0
+# (y 64-68), 6..10 = satir 1 (y 109-111). Etiketin `y`'si en kucuk oldugu icin `(y,x)`
+# sirasinda satirin ILK blogudur; tur 1 (referans = ilk blok) iki satiri TEK satira
+# topluyordu (11 -> 1 blok, kelimeler x sirasinda ic ice; Tester-A/B ret, tur 2 T2-1).
+ETIKET_KOPRU_GEOMETRI: tuple[tuple[int, int, int, int], ...] = (
+    (57, 55, 125, 72),
+    (206, 65, 59, 34),
+    (277, 66, 87, 31),
+    (378, 66, 87, 32),
+    (481, 68, 113, 28),
+    (609, 64, 120, 35),
+    (205, 111, 148, 32),
+    (365, 110, 61, 34),
+    (435, 110, 61, 33),
+    (508, 109, 59, 35),
+    (580, 111, 117, 32),
+)
+ETIKET_KOPRU_SATIRLAR: tuple[frozenset[int], frozenset[int]] = (
+    frozenset(range(1, 6)),
+    frozenset(range(6, 11)),
+)
+
+
+def _etiket_kopru_bloklari(etiketli: bool = True) -> list[TextBlock]:
+    return [
+        _blok(x, y, w, h, text=f"e{i}")
+        for i, (x, y, w, h) in enumerate(ETIKET_KOPRU_GEOMETRI)
+        if etiketli or i != 0
+    ]
+
+
+def _satir_dagilimi(cikti: Sequence[TextBlock], satirlar: Sequence[frozenset[int]]) -> list[set[int]]:
+    """Her cizilen satir icin: satirin kelime kutularini iceren cikti bloklarinin
+    indeks kumesi (`line_boxes` bos = tek parca, kendi bbox'i). Kutular metinle
+    (`e{i}`) degil GEOMETRIYLE eslenir."""
+    kutu_indeksi = {Rect(x, y, w, h): i for i, (x, y, w, h) in enumerate(ETIKET_KOPRU_GEOMETRI)}
+    dagilim: list[set[int]] = [set() for _ in satirlar]
+    for b_idx, blok in enumerate(cikti):
+        parcalar = blok.line_boxes or (blok.bbox,)
+        for r in parcalar:
+            for s_idx, satir in enumerate(satirlar):
+                if kutu_indeksi[r] in satir:
+                    dagilim[s_idx].add(b_idx)
+    return dagilim
+
+
 # ---------------------------------------------------------------------------
 # K1 -- saf, deterministik, butce
 # ---------------------------------------------------------------------------
@@ -318,12 +366,14 @@ def test_k2_kr_geometrisi_17_kutu_4_satir_2_5_5_5() -> None:
         assert _xler(c) == sorted(_xler(c))
 
 
-def test_k2_satir_bolumleme_satirin_ilk_bloguna_gore() -> None:
-    """Satir uyeligi `(y,x,idx)` sirasindaki ILK blokla olculur, bir
-    oncekiyle DEGIL. Merdiven: a(0,0) b(100,10) c(50,20), h=20 -- b a ile
-    ortusur (10), c b ile ortusur (10) ama a ile ORTUSMEZ (0) -> c ayri
-    satir. "Bir oncekiyle" uyelik c'yi satira alir, x sirasinda c(50) b(100)
-    onune gecer ve c-b birlesirdi ("c b") -- mutant M17 burada duser."""
+def test_k2_satir_bolumleme_satirin_referansiyla_bir_oncekiyle_degil() -> None:
+    """Satir uyeligi satirin REFERANSIYLA (en kisa blok, bag: `(y,x,idx)`
+    sirasinda ilk -- T2-1) olculur, bir ONCEKIYLE degil. Merdiven: a(0,0)
+    b(100,10) c(50,20), hepsi h=20 (bag -> referans a) -- b a ile ortusur
+    (10), c b ile ortusur (10) ama a ile ORTUSMEZ (0) -> c ayri satir.
+    "Bir oncekiyle" (ya da "son eklenenle") uyelik c'yi satira alir, x
+    sirasinda c(50) b(100) onune gecer ve c-b birlesirdi ("c b") -- mutant
+    M17 burada duser."""
     a = _blok(0, 0, 50, 20, text="a")
     b = _blok(100, 10, 50, 20, text="b")
     c = _blok(50, 20, 50, 20, text="c")
@@ -335,20 +385,100 @@ def test_k2_satir_bolumleme_satirin_ilk_bloguna_gore() -> None:
     assert [x.text for x in satirlari_birlestir([a, b, c2])] == ["a c b"]
 
 
-def test_k2_grup_icinde_dikey_ortusme_grubun_ilk_bloguyla() -> None:
-    """Uzun kutu koprusu (KRT O2): T(60,0,40,60) satirin ilk blogu (en kucuk y);
-    a(0,5,50,20) ve c(110,40,50,20) T ile ortusur -> ucu AYNI SATIRDA. x
-    sirasinda a-T birlesir (ortusme 20, bosluk 10); c grubun ILK blogu a ile
-    ortusmez (-15) -> ayri. Referans SON blok (T) olsaydi c de birlesirdi
-    ("a T c", iki satir tek metin) -- mutant M18 burada duser."""
-    a = _blok(0, 5, 50, 20, text="a")
-    t = _blok(60, 0, 40, 60, text="T")
-    c = _blok(110, 40, 50, 20, text="c")
-    cikti = satirlari_birlestir([a, t, c])
-    assert [x.text for x in cikti] == ["a T", "c"]
-    # pozitif kontrol: c'yi a ile ortusecek kadar yukari al -> ucu birlesir
-    c2 = _blok(110, 10, 50, 20, text="c")
-    assert [x.text for x in satirlari_birlestir([a, t, c2])] == ["a T c"]
+def test_k2_grup_icinde_dikey_ortusme_grubun_ilk_bloguyla_uzun_kutu_solda() -> None:
+    """K2 adim 4: grup ici dikey referans GRUBUN ILK blogu. Uzun kutu SOLDA
+    (erisilebilir geometri, Tester-B): T(0,0,40,60) grubun ilk blogu;
+    a(50,5,50,20) satirin en kisa blogu (referans), b(105,0,50,24) ve
+    c(160,15,50,20) a ile ortusur (19, 10) -> dordu ayni satir. x sirasinda
+    T-a-b-c: c grubun ILK blogu T ile ortusur (20 >= 10) ve b'ye komsu
+    (bosluk 5) -> TEK blok. Referans SON blok (b: 0..24) olsaydi c ile
+    ortusme 9 < 10 -> c ayri kalir ("T a b", "c": satir parcalanir) -- mutant
+    M18 burada duser. (Tur 1'de T ORTADAYDI; T2-1 sonrasi c ayri satira
+    dustugu icin o geometri M18'i ayirt edemiyordu -- yeniden nisanlandi.)"""
+    t = _blok(0, 0, 40, 60, text="T")
+    a = _blok(50, 5, 50, 20, text="a")
+    b = _blok(105, 0, 50, 24, text="b")
+    c = _blok(160, 15, 50, 20, text="c")
+    cikti = satirlari_birlestir([t, a, b, c])
+    assert [x.text for x in cikti] == ["T a b c"]
+    assert _xler(cikti[0]) == [0, 50, 105, 160]
+
+
+def test_k2_grup_icinde_dikey_ortusme_grubun_ilk_bloguyla_satir_ici_merdiven() -> None:
+    """K2 adim 4, ters yon: satir uyeligi en kisa blokla olculdugu icin ayni
+    satirdaki iki blok birbiriyle ORTUSMEYEBILIR; grup ici referans (grubun
+    ILK blogu) bunu ayirir. A(0,0,50,20) S(55,11,40,18) B(100,20,50,20):
+    S referans (en kisa), A ve B S ile 9 >= 9 ortusur -> ucu ayni satir. x
+    sirasinda A-S birlesir; B grubun ILK blogu A ile ortusmez (0) -> AYRI.
+    Referans SON blok (S) olsaydi B de birlesirdi ("A S B") -- M18."""
+    a = _blok(0, 0, 50, 20, text="A")
+    s = _blok(55, 11, 40, 18, text="S")
+    b = _blok(100, 20, 50, 20, text="B")
+    assert [x.text for x in satirlari_birlestir([a, s, b])] == ["A S", "B"]
+    # pozitif kontrol: B'yi A ile ortusecek kadar yukari al (10..30) -> ucu birlesir
+    b2 = _blok(100, 10, 50, 20, text="B")
+    assert [x.text for x in satirlari_birlestir([a, s, b2])] == ["A S B"]
+
+
+@pytest.mark.parametrize("k", [5, 0, 12], ids=["satir2-x+5-fermuar", "satir2-x-ayni", "satir2-x+12"])
+def test_k2_uzun_kutu_koprusu_solda_sentetik_iki_satir_ayri_bloklar(k: int) -> None:
+    """T2-1 (Tester-B sentetik geometrisi): iki satiri dikey kaplayan etiket
+    T(0,0,40,60) SOLDA, `(y,x)` sirasinda satirin ilk blogu. Satir 1 a/b/c
+    (y=5), satir 2 d/e/f (y=40, x kaydirmasi k). Satir referansi EN KISA
+    blok: a satira girer girmez referans olur (h 20 < 60); d (40..60) a ile
+    ortusmez (-15) -> yeni satir. Cikti: etiket satir 1'e yapisik, satir 2
+    butun. Referans ILK blok (tur 1) olsaydi altisi da T ile ortusur, tek
+    satirda x sirasinda ic ice gecerdi ("T a d b e c f") ya da k=0'da
+    parcalanirdi; referans EN UZUN blok da ayni (T en uzun)."""
+    t = _blok(0, 0, 40, 60, text="T")
+    s1 = [_blok(50, 5, 50, 20, text="a"), _blok(110, 5, 50, 20, text="b"), _blok(170, 5, 50, 20, text="c")]
+    s2 = [_blok(50 + k, 40, 50, 20, text="d"), _blok(110 + k, 40, 50, 20, text="e"), _blok(170 + k, 40, 50, 20, text="f")]
+    cikti = satirlari_birlestir([t, *s1, *s2])
+    assert [x.text for x in cikti] == ["T a b c", "d e f"]
+    # pozitif kontrol: etiketsiz ayni geometri de iki satir
+    assert [x.text for x in satirlari_birlestir(s1 + s2)] == ["a b c", "d e f"]
+
+
+def test_k2_uzun_kutu_koprusu_gercek_geometri_11_kutu_iki_blok_6_5() -> None:
+    """T2-1, gercek OCR geometrisi (`ETIKET_KOPRU_GEOMETRI`; `real_check` #1c
+    ayni fixture'i gercek motorla olcer). Degismez: her cizilen satirin 5
+    kelime kutusu TAM OLARAK BIR cikti blogunda ve hicbir cikti blogu iki
+    satirdan kutu icermez. Secilen kural (en kisa referans) etiketi satir
+    0'a yapistirir: 11 -> 2 blok `[6, 5]`. Tur 1: 11 -> 1 blok, 11 parca."""
+    cikti = satirlari_birlestir(_etiket_kopru_bloklari())
+    dagilim = _satir_dagilimi(cikti, ETIKET_KOPRU_SATIRLAR)
+    assert all(len(d) == 1 for d in dagilim), dagilim  # her satir tek blokta
+    assert dagilim[0] != dagilim[1], dagilim  # iki satir ayni blokta DEGIL
+    assert [len(c.line_boxes) for c in cikti] == [6, 5]
+    for c in cikti:
+        assert _xler(c) == sorted(_xler(c))
+    # girdi sirasi onemsiz (K6): ters girdi ayni cikti
+    assert satirlari_birlestir(list(reversed(_etiket_kopru_bloklari()))) == cikti
+    # pozitif kontrol: etiketsiz 10 kutu -> [5, 5]
+    etiketsiz = satirlari_birlestir(_etiket_kopru_bloklari(etiketli=False))
+    assert [len(c.line_boxes) for c in etiketsiz] == [5, 5]
+    assert all(len(d) == 1 for d in _satir_dagilimi(etiketsiz, ETIKET_KOPRU_SATIRLAR))
+
+
+def test_k2_satir_referansi_en_kisa_blok_kisa_alt_kutu_siniri_sabitlendi() -> None:
+    """Secilen kuralin SINIRI (belge, degismez degil): satirin ALTINA sarkan
+    kisa bir kutu (p: h=12, 20..32) referans olur; bir sonraki satir p ile
+    `>= 0.5*12 = 6` ortusecek kadar yakinsa (satirlar birbirine 4 px
+    giriyor) ayni satira girer ve satir ici x sirasi iki satiri karistirir.
+    Aralik 27 (ortusme 5 < 6) -> iki satir butun; 26 (ortusme 6) -> karisik.
+    Gercek OCR'da tespitci noktalamayi kelime kutusuna dahil eder (dlg_KR: 17
+    kutu, ayri noktalama kutusu yok) ve satirlar birbirine girmez; sinif
+    `[ÖLÇÜLMÜYOR]` gercek OCR'da, burada sentetik SABITLENDI."""
+    def _sahne(aralik: int) -> list[TextBlock]:
+        return [
+            _blok(0, 0, 50, 30, text="w1"), _blok(55, 0, 50, 30, text="w2"), _blok(110, 20, 8, 12, text="p"),
+            _blok(0, aralik, 50, 30, text="n1"), _blok(55, aralik, 50, 30, text="n2"),
+        ]
+
+    assert [x.text for x in satirlari_birlestir(_sahne(27))] == ["w1 w2 p", "n1 n2"]
+    karisik = [x.text for x in satirlari_birlestir(_sahne(26))]
+    assert karisik != ["w1 w2 p", "n1 n2"]
+    assert len(karisik) > 2  # satirlar parcalanir (bilinen sinir)
 
 
 # ---------------------------------------------------------------------------
@@ -504,18 +634,52 @@ def test_k6_bagli_durum_girdi_sirasi_korunur_sinir() -> None:
     assert [c.text for c in satirlari_birlestir([b, a])] == ["b", "a"]
 
 
-def test_k6_bagli_durumda_satir_referansi_ilk_girdi_blogu() -> None:
-    """Ayni `(y,x)`'te iki kutu (a h=20, b h=60): satirin referansi girdide
-    ONCE gelen olur. [a,b,c]: referans a, c(60,30) a ile ortusmez -> uc ayri.
-    Bag TERS cozulseydi referans b olur, c satira girer ve b-c birlesirdi
-    ("a", "b c") -- mutant M04 burada duser. [b,a,c] girdisi K6 sinirinin
-    kaydi: referans b, c satira girer ama x sirasinda a'nin grubu araya
-    girdigi icin yine ayri kalir; cikti sirasi girdi sirasini izler."""
+def test_k6_bagli_durumda_satir_referansi_en_kisa_girdi_sirasindan_bagimsiz() -> None:
+    """Ayni `(y,x)`'te iki kutu (a h=20, b h=60): satirin referansi EN KISA
+    olan (a) olur, girdi sirasi NE OLURSA OLSUN (T2-1): c(60,30) a ile
+    ortusmez -> c her iki girdide de satira GIRMEZ, uc ayri blok. Girdi
+    sirasi yalniz ciktinin sirasini belirler (K6 siniri: a/b bagli).
+    Referans "son eklenen" olsaydi [a,b,c]'de referans b olur, c satira
+    girer ve x sirasinda b-c birlesirdi ("a", "b c") -- mutant M17 burada
+    duser. Referans ILK girdi blogu (tur 1) bu geometride AYNI ciktiyi verir
+    ([b,a,c]'de c satira girer ama x sirasinda a'nin grubu araya girer) --
+    E'yi bu test DEGIL, kopru testleri ayirt eder."""
     a = _blok(0, 0, 50, 20, text="a")
     b = _blok(0, 0, 50, 60, text="b")
     c = _blok(60, 30, 50, 20, text="c")
     assert [x.text for x in satirlari_birlestir([a, b, c])] == ["a", "b", "c"]
     assert [x.text for x in satirlari_birlestir([b, a, c])] == ["b", "a", "c"]
+
+
+def test_k6_ayni_x_farkli_y_satir_ici_sira_y_ile_permutasyonlar_ayni() -> None:
+    """T2-2 (Tester-B M41): satir ici siralama anahtari `(x, y, idx)` -- ayni
+    `x`'teki iki kutu `y` ile siralanir, girdi indeksiyle DEGIL. p(0,0) ve
+    q(0,10) ayni x (ikincisi yeni grup acar, K2); r(55,10) acik (SON) gruba
+    katilir. `y` anahtarda oldugu icin acik grup her girdi sirasinda q'dur
+    -> "p", "q r"; `(y,x)` bagi yok -> 6 permutasyon AYNI liste (K6).
+    Anahtar `(x, idx)` olsaydi [q,p,r] girdisinde acik grup p olur ve r
+    p'ye katilirdi ("p r", "q") -- girdi sirasina bagli cikti."""
+    p = _blok(0, 0, 50, 20, text="p")
+    q = _blok(0, 10, 50, 20, text="q")
+    r = _blok(55, 10, 50, 20, text="r")
+    beklenen = ["p", "q r"]
+    assert [x.text for x in satirlari_birlestir([q, p, r])] == beklenen
+    for perm in itertools.permutations([p, q, r]):
+        assert [x.text for x in satirlari_birlestir(list(perm))] == beklenen, [x.text for x in perm]
+
+
+def test_k6_cikti_anahtarinda_bag_girdi_sirasina_bagli_sinir() -> None:
+    """K6 siniri (T2-3, Tester-A): girdide `(y,x)` bagi OLMASA da iki cikti
+    blogunun `(y,x)`'i esit dogabilir -- birlesik bbox'in `(min y, min x)`'i
+    baska bir kutuyla cakisir. C(0,0,10,30) A(0,10,10,20) B(20,0,10,20):
+    A-B birlesir, bbox (0,0); C de (0,0) -> bag en kucuk girdi indeksiyle
+    -> cikti sirasi girdi sirasina bagli. Urun etkisi yok (normalizer
+    yeniden siralar); belge olcusu."""
+    c = _blok(0, 0, 10, 30, text="C")
+    a = _blok(0, 10, 10, 20, text="A")
+    b = _blok(20, 0, 10, 20, text="B")
+    assert [x.text for x in satirlari_birlestir([c, a, b])] == ["C", "A B"]
+    assert [x.text for x in satirlari_birlestir([a, b, c])] == ["A B", "C"]
 
 
 def test_k6_bagli_durum_farkli_monitorlerde_de_girdi_indeksi() -> None:
