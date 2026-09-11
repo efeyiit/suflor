@@ -162,15 +162,33 @@ Olcu: `test_k6_*`; `real_check.py` #7 (bos dizin -> `ModelMissingError`).
 
 ## K7 -- motor OCR metnini loglamaz; kutuphane logu kurulumdan SONRA susturulur
 
-Bu modulde `print` yok, `logging` cagrisi yok (yalniz `setLevel`).
+DEGISMEZ (kanal-bagimsiz, tur 2 T2-1): `recognize` suresince OCR metni
+HICBIR cikis kanalina yazilmaz -- stdout, stderr, herhangi bir `logging`
+logger'i (ad ve seviye ne olursa olsun), `warnings`. Bu modulde `print`
+yok, `sys.std*`/`os.write` yok, `logging` YAYIMI yok (yalniz
+`getLogger(...).setLevel`).
+
 Kutuphane `"RapidOCR"` logger'ini KURULUMDA kendisi seviyelendirir
 (olcum-3 #2: kurulum oncesi ERROR -> kurulum sonrasi INFO). Bu yuzden motor
 seviyeyi `ERROR`a fabrika DONDUKTEN SONRA ceker; ayrica params'a
 `Global.log_level="error"` koyar ki kurulum SIRASINDAKI INFO satirlari
 (motor adi, model yolu) da basilmasin (olcum-3 #3). `WARNING` yetmez:
-metinsiz her karede WARNING basiliyor. Olcu: `test_k7_*` (fabrika
-seviyeyi INFO'ya sifirlar -> recognize sonrasi ERROR; nobetci metin
-caplog'a dusmez; pozitif kontrol).
+metinsiz her karede WARNING basiliyor. Motor seviyeye yalniz kurulumda
+dokunur; uygulama sonradan o logger'i acarsa (debug modu) kutuphanenin
+kendi satirlari gecer -- bu ust katman karari, motor degil.
+
+Olcu (DAVRANIS, tur 2): `test_k7_soguk_motor_*` ve `test_k7_sicak_motor_*`
+-- iki nobetci metinli (Latin + CJK) sahte tanıyıcıyla `recognize`;
+`capfd` ile fd duzeyinde stdout/stderr `== ""` (sifir bayt; `sys.stdout.write`,
+`os.write(1)`, `sys.__stderr__` hepsi gorunur), kok logger DEBUG'da
+`caplog` + `RapidOCR` logger'ina DOGRUDAN takili handler (propagate=False
+kor birakmasin) altinda hicbir kayit nobetci icermez, `warnings` kanali
+temiz. Iki nokta: soguk (kurulum + tanima) ve sicak (kurulumdan SONRA
+kutuphane logger'i acilmis). Pozitif kontrol: her kanala nobetci yazan
+test ici sahte motorlarla ayni olcu DUSER (`test_k7_pozitif_kontrol_kanal_*`).
+AST ikincil: `print`/`sys.stdout.write`/`sys.stderr.write`/`os.write` ve
+log yayimi 0 (`test_k7_ast_*`). Sira olcusu: fabrika seviyeyi INFO'ya
+sifirlar -> recognize sonrasi ERROR (`test_k7_logger_seviyesi_*`).
 
 ## K8 -- `preset` kabul edilir ama v1'de motoru DEGISTIRMEZ `[ÖLÇÜLMÜYOR]`
 
@@ -189,10 +207,14 @@ Motor sure TUTMAZ (`last_timing` yok). Butce tek yerde: `budget_ms: 300`
 
 `__init__` kutuphaneye ve dosya sistemine DOKUNMAZ (yalniz argüman
 dogrulama). Ilk `recognize` model dosyalarini denetler, fabrikayi cagirir;
-sonrakiler ayni tanıyıcıyı kullanir. `close()` idempotent; sonrasi
+sonrakiler ayni tanıyıcıyı kullanir. `close()` idempotent; tanıyıcı
+referansi BIRAKILIR (`_taniyici = None` -- gercek yolda det+rec ONNX
+oturumlari; dil degisiminde eski motor bellekte kalmasin, T2-2); sonrasi
 `recognize` -> `OcrError`, fabrika yeniden CAGRILMAZ. Baglam yoneticisi
 DEGIL (T-005 dersi). `recognize` sirasi: kapali mi -> kare dogrulama ->
-tembel kurulum -> tanıma -> donusum. Olcu: `test_k10_*`.
+tembel kurulum -> tanıma -> donusum. Kurulum (fabrika) hata verirse ornek
+TUTULMAZ; bir sonraki `recognize` kurulumu yeniden dener (K6 b). Olcu:
+`test_k10_*` (weakref: `close()` + `gc.collect()` sonrasi tanıyıcı olu).
 
 ## K11 -- model tablosu dil basina SABIT
 
@@ -394,6 +416,14 @@ def _varsayilan_fabrika(params: dict[str, object]) -> Tanıyıcı:  # pragma: no
     `lang_type` string kabul eder ama tutarlilik icin o da cevrilir.
     Cevrimdisi indirme hatasi -> `ModelMissingError`; diger istisnalar
     motora yayilir ve orada siniflandirilir (K6).
+
+    `[ÖLÇÜLMÜYOR]` -- tanıyıcıdaki `isinstance(cikti, RapidOCROutput)` dali:
+    kutuphane `RapidOCROutput` disinda bir tip dondurdugunde (`TextDetOutput`
+    gibi) `OcrError` uretir; birim testte kutuphane yuklenmez (K1 bariyeri),
+    `real_check.py`nin uc fixture'i bu dali TETIKLEMEZ (uc dilde de
+    `RapidOCROutput` donuyor). Gercek tetikleyici bilinmiyor; belgelenir.
+    Motorun genel "beklenmeyen tip -> OcrError" yolu sahte tanıyıcıyla
+    olculur (`test_k6_taniyici_sozlesme_hatasi_oldugu_gibi_gecer`).
     """
     from rapidocr import EngineType, LangCls, LangDet, LangRec, ModelType, OCRVersion, RapidOCR
     from rapidocr.utils.download_file import DownloadFileException
@@ -662,7 +692,11 @@ class RapidOcrEngine(OcrEngine):
         return _bloklara_cevir(cikti, frame.rect)
 
     def close(self) -> None:
-        """Tanıyıcıyı birakir; idempotent. Sonrasi `recognize` -> `OcrError` (K10)."""
+        """Tanıyıcıyı BIRAKIR (referans tutulmaz; weakref olu); idempotent.
+
+        Sonrasi `recognize` -> `OcrError`, fabrika yeniden cagrilmaz (K10).
+        Olcu: `test_k10_close_taniyiciyi_gercekten_birakir_weakref`.
+        """
         self._taniyici = None
         self._kapali = True
 

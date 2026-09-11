@@ -10,12 +10,15 @@ dil tablosu degerleri ve anahtar adlari burada SABIT yazilidir -- motorun
 kendi tablosundan TURETILMEZ. Kaynak: `.agents/tasks/T-006/evidence/
 olcum-2-model-adlari-ve-enum.txt` (rapidocr'un kendi cozucusunun ciktisi).
 
-OCR metni hicbir yere basilmaz (PROTOKOL 7); `print` yok.
+OCR metni hicbir yere basilmaz (PROTOKOL 7); `print` yok. Tur 2'nin K7
+pozitif kontrolleri nobetciyi bir kanala YAZAR ama o kanal `capfd`/`caplog`/
+`catch_warnings` ile yutulur; konsola ULASMAZ (asagida "K7 -- tur 2").
 """
 from __future__ import annotations
 
 import ast
 import dataclasses
+import gc
 import importlib.metadata
 import inspect
 import json
@@ -23,7 +26,9 @@ import logging
 import math
 import os
 import sys
-from collections.abc import Callable, Sequence
+import warnings
+import weakref
+from collections.abc import Callable, Iterator, Sequence
 from pathlib import Path
 from typing import Any
 
@@ -607,6 +612,12 @@ def test_k6_bozuk_cikti_ocrerror(tmp_path: Path, c: Any) -> None:
         motor(tmp_path, f).recognize(kare(), OcrPreset.DIALOGUE)
 
 
+def test_k6_varsayilan_fabrika_isinstance_dali_olculmuyor_damgali() -> None:
+    """Tur 2: gercek fabrikanin `isinstance(cikti, RapidOCROutput)` dali olculmuyor -- damga docstring'de (4.6/2)."""
+    doc = rapid_engine._varsayilan_fabrika.__doc__ or ""
+    assert "[ÖLÇÜLMÜYOR]" in doc and "isinstance" in doc
+
+
 def test_k6_hata_mesaji_ocr_metni_tasimaz(tmp_path: Path) -> None:
     """PROTOKOL 7: bozuk ciktida bile istisna metni blok metnini icermez."""
     nobetci = "NOBETCI-9c1e"
@@ -667,6 +678,290 @@ def test_k7_pozitif_kontrol_seviye_dusurulmezse_uyari_gecer(caplog: pytest.LogCa
 
 
 # ===========================================================================
+# K7 -- tur 2: olcu DAVRANISA kancali (PROTOKOL 4.6/7), kanal-bagimsiz
+# ===========================================================================
+#
+# Degismez (sef karari T2-1): `recognize` suresince OCR metni HICBIR cikis
+# kanalina yazilmaz -- stdout, stderr, herhangi bir `logging` logger'i (ad ve
+# seviye ne olursa olsun), `warnings`. Tur 1'in olcusu `print` ADINI sayiyor ve
+# yalniz `RapidOCR` logger'ini dinliyordu; `sys.stdout.write(blok.text)` ekleyen
+# mutant 95 testten geciyordu. Asagidaki olcu davranisi olcer:
+#
+#   * `capfd`  -- dosya tanimlayici duzeyinde stdout/stderr: `sys.stdout.write`i
+#                 de, `os.write(1, ...)`i de, `sys.__stderr__`i de gorur
+#                 (`capsys` yalniz `sys.stdout` nesnesini gorur; `capfd` ust kume).
+#                 Beklenen: out == "" VE err == "" -- sifir bayt, "nobetci
+#                 icermez" YETMEZ.
+#   * `caplog` -- KOK logger DEBUG (logger belirtmeden); `RapidOCR` logger'ina
+#                 `caplog.handler` DOGRUDAN takilir ki kutuphanenin
+#                 `propagate=False` ayari olcuyu kor birakmasin. Beklenen: hicbir
+#                 `record.getMessage()` iki nobetciyi de icermez.
+#   * `warnings.catch_warnings(record=True)` + `simplefilter("always")` --
+#                 `warnings.warn` kanali (uretimde stderr'e gider; pytest ayri
+#                 yakalar, bu yuzden `capfd` goremez). "always" sart: "default"
+#                 suzgec ayni konumdan ikinci uyariyi bastirir, sicak nokta kor
+#                 kalirdi. Beklenen: hicbir uyari metni nobetci icermez.
+#
+# Iki nokta (4.6/7): SOGUK motor (ilk recognize = kurulum + tanima) ve SICAK
+# motor (kurulum bitmis, kutuphane logger'i uygulama debug modu gibi SONRADAN
+# acilmis -- motor seviyeyi yalniz kurulumda ceker, sonra dokunmaz). Pozitif
+# kontroller: `OcrEngine`i uygulayan, nobetciyi bir kanala yazan test ici sahte
+# motorlar AYNI olcu fonksiyonundan gecirilir ve DUSER (4.6/10).
+
+NOBETCILER: tuple[str, str] = ("NÖBETÇİ-7f3a", "長老-9c1e")
+"""Iki nobetci: Turkce harfli Latin + ASCII-disi CJK (cp1254 tuzagi -- Windows)."""
+
+
+def _kutuphane_gibi_kur() -> None:
+    """Gercek kutuphanenin kurulumda yaptigi: `RapidOCR` logger'i INFO + propagate KAPALI."""
+    lg = logging.getLogger(LOGGER_ADI)
+    lg.setLevel(logging.INFO)
+    lg.propagate = False
+
+
+@pytest.fixture
+def kutuphane_logger_geri_al() -> Iterator[None]:
+    """`RapidOCR` logger'inin seviye/propagate/handler'larini test sonunda geri alir (global durum sizmasin)."""
+    lg = logging.getLogger(LOGGER_ADI)
+    eski_seviye, eski_propagate, eski_handlerlar = lg.level, lg.propagate, list(lg.handlers)
+    yield
+    lg.setLevel(eski_seviye)
+    lg.propagate = eski_propagate
+    lg.handlers[:] = eski_handlerlar
+
+
+def _nobetci_ciktisi() -> SahteCikti:
+    return cikti((kutu(0, 0, 5, 5), NOBETCILER[0], 0.9), (kutu(0, 10, 5, 15), NOBETCILER[1], 0.4))
+
+
+def _ozgun_akislari_bosalt() -> None:
+    """`sys.__stdout__`/`sys.__stderr__` tamponunu fd'ye indirir (capfd ancak fd'de gorur).
+
+    `capfd` `sys.stdout/stderr`i tamponsuz kopyayla degistirir ama OZGUN nesneler
+    (`sys.__std*__`) kendi satir tamponunu korur: newline'siz bir `write` fd'ye
+    inmeden olcum penceresi kapanabilirdi. Pencerenin iki ucunda bosaltilir ki
+    olcum tampona degil DAVRANISA bagli olsun. Pencereli pakette (`pythonw`)
+    bu nesneler `None`dur -- atlanir.
+    """
+    for akis in (sys.__stdout__, sys.__stderr__):
+        if akis is not None:
+            akis.flush()
+
+
+def _k7_kanal_olcusu(
+    m: OcrEngine,
+    capfd: pytest.CaptureFixture[str],
+    caplog: pytest.LogCaptureFixture,
+) -> list[TextBlock]:
+    """K7'nin kanal-bagimsiz olcusu: TEK `recognize` cagrisi, uc kanal, sifir sizinti.
+
+    Kutuphane logger'i `propagate=False` olsa bile gorulsun diye `caplog.handler`
+    ona DOGRUDAN takilir (sonunda kaldirilir; `propagate` eski degerine doner).
+    Sahte motorlar da ayni fonksiyondan gecer -- olcu motora degil DAVRANISA bagli.
+    """
+    lg = logging.getLogger(LOGGER_ADI)
+    eski_propagate = lg.propagate
+    caplog.set_level(logging.DEBUG)  # KOK logger + caplog.handler: DEBUG
+    caplog.set_level(logging.DEBUG, logger=LOGGER_ADI)  # uygulama debug modu: kutuphane logger'i ACIK
+    lg.addHandler(caplog.handler)  # propagate=False kor birakmasin
+    caplog.clear()
+    _ozgun_akislari_bosalt()
+    capfd.readouterr()  # olcum oncesi artiklari at
+    try:
+        with warnings.catch_warnings(record=True) as uyari_kayitlari:
+            warnings.simplefilter("always")  # "default" olsaydi ayni konumdan 2. uyari BASTIRILIRDI (sicak nokta kor kalirdi)
+            bloklar = m.recognize(kare(), OcrPreset.DIALOGUE)
+    finally:
+        lg.removeHandler(caplog.handler)
+        lg.propagate = eski_propagate
+    _ozgun_akislari_bosalt()  # `sys.__stderr__.write` satir tamponunda kalmasin; fd'ye insin
+    out, err = capfd.readouterr()
+    assert out == "", f"stdout'a {len(out)} karakter yazildi (sifir olmali)"
+    assert err == "", f"stderr'e {len(err)} karakter yazildi (sifir olmali)"
+    mesajlar = [r.getMessage() for r in caplog.records]
+    uyarilar = [str(w.message) for w in uyari_kayitlari]
+    for n in NOBETCILER:
+        assert not [msg for msg in mesajlar if n in msg], "nobetci bir log kaydina dustu"
+        assert not [u for u in uyarilar if n in u], "nobetci bir warnings kaydina dustu"
+    return bloklar
+
+
+def test_k7_soguk_motor_hicbir_kanala_metin_yazmaz(
+    tmp_path: Path,
+    kutuphane_logger_geri_al: None,
+    capfd: pytest.CaptureFixture[str],
+    caplog: pytest.LogCaptureFixture,
+) -> None:
+    """Nokta 1: ilk `recognize` (kurulum + tanima) -- stdout/stderr sifir bayt, log/uyari temiz."""
+    f = SahteFabrika(_nobetci_ciktisi(), kurulumda=_kutuphane_gibi_kur)
+    bloklar = _k7_kanal_olcusu(motor(tmp_path, f), capfd, caplog)
+    assert [b.text for b in bloklar] == list(NOBETCILER)  # metin motordan AYNEN cikti
+    assert f.calls == 1
+
+
+def test_k7_sicak_motor_kutuphane_logger_i_acikken_metin_yazmaz(
+    tmp_path: Path,
+    kutuphane_logger_geri_al: None,
+    capfd: pytest.CaptureFixture[str],
+    caplog: pytest.LogCaptureFixture,
+) -> None:
+    """Nokta 2: kurulum bitti, sonra `RapidOCR` logger'i DEBUG'a acildi (uygulama debug modu).
+
+    Motor seviyeyi yalniz kurulumda ERROR'a ceker; ikinci `recognize` fabrikayi
+    cagirmaz, dolayisiyla acik logger acik kalir -- kutuphane logger'ina `.info`
+    ile metin yazan bir uygulama burada gorunur.
+    """
+    f = SahteFabrika(_nobetci_ciktisi(), kurulumda=_kutuphane_gibi_kur)
+    m = motor(tmp_path, f)
+    m.recognize(kare(), OcrPreset.DIALOGUE)  # kurulum; motor RapidOCR'u ERROR'a cekti
+    assert logging.getLogger(LOGGER_ADI).level == logging.ERROR
+    bloklar = _k7_kanal_olcusu(m, capfd, caplog)
+    assert [b.text for b in bloklar] == list(NOBETCILER)
+    assert f.calls == 1
+
+
+# -- pozitif kontroller (4.6/10): olcu ATESLIYOR mu? ----------------------------
+#
+# `OcrEngine`i uygulayan 5 satirlik sahte motorlar; her biri nobetciyi TEK bir
+# kanala yazar. Yazilan sey `capfd`/`caplog`/`catch_warnings` tarafindan yutulur,
+# konsola/dosyaya ULASMAZ. Olcu her birinde AssertionError vermeli.
+
+
+def _blok(metin: str) -> TextBlock:
+    return TextBlock(text=metin, bbox=Rect(0, 0, 5, 5), confidence=0.9)
+
+
+class _StdoutaYazan(OcrEngine):
+    def recognize(self, frame: Frame, preset: OcrPreset) -> list[TextBlock]:
+        sys.stdout.write(NOBETCILER[0])  # M25b sinifi
+        return [_blok(NOBETCILER[0])]
+
+
+class _StderreYazan(OcrEngine):
+    def recognize(self, frame: Frame, preset: OcrPreset) -> list[TextBlock]:
+        sys.stderr.write(NOBETCILER[1])
+        return [_blok(NOBETCILER[1])]
+
+
+class _FdYeYazan(OcrEngine):
+    def recognize(self, frame: Frame, preset: OcrPreset) -> list[TextBlock]:
+        os.write(1, NOBETCILER[1].encode("utf-8"))  # sys.stdout'u atlar; capsys GOREMEZ, capfd gorur
+        return [_blok(NOBETCILER[1])]
+
+
+class _OzgunStderreYazan(OcrEngine):
+    def recognize(self, frame: Frame, preset: OcrPreset) -> list[TextBlock]:
+        assert sys.__stderr__ is not None
+        sys.__stderr__.write(NOBETCILER[0])  # newline YOK: satir tamponunda kalir; bosaltma olmasa gorunmezdi
+        return [_blok(NOBETCILER[0])]
+
+
+class _KokLoggeraYazan(OcrEngine):
+    def recognize(self, frame: Frame, preset: OcrPreset) -> list[TextBlock]:
+        logging.getLogger("suflor.ocr").debug("blok %s", NOBETCILER[0])  # M28c sinifi
+        return [_blok(NOBETCILER[0])]
+
+
+class _KutuphaneLoggerinaYazan(OcrEngine):
+    def recognize(self, frame: Frame, preset: OcrPreset) -> list[TextBlock]:
+        lg = logging.getLogger(LOGGER_ADI)
+        lg.propagate = False  # kutuphane gibi: koke ULASMAZ; yalniz dogrudan takili handler gorur
+        lg.info("blok %s", NOBETCILER[1])  # M28b sinifi
+        return [_blok(NOBETCILER[1])]
+
+
+class _UyariVeren(OcrEngine):
+    def recognize(self, frame: Frame, preset: OcrPreset) -> list[TextBlock]:
+        warnings.warn(NOBETCILER[0], stacklevel=2)
+        return [_blok(NOBETCILER[0])]
+
+
+@pytest.mark.parametrize(
+    "sahte",
+    [_StdoutaYazan, _StderreYazan, _FdYeYazan, _OzgunStderreYazan, _KokLoggeraYazan, _KutuphaneLoggerinaYazan, _UyariVeren],
+    ids=["stdout", "stderr", "os.write(1)", "sys.__stderr__-tamponlu", "kok-logger-debug", "RapidOCR-logger-info-propagate-kapali", "warnings"],
+)
+def test_k7_pozitif_kontrol_kanal_olcusu_atesliyor(
+    sahte: type[OcrEngine],
+    kutuphane_logger_geri_al: None,
+    capfd: pytest.CaptureFixture[str],
+    caplog: pytest.LogCaptureFixture,
+) -> None:
+    """Ayni olcu, nobetciyi o kanala yazan sahte motorla DUSMELI (4.6/10)."""
+    with pytest.raises(AssertionError):
+        _k7_kanal_olcusu(sahte(), capfd, caplog)
+    capfd.readouterr()
+    caplog.clear()
+
+
+def test_k7_negatif_kontrol_sessiz_sahte_motor_olcuden_gecer(
+    kutuphane_logger_geri_al: None,
+    capfd: pytest.CaptureFixture[str],
+    caplog: pytest.LogCaptureFixture,
+) -> None:
+    """Yanlis pozitif yok: hicbir kanala yazmayan sozlesme sahtesi olcuden gecer."""
+    from src.contracts.interfaces import FakeOcrEngine
+
+    bloklar = _k7_kanal_olcusu(FakeOcrEngine([[_blok(NOBETCILER[0])]]), capfd, caplog)
+    assert [b.text for b in bloklar] == [NOBETCILER[0]]
+
+
+# -- AST (ikincil, erken uyari): dort yazma cagrisi + log yayimi 0 ------------
+
+_YAZMA_CAGRILARI: tuple[str, ...] = ("print", "sys.stdout.write", "sys.stderr.write", "os.write")
+_AKIS_ADLARI: tuple[str, ...] = ("sys.stdout", "sys.stderr", "sys.__stdout__", "sys.__stderr__")
+_LOG_YAYIM_METOTLARI: frozenset[str] = frozenset(
+    {"debug", "info", "warning", "warn", "error", "critical", "exception", "log"}
+)
+
+
+def _yazma_sayaci(agac: ast.AST) -> dict[str, int]:
+    """Kaynakta `print`/`sys.stdout.write`/`sys.stderr.write`/`os.write` cagrisi,
+    `sys.std*` akis erisimi ve `<nesne>.debug/info/.../log(...)` yayimi sayisi."""
+    sayac: dict[str, int] = {ad: 0 for ad in (*_YAZMA_CAGRILARI, *_AKIS_ADLARI, "log-yayimi")}
+    for d in ast.walk(agac):
+        if isinstance(d, ast.Call):
+            ad = ast.unparse(d.func)
+            if ad in _YAZMA_CAGRILARI:
+                sayac[ad] += 1
+            if isinstance(d.func, ast.Attribute) and d.func.attr in _LOG_YAYIM_METOTLARI:
+                sayac["log-yayimi"] += 1
+        if isinstance(d, ast.Attribute) and ast.unparse(d) in _AKIS_ADLARI:
+            sayac[ast.unparse(d)] += 1
+    return sayac
+
+
+def test_k7_ast_yazma_cagrisi_ve_log_yayimi_sifir() -> None:
+    """`print`, `sys.stdout.write`, `sys.stderr.write`, `os.write` -> dordu de 0;
+    `sys.std*` akisina erisim 0; hicbir `.debug/.info/.warning/...` yayimi yok
+    (modulde `logging` yalniz `getLogger(...).setLevel` icin)."""
+    sayac = _yazma_sayaci(_modul_agaci())
+    assert sayac == {ad: 0 for ad in sayac}, sayac
+
+
+def test_k7_ast_pozitif_kontrol_sayac_hepsini_gorur() -> None:
+    """Sayacin kor olmadigi gosterilir: dort cagri + akis + yayim iceren parca -> hepsi > 0."""
+    parca = (
+        "import sys, os, logging\n"
+        "def f(m):\n"
+        "    print(m)\n"
+        "    sys.stdout.write(m)\n"
+        "    sys.stderr.write(m)\n"
+        "    os.write(1, m.encode())\n"
+        "    sys.__stdout__.write(m)\n"
+        "    sys.__stderr__.flush()\n"
+        "    logging.getLogger('x').debug('%s', m)\n"
+        "    logging.getLogger('y').log(10, m)\n"
+    )
+    sayac = _yazma_sayaci(ast.parse(parca))
+    assert sayac == {
+        "print": 1, "sys.stdout.write": 1, "sys.stderr.write": 1, "os.write": 1,
+        "sys.stdout": 1, "sys.stderr": 1, "sys.__stdout__": 1, "sys.__stderr__": 1,
+        "log-yayimi": 2,
+    }
+
+
+# ===========================================================================
 # K8 -- preset kabul edilir, v1'de motoru degistirmez
 # ===========================================================================
 
@@ -717,6 +1012,49 @@ def test_k10_close_kurulmamis_motorda_da_sessiz(tmp_path: Path) -> None:
     m.close()
     with pytest.raises(OcrError):
         m.recognize(kare(), OcrPreset.DIALOGUE)
+    assert f.calls == 0
+
+
+def test_k10_close_taniyiciyi_gercekten_birakir_weakref(tmp_path: Path) -> None:
+    """Tur 2 (T2-2): `close()` sonrasi motor tanıyıcıya referans TUTMAZ.
+
+    Gercek yolda tanıyıcı det+rec ONNX oturumlarini tasir; dil degisiminde eski
+    motor bellekte kalmamali. Olcu: fabrikanin dondurdugu tanıyıcıya `weakref`;
+    `close()` + `gc.collect()` sonrasi olu. Pozitif kontrol: `close()` ONCESI
+    ayni weakref CANLI (motor tutuyor) -- yoksa olcu bos donerdi (4.6/10).
+    """
+    f = SahteFabrika(_nobetci_ciktisi())
+    zayif: list[weakref.ref[Any]] = []
+
+    def fabrika(params: dict[str, object]) -> Callable[[Any], Any]:
+        t = f(params)  # taze kapanis; `f` onu TUTMAZ, yalniz motor tutar
+        zayif.append(weakref.ref(t))
+        return t
+
+    model_dosyalari(tmp_path, OcrLanguage.JAPAN)
+    m = RapidOcrEngine(language=OcrLanguage.JAPAN, model_dir=tmp_path, recognizer_factory=fabrika)
+    m.recognize(kare(), OcrPreset.DIALOGUE)
+    [ref] = zayif
+    gc.collect()
+    assert ref() is not None  # pozitif kontrol: kapatmadan once motor referansi tutuyor
+    m.close()
+    gc.collect()
+    assert ref() is None  # birakildi
+    with pytest.raises(OcrError):
+        m.recognize(kare(), OcrPreset.DIALOGUE)
+    assert f.calls == 1  # kapali motor fabrikayi YENIDEN cagirmaz
+    m.close()
+    gc.collect()
+    assert ref() is None and f.calls == 1  # idempotent
+
+
+def test_k10_kapali_motor_close_sonrasi_bozuk_karede_de_ocrerror(tmp_path: Path) -> None:
+    """Sira (K10 -> K6 c): kapali motorda bozuk kare bile `OcrError` alir, fabrika 0."""
+    f = SahteFabrika()
+    m = motor(tmp_path, f)
+    m.close()
+    with pytest.raises(OcrError):
+        m.recognize(kare(image=np.zeros((40, 100, 4), np.uint8)), OcrPreset.DIALOGUE)
     assert f.calls == 0
 
 

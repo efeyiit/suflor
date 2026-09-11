@@ -1,0 +1,7 @@
+# cp1254 kontrolu (paket 'Windows tuzaklari'): PYTHONIOENCODING ve PYTHONUTF8 YOK; stdout dosyaya yonlendirilmis -> Python locale kodlamasi (cp1254).
+# Beklenen: birim testler nobetci (CJK dahil) HICBIR yere basmadigi icin UnicodeEncodeError YOK, 110 passed.
+stdout.encoding = cp1254
+........................................................................ [ 65%]
+......................................                                   [100%]
+110 passed in 0.33s
+exit=0

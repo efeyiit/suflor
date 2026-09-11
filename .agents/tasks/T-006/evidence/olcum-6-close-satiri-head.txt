@@ -1,0 +1,11 @@
+$ git rev-parse --short HEAD
+19222f9
+$ git show HEAD:src/ocr/rapid_engine.py | grep -n -B2 -A3 "_taniyici = None"
+664-    def close(self) -> None:
+665-        """Tanıyıcıyı birakir; idempotent. Sonrasi `recognize` -> `OcrError` (K10)."""
+666:        self._taniyici = None
+667-        self._kapali = True
+668-
+669-    # -- ic yardimcilar ----------------------------------------------------
+
+SONUC: tur 1 tesliminde (HEAD) close() zaten self._taniyici = None yapiyor; T2-2 icin src davranis degisikligi GEREKMEDI, yalniz olcu (weakref testi) + docstring eklendi. Tester-B'nin M32'si bu satiri SILEN mutanttir; tur 1 testleri onu ayirt edemiyordu (bkz. mutant-ayirt-etme-tur2.txt M-E).

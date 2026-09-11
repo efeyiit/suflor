@@ -1,0 +1,194 @@
+# TDD KIRMIZI (tur 2): ayna agacinda motora M-A (sys.stdout.write(blok.text)) + M-E (close() _taniyici birakmaz) uygulandi;
+# yeni testler bu motorda DUSMELI. Komut: python -m pytest tests/unit/ocr/test_rapid_engine.py -q -k 'k7_soguk or k7_sicak or k7_ast_yazma or k10_close_taniyiciyi' -p no:cacheprovider
+
+FFFF                                                                     [100%]
+================================== FAILURES ===================================
+_______________ test_k7_soguk_motor_hicbir_kanala_metin_yazmaz ________________
+
+tmp_path = WindowsPath('C:/Users/pc/AppData/Local/Temp/pytest-of-pc/pytest-705/test_k7_soguk_motor_hicbir_kan0')
+kutuphane_logger_geri_al = None
+capfd = <_pytest.capture.CaptureFixture object at 0x0000020B33BB0DA0>
+caplog = <_pytest.logging.LogCaptureFixture object at 0x0000020B33BB11C0>
+
+    def test_k7_soguk_motor_hicbir_kanala_metin_yazmaz(
+        tmp_path: Path,
+        kutuphane_logger_geri_al: None,
+        capfd: pytest.CaptureFixture[str],
+        caplog: pytest.LogCaptureFixture,
+    ) -> None:
+        """Nokta 1: ilk `recognize` (kurulum + tanima) -- stdout/stderr sifir bayt, log/uyari temiz."""
+        f = SahteFabrika(_nobetci_ciktisi(), kurulumda=_kutuphane_gibi_kur)
+>       bloklar = _k7_kanal_olcusu(motor(tmp_path, f), capfd, caplog)
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\unit\ocr\test_rapid_engine.py:797: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+m = <src.ocr.rapid_engine.RapidOcrEngine object at 0x0000020B33BB0BF0>
+capfd = <_pytest.capture.CaptureFixture object at 0x0000020B33BB0DA0>
+caplog = <_pytest.logging.LogCaptureFixture object at 0x0000020B33BB11C0>
+
+    def _k7_kanal_olcusu(
+        m: OcrEngine,
+        capfd: pytest.CaptureFixture[str],
+        caplog: pytest.LogCaptureFixture,
+    ) -> list[TextBlock]:
+        """K7'nin kanal-bagimsiz olcusu: TEK `recognize` cagrisi, uc kanal, sifir sizinti.
+    
+        Kutuphane logger'i `propagate=False` olsa bile gorulsun diye `caplog.handler`
+        ona DOGRUDAN takilir (sonunda kaldirilir; `propagate` eski degerine doner).
+        Sahte motorlar da ayni fonksiyondan gecer -- olcu motora degil DAVRANISA bagli.
+        """
+        lg = logging.getLogger(LOGGER_ADI)
+        eski_propagate = lg.propagate
+        caplog.set_level(logging.DEBUG)  # KOK logger + caplog.handler: DEBUG
+        caplog.set_level(logging.DEBUG, logger=LOGGER_ADI)  # uygulama debug modu: kutuphane logger'i ACIK
+        lg.addHandler(caplog.handler)  # propagate=False kor birakmasin
+        caplog.clear()
+        _ozgun_akislari_bosalt()
+        capfd.readouterr()  # olcum oncesi artiklari at
+        try:
+            with warnings.catch_warnings(record=True) as uyari_kayitlari:
+                warnings.simplefilter("always")  # "default" olsaydi ayni konumdan 2. uyari BASTIRILIRDI (sicak nokta kor kalirdi)
+                bloklar = m.recognize(kare(), OcrPreset.DIALOGUE)
+        finally:
+            lg.removeHandler(caplog.handler)
+            lg.propagate = eski_propagate
+        _ozgun_akislari_bosalt()  # `sys.__stderr__.write` satir tamponunda kalmasin; fd'ye insin
+        out, err = capfd.readouterr()
+>       assert out == "", f"stdout'a {len(out)} karakter yazildi (sifir olmali)"
+E       AssertionError: stdout'a 19 karakter yazildi (sifir olmali)
+E       assert 'NÖBETÇİ-7f3a長老-9c1e' == ''
+E         
+E         + NÖBETÇİ-7f3a長老-9c1e
+
+tests\unit\ocr\test_rapid_engine.py:779: AssertionError
+_________ test_k7_sicak_motor_kutuphane_logger_i_acikken_metin_yazmaz _________
+
+tmp_path = WindowsPath('C:/Users/pc/AppData/Local/Temp/pytest-of-pc/pytest-705/test_k7_sicak_motor_kutuphane_0')
+kutuphane_logger_geri_al = None
+capfd = <_pytest.capture.CaptureFixture object at 0x0000020B33B71940>
+caplog = <_pytest.logging.LogCaptureFixture object at 0x0000020B33BB3050>
+
+    def test_k7_sicak_motor_kutuphane_logger_i_acikken_metin_yazmaz(
+        tmp_path: Path,
+        kutuphane_logger_geri_al: None,
+        capfd: pytest.CaptureFixture[str],
+        caplog: pytest.LogCaptureFixture,
+    ) -> None:
+        """Nokta 2: kurulum bitti, sonra `RapidOCR` logger'i DEBUG'a acildi (uygulama debug modu).
+    
+        Motor seviyeyi yalniz kurulumda ERROR'a ceker; ikinci `recognize` fabrikayi
+        cagirmaz, dolayisiyla acik logger acik kalir -- kutuphane logger'ina `.info`
+        ile metin yazan bir uygulama burada gorunur.
+        """
+        f = SahteFabrika(_nobetci_ciktisi(), kurulumda=_kutuphane_gibi_kur)
+        m = motor(tmp_path, f)
+        m.recognize(kare(), OcrPreset.DIALOGUE)  # kurulum; motor RapidOCR'u ERROR'a cekti
+        assert logging.getLogger(LOGGER_ADI).level == logging.ERROR
+>       bloklar = _k7_kanal_olcusu(m, capfd, caplog)
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\unit\ocr\test_rapid_engine.py:818: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+m = <src.ocr.rapid_engine.RapidOcrEngine object at 0x0000020B33BB1130>
+capfd = <_pytest.capture.CaptureFixture object at 0x0000020B33B71940>
+caplog = <_pytest.logging.LogCaptureFixture object at 0x0000020B33BB3050>
+
+    def _k7_kanal_olcusu(
+        m: OcrEngine,
+        capfd: pytest.CaptureFixture[str],
+        caplog: pytest.LogCaptureFixture,
+    ) -> list[TextBlock]:
+        """K7'nin kanal-bagimsiz olcusu: TEK `recognize` cagrisi, uc kanal, sifir sizinti.
+    
+        Kutuphane logger'i `propagate=False` olsa bile gorulsun diye `caplog.handler`
+        ona DOGRUDAN takilir (sonunda kaldirilir; `propagate` eski degerine doner).
+        Sahte motorlar da ayni fonksiyondan gecer -- olcu motora degil DAVRANISA bagli.
+        """
+        lg = logging.getLogger(LOGGER_ADI)
+        eski_propagate = lg.propagate
+        caplog.set_level(logging.DEBUG)  # KOK logger + caplog.handler: DEBUG
+        caplog.set_level(logging.DEBUG, logger=LOGGER_ADI)  # uygulama debug modu: kutuphane logger'i ACIK
+        lg.addHandler(caplog.handler)  # propagate=False kor birakmasin
+        caplog.clear()
+        _ozgun_akislari_bosalt()
+        capfd.readouterr()  # olcum oncesi artiklari at
+        try:
+            with warnings.catch_warnings(record=True) as uyari_kayitlari:
+                warnings.simplefilter("always")  # "default" olsaydi ayni konumdan 2. uyari BASTIRILIRDI (sicak nokta kor kalirdi)
+                bloklar = m.recognize(kare(), OcrPreset.DIALOGUE)
+        finally:
+            lg.removeHandler(caplog.handler)
+            lg.propagate = eski_propagate
+        _ozgun_akislari_bosalt()  # `sys.__stderr__.write` satir tamponunda kalmasin; fd'ye insin
+        out, err = capfd.readouterr()
+>       assert out == "", f"stdout'a {len(out)} karakter yazildi (sifir olmali)"
+E       AssertionError: stdout'a 19 karakter yazildi (sifir olmali)
+E       assert 'NÖBETÇİ-7f3a長老-9c1e' == ''
+E         
+E         + NÖBETÇİ-7f3a長老-9c1e
+
+tests\unit\ocr\test_rapid_engine.py:779: AssertionError
+________________ test_k7_ast_yazma_cagrisi_ve_log_yayimi_sifir ________________
+
+    def test_k7_ast_yazma_cagrisi_ve_log_yayimi_sifir() -> None:
+        """`print`, `sys.stdout.write`, `sys.stderr.write`, `os.write` -> dordu de 0;
+        `sys.std*` akisina erisim 0; hicbir `.debug/.info/.warning/...` yayimi yok
+        (modulde `logging` yalniz `getLogger(...).setLevel` icin)."""
+        sayac = _yazma_sayaci(_modul_agaci())
+>       assert sayac == {ad: 0 for ad in sayac}, sayac
+E       AssertionError: {'print': 0, 'sys.stdout.write': 1, 'sys.stderr.write': 0, 'os.write': 0, ...}
+E       assert {'print': 0, ...rite': 0, ...} == {'print': 0, ...rite': 0, ...}
+E         
+E         Omitting 7 identical items, use -vv to show
+E         Differing items:
+E         {'sys.stdout': 1} != {'sys.stdout': 0}
+E         {'sys.stdout.write': 1} != {'sys.stdout.write': 0}
+E         Use -v to get more diff
+
+tests\unit\ocr\test_rapid_engine.py:939: AssertionError
+_____________ test_k10_close_taniyiciyi_gercekten_birakir_weakref _____________
+
+tmp_path = WindowsPath('C:/Users/pc/AppData/Local/Temp/pytest-of-pc/pytest-705/test_k10_close_taniyiciyi_gerc0')
+
+    def test_k10_close_taniyiciyi_gercekten_birakir_weakref(tmp_path: Path) -> None:
+        """Tur 2 (T2-2): `close()` sonrasi motor tanıyıcıya referans TUTMAZ.
+    
+        Gercek yolda tanıyıcı det+rec ONNX oturumlarini tasir; dil degisiminde eski
+        motor bellekte kalmamali. Olcu: fabrikanin dondurdugu tanıyıcıya `weakref`;
+        `close()` + `gc.collect()` sonrasi olu. Pozitif kontrol: `close()` ONCESI
+        ayni weakref CANLI (motor tutuyor) -- yoksa olcu bos donerdi (4.6/10).
+        """
+        f = SahteFabrika(_nobetci_ciktisi())
+        zayif: list[weakref.ref[Any]] = []
+    
+        def fabrika(params: dict[str, object]) -> Callable[[Any], Any]:
+            t = f(params)  # taze kapanis; `f` onu TUTMAZ, yalniz motor tutar
+            zayif.append(weakref.ref(t))
+            return t
+    
+        model_dosyalari(tmp_path, OcrLanguage.JAPAN)
+        m = RapidOcrEngine(language=OcrLanguage.JAPAN, model_dir=tmp_path, recognizer_factory=fabrika)
+        m.recognize(kare(), OcrPreset.DIALOGUE)
+        [ref] = zayif
+        gc.collect()
+        assert ref() is not None  # pozitif kontrol: kapatmadan once motor referansi tutuyor
+        m.close()
+        gc.collect()
+>       assert ref() is None  # birakildi
+        ^^^^^^^^^^^^^^^^^^^^
+E       AssertionError: assert <function SahteFabrika.__call__.<locals>._tani at 0x0000020B33BF8D60> is None
+E        +  where <function SahteFabrika.__call__.<locals>._tani at 0x0000020B33BF8D60> = <weakref at 0x0000020B339C7F10; to 'function' at 0x0000020B33BF8D60 (_tani)>()
+
+tests\unit\ocr\test_rapid_engine.py:1042: AssertionError
+---------------------------- Captured stdout call -----------------------------
+NÖBETÇİ-7f3a長老-9c1e
+=========================== short test summary info ===========================
+FAILED tests/unit/ocr/test_rapid_engine.py::test_k7_soguk_motor_hicbir_kanala_metin_yazmaz
+FAILED tests/unit/ocr/test_rapid_engine.py::test_k7_sicak_motor_kutuphane_logger_i_acikken_metin_yazmaz
+FAILED tests/unit/ocr/test_rapid_engine.py::test_k7_ast_yazma_cagrisi_ve_log_yayimi_sifir
+FAILED tests/unit/ocr/test_rapid_engine.py::test_k10_close_taniyiciyi_gercekten_birakir_weakref
+4 failed, 106 deselected in 0.33s
+exit=1
