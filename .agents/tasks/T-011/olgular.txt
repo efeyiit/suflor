@@ -53,3 +53,31 @@ NMT (NLLB/CT2) kisit ALAMAZ; T-007 C9: yer tutucu JP'de kayboluyor. Soru: terim 
   3. glossary_hits sozlesmeye uygun doldurulur (start/end, segment_index).
   4. Kalite altin seti hala yok: bu gorev "terim korunur ve kaynak ek bozulmaz" garanti
      eder; ceviri kalitesi [OLCULMUYOR] (G1/G4 rapor).
+
+[G5] BILESIK KELIME SINIFI GERCEK VE ANLAM BOZUYOR (sef olctu, KRT'den once)
+  Alt dize eslesme yanlis gomerse (gercek NMT):
+    KR 검사가 왔습니다. (dedektif geldi)  검->Kılıç: "Kılıç geldi."        ANLAM YOK OLDU
+    JP 剣士が村に入った。(kilic ustasi)  剣->Kılıç: "Kılıç Bay Köy'ye girdi." BOZUK
+    KR 방앗간집 주인 (degirmen evi)       -> "Değirmen'in sahibi"          degisti
+    JP 村人が来た。 (koyluler)            -> "Köylüler geldi."             sans eseri ayni
+  Paketin K1 "JP/ZH/KR icin alt dize" kurali BU HALIYLE URUNU BOZAR.
+
+[G6] COZUM KURALI OLCULDU: terimden SONRA ek/parcacik/noktalama/bosluk/son gelmeli
+  JP parcaciklar: を が は に の で と も へ や 、。！？「」
+  KR ekler (en uzun once): 을 를 이 가 은 는 에 에서 으로 로 와 과 도 의 만 께서 부터 까지
+     -- ve ekten SONRA da sinir olmali (ek baska kelimenin basi olmasin)
+  17/17 test: 검사/剣士/村人/방앗간집 REDDEDILDI; 검을/剣を/村は/방앗간을/방앗간에서 KABUL.
+  ISTISNA: 長老マルクス -- unvan + ad bitisik, parcacik yok -> 長老 eslesmez.
+  EK KURAL: sonraki metin sozlukteki BASKA bir terimle basliyorsa o da sinirdir
+  (長老|マルクス ikisi de sozlukte -> ikisi de gomulur). Gomerken iki Latin hedef
+  bitisikse araya bosluk: "İhtiyar Marcus".
+  Terimden ONCE de ayni sinir kurali (KR 'x검' gibi on-bilesikler).
+
+[G7] KUCUK HARF CINS ISIM GOMME GUVENILMEZ (JP)
+  JP  değirmenで会いましょう。 -> "Birlikte görüşürüz."     TERIM KAYIP
+  KR  değirmen에서 만납시다.   -> "Şimdi, değirmen'den alalım."  kesme var, anlam bozuk
+  JP  köyは東にある。          -> "Köy doğuda."   iyi
+  KR  köy은 동쪽에 있습니다.    -> "Köy doğuda."   iyi
+  Buyuk harf (Değirmen) G1/G4'te 21/21 korunmustu. KARAR: hedef terim her zaman
+  ILK HARFI BUYUK gomulur (ozel_ad bayragindan bagimsiz); kesme isareti kozmetik,
+  [OLCULMUYOR] kalir. ozel_ad bayragi yalniz note icin.
