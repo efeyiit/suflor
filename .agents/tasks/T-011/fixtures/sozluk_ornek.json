@@ -43,24 +43,6 @@
     {
       "kaynak": "elder",
       "hedef": "İhtiyar"
-    },
-    {
-      "kaynak": "剣",
-      "hedef": "Kılıç"
-    },
-    {
-      "kaynak": "검",
-      "hedef": "Kılıç"
-    },
-    {
-      "kaynak": "村",
-      "hedef": "köy",
-      "ozel_ad": false
-    },
-    {
-      "kaynak": "마을",
-      "hedef": "köy",
-      "ozel_ad": false
     }
   ]
 }

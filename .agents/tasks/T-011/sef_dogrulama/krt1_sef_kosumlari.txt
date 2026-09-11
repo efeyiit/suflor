@@ -1,0 +1,19 @@
+==== T-011 KRT-1 -- SEFIN YENIDEN URETIMLERI ====
+Y1 (bilesik kelime): sef KRT'den ONCE G5'te olctu -- 검사->"Kılıç geldi.", 剣士->bozuk. DOGRU.
+   KRT'nin EK BULGUSU (sef uretti): 검은 옷 (siyah giysi) -> 검+은, 은 GERCEK EK -> sefin G6
+   parcacik kurali KABUL EDER -> "Kılıç giyinmişti." ANLAM BOZUK. Tek heceli KR / tek kanji
+   JP terimler sinir kuraliyla ayristirilamaz -> SEMA REDDEDER (kisa_terim_izni ile opt-in).
+Y2 (yer tutucu): lookup(text) yer tutucuyu goremez -> imza lookup(text, placeholders=()).
+   Kapi hicbir segmente placeholders vermiyordu -> #3 eklendi. DOGRU (kod okuma).
+Y3 (bilinen kelime gomme ZARAR) -> SEF URETTI:
+   JP 剣を渡した。   ham "Kılıcı verdi."   gomulu "Kılıç'i verdim."      (kesme + kisi kaymasi)
+   KR 검을 건넸습니다. ham "Kılıcını çeker." gomulu "Kılıç'i inşa ediyoruz." ANLAM YOK
+   JP 水車小屋は古い。 ham "Su arabası evleri eski." gomulu "Değirmen çok eski."  DUZELDI
+   SONUC: gomme yalniz modelin YANLIS cevirdigi terimler icin faydali; bildigi kelimede zarar.
+   Yazarlik kurali + fixture v2: bilinen kelimeler (剣/검/村/마을) cikarildi.
+   SEF HATASI: K4 "[OLCULMUYOR]" damgasi olculebilir bir zarari ortuyordu (T-008 #7 sinifi).
+Orta (kabul): \b CJK'da Latin+parcacik eslesmez (Marcusが) -> sinir kurali TUM betiklere, \b yok;
+   casefold indeks kaydirir -> re.IGNORECASE orijinal metinde; NFC iki tarafta; segment_index
+   None/aralik disi -> ContractViolation (K7); hedefte .!? -> sema reddeder; butce tek deger;
+   real_check type(h)(...) -> dataclasses.replace.
+G2 genis (KRT): 10 cumle 2-3 Latin terim art arda -> Ingilizce'ye kayma 0/10. G4 ile uyumlu.

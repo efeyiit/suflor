@@ -8,10 +8,13 @@ Sefe aittir. Stdout yalniz ASCII; metin basilmaz (yalniz sayilar/boolean).
   3. KR degirmen cumlesi: "Degirmen" var, "Dogu'ya dogru Dogu'ya dogru" tekrari YOK
   4. Unvan: 장로 마르쿠스 -> "Elder" YOK, "Ihtiyar" ve "Marcus" var
   5. Cins isim raporu (dusurmez)
-  6. 1000 segment x 15 terim < 50 ms
+  6. Y1 negatif: tek heceli KR sema reddi; izinle bilesikte eslesmez
+  7. 1000 segment x fixture < 50 ms
 """
 from __future__ import annotations
 
+import dataclasses
+import json
 import statistics
 import sys
 import time
@@ -50,8 +53,8 @@ def main() -> int:
         if gom:
             hits = []
             for i, seg in enumerate(segs):
-                for h in s.lookup(seg.text):
-                    hits.append(type(h)(source_term=h.source_term, target_term=h.target_term, start=h.start, end=h.end, segment_index=i, note=h.note))
+                for h in s.lookup(seg.text, seg.placeholders):
+                    hits.append(dataclasses.replace(h, segment_index=i))
             segs = terimleri_gom(segs, tuple(hits))
         return list(p.translate(TranslationRequest(segments=segs, source_lang=dil, target_lang="tr")).translations)
 
@@ -76,19 +79,43 @@ def main() -> int:
     (tamam if "Elder" not in u and "İhtiyar" in u and "Marcus" in u else ihlal)(
         f"[4] unvan: Elder={'Elder' in u} Ihtiyar={'İhtiyar' in u} Marcus={'Marcus' in u}")
 
+    # 3 yer tutucu (Y2)
+    h_yok = s.lookup("{PLAYER}は村にいます", ("{PLAYER}",))
+    h_var = s.lookup("{0}マルクス", ("{0}",))
+    (tamam if not any(x.source_term.lower() == "player" for x in h_yok) else ihlal)(f"[3a] {{PLAYER}} icinde terim eslesmedi: {len(h_yok)} hit")
+    (tamam if any(x.target_term == "Marcus" for x in h_var) else ihlal)(f"[3b] {{0}} bitisik: Marcus hit var ({len(h_var)})")
+    c3 = cevir(["{0}マルクスは村にいます。"], "jpn_Jpan", True)[0]
+    (tamam if "Marcus" in c3 and "{0}" in c3 else ihlal)(f"[3c] gomulu+yer tutucu ceviri: Marcus={'Marcus' in c3} {{0}}={'{0}' in c3}")
+
+    # 6 Y1 negatif: tek heceli KR terim semada reddedilir
+    import tempfile
+    from src.translate.sozluk import GlossaryStore as _GS
+    with tempfile.TemporaryDirectory() as td:
+        kotu = Path(td) / "kotu.json"
+        kotu.write_text(json.dumps({"terimler": [{"kaynak": "검", "hedef": "Kılıç"}]}, ensure_ascii=False), encoding="utf-8")
+        try:
+            _GS(kotu); ihlal("[6a] tek heceli KR terim kabul edildi (ValueError bekleniyordu)")
+        except ValueError as e:
+            (tamam if chr(44608) in str(e) else ihlal)(f"[6a] tek heceli KR terim reddedildi, mesajda terim var={chr(44608) in str(e)}")
+        izin = Path(td) / "izin.json"
+        izin.write_text(json.dumps({"terimler": [{"kaynak": "검", "hedef": "Kılıç", "kisa_terim_izni": True}]}, ensure_ascii=False), encoding="utf-8")
+        g2 = _GS(izin)
+        (tamam if not g2.lookup("검사가 왔습니다.") else ihlal)(f"[6b] izinli tek hece, bilesik icinde eslesmez: {len(g2.lookup('검사가 왔습니다.'))} hit")
+        n6c = len(g2.lookup("검은 옷을 입었다."))
+        tamam(f"[6c] bilinen sinir (siyah giysi cumlesi): {n6c} hit (rapor; ek kurali ayristiramaz)")
+
     # 5 rapor
-    r = cevir(["村は東にある。"], "jpn_Jpan", True)[0]
-    tamam(f"[5] cins isim (koy) raporu: kesme isareti var={chr(39) in r}  ({len(r)} kar.)")
+    r = cevir(["水車小屋は古い。"], "jpn_Jpan", True)[0]
+    tamam(f"[5] buyuk harf gomme raporu (Degirmen): kesme={chr(39) in r} ({len(r)} kar.)")
 
     # 6 sure
     segs = tuple(Segment(text="長老マルクスが水車小屋で待っています。", bbox=Rect(0, i, 1, 1)) for i in range(1000))
     t = []
     for _ in range(5):
         t0 = time.perf_counter()
-        hits = tuple(type(h)(source_term=h.source_term, target_term=h.target_term, start=h.start, end=h.end, segment_index=i, note=h.note)
-                     for i, sg in enumerate(segs) for h in s.lookup(sg.text))
+        hits = tuple(dataclasses.replace(h, segment_index=i) for i, sg in enumerate(segs) for h in s.lookup(sg.text, sg.placeholders))
         terimleri_gom(segs, hits); t.append((time.perf_counter() - t0) * 1000)
-    (tamam if statistics.median(t) < 50 else ihlal)(f"[6] 1000 segment lookup+gom medyan {statistics.median(t):.1f} ms (< 50)")
+    (tamam if statistics.median(t) < 50 else ihlal)(f"[7] 1000 segment lookup+gom medyan {statistics.median(t):.1f} ms (< 50)")
     p.close()
     print()
     if ihlaller: print(f"REAL_CHECK: {len(ihlaller)} IHLAL"); return 1
