@@ -32,6 +32,7 @@ import logging
 import os
 import sys
 import time
+import types
 import warnings
 import weakref
 from collections.abc import Callable, Iterator, Sequence
@@ -72,6 +73,11 @@ KAYNAK_BICIMLERI: dict[str, tuple[str, str, str]] = {  # NLLB, ISO 639-1, OcrLan
     "eng_Latn": ("eng_Latn", "en", "english"),
 }
 HEDEF_BICIMLERI: tuple[str, ...] = ("tr", "tur", "tur_Latn", "turkish")
+TERMINATORLER: tuple[str, ...] = (".", "!", "?", "。", "！", "？")
+"""K3 (Y1) evrensel cumle sonu kumesi -- paket v2 K3 metninden SABIT yazildi; saglayicidan turetilmez (4.6/8)."""
+TERMINATOR_IDLERI: list[str] = [f"U+{ord(t):04X}" for t in TERMINATORLER]
+MOTOR_NOBETCISI = "MOTOR-NOBETCI-4b7d"
+"""T2-3: motor CIKTISINA konan nobetci -- hata mesajina kaynak metin gibi ceviri metni de sizmamali."""
 
 JP_CUMLELER = ("長老マルクス", "村の長老があなたを待っています。", "水車小屋を過ぎて東の道を行きなさい。", "日が暮れたら道を外れないように。")
 JP_PARAGRAF = "村の長老があなたを待っています。水車小屋を過ぎて東の道を行きなさい。日が暮れたら道を外れないように。"
@@ -424,6 +430,8 @@ def test_k3a_iki_segment_uc_arti_bir_cumle_tek_cagri_dort_giris_dogru_dagitim(tm
         ("A. B.", ["A.", "B."]),  # Y1: KR ASCII nokta
         ("A。B。", ["A。", "B。"]),  # JP
         ("A! B？ C.", ["A!", "B？", "C."]),  # karisik
+        ("A? B.", ["A?", "B."]),  # T2-1: ASCII soru isareti TEK BASINA ayirt edici (tur 1'de `?` hep `!`/sonda idi)
+        ("A！B。", ["A！", "B。"]),  # T2-1: CJK unlem TEK BASINA ayirt edici
         (" ".join(KR_CUMLELER), list(KR_CUMLELER)),  # KR fixture'inin kendisi (v1 kurali 1 parca veriyordu)
         (JP_PARAGRAF, list(JP_CUMLELER[1:])),  # C8 paragrafi -> 3
         ("A.B.", ["A.", "B."]),  # bosluk sarti YOK (paket v2: evrensel kume)
@@ -503,6 +511,47 @@ def test_k3d_kayipsizlik_harf_rakam_dizisi_korunur(tmp_path: Path) -> None:
     assert tum == "".join(ch for m in metinler for ch in m if ch.isalnum())
 
 
+@pytest.mark.parametrize("t", TERMINATORLER, ids=TERMINATOR_IDLERI)
+def test_k3b_her_terminator_tek_basina_boler(tmp_path: Path, t: str) -> None:
+    """T2-1: K3 degismezi ALTI isaretin HER BIRINDE ayri olculur (4.6/7 -- tek noktaya kapili uygulama gorunsun).
+
+    `A{t} B{t}` -> 2 parca; `A{t}B{t} C{t}` -> 3 parca (bosluklu ve bosluksuz).
+    Tur 1'de `?` ve `！` hicbir testte ayirt edici konumda degildi: kumeden
+    dusurulunce bes kapi da yesil kaliyordu (Tester-B olctu, sef uretti).
+    """
+    f = SahteFabrika()
+    p = saglayici(tmp_path, f)
+    p.translate(istek([f"A{t} B{t}"]))
+    assert f.motor.gonderilen_parcalar() == [f"A{t}", f"B{t}"]
+    p.translate(istek([f"A{t}B{t} C{t}"]))
+    assert f.motor.gonderilen_parcalar() == [f"A{t}", f"B{t}", f"C{t}"]
+    assert f.motor.call_count == 2
+
+
+@pytest.mark.parametrize("t", TERMINATORLER, ids=TERMINATOR_IDLERI)
+def test_k3b_terminator_diger_isaretler_yokken_harfli_kuyrugu_ayirir(tmp_path: Path, t: str) -> None:
+    """T2-1 tek-isaretli fixture: metinde YALNIZ `t` var, ardindan HARFLI kuyruk (`A? B`).
+
+    `t` terminator degilse tum metin tek parca (`A? B`) olarak giderdi -- yani
+    ikinci cumle ilkine kaynasir (KRT Y1'in cumle-kaybi sinifi). Uc dilde ayni.
+    """
+    f = SahteFabrika()
+    for kaynak in ("jpn_Jpan", "kor_Hang", "eng_Latn"):
+        saglayici(tmp_path, f).translate(istek([f"A{t} B"], kaynak=kaynak))
+        assert f.motor.gonderilen_parcalar() == [f"A{t}", "B"], (kaynak, t)
+    assert cumlelere_bol(f"A{t} B") == [f"A{t}", "B"]
+    assert cumlelere_bol(f"A{t}") == [f"A{t}"] and cumlelere_bol(f"{t}A") == [t, "A"]
+    assert cumlelere_bol(t) == [t] and not modele_gider(t)
+
+
+@pytest.mark.parametrize("isaret", [",", ";", ":", "…", "、", "，"], ids=["virgul", "noktali-virgul", "iki-nokta", "U+2026", "U+3001", "U+FF0C"])
+def test_k3b_terminator_olmayan_isaret_bolmez_negatif_kontrol(tmp_path: Path, isaret: str) -> None:
+    """Kumenin SINIRI: virgul/noktali virgul/`…` (U+2026, belgeli) bolmez -- `A, B` tek parca."""
+    f = SahteFabrika()
+    saglayici(tmp_path, f).translate(istek([f"A{isaret} B"]))
+    assert f.motor.gonderilen_parcalar() == [f"A{isaret} B"]
+
+
 def test_k3_cumlelere_bol_yardimcisi_ve_modele_gider() -> None:
     """Ikincil (mekanizma): public yardimci -- tester dogrudan olcebilsin."""
     assert cumlelere_bol("A. B.") == ["A.", "B."]
@@ -533,6 +582,126 @@ def test_k3_birden_cok_segment_tek_cagri_sira_korunur(tmp_path: Path) -> None:
 def test_k3_olculmuyor_damgasi_bilinen_zayifliklar_docstringde() -> None:
     doc = local_nmt.__doc__ or ""
     assert "[ÖLÇÜLMÜYOR]" in doc and "Dr. Smith" in doc and "3.5" in doc
+
+
+# -- K3e / T2-2: yalniz yer tutucudan olusan parca modele gitmez (sef karari tur 2) ---
+#
+# Degismez (K3 suzgeci, keskinlestirildi): parca, `segment.placeholders`daki
+# dizeler CIKARILDIKTAN SONRA harf/rakam icermiyorsa modele gitmez, aynen gecer.
+# Neden: `{PLAYER}!` / `{0}!` / `{0}。` parcalari yer tutucunun ICINDEKI harf
+# yuzunden modele gidiyor ve gercek model UYDURUYORDU ("- Hayir, hayir. {PLAYER}";
+# Tester-A K-1, sef uretti). Yer tutucu bilgisi YALNIZ `Segment.placeholders`tan
+# gelir: bildirilmemis `{PLAYER}` metindir ve gider.
+
+
+def test_k3e_yalniz_yer_tutucu_parcasi_modele_gitmez_ciktida_aynen(tmp_path: Path) -> None:
+    """T2-2 olcusu 1: `{PLAYER}!` (`placeholders=("{PLAYER}",)`) -> motora giden 0, motor KURULMAZ, cikti aynen."""
+    f = SahteFabrika(SahteMotor(cevir=lambda p: "UYDURMA"))  # model ne dondururse dondursun, hic sorulmamali
+    r = saglayici(tmp_path, f).translate(istek(["{PLAYER}!"], kaynak="en", yer_tutucular=("{PLAYER}",)))
+    assert f.calls == 0 and f.motor.call_count == 0
+    assert r.translations == ("{PLAYER}!",)
+
+
+def test_k3e_yer_tutucu_yaninda_metin_varsa_gider_pozitif_kontrol(tmp_path: Path) -> None:
+    """T2-2 olcusu 2 (pozitif kontrol): `{PLAYER} is here.` -> gider; suzgec yer tutuculu her parcayi yutmuyor."""
+    f = SahteFabrika(SahteMotor(cevir=lambda p: "T(" + p + ")"))
+    r = saglayici(tmp_path, f).translate(istek(["{PLAYER} is here."], kaynak="en", yer_tutucular=("{PLAYER}",)))
+    assert f.motor.gonderilen_parcalar() == ["{PLAYER} is here."]
+    assert r.translations == ("T({PLAYER} is here.)",)
+
+
+def test_k3e_yer_tutucu_bildirilmemisse_metindir_gider(tmp_path: Path) -> None:
+    """T2-2 olcusu 3: `placeholders=()` iken `{PLAYER}!` METINDIR (harf icerir) -> gider, cevirisi doner."""
+    f = SahteFabrika(SahteMotor(cevir=lambda p: "T(" + p + ")"))
+    r = saglayici(tmp_path, f).translate(istek(["{PLAYER}!"], kaynak="en"))
+    assert f.motor.gonderilen_parcalar() == ["{PLAYER}!"]
+    assert r.translations == ("T({PLAYER}!)",)
+    f2 = SahteFabrika(SahteMotor(cevir=lambda p: "T(" + p + ")"))  # baska bir yer tutucu bildirilmis: `{PLAYER}` yine metin
+    r2 = saglayici(tmp_path, f2).translate(istek(["{PLAYER}! {0}"], kaynak="en", yer_tutucular=("{0}",)))
+    assert f2.motor.gonderilen_parcalar() == ["{PLAYER}!"] and r2.translations == ("T({PLAYER}!) {0}",)
+
+
+@pytest.mark.parametrize(
+    ("metin", "yer_tutucular", "gonderilen", "cikti"),
+    [
+        ("{PLAYER}! Wait!", ("{PLAYER}",), ["Wait!"], "{PLAYER}! T(Wait!)"),  # vokatif + cumle (A K-1 kalibi) -- YENIDEN NISANLANDI
+        ("{0}. B.", ("{0}",), ["B."], "{0}. T(B.)"),  # cumle sinirinda yer tutucu -- YENIDEN NISANLANDI (tur 1: `{0}.` gidiyordu)
+        ("{0}!", ("{0}",), [], "{0}!"),
+        ("{0}。", ("{0}",), [], "{0}。"),  # JP (sef uretti: `{0}。` -> `{0}♪` uyduruyordu)
+        ("%s!", ("%s",), [], "%s!"),
+        ("{0} {1}!", ("{0}", "{1}"), [], "{0} {1}!"),  # iki yer tutucu, ikisi de cikarilinca harf yok
+        ("{0}{1}", ("{0}", "{1}"), [], "{0}{1}"),
+        ("{0}! {1}?", ("{0}", "{1}"), [], "{0}! {1}?"),  # iki parca, ikisi de gecis -> segment AYNEN
+        ("<T0>!", ("<T0>",), [], "<T0>!"),  # farkli bicim
+        ("[Marcus]!", ("[Marcus]",), [], "[Marcus]!"),
+        ("{0}! Go {1}.", ("{1}",), ["{0}!", "Go {1}."], "T({0}!) T(Go {1}.)"),  # yalniz `{1}` bildirildi; `{0}` metindir, gider
+        ("{0}5!", ("{0}",), ["{0}5!"], "T({0}5!)"),  # rakam kalir -> gider
+    ],
+    ids=["vokatif+cumle", "sinirda-nokta", "unlem", "JP-nokta", "yuzde-s", "iki-yt", "iki-yt-bitisik", "iki-gecis-parcasi", "acili", "koseli", "bildirilmemis", "rakam-kalir"],
+)
+def test_k3e_yer_tutucu_cikarildiktan_sonra_suzgec_tablosu(
+    tmp_path: Path, metin: str, yer_tutucular: tuple[str, ...], gonderilen: list[str], cikti: str
+) -> None:
+    f = SahteFabrika(SahteMotor(cevir=lambda p: "T(" + p + ")"))
+    r = saglayici(tmp_path, f).translate(istek([metin], kaynak="en", yer_tutucular=yer_tutucular))
+    assert f.motor.tum_gonderilen_parcalar() == gonderilen
+    assert r.translations == (cikti,)
+    if not gonderilen:
+        assert f.calls == 0
+
+
+def test_k3e_yer_tutucu_cumle_sinirinda_uc_segment_kendi_segmentinde_kalir(tmp_path: Path) -> None:
+    """YENIDEN NISANLANDI (A `test_a4_cumle_sinirinda_*` sinifi): `{0}. B.` / `C. {1}` / `D.` -- yer tutucu parcalari
+    modele GITMEZ, kendi segmentinde yerinde kalir; gidenler yalniz `B.`, `C.`, `D.`; onarim eklemez (sayim tam)."""
+    segs = (
+        Segment(text="{0}. B.", bbox=Rect(0, 0, 800, 36), placeholders=("{0}",)),
+        Segment(text="C. {1}", bbox=Rect(0, 40, 800, 36), placeholders=("{1}",)),
+        Segment(text="D.", bbox=Rect(0, 80, 800, 36)),
+    )
+    f = SahteFabrika(SahteMotor(cevir=lambda p: "T(" + p + ")"))
+    r = saglayici(tmp_path, f).translate(TranslationRequest(segments=segs, source_lang="en", target_lang="tr"))
+    assert f.motor.call_count == 1 and f.motor.gonderilen_parcalar() == ["B.", "C.", "D."]
+    assert r.translations == ("{0}. T(B.)", "T(C.) {1}", "T(D.)")
+    f2 = SahteFabrika(SahteMotor(cevir=lambda p: "T"))  # model her seyi dusurse de yer tutucu gecis parcasinda sag
+    r2 = saglayici(tmp_path, f2).translate(TranslationRequest(segments=segs, source_lang="en", target_lang="tr"))
+    assert r2.translations == ("{0}. T", "T {1}", "T")
+
+
+def test_k3e_yer_tutucu_onarimi_gecis_parcasiyla_cakismaz(tmp_path: Path) -> None:
+    """Gecis parcasindaki yer tutucu sayima girer: model `{0}`u dusurse de segmentte zaten var -> EKLENMEZ."""
+    f = SahteFabrika(SahteMotor(cevir=lambda p: "Bekle"))
+    r = saglayici(tmp_path, f).translate(istek(["{0}! Wait!"], kaynak="en", yer_tutucular=("{0}",)))
+    assert r.translations == ("{0}! Bekle",)
+    f2 = SahteFabrika(SahteMotor(cevir=lambda p: "Bekle"))  # kaynakta 2 gecis, biri gecis parcasinda, biri cevirilen parcada dustu -> 1 eklenir
+    r2 = saglayici(tmp_path, f2).translate(istek(["{0}! Wait {0}."], kaynak="en", yer_tutucular=("{0}",)))
+    assert r2.translations == ("{0}! Bekle {0}",)
+
+
+def test_k3e_modele_gider_yardimcisi_yer_tutucu_parametresi() -> None:
+    """Ikincil (mekanizma): public yardimci -- tester dogrudan olcebilsin."""
+    assert modele_gider("{PLAYER}!") is True
+    assert modele_gider("{PLAYER}!", ("{PLAYER}",)) is False
+    assert modele_gider("{PLAYER} x", ("{PLAYER}",)) is True
+    assert modele_gider("{0}{1}!", ("{0}", "{1}")) is False
+    assert modele_gider("{0}", ("{1}",)) is True
+    assert modele_gider("A", ("",)) is True and modele_gider("!", ("",)) is False  # bos yer tutucu yok sayilir
+    assert modele_gider("{0}{0}!", ("{0}",)) is False  # her gecis cikarilir
+    assert modele_gider("{0}", ()) is True and modele_gider("{0}") is True
+
+
+def test_k3e_modele_giden_her_parcada_yer_tutucu_disinda_harf_veya_rakam_var(tmp_path: Path) -> None:
+    """T2-2 degismezi toplu: gonderilen her parca, yer tutucular cikarilinca hala harf/rakam icerir."""
+    f = SahteFabrika()
+    yt = ("{0}", "{1}", "%s")
+    metinler = ["{0}!", "{0} A。", "{1}? B", "%s", "%s x", "{0}{1}", "A", "{0}. {1}. C."]
+    saglayici(tmp_path, f).translate(istek(metinler, kaynak="en", yer_tutucular=yt))
+    parcalar = f.motor.tum_gonderilen_parcalar()
+    assert parcalar == ["{0} A。", "B", "%s x", "A", "C."]
+    for p in parcalar:
+        kalan = p
+        for y in yt:
+            kalan = kalan.replace(y, "")
+        assert any(ch.isalnum() for ch in kalan), p
 
 
 # ===========================================================================
@@ -857,16 +1026,41 @@ def _sayi_donduren_decode(_t: list[str]) -> str:
         (lambda: SahteFabrika(encode=_patlayan_encode), ProviderUnavailable),  # encode istisnasi
         (lambda: SahteFabrika(decode=_patlayan_decode), ProviderUnavailable),  # decode istisnasi
         (lambda: SahteFabrika(decode=_sayi_donduren_decode), ProviderUnavailable),  # decode str degil
+        # T2-3: MOTOR CIKTISI nobetci tasir -- sayi uyusmazligi mesaji ciktiyi (`{cikti!r}`) tasimamali
+        (lambda: SahteFabrika(SahteMotor(cikti=lambda t: [SahteHipotez([[HEDEF, MOTOR_NOBETCISI]])] * (len(t) + 1))), ContractViolation),
+        # T2-3: bozuk motor nesnesinin repr'i nobetci tasir -- bicim mesaji `{nesne!r}` tasimamali (yalniz tip adi)
+        (lambda: SahteFabrika(SahteMotor(cikti=lambda t: [types.SimpleNamespace(hypotheses=None, metin=MOTOR_NOBETCISI) for _ in t])), ProviderUnavailable),
+        # T2-3: hipotez listesi bos ama nesnenin repr'i nobetci tasir
+        (lambda: SahteFabrika(SahteMotor(cikti=lambda t: [types.SimpleNamespace(hypotheses=[], metin=MOTOR_NOBETCISI) for _ in t])), ProviderUnavailable),
+        # T2-3: token str degil; hipotezin kendisi nobetci tasir (`{ilk!r}` sizmamali)
+        (lambda: SahteFabrika(SahteMotor(cikti=lambda t: [SahteHipotez([[HEDEF, MOTOR_NOBETCISI, 5]]) for _ in t])), ProviderUnavailable),
+        # T2-3: decode str dondurmedi; dondurdugu nesnenin repr'i nobetci tasir
+        (lambda: SahteFabrika(decode=lambda _t: types.SimpleNamespace(metin=MOTOR_NOBETCISI)), ProviderUnavailable),  # type: ignore[arg-type,return-value]
     ],
-    ids=["sayi", "bozuk-cikti", "motor", "fabrika", "encode", "decode", "decode-tip"],
+    ids=["sayi", "bozuk-cikti", "motor", "fabrika", "encode", "decode", "decode-tip",
+         "sayi-nobetcili-cikti", "bozuk-nesne-nobetcili", "bos-hipotez-nobetcili-nesne", "int-token-nobetcili-hipotez", "decode-tip-nobetcili-nesne"],
 )
 def test_k6_hata_mesajlari_kaynak_metni_tasimaz(tmp_path: Path, fabrika: Callable[[], SahteFabrika], hata: type[Exception]) -> None:
-    """PROTOKOL 7: hangi yoldan gelirse gelsin, istisna metni KAYNAK metni (nobetci) icermez."""
+    """PROTOKOL 7: hangi yoldan gelirse gelsin, istisna metni ne KAYNAK metni ne MOTOR CIKTISINI (iki nobetci) icerir.
+
+    T2-3: `nobetci` kaynak metinde, `MOTOR_NOBETCISI` motor ciktisinda/bozuk
+    nesnenin repr'inde; ikisi de ne `str` ne `repr` icinde. Tur 1'de yalniz
+    kaynak nobetcisi vardi; `{cikti!r}`/`{nesne!r}` ekleyen uygulama geciyordu.
+    """
     nobetci = "NOBETCI-9c1e"
     with pytest.raises(hata) as ei:
         saglayici(tmp_path, fabrika()).translate(istek([nobetci + "。", "x " + nobetci + "."]))
     assert nobetci not in str(ei.value)
     assert nobetci not in repr(ei.value)
+    assert MOTOR_NOBETCISI not in str(ei.value)
+    assert MOTOR_NOBETCISI not in repr(ei.value)
+
+
+def test_k6_motor_ciktisi_nobetcisi_gercekten_motora_ulasiyor_pozitif_kontrol(tmp_path: Path) -> None:
+    """T2-3 pozitif kontrol: nobetcili cikti SAGLAM bicimde gelirse ceviriye ulasir -- yani nobetci yolun icinde."""
+    f = SahteFabrika(SahteMotor(cikti=lambda t: [SahteHipotez([[HEDEF, MOTOR_NOBETCISI]]) for _ in t]))
+    r = saglayici(tmp_path, f).translate(istek(["A。"]))
+    assert r.translations == (MOTOR_NOBETCISI,)
 
 
 def test_k6_hata_mesaji_motor_hatasinin_metnini_tasimaz(tmp_path: Path) -> None:
@@ -1348,19 +1542,33 @@ def yabanci_logger_geri_al() -> Iterator[None]:
 
 
 @pytest.mark.parametrize(
-    "sahte",
-    [_StdoutaYazan, _StderreYazan, _FdYeYazan, _OzgunStderreYazan, _KokLoggeraYazan, _PropagateKapaliLoggeraYazan, _UyariVeren],
+    ("sahte", "beklenen_mesaj"),
+    [
+        (_StdoutaYazan, "stdout'a"),
+        (_StderreYazan, "stderr'e"),
+        (_FdYeYazan, "stdout'a"),
+        (_OzgunStderreYazan, "stderr'e"),
+        (_KokLoggeraYazan, "log kaydina"),
+        (_PropagateKapaliLoggeraYazan, "log kaydina"),
+        (_UyariVeren, "warnings kaydina"),
+    ],
     ids=["stdout", "stderr", "os.write(1)", "sys.__stderr__-tamponlu", "kok-logger-debug", "adi-bilinmeyen-logger-propagate-kapali", "warnings"],
 )
 def test_k10_pozitif_kontrol_kanal_olcusu_atesliyor(
     sahte: type[TranslationProvider],
+    beklenen_mesaj: str,
     yabanci_logger_geri_al: None,
     capfd: pytest.CaptureFixture[str],
     caplog: pytest.LogCaptureFixture,
     logger_handle_kancasi: list[logging.LogRecord],
 ) -> None:
-    """Ayni olcu, nobetciyi o kanala yazan sahte saglayiciyla DUSMELI (4.6/10)."""
-    with pytest.raises(AssertionError):
+    """Ayni olcu, nobetciyi o kanala yazan sahte saglayiciyla DUSMELI (4.6/10) -- ve DOGRU SEBEPLE (T2-3, `match=`).
+
+    `match=` olmadan olcu baska bir sebeple dusup (ornegin fixture hatasi) yine
+    "atesliyor" sayilirdi; beklenen mesaj kanala ozgudur: stdout / stderr /
+    log kaydi / warnings kaydi.
+    """
+    with pytest.raises(AssertionError, match=beklenen_mesaj):
         _k10_kanal_olcusu(sahte(), capfd, caplog, logger_handle_kancasi)
     capfd.readouterr()
     caplog.clear()

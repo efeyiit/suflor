@@ -53,31 +53,51 @@ Her segment metni `cumlelere_bol` ile parcalara ayrilir; tum segmentlerin
 tum parcalari TEK `translate_batch` cagrisinda gider (C2: toplu ceviri
 cumle basina 2x ucuz); cikti segment basina `" "` ile birlestirilir.
 
-Kural (Y1): cumle sonu isareti kumesi EVRENSEL `.!?。！？` -- Korece ASCII
-`.` kullanir, v1'in dile gore `。！？` kurali KR'yi hic bolmuyor ve tek
-girdide ikinci cumle tamamen kayboluyordu (KRT olctu, sef dogruladi).
+Kural (Y1): cumle sonu isareti kumesi EVRENSEL `.!?。！？` -- ALTI isaretin
+HER BIRI TEK BASINA cumle sonudur (T2-1). Korece ASCII `.` kullanir, v1'in
+dile gore `。！？` kurali KR'yi hic bolmuyor ve tek girdide ikinci cumle
+tamamen kayboluyordu (KRT olctu, sef dogruladi). Tur 1 olcusu `?` (U+003F)
+ve `！` (U+FF01) icin kordu: kumeden dusurulunce bes kapi yesil kaliyor,
+gercek modelde "Are you ready? The village elder..." tek parca gidip ilk
+cumle kayboluyordu (Tester-B olctu, sef uretti). Simdi her isaret ayri
+olculur (`test_k3b_her_terminator_tek_basina_boler[U+XXXX]`,
+`test_k3b_terminator_diger_isaretler_yokken_*`); kumenin sinirini negatif
+kontrol sabitler (`,` `;` `:` `…` `、` `，` bolmez).
 Bosluk sarti YOK (`A.B.` -> 2 parca). Ardisik terminatorler (`...`, `？！`)
 ve terminatorden sonraki kapanis isaretleri (`」』）)"'”’»`; arada bosluk olsa
 da) ayni parcada kalir (`「A。」` -> 1 parca, `A。 」` -> 1 parca). Terminatorsuz kuyruk tek parcadir.
 
-Parca suzgeci (Y2): icinde HIC harf/rakam olmayan parca (`？`, `」`, `。。。`,
-`...`, yalniz bosluk) modele GONDERILMEZ, ciktiya AYNEN gecer -- model bu
-parcalara Turkce UYDURUR (`？` -> "- Hayir, hayir."; KRT olctu, sef
-dogruladi, 5/5; bu kuralla gercek modelde `A。？`, `「A。」`, `待って！？…`,
-`…。「…。」` ciktilarinda uydurma YOK, olcum-2 [E]). Hicbir parcasi modele gitmeyen segment (bos metin, yalniz
-bosluk, yalniz noktalama) ciktida KAYNAK METNIN AYNISIDIR (`"" -> ""`,
-`"   " -> "   "`). Gonderilecek parca yoksa motor KURULMAZ bile (fabrika
+Parca suzgeci (Y2, T2-2 ile keskinlestirildi): parca, `Segment.placeholders`
+icindeki dizeler CIKARILDIKTAN SONRA hic harf/rakam icermiyorsa (`？`, `」`,
+`。。。`, `...`, yalniz bosluk, `{PLAYER}!`, `{0}。`, `%s!`) modele
+GONDERILMEZ, ciktiya AYNEN gecer -- model bu parcalara Turkce UYDURUR
+(`？` -> "- Hayir, hayir."; KRT olctu, sef dogruladi, 5/5; `{PLAYER}!` ->
+"- Hayir, hayir. {PLAYER}", `{0}。` -> `{0}♪`: Tester-A K-1, sef uretti;
+bu kuralla gercek modelde `A。？`, `「A。」`, `待って！？…`, `…。「…。」`
+ciktilarinda uydurma YOK, olcum-2 [E]; `{PLAYER}!` -> `{PLAYER}!` aynen,
+olcum-4). Yer tutucu bilgisi YALNIZ `Segment.placeholders`tan gelir:
+bildirilmemis `{PLAYER}` METINDIR ve gider. Yer tutucu yaninda metin varsa
+(`{PLAYER} is here.`) parca gider. Gecis parcasindaki yer tutucu K5 sayimina
+girer (ciktida zaten var, eklenmez). Hicbir parcasi modele gitmeyen segment
+(bos metin, yalniz bosluk, yalniz noktalama, yalniz yer tutucu) ciktida
+KAYNAK METNIN AYNISIDIR (`"" -> ""`, `"   " -> "   "`, `"{PLAYER}!" ->
+"{PLAYER}!"`). Gonderilecek parca yoksa motor KURULMAZ bile (fabrika
 sayaci 0).
 
 Bilinen zayifliklar `[ÖLÇÜLMÜYOR]` (kalite; altin set yok): EN kisaltma
 (`Dr. Smith` -> `Dr.` + `Smith`), ondalik (`3.5` -> `3.` + `5`, iki parca da
 rakam icerdigi icin modele gider), surum numarasi (`v1.2.3`), boslukssuz
 `what?No` bolunur; JP tirnak ici cumle (`「…。」`) tek parca kalir; `…`
-(U+2026) terminator DEGILDIR. Olcu: `test_k3a_*` (2 segment 3+1 cumle, tek
-cagri, 4 giris, dogru dagitim), `test_k3b_*` (Y1: KR/JP/karisik, uc dilde
-ayni), `test_k3c_*` (Y2: 1/1/0/0 + aynen), `test_k3d_*` (kayipsizlik: harf/
-rakam dizisi), `test_k3_*`; `real_check.py` #3 (JP paragraf), #4 (KR tek
-segment), #4b (`。。。` aynen).
+(U+2026) ve tam genislik nokta `．` (U+FF0E) terminator DEGILDIR; simetrik
+ASCII tirnakta (`A. "B."`) acilis tirnagi kapanis sayilip ONCEKI cumleye
+yapisir (`A. "` + `B."`; kayipsiz, uydurma yok -- Tester-A K-2). Olcu:
+`test_k3a_*` (2 segment 3+1 cumle, tek cagri, 4 giris, dogru dagitim),
+`test_k3b_*` (Y1: KR/JP/karisik, uc dilde ayni; T2-1: alti terminator ayri
+ayri), `test_k3c_*` (Y2: 1/1/0/0 + aynen), `test_k3d_*` (kayipsizlik: harf/
+rakam dizisi), `test_k3e_*` (T2-2: yalniz yer tutucu parcasi gitmez, yaninda
+metin varsa gider, bildirilmemisse gider; cumle sinirinda uc segment),
+`test_k3_*`; `real_check.py` #3 (JP paragraf), #4 (KR tek segment), #4b
+(`。。。` aynen); `evidence/olcum-4-*` (gercek model: `{PLAYER}!` aynen).
 
 ## K4 -- dil kodu ACIK, uc bicimli; `source_lang=None` desteklenmez
 
@@ -136,7 +156,11 @@ degil, `.hypotheses` yok/bos, token `str` degil, `decode` `str`
 dondurmuyor) -> `ProviderUnavailable`.
 (c) Hizalama / cumle sayisi -> `ContractViolation` (K2).
 Sarmalayan hata mesajlari yalniz TIP ADI ve SAYI tasir; kaynak/ceviri
-metni asla (PROTOKOL 7). `ProviderTimeout` v1'de FIRLATILMAZ (butce yok,
+metni asla (PROTOKOL 7) -- olcu iki nobetcili: kaynak metinde VE motor
+ciktisinda / bozuk motor nesnesinin repr'inde (T2-3; `{cikti!r}`,
+`{nesne!r}`, `{ilk!r}` ekleyen uygulama duser,
+`test_k6_hata_mesajlari_kaynak_metni_tasimaz[*-nobetcili-*]`).
+`ProviderTimeout` v1'de FIRLATILMAZ (butce yok,
 `translate_batch` senkron ve iptal edilemez; ust katman zaman asimi uygular)
 `[ÖLÇÜLMÜYOR]`. Olcu: `test_k6_*`; `real_check.py` #8.
 
@@ -200,8 +224,9 @@ ve `warnings` YOK; hicbir kanala kaynak/ceviri metni yazilmaz. Olcu
 (DAVRANIS, T-006 K7 deseni): `test_k10_soguk_*` / `test_k10_sicak_*` --
 iki nobetci (Latin + CJK) ile `capfd` sifir bayt, kok logger DEBUG `caplog`
 + `Logger.handle` kancasi (propagate=False, adi bilinmeyen logger dahil),
-`warnings`; 7 pozitif kontrol sahte saglayici DUSER, `FakeProvider` gecer;
-AST ikincil. CT2'nin C++ logu (stderr, varsayilan WARNING) global
+`warnings`; 7 pozitif kontrol sahte saglayici kanala ozgu mesajla
+(`match=`: stdout / stderr / log kaydi / warnings kaydi -- T2-3) DUSER,
+`FakeProvider` gecer; AST ikincil. CT2'nin C++ logu (stderr, varsayilan WARNING) global
 seviyesine DOKUNULMAZ; gercek kosumda olculdu: kurulum + uc dilde ceviri
 boyunca alt surecin stdout/stderr'i 0 bayt (olcum-2 [A]); birim testte
 `[ÖLÇÜLMÜYOR]` (K1 bariyeri).
@@ -358,9 +383,18 @@ def cumlelere_bol(metin: str, *, ham: bool = False) -> list[str]:
     return [p.strip() for p in parcalar if p.strip()]
 
 
-def modele_gider(parca: str) -> bool:
-    """K3 (Y2): parca en az bir harf/rakam iceriyorsa modele gider; yoksa aynen gecer."""
-    return any(ch.isalnum() for ch in parca)
+def modele_gider(parca: str, yer_tutucular: Sequence[str] = ()) -> bool:
+    """K3 (Y2, T2-2): parca, `yer_tutucular` CIKARILDIKTAN SONRA en az bir harf/rakam iceriyorsa modele gider.
+
+    `{PLAYER}!` (`yer_tutucular=("{PLAYER}",)`) -> False (aynen gecer);
+    `{PLAYER} is here.` -> True; `{PLAYER}!` yer tutucu bildirilmemisken -> True
+    (bildirilmemis yer tutucu METINDIR). Her gecis cikarilir; bos dize yok sayilir.
+    """
+    kalan = parca
+    for yt in yer_tutucular:
+        if yt:
+            kalan = kalan.replace(yt, "")
+    return any(ch.isalnum() for ch in kalan)
 
 
 def zorunlu_model_dosyalari() -> tuple[str, ...]:
@@ -577,9 +611,11 @@ class LocalNmtProvider(TranslationProvider):
         """`request.segments`i cevirir; `translations` segmentlerle birebir hizali.
 
         Sira: kapali mi (K10) -> istek/dil dogrulama (K2, K4; motor cagrilmaz)
-        -> cumle bolme + parca suzgeci (K3) -> gonderilecek parca varsa tembel
-        kurulum (K6 a, K10) -> TEK `translate_batch` (K3) -> cumle sayimi (K2)
-        -> birlestirme (K3) -> yer tutucu onarimi (K5) -> `ensure_aligned`.
+        -> cumle bolme + parca suzgeci (K3; suzgec `segment.placeholders`
+        cikarildiktan sonra karar verir, T2-2) -> gonderilecek parca varsa
+        tembel kurulum (K6 a, K10) -> TEK `translate_batch` (K3) -> cumle
+        sayimi (K2) -> birlestirme (K3) -> yer tutucu onarimi (K5) ->
+        `ensure_aligned`.
 
         `glossary_hits`, `tm_examples`, `style_profile`, `image_crops` kabul
         edilir, OKUNMAZ `[ÖLÇÜLMÜYOR]` (K5). `ProviderTimeout` firlatilmaz;
@@ -612,7 +648,7 @@ class LocalNmtProvider(TranslationProvider):
                 raise ContractViolation(f"segment {i} placeholders icinde str olmayan oge var")
             plan: list[tuple[str, int]] = []
             for parca in cumlelere_bol(segment.text):
-                if modele_gider(parca):
+                if modele_gider(parca, segment.placeholders):  # T2-2: yer tutucular cikarildiktan sonra karar
                     plan.append((parca, len(gonderilecek)))
                     gonderilecek.append(parca)
                 else:

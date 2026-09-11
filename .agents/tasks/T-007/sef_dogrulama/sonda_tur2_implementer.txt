@@ -1,0 +1,13 @@
+==== T-007 TUR 2 IMPLEMENTER -- SEF SONDASI ====
+Sahiplik temiz. src diff +61/-25 (T2-2 tek davranis degisikligi + docstring).
+BES KAPI: mypy Success · 255 passed · real_check TEMIZ · %100 · tam takim 1359 · delivery KABUL.
+B'NIN KITI (sef kostu): K3-01..K3-06 ALTISI DA YAKALANDI (birim + kapsam + tam takim;
+  K3-01/04 real_check'te de). Tur 1'de K3-03/05 kaciyordu.
+A REGRESYONU: 3 kirik, ucu de T2-2'nin kacinilmaz bayatlamasi (4.6/5):
+  test_a4_cumle_sinirinda_yer_tutucu_dogru_segmentte_onarilir  -- A adlandirmisti
+  test_a4_segment_basina_farkli_yer_tutucu_listesi              -- A adlandirmisti
+  test_am2_y2_olcusu_suzgec_kalkinca_duser -- mutant sondasi modele_gider'i tek
+    argumanli lambda ile yamaliyor; T2-2 imzayi (parca, yer_tutucular) yapti ->
+    TypeError. T-004'teki "mutant sonda deseni bayatlar" sinifi. A yeniden nisanlar.
+  Dorduncu kirik YOK.
+KARAR: KABUL EDILEBILIR. B tur 2'ye.

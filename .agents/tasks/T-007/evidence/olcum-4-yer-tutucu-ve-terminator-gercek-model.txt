@@ -1,0 +1,16 @@
+[A] T2-2 -- yalniz yer tutucu cumlesi (gercek model)
+  ok    EN {PLAYER}!                       parca=1 giden=0 (beklenen 0) aynen=True uzunluk=9 hayir_kalibi=False yt_var=True
+  ok    EN {0}!                            parca=1 giden=0 (beklenen 0) aynen=True uzunluk=4 hayir_kalibi=False yt_var=True
+  ok    JP {0}。                            parca=1 giden=0 (beklenen 0) aynen=True uzunluk=4 hayir_kalibi=False yt_var=True
+  ok    EN %s!                             parca=1 giden=0 (beklenen 0) aynen=True uzunluk=3 hayir_kalibi=False yt_var=True
+  ok    KR {0}!                            parca=1 giden=0 (beklenen 0) aynen=True uzunluk=4 hayir_kalibi=False yt_var=True
+  ok    EN {PLAYER}! Wait!                 parca=2 giden=1 (beklenen 1) aynen=False uzunluk=23 hayir_kalibi=False yt_var=True
+        '{PLAYER}! ' ile basliyor=True kalan_uzunluk=13 (kalan = yalniz 'Wait!' cevirisi)
+  ok    EN {PLAYER} is here. (pozitif)     parca=1 giden=1 (beklenen 1) aynen=False uzunluk=22 hayir_kalibi=False yt_var=True
+  ok    EN {PLAYER}! placeholders=() (metin) parca=1 giden=1 (beklenen 1) aynen=False uzunluk=15 hayir_kalibi=True yt_var=True
+[B] T2-1 -- `?` / U+FF01 tek basina bolunce cumle kaybi (gercek model)
+  ok    EN 'Are you ready? The village...' parca=2 giden=2 (beklenen 2) uzunluk=48 anahtarlar={'hazır': True, 'bekliyor': True}
+  ok    JP 'Tomare! Mura no...' (U+FF01)   parca=2 giden=2 (beklenen 2) uzunluk=46 anahtarlar={'dur': True, 'bekliyor': True}
+  ok    JP 'Matte! Hontou ni...' (U+FF01)  parca=2 giden=2 (beklenen 2) uzunluk=36 anahtarlar={}
+
+OLCUM-4: TEMIZ

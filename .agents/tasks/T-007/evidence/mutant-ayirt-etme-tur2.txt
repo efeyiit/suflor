@@ -1,0 +1,108 @@
+ayna: C:\Users\pc\AppData\Local\Temp\scratch\C--Users-pc-Desktop-efe--eviri-uygulamas-\d52c967f-bd19-4db3-b5e9-77e6cd08b889\scratchpad\ayna-tur2
+tur 1 test dosyasi: git show 6cdf1ba:tests/unit/translate/test_local_nmt.py (1466 satir)
+temel (mutantsiz): tur2 exit=0 255 passed / 0 failed ; tur1 exit=0 210 passed / 0 failed
+
+  mutant    tur2       tur1       aciklama
+  K3-01     X (16)     X (11)     K3 (Y1): terminator kumesinden U+002E EKSIK
+            tur2 dusen: test_k3b_bolme_noktalamaya_gore_dile_gore_degil[A. B.-parcalar0], test_k3b_bolme_noktalamaya_gore_dile_gore_degil[\ub9c8\uc744 \uc7a5\ub85c\uac00 \ub2f9\uc2e0\uc744 \uae30\ub2e4\ub9ac\uace0 \uc788\uc2b5\ub2c8\ub2e4. \ubc29\uc557\uac04\uc744 \uc9c0\ub098 \ub3d9\ucabd \uae38\ub85c \uac00\uc2ed\uc2dc\uc624.-parcalar5], test_k3b_bolme_noktalamaya_gore_dile_gore_degil[A.B.-parcalar7], +13
+            tur1 dusen: test_k3b_bolme_noktalamaya_gore_dile_gore_degil[A. B.-parcalar0], test_k3b_bolme_noktalamaya_gore_dile_gore_degil[\ub9c8\uc744 \uc7a5\ub85c\uac00 \ub2f9\uc2e0\uc744 \uae30\ub2e4\ub9ac\uace0 \uc788\uc2b5\ub2c8\ub2e4. \ubc29\uc557\uac04\uc744 \uc9c0\ub098 \ub3d9\ucabd \uae38\ub85c \uac00\uc2ed\uc2dc\uc624.-parcalar3], test_k3b_bolme_noktalamaya_gore_dile_gore_degil[A.B.-parcalar5], +8
+  K3-02     X (9)      X (3)      K3 (Y1): terminator kumesinden U+0021 EKSIK
+            tur2 dusen: test_k3b_bolme_noktalamaya_gore_dile_gore_degil[A! B\uff1f C.-parcalar2], test_k3b_bolme_noktalamaya_gore_dile_gore_degil[Wait... what?!-parcalar8], test_k3b_her_terminator_tek_basina_boler[U+0021], +6
+            tur1 dusen: test_k3b_bolme_noktalamaya_gore_dile_gore_degil[A! B\uff1f C.-parcalar2], test_k3b_bolme_noktalamaya_gore_dile_gore_degil[Wait... what?!-parcalar6], test_k3_birden_cok_segment_tek_cagri_sira_korunur
+  K3-03     X (4)      .          K3 (Y1): terminator kumesinden U+003F EKSIK
+            tur2 dusen: test_k3b_bolme_noktalamaya_gore_dile_gore_degil[A? B.-parcalar3], test_k3b_her_terminator_tek_basina_boler[U+003F], test_k3b_terminator_diger_isaretler_yokken_harfli_kuyrugu_ayirir[U+003F], +1
+  K3-04     X (15)     X (13)     K3 (Y1): terminator kumesinden U+3002 EKSIK
+            tur2 dusen: test_k2_segment_sayisi_tutup_cumle_sayisi_tutmayan_kayma_contractviolation, test_k3a_iki_segment_uc_arti_bir_cumle_tek_cagri_dort_giris_dogru_dagitim, test_k3b_bolme_noktalamaya_gore_dile_gore_degil[A\u3002B\u3002-parcalar1], +12
+            tur1 dusen: test_k2_segment_sayisi_tutup_cumle_sayisi_tutmayan_kayma_contractviolation, test_k3a_iki_segment_uc_arti_bir_cumle_tek_cagri_dort_giris_dogru_dagitim, test_k3b_bolme_noktalamaya_gore_dile_gore_degil[A\u3002B\u3002-parcalar1], +10
+  K3-05     X (3)      .          K3 (Y1): terminator kumesinden U+FF01 EKSIK
+            tur2 dusen: test_k3b_bolme_noktalamaya_gore_dile_gore_degil[A\uff01B\u3002-parcalar4], test_k3b_her_terminator_tek_basina_boler[U+FF01], test_k3b_terminator_diger_isaretler_yokken_harfli_kuyrugu_ayirir[U+FF01]
+  K3-06     X (4)      X (2)      K3 (Y1): terminator kumesinden U+FF1F EKSIK
+            tur2 dusen: test_k3b_bolme_noktalamaya_gore_dile_gore_degil[A! B\uff1f C.-parcalar2], test_k3c_parca_suzgeci_harf_rakam_olmayan_modele_gitmez_aynen_gecer[A\u3002\uff1f-gonderilen0-A\u3002\uff1f], test_k3b_her_terminator_tek_basina_boler[U+FF1F], +1
+            tur1 dusen: test_k3b_bolme_noktalamaya_gore_dile_gore_degil[A! B\uff1f C.-parcalar2], test_k3c_parca_suzgeci_harf_rakam_olmayan_modele_gitmez_aynen_gecer[A\u3002\uff1f-gonderilen0-A\u3002\uff1f]
+  T2-2-M1   X (15)     .          K3 suzgeci yer tutuculari GORMUYOR (tur 1 davranisi: `{PLAYER}!` modele gider)
+            tur2 dusen: test_k3e_yalniz_yer_tutucu_parcasi_modele_gitmez_ciktida_aynen, test_k3e_yer_tutucu_bildirilmemisse_metindir_gider, test_k3e_yer_tutucu_cikarildiktan_sonra_suzgec_tablosu[vokatif+cumle], +12
+  T2-2-M2   X (1)      .          K3 suzgeci yer tutucunun yalniz ILK gecisini cikariyor (`{0}{0}!` gider)
+            tur2 dusen: test_k3e_modele_gider_yardimcisi_yer_tutucu_parametresi
+  T2-2-M3   X (9)      .          K3 suzgeci: yalniz yer tutucudan olusan segment ciktida bos (aynen degil)
+            tur2 dusen: test_k3e_yalniz_yer_tutucu_parcasi_modele_gitmez_ciktida_aynen, test_k3e_yer_tutucu_cikarildiktan_sonra_suzgec_tablosu[unlem], test_k3e_yer_tutucu_cikarildiktan_sonra_suzgec_tablosu[JP-nokta], +6
+  K10-08    X (1)      .          K6/PROTOKOL 7: sayi uyusmazligi mesaji motor CIKTISINI (`{cikti!r}`) tasiyor
+            tur2 dusen: test_k6_hata_mesajlari_kaynak_metni_tasimaz[sayi-nobetcili-cikti]
+  K10-09    X (2)      .          K6/PROTOKOL 7: bozuk hipotez mesaji NESNE repr'ini (`{nesne!r}`) tasiyor
+            tur2 dusen: test_k6_hata_mesajlari_kaynak_metni_tasimaz[bozuk-nesne-nobetcili], test_k6_hata_mesajlari_kaynak_metni_tasimaz[bos-hipotez-nobetcili-nesne]
+  K10-10    X (1)      .          K6/PROTOKOL 7: token tipi mesaji HIPOTEZI (`{tokenler!r}`) tasiyor
+            tur2 dusen: test_k6_hata_mesajlari_kaynak_metni_tasimaz[int-token-nobetcili-hipotez]
+  K10-11    X (1)      .          K6/PROTOKOL 7: decode tip mesaji DONEN NESNEYI (`{metinler!r}`) tasiyor
+            tur2 dusen: test_k6_hata_mesajlari_kaynak_metni_tasimaz[decode-tip-nobetcili-nesne]
+  C-1       .          .          modele_gider: `replace` yerine `split/join` (esdeger)
+  C-2       .          .          modele_gider: generator yerine liste (esdeger)
+  C-3       .          .          terminator kumesi AYNI, sirasi farkli (karakter sinifi -- esdeger)
+  C-4       .          .          latency carpani 1000.0 -> 1e3 (esdeger)
+  C-5       .          .          close() satir sirasi degisti (esdeger)
+  M-01      X (24)     X (17)     [tur 1] K3/Y1: bolme DILE gore (JP/KR/ZH -> yalniz CJK isaretleri; EN -> ASCII) -- v1 hatasi
+            tur2 dusen: test_k3b_bolme_noktalamaya_gore_dile_gore_degil[A. B.-parcalar0], test_k3b_bolme_noktalamaya_gore_dile_gore_degil[A! B\uff1f C.-parcalar2], test_k3b_bolme_noktalamaya_gore_dile_gore_degil[A? B.-parcalar3], +21
+            tur1 dusen: test_k3b_bolme_noktalamaya_gore_dile_gore_degil[A. B.-parcalar0], test_k3b_bolme_noktalamaya_gore_dile_gore_degil[A! B\uff1f C.-parcalar2], test_k3b_bolme_noktalamaya_gore_dile_gore_degil[\ub9c8\uc744 \uc7a5\ub85c\uac00 \ub2f9\uc2e0\uc744 \uae30\ub2e4\ub9ac\uace0 \uc788\uc2b5\ub2c8\ub2e4. \ubc29\uc557\uac04\uc744 \uc9c0\ub098 \ub3d9\ucabd \uae38\ub85c \uac00\uc2ed\uc2dc\uc624.-parcalar3], +14
+  M-02'     X (24)     X (9)      [tur 1] K3/Y2: parca suzgeci kaldirildi -- her parca modele gider
+            tur2 dusen: test_k3c_parca_suzgeci_harf_rakam_olmayan_modele_gitmez_aynen_gecer[\u3002\u3002\u3002-gonderilen2-\u3002\u3002\u3002], test_k3c_parca_suzgeci_harf_rakam_olmayan_modele_gitmez_aynen_gecer[...-gonderilen3-...], test_k3c_parca_suzgeci_harf_rakam_olmayan_modele_gitmez_aynen_gecer[\uff1f-gonderilen4-\uff1f], +21
+            tur1 dusen: test_k3c_parca_suzgeci_harf_rakam_olmayan_modele_gitmez_aynen_gecer[\u3002\u3002\u3002-gonderilen2-\u3002\u3002\u3002], test_k3c_parca_suzgeci_harf_rakam_olmayan_modele_gitmez_aynen_gecer[...-gonderilen3-...], test_k3c_parca_suzgeci_harf_rakam_olmayan_modele_gitmez_aynen_gecer[\uff1f-gonderilen4-\uff1f], +6
+  M-03      X (7)      X (6)      [tur 1] K2/O3: cumle sayisi denetimi kaldirildi (kisa olan kadar zip)
+            tur2 dusen: test_k2_uc_giris_farkli_sayida_cikis_contractviolation[2], test_k2_uc_giris_farkli_sayida_cikis_contractviolation[4], test_k2_uc_giris_farkli_sayida_cikis_contractviolation[0], +4
+            tur1 dusen: test_k2_uc_giris_farkli_sayida_cikis_contractviolation[2], test_k2_uc_giris_farkli_sayida_cikis_contractviolation[4], test_k2_uc_giris_farkli_sayida_cikis_contractviolation[0], +3
+  M-04      X (1)      X (1)      [tur 1] K2: ensure_aligned cagrisi kaldirildi
+            tur2 dusen: test_k2_ast_translate_govdesinde_ensure_aligned_cagrisi_var
+            tur1 dusen: test_k2_ast_translate_govdesinde_ensure_aligned_cagrisi_var
+  M-05      X (2)      X (1)      [tur 1] K5/O1: sayim yerine `in` kontrolu (ikinci `%s` sessizce kaybolur)
+            tur2 dusen: test_k3e_yer_tutucu_onarimi_gecis_parcasiyla_cakismaz, test_k5_ayni_yer_tutucu_birden_cok_gecis_sayim_ile
+            tur1 dusen: test_k5_ayni_yer_tutucu_birden_cok_gecis_sayim_ile
+  M-06      X (5)      X (4)      [tur 1] K5: onarim tamamen kaldirildi
+            tur2 dusen: test_k3e_yer_tutucu_onarimi_gecis_parcasiyla_cakismaz, test_k5_dusen_yer_tutucu_sona_eklenir_sirayla_boslukla, test_k5_yalniz_eksik_olan_eklenir, +2
+            tur1 dusen: test_k5_dusen_yer_tutucu_sona_eklenir_sirayla_boslukla, test_k5_yalniz_eksik_olan_eklenir, test_k5_bozuk_bicim_tam_alt_dize_degil_eklenir, +1
+  M-07      X (1)      X (1)      [tur 1] K8: repetition_penalty 1.0 iken de motora geciliyor
+            tur2 dusen: test_k8_repetition_penalty_varsayilan_1_hic_gecilmez
+            tur1 dusen: test_k8_repetition_penalty_varsayilan_1_hic_gecilmez
+  M-08      X (2)      X (2)      [tur 1] K8: inter_threads = threads (1 degil)
+            tur2 dusen: test_k8_threads_intra_aynen_inter_bir_cpu_int8[4], test_k8_threads_intra_aynen_inter_bir_cpu_int8[8]
+            tur1 dusen: test_k8_threads_intra_aynen_inter_bir_cpu_int8[4], test_k8_threads_intra_aynen_inter_bir_cpu_int8[8]
+  M-09      X (1)      X (1)      [tur 1] K9: latency kurulum suresini ICERIYOR
+            tur2 dusen: test_k9_ilk_cagri_latency_fabrika_suresini_icermez
+            tur1 dusen: test_k9_ilk_cagri_latency_fabrika_suresini_icermez
+  M-10      X (1)      X (1)      [tur 1] K10: close() motoru BIRAKMIYOR
+            tur2 dusen: test_k10_close_motoru_ve_encode_decode_yu_gercekten_birakir_weakref
+            tur1 dusen: test_k10_close_motoru_ve_encode_decode_yu_gercekten_birakir_weakref
+  M-11      X (3)      X (3)      [tur 1] K10: segment metni stdout'a yaziliyor
+            tur2 dusen: test_k10_soguk_saglayici_hicbir_kanala_metin_yazmaz, test_k10_sicak_saglayici_kok_logger_debugdayken_metin_yazmaz, test_k10_hata_yolunda_da_kanal_temiz
+            tur1 dusen: test_k10_soguk_saglayici_hicbir_kanala_metin_yazmaz, test_k10_sicak_saglayici_kok_logger_debugdayken_metin_yazmaz, test_k10_hata_yolunda_da_kanal_temiz
+  M-12      X (4)      X (4)      [tur 1] K10: segment metni propagate=False, adi bilinmeyen bir logger'a INFO yaziliyor
+            tur2 dusen: test_k10_soguk_saglayici_hicbir_kanala_metin_yazmaz, test_k10_sicak_saglayici_kok_logger_debugdayken_metin_yazmaz, test_k10_hata_yolunda_da_kanal_temiz, +1
+            tur1 dusen: test_k10_soguk_saglayici_hicbir_kanala_metin_yazmaz, test_k10_sicak_saglayici_kok_logger_debugdayken_metin_yazmaz, test_k10_hata_yolunda_da_kanal_temiz, +1
+  M-13      X (2)      X (2)      [tur 1] K4: source_lang=None sessizce JAPAN sayiliyor
+            tur2 dusen: test_k4_kaynak_kodu_tablo_disi_provider_unavailable_motor_kurulmaz[None], test_k4_kaynak_dogrulamasi_bos_istekte_de_calisir
+            tur1 dusen: test_k4_kaynak_kodu_tablo_disi_provider_unavailable_motor_kurulmaz[None], test_k4_kaynak_dogrulamasi_bos_istekte_de_calisir
+  M-14      X (4)      X (4)      [tur 1] K6/O4: yalniz model.bin + sentencepiece denetleniyor (v1 listesi)
+            tur2 dusen: test_k6_bos_dizin_modelmissing_fabrika_sifir_mesajda_dort_ad, test_k6_dort_dosyadan_biri_yoksa_modelmissing_adi_mesajda[shared_vocabulary.txt], test_k6_dort_dosyadan_biri_yoksa_modelmissing_adi_mesajda[config.json], +1
+            tur1 dusen: test_k6_bos_dizin_modelmissing_fabrika_sifir_mesajda_dort_ad, test_k6_dort_dosyadan_biri_yoksa_modelmissing_adi_mesajda[shared_vocabulary.txt], test_k6_dort_dosyadan_biri_yoksa_modelmissing_adi_mesajda[config.json], +1
+  M-15      X (16)     X (10)     [tur 1] K3: segment ciktisi bosluksuz birlestiriliyor
+            tur2 dusen: test_k3a_iki_segment_uc_arti_bir_cumle_tek_cagri_dort_giris_dogru_dagitim, test_k3c_parca_suzgeci_harf_rakam_olmayan_modele_gitmez_aynen_gecer[A\u3002 \u3002\u3002\u3002-gonderilen8-A\u3002 \u3002\u3002\u3002], test_k3c_parca_suzgeci_harf_rakam_olmayan_modele_gitmez_aynen_gecer[\u3002\u3002\u3002 A\u3002-gonderilen9-\u3002\u3002\u3002 A\u3002], +13
+            tur1 dusen: test_k3a_iki_segment_uc_arti_bir_cumle_tek_cagri_dort_giris_dogru_dagitim, test_k3c_parca_suzgeci_harf_rakam_olmayan_modele_gitmez_aynen_gecer[A\u3002 \u3002\u3002\u3002-gonderilen8-A\u3002 \u3002\u3002\u3002], test_k3c_parca_suzgeci_harf_rakam_olmayan_modele_gitmez_aynen_gecer[\u3002\u3002\u3002 A\u3002-gonderilen9-\u3002\u3002\u3002 A\u3002], +7
+  M-16      X (3)      X (3)      [tur 1] K9/O2: max_decoding_length 160 (demo degeri)
+            tur2 dusen: test_k8_beam_size_aynen_max_decoding_length_256[4], test_k8_beam_size_aynen_max_decoding_length_256[2], test_k8_beam_size_aynen_max_decoding_length_256[1]
+            tur1 dusen: test_k8_beam_size_aynen_max_decoding_length_256[4], test_k8_beam_size_aynen_max_decoding_length_256[2], test_k8_beam_size_aynen_max_decoding_length_256[1]
+  M-17      X (16)     X (7)      [tur 1] K3/Y2: hicbir parcasi modele gitmeyen segment bos string oluyor (aynen degil)
+            tur2 dusen: test_k3c_parca_suzgeci_harf_rakam_olmayan_modele_gitmez_aynen_gecer[\u3002\u3002\u3002-gonderilen2-\u3002\u3002\u3002], test_k3c_parca_suzgeci_harf_rakam_olmayan_modele_gitmez_aynen_gecer[...-gonderilen3-...], test_k3c_parca_suzgeci_harf_rakam_olmayan_modele_gitmez_aynen_gecer[\uff1f-gonderilen4-\uff1f], +13
+            tur1 dusen: test_k3c_parca_suzgeci_harf_rakam_olmayan_modele_gitmez_aynen_gecer[\u3002\u3002\u3002-gonderilen2-\u3002\u3002\u3002], test_k3c_parca_suzgeci_harf_rakam_olmayan_modele_gitmez_aynen_gecer[...-gonderilen3-...], test_k3c_parca_suzgeci_harf_rakam_olmayan_modele_gitmez_aynen_gecer[\uff1f-gonderilen4-\uff1f], +4
+  M-18      X (85)     X (57)     [tur 1] K4: kaynak belirteci basa degil SONA konuyor
+            tur2 dusen: test_k2_sonuc_alanlari_ve_hizali_cikti, test_k3a_iki_segment_uc_arti_bir_cumle_tek_cagri_dort_giris_dogru_dagitim, test_k3b_bolme_noktalamaya_gore_dile_gore_degil[A. B.-parcalar0], +82
+            tur1 dusen: test_k2_sonuc_alanlari_ve_hizali_cikti, test_k3a_iki_segment_uc_arti_bir_cumle_tek_cagri_dort_giris_dogru_dagitim, test_k3b_bolme_noktalamaya_gore_dile_gore_degil[A. B.-parcalar0], +54
+  M-19      X (3)      X (3)      [tur 1] K6: fabrika istisnasi sarilmadan yayiliyor (ProviderUnavailable degil)
+            tur2 dusen: test_k6_fabrika_istisnasi_siniflandirilir, test_k6_fabrika_hatasindan_sonra_yeniden_denenebilir, test_k6_hata_mesajlari_kaynak_metni_tasimaz[fabrika]
+            tur1 dusen: test_k6_fabrika_istisnasi_siniflandirilir, test_k6_fabrika_hatasindan_sonra_yeniden_denenebilir, test_k6_hata_mesajlari_kaynak_metni_tasimaz[fabrika]
+  M-20      X (1)      X (1)      [tur 1] K10: kapali saglayici bos istegi KABUL ediyor (kapali denetimi bos istekte atlaniyor)
+            tur2 dusen: test_k10_tembel_tek_ornek_close_idempotent
+            tur1 dusen: test_k10_tembel_tek_ornek_close_idempotent
+  M-21      X (58)     X (43)     [tur 1] K3: tum segmentler tek batch yerine segment basina ayri translate_batch
+            tur2 dusen: test_k3a_iki_segment_uc_arti_bir_cumle_tek_cagri_dort_giris_dogru_dagitim, test_k3b_bolme_noktalamaya_gore_dile_gore_degil[A. B.-parcalar0], test_k3b_bolme_noktalamaya_gore_dile_gore_degil[A\u3002B\u3002-parcalar1], +55
+            tur1 dusen: test_k3a_iki_segment_uc_arti_bir_cumle_tek_cagri_dort_giris_dogru_dagitim, test_k3b_bolme_noktalamaya_gore_dile_gore_degil[A. B.-parcalar0], test_k3b_bolme_noktalamaya_gore_dile_gore_degil[A\u3002B\u3002-parcalar1], +40
+  M-22      X (1)      X (1)      [tur 1] K6: hata mesaji kaynak metni tasiyor (PROTOKOL 7)
+            tur2 dusen: test_k6_hata_mesajlari_kaynak_metni_tasimaz[motor]
+            tur1 dusen: test_k6_hata_mesajlari_kaynak_metni_tasimaz[motor]
+
+MUTANT KITI TUR 2 TEMIZ: tur2 35/35 mutant yakalandi (13 yeni + 22 tur-1 regresyonu), 5/5 esdeger kontrol kacti; tur1 dosyasi K3-03 (?) ve K3-05 (U+FF01), T2-2-M*, K10-08..11 icin KOR (beklenen)

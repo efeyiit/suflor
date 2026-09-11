@@ -1,0 +1,481 @@
+......................................................................F. [ 28%]
+FFFFFFFFFFF..FFFF....................................................... [ 56%]
+........................................................................ [ 84%]
+.......................................                                  [100%]
+================================== FAILURES ===================================
+_______ test_k3e_yalniz_yer_tutucu_parcasi_modele_gitmez_ciktida_aynen ________
+
+tmp_path = WindowsPath('C:/Users/pc/AppData/Local/Temp/pytest-of-pc/pytest-1667/test_k3e_yalniz_yer_tutucu_par0')
+
+    def test_k3e_yalniz_yer_tutucu_parcasi_modele_gitmez_ciktida_aynen(tmp_path: Path) -> None:
+        """T2-2 olcusu 1: `{PLAYER}!` (`placeholders=("{PLAYER}",)`) -> motora giden 0, motor KURULMAZ, cikti aynen."""
+        f = SahteFabrika(SahteMotor(cevir=lambda p: "UYDURMA"))  # model ne dondururse dondursun, hic sorulmamali
+        r = saglayici(tmp_path, f).translate(istek(["{PLAYER}!"], kaynak="en", yer_tutucular=("{PLAYER}",)))
+>       assert f.calls == 0 and f.motor.call_count == 0
+E       assert (1 == 0)
+E        +  where 1 = <translate.test_local_nmt.SahteFabrika object at 0x000001FDA7063230>.calls
+
+tests\unit\translate\test_local_nmt.py:601: AssertionError
+_____________ test_k3e_yer_tutucu_bildirilmemisse_metindir_gider ______________
+
+tmp_path = WindowsPath('C:/Users/pc/AppData/Local/Temp/pytest-of-pc/pytest-1667/test_k3e_yer_tutucu_bildirilme0')
+
+    def test_k3e_yer_tutucu_bildirilmemisse_metindir_gider(tmp_path: Path) -> None:
+        """T2-2 olcusu 3: `placeholders=()` iken `{PLAYER}!` METINDIR (harf icerir) -> gider, cevirisi doner."""
+        f = SahteFabrika(SahteMotor(cevir=lambda p: "T(" + p + ")"))
+        r = saglayici(tmp_path, f).translate(istek(["{PLAYER}!"], kaynak="en"))
+        assert f.motor.gonderilen_parcalar() == ["{PLAYER}!"]
+        assert r.translations == ("T({PLAYER}!)",)
+        f2 = SahteFabrika(SahteMotor(cevir=lambda p: "T(" + p + ")"))  # baska bir yer tutucu bildirilmis: `{PLAYER}` yine metin
+        r2 = saglayici(tmp_path, f2).translate(istek(["{PLAYER}! {0}"], kaynak="en", yer_tutucular=("{0}",)))
+>       assert f2.motor.gonderilen_parcalar() == ["{PLAYER}!"] and r2.translations == ("T({PLAYER}!) {0}",)
+E       AssertionError: assert (['{PLAYER}!', '{0}'] == ['{PLAYER}!']
+E         
+E         Left contains one more item: '{0}'
+E         Use -v to get more diff)
+
+tests\unit\translate\test_local_nmt.py:621: AssertionError
+____ test_k3e_yer_tutucu_cikarildiktan_sonra_suzgec_tablosu[vokatif+cumle] ____
+
+tmp_path = WindowsPath('C:/Users/pc/AppData/Local/Temp/pytest-of-pc/pytest-1667/test_k3e_yer_tutucu_cikarildik0')
+metin = '{PLAYER}! Wait!', yer_tutucular = ('{PLAYER}',), gonderilen = ['Wait!']
+cikti = '{PLAYER}! T(Wait!)'
+
+    @pytest.mark.parametrize(
+        ("metin", "yer_tutucular", "gonderilen", "cikti"),
+        [
+            ("{PLAYER}! Wait!", ("{PLAYER}",), ["Wait!"], "{PLAYER}! T(Wait!)"),  # vokatif + cumle (A K-1 kalibi) -- YENIDEN NISANLANDI
+            ("{0}. B.", ("{0}",), ["B."], "{0}. T(B.)"),  # cumle sinirinda yer tutucu -- YENIDEN NISANLANDI (tur 1: `{0}.` gidiyordu)
+            ("{0}!", ("{0}",), [], "{0}!"),
+            ("{0}。", ("{0}",), [], "{0}。"),  # JP (sef uretti: `{0}。` -> `{0}♪` uyduruyordu)
+            ("%s!", ("%s",), [], "%s!"),
+            ("{0} {1}!", ("{0}", "{1}"), [], "{0} {1}!"),  # iki yer tutucu, ikisi de cikarilinca harf yok
+            ("{0}{1}", ("{0}", "{1}"), [], "{0}{1}"),
+            ("{0}! {1}?", ("{0}", "{1}"), [], "{0}! {1}?"),  # iki parca, ikisi de gecis -> segment AYNEN
+            ("<T0>!", ("<T0>",), [], "<T0>!"),  # farkli bicim
+            ("[Marcus]!", ("[Marcus]",), [], "[Marcus]!"),
+            ("{0}! Go {1}.", ("{1}",), ["{0}!", "Go {1}."], "T({0}!) T(Go {1}.)"),  # yalniz `{1}` bildirildi; `{0}` metindir, gider
+            ("{0}5!", ("{0}",), ["{0}5!"], "T({0}5!)"),  # rakam kalir -> gider
+        ],
+        ids=["vokatif+cumle", "sinirda-nokta", "unlem", "JP-nokta", "yuzde-s", "iki-yt", "iki-yt-bitisik", "iki-gecis-parcasi", "acili", "koseli", "bildirilmemis", "rakam-kalir"],
+    )
+    def test_k3e_yer_tutucu_cikarildiktan_sonra_suzgec_tablosu(
+        tmp_path: Path, metin: str, yer_tutucular: tuple[str, ...], gonderilen: list[str], cikti: str
+    ) -> None:
+        f = SahteFabrika(SahteMotor(cevir=lambda p: "T(" + p + ")"))
+        r = saglayici(tmp_path, f).translate(istek([metin], kaynak="en", yer_tutucular=yer_tutucular))
+>       assert f.motor.tum_gonderilen_parcalar() == gonderilen
+E       AssertionError: assert ['{PLAYER}!', 'Wait!'] == ['Wait!']
+E         
+E         At index 0 diff: '{PLAYER}!' != 'Wait!'
+E         Left contains one more item: 'Wait!'
+E         Use -v to get more diff
+
+tests\unit\translate\test_local_nmt.py:647: AssertionError
+____ test_k3e_yer_tutucu_cikarildiktan_sonra_suzgec_tablosu[sinirda-nokta] ____
+
+tmp_path = WindowsPath('C:/Users/pc/AppData/Local/Temp/pytest-of-pc/pytest-1667/test_k3e_yer_tutucu_cikarildik1')
+metin = '{0}. B.', yer_tutucular = ('{0}',), gonderilen = ['B.']
+cikti = '{0}. T(B.)'
+
+    @pytest.mark.parametrize(
+        ("metin", "yer_tutucular", "gonderilen", "cikti"),
+        [
+            ("{PLAYER}! Wait!", ("{PLAYER}",), ["Wait!"], "{PLAYER}! T(Wait!)"),  # vokatif + cumle (A K-1 kalibi) -- YENIDEN NISANLANDI
+            ("{0}. B.", ("{0}",), ["B."], "{0}. T(B.)"),  # cumle sinirinda yer tutucu -- YENIDEN NISANLANDI (tur 1: `{0}.` gidiyordu)
+            ("{0}!", ("{0}",), [], "{0}!"),
+            ("{0}。", ("{0}",), [], "{0}。"),  # JP (sef uretti: `{0}。` -> `{0}♪` uyduruyordu)
+            ("%s!", ("%s",), [], "%s!"),
+            ("{0} {1}!", ("{0}", "{1}"), [], "{0} {1}!"),  # iki yer tutucu, ikisi de cikarilinca harf yok
+            ("{0}{1}", ("{0}", "{1}"), [], "{0}{1}"),
+            ("{0}! {1}?", ("{0}", "{1}"), [], "{0}! {1}?"),  # iki parca, ikisi de gecis -> segment AYNEN
+            ("<T0>!", ("<T0>",), [], "<T0>!"),  # farkli bicim
+            ("[Marcus]!", ("[Marcus]",), [], "[Marcus]!"),
+            ("{0}! Go {1}.", ("{1}",), ["{0}!", "Go {1}."], "T({0}!) T(Go {1}.)"),  # yalniz `{1}` bildirildi; `{0}` metindir, gider
+            ("{0}5!", ("{0}",), ["{0}5!"], "T({0}5!)"),  # rakam kalir -> gider
+        ],
+        ids=["vokatif+cumle", "sinirda-nokta", "unlem", "JP-nokta", "yuzde-s", "iki-yt", "iki-yt-bitisik", "iki-gecis-parcasi", "acili", "koseli", "bildirilmemis", "rakam-kalir"],
+    )
+    def test_k3e_yer_tutucu_cikarildiktan_sonra_suzgec_tablosu(
+        tmp_path: Path, metin: str, yer_tutucular: tuple[str, ...], gonderilen: list[str], cikti: str
+    ) -> None:
+        f = SahteFabrika(SahteMotor(cevir=lambda p: "T(" + p + ")"))
+        r = saglayici(tmp_path, f).translate(istek([metin], kaynak="en", yer_tutucular=yer_tutucular))
+>       assert f.motor.tum_gonderilen_parcalar() == gonderilen
+E       AssertionError: assert ['{0}.', 'B.'] == ['B.']
+E         
+E         At index 0 diff: '{0}.' != 'B.'
+E         Left contains one more item: 'B.'
+E         Use -v to get more diff
+
+tests\unit\translate\test_local_nmt.py:647: AssertionError
+________ test_k3e_yer_tutucu_cikarildiktan_sonra_suzgec_tablosu[unlem] ________
+
+tmp_path = WindowsPath('C:/Users/pc/AppData/Local/Temp/pytest-of-pc/pytest-1667/test_k3e_yer_tutucu_cikarildik2')
+metin = '{0}!', yer_tutucular = ('{0}',), gonderilen = [], cikti = '{0}!'
+
+    @pytest.mark.parametrize(
+        ("metin", "yer_tutucular", "gonderilen", "cikti"),
+        [
+            ("{PLAYER}! Wait!", ("{PLAYER}",), ["Wait!"], "{PLAYER}! T(Wait!)"),  # vokatif + cumle (A K-1 kalibi) -- YENIDEN NISANLANDI
+            ("{0}. B.", ("{0}",), ["B."], "{0}. T(B.)"),  # cumle sinirinda yer tutucu -- YENIDEN NISANLANDI (tur 1: `{0}.` gidiyordu)
+            ("{0}!", ("{0}",), [], "{0}!"),
+            ("{0}。", ("{0}",), [], "{0}。"),  # JP (sef uretti: `{0}。` -> `{0}♪` uyduruyordu)
+            ("%s!", ("%s",), [], "%s!"),
+            ("{0} {1}!", ("{0}", "{1}"), [], "{0} {1}!"),  # iki yer tutucu, ikisi de cikarilinca harf yok
+            ("{0}{1}", ("{0}", "{1}"), [], "{0}{1}"),
+            ("{0}! {1}?", ("{0}", "{1}"), [], "{0}! {1}?"),  # iki parca, ikisi de gecis -> segment AYNEN
+            ("<T0>!", ("<T0>",), [], "<T0>!"),  # farkli bicim
+            ("[Marcus]!", ("[Marcus]",), [], "[Marcus]!"),
+            ("{0}! Go {1}.", ("{1}",), ["{0}!", "Go {1}."], "T({0}!) T(Go {1}.)"),  # yalniz `{1}` bildirildi; `{0}` metindir, gider
+            ("{0}5!", ("{0}",), ["{0}5!"], "T({0}5!)"),  # rakam kalir -> gider
+        ],
+        ids=["vokatif+cumle", "sinirda-nokta", "unlem", "JP-nokta", "yuzde-s", "iki-yt", "iki-yt-bitisik", "iki-gecis-parcasi", "acili", "koseli", "bildirilmemis", "rakam-kalir"],
+    )
+    def test_k3e_yer_tutucu_cikarildiktan_sonra_suzgec_tablosu(
+        tmp_path: Path, metin: str, yer_tutucular: tuple[str, ...], gonderilen: list[str], cikti: str
+    ) -> None:
+        f = SahteFabrika(SahteMotor(cevir=lambda p: "T(" + p + ")"))
+        r = saglayici(tmp_path, f).translate(istek([metin], kaynak="en", yer_tutucular=yer_tutucular))
+>       assert f.motor.tum_gonderilen_parcalar() == gonderilen
+E       AssertionError: assert ['{0}!'] == []
+E         
+E         Left contains one more item: '{0}!'
+E         Use -v to get more diff
+
+tests\unit\translate\test_local_nmt.py:647: AssertionError
+______ test_k3e_yer_tutucu_cikarildiktan_sonra_suzgec_tablosu[JP-nokta] _______
+
+tmp_path = WindowsPath('C:/Users/pc/AppData/Local/Temp/pytest-of-pc/pytest-1667/test_k3e_yer_tutucu_cikarildik3')
+metin = '{0}。', yer_tutucular = ('{0}',), gonderilen = [], cikti = '{0}。'
+
+    @pytest.mark.parametrize(
+        ("metin", "yer_tutucular", "gonderilen", "cikti"),
+        [
+            ("{PLAYER}! Wait!", ("{PLAYER}",), ["Wait!"], "{PLAYER}! T(Wait!)"),  # vokatif + cumle (A K-1 kalibi) -- YENIDEN NISANLANDI
+            ("{0}. B.", ("{0}",), ["B."], "{0}. T(B.)"),  # cumle sinirinda yer tutucu -- YENIDEN NISANLANDI (tur 1: `{0}.` gidiyordu)
+            ("{0}!", ("{0}",), [], "{0}!"),
+            ("{0}。", ("{0}",), [], "{0}。"),  # JP (sef uretti: `{0}。` -> `{0}♪` uyduruyordu)
+            ("%s!", ("%s",), [], "%s!"),
+            ("{0} {1}!", ("{0}", "{1}"), [], "{0} {1}!"),  # iki yer tutucu, ikisi de cikarilinca harf yok
+            ("{0}{1}", ("{0}", "{1}"), [], "{0}{1}"),
+            ("{0}! {1}?", ("{0}", "{1}"), [], "{0}! {1}?"),  # iki parca, ikisi de gecis -> segment AYNEN
+            ("<T0>!", ("<T0>",), [], "<T0>!"),  # farkli bicim
+            ("[Marcus]!", ("[Marcus]",), [], "[Marcus]!"),
+            ("{0}! Go {1}.", ("{1}",), ["{0}!", "Go {1}."], "T({0}!) T(Go {1}.)"),  # yalniz `{1}` bildirildi; `{0}` metindir, gider
+            ("{0}5!", ("{0}",), ["{0}5!"], "T({0}5!)"),  # rakam kalir -> gider
+        ],
+        ids=["vokatif+cumle", "sinirda-nokta", "unlem", "JP-nokta", "yuzde-s", "iki-yt", "iki-yt-bitisik", "iki-gecis-parcasi", "acili", "koseli", "bildirilmemis", "rakam-kalir"],
+    )
+    def test_k3e_yer_tutucu_cikarildiktan_sonra_suzgec_tablosu(
+        tmp_path: Path, metin: str, yer_tutucular: tuple[str, ...], gonderilen: list[str], cikti: str
+    ) -> None:
+        f = SahteFabrika(SahteMotor(cevir=lambda p: "T(" + p + ")"))
+        r = saglayici(tmp_path, f).translate(istek([metin], kaynak="en", yer_tutucular=yer_tutucular))
+>       assert f.motor.tum_gonderilen_parcalar() == gonderilen
+E       AssertionError: assert ['{0}。'] == []
+E         
+E         Left contains one more item: '{0}。'
+E         Use -v to get more diff
+
+tests\unit\translate\test_local_nmt.py:647: AssertionError
+_______ test_k3e_yer_tutucu_cikarildiktan_sonra_suzgec_tablosu[yuzde-s] _______
+
+tmp_path = WindowsPath('C:/Users/pc/AppData/Local/Temp/pytest-of-pc/pytest-1667/test_k3e_yer_tutucu_cikarildik4')
+metin = '%s!', yer_tutucular = ('%s',), gonderilen = [], cikti = '%s!'
+
+    @pytest.mark.parametrize(
+        ("metin", "yer_tutucular", "gonderilen", "cikti"),
+        [
+            ("{PLAYER}! Wait!", ("{PLAYER}",), ["Wait!"], "{PLAYER}! T(Wait!)"),  # vokatif + cumle (A K-1 kalibi) -- YENIDEN NISANLANDI
+            ("{0}. B.", ("{0}",), ["B."], "{0}. T(B.)"),  # cumle sinirinda yer tutucu -- YENIDEN NISANLANDI (tur 1: `{0}.` gidiyordu)
+            ("{0}!", ("{0}",), [], "{0}!"),
+            ("{0}。", ("{0}",), [], "{0}。"),  # JP (sef uretti: `{0}。` -> `{0}♪` uyduruyordu)
+            ("%s!", ("%s",), [], "%s!"),
+            ("{0} {1}!", ("{0}", "{1}"), [], "{0} {1}!"),  # iki yer tutucu, ikisi de cikarilinca harf yok
+            ("{0}{1}", ("{0}", "{1}"), [], "{0}{1}"),
+            ("{0}! {1}?", ("{0}", "{1}"), [], "{0}! {1}?"),  # iki parca, ikisi de gecis -> segment AYNEN
+            ("<T0>!", ("<T0>",), [], "<T0>!"),  # farkli bicim
+            ("[Marcus]!", ("[Marcus]",), [], "[Marcus]!"),
+            ("{0}! Go {1}.", ("{1}",), ["{0}!", "Go {1}."], "T({0}!) T(Go {1}.)"),  # yalniz `{1}` bildirildi; `{0}` metindir, gider
+            ("{0}5!", ("{0}",), ["{0}5!"], "T({0}5!)"),  # rakam kalir -> gider
+        ],
+        ids=["vokatif+cumle", "sinirda-nokta", "unlem", "JP-nokta", "yuzde-s", "iki-yt", "iki-yt-bitisik", "iki-gecis-parcasi", "acili", "koseli", "bildirilmemis", "rakam-kalir"],
+    )
+    def test_k3e_yer_tutucu_cikarildiktan_sonra_suzgec_tablosu(
+        tmp_path: Path, metin: str, yer_tutucular: tuple[str, ...], gonderilen: list[str], cikti: str
+    ) -> None:
+        f = SahteFabrika(SahteMotor(cevir=lambda p: "T(" + p + ")"))
+        r = saglayici(tmp_path, f).translate(istek([metin], kaynak="en", yer_tutucular=yer_tutucular))
+>       assert f.motor.tum_gonderilen_parcalar() == gonderilen
+E       AssertionError: assert ['%s!'] == []
+E         
+E         Left contains one more item: '%s!'
+E         Use -v to get more diff
+
+tests\unit\translate\test_local_nmt.py:647: AssertionError
+_______ test_k3e_yer_tutucu_cikarildiktan_sonra_suzgec_tablosu[iki-yt] ________
+
+tmp_path = WindowsPath('C:/Users/pc/AppData/Local/Temp/pytest-of-pc/pytest-1667/test_k3e_yer_tutucu_cikarildik5')
+metin = '{0} {1}!', yer_tutucular = ('{0}', '{1}'), gonderilen = []
+cikti = '{0} {1}!'
+
+    @pytest.mark.parametrize(
+        ("metin", "yer_tutucular", "gonderilen", "cikti"),
+        [
+            ("{PLAYER}! Wait!", ("{PLAYER}",), ["Wait!"], "{PLAYER}! T(Wait!)"),  # vokatif + cumle (A K-1 kalibi) -- YENIDEN NISANLANDI
+            ("{0}. B.", ("{0}",), ["B."], "{0}. T(B.)"),  # cumle sinirinda yer tutucu -- YENIDEN NISANLANDI (tur 1: `{0}.` gidiyordu)
+            ("{0}!", ("{0}",), [], "{0}!"),
+            ("{0}。", ("{0}",), [], "{0}。"),  # JP (sef uretti: `{0}。` -> `{0}♪` uyduruyordu)
+            ("%s!", ("%s",), [], "%s!"),
+            ("{0} {1}!", ("{0}", "{1}"), [], "{0} {1}!"),  # iki yer tutucu, ikisi de cikarilinca harf yok
+            ("{0}{1}", ("{0}", "{1}"), [], "{0}{1}"),
+            ("{0}! {1}?", ("{0}", "{1}"), [], "{0}! {1}?"),  # iki parca, ikisi de gecis -> segment AYNEN
+            ("<T0>!", ("<T0>",), [], "<T0>!"),  # farkli bicim
+            ("[Marcus]!", ("[Marcus]",), [], "[Marcus]!"),
+            ("{0}! Go {1}.", ("{1}",), ["{0}!", "Go {1}."], "T({0}!) T(Go {1}.)"),  # yalniz `{1}` bildirildi; `{0}` metindir, gider
+            ("{0}5!", ("{0}",), ["{0}5!"], "T({0}5!)"),  # rakam kalir -> gider
+        ],
+        ids=["vokatif+cumle", "sinirda-nokta", "unlem", "JP-nokta", "yuzde-s", "iki-yt", "iki-yt-bitisik", "iki-gecis-parcasi", "acili", "koseli", "bildirilmemis", "rakam-kalir"],
+    )
+    def test_k3e_yer_tutucu_cikarildiktan_sonra_suzgec_tablosu(
+        tmp_path: Path, metin: str, yer_tutucular: tuple[str, ...], gonderilen: list[str], cikti: str
+    ) -> None:
+        f = SahteFabrika(SahteMotor(cevir=lambda p: "T(" + p + ")"))
+        r = saglayici(tmp_path, f).translate(istek([metin], kaynak="en", yer_tutucular=yer_tutucular))
+>       assert f.motor.tum_gonderilen_parcalar() == gonderilen
+E       AssertionError: assert ['{0} {1}!'] == []
+E         
+E         Left contains one more item: '{0} {1}!'
+E         Use -v to get more diff
+
+tests\unit\translate\test_local_nmt.py:647: AssertionError
+___ test_k3e_yer_tutucu_cikarildiktan_sonra_suzgec_tablosu[iki-yt-bitisik] ____
+
+tmp_path = WindowsPath('C:/Users/pc/AppData/Local/Temp/pytest-of-pc/pytest-1667/test_k3e_yer_tutucu_cikarildik6')
+metin = '{0}{1}', yer_tutucular = ('{0}', '{1}'), gonderilen = []
+cikti = '{0}{1}'
+
+    @pytest.mark.parametrize(
+        ("metin", "yer_tutucular", "gonderilen", "cikti"),
+        [
+            ("{PLAYER}! Wait!", ("{PLAYER}",), ["Wait!"], "{PLAYER}! T(Wait!)"),  # vokatif + cumle (A K-1 kalibi) -- YENIDEN NISANLANDI
+            ("{0}. B.", ("{0}",), ["B."], "{0}. T(B.)"),  # cumle sinirinda yer tutucu -- YENIDEN NISANLANDI (tur 1: `{0}.` gidiyordu)
+            ("{0}!", ("{0}",), [], "{0}!"),
+            ("{0}。", ("{0}",), [], "{0}。"),  # JP (sef uretti: `{0}。` -> `{0}♪` uyduruyordu)
+            ("%s!", ("%s",), [], "%s!"),
+            ("{0} {1}!", ("{0}", "{1}"), [], "{0} {1}!"),  # iki yer tutucu, ikisi de cikarilinca harf yok
+            ("{0}{1}", ("{0}", "{1}"), [], "{0}{1}"),
+            ("{0}! {1}?", ("{0}", "{1}"), [], "{0}! {1}?"),  # iki parca, ikisi de gecis -> segment AYNEN
+            ("<T0>!", ("<T0>",), [], "<T0>!"),  # farkli bicim
+            ("[Marcus]!", ("[Marcus]",), [], "[Marcus]!"),
+            ("{0}! Go {1}.", ("{1}",), ["{0}!", "Go {1}."], "T({0}!) T(Go {1}.)"),  # yalniz `{1}` bildirildi; `{0}` metindir, gider
+            ("{0}5!", ("{0}",), ["{0}5!"], "T({0}5!)"),  # rakam kalir -> gider
+        ],
+        ids=["vokatif+cumle", "sinirda-nokta", "unlem", "JP-nokta", "yuzde-s", "iki-yt", "iki-yt-bitisik", "iki-gecis-parcasi", "acili", "koseli", "bildirilmemis", "rakam-kalir"],
+    )
+    def test_k3e_yer_tutucu_cikarildiktan_sonra_suzgec_tablosu(
+        tmp_path: Path, metin: str, yer_tutucular: tuple[str, ...], gonderilen: list[str], cikti: str
+    ) -> None:
+        f = SahteFabrika(SahteMotor(cevir=lambda p: "T(" + p + ")"))
+        r = saglayici(tmp_path, f).translate(istek([metin], kaynak="en", yer_tutucular=yer_tutucular))
+>       assert f.motor.tum_gonderilen_parcalar() == gonderilen
+E       AssertionError: assert ['{0}{1}'] == []
+E         
+E         Left contains one more item: '{0}{1}'
+E         Use -v to get more diff
+
+tests\unit\translate\test_local_nmt.py:647: AssertionError
+__ test_k3e_yer_tutucu_cikarildiktan_sonra_suzgec_tablosu[iki-gecis-parcasi] __
+
+tmp_path = WindowsPath('C:/Users/pc/AppData/Local/Temp/pytest-of-pc/pytest-1667/test_k3e_yer_tutucu_cikarildik7')
+metin = '{0}! {1}?', yer_tutucular = ('{0}', '{1}'), gonderilen = []
+cikti = '{0}! {1}?'
+
+    @pytest.mark.parametrize(
+        ("metin", "yer_tutucular", "gonderilen", "cikti"),
+        [
+            ("{PLAYER}! Wait!", ("{PLAYER}",), ["Wait!"], "{PLAYER}! T(Wait!)"),  # vokatif + cumle (A K-1 kalibi) -- YENIDEN NISANLANDI
+            ("{0}. B.", ("{0}",), ["B."], "{0}. T(B.)"),  # cumle sinirinda yer tutucu -- YENIDEN NISANLANDI (tur 1: `{0}.` gidiyordu)
+            ("{0}!", ("{0}",), [], "{0}!"),
+            ("{0}。", ("{0}",), [], "{0}。"),  # JP (sef uretti: `{0}。` -> `{0}♪` uyduruyordu)
+            ("%s!", ("%s",), [], "%s!"),
+            ("{0} {1}!", ("{0}", "{1}"), [], "{0} {1}!"),  # iki yer tutucu, ikisi de cikarilinca harf yok
+            ("{0}{1}", ("{0}", "{1}"), [], "{0}{1}"),
+            ("{0}! {1}?", ("{0}", "{1}"), [], "{0}! {1}?"),  # iki parca, ikisi de gecis -> segment AYNEN
+            ("<T0>!", ("<T0>",), [], "<T0>!"),  # farkli bicim
+            ("[Marcus]!", ("[Marcus]",), [], "[Marcus]!"),
+            ("{0}! Go {1}.", ("{1}",), ["{0}!", "Go {1}."], "T({0}!) T(Go {1}.)"),  # yalniz `{1}` bildirildi; `{0}` metindir, gider
+            ("{0}5!", ("{0}",), ["{0}5!"], "T({0}5!)"),  # rakam kalir -> gider
+        ],
+        ids=["vokatif+cumle", "sinirda-nokta", "unlem", "JP-nokta", "yuzde-s", "iki-yt", "iki-yt-bitisik", "iki-gecis-parcasi", "acili", "koseli", "bildirilmemis", "rakam-kalir"],
+    )
+    def test_k3e_yer_tutucu_cikarildiktan_sonra_suzgec_tablosu(
+        tmp_path: Path, metin: str, yer_tutucular: tuple[str, ...], gonderilen: list[str], cikti: str
+    ) -> None:
+        f = SahteFabrika(SahteMotor(cevir=lambda p: "T(" + p + ")"))
+        r = saglayici(tmp_path, f).translate(istek([metin], kaynak="en", yer_tutucular=yer_tutucular))
+>       assert f.motor.tum_gonderilen_parcalar() == gonderilen
+E       AssertionError: assert ['{0}!', '{1}?'] == []
+E         
+E         Left contains 2 more items, first extra item: '{0}!'
+E         Use -v to get more diff
+
+tests\unit\translate\test_local_nmt.py:647: AssertionError
+________ test_k3e_yer_tutucu_cikarildiktan_sonra_suzgec_tablosu[acili] ________
+
+tmp_path = WindowsPath('C:/Users/pc/AppData/Local/Temp/pytest-of-pc/pytest-1667/test_k3e_yer_tutucu_cikarildik8')
+metin = '<T0>!', yer_tutucular = ('<T0>',), gonderilen = [], cikti = '<T0>!'
+
+    @pytest.mark.parametrize(
+        ("metin", "yer_tutucular", "gonderilen", "cikti"),
+        [
+            ("{PLAYER}! Wait!", ("{PLAYER}",), ["Wait!"], "{PLAYER}! T(Wait!)"),  # vokatif + cumle (A K-1 kalibi) -- YENIDEN NISANLANDI
+            ("{0}. B.", ("{0}",), ["B."], "{0}. T(B.)"),  # cumle sinirinda yer tutucu -- YENIDEN NISANLANDI (tur 1: `{0}.` gidiyordu)
+            ("{0}!", ("{0}",), [], "{0}!"),
+            ("{0}。", ("{0}",), [], "{0}。"),  # JP (sef uretti: `{0}。` -> `{0}♪` uyduruyordu)
+            ("%s!", ("%s",), [], "%s!"),
+            ("{0} {1}!", ("{0}", "{1}"), [], "{0} {1}!"),  # iki yer tutucu, ikisi de cikarilinca harf yok
+            ("{0}{1}", ("{0}", "{1}"), [], "{0}{1}"),
+            ("{0}! {1}?", ("{0}", "{1}"), [], "{0}! {1}?"),  # iki parca, ikisi de gecis -> segment AYNEN
+            ("<T0>!", ("<T0>",), [], "<T0>!"),  # farkli bicim
+            ("[Marcus]!", ("[Marcus]",), [], "[Marcus]!"),
+            ("{0}! Go {1}.", ("{1}",), ["{0}!", "Go {1}."], "T({0}!) T(Go {1}.)"),  # yalniz `{1}` bildirildi; `{0}` metindir, gider
+            ("{0}5!", ("{0}",), ["{0}5!"], "T({0}5!)"),  # rakam kalir -> gider
+        ],
+        ids=["vokatif+cumle", "sinirda-nokta", "unlem", "JP-nokta", "yuzde-s", "iki-yt", "iki-yt-bitisik", "iki-gecis-parcasi", "acili", "koseli", "bildirilmemis", "rakam-kalir"],
+    )
+    def test_k3e_yer_tutucu_cikarildiktan_sonra_suzgec_tablosu(
+        tmp_path: Path, metin: str, yer_tutucular: tuple[str, ...], gonderilen: list[str], cikti: str
+    ) -> None:
+        f = SahteFabrika(SahteMotor(cevir=lambda p: "T(" + p + ")"))
+        r = saglayici(tmp_path, f).translate(istek([metin], kaynak="en", yer_tutucular=yer_tutucular))
+>       assert f.motor.tum_gonderilen_parcalar() == gonderilen
+E       AssertionError: assert ['<T0>!'] == []
+E         
+E         Left contains one more item: '<T0>!'
+E         Use -v to get more diff
+
+tests\unit\translate\test_local_nmt.py:647: AssertionError
+_______ test_k3e_yer_tutucu_cikarildiktan_sonra_suzgec_tablosu[koseli] ________
+
+tmp_path = WindowsPath('C:/Users/pc/AppData/Local/Temp/pytest-of-pc/pytest-1667/test_k3e_yer_tutucu_cikarildik9')
+metin = '[Marcus]!', yer_tutucular = ('[Marcus]',), gonderilen = []
+cikti = '[Marcus]!'
+
+    @pytest.mark.parametrize(
+        ("metin", "yer_tutucular", "gonderilen", "cikti"),
+        [
+            ("{PLAYER}! Wait!", ("{PLAYER}",), ["Wait!"], "{PLAYER}! T(Wait!)"),  # vokatif + cumle (A K-1 kalibi) -- YENIDEN NISANLANDI
+            ("{0}. B.", ("{0}",), ["B."], "{0}. T(B.)"),  # cumle sinirinda yer tutucu -- YENIDEN NISANLANDI (tur 1: `{0}.` gidiyordu)
+            ("{0}!", ("{0}",), [], "{0}!"),
+            ("{0}。", ("{0}",), [], "{0}。"),  # JP (sef uretti: `{0}。` -> `{0}♪` uyduruyordu)
+            ("%s!", ("%s",), [], "%s!"),
+            ("{0} {1}!", ("{0}", "{1}"), [], "{0} {1}!"),  # iki yer tutucu, ikisi de cikarilinca harf yok
+            ("{0}{1}", ("{0}", "{1}"), [], "{0}{1}"),
+            ("{0}! {1}?", ("{0}", "{1}"), [], "{0}! {1}?"),  # iki parca, ikisi de gecis -> segment AYNEN
+            ("<T0>!", ("<T0>",), [], "<T0>!"),  # farkli bicim
+            ("[Marcus]!", ("[Marcus]",), [], "[Marcus]!"),
+            ("{0}! Go {1}.", ("{1}",), ["{0}!", "Go {1}."], "T({0}!) T(Go {1}.)"),  # yalniz `{1}` bildirildi; `{0}` metindir, gider
+            ("{0}5!", ("{0}",), ["{0}5!"], "T({0}5!)"),  # rakam kalir -> gider
+        ],
+        ids=["vokatif+cumle", "sinirda-nokta", "unlem", "JP-nokta", "yuzde-s", "iki-yt", "iki-yt-bitisik", "iki-gecis-parcasi", "acili", "koseli", "bildirilmemis", "rakam-kalir"],
+    )
+    def test_k3e_yer_tutucu_cikarildiktan_sonra_suzgec_tablosu(
+        tmp_path: Path, metin: str, yer_tutucular: tuple[str, ...], gonderilen: list[str], cikti: str
+    ) -> None:
+        f = SahteFabrika(SahteMotor(cevir=lambda p: "T(" + p + ")"))
+        r = saglayici(tmp_path, f).translate(istek([metin], kaynak="en", yer_tutucular=yer_tutucular))
+>       assert f.motor.tum_gonderilen_parcalar() == gonderilen
+E       AssertionError: assert ['[Marcus]!'] == []
+E         
+E         Left contains one more item: '[Marcus]!'
+E         Use -v to get more diff
+
+tests\unit\translate\test_local_nmt.py:647: AssertionError
+___ test_k3e_yer_tutucu_cumle_sinirinda_uc_segment_kendi_segmentinde_kalir ____
+
+tmp_path = WindowsPath('C:/Users/pc/AppData/Local/Temp/pytest-of-pc/pytest-1667/test_k3e_yer_tutucu_cumle_sini0')
+
+    def test_k3e_yer_tutucu_cumle_sinirinda_uc_segment_kendi_segmentinde_kalir(tmp_path: Path) -> None:
+        """YENIDEN NISANLANDI (A `test_a4_cumle_sinirinda_*` sinifi): `{0}. B.` / `C. {1}` / `D.` -- yer tutucu parcalari
+        modele GITMEZ, kendi segmentinde yerinde kalir; gidenler yalniz `B.`, `C.`, `D.`; onarim eklemez (sayim tam)."""
+        segs = (
+            Segment(text="{0}. B.", bbox=Rect(0, 0, 800, 36), placeholders=("{0}",)),
+            Segment(text="C. {1}", bbox=Rect(0, 40, 800, 36), placeholders=("{1}",)),
+            Segment(text="D.", bbox=Rect(0, 80, 800, 36)),
+        )
+        f = SahteFabrika(SahteMotor(cevir=lambda p: "T(" + p + ")"))
+        r = saglayici(tmp_path, f).translate(TranslationRequest(segments=segs, source_lang="en", target_lang="tr"))
+>       assert f.motor.call_count == 1 and f.motor.gonderilen_parcalar() == ["B.", "C.", "D."]
+E       AssertionError: assert (1 == 1 and ['{0}.', 'B.'..., '{1}', 'D.'] == ['B.', 'C.', 'D.']
+E        +  where 1 = <translate.test_local_nmt.SahteMotor object at 0x000001FDA68052B0>.call_count
+E        +    where <translate.test_local_nmt.SahteMotor object at 0x000001FDA68052B0> = <translate.test_local_nmt.SahteFabrika object at 0x000001FDA6806780>.motor
+E         
+E         At index 0 diff: '{0}.' != 'B.'
+E         Left contains 2 more items, first extra item: '{1}'
+E         Use -v to get more diff)
+
+tests\unit\translate\test_local_nmt.py:663: AssertionError
+____________ test_k3e_yer_tutucu_onarimi_gecis_parcasiyla_cakismaz ____________
+
+tmp_path = WindowsPath('C:/Users/pc/AppData/Local/Temp/pytest-of-pc/pytest-1667/test_k3e_yer_tutucu_onarimi_ge0')
+
+    def test_k3e_yer_tutucu_onarimi_gecis_parcasiyla_cakismaz(tmp_path: Path) -> None:
+        """Gecis parcasindaki yer tutucu sayima girer: model `{0}`u dusurse de segmentte zaten var -> EKLENMEZ."""
+        f = SahteFabrika(SahteMotor(cevir=lambda p: "Bekle"))
+        r = saglayici(tmp_path, f).translate(istek(["{0}! Wait!"], kaynak="en", yer_tutucular=("{0}",)))
+>       assert r.translations == ("{0}! Bekle",)
+E       AssertionError: assert ('Bekle Bekle {0}',) == ('{0}! Bekle',)
+E         
+E         At index 0 diff: 'Bekle Bekle {0}' != '{0}! Bekle'
+E         Use -v to get more diff
+
+tests\unit\translate\test_local_nmt.py:674: AssertionError
+___________ test_k3e_modele_gider_yardimcisi_yer_tutucu_parametresi ___________
+
+    def test_k3e_modele_gider_yardimcisi_yer_tutucu_parametresi() -> None:
+        """Ikincil (mekanizma): public yardimci -- tester dogrudan olcebilsin."""
+        assert modele_gider("{PLAYER}!") is True
+>       assert modele_gider("{PLAYER}!", ("{PLAYER}",)) is False
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       TypeError: modele_gider() takes 1 positional argument but 2 were given
+
+tests\unit\translate\test_local_nmt.py:683: TypeError
+__ test_k3e_modele_giden_her_parcada_yer_tutucu_disinda_harf_veya_rakam_var ___
+
+tmp_path = WindowsPath('C:/Users/pc/AppData/Local/Temp/pytest-of-pc/pytest-1667/test_k3e_modele_giden_her_parc0')
+
+    def test_k3e_modele_giden_her_parcada_yer_tutucu_disinda_harf_veya_rakam_var(tmp_path: Path) -> None:
+        """T2-2 degismezi toplu: gonderilen her parca, yer tutucular cikarilinca hala harf/rakam icerir."""
+        f = SahteFabrika()
+        yt = ("{0}", "{1}", "%s")
+        metinler = ["{0}!", "{0} A。", "{1}? B", "%s", "%s x", "{0}{1}", "A", "{0}. {1}. C."]
+        saglayici(tmp_path, f).translate(istek(metinler, kaynak="en", yer_tutucular=yt))
+        parcalar = f.motor.tum_gonderilen_parcalar()
+>       assert parcalar == ["{0} A。", "B", "%s x", "A", "C."]
+E       AssertionError: assert ['{0}!', '{0}..., '%s x', ...] == ['{0} A。', 'B...x', 'A', 'C.']
+E         
+E         At index 0 diff: '{0}!' != '{0} A。'
+E         Left contains 6 more items, first extra item: '%s x'
+E         Use -v to get more diff
+
+tests\unit\translate\test_local_nmt.py:699: AssertionError
+=========================== short test summary info ===========================
+FAILED tests/unit/translate/test_local_nmt.py::test_k3e_yalniz_yer_tutucu_parcasi_modele_gitmez_ciktida_aynen
+FAILED tests/unit/translate/test_local_nmt.py::test_k3e_yer_tutucu_bildirilmemisse_metindir_gider
+FAILED tests/unit/translate/test_local_nmt.py::test_k3e_yer_tutucu_cikarildiktan_sonra_suzgec_tablosu[vokatif+cumle]
+FAILED tests/unit/translate/test_local_nmt.py::test_k3e_yer_tutucu_cikarildiktan_sonra_suzgec_tablosu[sinirda-nokta]
+FAILED tests/unit/translate/test_local_nmt.py::test_k3e_yer_tutucu_cikarildiktan_sonra_suzgec_tablosu[unlem]
+FAILED tests/unit/translate/test_local_nmt.py::test_k3e_yer_tutucu_cikarildiktan_sonra_suzgec_tablosu[JP-nokta]
+FAILED tests/unit/translate/test_local_nmt.py::test_k3e_yer_tutucu_cikarildiktan_sonra_suzgec_tablosu[yuzde-s]
+FAILED tests/unit/translate/test_local_nmt.py::test_k3e_yer_tutucu_cikarildiktan_sonra_suzgec_tablosu[iki-yt]
+FAILED tests/unit/translate/test_local_nmt.py::test_k3e_yer_tutucu_cikarildiktan_sonra_suzgec_tablosu[iki-yt-bitisik]
+FAILED tests/unit/translate/test_local_nmt.py::test_k3e_yer_tutucu_cikarildiktan_sonra_suzgec_tablosu[iki-gecis-parcasi]
+FAILED tests/unit/translate/test_local_nmt.py::test_k3e_yer_tutucu_cikarildiktan_sonra_suzgec_tablosu[acili]
+FAILED tests/unit/translate/test_local_nmt.py::test_k3e_yer_tutucu_cikarildiktan_sonra_suzgec_tablosu[koseli]
+FAILED tests/unit/translate/test_local_nmt.py::test_k3e_yer_tutucu_cumle_sinirinda_uc_segment_kendi_segmentinde_kalir
+FAILED tests/unit/translate/test_local_nmt.py::test_k3e_yer_tutucu_onarimi_gecis_parcasiyla_cakismaz
+FAILED tests/unit/translate/test_local_nmt.py::test_k3e_modele_gider_yardimcisi_yer_tutucu_parametresi
+FAILED tests/unit/translate/test_local_nmt.py::test_k3e_modele_giden_her_parcada_yer_tutucu_disinda_harf_veya_rakam_var
+16 failed, 239 passed in 1.48s
