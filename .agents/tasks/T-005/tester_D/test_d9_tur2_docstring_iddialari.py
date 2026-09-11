@@ -203,19 +203,15 @@ def test_d9_ayrismanin_kaynagi_NEGATIF_x_li_M0() -> None:
     assert _sonuc(_servis(), ham) == ("CaptureError", None)
 
 
-@pytest.mark.xfail(
-    strict=True,
-    reason="BULGU D-2.2 (tur 2): `capture_region` docstring'i olculmemis bir "
-           "OLUMSUZ iddia tasiyor -- 'Kenardan uzak (derin INSIDE) bolgelerde ise "
-           "dort tipte de ayrisma SIFIRDIR' ve 'tasma yalnizca monitor sinirlarina "
-           "yaklasan bolgelerde gozlemlenebilir hale gelir'. Olcum: `Rect(1000, "
-           "600, 1000, 200)` her kenardan >=560 px uzak, M1'in tamamen icinde ve "
-           "uint16/32/64'te `CaptureError` veriyor; ayrisan aile `x == w` ve "
-           "kenara uzaklikla ilgisi yok (kaynak M0'in negatif x'i). Bu, PROTOKOL "
-           "§4.6/10'un yasakladigi sinifin ta kendisi ve kural bu turda TAM BU "
-           "cumlenin atasi yuzunden eklendi.",
-)
-def test_d9_BULGU_docstring_sifir_iddiasi_metinde_duruyor() -> None:
+def test_d9_TUR3_docstring_sifir_iddiasi_SILINDI_ve_damga_var() -> None:
+    """TUR 3'te KAPANDI (tur 2 bulgusu D-2.2).
+
+    Tur 2'de `xfail(strict)` ile BULGU olarak duruyordu; tur 3'te cumle
+    silindi, yerine `[OLCULMUYOR]` damgasi + olculmus uyeler yazildi. XPASS
+    oldu, yesil teste cevrildi. Uc sey birden olculur: (1) eski olumsuz
+    evrensel cumle YOK, (2) damga VAR, (3) olculmus uyeler -- derin INSIDE
+    karsi ornegi, `x != w` uyesi, L duzeni uint8 -- metinde ADLANDIRILMIS.
+    """
     metin = _docstring()
     assert "ayrisma **sifirdir**" not in metin and "ayrisma sifirdir" not in metin, (
         "docstring hala olculmemis 'ayrisma sifirdir' iddiasini tasiyor"
@@ -223,3 +219,7 @@ def test_d9_BULGU_docstring_sifir_iddiasi_metinde_duruyor() -> None:
     assert "yalnizca monitor sinirlarina yaklasan" not in metin, (
         "docstring hala 'tasma yalnizca sinirlara yaklasan bolgelerde gozlemlenebilir' diyor"
     )
+    assert "[OLCULMUYOR]" in metin, "ayrisma kumesi icin [OLCULMUYOR] damgasi yok (PROTOKOL §4.6/2)"
+    for uye in ("Rect(1000, 600, 1000, 200)", "Rect(100, 600, 1124, 64)",
+                "Rect(0, 0, 201, 201)", "sinirli degildir"):
+        assert uye in metin, f"olculmus uye docstring'de adlandirilmamis: {uye}"

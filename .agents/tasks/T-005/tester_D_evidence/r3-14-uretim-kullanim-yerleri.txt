@@ -1,0 +1,45 @@
+=== MssBackend / close() / __exit__ kullanim yerleri (src, demo, tests) ===
+src/capture/service.py:10:`CaptureBackend` (Protocol) · `MssBackend` (gercek ekran) · `FakeBackend`
+src/capture/service.py:21:`_uyum_mss: CaptureBackend = MssBackend()` satirlari, iki somut backend'in
+src/capture/service.py:32:Process icindeki **ilk** `mss.MSS()` kurulumu -- yani `MssBackend`'in ilk
+src/capture/service.py:35:olceklemesini etkiler. **`MssBackend` metotlari `QApplication` kurulmadan
+src/capture/service.py:36:ONCE cagrilmamalidir.** (`MssBackend()` yapiminin kendisi zararsizdir: tembel
+src/capture/service.py:45:kapatilir (`MssBackend` bir baglam yoneticisidir).
+src/capture/service.py:95:__all__ = ["CaptureBackend", "MssBackend", "FakeBackend", "CaptureService"]
+src/capture/service.py:120:class MssBackend:
+src/capture/service.py:153:    def __enter__(self) -> MssBackend:
+src/capture/service.py:156:    def __exit__(self, *_: object) -> None:
+src/capture/service.py:157:        self.close()
+src/capture/service.py:175:            self._tutamac.close()
+src/capture/service.py:307:        backend: `CaptureBackend`; gercek ekran icin `MssBackend`, test icin
+src/capture/service.py:623:_uyum_mss: CaptureBackend = MssBackend()
+demo/bolge_izle.py:26:from src.capture.service import CaptureService, MssBackend  # noqa: E402
+demo/bolge_izle.py:118:        self.close()
+demo/bolge_izle.py:221:    servis = CaptureService(MssBackend())
+tests/unit/capture/test_service.py:4:dokunulmaz (K1 engeli `conftest.py`'de). `MssBackend`'in gercek `mss`
+tests/unit/capture/test_service.py:25:    MssBackend,
+tests/unit/capture/test_service.py:75:    assert isinstance(MssBackend(), protokol)
+tests/unit/capture/test_service.py:80:    b = MssBackend()
+tests/unit/capture/test_service.py:83:    b.close()  # idempotent, tutamac hic kurulmadi
+tests/unit/capture/test_service.py:912:# K10 -- MssBackend omru (baglam yoneticisi + close idempotensi)
+tests/unit/capture/test_service.py:919:    Gercek `mss.MSS.close()` KENDI ICINDE idempotenttir ("It is safe to call
+tests/unit/capture/test_service.py:920:    this multiple times"); sahte de oyle davranir ki olcu `MssBackend`'in
+tests/unit/capture/test_service.py:943:    """K10: `__exit__` -> `close()` KOSULSUZDUR -- cikis yolundan bagimsiz.
+tests/unit/capture/test_service.py:946:    `__exit__`'in gordugu `exc_type` tam **iki ayrik sinif** alir:
+tests/unit/capture/test_service.py:952:    | `generator.close()` | `GeneratorExit` |
+tests/unit/capture/test_service.py:955:    `generator.close()` ikinciye coker. Bu yuzden iki parametre ekseni
+tests/unit/capture/test_service.py:968:    (3) `__exit__` istisnayi YUTMADI -- govdede yukselen `CaptureError`
+tests/unit/capture/test_service.py:970:    varyanti (`__exit__` -> `return True`) olcuye takilmazdi.
+tests/unit/capture/test_service.py:972:    b = MssBackend()
+tests/unit/capture/test_service.py:982:        # (yani `__exit__` `True` dondurup YUTMADI) ve degistirilmeden geldi.
+tests/unit/capture/test_service.py:991:        f"__exit__ ({yol}, exc_type="
+tests/unit/capture/test_service.py:997:    assert b._tutamac is None, f"__exit__ ({yol}) `_tutamac` alanini sifirlamadi"
+tests/unit/capture/test_service.py:1001:    b = MssBackend()
+tests/unit/capture/test_service.py:1004:    b.close()
+tests/unit/capture/test_service.py:1010:    b.close()
+
+=== uretimde 'with' + Backend ayni satirda ===
+(yok)
+
+=== uretimde uretec (yield) icinde Backend ===
+(yield iceren dosya yok)

@@ -1,0 +1,4 @@
+denetlenen: service.py, monitors.py, conftest.py, test_service.py, test_monitors.py
+
+TEMIZ: K1 engeli calisiyor, devretmiyor, oturum kapsamli; mss'e yuklemede girisim yok; grab icerigi dogru; monitors() kur+kapat+canli; grab tutamaci tek; close idempotent; Qt yok
+exit=0

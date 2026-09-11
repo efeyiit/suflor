@@ -1,0 +1,28 @@
+=== pragma sayisi (tur 1/2: 3) ===
+src/capture/service.py:159:    def monitors(self) -> Sequence[Mapping[str, object]]:  # pragma: no cover -- K1: gercek ekran, headless_check §3 ile denetleniyor
+src/capture/service.py:165:    def grab(self, rect: Rect) -> ImageArray:  # pragma: no cover -- K1: gercek ekran, headless_check §3 ile denetleniyor
+src/capture/service.py:173:    def close(self) -> None:  # pragma: no cover -- K1: gercek ekran, headless_check §3 ile denetleniyor
+toplam: 3
+
+=== gizli kapsam yapilandirmasi ===
+.coveragerc: yok
+pyproject.toml: yok
+setup.cfg: yok
+tox.ini: yok
+pytest.ini: yok
+
+=== kapsam satiri (r3-04) ===
+TOTAL                       171      2    99%
+Required test coverage of 95% reached. Total coverage: 98.83%
+
+=== TEST docstring'i (test_k10_exit_uzun_omurlu_tutamaci_kapatir) -- olumsuz evrensel belirtec taramasi ===
+4:    `__exit__`'in gordugu `exc_type` tam **iki ayrik sinif** alir:
+12:    Ucuncu bir varyant yoktur: `return`/`break`/`continue` birinci sinifa,
+14:    TAMAMEN kapatir -- tek noktada kalan bir olcu, o noktaya kapili bir
+22:    yoktur ve K10'un olctugu ariza 5001. kapatilmamis ornekte
+
+=== ayni cumlelerin OLCUMLE durumu ===
+  'exc_type tam **iki ayrik sinif** alir'      : CIKIS YOLU icin DOGRU (r3-09 A: 14 yol -> 2 sinif); DEGER icin YANLIS (r3-09 B: None + 114 alt sinif)
+  'Ucuncu bir varyant yoktur'                 : cikis YOLU icin DOGRU (r3-09 A)
+  'iki parametre ekseni TAMAMEN kapatir'      : YANLIS -- M60/M61/M62/M64 iki parametreyi de geciyor (r3-10)
+  pozitif kontrol var mi? HAYIR -- iddia icin o siniftan (deger ekseni) hicbir mutant kosulmamis

@@ -1,0 +1,63 @@
+==============================================================================
+(A) CIKIS YOLU ekseni -- `__exit__` her yolda NE goruyor?
+==============================================================================
+  normal dusus                                  -> exc_type=None                 (__exit__ cagrisi: 1)
+  return                                        -> exc_type=None                 (__exit__ cagrisi: 1)
+  break                                         -> exc_type=None                 (__exit__ cagrisi: 1)
+  continue                                      -> exc_type=None                 (__exit__ cagrisi: 1)
+  govdede Exception (ValueError)                -> exc_type=ValueError           (__exit__ cagrisi: 1)
+  govdede CaptureError                          -> exc_type=CaptureError         (__exit__ cagrisi: 1)
+  govdede BaseException (KeyboardInterrupt)     -> exc_type=KeyboardInterrupt    (__exit__ cagrisi: 1)
+  sys.exit() -> SystemExit                      -> exc_type=SystemExit           (__exit__ cagrisi: 1)
+  generator.close() -> GeneratorExit            -> exc_type=GeneratorExit        (__exit__ cagrisi: 1)
+  uretec cop toplandi -> GeneratorExit          -> exc_type=GeneratorExit        (__exit__ cagrisi: 1)
+  generator.throw(RuntimeError)                 -> exc_type=RuntimeError         (__exit__ cagrisi: 1)
+  uretec tuketildi (StopIteration)              -> exc_type=None                 (__exit__ cagrisi: 1)
+  except icinde yeniden yukseltme (TypeError)   -> exc_type=TypeError            (__exit__ cagrisi: 1)
+  dis finally return ile YUTAR (govde ValueError) -> exc_type=ValueError           (__exit__ cagrisi: 1)
+
+  `exc_type is None` sinifina dusen yollar   : 5
+      - break
+      - continue
+      - normal dusus
+      - return
+      - uretec tuketildi (StopIteration)
+  `exc_type is not None` sinifina dusen yollar: 9
+      - dis finally return ile YUTAR (govde ValueError)  (ValueError)
+      - except icinde yeniden yukseltme (TypeError)  (TypeError)
+      - generator.close() -> GeneratorExit  (GeneratorExit)
+      - generator.throw(RuntimeError)  (RuntimeError)
+      - govdede BaseException (KeyboardInterrupt)  (KeyboardInterrupt)
+      - govdede CaptureError  (CaptureError)
+      - govdede Exception (ValueError)  (ValueError)
+      - sys.exit() -> SystemExit  (SystemExit)
+      - uretec cop toplandi -> GeneratorExit  (GeneratorExit)
+
+  SONUC (A): sefin iddiasi -- cikis YOLU ekseni iki ayrik sinifa
+  cokuyor -- DOGRULANDI. Ucuncu bir SINIF yok.
+
+==============================================================================
+(B) `exc_type` DEGER ekseni -- kac AYRIK deger gorulebilir?
+==============================================================================
+  Yukaridaki 14 yolun urettigi AYRIK `exc_type` degeri: None + 7 istisna tipi
+      ['CaptureError', 'GeneratorExit', 'KeyboardInterrupt', 'RuntimeError', 'SystemExit', 'TypeError', 'ValueError']
+
+  `__exit__` imzasi `exc_type`'i BIR DEGER olarak alir; deger uzayi
+  `None` + BaseException'in tum alt siniflaridir. Bu ortamdaki
+  yuklu alt sinif sayisi:
+      BaseException alt sinif sayisi (bu process): 114
+
+  SONUC (B): cikis YOLU ekseni 2 sinifa cokuyor (A dogru), ama
+  `exc_type`'in DEGER ekseni 2 degildir. Bir uygulama `exc_type`'in
+  DEGERINE gore ayrisabilir (114 tip + None). 'Iki parametre ekseni
+  TAMAMEN kapatir' sonucu bu yuzden YAPIDAN CIKMAZ; olcunun secilen
+  iki NOKTASI (None, CaptureError) disinda kalan degerlere kapili bir
+  uygulama iki bacagi da gecer. Mutantlarla olculur: t3_mutant_kiti.py
+
+==============================================================================
+(C) Uretim kodunda `with MssBackend()` / uretec kullanimi var mi?
+==============================================================================
+  (uretimde `with <...>Backend()` kullanimi YOK -- omur yonetimi
+   cagirana birakilmis; `close()` ve `__exit__` ikisi de API yuzeyi)
+
+exit=0

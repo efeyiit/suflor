@@ -289,22 +289,22 @@ def test_d5_TUR2_uygulama_ISTISNA_yolunda_da_kapatiyor() -> None:
     assert o["tutamac_none"] is True
 
 
-@pytest.mark.xfail(
-    strict=True,
-    reason="BULGU D-2.1 (tur 2): T2-1'in eklendigi olcu `__exit__`'i YALNIZ "
-           "istisnasiz cikista kosuyor. `__exit__`'i 'yalnizca exc_type is None "
-           "ise close()' yapan bir uygulama (M53) BES kabul komutundan da temiz "
-           "geciyor -- oysa K10 'her `with` blogu bir window DC sizdirir, 5001. "
-           "kapatilmamis ornekte GetWindowDC kalici olarak duser' diyor ve "
-           "`CaptureError` ile biten bir `with` govdesi urunun NORMAL hata "
-           "yoludur (K6 sinif b/c). PROTOKOL §4.6/7: davranissal olcu, kapsadigi "
-           "uzayin EN AZ IKI noktasinda kosmali; istisna/istisnasiz ekseninde "
-           "tek nokta var. `[OLCULMUYOR]` damgasi da yok (§4.6/2).",
-)
-def test_d5_TUR2_BULGU_exit_ISTISNA_yolu_olculmuyor(ayna) -> None:  # type: ignore[no-untyped-def]
+def test_d5_TUR3_exit_ISTISNA_yolu_artik_KAPIYA_TAKILIYOR(ayna) -> None:  # type: ignore[no-untyped-def]
+    """TUR 3'te KAPANDI (tur 2 bulgusu D-2.1).
+
+    Tur 2'de bu test `xfail(strict)` ile BULGU olarak duruyordu: `__exit__`'i
+    yalniz `exc_type is None` iken kapatan uygulama (M53) bes kapidan da
+    geciyordu. Tur 3'te `test_k10_exit_uzun_omurlu_tutamaci_kapatir`
+    `exc_type` ekseninde parametrelendi; M53 artik G2/G4/G5'e takiliyor
+    (r3-08: `M53 [.X.XX]`). XPASS oldu, yesil teste cevrildi.
+    """
     kapilar = _tum_kapilar(ayna, M53_EXIT_ISTISNA)
-    assert any(rc != 0 for rc in kapilar.values()), (
-        f"`__exit__` istisna yolunda close() cagirmiyor ama BES kapi da temiz: {kapilar}"
+    takilan = [ad for ad, rc in kapilar.items() if rc != 0]
+    assert takilan, (
+        f"REGRESYON: M53 (istisna yolunda kapatmayan __exit__) yine bes kapidan geciyor: {kapilar}"
+    )
+    assert "G2-pytest" in takilan, (
+        f"M53'u yakalayan kapi `tests/` katmani olmali (T3-1 bunu orada kapatti): {takilan}"
     )
 
 

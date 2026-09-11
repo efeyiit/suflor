@@ -1,0 +1,4 @@
+KABUL EDILEBILIR  (verdict-D.md, rol=tester, tur=3)
+  18 komut/kontrol, hepsinin kaniti diskte mevcut ve dolu
+  karar: onay
+exit=0

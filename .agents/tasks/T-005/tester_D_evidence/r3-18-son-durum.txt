@@ -1,0 +1,48 @@
+=== git status --short -- src tests (BOS olmali) ===
+[cikti sonu]
+
+=== git diff --stat -- src tests ===
+[cikti sonu]
+
+=== ayna agaci (depo DISINDA) ===
+C:/Users/pc/AppData/Local/Temp/scratch/.../scratchpad/t005_tester_D_mutroot
+src
+tests
+
+=== ayna service.py == depo service.py (geri alma dogru mu) ===
+AYNI
+
+=== tester_D altinda bu tur yazilan/degisen dosyalar ===
+ M .agents/tasks/T-005/tester_D/test_d5_bos_olcum_noktalari.py
+ M .agents/tasks/T-005/tester_D/test_d9_tur2_docstring_iddialari.py
+?? .agents/tasks/T-005/tester_D/t3_bacak_gucu.py
+?? .agents/tasks/T-005/tester_D/t3_docstring_denetimi.py
+?? .agents/tasks/T-005/tester_D/t3_exc_type_ekseni.py
+?? .agents/tasks/T-005/tester_D/t3_mutant_kiti.py
+?? .agents/tasks/T-005/tester_D/test_d10_tur3_exc_type_ekseni.py
+?? .agents/tasks/T-005/tester_D_evidence/r3-01-mypy.txt
+?? .agents/tasks/T-005/tester_D_evidence/r3-02-pytest-owned.txt
+?? .agents/tasks/T-005/tester_D_evidence/r3-03-headless.txt
+?? .agents/tasks/T-005/tester_D_evidence/r3-04-cov.txt
+?? .agents/tasks/T-005/tester_D_evidence/r3-05-pytest-all.txt
+?? .agents/tasks/T-005/tester_D_evidence/r3-06-tester-D-kit.txt
+?? .agents/tasks/T-005/tester_D_evidence/r3-07-sef-kapi-mutantlari-dalga1.txt
+?? .agents/tasks/T-005/tester_D_evidence/r3-08-sef-kapi-mutantlari-dalga2.txt
+?? .agents/tasks/T-005/tester_D_evidence/r3-09-exc-type-ekseni.txt
+?? .agents/tasks/T-005/tester_D_evidence/r3-10-mutant-dalga-tur3.txt
+?? .agents/tasks/T-005/tester_D_evidence/r3-11-bacak-gucu.txt
+?? .agents/tasks/T-005/tester_D_evidence/r3-12-docstring-denetimi.txt
+?? .agents/tasks/T-005/tester_D_evidence/r3-13-known-gaps-alani.txt
+?? .agents/tasks/T-005/tester_D_evidence/r3-14-uretim-kullanim-yerleri.txt
+?? .agents/tasks/T-005/tester_D_evidence/r3-15-d10-kit.txt
+?? .agents/tasks/T-005/tester_D_evidence/r3-16-tester-D-kiti-tur3.txt
+?? .agents/tasks/T-005/tester_D_evidence/r3-17-pragma-ve-test-docstring.txt
+?? .agents/tasks/T-005/tester_D_evidence/r3-18-son-durum.txt
+
+=== HEAD ===
+c06bf4f T-006 ön ölçümleri: OCR motoru seçimi ölçüyle dayandırıldı
+
+=== 043cef2 (tur 3 teslimi) .. HEAD arasinda sahipli dosyalar degisti mi ===
+c06bf4f T-006 ön ölçümleri: OCR motoru seçimi ölçüyle dayandırıldı
+5869e73 Bölge izleme gösterimi: ekran yakalama ve değişim tespiti çalışır halde
+[bos = degismedi; olcum tabani gecerli]

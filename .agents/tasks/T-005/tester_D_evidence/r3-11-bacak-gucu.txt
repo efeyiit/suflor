@@ -1,0 +1,46 @@
+ayna agaci: C:\Users\pc\AppData\Local\Temp\scratch\C--Users-pc-Desktop-efe--eviri-uygulamas-\d52c967f-bd19-4db3-b5e9-77e6cd08b889\scratchpad\t005_tester_D_mutroot   (depo YAZILMAZ)
+
+==============================================================================
+TABAN -- her bacak mutasyonsuz agacta GECMELI
+==============================================================================
+  exc_type=None            rc=0  1 passed in 0.22s
+  exc_type=CaptureError    rc=0  1 passed in 0.13s
+  HER IKISI                rc=0  2 passed in 0.12s
+
+==============================================================================
+BACAK BASINA AYIRT ETME GUCU (X = bacak TEK BASINA yakaliyor)
+==============================================================================
+mutant   exc_type=None            exc_type=CaptureError    HER IKISI               
+M12      X                        X                        X                       
+         __exit__ hicbir sey yapmaz (tur 1 bloke mutanti)
+M50      X                        X                        X                       
+         __exit__ tutamaci KAPATMADAN birakir
+M53      .                        X                        X                       
+         __exit__ YALNIZ temiz cikista kapatir (tur 2 bloke mutanti)
+M53T     X                        .                        X                       
+         M53'un AYNASI: __exit__ YALNIZ istisnali cikista kapatir (temiz cikista sizar) -- tur 2 olcusunun tek yakaladigi sinif
+M63      .                        X                        X                       
+         __exit__ kapatir ama istisnayi YUTAR
+M67      X                        X                        X                       
+         __exit__ close() yerine baska metoda baglanir
+M68      .                        .                        .                       
+         KONTROL: iki dal ayri yazilir ama DAVRANIS AYNI
+
+==============================================================================
+ARA ASSERT SONDASI -- `pytest.raises` bir AssertionError'i yutuyor mu?
+==============================================================================
+  exc_type=None            rc=1  1 failed in 0.25s  ara assert ATESLEDI
+  exc_type=CaptureError    rc=1  1 failed in 0.24s  ara assert ATESLEDI
+  HER IKISI                rc=1  2 failed in 0.26s  ara assert ATESLEDI
+
+=== MARKDOWN ===
+| mutant | ne yapiyor | exc_type=None | exc_type=CaptureError | HER IKISI |
+|---|---|---|---|---|
+| M12 | __exit__ hicbir sey yapmaz (tur 1 bloke mutanti) | X | X | X |
+| M50 | __exit__ tutamaci KAPATMADAN birakir | X | X | X |
+| M53 | __exit__ YALNIZ temiz cikista kapatir (tur 2 bloke mutanti) | . | X | X |
+| M53T | M53'un AYNASI: __exit__ YALNIZ istisnali cikista kapatir (temiz cikista sizar) -- tur 2 olcusunun tek yakaladigi sinif | X | . | X |
+| M63 | __exit__ kapatir ama istisnayi YUTAR | . | X | X |
+| M67 | __exit__ close() yerine baska metoda baglanir | X | X | X |
+| M68 | KONTROL: iki dal ayri yazilir ama DAVRANIS AYNI | . | . | . |
+exit=0

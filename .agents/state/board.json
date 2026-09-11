@@ -84,7 +84,9 @@
       ],
       "durum": "testerlar",
       "tur": 1,
-      "not": "IMPLEMENTER TAMAM, SEF DOGRULADI. Bes kabul komutu exit 0; 159 yeni test; kapsam %98.83; pytest tests -> 981 passed. GERCEK EKRANDA CALISIYOR: iki monitor dogru, negatif koordinat (-2000,300)->mi=0, yayilan bolge mi=-1, tam ekran (1440,2560,3), bellek paylasimi False, numpy sizintisi yok, seq dogru artiyor. Implementer kendi olcumuyle iki kendi hatasini buldu (pragma yeri, docstring'de yanlis ms) ve paketin iki iddiasini bagimsiz yeniden uretti. Dort tester sirada."
+      "not": "IMPLEMENTER TAMAM, SEF DOGRULADI. Bes kabul komutu exit 0; 159 yeni test; kapsam %98.83; pytest tests -> 981 passed. GERCEK EKRANDA CALISIYOR: iki monitor dogru, negatif koordinat (-2000,300)->mi=0, yayilan bolge mi=-1, tam ekran (1440,2560,3), bellek paylasimi False, numpy sizintisi yok, seq dogru artiyor. Implementer kendi olcumuyle iki kendi hatasini buldu (pragma yeri, docstring'de yanlis ms) ve paketin iki iddiasini bagimsiz yeniden uretti. Dort tester sirada.",
+      "status": "kabul",
+      "round": 3
     },
     {
       "id": "T-006",

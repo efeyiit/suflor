@@ -1,0 +1,270 @@
+==============================================================================
+A. MEKANIK TARAMA -- docstring'lerde olumsuz/evrensel belirtec
+==============================================================================
+  toplam belirtec tasiyan cumle: 93
+
+  [__init__.py::<modul>]
+     Bu paket başlatıcısı orkestra şefi tarafından oluşturulmuştur; paralel çalışan implementer ajanlarının aynı dosyaya yazmasını önlemek için hiçbir görevin `owns` kapsamında değildir.
+  [change_detector.py::<modul>]
+     bolge her ~250 ms yakalanir, bu sinif "hicbir sey degismedi" derse pipeline'in geri kalani (OCR, ceviri) hic calismaz -- CPU ve maliyet tam olarak burada kurtarilir.
+  [change_detector.py::<modul>]
+     En yakin komsu ornekleme de ayni riski tasirdi; blok ortalamasi PIL/cv2 olmadan (yalnizca stdlib+numpy izinli) basit bir "area resize" esdegeridir.
+  [change_detector.py::<modul>]
+     Yeni karenin hash'i, son ONAYLANMIS (kararli) hash'ten Hamming mesafesi bakimindan esik disindaysa bir "aday degisiklik" baslar.
+  [change_detector.py::<modul>]
+     Boylece esik, sistemde tutarli tek bir "esitlik" anlamina gelir; kesin bit-esitligi kullanilsaydi, sonsuz kucuk artik gurultu debounce'un hic onaylanmamasina (canli kilitlenme) yol acabilirdi.
+  [change_detector.py::<modul>]
+     (b) Aday surerken icerik taban (son kararli) hash'e geri donerse bekleyen aday IPTAL edilir (sifirlanir).
+  [change_detector.py::<modul>]
+     bu modul ekran yakalama yapmaz, Windows API cagirmaz, dosya okumaz -- yalnizca kendisine verilen `Frame` uzerinde calisir.
+  [change_detector.py::<modul>]
+     Yalnizca stdlib ve numpy kullanir; `Frame`/`Rect`/`ImageArray` sozlesmelerine yalnizca kullanici olarak dokunur, degistirmez.
+  [change_detector.py::<modul>]
+     `h/w < 5` bandinda `IndexError` ile COKUYOR, `5 <= h/w < hash_size (+1)` bandinda sessizce `0/0` -> `NaN` uretiyordu (karsilastirmalar `NaN` ile hep `False` doner, yani ilgili hash bitleri donetlenemez sekilde sabitlenirdi).
+  [change_detector.py::<modul>]
+     Gercekci bolgeler (>= 8x9, pratikte hep boyle) icin `min(...)` her zaman `out_h`/`out_w`'yi secer -- yani bu duzeltme BUYUK bolgelerde davranisi degistirmez (debounce, esik, bolge sifirlama, butce -- hepsi ayni).
+  [change_detector.py::<modul>]
+     Sonuc olarak KUCUK bolgelerde hash uzunlugu (`hash_size * hash_size` yerine `eff_out_h * (eff_out_w - 1)` bit) kucumektedir; bu, daha az bit uzerinden karsilastirma anlamina gelir ve ayni `threshold` daha "toleransli" hale gelebilir -- kucuk bolgelerde algilama hassasiyeti dogal olarak azalir (ama a
+  [change_detector.py::<modul>]
+     `w == 1` (tek piksel genislikte bolge) icin izgara genisligi de 1'e kirpilir; bu dHash'in yalnizca YATAY komsu hucre farkina baktigi icin (bkz.
+  [change_detector.py::<modul>]
+     yukaridaki algoritma), tek sutunlu bir goruntude karsilastirilacak ikinci bir sutun yoktur -- hash 0 bit uzunlugunda olur ve o bolge icin `has_changed` ilk kareden sonra hep `False` doner.
+  [change_detector.py::<modul>]
+     tamamen siyahtan tamamen beyaza) dHash icin GORUNMEZ kalir:
+  [change_detector.py::<modul>]
+     yalnizca yatay-komsu hucre farkina bakildigi icin duz bir goruntude her komsu fark esittir (deger ne olursa olsun hash hep ayni cikar).
+  [change_detector.py::_block_mean_resize]
+     Tamamen vektorize (Python dongusu yok):
+  [change_detector.py::_block_mean_resize]
+     `np.add.reduceat` yalnizca kova sayisi girdi piksel sayisini ASMADIGINDA guvenlidir -- aksi halde kova sinirlari cakisir ve ya `IndexError` firlatir ya da (cakisan sinirlar `np.diff` ile 0 genislik urettiginde) `0/0` -> `NaN` sessizce olusur.
+  [change_detector.py::_block_mean_resize]
+     `h >= out_h` ve `w >= out_w` oldugu (gercekci yakalama bolgeleri icin hep dogru) durumlarda kirpma devreye girmez, davranis oncekiyle BIREBIR aynidir.
+  [change_detector.py::_block_mean_resize]
+     bos bir goruntu gecerli bir yakalama degildir); bu kosul altinda kirpilmis kova sayisi <= piksel sayisi esitsizligi, her kovaya en az 1 piksel dusmesini (dolayisiyla `counts` hicbir zaman 0 olmamasini) garanti eder -- genis bir aralikta (kova sayisi 1..24, piksel sayisi kova sayisina esit veya daha 
+  [change_detector.py::_dhash]
+     `w == 1` ozel durumunda (yatay komsu yok) 0 bit uretilir, yani o bolge icin hash hep ayni (0) kalir -- bkz.
+  [change_detector.py::ChangeDetector]
+     Disariya hicbir yan etkisi yoktur (I/O yok, ekran yakalama yok); yalnizca kendi ic durumunu degistirir.
+  [change_detector.py::has_changed]
+     bu kare kosulsuz `True` doner ve yeni bir taban alinir (tasarim 2.2 adim 4 / gorev paketi madde 4).
+  [change_detector.py::has_changed]
+     yeni karenin hash'i, son kararli hash'ten esik disindaysa bir "aday degisiklik" baslar/surer.
+  [change_detector.py::has_changed]
+     Aday, esik disina cikarsa VEYA taban hash'e geri donerse iptal edilir (sifirlanir).
+  [dpi.py::<modul>]
+     Bu modul **tamamen saf fonksiyonlardan** olusur:
+  [dpi.py::<modul>]
+     Monitor bilgisi her zaman parametre olarak gelir -- boylece headless ve deterministik test edilebilir.
+  [dpi.py::<modul>]
+     `Rect` (src/contracts/models.py) dondurulmus sozlesmedir, burada yalnizca kullanilir.
+  [dpi.py::<modul>]
+     `Monitor` asagida yalnizca okunabilirlik icin bir `TypeAlias`'tir; calisma zamaninda `Rect`'ten farksizdir.
+  [dpi.py::<modul>]
+     Bu modul bunun yerine **sifirdan uzaga yuvarlama** (round-half-away-from-zero) kullanir:
+  [dpi.py::<modul>]
+     Kabul edilen deger alani -- dpi_scale >= 1.0 ZORUNLUDUR (tur 2 duzeltmesi) ------------------------------------------------------------------------ `logical_to_physical` ve `physical_to_logical`, `dpi_scale < 1.0` olan bir `Rect`'i **`ValueError` ile reddeder** (yalnizca `dpi_scale <= 0` degil -- bu
+  [dpi.py::<modul>]
+     Windows'ta DPI olcegi hicbir zaman %100'un altina inmez (%100, %125, %150, %175, %200, ...) -- `dpi_scale < 1.0` gecerli bir isletim sistemi metadata'si degildir, sessizce kabul edilmemelidir.
+  [dpi.py::<modul>]
+     asagidaki round-trip ispati yalnizca `s >= 1` icin gecerlidir.
+  [dpi.py::<modul>]
+     * `physical_to_logical(logical_to_physical(r)) == r` -- modulun kabul ettigi HER `r` icin (yani `r.dpi_scale >= 1.0` -- daha kucugu `ValueError` ile reddedilir) HER ZAMAN dogru.
+  [dpi.py::<modul>]
+     Ispat taslagi (ilk yon icin):
+  [dpi.py::<modul>]
+     s == 1 icin zaten hic yuvarlama gerekmez (esitlik tam, iki yon de kararlidir).
+  [dpi.py::<modul>]
+     Ters yonde (fizikselden baslayarak)ayni analiz gecerli degildir cunku baslangic degeri bir L'den turetilmis olmak ZORUNDA degildir.
+  [dpi.py::<modul>]
+     bu modulu kullanan kod, bir bolgeyi MANTIKSAL olarak tanimlayip fizikselde yakaladiginda (v1'in tipik kullanimi -- kullanici bir bolge secer, capture o bolgeyi fiziksel piksellerde okur) round-trip HER ZAMAN kararlidir -- KOSULSUZ, cunku artik validasyonun kabul alani ile ispatin varsaydigi alan (`s
+  [dpi.py::<modul>]
+     Negatif genislik/yukseklik -- guvenli ele alinir, cokme yok --------------------------------------------------------------- `w < 0` veya `h < 0` tasiyan bir `Rect` hicbir fonksiyonda istisnaya yol acmaz.
+  [dpi.py::<modul>]
+     `intersect` ve `clamp_to_monitor` bunu tutarli bicimde "kesisim yok" (`None`) sayar, `classify_region` ise "alani yok" (`OUTSIDE`) sayar -- negatif alan, sifir alan gibi davranir.
+  [dpi.py::<modul>]
+     Bu, DPI-olcekli arayuzlerin standart davranisidir (Windows'un kendisi dahil) ve yukaridaki round-trip garantisini ETKILEMEZ -- round-trip yalnizca (x, y, w, h) dortlusunun kendisi icin taahhut edilir.
+  [dpi.py::RegionValidity]
+     Bu enum yalnizca SINIFLANDIRIR; hangi durumda izlemenin duraklatilacagina UI/pipeline katmani karar verir (bu fonksiyonun sorumlulugu degil -- saf siniflandirma).
+  [dpi.py::_round_half_away_from_zero]
+     Sifirdan uzaga yuvarlama:
+  [dpi.py::logical_to_physical]
+     `physical_to_logical` ile geri alindiginda HER ZAMAN orijinali verir (bkz.
+  [dpi.py::logical_to_physical]
+     modul dokumantasyonu, ispat taslagi) -- bu, `dpi_scale < 1.0`'in asagida reddedilmesi sayesinde KOSULSUZ dogrudur.
+  [dpi.py::logical_to_physical]
+     Windows'ta DPI olcegi hicbir zaman %100'un altina inmez (gecerli metadata degil) VE `s < 1` icin round-trip garantisi matematiksel olarak tutmaz (bkz.
+  [dpi.py::physical_to_logical]
+     Windows'ta DPI olcegi hicbir zaman %100'un altina inmez (gecerli metadata degil) VE `s < 1` icin round-trip garantisi matematiksel olarak tutmaz (bkz.
+  [dpi.py::to_monitor_relative]
+     Salt tam sayi toplama/cikarma -- yuvarlama yok, HER ZAMAN kayipsiz ve `to_virtual_desktop` ile round-trip kararlidir.
+  [dpi.py::intersect]
+     `rect` ile `monitor`'un kesisimi; kesisim yoksa (veya alani sifir ya da negatifse) `None`.
+  [dpi.py::intersect]
+     Bu sayede iki komsu (bitisik, ortusmeyen) monitor arasindaki sinirin TAM UZERINDE oturan bir bolge, iki monitorun BIRLESIMI tarafindan dogru sekilde "tam kapsaniyor" sayilir; buna karsilik yalnizca bir kenari diger monitora DEGEN (ama ustune binmeyen) bir bolge kesismiyor sayilir (bkz.
+  [dpi.py::clamp_to_monitor]
+     eger kirpma sonucu boyut sifira (veya altina) duserse -- yani `rect`, `monitor` ile HIC kesismiyorsa -- fonksiyon sessizce `w=0`/`h=0` gibi "gorunuse gore hala gecerli ama aslinda gorunmez" bir `Rect` DONDURMEZ; acikca `None` doner.
+  [dpi.py::clamp_to_monitor]
+     "boyut sifira duserse acikca bildir").
+  [dpi.py::classify_region]
+     `monitors` kendi aralarinda ORTUSMEZ -- gercek Windows kurulumlarinda bu her zaman dogrudur (isletim sistemi, monitorlerin sanal masaustunde cakismasina izin vermez).
+  [monitors.py::<modul>]
+     `dpi.py` gibi bu modul de **tamamen saftir**:
+  [monitors.py::<modul>]
+     Ham monitor bilgisi her zaman parametre olarak gelir; boylece headless ve deterministik test edilebilir.
+  [monitors.py::<modul>]
+     DPI olcegi -- `mss` TASIMAZ (sef olctu) ----------------------------------------- Ham sozluklerde yalnizca `left/top/width/height/is_primary/name/unique_id` vardir; **DPI/scale anahtari yoktur**.
+  [monitors.py::<modul>]
+     Olcegi yalnizca cagiran bilebilir (A7'nin Qt'den okudugu `devicePixelRatio`).
+  [monitors.py::<modul>]
+     Monitor kimligi -- KONUMSAL ve KARARSIZ (kabul edilen eksiklik) ----------------------------------------------------------------- `monitor_index` yalnizca `mss`'in dondurdugu SIRADIR.
+  [monitors.py::rects_from_mss_monitors]
+     Bos liste ve yalnizca birlesim girdisi tasiyan liste -> `()`.
+  [monitors.py::list_monitors]
+     backend'in kendi hatasi (surucu, DC tukenmesi, ...) K6 taksonomisinin (b) sinifi degildir -- K6 yalnizca YAKALAMA cagrilarini kapsar.
+  [monitors.py::union_bbox]
+     L seklinde bir duzende birlesim dikdortgeni hicbir monitore dusmeyen "olu" alan icerebilir; `mss` o alani siyah doldurur.
+  [service.py::<modul>]
+     "Qt'ye sifir bagimlilik, headless test edilebilir").
+  [service.py::<modul>]
+     Satirlar silinirse ya da degeri olmayan ciplak bir ek aciklamaya donerse mypy hicbir sey dogrulamaz -- bu yuzden `headless_check.py` §4 varliklarini AST ile denetler.
+  [service.py::<modul>]
+     tembel oldugu icin `mss`'e hic dokunmaz -- modul duzeyindeki `_uyum_mss` ornegi de bu yuzden guvenlidir.) Ayrica `mss`'te `__del__` **yoktur**:
+  [service.py::<modul>]
+     Thread guvenligi -- YOKTUR ---------------------------- `CaptureService` thread-safe **degildir**:
+  [service.py::<modul>]
+     `seq` yalnizca TEK ORNEK icinde karsilastirilabilir (A6 kisiti) ----------------------------------------------------------------- `seq` her `CaptureService` orneginde 0'dan baslar.
+  [service.py::<modul>]
+     pipeline servis ornegini degistirirse karsilastirma tabanini **sifirlamak zorundadir**, aksi halde yeni kareler eski sanilip atilir ve ceviri sessizce donar.
+  [service.py::<modul>]
+     Import bicimi -------------- `src/__init__.py` yoktur.
+  [service.py::MssBackend]
+     her cagri yeni bir ornek kurdugu icin bir listeyi bozmanin sonrakine etkisi zaten yoktur (sef olctu).
+  [service.py::MssBackend]
+     `__init__` `mss`'e **hic dokunmaz**; bu yuzden K1 engeli altinda bile kurulabilir ve modul duzeyindeki `_uyum_mss` ornegi zararsizdir.
+  [service.py::MssBackend]
+     `mss.mss()` **kullanimdan kalkmistir** (`DeprecationWarning`, mss 10.2.0); bu sinif yalnizca `mss.MSS()` cagirir.
+  [service.py::_varsayilan_uretici]
+     `(rect.h, rect.w, 4)` sifir dizi (BGRA).
+  [service.py::FakeBackend]
+     Headless test arka ucu -- gercek ekrana ve `mss`'e hic dokunmaz (K1).
+  [service.py::FakeBackend]
+     Varsayilani `(h, w, 4)` sifir dizi.
+  [service.py::FakeBackend]
+     bozuk sozluk, kume sayi/sira degisimi ve canlilik vakalari yalnizca bu yolla kurulabilir.
+  [service.py::_ham_sozluk]
+     `Rect` -> ham `mss` sozlugu (yalnizca `FakeBackend` icin).
+  [service.py::_kabul_ve_duzlestir_olcek]
+     `np.float64` `float`'in ALT SINIFI oldugu icin serilesir, ama **`np.float32` serilesmez** (sef olctu) -- bu yuzden `float()` kosulsuz uygulanir.
+  [service.py::CaptureService]
+     K6 yalnizca `capture_region`/`capture_full` cagrilarini kapsar.
+  [service.py::CaptureService]
+     Servis olcekleme yapmaz ve `rect.dpi_scale`'i **hicbir kararda kullanmaz** -- yalnizca `Frame.rect`'e tasir.
+  [service.py::CaptureService]
+     `rect.monitor_index` de hicbir kararda kullanilmaz:
+  [service.py::CaptureService]
+     bolge yalnizca `x, y, w, h` ile degerlendirilir.
+  [service.py::refresh_monitors]
+     `seq`'i **sifirlamaz** (K2).
+  [service.py::refresh_monitors]
+     Bozuk sozlukte `CaptureError` firlatir ve bu durumda servisin **eski kumesi degismeden kalir** -- atama yalnizca basarili donusumden sonra yapilir; yarim guncellenmis bir durum olusmaz.
+  [service.py::capture_region]
+     giris kabul kapisi + duzlestirme -> alan denetimi -> BIRLESIME gore siniflandirma -> (gerekirse) BIRLESIME gore kirpma -> backend cagrisi (K6 yeniden deneme) -> bicim dogrulama -> **kosulsuz kopya** -> `Frame`.
+  [service.py::capture_region]
+     `Rect(1000, 600, 1000, 200)` `M1`'in tamamen icindedir ve her kenardan **>= 560 px** uzaktir; buna ragmen duz `int` ile `(1000, 600, 1000, 200)` verirken ham `uint16`/`uint32`/`uint64` ile `CaptureError` alir.
+  [service.py::capture_region]
+     Duzlestirme bu yuzden bolgeye gore degil **KOSULSUZ** uygulanir; `classify_region`, `intersect` ve `monitor_index` hesabi **yalniz duzlestirilmis** `Rect` gorur.
+  [service.py::capture_region]
+     Kirpma **her zaman** `union_bbox(monitors)`'a karsi yapilir, **asla** tek bir monitore karsi degil.
+  [service.py::capture_region]
+     bolge tamsayi olmayan alan tasiyorsa; alani sifir ya da negatifse; monitor kumesi bossa; bolge `OUTSIDE` ise (bunlarin **hicbirinde backend cagrilmaz**, K6 sinif a); backend uc denemede de istisna firlatirsa (sinif b); ya da backend'in ciktisi K7 bicimine uymuyorsa (sinif c, yeniden deneme YOK).
+  [service.py::capture_region]
+     L seklinde bir duzende birlesim dikdortgeni hicbir monitore dusmeyen "olu" alan icerebilir ve `mss` orayi siyah doldurur.
+  [service.py::capture_full]
+     `capture_full` yalnizca tek bir monitoru hedefler.
+  [service.py::_monitor_indeksi]
+     Bolgenin o monitorun tamamen icinde olmasi gerekmez (L duzeninde olu alan icerebilir).
+  [service.py::_backend_dan_al]
+     (c) backend **donduğu halde cikti gecersizse** yeniden **denenmez** ve `__cause__` `None` kalir -- bozuk bir bicim ikinci denemede duzelmez, yalnizca 13.5 ms daha harcanirdi.
+  [service.py::_bicimi_dogrula]
+     `isinstance(ham, np.ndarray)` degilse `CaptureError`; hicbir `np.asarray` / `np.array` / `hasattr` donusumu yapilmaz.
+  [service.py::_kopyala]
+     BGR(A) -> BGR, **kosulsuz kopya** (K7 sahiplik).
+
+==============================================================================
+B. TUR 3 DOCSTRING'ININ OLUMLU IDDIALARI -- bagimsiz olcum
+==============================================================================
+B1. `Rect(1000, 600, 1000, 200)` derin INSIDE + ham yolda CaptureError
+    duz int          -> ('ok', (1000, 600, 1000, 200), 0)
+    ham uint16       -> ('CaptureError', 'bolge hicbir monitorle kesismiyor: x=1000, y=600, ', 5)
+    ham uint32       -> ('CaptureError', 'bolge hicbir monitorle kesismiyor: x=1000, y=600, ', 3)
+    ham uint64       -> ('CaptureError', 'bolge hicbir monitorle kesismiyor: x=1000, y=600, ', 3)
+    M1 kenarina EN KISA uzaklik = 560 px  (docstring: '>= 560 px')
+    -> TUTUYOR
+
+B2. `x == w` uyeleri ayrisiyor; `x=1000,w=1001` ve `x=999,w=1000` AYRISMIYOR
+    (docstring bunu 'olcu o noktalarda ATESLENEBILIR durumdadir' diye yaziyor)
+    x=  100 w=  100  ham=CaptureError   duz=ok    ayrisma=EVET
+    x=  300 w=  300  ham=CaptureError   duz=ok    ayrisma=EVET
+    x=  500 w=  500  ham=CaptureError   duz=ok    ayrisma=EVET
+    x= 1000 w= 1000  ham=CaptureError   duz=ok    ayrisma=EVET
+    x= 1200 w= 1200  ham=CaptureError   duz=ok    ayrisma=EVET
+    -- POZITIF KONTROL (ayrismamasi beklenen komsular):
+    x= 1000 w= 1001  ham=ok             duz=ok    ayrisma=hayir
+    x=  999 w= 1000  ham=ok             duz=ok    ayrisma=hayir
+    -> TUTUYOR
+
+B3. `x != w` uyesi: uint16, `Rect(100, 600, 1124, 64)` -- CaptureError
+    ham uint16 -> ('CaptureError', 'bolge hicbir monitorle kesismiyor: x=100, y=600, w', 5)
+    duz int    -> ('ok', (100, 600, 1124, 64), 0)
+    M1 kenarina EN KISA uzaklik = 100 px  (INSIDE mi: EVET)
+    -> TUTUYOR
+
+B4. Kenar grid'i (x 0..2600, y 0..1400, w/h in {1,50,200,500}):
+    uint32/uint64 icin 6480 kombinasyonun 1108'i SESSIZ farkli geometri,
+    240'i SESSIZCE kabul edilen GECERSIZ bolge
+    uint32  : toplam=6480  sessiz-farkli=1108  sessizce-kabul-edilen-gecersiz=240
+    uint64  : toplam=6480  sessiz-farkli=1108  sessizce-kabul-edilen-gecersiz=240
+    -> TUTUYOR
+
+B5. L duzeni A=(0,0,100,100) B=(100,100,100,100), uint8 `Rect(0,0,201,201)`
+    -> K6 taksonomisi DISINDA ciplak OverflowError
+    ham uint8 -> ('CIPLAK:OverflowError', 'Python integer 10000 out of bounds for uint8', 2)
+    duz int   -> ('ok', (0, 0, 200, 200), 0)
+    -> TUTUYOR
+
+B6. Docstring'in ATIF VERDIGI ham cikti dosyalari diskte VAR ve DOLU mu?
+    .agents/tasks/T-005/evidence/t3-2-derin-inside-ayrisma.txt: VAR  6543 bayt
+    .agents/tasks/T-005/evidence/t2-2-tasma-olcumu.txt: VAR  7579 bayt
+    -> TUTUYOR
+
+==============================================================================
+C. KAPALI-KUME EVRENSELLERI -- gerçekten kosuluyorlar mi?
+==============================================================================
+C1. 'bunlarin HICBIRINDE backend cagrilmaz' (K6 sinif a, dort kosul)
+    tamsayi olmayan alan     grab_calls=0  CaptureError: bolge alani 'x' tamsayi olmali, gelen:
+    alan sifir               grab_calls=0  CaptureError: bolgenin alani yok: w=0, h=10 (ikisi d
+    alan negatif             grab_calls=0  CaptureError: bolgenin alani yok: w=-5, h=10 (ikisi 
+    monitor kumesi bos       grab_calls=0  CaptureError: monitor kumesi bos: yakalanacak ekran 
+    bolge OUTSIDE            grab_calls=0  CaptureError: bolge hicbir monitorle kesismiyor: x=9
+    -> TUTUYOR
+
+C2. 'Kirpma HER ZAMAN union_bbox'a karsi, ASLA tek monitore karsi degil'
+    iki monitore yayilan 5300w bolge:
+    Frame.rect = (-2560, 100, 5120, 200)
+    tek monitore karsi olsaydi w=2560, birlesime karsi w=5120
+    -> TUTUYOR
+
+==============================================================================
+OZET
+==============================================================================
+  TUTUYOR   B1 derin INSIDE karsi ornegi
+  TUTUYOR   B2 x==w uyeleri + komsu pozitif kontrolu
+  TUTUYOR   B3 x != w uyesi (aile x==w ile SINIRLI DEGIL)
+  TUTUYOR   B4 kenar grid'i 6480 / 1108 / 240
+  TUTUYOR   B5 L duzeni uint8 ciplak OverflowError
+  TUTUYOR   B6 atif dosyalari var ve dolu
+  TUTUYOR   C1 K6 sinif a: hicbirinde backend cagrilmaz
+  TUTUYOR   C2 kirpma birlesime karsi
+
+  8/8 iddia bagimsiz olcumle dogrulandi
+exit=0

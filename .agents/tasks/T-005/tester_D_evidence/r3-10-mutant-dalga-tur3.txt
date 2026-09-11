@@ -1,0 +1,52 @@
+ayna agaci: C:\Users\pc\AppData\Local\Temp\scratch\C--Users-pc-Desktop-efe--eviri-uygulamas-\d52c967f-bd19-4db3-b5e9-77e6cd08b889\scratchpad\t005_tester_D_mutroot   (depo YAZILMAZ)
+kapilar = tur 3 kararinin BES kabul komutu
+kapilar: G1-mypy | G2-sahipli | G3-headless | G4-kapsam | G5-tamtakim
+
+TABAN (mutasyonsuz ayna): G1-mypy=TEMIZ | G2-sahipli=TEMIZ | G3-headless=TEMIZ | G4-kapsam=TEMIZ | G5-tamtakim=TEMIZ
+
+M60 [.....] *** HICBIR KAPI YAKALAMADI ***
+     __exit__ YALNIZ GeneratorExit'te kapatmaz (uretec close()/cop toplama her seferinde bir DC sizdirir)
+     hedef degismez: K10 `__exit__` -> close() KOSULSUZ  [exc_type DEGER ekseni: GeneratorExit]
+M61 [.....] *** HICBIR KAPI YAKALAMADI ***
+     __exit__ YALNIZ olcunun sectigi IKI degerde kapatir (None, CaptureError) -- diger HER istisnada tutamac sizar
+     hedef degismez: K10 `__exit__` -> close() KOSULSUZ  [olcunun IKI NOKTASINA kapili varyant]
+M62 [.....] *** HICBIR KAPI YAKALAMADI ***
+     __exit__ BaseException'da kapatmaz (KeyboardInterrupt / GeneratorExit / SystemExit) -- 'except Exception' aliskanliginin DOGAL hatasi
+     hedef degismez: K10 `__exit__` -> close() KOSULSUZ  [exc_type DEGER ekseni: BaseException]
+M63 [.X.XX] YAKALANDI
+     POZITIF KONTROL: __exit__ kapatir AMA istisnayi YUTAR (return True)
+     hedef degismez: K10 `__exit__` istisnayi yutmaz  [yeni assert ATESLEYEBILIYOR mu?]
+     | G2-sahipli:1 failed, 163 passed in 0.68s
+     | G4-kapsam:Required test coverage of 95% reached. Total coverage: 98.84%
+     | G5-tamtakim:1 failed, 985 passed in 4.43s
+M64 [.....] *** HICBIR KAPI YAKALAMADI ***
+     __exit__ CaptureError'u gecirir ama DIGER istisnalari sessizce YUTAR (ValueError / KeyboardInterrupt cagirana hic ulasmaz)
+     hedef degismez: K10 `__exit__` istisnayi yutmaz  [yutma ekseni de IKI NOKTAYA kapili]
+M65 [X....] YAKALANDI
+     KONTROL: __exit__ acikca `False` dondurur -- davranis AYNI
+     hedef degismez: yanlis pozitif denetimi: KACMASI DOGRU
+     | G1-mypy:src\capture\service.py:156: error: "bool" is invalid as return type for "__exit__" that always returns False  
+M66 [.....] *** HICBIR KAPI YAKALAMADI ***
+     KONTROL: __exit__ `close()` CAGIRMAZ, govdesini SATIR ICI yapar -- davranis AYNI (olcu MEKANIZMAYI mi DEGISMEZI mi kancaliyor?)
+     hedef degismez: yanlis pozitif denetimi: KACMASI DOGRU (PROTOKOL §4.6/7)
+M67 [.X.XX] YAKALANDI
+     __exit__ `close()` yerine tutamaci yalnizca BIRAKAN bir metoda baglanir (alan None olur, alttaki DC sizar)
+     hedef degismez: K10 `__exit__` -> close()  [mekanizma degistirme]
+     | G2-sahipli:2 failed, 162 passed in 0.71s
+     | G4-kapsam:Required test coverage of 95% reached. Total coverage: 98.84%
+     | G5-tamtakim:2 failed, 984 passed in 5.12s
+
+=== MARKDOWN TABLOSU ===
+| mutant | ne yapiyor | hedef degismez | G1-mypy | G2-sahipli | G3-headless | G4-kapsam | G5-tamtakim |
+|---|---|---|---|---|---|---|---|
+| M60 | __exit__ YALNIZ GeneratorExit'te kapatmaz (uretec close()/cop toplama her seferinde bir DC sizdirir) | K10 `__exit__` -> close() KOSULSUZ  [exc_type DEGER ekseni: GeneratorExit] | . | . | . | . | . |
+| M61 | __exit__ YALNIZ olcunun sectigi IKI degerde kapatir (None, CaptureError) -- diger HER istisnada tutamac sizar | K10 `__exit__` -> close() KOSULSUZ  [olcunun IKI NOKTASINA kapili varyant] | . | . | . | . | . |
+| M62 | __exit__ BaseException'da kapatmaz (KeyboardInterrupt / GeneratorExit / SystemExit) -- 'except Exception' aliskanliginin DOGAL hatasi | K10 `__exit__` -> close() KOSULSUZ  [exc_type DEGER ekseni: BaseException] | . | . | . | . | . |
+| M63 | POZITIF KONTROL: __exit__ kapatir AMA istisnayi YUTAR (return True) | K10 `__exit__` istisnayi yutmaz  [yeni assert ATESLEYEBILIYOR mu?] | . | X | . | X | X |
+| M64 | __exit__ CaptureError'u gecirir ama DIGER istisnalari sessizce YUTAR (ValueError / KeyboardInterrupt cagirana hic ulasmaz) | K10 `__exit__` istisnayi yutmaz  [yutma ekseni de IKI NOKTAYA kapili] | . | . | . | . | . |
+| M65 | KONTROL: __exit__ acikca `False` dondurur -- davranis AYNI | yanlis pozitif denetimi: KACMASI DOGRU | X | . | . | . | . |
+| M66 | KONTROL: __exit__ `close()` CAGIRMAZ, govdesini SATIR ICI yapar -- davranis AYNI (olcu MEKANIZMAYI mi DEGISMEZI mi kancaliyor?) | yanlis pozitif denetimi: KACMASI DOGRU (PROTOKOL §4.6/7) | . | . | . | . | . |
+| M67 | __exit__ `close()` yerine tutamaci yalnizca BIRAKAN bir metoda baglanir (alan None olur, alttaki DC sizar) | K10 `__exit__` -> close()  [mekanizma degistirme] | . | X | . | X | X |
+
+HICBIR KAPININ YAKALAMADIGI MUTANTLAR (5): M60, M61, M62, M64, M66
+exit=0
