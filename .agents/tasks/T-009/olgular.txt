@@ -1,0 +1,23 @@
+==== T-009 (KORECE CUMLE SINIRI) -- SEFIN ON OLCUMLERI ====
+T-008 KRT-1 Y1 ile bulundu; sef dogruladi.
+
+[K1] KORECE TANIMA MODELI CUMLE SONU NOKTASINI DUSURUYOR
+  dlg_KR.png: kaynakta 3 cumle sonu noktasi; 17 blokta '.' sayisi 0.
+  Satir sonu kutulari '리고' '니다' '시오' '시오' ile bitiyor (nokta yok).
+  Tespit degil, TANIMA: uc det modeli de (MULTI 17 kutu, CH 4 kutu, EN 11 kutu)
+  kutuyu metnin sonuna kadar (x~675) uzatiyor; hicbirinde '.' cikmiyor.
+  korean_PP-OCRv4_rec_mobile sozlugu/egitimi noktayi vermiyor gibi -- model sinirlamasi.
+
+[K2] SONUC: T-008 birlestirme + normalize -> govde tek segment, 58 karakter, 0 nokta.
+  T-007 cumle bolme noktalamaya gore -> bolunmez -> NMT 3 cumleyi tek girdi alir:
+    noktasiz : 8 kelime, "dogu" YOK
+    nokta elle eklenince: 15 kelime, "dogu" VAR
+  Korece icin urun T-008'den sonra da EKSIK kalir (kelime-kelime degil ama cumle kaybi).
+
+[K3] ADAY COZUMLER (olculecek)
+  (a) Korece cumle-sonu ek sezgisi: satir/blok sonu '다'/'요'/'니다'/'시오'/'까' + bosluk
+      ya da blok sonu -> cumle siniri say. Dil-ozel; T-007 K3'e KR istisnasi.
+      Olcu: dlg_KR ile 3 cumle -> 3 parca; yanlis pozitif: cumle ortasi '다' (ör. '다시').
+  (b) Farkli KR tanima modeli (v5/v6 korean?) noktayi veriyor mu -- olculmedi.
+  (c) Satir sonunu cumle sonu say (KR diyalogda satir ~ cumle degil; yanlis).
+  (d) NMT'ye uzun girdi + beam -> 15 kelime ciktisi noktasiz da alinir mi (olculdu: HAYIR, 8).
