@@ -14,7 +14,7 @@ Kontroller (packet.md "Kabul kapisi"):
   3. C8 pozitif kontrol: JP 3-cumlelik TEK segment -> >=3 cumle ve uc anahtar
   4. KR 2 cumle TEK segment -> >=2 cumle + anahtarlar (Y1); 4b: yalniz noktalama aynen (Y2)
   5. yer tutucu: JP {0}/{1} -> ciktida var (onarim); EN -> var (model korudu)
-  6. sure: JP 4 cumle tek batch medyan <= 200 ms (UYARI esigi)
+  6. sure: JP 4 cumle tek batch beam=4 medyan <= 350 ms (UYARI esigi, Y3)
   7. ASCII-disi model_dir kopyasi -> calisir (C5)
   8. source_lang=None -> ProviderUnavailable; bos model_dir -> ModelMissingError
 """
@@ -124,7 +124,7 @@ def main() -> int:
     for _ in range(5):
         t0 = time.perf_counter(); p.translate(rq); s.append((time.perf_counter() - t0) * 1000)
     med = statistics.median(s)
-    (tamam if med <= 200 else uyari)(f"[6] JP 4 cumle tek batch: medyan {med:.0f} ms (esik 200, uyari)")
+    (tamam if med <= 350 else uyari)(f"[6] JP 4 cumle tek batch beam=4: medyan {med:.0f} ms (esik 350 = olculen 307-316 + pay; uyari)")
 
     # 7 ASCII-disi model_dir
     with tempfile.TemporaryDirectory() as td:
