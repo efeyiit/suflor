@@ -1,0 +1,66 @@
+{
+  "terimler": [
+    {
+      "kaynak": "マルクス",
+      "hedef": "Marcus"
+    },
+    {
+      "kaynak": "마르쿠스",
+      "hedef": "Marcus"
+    },
+    {
+      "kaynak": "Marcus",
+      "hedef": "Marcus"
+    },
+    {
+      "kaynak": "アイラ",
+      "hedef": "Ayla"
+    },
+    {
+      "kaynak": "아일라",
+      "hedef": "Ayla"
+    },
+    {
+      "kaynak": "水車小屋",
+      "hedef": "Değirmen"
+    },
+    {
+      "kaynak": "방앗간",
+      "hedef": "Değirmen"
+    },
+    {
+      "kaynak": "mill",
+      "hedef": "Değirmen"
+    },
+    {
+      "kaynak": "長老",
+      "hedef": "İhtiyar"
+    },
+    {
+      "kaynak": "장로",
+      "hedef": "İhtiyar"
+    },
+    {
+      "kaynak": "elder",
+      "hedef": "İhtiyar"
+    },
+    {
+      "kaynak": "剣",
+      "hedef": "Kılıç"
+    },
+    {
+      "kaynak": "검",
+      "hedef": "Kılıç"
+    },
+    {
+      "kaynak": "村",
+      "hedef": "köy",
+      "ozel_ad": false
+    },
+    {
+      "kaynak": "마을",
+      "hedef": "köy",
+      "ozel_ad": false
+    }
+  ]
+}
