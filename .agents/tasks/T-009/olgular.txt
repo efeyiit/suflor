@@ -21,3 +21,19 @@ T-008 KRT-1 Y1 ile bulundu; sef dogruladi.
   (b) Farkli KR tanima modeli (v5/v6 korean?) noktayi veriyor mu -- olculmedi.
   (c) Satir sonunu cumle sonu say (KR diyalogda satir ~ cumle degil; yanlis).
   (d) NMT'ye uzun girdi + beam -> 15 kelime ciktisi noktasiz da alinir mi (olculdu: HAYIR, 8).
+
+[K4] COZUM (b) OLCULDU: PP-OCRv5 KORECE TANIMA NOKTAYI VERIYOR (sef, 12:37)
+  Ayni det (MULTI v4), ayni goruntu, yalniz Rec.ocr_version degisti:
+    PPOCRV4 MOBILE : 17 kutu, '.' 0, dogru kelime 17/17, OCR medyan 1099 ms
+    PPOCRV5 MOBILE : 17 kutu, '.' 3, dogru kelime 17/17, OCR medyan  332 ms   <-- 3x HIZLI
+    PPOCRV5 SERVER / PPOCRV6 small,medium: KR icin desteklenmiyor (ValueError)
+  Model dosyasi: korean_PP-OCRv5_rec_mobile.onnx (12.86 MB, modelscope, indirildi)
+  UCTAN UCA (v5): 17 blok -> 4 satir -> 2 segment; govde nokta=3 -> 3 cumle
+    ceviri 15 kelime: bekliyor=True dogu=True gunes=True   (v4: 6 kelime, yalniz bekliyor)
+  SONUC: sezgi kurali GEREKMIYOR. T-006 K11 tablosunda KOREAN Rec.ocr_version
+  PPOCRV4 -> PPOCRV5 ve sabit dosya adi tablosuna yeni ad. Tek satirlik degisiklik.
+
+[K5] DIGER DILLER v5:
+  JP  PPOCRV5: ValueError (desteklenmiyor) -> v4 kalir (4/4, 273 ms)
+  EN  PPOCRV5: 4/4, 284 ms (v4: 376 ms) -> %25 hizli, ayni dogruluk. ACIK KALEM (T-009 kapsam disi;
+      her degisiklik olcum ister, KR'deki gibi bir kusur yok).
