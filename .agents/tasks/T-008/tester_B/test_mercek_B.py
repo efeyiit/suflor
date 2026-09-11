@@ -1,13 +1,13 @@
 """TESTER-B (T-008, mercek B: test kalitesi / saflik / kapsam durustlugu / bariyer).
 
-B2 Totoloji     -- 68 testte assert'siz, sabit ya da yalniz kendi ciktisina bagli test var mi;
+B2 Totoloji     -- teslim testlerinde (tur 1: 68, tur 2: 76) assert'siz, sabit ya da yalniz kendi ciktisina bagli test var mi;
                    esik fixture'lari SINIRDA mi; ikinci parametre noktasi (h=20, h=33) var mi.
 B3 Saflik       -- AST (bagimsiz uygulama), girdi degismezligi (`id` + `==`), determinizm
                    (100 rastgele x 2; iki ayri surec farkli PYTHONHASHSEED), 1000 blok < 50 ms,
                    1k -> 10k -> 100k olcekleme (n log n mi, n^2 mi), dusmanca yerlesimler.
 B4 Kapsam       -- pragma yok, .coveragerc yok, her test ciktiya bakan bir assert tasiyor.
 B5 Bariyer      -- kendi bariyerim atesliyor (`match="K1 bariyeri"`); sefin bariyeri teslim
-                   dosyasi kosarken 68/68 setup'ta aktif (ayri surec, gozlem eklentisi);
+                   dosyasi kosarken HER testin setup'inda aktif (tur 2 nisan: sayi pini yok) (ayri surec, gozlem eklentisi);
                    modul yasak kok import etmiyor.
 
 Sentetik `TextBlock`; OCR yok; metin basilmaz. `tests/`, `src/`, `real_check.py` yazilmaz.
@@ -21,6 +21,7 @@ import itertools
 import json
 import os
 import random
+import re
 import statistics
 import subprocess
 import sys
@@ -56,11 +57,89 @@ def _teslim_agaci() -> ast.Module:
 # =============================================================================
 # B2 -- totoloji
 # =============================================================================
-def test_b2_teslim_68_test_topluyor() -> None:
+# Tur 1 teslim dosyasinin (commit fe01641) 48 test fonksiyonundan yeniden nisanlanan 3'u disinda kalan 45'i.
+TUR1_KORUNAN: tuple[str, ...] = (
+    "test_itiraz_paket_lafzi_kr_geometrisinde_dokuz_grup_verir",
+    "test_k1_1000_blok_50_ms_altinda",
+    "test_k1_ayni_girdi_ayni_cikti",
+    "test_k1_girdi_demet_de_olabilir",
+    "test_k1_girdi_listesi_ve_bloklar_degismez",
+    "test_k1_sabitler_paketteki_degerlerde",
+    "test_k1_saflik_ast_yasak_cagri_modul_ve_mutable_yok",
+    "test_k2_cakisan_kutu_komsudur",
+    "test_k2_dikey_ortusme_esigi_sinirda",
+    "test_k2_esik_min_h_ile_kucuk_kutu_belirler",
+    "test_k2_esik_orijinal_yukseklikle_birlesik_degil_y2",
+    "test_k2_farkli_dpi_scale_birlesmez",
+    "test_k2_farkli_monitor_index_birlesmez",
+    "test_k2_ic_ice_kutu_x_ilerliyorsa_birlesir_belgeli",
+    "test_k2_iki_satir_x_geri_sarar_ayri_bloklar",
+    "test_k2_kr_geometrisi_17_kutu_4_satir_2_5_5_5",
+    "test_k2_x_ilerlemeyen_kutu_yeni_grup_acar",
+    "test_k2_y_titresimli_satir_x_sirasinda_birlesir_itiraz",
+    "test_k2_yatay_bosluk_esigi_sinirda",
+    "test_k2_yozlasmis_kutu_hicbir_seyle_birlesmez_ve_aynen_gecer",
+    "test_k2_zincir_gecisli_tek_blok",
+    "test_k3_betik_tablosu",
+    "test_k3_bos_parca_metne_katilmaz_kutusu_katilir",
+    "test_k3_hepsi_bos_metin_bos",
+    "test_k3_uc_parca_karisik_betik",
+    "test_k4_docstring_yasak_sozcuk_yok_ve_bir_kez_uyarisi_var",
+    "test_k4_ikinci_uygulama_sabit_nokta_degil_pozitif_kontrol",
+    "test_k5_line_boxes_parcalarin_bbox_i_kendi_line_boxes_i_degil",
+    "test_k5_negatif_koordinat_normal",
+    "test_k5_tek_parca_ayni_nesne_line_boxes_dokunulmaz",
+    "test_k5_uc_parcali_bbox_birlesim_confidence_min_line_boxes_x_sirali",
+    "test_k6_bagli_durum_farkli_monitorlerde_de_girdi_indeksi",
+    "test_k6_bagli_durum_girdi_sirasi_korunur_sinir",
+    "test_k6_bagsiz_kucuk_girdi_tum_permutasyonlar_ayni",
+    "test_k6_cikti_y_x_sirasinda_satir_icinde_de",
+    "test_k6_kr_geometrisi_permutasyonlarda_ayni_cikti",
+    "test_k6_uc_satir_uc_kutu_karisik",
+    "test_k7_iki_sutun_uc_satir_alti_blok",
+    "test_k7_uc_h_bosluk_ayri_blok",
+    "test_k8_bos_girdi_bos_liste",
+    "test_k8_confidence_hepsi_nan_nan",
+    "test_k8_confidence_nan_nan_olmayanlarin_min_i_sira_bagimsiz",
+    "test_k8_tek_blok_ayni_nesne",
+    "test_k8_yozlasmis_iki_kutu_birbiriyle_de_birlesmez",
+    "test_k8_yozlasmis_kutular_okuma_sirasinda_yerinde",
+)
+# Tur 1 -> tur 2 yeniden nisanlanan (adi degisen) teslim testleri: eski ad YOK, yeni ad VAR olmali.
+YENIDEN_NISAN: dict[str, tuple[str, ...]] = {
+    "test_k2_satir_bolumleme_satirin_ilk_bloguna_gore": ("test_k2_satir_bolumleme_satirin_referansiyla_bir_oncekiyle_degil",),
+    "test_k2_grup_icinde_dikey_ortusme_grubun_ilk_bloguyla": (
+        "test_k2_grup_icinde_dikey_ortusme_grubun_ilk_bloguyla_uzun_kutu_solda",
+        "test_k2_grup_icinde_dikey_ortusme_grubun_ilk_bloguyla_satir_ici_merdiven",
+    ),
+    "test_k6_bagli_durumda_satir_referansi_ilk_girdi_blogu": ("test_k6_bagli_durumda_satir_referansi_en_kisa_girdi_sirasindan_bagimsiz",),
+}
+# Tur 2 teslimin "8 yeni" dedigi olculer (T2-1 / T2-2 / T2-3): dosyada var olmali.
+TUR2_YENI: tuple[str, ...] = (
+    "test_k2_uzun_kutu_koprusu_solda_sentetik_iki_satir_ayri_bloklar",
+    "test_k2_uzun_kutu_koprusu_gercek_geometri_11_kutu_iki_blok_6_5",
+    "test_k2_satir_referansi_en_kisa_blok_kisa_alt_kutu_siniri_sabitlendi",
+    "test_k6_ayni_x_farkli_y_satir_ici_sira_y_ile_permutasyonlar_ayni",
+    "test_k6_cikti_anahtarinda_bag_girdi_sirasina_bagli_sinir",
+)
+
+
+def test_b2_teslim_en_az_68_test_topluyor_dusen_yok_yeniden_nisan_adlari() -> None:
+    """Tur 2 nisan (sayi pini yerine): en az 68 (tur 1 tabani) toplanir; yeniden nisanlanan
+    3 eski ad YOK ve yerine gelen 4 yeni ad VAR; tur 2'nin 5 yeni olcu adi VAR. Tur 1'in
+    kalan 45 fonksiyon adi bir adlandirilmis yeniden nisan olmadan SESSIZCE dusmedi (AST ile sayilir)."""
     r = subprocess.run([sys.executable, "-m", "pytest", str(TESLIM_TEST), "-q", "-p", "no:cacheprovider", "--collect-only"],
                        cwd=str(DEPO), capture_output=True, text=True, encoding="utf-8", errors="replace")
     assert r.returncode == 0, r.stdout[-800:]
-    assert "68 tests collected" in r.stdout, r.stdout[-300:]
+    m = re.search(r"(\d+) tests? collected", r.stdout)
+    assert m is not None and int(m.group(1)) >= 68, r.stdout[-300:]
+    adlar = {f.name for f in _test_fonksiyonlari(_teslim_agaci())}
+    for eski, yeniler in YENIDEN_NISAN.items():
+        assert eski not in adlar, eski
+        assert set(yeniler) <= adlar, yeniler
+    assert set(TUR2_YENI) <= adlar, sorted(set(TUR2_YENI) - adlar)
+    # tur 1 tabaninin (commit fe01641: 48 fonksiyon / 68 toplanan) 45 korunan fonksiyon adi: hicbiri sessizce dusmedi
+    assert set(TUR1_KORUNAN) <= adlar, sorted(set(TUR1_KORUNAN) - adlar)
 
 
 def test_b2_her_test_fonksiyonunda_assert_ya_da_raises_var() -> None:
@@ -382,18 +461,20 @@ def test_b5_modul_yasak_kok_import_etmiyor() -> None:
     assert not any(k.split(".", 1)[0] in tb_bariyer.YASAK_KOKLER for k in sys.modules)
 
 
-def test_b5_sefin_bariyeri_teslim_dosyasi_kosarken_68_68_aktif(tmp_path: Path) -> None:
+def test_b5_sefin_bariyeri_teslim_dosyasi_kosarken_her_testte_aktif(tmp_path: Path) -> None:
     """Ayri surec: `pytest tests/unit/ocr/test_satir_birlestirici.py -p tb_gozlem_plugin`.
-    Her setup'ta meta_path[0] `_T006Bariyer` ve `import rapidocr` -> RuntimeError('T-006 K1 bariyeri')."""
+    Her setup'ta meta_path[0] `_T006Bariyer` ve `import rapidocr` -> RuntimeError('T-006 K1 bariyeri').
+    Tur 2 nisan: sayi pini (68) yerine "setup sayisi >= 68 ve dort sayac setup sayisina ESIT"."""
     hedef = tmp_path / "gozlem.json"
     env = dict(os.environ, TB_GOZLEM=str(hedef), PYTHONPATH=str(BU_DIZIN) + os.pathsep + os.environ.get("PYTHONPATH", ""))
     r = subprocess.run([sys.executable, "-m", "pytest", str(TESLIM_TEST), "-q", "-p", "no:cacheprovider", "-p", "tb_gozlem_plugin"],
                        cwd=str(DEPO), capture_output=True, text=True, encoding="utf-8", errors="replace", env=env)
     assert r.returncode == 0, r.stdout[-800:]
     g = json.loads(hedef.read_text(encoding="utf-8"))
-    assert g["setup"] == 68, g
-    assert g["basta_bariyer"] == 68, g
-    assert g["rapidocr_kesildi"] == 68 and g["onnxruntime_kesildi"] == 68, g
+    n = g["setup"]
+    assert n >= 68, g
+    assert g["basta_bariyer"] == n, g
+    assert g["rapidocr_kesildi"] == n and g["onnxruntime_kesildi"] == n, g
     assert g["yasak_kok_sys_modules"] == 0 and g["yasak_kok_sonda"] == [], g
     assert g["ilk_hata"] == "", g
 
@@ -439,3 +520,29 @@ def test_b1_ek_k3_uyumluluk_ideografi_cjk() -> None:
     assert " " not in c.text
     (d,) = satirlari_birlestir([_b(0, 0, 50, 20, cjk), _b(55, 0, 50, 20, uyum)])
     assert " " not in d.text
+
+
+def _r_s_a_d() -> tuple[TextBlock, TextBlock, TextBlock, TextBlock]:
+    """Ayni (y,x) cift, farkli h: s(100,15,50,8) kisa, a(100,15,50,20) uzun; R(0,0,95,20) onceki satir
+    (s ile ortusme 5 >= 0.5*8, a ile 5 < 10), D(160,0,50,20) R'nin satirinda sagda."""
+    return _b(0, 0, 95, 20, "R"), _b(100, 15, 50, 8, "s"), _b(100, 15, 50, 20, "a"), _b(160, 0, 50, 20, "D")
+
+
+def test_b1_ek_k6_ayni_yx_farkli_h_cift_ters_idx_mutanti_sinir_pini() -> None:
+    """M37 sinifi (`-idx`, implementer tur 2 C-3 'esdeger' dedi -- DEGIL): ayni (y,x) farkli h ciftte
+    ilk siralamadaki bag sirasi SATIR UYELIGINI degistirir (kisa s once islenirse R'nin satirina girer ve
+    referans olur, a da onunla ortusup ayni satira girer; a once islenirse yeni satir acar). Mevcut
+    davranis girdi sirasiyla PINLENIR (sinir belgesi): [R,s,a,D] -> "R s","D","a"; `-idx` -> "R","D","s","a"."""
+    R, s, a, D = _r_s_a_d()
+    assert [c.text for c in satirlari_birlestir([R, s, a, D])] == ["R s", "D", "a"]
+    assert [c.text for c in satirlari_birlestir([R, a, s, D])] == ["R", "D", "a", "s"]
+
+
+@pytest.mark.xfail(strict=True, reason="BULGU r2-B2-1b: docstring K6 'bag ... satir uyeligini DEGIL' iddiasi bu geometride yanlis")
+def test_b2_docstring_k6_bag_sirasi_satir_uyeligini_degistirmez_iddiasi() -> None:
+    """Docstring K6 (T2-3): 'Bag yalniz cikti SIRASINI etkiler, satir uyeligini DEGIL'. Olcu: bagli
+    ciftin iki girdi sirasinda satir BOLUMLEMESI (hangi kutular birlesti) ayni olmali. Mevcut kodda
+    degil (strict xfail: mekanizma duzelirse XPASS -> bu test duser -> docstring geri alinabilir)."""
+    R, s, a, D = _r_s_a_d()
+    bolumleme = lambda g: sorted(sorted(r.x for r in (c.line_boxes or (c.bbox,))) for c in satirlari_birlestir(g))  # noqa: E731
+    assert bolumleme([R, s, a, D]) == bolumleme([R, a, s, D])

@@ -1,0 +1,10 @@
+ORIJINAL kod:
+  [R, s, a, D] -> ['R s', 'D', 'a']
+  [R, a, s, D] -> ['R', 'D', 'a', 's']
+-idx MUTANT:
+  [R, s, a, D] -> ['R', 'D', 's', 'a']
+  [R, a, s, D] -> ['R', 'D', 'a', 's']
+
+ESDEGER DEGIL: True
+ORIJINALDE bag sirasi SATIR UYELIGINI degistiriyor (docstring K6 'satir uyeligini DEGIL' iddiasi): True
+rastgele 3000 (ayni (y,x) cift, farkli h, komsu satir): -idx ayrisma = 264

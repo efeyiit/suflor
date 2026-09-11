@@ -1,0 +1,6 @@
+ETIKETSIZ (regresyon): 3000 rastgele yerlesim, tur1 != tur2: 0
+ETIKETLI (pozitif kontrol): 3000 rastgele yerlesim, tur1 != tur2: 1852
+KR_GEOMETRI: tur1 parca [2, 5, 5, 5] | tur2 parca [2, 5, 5, 5] | ayni: True
+ETIKET_KOPRU_GEOMETRI: tur1 parca [11] | tur2 parca [6, 5] | ayni: False
+tur1 ETIKETLI 3000: iki satir karisan blok 251, parcalanan satir 3210, ihlalli yerlesim 1815
+tur2 ETIKETLI 3000: iki satir karisan blok 0, parcalanan satir 0, ihlalli yerlesim 0

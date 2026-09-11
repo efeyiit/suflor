@@ -1,4 +1,4 @@
-"""B1c -- AYIRT ETME: kacan 3 mutant (M23, M40, M41) x {teslim testleri, mercek-B testleri}
+"""B1c -- AYIRT ETME (tur 2): kacan 3 mutant (M23, M37, M40) x {teslim testleri, mercek-B testleri}
 ayna agacinda. Beklenen: teslim `.` (kitle tutarli), mercek-B `X` (hazir olcu var);
 mutasyonsuz tabanda ikisi de gecer (yanlis pozitif yok).
 Kosum: T008_TB_SCRATCH=<dizin> python .agents/tasks/T-008/tester_B/b1c_ayirt_etme.py
@@ -9,7 +9,7 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 import mutant_kiti as kit
 
-KACANLAR = ("M23", "M40", "M41")
+KACANLAR = ("M23", "M37", "M40")  # tur 2: M41 yakalaniyor (T2-2), M37 (-idx) kaciyor
 TB = ".agents/tasks/T-008/tester_B"
 
 def kos(argv):
@@ -22,7 +22,7 @@ kit._ayna_kur()
 shutil.copytree(kit.DEPO / TB, kit.KOK / TB, ignore=shutil.ignore_patterns("__pycache__", "*.pyc"))
 TESLIM = [sys.executable, "-m", "pytest", "-q", "-p", "no:cacheprovider", "-rfE", kit.TEST]
 MERCEK = [sys.executable, "-m", "pytest", "-q", "-p", "no:cacheprovider", "-rfE", TB, "--deselect",
-          f"{TB}/test_mercek_B.py::test_b5_sefin_bariyeri_teslim_dosyasi_kosarken_68_68_aktif"]  # ayri surec testi aynada da calisir ama yavas; disarida
+          f"{TB}/test_mercek_B.py::test_b5_sefin_bariyeri_teslim_dosyasi_kosarken_her_testte_aktif"]  # ayri surec testi aynada da calisir ama yavas; disarida
 print(f"ayna: {kit.KOK}")
 rc1, s1, _ = kos(TESLIM); rc2, s2, _ = kos(MERCEK)
 print(f"TABAN  teslim exit={rc1} ({s1}) | mercek-B exit={rc2} ({s2})")

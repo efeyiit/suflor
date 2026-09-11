@@ -1,6 +1,6 @@
 """TESTER-B mutant kiti (T-008, mercek B: test kalitesi) -- bes kapinin AYIRT ETME GUCU.
 
-Soru: "68 birim testi + real_check + mypy + kapsam + tam takim, `satirlari_birlestir`i
+Soru (tur 2: 76 test): "birim testleri + real_check + mypy + kapsam + tam takim, `satirlari_birlestir`i
 gercekten olcuyor mu?" Yontem: kaynagi bilerek bozup HANGI KAPININ yakaladigini
 saymak. Hicbir kapinin yakalamadigi, urunu bozan ve ERISILEBILIR bir mutant, o
 degismezin olcusunun BOS oldugunu kanitlar. Davranis-esdeger KONTROL mutantlari
@@ -89,7 +89,10 @@ YOZLASMIS = "    return r.h <= 0 or r.w <= 0\n"
 DIKEY_DONUS = "    return ortusme >= DIKEY_ORTUSME_ESIGI * min(a.h, b.h)\n"
 X_ILERLEME = "    if not aday.x > son.x:\n        return False\n"
 BOSLUK_DONUS = "    return bosluk <= YATAY_BOSLUK_ESIGI * min(son.h, aday.h)\n"
-SATIR_UYELIK = "        if satirlar and _dikey_ortusme_yeterli(satirlar[-1][0][1].bbox, oge[1].bbox):\n"
+# tur 2 (T2-1): satir referansi = EN KISA blok; tur 1 hedefi `satirlar[-1][0][1].bbox` artik yok
+REF_KOSUL = "        if referans is not None and _dikey_ortusme_yeterli(referans, kutu):\n"
+REF_GUNCELLE = "            if kutu.h < referans.h:\n                referans = kutu\n"
+REF_EKLE_GUNCELLE = "            satirlar[-1].append(oge)\n" + REF_GUNCELLE
 X_SIRALI = "    x_sirali = sorted(satir, key=lambda c: (c[1].bbox.x, c[1].bbox.y, c[0]))\n"
 GRUP_ILK = "            ilk = gruplar[-1][0][1].bbox\n"
 GRUP_SON = "            son = gruplar[-1][-1][1].bbox\n"
@@ -171,8 +174,8 @@ MUTANTLAR: list[Mutant] = [
     Mutant("M15", [_y(BOSLUK_DONUS, BOSLUK_DONUS.replace("<=", "<"))],
            "K2: bosluk `<=` -> `<` (tam 0.75 ayrilir)", "K2 sinir", "G2 G4 G5",
            urun_etkisi="sinirda ayri blok"),
-    Mutant("M16", [_y(SATIR_UYELIK, SATIR_UYELIK.replace("satirlar[-1][0][1]", "satirlar[-1][-1][1]"))],
-           "K2: satir uyeligi ILK blokla degil bir ONCEKIYLE (merdiven tek satir)", "K2 satir referansi", "G2 G4 G5",
+    Mutant("M16", [_y(REF_GUNCELLE, "            referans = kutu\n")],
+           "K2 (tur 2 nisan): satir referansi EN KISA degil SON EKLENEN blok (= uyelik bir oncekiyle; merdiven tek satir)", "K2 satir referansi", "G2 G4 G5",
            urun_etkisi="merdiven dizilim tek satira toplanir"),
     Mutant("M17", [_y(GRUP_ILK, "            ilk = gruplar[-1][-1][1].bbox\n")],
            "K2: grup ici dikey referans ILK degil SON blok (uzun kutu koprusu)", "K2 grup referansi", "G2 G4 G5",
@@ -238,8 +241,8 @@ MUTANTLAR: list[Mutant] = [
            urun_etkisi="ayni nesne garantisi (docstring) bozulur; `==` tutar"),
     # ---- K6: sira ----------------------------------------------------------------------
     Mutant("M37", [_y(ILK_SIRALAMA, ILK_SIRALAMA.replace(", c[0]))", ", -c[0]))"))],
-           "K6: bag girdi sirasinin TERSIYLE (-idx)", "K6 bag", "G2 G4 G5",
-           urun_etkisi="ayni (y,x) cift tespitte sira tersine doner"),
+           "K6: bag girdi sirasinin TERSIYLE (-idx) -- tur 2: implementer C-3 'esdeger' dedi; DEGIL (ayni (y,x) farkli h cift satir uyeligini degistirir)", "K6 bag keskinlik", "? (tur 2: fixture yok, kacmasi beklenir)",
+           urun_etkisi="ayni (y,x) farkli h cift tespit: kisa olan onceki satira yapisirsa uzun olan da surukleniyor -- girdi sirasina bagli satir uyeligi"),
     Mutant("M38", [_y(SON_SIRALAMA, "    sonuc.sort(key=lambda c: c[0], reverse=True)\n")],
            "K6: cikti TERS okuma sirasinda", "K6 sira", "G2 G3 G4 G5",
            urun_etkisi="normalizer yeniden siralar ama sozlesme bozuk"),
@@ -272,6 +275,33 @@ MUTANTLAR: list[Mutant] = [
     Mutant("M47", [_y("import math\n", "import math\nimport os\n")],
            "K1: modul duzeyinde `import os`", "K1 saflik", "G2 G3 G4 G5",
            urun_etkisi="I/O kapisi"),
+    # ---- TUR 2: T2-1 satir referansi (en kisa) / T2-2 ----------------------------------
+    Mutant("M48", [_y(REF_EKLE_GUNCELLE, "            satirlar[-1].append(oge)\n")],
+           "T2-1 GERI (E geri): referans satirin ILK blogu -- guncelleme yok (tur 1 kodu)", "T2-1 satir referansi", "G2 G3 G4 G5 (#1c)",
+           urun_etkisi="uzun etiket iki satiri kopruler: 11 -> 1 blok (tur 1 ret sinifi)"),
+    Mutant("M49", [_y(REF_GUNCELLE, REF_GUNCELLE.replace("kutu.h < referans.h", "kutu.h > referans.h"))],
+           "T2-1: referans EN UZUN blok (`<` -> `>`)", "T2-1 satir referansi", "G2 G3 G4 G5 (#1c)",
+           urun_etkisi="en uzun kutu referans: etiket koprusu geri gelir"),
+    Mutant("M50", [_y(REF_GUNCELLE, REF_GUNCELLE.replace("kutu.h < referans.h", "kutu.h <= referans.h"))],
+           "T2-1 bag: `<=` (esit yukseklikte SON kisa blok referans; karar `bag: ilk`)", "T2-1 bag", "G2 G4 G5",
+           urun_etkisi="esit yukseklikli merdivende referans kayar"),
+    Mutant("M51", [_y(REF_KOSUL, "        if satirlar and _dikey_ortusme_yeterli(satirlar[-1][0][1].bbox, kutu):\n")],
+           "T2-1: uyelik satirin ILK bloguyla (tur 1 lafzi birebir; referans guncellenir ama KULLANILMAZ) -- M48 ile ayni davranis beklenir", "T2-1 satir referansi", "G2 G3 G4 G5 (#1c)",
+           urun_etkisi="M48 ile ayni: etiket koprusu"),
+    Mutant("M52", [_y(REF_GUNCELLE, REF_GUNCELLE.replace("kutu.h < referans.h", "kutu.w < referans.w"))],
+           "T2-1: referans yanlis boyutla (en DAR blok, h degil w)", "T2-1 satir referansi", "G2 G4 G5",
+           urun_etkisi="genis kelime etiketi asamaz -> kopru; dar etiket gecer"),
+    Mutant("M53", [_y(REF_KOSUL, "        if referans is not None and _dikey_ortusme_yeterli(satirlar[-1][-1][1].bbox, kutu):\n")],
+           "T2-1: uyelik bir ONCEKIYLE olculur, referans guncellenir ama kullanilmaz (M16 ile ayni davranis beklenir)", "K2 satir referansi", "G2 G4 G5",
+           urun_etkisi="merdiven tek satir"),
+    Mutant("C-7", [_y(DIKEY_DONUS, DIKEY_DONUS.replace("min(a.h, b.h)", "min(b.h, a.h)")),
+                   _y(BOSLUK_DONUS, BOSLUK_DONUS.replace("min(son.h, aday.h)", "min(aday.h, son.h)"))],
+           "KONTROL (implementer C-2): min argumanlari yer degistirdi (esdeger)", "-- kontrol --", ".....", kontrol=True),
+    Mutant("C-8", [_y(REF_KOSUL, REF_KOSUL.replace("_dikey_ortusme_yeterli(referans, kutu)", "_dikey_ortusme_yeterli(kutu, referans)"))],
+           "KONTROL: satir uyeligi ortusme argumanlari yer degistirdi (simetrik; esdeger)", "-- kontrol --", ".....", kontrol=True),
+    # NOT: implementer C-3 (`-idx`, eski M04) = buradaki M37 (DAVRANIS mutanti). Tur 2'de esdeger
+    # DEGIL (r2-B2-1b-idx-mutanti-esdeger-degil.txt: ayni (y,x) farkli h cift + komsu satir, 3000'de 264
+    # ayrisma); teslim fixture'lari bu sinifa ugramadigi icin kacar -- beklenen `.....` (§4.6/10).
     Mutant("C-6", [_y(FONK_BAS, FONK_BAS + "    _kayit = sorted(blocks, key=lambda b: b.text)\n")],
            "KONTROL: ciktiya etkisiz ek siralama (yalniz sure; 1000 blok butcesi hassas mi?)", "-- kontrol --", ".....", kontrol=True),
     # ---- KONTROL: davranis-esdeger, KACMALI -------------------------------------------------

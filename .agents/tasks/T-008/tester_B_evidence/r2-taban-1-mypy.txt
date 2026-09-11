@@ -1,0 +1,4 @@
+Success: no issues found in 1 source file
+mypy exit=0
+Success: no issues found in 1 source file
+mypy(test) exit=0

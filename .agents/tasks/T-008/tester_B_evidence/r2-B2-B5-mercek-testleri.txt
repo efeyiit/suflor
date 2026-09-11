@@ -1,0 +1,54 @@
+============================= test session starts =============================
+platform win32 -- Python 3.12.10, pytest-9.1.1, pluggy-1.6.0 -- C:\Users\pc\AppData\Local\Programs\Python\Python312\python.exe
+rootdir: C:\Users\pc\Desktop\efe\çeviri uygulamasý
+plugins: anyio-4.15.1, cov-7.1.0
+collecting ... collected 43 items
+
+.agents/tasks/T-008/tester_B/test_mercek_B.py::test_b2_teslim_en_az_68_test_topluyor_dusen_yok_yeniden_nisan_adlari PASSED [  2%]
+.agents/tasks/T-008/tester_B/test_mercek_B.py::test_b2_her_test_fonksiyonunda_assert_ya_da_raises_var PASSED [  4%]
+.agents/tasks/T-008/tester_B/test_mercek_B.py::test_b2_sabit_ya_da_kendine_esit_assert_yok PASSED [  6%]
+.agents/tasks/T-008/tester_B/test_mercek_B.py::test_b2_yalniz_kendine_bagli_testler_listesi_ve_cipalari PASSED [  9%]
+.agents/tasks/T-008/tester_B/test_mercek_B.py::test_b2_esik_sinir_noktalari_teslimde_var PASSED [ 11%]
+.agents/tasks/T-008/tester_B/test_mercek_B.py::test_b2_yatay_esik_ikinci_parametre_noktasi[h20] PASSED [ 13%]
+.agents/tasks/T-008/tester_B/test_mercek_B.py::test_b2_yatay_esik_ikinci_parametre_noktasi[h33-tek] PASSED [ 16%]
+.agents/tasks/T-008/tester_B/test_mercek_B.py::test_b2_yatay_esik_ikinci_parametre_noktasi[h100] PASSED [ 18%]
+.agents/tasks/T-008/tester_B/test_mercek_B.py::test_b2_dikey_esik_ikinci_parametre_noktasi[h20] PASSED [ 20%]
+.agents/tasks/T-008/tester_B/test_mercek_B.py::test_b2_dikey_esik_ikinci_parametre_noktasi[h33-tek] PASSED [ 23%]
+.agents/tasks/T-008/tester_B/test_mercek_B.py::test_b2_dikey_esik_ikinci_parametre_noktasi[h100] PASSED [ 25%]
+.agents/tasks/T-008/tester_B/test_mercek_B.py::test_b2_real_check_model_pinli_sabitler_belgelendi PASSED [ 27%]
+.agents/tasks/T-008/tester_B/test_mercek_B.py::test_b3_ast_saflik_bagimsiz_denetim PASSED [ 30%]
+.agents/tasks/T-008/tester_B/test_mercek_B.py::test_b3_girdi_listesi_ve_bloklar_degismez_id_ve_esitlik PASSED [ 32%]
+.agents/tasks/T-008/tester_B/test_mercek_B.py::test_b3_deterministik_100_rastgele_girdi_x2_ve_permutasyon PASSED [ 34%]
+.agents/tasks/T-008/tester_B/test_mercek_B.py::test_b3_ayri_surec_farkli_hash_tohumu_ayni_cikti PASSED [ 37%]
+.agents/tasks/T-008/tester_B/test_mercek_B.py::test_b3_1000_blok_50_ms_altinda_dort_yerlesim[rastgele] PASSED [ 39%]
+.agents/tasks/T-008/tester_B/test_mercek_B.py::test_b3_1000_blok_50_ms_altinda_dort_yerlesim[tek-satir-zincir] PASSED [ 41%]
+.agents/tasks/T-008/tester_B/test_mercek_B.py::test_b3_1000_blok_50_ms_altinda_dort_yerlesim[hepsi-bagli] PASSED [ 44%]
+.agents/tasks/T-008/tester_B/test_mercek_B.py::test_b3_1000_blok_50_ms_altinda_dort_yerlesim[sutun] PASSED [ 46%]
+.agents/tasks/T-008/tester_B/test_mercek_B.py::test_b3_olcekleme_n_log_n_1k_10k[rastgele] PASSED [ 48%]
+.agents/tasks/T-008/tester_B/test_mercek_B.py::test_b3_olcekleme_n_log_n_1k_10k[tek-satir-zincir] PASSED [ 51%]
+.agents/tasks/T-008/tester_B/test_mercek_B.py::test_b3_olcekleme_n_log_n_1k_10k[hepsi-bagli] PASSED [ 53%]
+.agents/tasks/T-008/tester_B/test_mercek_B.py::test_b3_olcekleme_n_log_n_1k_10k[sutun] PASSED [ 55%]
+.agents/tasks/T-008/tester_B/test_mercek_B.py::test_b3_100k_blok_saniye_altinda PASSED [ 58%]
+.agents/tasks/T-008/tester_B/test_mercek_B.py::test_b4_pragma_ve_kapsam_yapilandirmasi_yok PASSED [ 60%]
+.agents/tasks/T-008/tester_B/test_mercek_B.py::test_b4_her_test_ciktiya_ya_da_kaynaga_bakan_assert_tasiyor PASSED [ 62%]
+.agents/tasks/T-008/tester_B/test_mercek_B.py::test_b4_sabit_degerleri_testi_tek_basina_esik_mutantini_tutmuyor_belge PASSED [ 65%]
+.agents/tasks/T-008/tester_B/test_mercek_B.py::test_b5_kendi_bariyerim_atesliyor[rapidocr] PASSED [ 67%]
+.agents/tasks/T-008/tester_B/test_mercek_B.py::test_b5_kendi_bariyerim_atesliyor[rapidocr.main] PASSED [ 69%]
+.agents/tasks/T-008/tester_B/test_mercek_B.py::test_b5_kendi_bariyerim_atesliyor[onnxruntime] PASSED [ 72%]
+.agents/tasks/T-008/tester_B/test_mercek_B.py::test_b5_modul_yasak_kok_import_etmiyor PASSED [ 74%]
+.agents/tasks/T-008/tester_B/test_mercek_B.py::test_b5_sefin_bariyeri_teslim_dosyasi_kosarken_her_testte_aktif PASSED [ 76%]
+.agents/tasks/T-008/tester_B/test_mercek_B.py::test_b5_bariyer_bu_dizin_sefin_diziniyle_birlikte_kosunca_da_tutar PASSED [ 79%]
+.agents/tasks/T-008/tester_B/test_mercek_B.py::test_b1_ek_k6_ayni_x_farkli_y_permutasyon_bagimsiz PASSED [ 81%]
+.agents/tasks/T-008/tester_B/test_mercek_B.py::test_b1_ek_k6_birlesik_grup_ile_tekil_blok_bagi_en_kucuk_indeks PASSED [ 83%]
+.agents/tasks/T-008/tester_B/test_mercek_B.py::test_b1_ek_k3_uyumluluk_ideografi_cjk PASSED [ 86%]
+.agents/tasks/T-008/tester_B/test_mercek_B.py::test_b1_ek_k6_ayni_yx_farkli_h_cift_ters_idx_mutanti_sinir_pini PASSED [ 88%]
+.agents/tasks/T-008/tester_B/test_mercek_B.py::test_b2_docstring_k6_bag_sirasi_satir_uyeligini_degistirmez_iddiasi XFAIL [ 90%]
+.agents/tasks/T-008/tester_B/test_mercek_B_ret.py::test_ret_uzun_etiket_solda_iki_satiri_tek_bloga_almamali[satir2-x+5-fermuar] PASSED [ 93%]
+.agents/tasks/T-008/tester_B/test_mercek_B_ret.py::test_ret_uzun_etiket_solda_iki_satiri_tek_bloga_almamali[satir2-x-ayni] PASSED [ 95%]
+.agents/tasks/T-008/tester_B/test_mercek_B_ret.py::test_ret_uzun_etiket_solda_iki_satiri_tek_bloga_almamali[satir2-x+12] PASSED [ 97%]
+.agents/tasks/T-008/tester_B/test_mercek_B_ret.py::test_ret_pozitif_kontrol_etiketsiz_iki_satir_dogru PASSED [100%]
+
+=========================== short test summary info ===========================
+XFAIL .agents/tasks/T-008/tester_B/test_mercek_B.py::test_b2_docstring_k6_bag_sirasi_satir_uyeligini_degistirmez_iddiasi - BULGU r2-B2-1b: docstring K6 'bag ... satir uyeligini DEGIL' iddiasi bu geometride yanlis
+======================== 42 passed, 1 xfailed in 4.51s ========================
+exit=0

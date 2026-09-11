@@ -1,0 +1,290 @@
+models/: junction (salt okunur kullanim; depo dosyalarina yazilmaz)
+ayna agaci: C:\Users\pc\AppData\Local\Temp\scratch\C--Users-pc-Desktop-efe--eviri-uygulamas-\d52c967f-bd19-4db3-b5e9-77e6cd08b889\scratchpad\t008_tester_B_ayna   (depo YAZILMAZ)
+kapilar PYTHONIOENCODING'siz (cp1254) kosar; real_check yalniz ASCII basar
+
+MUTANT KITI -- her mutant icin hangi kapi YAKALAR (X) / KACIRIR (.)
+kapilar: G1-mypy | G2-birim | G3-real | G4-kapsam | G5-tum
+
+M01   [.X.XX] YAKALANDI   G2 dusen=5  (beklenen: G2 G4 G5)
+       K2: DIKEY 0.5 -> 0.0 (yalnizca degen kutular da ayni satir)
+       urun: alt alta bitisik satirlar ayni satir sayilir
+       G2-birim: tests\unit\ocr\test_satir_birlestirici.py:148: AssertionError
+       G4-kapsam: tests\unit\ocr\test_satir_birlestirici.py:148: AssertionError
+       G5-tum: tests\unit\ocr\test_satir_birlestirici.py:148: AssertionError
+         G2-birim: FAILED tests/unit/ocr/test_satir_birlestirici.py::test_k1_sabitler_paketteki_degerlerde
+         G2-birim: FAILED tests/unit/ocr/test_satir_birlestirici.py::test_k2_dikey_ortusme_esigi_sinirda[0.49-ayri]
+         G2-birim: FAILED tests/unit/ocr/test_satir_birlestirici.py::test_k2_satir_bolumleme_satirin_referansiyla_bir_oncekiyle_degil
+         G2-birim: FAILED tests/unit/ocr/test_satir_birlestirici.py::test_k2_grup_icinde_dikey_ortusme_grubun_ilk_bloguyla_satir_ici_merdiven
+         G2-birim: ... +1
+         G4-kapsam: FAILED tests/unit/ocr/test_satir_birlestirici.py::test_k1_sabitler_paketteki_degerlerde
+         G4-kapsam: FAILED tests/unit/ocr/test_satir_birlestirici.py::test_k2_dikey_ortusme_esigi_sinirda[0.49-ayri]
+         G4-kapsam: FAILED tests/unit/ocr/test_satir_birlestirici.py::test_k2_satir_bolumleme_satirin_referansiyla_bir_oncekiyle_degil
+         G4-kapsam: FAILED tests/unit/ocr/test_satir_birlestirici.py::test_k2_grup_icinde_dikey_ortusme_grubun_ilk_bloguyla_satir_ici_merdiven
+         G4-kapsam: ... +1
+         G5-tum: FAILED tests/unit/ocr/test_satir_birlestirici.py::test_k1_sabitler_paketteki_degerlerde
+         G5-tum: FAILED tests/unit/ocr/test_satir_birlestirici.py::test_k2_dikey_ortusme_esigi_sinirda[0.49-ayri]
+         G5-tum: FAILED tests/unit/ocr/test_satir_birlestirici.py::test_k2_satir_bolumleme_satirin_referansiyla_bir_oncekiyle_degil
+         G5-tum: FAILED tests/unit/ocr/test_satir_birlestirici.py::test_k2_grup_icinde_dikey_ortusme_grubun_ilk_bloguyla_satir_ici_merdiven
+         G5-tum: ... +1
+       sureler: 3s 1s 10s 1s 10s
+M02   [.X.XX] YAKALANDI   G2 dusen=8  (beklenen: G2 G4 G5)
+       K2: DIKEY 0.5 -> 0.9 (KR y-titresimli kelimeler ayri satir)
+       urun: KR 3. satir ortusme 34/41=0.83 -> 0.9 ile de gecer (elle hesap); yalniz 0.51 sinir testi
+       G2-birim: tests\unit\ocr\test_satir_birlestirici.py:148: AssertionError
+       G4-kapsam: tests\unit\ocr\test_satir_birlestirici.py:148: AssertionError
+       G5-tum: tests\unit\ocr\test_satir_birlestirici.py:148: AssertionError
+         G2-birim: FAILED tests/unit/ocr/test_satir_birlestirici.py::test_k1_sabitler_paketteki_degerlerde
+         G2-birim: FAILED tests/unit/ocr/test_satir_birlestirici.py::test_k2_dikey_ortusme_esigi_sinirda[0.50-sinirda-birlesir]
+         G2-birim: FAILED tests/unit/ocr/test_satir_birlestirici.py::test_k2_dikey_ortusme_esigi_sinirda[0.51-birlesir]
+         G2-birim: FAILED tests/unit/ocr/test_satir_birlestirici.py::test_k2_satir_bolumleme_satirin_referansiyla_bir_oncekiyle_degil
+         G2-birim: ... +4
+         G4-kapsam: FAILED tests/unit/ocr/test_satir_birlestirici.py::test_k1_sabitler_paketteki_degerlerde
+         G4-kapsam: FAILED tests/unit/ocr/test_satir_birlestirici.py::test_k2_dikey_ortusme_esigi_sinirda[0.50-sinirda-birlesir]
+         G4-kapsam: FAILED tests/unit/ocr/test_satir_birlestirici.py::test_k2_dikey_ortusme_esigi_sinirda[0.51-birlesir]
+         G4-kapsam: FAILED tests/unit/ocr/test_satir_birlestirici.py::test_k2_satir_bolumleme_satirin_referansiyla_bir_oncekiyle_degil
+         G4-kapsam: ... +4
+         G5-tum: FAILED tests/unit/ocr/test_satir_birlestirici.py::test_k1_sabitler_paketteki_degerlerde
+         G5-tum: FAILED tests/unit/ocr/test_satir_birlestirici.py::test_k2_dikey_ortusme_esigi_sinirda[0.50-sinirda-birlesir]
+         G5-tum: FAILED tests/unit/ocr/test_satir_birlestirici.py::test_k2_dikey_ortusme_esigi_sinirda[0.51-birlesir]
+         G5-tum: FAILED tests/unit/ocr/test_satir_birlestirici.py::test_k2_satir_bolumleme_satirin_referansiyla_bir_oncekiyle_degil
+         G5-tum: ... +4
+       sureler: 0s 1s 10s 2s 12s
+M03   [.X.XX] YAKALANDI   G2 dusen=6  (beklenen: G2 G4 G5)
+       K2: YATAY 0.75 -> 0.6 (KR 0.57 hala birlesir; 0.74 sinir testi ayirir)
+       urun: gri bolge alt ucu; gercek KR kelime boslugu (<=0.57) yine birlesir
+       G2-birim: tests\unit\ocr\test_satir_birlestirici.py:149: AssertionError
+       G4-kapsam: tests\unit\ocr\test_satir_birlestirici.py:149: AssertionError
+       G5-tum: tests\unit\ocr\test_satir_birlestirici.py:149: AssertionError
+         G2-birim: FAILED tests/unit/ocr/test_satir_birlestirici.py::test_k1_sabitler_paketteki_degerlerde
+         G2-birim: FAILED tests/unit/ocr/test_satir_birlestirici.py::test_k2_yatay_bosluk_esigi_sinirda[0.74-birlesir]
+         G2-birim: FAILED tests/unit/ocr/test_satir_birlestirici.py::test_k2_yatay_bosluk_esigi_sinirda[0.75-sinirda-birlesir]
+         G2-birim: FAILED tests/unit/ocr/test_satir_birlestirici.py::test_k2_esik_min_h_ile_kucuk_kutu_belirler
+         G2-birim: ... +2
+         G4-kapsam: FAILED tests/unit/ocr/test_satir_birlestirici.py::test_k1_sabitler_paketteki_degerlerde
+         G4-kapsam: FAILED tests/unit/ocr/test_satir_birlestirici.py::test_k2_yatay_bosluk_esigi_sinirda[0.74-birlesir]
+         G4-kapsam: FAILED tests/unit/ocr/test_satir_birlestirici.py::test_k2_yatay_bosluk_esigi_sinirda[0.75-sinirda-birlesir]
+         G4-kapsam: FAILED tests/unit/ocr/test_satir_birlestirici.py::test_k2_esik_min_h_ile_kucuk_kutu_belirler
+         G4-kapsam: ... +2
+         G5-tum: FAILED tests/unit/ocr/test_satir_birlestirici.py::test_k1_sabitler_paketteki_degerlerde
+         G5-tum: FAILED tests/unit/ocr/test_satir_birlestirici.py::test_k2_yatay_bosluk_esigi_sinirda[0.74-birlesir]
+         G5-tum: FAILED tests/unit/ocr/test_satir_birlestirici.py::test_k2_yatay_bosluk_esigi_sinirda[0.75-sinirda-birlesir]
+         G5-tum: FAILED tests/unit/ocr/test_satir_birlestirici.py::test_k2_esik_min_h_ile_kucuk_kutu_belirler
+         G5-tum: ... +2
+       sureler: 0s 1s 10s 2s 9s
+M04   [.XXXX] YAKALANDI   G2 dusen=3  (beklenen: G2 G3 G4 G5 (#4c))
+       K2: YATAY 0.75 -> 0.9 (1-em KR 0.78 birlesir)
+       urun: kr_menu 1-em etiket|deger birlesir
+       G2-birim: tests\unit\ocr\test_satir_birlestirici.py:149: AssertionError
+       G3-real: IHLAL  [4c] 1-em menu KR: 4 -> 3 blok; satir basina en az 1 (>= 2; bosluk 0.78-1.06xh, 1.0+ esik birlestirir)
+       G4-kapsam: tests\unit\ocr\test_satir_birlestirici.py:149: AssertionError
+       G5-tum: tests\unit\ocr\test_satir_birlestirici.py:149: AssertionError
+         G2-birim: FAILED tests/unit/ocr/test_satir_birlestirici.py::test_k1_sabitler_paketteki_degerlerde
+         G2-birim: FAILED tests/unit/ocr/test_satir_birlestirici.py::test_k2_yatay_bosluk_esigi_sinirda[0.76-ayri]
+         G2-birim: FAILED tests/unit/ocr/test_satir_birlestirici.py::test_k2_esik_min_h_ile_kucuk_kutu_belirler
+         G4-kapsam: FAILED tests/unit/ocr/test_satir_birlestirici.py::test_k1_sabitler_paketteki_degerlerde
+         G4-kapsam: FAILED tests/unit/ocr/test_satir_birlestirici.py::test_k2_yatay_bosluk_esigi_sinirda[0.76-ayri]
+         G4-kapsam: FAILED tests/unit/ocr/test_satir_birlestirici.py::test_k2_esik_min_h_ile_kucuk_kutu_belirler
+         G5-tum: FAILED tests/unit/ocr/test_satir_birlestirici.py::test_k1_sabitler_paketteki_degerlerde
+         G5-tum: FAILED tests/unit/ocr/test_satir_birlestirici.py::test_k2_yatay_bosluk_esigi_sinirda[0.76-ayri]
+         G5-tum: FAILED tests/unit/ocr/test_satir_birlestirici.py::test_k2_esik_min_h_ile_kucuk_kutu_belirler
+       sureler: 0s 1s 9s 1s 8s
+M05   [.XXXX] YAKALANDI   G2 dusen=3  (beklenen: G2 G3 G4 G5 (#4c))
+       K2: YATAY 0.75 -> 1.0 (paket v1 degeri; KRT Y3)
+       urun: 1-em bosluk sinifi (0.97-1.06) sinira dayanir; KR 0.78 birlesir
+       G2-birim: tests\unit\ocr\test_satir_birlestirici.py:149: AssertionError
+       G3-real: IHLAL  [4c] 1-em menu KR: 4 -> 3 blok; satir basina en az 1 (>= 2; bosluk 0.78-1.06xh, 1.0+ esik birlestirir)
+       G4-kapsam: tests\unit\ocr\test_satir_birlestirici.py:149: AssertionError
+       G5-tum: tests\unit\ocr\test_satir_birlestirici.py:149: AssertionError
+         G2-birim: FAILED tests/unit/ocr/test_satir_birlestirici.py::test_k1_sabitler_paketteki_degerlerde
+         G2-birim: FAILED tests/unit/ocr/test_satir_birlestirici.py::test_k2_yatay_bosluk_esigi_sinirda[0.76-ayri]
+         G2-birim: FAILED tests/unit/ocr/test_satir_birlestirici.py::test_k2_esik_min_h_ile_kucuk_kutu_belirler
+         G4-kapsam: FAILED tests/unit/ocr/test_satir_birlestirici.py::test_k1_sabitler_paketteki_degerlerde
+         G4-kapsam: FAILED tests/unit/ocr/test_satir_birlestirici.py::test_k2_yatay_bosluk_esigi_sinirda[0.76-ayri]
+         G4-kapsam: FAILED tests/unit/ocr/test_satir_birlestirici.py::test_k2_esik_min_h_ile_kucuk_kutu_belirler
+         G5-tum: FAILED tests/unit/ocr/test_satir_birlestirici.py::test_k1_sabitler_paketteki_degerlerde
+         G5-tum: FAILED tests/unit/ocr/test_satir_birlestirici.py::test_k2_yatay_bosluk_esigi_sinirda[0.76-ayri]
+         G5-tum: FAILED tests/unit/ocr/test_satir_birlestirici.py::test_k2_esik_min_h_ile_kucuk_kutu_belirler
+       sureler: 0s 1s 9s 2s 8s
+M06   [.XXXX] YAKALANDI   G2 dusen=9  (beklenen: G2 G3 G4 G5 (#4c))
+       K2: YATAY 0.75 -> 10.0 (menu sutunlari birlesir)
+       urun: 1-em menu etiket|deger tek blok; 13xh menu hala ayri (implementer ITIRAZ 2)
+       G2-birim: tests\unit\ocr\test_satir_birlestirici.py:149: AssertionError
+       G3-real: IHLAL  [4c] 1-em menu KR: 4 -> 2 blok; satir basina en az 1 (>= 2; bosluk 0.78-1.06xh, 1.0+ esik birlestirir)
+       G4-kapsam: tests\unit\ocr\test_satir_birlestirici.py:149: AssertionError
+       G5-tum: tests\unit\ocr\test_satir_birlestirici.py:149: AssertionError
+         G2-birim: FAILED tests/unit/ocr/test_satir_birlestirici.py::test_k1_sabitler_paketteki_degerlerde
+         G2-birim: FAILED tests/unit/ocr/test_satir_birlestirici.py::test_k2_yatay_bosluk_esigi_sinirda[0.76-ayri]
+         G2-birim: FAILED tests/unit/ocr/test_satir_birlestirici.py::test_k2_esik_min_h_ile_kucuk_kutu_belirler
+         G2-birim: FAILED tests/unit/ocr/test_satir_birlestirici.py::test_k2_esik_orijinal_yukseklikle_birlesik_degil_y2
+         G2-birim: ... +5
+         G4-kapsam: FAILED tests/unit/ocr/test_satir_birlestirici.py::test_k1_sabitler_paketteki_degerlerde
+         G4-kapsam: FAILED tests/unit/ocr/test_satir_birlestirici.py::test_k2_yatay_bosluk_esigi_sinirda[0.76-ayri]
+         G4-kapsam: FAILED tests/unit/ocr/test_satir_birlestirici.py::test_k2_esik_min_h_ile_kucuk_kutu_belirler
+         G4-kapsam: FAILED tests/unit/ocr/test_satir_birlestirici.py::test_k2_esik_orijinal_yukseklikle_birlesik_degil_y2
+         G4-kapsam: ... +5
+         G5-tum: FAILED tests/unit/ocr/test_satir_birlestirici.py::test_k1_sabitler_paketteki_degerlerde
+         G5-tum: FAILED tests/unit/ocr/test_satir_birlestirici.py::test_k2_yatay_bosluk_esigi_sinirda[0.76-ayri]
+         G5-tum: FAILED tests/unit/ocr/test_satir_birlestirici.py::test_k2_esik_min_h_ile_kucuk_kutu_belirler
+         G5-tum: FAILED tests/unit/ocr/test_satir_birlestirici.py::test_k2_esik_orijinal_yukseklikle_birlesik_degil_y2
+         G5-tum: ... +5
+       sureler: 0s 1s 9s 2s 9s
+M07   [.XXXX] YAKALANDI   G2 dusen=3  (beklenen: G2 G4 G5)
+       K2: bosluk esigi min(h) -> max(h)
+       urun: kisa kutunun yanindaki uzun kutu esigi buyutur -> yanlis birlestirme
+       G2-birim: E       AssertionError: assert 1 == 2
+       G3-real: IHLAL  [4c] 1-em menu KR: 4 -> 3 blok; satir basina en az 1 (>= 2; bosluk 0.78-1.06xh, 1.0+ esik birlestirir)
+       G4-kapsam: E       AssertionError: assert 1 == 2
+       G5-tum: E       AssertionError: assert 1 == 2
+         G2-birim: FAILED tests/unit/ocr/test_satir_birlestirici.py::test_k2_esik_min_h_ile_kucuk_kutu_belirler
+         G2-birim: FAILED tests/unit/ocr/test_satir_birlestirici.py::test_k2_esik_orijinal_yukseklikle_birlesik_degil_y2
+         G2-birim: FAILED tests/unit/ocr/test_satir_birlestirici.py::test_k4_ikinci_uygulama_sabit_nokta_degil_pozitif_kontrol
+         G4-kapsam: FAILED tests/unit/ocr/test_satir_birlestirici.py::test_k2_esik_min_h_ile_kucuk_kutu_belirler
+         G4-kapsam: FAILED tests/unit/ocr/test_satir_birlestirici.py::test_k2_esik_orijinal_yukseklikle_birlesik_degil_y2
+         G4-kapsam: FAILED tests/unit/ocr/test_satir_birlestirici.py::test_k4_ikinci_uygulama_sabit_nokta_degil_pozitif_kontrol
+         G5-tum: FAILED tests/unit/ocr/test_satir_birlestirici.py::test_k2_esik_min_h_ile_kucuk_kutu_belirler
+         G5-tum: FAILED tests/unit/ocr/test_satir_birlestirici.py::test_k2_esik_orijinal_yukseklikle_birlesik_degil_y2
+         G5-tum: FAILED tests/unit/ocr/test_satir_birlestirici.py::test_k4_ikinci_uygulama_sabit_nokta_degil_pozitif_kontrol
+       sureler: 0s 1s 9s 2s 7s
+M08   [.X.XX] YAKALANDI   G2 dusen=7  (beklenen: G2 G4 G5)
+       K2: dikey esik min(h) -> max(h)
+       urun: kisa kutu uzun kutuyla ayni satira giremez; KR h 33-41 gecer, uzun kutu koprusu testi yakalar
+       G2-birim: E       AssertionError: assert ['T', 'a b c'] == ['T a b c']
+       G4-kapsam: E       AssertionError: assert ['T', 'a b c'] == ['T a b c']
+       G5-tum: E       AssertionError: assert ['T', 'a b c'] == ['T a b c']
+         G2-birim: FAILED tests/unit/ocr/test_satir_birlestirici.py::test_k2_grup_icinde_dikey_ortusme_grubun_ilk_bloguyla_uzun_kutu_solda
+         G2-birim: FAILED tests/unit/ocr/test_satir_birlestirici.py::test_k2_grup_icinde_dikey_ortusme_grubun_ilk_bloguyla_satir_ici_merdiven
+         G2-birim: FAILED tests/unit/ocr/test_satir_birlestirici.py::test_k2_uzun_kutu_koprusu_solda_sentetik_iki_satir_ayri_bloklar[satir2-x+5-fermuar]
+         G2-birim: FAILED tests/unit/ocr/test_satir_birlestirici.py::test_k2_uzun_kutu_koprusu_solda_sentetik_iki_satir_ayri_bloklar[satir2-x-ayni]
+         G2-birim: ... +3
+         G4-kapsam: FAILED tests/unit/ocr/test_satir_birlestirici.py::test_k2_grup_icinde_dikey_ortusme_grubun_ilk_bloguyla_uzun_kutu_solda
+         G4-kapsam: FAILED tests/unit/ocr/test_satir_birlestirici.py::test_k2_grup_icinde_dikey_ortusme_grubun_ilk_bloguyla_satir_ici_merdiven
+         G4-kapsam: FAILED tests/unit/ocr/test_satir_birlestirici.py::test_k2_uzun_kutu_koprusu_solda_sentetik_iki_satir_ayri_bloklar[satir2-x+5-fermuar]
+         G4-kapsam: FAILED tests/unit/ocr/test_satir_birlestirici.py::test_k2_uzun_kutu_koprusu_solda_sentetik_iki_satir_ayri_bloklar[satir2-x-ayni]
+         G4-kapsam: ... +3
+         G5-tum: FAILED tests/unit/ocr/test_satir_birlestirici.py::test_k2_grup_icinde_dikey_ortusme_grubun_ilk_bloguyla_uzun_kutu_solda
+         G5-tum: FAILED tests/unit/ocr/test_satir_birlestirici.py::test_k2_grup_icinde_dikey_ortusme_grubun_ilk_bloguyla_satir_ici_merdiven
+         G5-tum: FAILED tests/unit/ocr/test_satir_birlestirici.py::test_k2_uzun_kutu_koprusu_solda_sentetik_iki_satir_ayri_bloklar[satir2-x+5-fermuar]
+         G5-tum: FAILED tests/unit/ocr/test_satir_birlestirici.py::test_k2_uzun_kutu_koprusu_solda_sentetik_iki_satir_ayri_bloklar[satir2-x-ayni]
+         G5-tum: ... +3
+       sureler: 0s 1s 9s 2s 8s
+M09   [.X.XX] YAKALANDI   G2 dusen=2  (beklenen: G2 G4 G5)
+       K2 (Y2): komsuluk grubun BIRLESIK bbox'ina gore (birlesik h ile esik)
+       urun: birlesik h buyudukce daha uzak kutular komsu olur (KRT Y2)
+       G2-birim: E       AssertionError: assert ['A b C'] == ['A b', 'C']
+       G4-kapsam: E       AssertionError: assert ['A b C'] == ['A b', 'C']
+       G5-tum: E       AssertionError: assert ['A b C'] == ['A b', 'C']
+         G2-birim: FAILED tests/unit/ocr/test_satir_birlestirici.py::test_k2_esik_orijinal_yukseklikle_birlesik_degil_y2
+         G2-birim: FAILED tests/unit/ocr/test_satir_birlestirici.py::test_k4_ikinci_uygulama_sabit_nokta_degil_pozitif_kontrol
+         G4-kapsam: FAILED tests/unit/ocr/test_satir_birlestirici.py::test_k2_esik_orijinal_yukseklikle_birlesik_degil_y2
+         G4-kapsam: FAILED tests/unit/ocr/test_satir_birlestirici.py::test_k4_ikinci_uygulama_sabit_nokta_degil_pozitif_kontrol
+         G5-tum: FAILED tests/unit/ocr/test_satir_birlestirici.py::test_k2_esik_orijinal_yukseklikle_birlesik_degil_y2
+         G5-tum: FAILED tests/unit/ocr/test_satir_birlestirici.py::test_k4_ikinci_uygulama_sabit_nokta_degil_pozitif_kontrol
+       sureler: 0s 1s 9s 2s 8s
+M10   [.X.XX] YAKALANDI   G2 dusen=6  (beklenen: G2 G4 G5)
+       K2: x ilerleme `>` -> `>=` (ayni x'teki cift tespit birlesir)
+       urun: cift tespit metni cogaltir
+       G2-birim: E       AssertionError: assert 1 == 2
+       G4-kapsam: E       AssertionError: assert 1 == 2
+       G5-tum: E       AssertionError: assert 1 == 2
+         G2-birim: FAILED tests/unit/ocr/test_satir_birlestirici.py::test_k2_x_ilerlemeyen_kutu_yeni_grup_acar
+         G2-birim: FAILED tests/unit/ocr/test_satir_birlestirici.py::test_k6_bagli_durum_girdi_sirasi_korunur_sinir
+         G2-birim: FAILED tests/unit/ocr/test_satir_birlestirici.py::test_k6_bagli_durumda_satir_referansi_en_kisa_girdi_sirasindan_bagimsiz
+         G2-birim: FAILED tests/unit/ocr/test_satir_birlestirici.py::test_k6_ayni_x_farkli_y_satir_ici_sira_y_ile_permutasyonlar_ayni
+         G2-birim: ... +2
+         G4-kapsam: FAILED tests/unit/ocr/test_satir_birlestirici.py::test_k2_x_ilerlemeyen_kutu_yeni_grup_acar
+         G4-kapsam: FAILED tests/unit/ocr/test_satir_birlestirici.py::test_k6_bagli_durum_girdi_sirasi_korunur_sinir
+         G4-kapsam: FAILED tests/unit/ocr/test_satir_birlestirici.py::test_k6_bagli_durumda_satir_referansi_en_kisa_girdi_sirasindan_bagimsiz
+         G4-kapsam: FAILED tests/unit/ocr/test_satir_birlestirici.py::test_k6_ayni_x_farkli_y_satir_ici_sira_y_ile_permutasyonlar_ayni
+         G4-kapsam: ... +2
+         G5-tum: FAILED tests/unit/ocr/test_satir_birlestirici.py::test_k2_x_ilerlemeyen_kutu_yeni_grup_acar
+         G5-tum: FAILED tests/unit/ocr/test_satir_birlestirici.py::test_k6_bagli_durum_girdi_sirasi_korunur_sinir
+         G5-tum: FAILED tests/unit/ocr/test_satir_birlestirici.py::test_k6_bagli_durumda_satir_referansi_en_kisa_girdi_sirasindan_bagimsiz
+         G5-tum: FAILED tests/unit/ocr/test_satir_birlestirici.py::test_k6_ayni_x_farkli_y_satir_ici_sira_y_ile_permutasyonlar_ayni
+         G5-tum: ... +2
+       sureler: 0s 1s 9s 2s 8s
+M11   [.X.XX] YAKALANDI   G2 dusen=1  (beklenen: G2 G4 G5)
+       K2: monitor_index denetimi YOK (yuzey anahtarindan cikarildi)
+       urun: iki monitorun ayni koordinatli kutulari birlesir
+       G2-birim: E       AssertionError: assert 1 == 2
+       G4-kapsam: E       AssertionError: assert 1 == 2
+       G5-tum: E       AssertionError: assert 1 == 2
+         G2-birim: FAILED tests/unit/ocr/test_satir_birlestirici.py::test_k2_farkli_monitor_index_birlesmez
+         G4-kapsam: FAILED tests/unit/ocr/test_satir_birlestirici.py::test_k2_farkli_monitor_index_birlesmez
+         G5-tum: FAILED tests/unit/ocr/test_satir_birlestirici.py::test_k2_farkli_monitor_index_birlesmez
+       sureler: 0s 1s 9s 1s 8s
+M12   [.X.XX] YAKALANDI   G2 dusen=1  (beklenen: G2 G4 G5)
+       K2: dpi_scale denetimi YOK (KARAR; K5 'ilk parcadan' sessiz kopya)
+       urun: farkli dpi kutular birlesir, dpi ilk parcadan kopyalanir (normalizer K10 reddederdi)
+       G2-birim: `ValueError` ile reddeder; burada da birlesmez -- sessiz kopyalama yok."""
+       G4-kapsam: `ValueError` ile reddeder; burada da birlesmez -- sessiz kopyalama yok."""
+       G5-tum: `ValueError` ile reddeder; burada da birlesmez -- sessiz kopyalama yok."""
+         G2-birim: FAILED tests/unit/ocr/test_satir_birlestirici.py::test_k2_farkli_dpi_scale_birlesmez
+         G4-kapsam: FAILED tests/unit/ocr/test_satir_birlestirici.py::test_k2_farkli_dpi_scale_birlesmez
+         G5-tum: FAILED tests/unit/ocr/test_satir_birlestirici.py::test_k2_farkli_dpi_scale_birlesmez
+       sureler: 0s 1s 9s 1s 7s
+M13   [.XXXX] YAKALANDI   G2 dusen=12  (beklenen: G2 G3 G4 G5)
+       K2: satir ici x siralamasi YOK -- paket lafzinin (y,x) sirasi (ITIRAZ 1'in tersi: 17 -> 9)
+       urun: gercek KR 17 -> 9 blok; kelime kelime ceviri geri gelir
+       G2-birim: E       AssertionError: assert ['A', 'C', 'b'] == ['A b', 'C']
+       G3-real: IHLAL  [1] KR 17 blok -> 9 blok (beklenen 17 -> 4)
+       G4-kapsam: E       AssertionError: assert ['A', 'C', 'b'] == ['A b', 'C']
+       G5-tum: E       AssertionError: assert ['A', 'C', 'b'] == ['A b', 'C']
+         G2-birim: FAILED tests/unit/ocr/test_satir_birlestirici.py::test_k2_esik_orijinal_yukseklikle_birlesik_degil_y2
+         G2-birim: FAILED tests/unit/ocr/test_satir_birlestirici.py::test_k2_y_titresimli_satir_x_sirasinda_birlesir_itiraz
+         G2-birim: FAILED tests/unit/ocr/test_satir_birlestirici.py::test_k2_kr_geometrisi_17_kutu_4_satir_2_5_5_5
+         G2-birim: FAILED tests/unit/ocr/test_satir_birlestirici.py::test_k2_grup_icinde_dikey_ortusme_grubun_ilk_bloguyla_uzun_kutu_solda
+         G2-birim: ... +8
+         G4-kapsam: FAILED tests/unit/ocr/test_satir_birlestirici.py::test_k2_esik_orijinal_yukseklikle_birlesik_degil_y2
+         G4-kapsam: FAILED tests/unit/ocr/test_satir_birlestirici.py::test_k2_y_titresimli_satir_x_sirasinda_birlesir_itiraz
+         G4-kapsam: FAILED tests/unit/ocr/test_satir_birlestirici.py::test_k2_kr_geometrisi_17_kutu_4_satir_2_5_5_5
+         G4-kapsam: FAILED tests/unit/ocr/test_satir_birlestirici.py::test_k2_grup_icinde_dikey_ortusme_grubun_ilk_bloguyla_uzun_kutu_solda
+         G4-kapsam: ... +8
+         G5-tum: FAILED tests/unit/ocr/test_satir_birlestirici.py::test_k2_esik_orijinal_yukseklikle_birlesik_degil_y2
+         G5-tum: FAILED tests/unit/ocr/test_satir_birlestirici.py::test_k2_y_titresimli_satir_x_sirasinda_birlesir_itiraz
+         G5-tum: FAILED tests/unit/ocr/test_satir_birlestirici.py::test_k2_kr_geometrisi_17_kutu_4_satir_2_5_5_5
+         G5-tum: FAILED tests/unit/ocr/test_satir_birlestirici.py::test_k2_grup_icinde_dikey_ortusme_grubun_ilk_bloguyla_uzun_kutu_solda
+         G5-tum: ... +8
+       sureler: 0s 1s 9s 2s 9s
+M14   [.X.XX] YAKALANDI   G2 dusen=6  (beklenen: G2 G4 G5)
+       K2: ortusme `>=` -> `>` (tam 0.5 ayrilir)
+       urun: sinirda ayri satir
+       G2-birim: E       AssertionError: assert 2 == 1
+       G4-kapsam: E       AssertionError: assert 2 == 1
+       G5-tum: E       AssertionError: assert 2 == 1
+         G2-birim: FAILED tests/unit/ocr/test_satir_birlestirici.py::test_k2_dikey_ortusme_esigi_sinirda[0.50-sinirda-birlesir]
+         G2-birim: FAILED tests/unit/ocr/test_satir_birlestirici.py::test_k2_satir_bolumleme_satirin_referansiyla_bir_oncekiyle_degil
+         G2-birim: FAILED tests/unit/ocr/test_satir_birlestirici.py::test_k2_grup_icinde_dikey_ortusme_grubun_ilk_bloguyla_uzun_kutu_solda
+         G2-birim: FAILED tests/unit/ocr/test_satir_birlestirici.py::test_k2_grup_icinde_dikey_ortusme_grubun_ilk_bloguyla_satir_ici_merdiven
+         G2-birim: ... +2
+         G4-kapsam: FAILED tests/unit/ocr/test_satir_birlestirici.py::test_k2_dikey_ortusme_esigi_sinirda[0.50-sinirda-birlesir]
+         G4-kapsam: FAILED tests/unit/ocr/test_satir_birlestirici.py::test_k2_satir_bolumleme_satirin_referansiyla_bir_oncekiyle_degil
+         G4-kapsam: FAILED tests/unit/ocr/test_satir_birlestirici.py::test_k2_grup_icinde_dikey_ortusme_grubun_ilk_bloguyla_uzun_kutu_solda
+         G4-kapsam: FAILED tests/unit/ocr/test_satir_birlestirici.py::test_k2_grup_icinde_dikey_ortusme_grubun_ilk_bloguyla_satir_ici_merdiven
+         G4-kapsam: ... +2
+         G5-tum: FAILED tests/unit/ocr/test_satir_birlestirici.py::test_k2_dikey_ortusme_esigi_sinirda[0.50-sinirda-birlesir]
+         G5-tum: FAILED tests/unit/ocr/test_satir_birlestirici.py::test_k2_satir_bolumleme_satirin_referansiyla_bir_oncekiyle_degil
+         G5-tum: FAILED tests/unit/ocr/test_satir_birlestirici.py::test_k2_grup_icinde_dikey_ortusme_grubun_ilk_bloguyla_uzun_kutu_solda
+         G5-tum: FAILED tests/unit/ocr/test_satir_birlestirici.py::test_k2_grup_icinde_dikey_ortusme_grubun_ilk_bloguyla_satir_ici_merdiven
+         G5-tum: ... +2
+       sureler: 0s 1s 10s 2s 10s
+M15   [.X.XX] YAKALANDI   G2 dusen=3  (beklenen: G2 G4 G5)
+       K2: bosluk `<=` -> `<` (tam 0.75 ayrilir)
+       urun: sinirda ayri blok
+       G2-birim: E       AssertionError: assert 2 == 1
+       G4-kapsam: E       AssertionError: assert 2 == 1
+       G5-tum: E       AssertionError: assert 2 == 1
+         G2-birim: FAILED tests/unit/ocr/test_satir_birlestirici.py::test_k2_yatay_bosluk_esigi_sinirda[0.75-sinirda-birlesir]
+         G2-birim: FAILED tests/unit/ocr/test_satir_birlestirici.py::test_k2_esik_min_h_ile_kucuk_kutu_belirler
+         G2-birim: FAILED tests/unit/ocr/test_satir_birlestirici.py::test_k4_ikinci_uygulama_sabit_nokta_degil_pozitif_kontrol
+         G4-kapsam: FAILED tests/unit/ocr/test_satir_birlestirici.py::test_k2_yatay_bosluk_esigi_sinirda[0.75-sinirda-birlesir]
+         G4-kapsam: FAILED tests/unit/ocr/test_satir_birlestirici.py::test_k2_esik_min_h_ile_kucuk_kutu_belirler
+         G4-kapsam: FAILED tests/unit/ocr/test_satir_birlestirici.py::test_k4_ikinci_uygulama_sabit_nokta_degil_pozitif_kontrol
+         G5-tum: FAILED tests/unit/ocr/test_satir_birlestirici.py::test_k2_yatay_bosluk_esigi_sinirda[0.75-sinirda-birlesir]
+         G5-tum: FAILED tests/unit/ocr/test_satir_birlestirici.py::test_k2_esik_min_h_ile_kucuk_kutu_belirler
+         G5-tum: FAILED tests/unit/ocr/test_satir_birlestirici.py::test_k4_ikinci_uygulama_sabit_nokta_degil_pozitif_kontrol
+       sureler: 0s 1s 10s 2s 10s
+
+kacan davranis mutanti: []
+yakalanan kontrol (yanlis pozitif): []
+tahminden sapan: ["M07: tahmin ['G2', 'G4', 'G5'] gercek ['G2', 'G3', 'G4', 'G5']"]
+exit=0

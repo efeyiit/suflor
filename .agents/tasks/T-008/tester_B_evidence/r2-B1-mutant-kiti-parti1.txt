@@ -1,0 +1,181 @@
+models/: junction (salt okunur kullanim; depo dosyalarina yazilmaz)
+ayna agaci: C:\Users\pc\AppData\Local\Temp\scratch\C--Users-pc-Desktop-efe--eviri-uygulamas-\d52c967f-bd19-4db3-b5e9-77e6cd08b889\scratchpad\t008_tester_B_ayna   (depo YAZILMAZ)
+kapilar PYTHONIOENCODING'siz (cp1254) kosar; real_check yalniz ASCII basar
+
+TABAN (mutasyonsuz ayna):
+  G1-mypy    exit=0     4.1s  Success: no issues found in 1 source file
+  G2-birim   exit=0     0.8s  76 passed in 0.28s
+  G3-real    exit=0    11.1s  REAL_CHECK: TEMIZ
+  G4-kapsam  exit=0     1.6s  76 passed in 0.77s
+  G5-tum     exit=0     9.6s  1444 passed in 8.83s
+
+MUTANT KITI -- her mutant icin hangi kapi YAKALAR (X) / KACIRIR (.)
+kapilar: G1-mypy | G2-birim | G3-real | G4-kapsam | G5-tum
+
+M16   [.X.XX] YAKALANDI   G2 dusen=2  (beklenen: G2 G4 G5)
+       K2 (tur 2 nisan): satir referansi EN KISA degil SON EKLENEN blok (= uyelik bir oncekiyle; merdiven tek satir)
+       urun: merdiven dizilim tek satira toplanir
+       G2-birim: E       AssertionError: assert ['a', 'c b'] == ['a', 'b', 'c']
+       G4-kapsam: E       AssertionError: assert ['a', 'c b'] == ['a', 'b', 'c']
+       G5-tum: E       AssertionError: assert ['a', 'c b'] == ['a', 'b', 'c']
+         G2-birim: FAILED tests/unit/ocr/test_satir_birlestirici.py::test_k2_satir_bolumleme_satirin_referansiyla_bir_oncekiyle_degil
+         G2-birim: FAILED tests/unit/ocr/test_satir_birlestirici.py::test_k6_bagli_durumda_satir_referansi_en_kisa_girdi_sirasindan_bagimsiz
+         G4-kapsam: FAILED tests/unit/ocr/test_satir_birlestirici.py::test_k2_satir_bolumleme_satirin_referansiyla_bir_oncekiyle_degil
+         G4-kapsam: FAILED tests/unit/ocr/test_satir_birlestirici.py::test_k6_bagli_durumda_satir_referansi_en_kisa_girdi_sirasindan_bagimsiz
+         G5-tum: FAILED tests/unit/ocr/test_satir_birlestirici.py::test_k2_satir_bolumleme_satirin_referansiyla_bir_oncekiyle_degil
+         G5-tum: FAILED tests/unit/ocr/test_satir_birlestirici.py::test_k6_bagli_durumda_satir_referansi_en_kisa_girdi_sirasindan_bagimsiz
+       sureler: 1s 1s 10s 1s 7s
+M17   [.X.XX] YAKALANDI   G2 dusen=2  (beklenen: G2 G4 G5)
+       K2: grup ici dikey referans ILK degil SON blok (uzun kutu koprusu)
+       urun: uzun kutu iki satiri kopruler
+       G2-birim: E       AssertionError: assert ['T a b', 'c'] == ['T a b c']
+       G4-kapsam: E       AssertionError: assert ['T a b', 'c'] == ['T a b c']
+       G5-tum: E       AssertionError: assert ['T a b', 'c'] == ['T a b c']
+         G2-birim: FAILED tests/unit/ocr/test_satir_birlestirici.py::test_k2_grup_icinde_dikey_ortusme_grubun_ilk_bloguyla_uzun_kutu_solda
+         G2-birim: FAILED tests/unit/ocr/test_satir_birlestirici.py::test_k2_grup_icinde_dikey_ortusme_grubun_ilk_bloguyla_satir_ici_merdiven
+         G4-kapsam: FAILED tests/unit/ocr/test_satir_birlestirici.py::test_k2_grup_icinde_dikey_ortusme_grubun_ilk_bloguyla_uzun_kutu_solda
+         G4-kapsam: FAILED tests/unit/ocr/test_satir_birlestirici.py::test_k2_grup_icinde_dikey_ortusme_grubun_ilk_bloguyla_satir_ici_merdiven
+         G5-tum: FAILED tests/unit/ocr/test_satir_birlestirici.py::test_k2_grup_icinde_dikey_ortusme_grubun_ilk_bloguyla_uzun_kutu_solda
+         G5-tum: FAILED tests/unit/ocr/test_satir_birlestirici.py::test_k2_grup_icinde_dikey_ortusme_grubun_ilk_bloguyla_satir_ici_merdiven
+       sureler: 0s 1s 10s 2s 11s
+M18   [.X.XX] YAKALANDI   G2 dusen=1  (beklenen: G2 G4 G5)
+       K2: grup icinde dikey ortusme HIC denetlenmiyor (yalniz yatay)
+       urun: ayni satirda x-komsu ama dikeyde ayrik kutular birlesir
+       G2-birim: E       AssertionError: assert ['A S B'] == ['A S', 'B']
+       G4-kapsam: E       AssertionError: assert ['A S B'] == ['A S', 'B']
+       G5-tum: E       AssertionError: assert ['A S B'] == ['A S', 'B']
+         G2-birim: FAILED tests/unit/ocr/test_satir_birlestirici.py::test_k2_grup_icinde_dikey_ortusme_grubun_ilk_bloguyla_satir_ici_merdiven
+         G4-kapsam: FAILED tests/unit/ocr/test_satir_birlestirici.py::test_k2_grup_icinde_dikey_ortusme_grubun_ilk_bloguyla_satir_ici_merdiven
+         G5-tum: FAILED tests/unit/ocr/test_satir_birlestirici.py::test_k2_grup_icinde_dikey_ortusme_grubun_ilk_bloguyla_satir_ici_merdiven
+       sureler: 1s 2s 12s 2s 8s
+M37   [.....] *** HICBIR KAPI YAKALAMADI ***   G2 dusen=0  (beklenen: ? (tur 2: fixture yok, kacmasi beklenir))
+       K6: bag girdi sirasinin TERSIYLE (-idx) -- tur 2: implementer C-3 'esdeger' dedi; DEGIL (ayni (y,x) farkli h cift satir uyeligini degistirir)
+       urun: ayni (y,x) farkli h cift tespit: kisa olan onceki satira yapisirsa uzun olan da surukleniyor -- girdi sirasina bagli satir uyeligi
+       sureler: 0s 1s 9s 1s 10s
+M41   [.X.XX] YAKALANDI   G2 dusen=2  (beklenen: ? (ayni x farkli y fixture yok))
+       K2/K6: satir ici siralama (x, idx) -- y anahtari yok
+       urun: ayni x, farkli y iki kutuda hangisi gruba once girer degisir
+       G2-birim: E       AssertionError: assert ['p r', 'q'] == ['p', 'q r']
+       G4-kapsam: E       AssertionError: assert ['p r', 'q'] == ['p', 'q r']
+       G5-tum: E       AssertionError: assert ['p r', 'q'] == ['p', 'q r']
+         G2-birim: FAILED tests/unit/ocr/test_satir_birlestirici.py::test_k6_ayni_x_farkli_y_satir_ici_sira_y_ile_permutasyonlar_ayni
+         G2-birim: FAILED tests/unit/ocr/test_satir_birlestirici.py::test_k6_cikti_anahtarinda_bag_girdi_sirasina_bagli_sinir
+         G4-kapsam: FAILED tests/unit/ocr/test_satir_birlestirici.py::test_k6_ayni_x_farkli_y_satir_ici_sira_y_ile_permutasyonlar_ayni
+         G4-kapsam: FAILED tests/unit/ocr/test_satir_birlestirici.py::test_k6_cikti_anahtarinda_bag_girdi_sirasina_bagli_sinir
+         G5-tum: FAILED tests/unit/ocr/test_satir_birlestirici.py::test_k6_ayni_x_farkli_y_satir_ici_sira_y_ile_permutasyonlar_ayni
+         G5-tum: FAILED tests/unit/ocr/test_satir_birlestirici.py::test_k6_cikti_anahtarinda_bag_girdi_sirasina_bagli_sinir
+       sureler: 1s 2s 13s 2s 11s
+M48   [.XXXX] YAKALANDI   G2 dusen=5  (beklenen: G2 G3 G4 G5 (#1c))
+       T2-1 GERI (E geri): referans satirin ILK blogu -- guncelleme yok (tur 1 kodu)
+       urun: uzun etiket iki satiri kopruler: 11 -> 1 blok (tur 1 ret sinifi)
+       G2-birim: E       AssertionError: assert ['T a d b e c f'] == ['T a b c', 'd e f']
+       G3-real: IHLAL  [1c] etiket koprusu: 11 kutu -> 1 blok, en buyuk blok 11 parca (>= 2 blok, <= 6 parca; v1: 1 blok/11 parca)
+       G4-kapsam: E       AssertionError: assert ['T a d b e c f'] == ['T a b c', 'd e f']
+       G5-tum: E       AssertionError: assert ['T a d b e c f'] == ['T a b c', 'd e f']
+         G2-birim: FAILED tests/unit/ocr/test_satir_birlestirici.py::test_k2_uzun_kutu_koprusu_solda_sentetik_iki_satir_ayri_bloklar[satir2-x+5-fermuar]
+         G2-birim: FAILED tests/unit/ocr/test_satir_birlestirici.py::test_k2_uzun_kutu_koprusu_solda_sentetik_iki_satir_ayri_bloklar[satir2-x-ayni]
+         G2-birim: FAILED tests/unit/ocr/test_satir_birlestirici.py::test_k2_uzun_kutu_koprusu_solda_sentetik_iki_satir_ayri_bloklar[satir2-x+12]
+         G2-birim: FAILED tests/unit/ocr/test_satir_birlestirici.py::test_k2_uzun_kutu_koprusu_gercek_geometri_11_kutu_iki_blok_6_5
+         G2-birim: ... +1
+         G4-kapsam: FAILED tests/unit/ocr/test_satir_birlestirici.py::test_k2_uzun_kutu_koprusu_solda_sentetik_iki_satir_ayri_bloklar[satir2-x+5-fermuar]
+         G4-kapsam: FAILED tests/unit/ocr/test_satir_birlestirici.py::test_k2_uzun_kutu_koprusu_solda_sentetik_iki_satir_ayri_bloklar[satir2-x-ayni]
+         G4-kapsam: FAILED tests/unit/ocr/test_satir_birlestirici.py::test_k2_uzun_kutu_koprusu_solda_sentetik_iki_satir_ayri_bloklar[satir2-x+12]
+         G4-kapsam: FAILED tests/unit/ocr/test_satir_birlestirici.py::test_k2_uzun_kutu_koprusu_gercek_geometri_11_kutu_iki_blok_6_5
+         G4-kapsam: ... +1
+         G5-tum: FAILED tests/unit/ocr/test_satir_birlestirici.py::test_k2_uzun_kutu_koprusu_solda_sentetik_iki_satir_ayri_bloklar[satir2-x+5-fermuar]
+         G5-tum: FAILED tests/unit/ocr/test_satir_birlestirici.py::test_k2_uzun_kutu_koprusu_solda_sentetik_iki_satir_ayri_bloklar[satir2-x-ayni]
+         G5-tum: FAILED tests/unit/ocr/test_satir_birlestirici.py::test_k2_uzun_kutu_koprusu_solda_sentetik_iki_satir_ayri_bloklar[satir2-x+12]
+         G5-tum: FAILED tests/unit/ocr/test_satir_birlestirici.py::test_k2_uzun_kutu_koprusu_gercek_geometri_11_kutu_iki_blok_6_5
+         G5-tum: ... +1
+       sureler: 0s 1s 9s 2s 8s
+M49   [.XXXX] YAKALANDI   G2 dusen=6  (beklenen: G2 G3 G4 G5 (#1c))
+       T2-1: referans EN UZUN blok (`<` -> `>`)
+       urun: en uzun kutu referans: etiket koprusu geri gelir
+       G2-birim: E       AssertionError: assert ['T a d b e c f'] == ['T a b c', 'd e f']
+       G3-real: IHLAL  [1c] etiket koprusu: 11 kutu -> 1 blok, en buyuk blok 11 parca (>= 2 blok, <= 6 parca; v1: 1 blok/11 parca)
+       G4-kapsam: E       AssertionError: assert ['T a d b e c f'] == ['T a b c', 'd e f']
+       G5-tum: E       AssertionError: assert ['T a d b e c f'] == ['T a b c', 'd e f']
+         G2-birim: FAILED tests/unit/ocr/test_satir_birlestirici.py::test_k2_uzun_kutu_koprusu_solda_sentetik_iki_satir_ayri_bloklar[satir2-x+5-fermuar]
+         G2-birim: FAILED tests/unit/ocr/test_satir_birlestirici.py::test_k2_uzun_kutu_koprusu_solda_sentetik_iki_satir_ayri_bloklar[satir2-x-ayni]
+         G2-birim: FAILED tests/unit/ocr/test_satir_birlestirici.py::test_k2_uzun_kutu_koprusu_solda_sentetik_iki_satir_ayri_bloklar[satir2-x+12]
+         G2-birim: FAILED tests/unit/ocr/test_satir_birlestirici.py::test_k2_uzun_kutu_koprusu_gercek_geometri_11_kutu_iki_blok_6_5
+         G2-birim: ... +2
+         G4-kapsam: FAILED tests/unit/ocr/test_satir_birlestirici.py::test_k2_uzun_kutu_koprusu_solda_sentetik_iki_satir_ayri_bloklar[satir2-x+5-fermuar]
+         G4-kapsam: FAILED tests/unit/ocr/test_satir_birlestirici.py::test_k2_uzun_kutu_koprusu_solda_sentetik_iki_satir_ayri_bloklar[satir2-x-ayni]
+         G4-kapsam: FAILED tests/unit/ocr/test_satir_birlestirici.py::test_k2_uzun_kutu_koprusu_solda_sentetik_iki_satir_ayri_bloklar[satir2-x+12]
+         G4-kapsam: FAILED tests/unit/ocr/test_satir_birlestirici.py::test_k2_uzun_kutu_koprusu_gercek_geometri_11_kutu_iki_blok_6_5
+         G4-kapsam: ... +2
+         G5-tum: FAILED tests/unit/ocr/test_satir_birlestirici.py::test_k2_uzun_kutu_koprusu_solda_sentetik_iki_satir_ayri_bloklar[satir2-x+5-fermuar]
+         G5-tum: FAILED tests/unit/ocr/test_satir_birlestirici.py::test_k2_uzun_kutu_koprusu_solda_sentetik_iki_satir_ayri_bloklar[satir2-x-ayni]
+         G5-tum: FAILED tests/unit/ocr/test_satir_birlestirici.py::test_k2_uzun_kutu_koprusu_solda_sentetik_iki_satir_ayri_bloklar[satir2-x+12]
+         G5-tum: FAILED tests/unit/ocr/test_satir_birlestirici.py::test_k2_uzun_kutu_koprusu_gercek_geometri_11_kutu_iki_blok_6_5
+         G5-tum: ... +2
+       sureler: 0s 1s 9s 2s 9s
+M50   [.X.XX] YAKALANDI   G2 dusen=1  (beklenen: G2 G4 G5)
+       T2-1 bag: `<=` (esit yukseklikte SON kisa blok referans; karar `bag: ilk`)
+       urun: esit yukseklikli merdivende referans kayar
+       G2-birim: E       AssertionError: assert ['a', 'c b'] == ['a', 'b', 'c']
+       G4-kapsam: E       AssertionError: assert ['a', 'c b'] == ['a', 'b', 'c']
+       G5-tum: E       AssertionError: assert ['a', 'c b'] == ['a', 'b', 'c']
+         G2-birim: FAILED tests/unit/ocr/test_satir_birlestirici.py::test_k2_satir_bolumleme_satirin_referansiyla_bir_oncekiyle_degil
+         G4-kapsam: FAILED tests/unit/ocr/test_satir_birlestirici.py::test_k2_satir_bolumleme_satirin_referansiyla_bir_oncekiyle_degil
+         G5-tum: FAILED tests/unit/ocr/test_satir_birlestirici.py::test_k2_satir_bolumleme_satirin_referansiyla_bir_oncekiyle_degil
+       sureler: 0s 1s 10s 2s 9s
+M51   [XXXXX] YAKALANDI   G2 dusen=5  (beklenen: G2 G3 G4 G5 (#1c))
+       T2-1: uyelik satirin ILK bloguyla (tur 1 lafzi birebir; referans guncellenir ama KULLANILMAZ) -- M48 ile ayni davranis beklenir
+       urun: M48 ile ayni: etiket koprusu
+       G1-mypy: src\ocr\satir_birlestirici.py:342: error: Item "None" of "Rect | None" has no attribute "h"  [union-attr]
+       G2-birim: E       AssertionError: assert ['T a d b e c f'] == ['T a b c', 'd e f']
+       G3-real: IHLAL  [1c] etiket koprusu: 11 kutu -> 1 blok, en buyuk blok 11 parca (>= 2 blok, <= 6 parca; v1: 1 blok/11 parca)
+       G4-kapsam: E       AssertionError: assert ['T a d b e c f'] == ['T a b c', 'd e f']
+       G5-tum: E       AssertionError: assert ['T a d b e c f'] == ['T a b c', 'd e f']
+         G2-birim: FAILED tests/unit/ocr/test_satir_birlestirici.py::test_k2_uzun_kutu_koprusu_solda_sentetik_iki_satir_ayri_bloklar[satir2-x+5-fermuar]
+         G2-birim: FAILED tests/unit/ocr/test_satir_birlestirici.py::test_k2_uzun_kutu_koprusu_solda_sentetik_iki_satir_ayri_bloklar[satir2-x-ayni]
+         G2-birim: FAILED tests/unit/ocr/test_satir_birlestirici.py::test_k2_uzun_kutu_koprusu_solda_sentetik_iki_satir_ayri_bloklar[satir2-x+12]
+         G2-birim: FAILED tests/unit/ocr/test_satir_birlestirici.py::test_k2_uzun_kutu_koprusu_gercek_geometri_11_kutu_iki_blok_6_5
+         G2-birim: ... +1
+         G4-kapsam: FAILED tests/unit/ocr/test_satir_birlestirici.py::test_k2_uzun_kutu_koprusu_solda_sentetik_iki_satir_ayri_bloklar[satir2-x+5-fermuar]
+         G4-kapsam: FAILED tests/unit/ocr/test_satir_birlestirici.py::test_k2_uzun_kutu_koprusu_solda_sentetik_iki_satir_ayri_bloklar[satir2-x-ayni]
+         G4-kapsam: FAILED tests/unit/ocr/test_satir_birlestirici.py::test_k2_uzun_kutu_koprusu_solda_sentetik_iki_satir_ayri_bloklar[satir2-x+12]
+         G4-kapsam: FAILED tests/unit/ocr/test_satir_birlestirici.py::test_k2_uzun_kutu_koprusu_gercek_geometri_11_kutu_iki_blok_6_5
+         G4-kapsam: ... +1
+         G5-tum: FAILED tests/unit/ocr/test_satir_birlestirici.py::test_k2_uzun_kutu_koprusu_solda_sentetik_iki_satir_ayri_bloklar[satir2-x+5-fermuar]
+         G5-tum: FAILED tests/unit/ocr/test_satir_birlestirici.py::test_k2_uzun_kutu_koprusu_solda_sentetik_iki_satir_ayri_bloklar[satir2-x-ayni]
+         G5-tum: FAILED tests/unit/ocr/test_satir_birlestirici.py::test_k2_uzun_kutu_koprusu_solda_sentetik_iki_satir_ayri_bloklar[satir2-x+12]
+         G5-tum: FAILED tests/unit/ocr/test_satir_birlestirici.py::test_k2_uzun_kutu_koprusu_gercek_geometri_11_kutu_iki_blok_6_5
+         G5-tum: ... +1
+       sureler: 0s 1s 9s 2s 8s
+M52   [.X.XX] YAKALANDI   G2 dusen=3  (beklenen: G2 G4 G5)
+       T2-1: referans yanlis boyutla (en DAR blok, h degil w)
+       urun: genis kelime etiketi asamaz -> kopru; dar etiket gecer
+       G2-birim: E       AssertionError: assert ['T a d b e c f'] == ['T a b c', 'd e f']
+       G4-kapsam: E       AssertionError: assert ['T a d b e c f'] == ['T a b c', 'd e f']
+       G5-tum: E       AssertionError: assert ['T a d b e c f'] == ['T a b c', 'd e f']
+         G2-birim: FAILED tests/unit/ocr/test_satir_birlestirici.py::test_k2_uzun_kutu_koprusu_solda_sentetik_iki_satir_ayri_bloklar[satir2-x+5-fermuar]
+         G2-birim: FAILED tests/unit/ocr/test_satir_birlestirici.py::test_k2_uzun_kutu_koprusu_solda_sentetik_iki_satir_ayri_bloklar[satir2-x-ayni]
+         G2-birim: FAILED tests/unit/ocr/test_satir_birlestirici.py::test_k2_uzun_kutu_koprusu_solda_sentetik_iki_satir_ayri_bloklar[satir2-x+12]
+         G4-kapsam: FAILED tests/unit/ocr/test_satir_birlestirici.py::test_k2_uzun_kutu_koprusu_solda_sentetik_iki_satir_ayri_bloklar[satir2-x+5-fermuar]
+         G4-kapsam: FAILED tests/unit/ocr/test_satir_birlestirici.py::test_k2_uzun_kutu_koprusu_solda_sentetik_iki_satir_ayri_bloklar[satir2-x-ayni]
+         G4-kapsam: FAILED tests/unit/ocr/test_satir_birlestirici.py::test_k2_uzun_kutu_koprusu_solda_sentetik_iki_satir_ayri_bloklar[satir2-x+12]
+         G5-tum: FAILED tests/unit/ocr/test_satir_birlestirici.py::test_k2_uzun_kutu_koprusu_solda_sentetik_iki_satir_ayri_bloklar[satir2-x+5-fermuar]
+         G5-tum: FAILED tests/unit/ocr/test_satir_birlestirici.py::test_k2_uzun_kutu_koprusu_solda_sentetik_iki_satir_ayri_bloklar[satir2-x-ayni]
+         G5-tum: FAILED tests/unit/ocr/test_satir_birlestirici.py::test_k2_uzun_kutu_koprusu_solda_sentetik_iki_satir_ayri_bloklar[satir2-x+12]
+       sureler: 1s 1s 13s 2s 8s
+M53   [.X.XX] YAKALANDI   G2 dusen=2  (beklenen: G2 G4 G5)
+       T2-1: uyelik bir ONCEKIYLE olculur, referans guncellenir ama kullanilmaz (M16 ile ayni davranis beklenir)
+       urun: merdiven tek satir
+       G2-birim: E       AssertionError: assert ['a', 'c b'] == ['a', 'b', 'c']
+       G4-kapsam: E       AssertionError: assert ['a', 'c b'] == ['a', 'b', 'c']
+       G5-tum: E       AssertionError: assert ['a', 'c b'] == ['a', 'b', 'c']
+         G2-birim: FAILED tests/unit/ocr/test_satir_birlestirici.py::test_k2_satir_bolumleme_satirin_referansiyla_bir_oncekiyle_degil
+         G2-birim: FAILED tests/unit/ocr/test_satir_birlestirici.py::test_k6_bagli_durumda_satir_referansi_en_kisa_girdi_sirasindan_bagimsiz
+         G4-kapsam: FAILED tests/unit/ocr/test_satir_birlestirici.py::test_k2_satir_bolumleme_satirin_referansiyla_bir_oncekiyle_degil
+         G4-kapsam: FAILED tests/unit/ocr/test_satir_birlestirici.py::test_k6_bagli_durumda_satir_referansi_en_kisa_girdi_sirasindan_bagimsiz
+         G5-tum: FAILED tests/unit/ocr/test_satir_birlestirici.py::test_k2_satir_bolumleme_satirin_referansiyla_bir_oncekiyle_degil
+         G5-tum: FAILED tests/unit/ocr/test_satir_birlestirici.py::test_k6_bagli_durumda_satir_referansi_en_kisa_girdi_sirasindan_bagimsiz
+       sureler: 0s 1s 9s 1s 8s
+
+kacan davranis mutanti: ['M37']
+yakalanan kontrol (yanlis pozitif): []
+tahminden sapan: ["M51: tahmin ['G2', 'G3', 'G4', 'G5'] gercek ['G1', 'G2', 'G3', 'G4', 'G5']"]
+exit=0

@@ -1,0 +1,8 @@
+==== T-008 TESTER B, TUR 2 -- SEF SONDASI ====
+Karar: ONAY. validate KABUL EDILEBILIR (21). Sahiplik temiz. B 42+1 xfail; A+B+urun 234 passed.
+B2-1 kit: 53 -> 50 yakalandi, 3 kacti (keskinlik), 8/8 kontrol kacti.
+B2-1b M04 karsi ornegi -> SEF URETTI: [R,s,a,D] vs [s,R,a,D] farkli cikti. Implementer'in
+  "davranis-esdeger" iddiasi YANLIS (4.6/10: fixture o dala ugramamisti). Gercek OCR'da
+  ayni-(y,x) cifti yok -> erisilemez, bloke degil; docstring K6 cumlesi acik kalem.
+B2-2 geometri bagimsiz kanalla 11/11 birebir. B2-5 diferansiyel: etiketsiz 3000 yerlesim 0 regresyon.
+KARAR: B'nin onayi KABUL. T-008 KABUL.

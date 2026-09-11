@@ -1,0 +1,15 @@
+........................................................................ [ 94%]
+....                                                                     [100%]
+76 passed in 0.23s
+exit=0
+--- gozlem.json:
+{
+ "setup": 76,
+ "basta_bariyer": 76,
+ "rapidocr_kesildi": 76,
+ "onnxruntime_kesildi": 76,
+ "yasak_kok_sys_modules": 0,
+ "ilk_hata": "",
+ "exitstatus": 0,
+ "yasak_kok_sonda": []
+}

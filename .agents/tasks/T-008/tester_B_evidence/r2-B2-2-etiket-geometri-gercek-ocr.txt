@@ -1,0 +1,12 @@
+fixture etiket_kopru_KR.png 1200x260; gercek OCR kutu sayisi 11; ETIKET_KOPRU_GEOMETRI kutu sayisi 11
+birebir esit (tespitci sirasinda): True
+kume olarak esit: True
+metni bos: 0; bas/son boslugu: 0; NaN: 0; line_boxes bos: 11/11
+ayni (y,x) cifti: 0; ayni x farkli y cifti: 0
+etiket indeksi (en yuksek h): 0; satir kumeleri (y-orta kumeleme, uygulamasiz): [[1, 2, 3, 4, 5], [6, 7, 8, 9, 10]]
+teslimin ETIKET_KOPRU_SATIRLAR'i ile ayni: True
+  satir 0: y 64-68, alt 96-99, h 28-35; etiketle dikey ortusme 35 (>= 0.5*min h 14.0: True)
+  satir 1: y 109-111, alt 143-144, h 32-35; etiketle dikey ortusme 18 (>= 0.5*min h 16.0: True)
+  satirlar arasi bosluk (satir0 alt 99 -> satir1 ust 109): 10 px (birbirine girmiyor: True)
+  etiket (x=57) satirlarin solunda: True; etiket y=55 en kucuk: True
+beklenen parca sayilari (etiket satir 0'a yapisik kuraliyla): [6, 5]; etiketsiz: [5, 5]
