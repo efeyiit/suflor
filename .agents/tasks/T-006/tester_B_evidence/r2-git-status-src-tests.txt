@@ -1,0 +1,36 @@
+# r2 -- sahiplik kaniti: tester B src/tests/real_check/conftest'e YAZMADI -- 2026-09-11 08:09:30
+$ git status --short -- src tests .agents/tasks/T-006/real_check.py tests/unit/ocr/conftest.py
+(satir sayisi: 0 -- 0 olmali)
+
+$ git diff --stat HEAD -- src tests .agents/tasks/T-006/real_check.py
+(bos)
+
+$ git status --short (tumu) -- yalniz tester_B/ ve tester_B_evidence/ ve verdict-B.md beklenir
+ M .agents/tasks/T-006/verdict-B.md
+?? .agents/tasks/T-006/tester_B/r2_b2_2_cagri_grafigi.py
+?? .agents/tasks/T-006/tester_B/r2_izleme_plugin.py
+?? .agents/tasks/T-006/tester_B/r2_mutant_kiti.py
+?? .agents/tasks/T-006/tester_B/r2_sira_plugin.py
+?? .agents/tasks/T-006/tester_B/test_mercek_B_r2.py
+?? .agents/tasks/T-006/tester_B_evidence/r2-B1-tur1-kiti-regresyon.txt
+?? .agents/tasks/T-006/tester_B_evidence/r2-B2-1a-kacis-yollari-kiti.txt
+?? .agents/tasks/T-006/tester_B_evidence/r2-B2-1b-mercekB-r2-testleri.txt
+?? .agents/tasks/T-006/tester_B_evidence/r2-B2-2a-ast-cagri-grafigi.txt
+?? .agents/tasks/T-006/tester_B_evidence/r2-B2-2b-calisma-zamani-izi.txt
+?? .agents/tasks/T-006/tester_B_evidence/r2-B2-3a-sira-ve-capture-bicimleri.txt
+?? .agents/tasks/T-006/tester_B_evidence/r2-B2-4a-mercekB-38-regresyon.txt
+?? .agents/tasks/T-006/tester_B_evidence/r2-B2-4b-totoloji-tarama-110.txt
+?? .agents/tasks/T-006/tester_B_evidence/r2-ast-esitligi-ve-yama-hedefleri.txt
+?? .agents/tasks/T-006/tester_B_evidence/r2-ast-sayac-kirilganligi.txt
+?? .agents/tasks/T-006/tester_B_evidence/r2-git-status-src-tests.txt
+?? .agents/tasks/T-006/tester_B_evidence/r2-taban-1-mypy.txt
+?? .agents/tasks/T-006/tester_B_evidence/r2-taban-2-pytest.txt
+?? .agents/tasks/T-006/tester_B_evidence/r2-taban-3-real_check-cp1254.txt
+?? .agents/tasks/T-006/tester_B_evidence/r2-taban-4-kapsam.txt
+?? .agents/tasks/T-006/tester_B_evidence/r2-taban-5-tum-takim.txt
+?? .agents/tasks/T-006/tester_B_evidence/r2-tur1-isaretleri-yeniden-nisan.txt
+
+ayna agaclari (depo disi):
+C:/Users/pc/AppData/Local/Temp/scratch/C--Users-pc-Desktop-efe--eviri-uygulamas-/d52c967f-bd19-4db3-b5e9-77e6cd08b889/scratchpad/kit_r2/t006_tester_B_mutroot
+C:/Users/pc/AppData/Local/Temp/scratch/C--Users-pc-Desktop-efe--eviri-uygulamas-/d52c967f-bd19-4db3-b5e9-77e6cd08b889/scratchpad/kit_tur1/t006_tester_B_mutroot
+exit=0

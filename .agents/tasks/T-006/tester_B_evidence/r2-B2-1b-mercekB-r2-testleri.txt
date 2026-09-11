@@ -1,0 +1,20 @@
+# r2 B2-1b/B2-2c -- mercek B tur 2 testleri (teslim olcusu dosyadan yuklendi; gercek motor sinifi + kacis sahteleri) -- 2026-09-11 07:47:54
+============================= test session starts =============================
+platform win32 -- Python 3.12.10, pytest-9.1.1, pluggy-1.6.0 -- C:\Users\pc\AppData\Local\Programs\Python\Python312\python.exe
+rootdir: C:\Users\pc\Desktop\efe\çeviri uygulaması
+plugins: anyio-4.15.1, cov-7.1.0
+collecting ... collected 10 items
+
+.agents/tasks/T-006/tester_B/test_mercek_B_r2.py::test_r2_b22_gercek_motor_stdout_yazan_taniyici_olcu_duser PASSED [ 10%]
+.agents/tasks/T-006/tester_B/test_mercek_B_r2.py::test_r2_b22_gercek_motor_fd2_yazan_taniyici_olcu_duser PASSED [ 20%]
+.agents/tasks/T-006/tester_B/test_mercek_B_r2.py::test_r2_b22_gercek_motor_rapidocr_logger_ERROR_seviyesi_olcu_duser PASSED [ 30%]
+.agents/tasks/T-006/tester_B/test_mercek_B_r2.py::test_r2_b22_gercek_motor_sessiz_taniyici_olcu_gecer PASSED [ 40%]
+.agents/tasks/T-006/tester_B/test_mercek_B_r2.py::test_r2_b21_R05_teslim_kurulumuyla_KACAR_cunku_streamhandler_yok PASSED [ 50%]
+.agents/tasks/T-006/tester_B/test_mercek_B_r2.py::test_r2_b21_R05_gercek_kutuphane_gibi_streamhandler_eklenince_YAKALANIR PASSED [ 60%]
+.agents/tasks/T-006/tester_B/test_mercek_B_r2.py::test_r2_b21_M28b_streamhandler_varken_iki_kanaldan_gorunur PASSED [ 70%]
+.agents/tasks/T-006/tester_B/test_mercek_B_r2.py::test_r2_b21_R04_kok_handler_stream_records_gormez_caplog_text_gorur PASSED [ 80%]
+.agents/tasks/T-006/tester_B/test_mercek_B_r2.py::test_r2_b21_bos_kare_noktasi_gercek_motor_temiz PASSED [ 90%]
+.agents/tasks/T-006/tester_B/test_mercek_B_r2.py::test_r2_b21_bos_kare_noktasinda_yazan_taniyici_olcu_duser PASSED [100%]
+
+============================= 10 passed in 0.21s ==============================
+exit=0

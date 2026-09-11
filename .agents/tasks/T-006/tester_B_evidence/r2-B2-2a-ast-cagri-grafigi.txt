@@ -1,0 +1,28 @@
+# r2 B2-2a -- AST cagri grafigi -- 2026-09-11 07:41:08
+dosya: tests\unit\ocr\test_rapid_engine.py
+
+[1] `_k7_kanal_olcusu` tanim sayisi: 1  (satir: [751])
+[2] `_k7_kanal_olcusu` cagiranlar (fonksiyon -> ilk arguman):
+    test_k7_soguk_motor_hicbir_kanala_metin_yazmaz             <- motor(tmp_path, f)                            (satir 797)
+    test_k7_sicak_motor_kutuphane_logger_i_acikken_metin_yazmaz <- m                                             (satir 818)
+    test_k7_pozitif_kontrol_kanal_olcusu_atesliyor             <- sahte()                                       (satir 892)
+    test_k7_negatif_kontrol_sessiz_sahte_motor_olcuden_gecer   <- FakeOcrEngine([[_blok(NOBETCILER[0])]])       (satir 905)
+    beklenen dort cagiran mevcut mu: EVET
+[2b] pozitif kontrol sahteleri (OcrEngine altsinifi, recognize tanimli):
+    _StdoutaYazan                bases=['OcrEngine'] metotlar=['recognize']
+    _StderreYazan                bases=['OcrEngine'] metotlar=['recognize']
+    _FdYeYazan                   bases=['OcrEngine'] metotlar=['recognize']
+    _OzgunStderreYazan           bases=['OcrEngine'] metotlar=['recognize']
+    _KokLoggeraYazan             bases=['OcrEngine'] metotlar=['recognize']
+    _KutuphaneLoggerinaYazan     bases=['OcrEngine'] metotlar=['recognize']
+    _UyariVeren                  bases=['OcrEngine'] metotlar=['recognize']
+[3] olcu govdesinde motor tipine/ic durumuna bakan ifade: 0
+[3b] `m` uzerindeki oznitelik erisimleri: ['m.recognize']
+[4] olcu govdesindeki assert'ler:
+    satir 779: assert out == '', f"stdout'a {len(out)} karakter yazildi (sifir olmali)"
+    satir 780: assert err == '', f"stderr'e {len(err)} karakter yazildi (sifir olmali)"
+    satir 784: assert not [msg for msg in mesajlar if n in msg], 'nobetci bir log kaydina dustu'
+    satir 785: assert not [u for u in uyarilar if n in u], 'nobetci bir warnings kaydina dustu'
+
+SONUC: TEK olcu fonksiyonu, dort cagiran, tip dali YOK, m yalniz .recognize -> sahte ve gercek AYNI yoldan gecer
+exit=0

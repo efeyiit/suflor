@@ -105,7 +105,9 @@
       "durum": "acildi-paket-yok",
       "tur": 0,
       "donduruldu": false,
-      "not": "ZORUNLU cikis sozlesmesi maddesi (T-004 K32'den): motorun urettigi her TextBlock.text NFC normalize edilmis olacak. Gerekce (sef olcumu): normalize() codepoint sayan iki esik tasiyor (max_group_chars, _MAX_SPEAKER_NAME_LEN) ve isalpha() tabanli ad suzgeci; ayni gorunen metin NFD geldiginde bolumleme degisiyor (3 blokluk govde NFC'de 1 segment, NFD'de 3) ve NFD adlar konusmaci sayilmiyor. Paket yazilirken bu madde ve olcusu (NFC==NFD ayniyeti testi) eklenecek."
+      "not": "ZORUNLU cikis sozlesmesi maddesi (T-004 K32'den): motorun urettigi her TextBlock.text NFC normalize edilmis olacak. Gerekce (sef olcumu): normalize() codepoint sayan iki esik tasiyor (max_group_chars, _MAX_SPEAKER_NAME_LEN) ve isalpha() tabanli ad suzgeci; ayni gorunen metin NFD geldiginde bolumleme degisiyor (3 blokluk govde NFC'de 1 segment, NFD'de 3) ve NFD adlar konusmaci sayilmiyor. Paket yazilirken bu madde ve olcusu (NFC==NFD ayniyeti testi) eklenecek.",
+      "status": "kabul",
+      "round": 2
     },
     {
       "id": "T-010",

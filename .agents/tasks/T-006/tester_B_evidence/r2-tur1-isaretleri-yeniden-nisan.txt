@@ -1,0 +1,14 @@
+# r2 -- tur 1 isaretlerinin (S1-S5, Y1-Y4) yeniden nisani -- 2026-09-11 07:58:09
+## Y3: _varsayilan_fabrika docstring'inde [ÖLÇÜLMÜYOR] + isinstance
+  [ÖLÇÜLMÜYOR] var: True | isinstance aniliyor: True
+## Y2: modul docstring K10/K6(b) yeniden deneme politikasi: True
+## Y1: seviye yalniz kurulumda cekilir, ust katman karari belgeli: True
+## Ş3: allow_download=True yolu [ÖLÇÜLMÜYOR] damgali: False
+## Ş1: real_check cp1254 -> bkz. r2-taban-3 (exit 0, 16 ok)
+16
+## Ş2: real_check stdout/stderr bayt olcusu var mi (subprocess/capture_output gecen satirlar):
+241:    r = subprocess.run([sys.executable, "-c", kod], capture_output=True, text=True, timeout=120, cwd=str(KOK))
+246:        ihlal(f"[7] beklenen ModelMissingError; alınan: {son!r}  stderr: {r.stderr.strip()[-200:]}")
+  -> yalniz [7] alt sureci; K7 gercek-yol bayt olcusu HALA YOK (sefin dosyasi, bloke etmez)
+## Ş5: mypy kapisi tur 1 kitinde 47 mutantin kacini yakaladi:
+  G1-mypy X sayisi = 0

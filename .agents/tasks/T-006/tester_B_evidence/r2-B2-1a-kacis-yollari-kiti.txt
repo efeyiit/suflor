@@ -1,0 +1,98 @@
+ayna agaci: C:\Users\pc\AppData\Local\Temp\scratch\C--Users-pc-Desktop-efe--eviri-uygulamas-\d52c967f-bd19-4db3-b5e9-77e6cd08b889\scratchpad\kit_r2\t006_tester_B_mutroot   (depo YAZILMAZ)
+kapilar PYTHONIOENCODING VERILMEDEN kosar (stdout cp1254) -- Ş1 duzeltmesi her mutantta sinanir
+
+TABAN (mutasyonsuz ayna):
+  G1-mypy    exit=0    4.0s  Success: no issues found in 1 source file
+  G2-birim   exit=0    0.8s  110 passed in 0.38s
+  G3-real    exit=0   13.5s  REAL_CHECK: TEM�Z (0 uyar�)
+  G4-kapsam  exit=0    1.1s  110 passed in 0.57s
+  G5-tum     exit=0    4.4s  1100 passed in 4.04s
+
+R2 KITI -- kacis yollari; [G1 G2 G3 G4 G5] X=yakaladi .=kacti ; 'beklenen' = kosum oncesi tahmin
+
+R01   [XXXXX] BULGU-ADAYI              *** SAPMA (beklenen .X.XX) ***
+       K7: `sys.__stdout__.write(metin)` -- newline YOK (satir tamponu); ozgun akis nesnesi
+       dusen: test_k7_ast_yazma_cagrisi_ve_log_yayimi_sifir, test_k7_sicak_motor_kutuphane_logger_i_acikken_metin_yazmaz, test_k7_soguk_motor_hicbir_kanala_metin_yazmaz, [G3-real: G3-real: UnicodeEncodeError: 'charmap' codec can't encode characters in position 0-5: character maps], [G4-kapsam: G4-kapsam: E       
+R02   [.X.XX] BULGU-ADAYI              beklendigi gibi
+       K7: `os.write(2, metin)` -- fd 2, sys.stderr atlanir
+       dusen: test_k7_ast_yazma_cagrisi_ve_log_yayimi_sifir, test_k7_sicak_motor_kutuphane_logger_i_acikken_metin_yazmaz, test_k7_soguk_motor_hicbir_kanala_metin_yazmaz, [G4-kapsam: G4-kapsam: E       AssertionError: stderr'e 12 karakter yazildi (sifir olmali)], [G5-tum: G5-tum: E       AssertionError: stderr'e 1
+R12   [.X.XX] BULGU-ADAYI              beklendigi gibi
+       K7: `sys.stdout.buffer.write(bytes)` -- ikili katman
+       dusen: test_k7_ast_yazma_cagrisi_ve_log_yayimi_sifir, test_k7_sicak_motor_kutuphane_logger_i_acikken_metin_yazmaz, test_k7_soguk_motor_hicbir_kanala_metin_yazmaz, [G4-kapsam: G4-kapsam: E       AssertionError: stdout'a 12 karakter yazildi (sifir olmali)], [G5-tum: G5-tum: E       AssertionError: stdout'a 1
+R16   [.XXXX] BULGU-ADAYI              *** SAPMA (beklenen .X.XX) ***
+       K7: `getattr(sys,'stdout').write(metin)` -- AST'yi atlatan M25b; yalniz DAVRANIS gorebilir
+       dusen: test_k7_sicak_motor_kutuphane_logger_i_acikken_metin_yazmaz, test_k7_soguk_motor_hicbir_kanala_metin_yazmaz, [G3-real: G3-real: UnicodeEncodeError: 'charmap' codec can't encode characters in position 0-5: character maps], [G4-kapsam: G4-kapsam: E       AssertionError: stdout'a 12 karakter yazildi (s
+R04   [.....] BULGU-ADAYI              beklendigi gibi
+       K7: kok logger handler'larinin `.stream`ine DOGRUDAN write (kayit uretmez; uygulama logger kurduysa dosyaya/stderr'e)
+R05   [.....] BULGU-ADAYI              beklendigi gibi
+       K7: `RapidOCR` logger handler'larinin `.stream`ine DOGRUDAN write (gercek kutuphanede StreamHandler(stderr))
+R07   [.X.XX] BULGU-ADAYI              beklendigi gibi
+       K7: alt surec `cmd /c echo metin` -- miras alinan fd 1'e cocuk yazar
+       dusen: test_k7_sicak_motor_kutuphane_logger_i_acikken_metin_yazmaz, test_k7_soguk_motor_hicbir_kanala_metin_yazmaz, [G4-kapsam: G4-kapsam: E       AssertionError: stdout'a 14 karakter yazildi (sifir olmali)], [G5-tum: G5-tum: E       AssertionError: stdout'a 14 karakter yazildi (sifir olmali)]
+R07b  [.X.XX] BULGU-ADAYI              beklendigi gibi
+       K7: alt surec (python -c) stdout'a metin -- cocuk surecte K1 bariyeri de yok
+       dusen: test_k7_sicak_motor_kutuphane_logger_i_acikken_metin_yazmaz, test_k7_soguk_motor_hicbir_kanala_metin_yazmaz, [G4-kapsam: G4-kapsam: E       AssertionError: stdout'a 12 karakter yazildi (sifir olmali)], [G5-tum: G5-tum: E       AssertionError: stdout'a 12 karakter yazildi (sifir olmali)]
+R08   [.....] KARAKTERIZ.              beklendigi gibi
+       K7: `atexit.register(print, metin)` -- surec sonunda yazar; olcum penceresi kapanmis
+R09   [.....] KARAKTERIZ.              beklendigi gibi
+       K7: ayri thread 300 ms sonra `print` -- olcum penceresi kapanmis
+R09b  [.X.XX] BULGU-ADAYI              beklendigi gibi
+       K7: ayri thread'den HEMEN yazar (join) -- pencere icinde
+       dusen: test_k7_ast_yazma_cagrisi_ve_log_yayimi_sifir, test_k7_sicak_motor_kutuphane_logger_i_acikken_metin_yazmaz, test_k7_soguk_motor_hicbir_kanala_metin_yazmaz, [G4-kapsam: G4-kapsam: E       AssertionError: stdout'a 12 karakter yazildi (sifir olmali)], [G5-tum: G5-tum: E       AssertionError: stdout'a 1
+R10   [.X.XX] KARAKTERIZ.              beklendigi gibi
+       K7: BOS karede `sys.stderr.write('bos kare')` -- davranis olcusu bos kareyi KOSMAZ; AST gorur
+       dusen: test_k7_ast_yazma_cagrisi_ve_log_yayimi_sifir, [G4-kapsam: G4-kapsam: E       AssertionError: {'print': 0, 'sys.stdout.write': 0, 'sys.stderr.write': 1, 'os.wr], [G5-tum: G5-tum: E       AssertionError: {'print': 0, 'sys.stdout.write': 0, 'sys.stderr.write': 1, 'os.write]
+R10b  [.....] KARAKTERIZ.              beklendigi gibi
+       K7: BOS karede fd 2'ye `open(2,'w',closefd=False).write` -- AST'yi de atlatir
+R11   [.XXXX] KARAKTERIZ.              *** SAPMA (beklenen .X.XX) ***
+       K7: yalniz puan > 0.95 iken yazar -- nobetciler 0.9/0.4; AST gorur
+       dusen: test_k7_ast_yazma_cagrisi_ve_log_yayimi_sifir, [G3-real: G3-real: UnicodeEncodeError: 'charmap' codec can't encode characters in position 0-5: character maps], [G4-kapsam: G4-kapsam: E       AssertionError: {'print': 0, 'sys.stdout.write': 1, 'sys.stderr.write': 0, 'os.wr], [G5-tum: G5-tum: E       
+R13   [.X.XX] KARAKTERIZ.              beklendigi gibi
+       K7: seviye 5 (< DEBUG) ile log -- caplog DEBUG'da gormez; AST `.log` gorur
+       dusen: test_k7_ast_yazma_cagrisi_ve_log_yayimi_sifir, [G4-kapsam: G4-kapsam: E       AssertionError: {'print': 0, 'sys.stdout.write': 0, 'sys.stderr.write': 0, 'os.wr], [G5-tum: G5-tum: E       AssertionError: {'print': 0, 'sys.stdout.write': 0, 'sys.stderr.write': 0, 'os.write]
+R14   [.X.XX] KARAKTERIZ.              beklendigi gibi
+       K7: `close()` icinde stdout'a yazar -- degismez `recognize` suresince; AST gorur
+       dusen: test_k7_ast_yazma_cagrisi_ve_log_yayimi_sifir, [G4-kapsam: G4-kapsam: E       AssertionError: {'print': 0, 'sys.stdout.write': 1, 'sys.stderr.write': 0, 'os.wr], [G5-tum: G5-tum: E       AssertionError: {'print': 0, 'sys.stdout.write': 1, 'sys.stderr.write': 0, 'os.write]
+R17   [.X.XX] BULGU-ADAYI              beklendigi gibi
+       K7: `RapidOCR` logger'ina ERROR seviyesinde blok METNI -- motor ERROR'a cekse de GECER (M28b'nin seviye-bagimsiz kardesi; makul gelistirici hatasi)
+       dusen: test_k7_ast_yazma_cagrisi_ve_log_yayimi_sifir, test_k7_nobetci_metin_loga_dusmez, test_k7_sicak_motor_kutuphane_logger_i_acikken_metin_yazmaz, test_k7_soguk_motor_hicbir_kanala_metin_yazmaz, [G4-kapsam: G4-kapsam: tests\unit\ocr\test_rapid_engine.py:668: AssertionError], [G5-tum: G5-tum: tests\unit\
+R19   [.....] KARAKTERIZ.              beklendigi gibi
+       K7: tanıma HATA yolunda `traceback.print_exc()` (stderr) -- davranis olcusu hata yolunu KOSMAZ; AST'de ad yok
+R03   [.X.XX] KONTROL (AST ad kancasi) beklendigi gibi
+       KONTROL: `print(..., file=devnull)` -- kanal yok; AST `print` ADINI sayar (beklenen yanlis alarm, ikincil kapi)
+       dusen: test_k7_ast_print_yok_logging_metin_yok, test_k7_ast_yazma_cagrisi_ve_log_yayimi_sifir, [G4-kapsam: G4-kapsam: E                   AssertionError: assert 'print' != 'print'], [G5-tum: G5-tum: E                   AssertionError: assert 'print' != 'print']
+R03b  [.....] KONTROL                  beklendigi gibi
+       KONTROL: devnull'a `.write` -- kanal yok, AST'de ad yok -> BES KAPI GECMELI
+R06   [.X.XX] KONTROL (AST yayim kancasi) beklendigi gibi
+       KONTROL(-ish): `simplefilter('ignore')` + `warn` -- uretimde de bastirilir; AST `.warn` yayimini sayar
+       dusen: test_k7_ast_yazma_cagrisi_ve_log_yayimi_sifir, [G4-kapsam: G4-kapsam: E       AssertionError: {'print': 0, 'sys.stdout.write': 0, 'sys.stderr.write': 0, 'os.wr], [G5-tum: G5-tum: E       AssertionError: {'print': 0, 'sys.stdout.write': 0, 'sys.stderr.write': 0, 'os.write]
+
+=== MARKDOWN ===
+| # | etiket | mutant | G1-mypy G2-birim G3-real G4-kapsam G5-tum | beklenen | dusen |
+|---|---|---|---|---|---|
+| R01 | BULGU-ADAYI | K7: `sys.__stdout__.write(metin)` -- newline YOK (satir tamponu); ozgun akis nesnesi | `XXXXX` | `.X.XX` | test_k7_ast_yazma_cagrisi_ve_log_yayimi_sifir; test_k7_sicak_motor_kutuphane_logger_i_acikken_metin_yazmaz; test_k7_soguk_motor_hicbir_kanala_metin_yazmaz; [G3- |
+| R02 | BULGU-ADAYI | K7: `os.write(2, metin)` -- fd 2, sys.stderr atlanir | `.X.XX` | `.X.XX` | test_k7_ast_yazma_cagrisi_ve_log_yayimi_sifir; test_k7_sicak_motor_kutuphane_logger_i_acikken_metin_yazmaz; test_k7_soguk_motor_hicbir_kanala_metin_yazmaz; [G4- |
+| R12 | BULGU-ADAYI | K7: `sys.stdout.buffer.write(bytes)` -- ikili katman | `.X.XX` | `.X.XX` | test_k7_ast_yazma_cagrisi_ve_log_yayimi_sifir; test_k7_sicak_motor_kutuphane_logger_i_acikken_metin_yazmaz; test_k7_soguk_motor_hicbir_kanala_metin_yazmaz; [G4- |
+| R16 | BULGU-ADAYI | K7: `getattr(sys,'stdout').write(metin)` -- AST'yi atlatan M25b; yalniz DAVRANIS gorebilir | `.XXXX` | `.X.XX` | test_k7_sicak_motor_kutuphane_logger_i_acikken_metin_yazmaz; test_k7_soguk_motor_hicbir_kanala_metin_yazmaz; [G3-real: G3-real: UnicodeEncodeError: 'charmap' co |
+| R04 | BULGU-ADAYI | K7: kok logger handler'larinin `.stream`ine DOGRUDAN write (kayit uretmez; uygulama logger kurduysa dosyaya/stderr'e) | `.....` | `.....` |  |
+| R05 | BULGU-ADAYI | K7: `RapidOCR` logger handler'larinin `.stream`ine DOGRUDAN write (gercek kutuphanede StreamHandler(stderr)) | `.....` | `.....` |  |
+| R07 | BULGU-ADAYI | K7: alt surec `cmd /c echo metin` -- miras alinan fd 1'e cocuk yazar | `.X.XX` | `.X.XX` | test_k7_sicak_motor_kutuphane_logger_i_acikken_metin_yazmaz; test_k7_soguk_motor_hicbir_kanala_metin_yazmaz; [G4-kapsam: G4-kapsam: E       AssertionError: stdo |
+| R07b | BULGU-ADAYI | K7: alt surec (python -c) stdout'a metin -- cocuk surecte K1 bariyeri de yok | `.X.XX` | `.X.XX` | test_k7_sicak_motor_kutuphane_logger_i_acikken_metin_yazmaz; test_k7_soguk_motor_hicbir_kanala_metin_yazmaz; [G4-kapsam: G4-kapsam: E       AssertionError: stdo |
+| R08 | KARAKTERIZ. | K7: `atexit.register(print, metin)` -- surec sonunda yazar; olcum penceresi kapanmis | `.....` | `.....` |  |
+| R09 | KARAKTERIZ. | K7: ayri thread 300 ms sonra `print` -- olcum penceresi kapanmis | `.....` | `.....` |  |
+| R09b | BULGU-ADAYI | K7: ayri thread'den HEMEN yazar (join) -- pencere icinde | `.X.XX` | `.X.XX` | test_k7_ast_yazma_cagrisi_ve_log_yayimi_sifir; test_k7_sicak_motor_kutuphane_logger_i_acikken_metin_yazmaz; test_k7_soguk_motor_hicbir_kanala_metin_yazmaz; [G4- |
+| R10 | KARAKTERIZ. | K7: BOS karede `sys.stderr.write('bos kare')` -- davranis olcusu bos kareyi KOSMAZ; AST gorur | `.X.XX` | `.X.XX` | test_k7_ast_yazma_cagrisi_ve_log_yayimi_sifir; [G4-kapsam: G4-kapsam: E       AssertionError: {'print': 0, 'sys.stdout.write': 0, 'sys.stderr.write': 1, 'os.wr] |
+| R10b | KARAKTERIZ. | K7: BOS karede fd 2'ye `open(2,'w',closefd=False).write` -- AST'yi de atlatir | `.....` | `.....` |  |
+| R11 | KARAKTERIZ. | K7: yalniz puan > 0.95 iken yazar -- nobetciler 0.9/0.4; AST gorur | `.XXXX` | `.X.XX` | test_k7_ast_yazma_cagrisi_ve_log_yayimi_sifir; [G3-real: G3-real: UnicodeEncodeError: 'charmap' codec can't encode characters in position 0-5: character maps];  |
+| R13 | KARAKTERIZ. | K7: seviye 5 (< DEBUG) ile log -- caplog DEBUG'da gormez; AST `.log` gorur | `.X.XX` | `.X.XX` | test_k7_ast_yazma_cagrisi_ve_log_yayimi_sifir; [G4-kapsam: G4-kapsam: E       AssertionError: {'print': 0, 'sys.stdout.write': 0, 'sys.stderr.write': 0, 'os.wr] |
+| R14 | KARAKTERIZ. | K7: `close()` icinde stdout'a yazar -- degismez `recognize` suresince; AST gorur | `.X.XX` | `.X.XX` | test_k7_ast_yazma_cagrisi_ve_log_yayimi_sifir; [G4-kapsam: G4-kapsam: E       AssertionError: {'print': 0, 'sys.stdout.write': 1, 'sys.stderr.write': 0, 'os.wr] |
+| R17 | BULGU-ADAYI | K7: `RapidOCR` logger'ina ERROR seviyesinde blok METNI -- motor ERROR'a cekse de GECER (M28b'nin seviye-bagimsiz kardesi; makul gelistirici hatasi) | `.X.XX` | `.X.XX` | test_k7_ast_yazma_cagrisi_ve_log_yayimi_sifir; test_k7_nobetci_metin_loga_dusmez; test_k7_sicak_motor_kutuphane_logger_i_acikken_metin_yazmaz; test_k7_soguk_mot |
+| R19 | KARAKTERIZ. | K7: tanıma HATA yolunda `traceback.print_exc()` (stderr) -- davranis olcusu hata yolunu KOSMAZ; AST'de ad yok | `.....` | `.....` |  |
+| R03 | KONTROL (AST ad kancasi) | KONTROL: `print(..., file=devnull)` -- kanal yok; AST `print` ADINI sayar (beklenen yanlis alarm, ikincil kapi) | `.X.XX` | `.X.XX` | test_k7_ast_print_yok_logging_metin_yok; test_k7_ast_yazma_cagrisi_ve_log_yayimi_sifir; [G4-kapsam: G4-kapsam: E                   AssertionError: assert 'print |
+| R03b | KONTROL | KONTROL: devnull'a `.write` -- kanal yok, AST'de ad yok -> BES KAPI GECMELI | `.....` | `.....` |  |
+| R06 | KONTROL (AST yayim kancasi) | KONTROL(-ish): `simplefilter('ignore')` + `warn` -- uretimde de bastirilir; AST `.warn` yayimini sayar | `.X.XX` | `.X.XX` | test_k7_ast_yazma_cagrisi_ve_log_yayimi_sifir; [G4-kapsam: G4-kapsam: E       AssertionError: {'print': 0, 'sys.stdout.write': 0, 'sys.stderr.write': 0, 'os.wr] |
+
+tahminden SAPAN: R01, R16, R11
+BES KAPIDAN KACAN BULGU ADAYI: R04, R05
+DAVRANIS OLCUSUNUN YAKALADIGI KONTROL (yanlis pozitif): yok
+exit=0 

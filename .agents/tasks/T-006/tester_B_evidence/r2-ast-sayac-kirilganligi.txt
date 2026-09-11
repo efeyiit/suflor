@@ -1,0 +1,9 @@
+# r2 -- AST ikincil kapisinin ad-kancasi kirilganligi (bilgi, bloke etmez) -- 2026-09-11 08:06:20
+import math | math.log(2.0)                             -> log-yayimi=1 print=0 sys.stdout=0
+x.error('a')                                            -> log-yayimi=1 print=0 sys.stdout=0
+cfg.warn = 1                                            -> log-yayimi=0 print=0 sys.stdout=0
+import logging | logging.getLogger('a').setLevel(40)    -> log-yayimi=0 print=0 sys.stdout=0
+getattr(sys,'stdout').write('m')                        -> log-yayimi=0 print=0 sys.stdout=0
+_p = print | _p('m')                                    -> log-yayimi=0 print=0 sys.stdout=0
+yorum: `math.log` ve `x.error` yanlis alarm (ad kancasi); `getattr(sys,'stdout')` ve `_p = print` gorunmez -- AST ikincil, davranis olcusu (R16: [.XXXX]) asil kapi
+exit=0

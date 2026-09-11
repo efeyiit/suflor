@@ -1,0 +1,375 @@
+ayna agaci: C:\Users\pc\AppData\Local\Temp\scratch\C--Users-pc-Desktop-efe--eviri-uygulamas-\d52c967f-bd19-4db3-b5e9-77e6cd08b889\scratchpad\kit_tur1\t006_tester_B_mutroot   (depo YAZILMAZ)
+kapilar PYTHONIOENCODING=utf-8 ile kosar (real_check cp1254'te coker -- kit notu)
+
+TABAN (mutasyonsuz ayna):
+  G1-mypy    exit=0    4.2s  Success: no issues found in 1 source file
+  G2-birim   exit=0    0.8s  110 passed in 0.39s
+  G3-real    exit=0   13.6s  REAL_CHECK: TEMİZ (0 uyarı)
+  G4-kapsam  exit=0    1.1s  110 passed in 0.57s
+  G5-tum     exit=0    4.4s  1100 passed in 4.00s
+
+MUTANT KITI -- her mutant icin hangi kapi YAKALAR (X) / KACIRIR (.)
+kapilar: G1-mypy | G2-birim | G3-real | G4-kapsam | G5-tum
+
+M01   [.XXXX] YAKALANDI
+       K5: `Global.text_score` anahtari SILINDI (kutuphane varsayilani 0.5 -> sessiz eleme)
+       hedef: K5
+       | G2-birim: E       KeyError: 'Global.text_score'
+       | G3-real: IHLAL  [8] KR+JAPAN: 9 blok, 0 tanesi confidence<0.5 - >=1 olmalı (süzgeç KAPALI kanıtı)
+       | G4-kapsam: E       KeyError: 'Global.text_score'
+       | G5-tum: E       KeyError: 'Global.text_score'
+M02   [.XXXX] YAKALANDI
+       K5: `Global.text_score` = 0.5 yazilmis (suzgec ACIK)
+       hedef: K5
+       | G2-birim: tests\unit\ocr\test_rapid_engine.py:389: AssertionError
+       | G3-real: IHLAL  [8] KR+JAPAN: 9 blok, 0 tanesi confidence<0.5 - >=1 olmalı (süzgeç KAPALI kanıtı)
+       | G4-kapsam: tests\unit\ocr\test_rapid_engine.py:389: AssertionError
+       | G5-tum: tests\unit\ocr\test_rapid_engine.py:389: AssertionError
+M03   [.XXXX] YAKALANDI
+       K5: yanlis anahtar adi `Global.textscore` (kutuphane sessizce kabul eder, KRT D4)
+       hedef: K5
+       | G2-birim: E       KeyError: 'Global.text_score'
+       | G3-real: raise ValueError(f"{k} is not a valid key.")
+       | G4-kapsam: E       KeyError: 'Global.text_score'
+       | G5-tum: E       KeyError: 'Global.text_score'
+M03b  [.XXXX] YAKALANDI
+       K5: motor kendi esigini uyguluyor (puan < 0.5 atlanir)
+       hedef: K5
+       | G2-birim: E       AssertionError: assert ['', 'u'] == [' bosluklu ', '', 'u']
+       | G3-real: IHLAL  [8] KR+JAPAN: 9 blok, 0 tanesi confidence<0.5 - >=1 olmalı (süzgeç KAPALI kanıtı)
+       | G4-kapsam: E       AssertionError: assert ['', 'u'] == [' bosluklu ', '', 'u']
+       | G5-tum: E       AssertionError: assert ['', 'u'] == [' bosluklu ', '', 'u']
+M03c  [.X.XX] YAKALANDI
+       K5: `text` DEGISTIRILIYOR (strip)
+       hedef: K5
+       | G2-birim: E       AssertionError: assert ['bosluklu', '', 'u'] == [' bosluklu ', '', 'u']
+       | G4-kapsam: E       AssertionError: assert ['bosluklu', '', 'u'] == [' bosluklu ', '', 'u']
+       | G5-tum: E       AssertionError: assert ['bosluklu', '', 'u'] == [' bosluklu ', '', 'u']
+M04   [.X.XX] YAKALANDI
+       K11 JAPAN: Det.lang_type multi -> ch
+       hedef: K11 (JAPAN det)
+       | G2-birim: E       AssertionError: assert ('ch' == 'multi'
+       | G4-kapsam: E       AssertionError: assert ('ch' == 'multi'
+       | G5-tum: E       AssertionError: assert ('ch' == 'multi'
+M05   [.X.XX] YAKALANDI
+       K11 KOREAN: Rec.lang_type korean -> japan
+       hedef: K11 (KOREAN rec)
+       | G2-birim: E       AssertionError: assert ('multi' == 'multi'
+       | G4-kapsam: E       AssertionError: assert ('multi' == 'multi'
+       | G5-tum: E       AssertionError: assert ('multi' == 'multi'
+M06   [.X.XX] YAKALANDI
+       K11 CHINESE: Det.ocr_version yalniz CHINESE'de PP-OCRv5
+       hedef: K11 (CHINESE version)
+       | G2-birim: E           AssertionError: assert 'PP-OCRv5' == 'PP-OCRv4'
+       | G4-kapsam: E           AssertionError: assert 'PP-OCRv5' == 'PP-OCRv4'
+       | G5-tum: E           AssertionError: assert 'PP-OCRv5' == 'PP-OCRv4'
+M07   [.X.XX] YAKALANDI
+       K11 ENGLISH: Rec.model_type yalniz ENGLISH'te server
+       hedef: K11 (ENGLISH type)
+       | G2-birim: E           AssertionError: assert 'server' == 'mobile'
+       | G4-kapsam: E           AssertionError: assert 'server' == 'mobile'
+       | G5-tum: E           AssertionError: assert 'server' == 'mobile'
+M08   [.XXXX] YAKALANDI
+       K6/K11 KOREAN: rec model DOSYASI japan (diskte var -> yanlis model sessizce yuklenir)
+       hedef: K11 dosya tablosu (KOREAN)
+       | G2-birim: `ModelMissingError` firlatir (K6). Testler ve `real_check` bunu
+       | G3-real: IHLAL  [3] KOREAN: birleşik benzerlik 0.019 >= 0.95  (17 blok)
+       | G4-kapsam: `ModelMissingError` firlatir (K6). Testler ve `real_check` bunu
+       | G5-tum: `ModelMissingError` firlatir (K6). Testler ve `real_check` bunu
+M09   [.XXXX] YAKALANDI
+       K6/K11 ENGLISH: det model DOSYASI multi (Y3: 22 kelime kutusu)
+       hedef: K11 dosya tablosu (ENGLISH)
+       | G2-birim: `ModelMissingError` firlatir (K6). Testler ve `real_check` bunu
+       | G3-real: IHLAL  [4] ENGLISH: 0/4 satır birebir  (22 blok)
+       | G4-kapsam: `ModelMissingError` firlatir (K6). Testler ve `real_check` bunu
+       | G5-tum: `ModelMissingError` firlatir (K6). Testler ve `real_check` bunu
+M10   [.X.XX] YAKALANDI
+       K3: UST sinir denetimi yok (cpu_count ustu sessiz otomatik)
+       hedef: K3 ust sinir
+       | G2-birim: >       with pytest.raises(ValueError):
+       | G4-kapsam: >       with pytest.raises(ValueError):
+       | G5-tum: >       with pytest.raises(ValueError):
+M11   [.X.XX] YAKALANDI
+       K3: ALT sinir 0'i kabul eder (0 = onnxruntime otomatik)
+       hedef: K3 alt sinir
+       | G2-birim: >       with pytest.raises(ValueError):
+       | G4-kapsam: >       with pytest.raises(ValueError):
+       | G5-tum: >       with pytest.raises(ValueError):
+M11b  [.X.XX] YAKALANDI
+       K3: tam sinir (n == cpu_count) REDDEDILIR (off-by-one)
+       hedef: K3 tam sinir
+       | G2-birim: with pytest.raises(ValueError):
+       | G4-kapsam: with pytest.raises(ValueError):
+       | G5-tum: with pytest.raises(ValueError):
+M12   [.X.XX] YAKALANDI
+       K3: `inter_op_num_threads` anahtari UNUTULMUS, intra dogru
+       hedef: K3 inter
+       | G2-birim: E       KeyError: 'EngineConfig.onnxruntime.inter_op_num_threads'
+       | G4-kapsam: E       KeyError: 'EngineConfig.onnxruntime.inter_op_num_threads'
+       | G5-tum: E       KeyError: 'EngineConfig.onnxruntime.inter_op_num_threads'
+M12b  [.X.XX] YAKALANDI
+       K3: inter sabit 1, intra dogru
+       hedef: K3 inter
+       | G2-birim: tests\unit\ocr\test_rapid_engine.py:269: AssertionError
+       | G4-kapsam: tests\unit\ocr\test_rapid_engine.py:269: AssertionError
+       | G5-tum: tests\unit\ocr\test_rapid_engine.py:269: AssertionError
+M13   [.X.XX] YAKALANDI
+       K3: None -> cpu_count (min(8, ...) yok)
+       hedef: K3 None varsayilani
+       | G2-birim: tests\unit\ocr\test_rapid_engine.py:278: AssertionError
+       | G4-kapsam: tests\unit\ocr\test_rapid_engine.py:278: AssertionError
+       | G5-tum: tests\unit\ocr\test_rapid_engine.py:278: AssertionError
+M13b  [.X.XX] YAKALANDI
+       K3: None -> 8 kosulsuz (cpu_count < 8'de sessiz otomatik)
+       hedef: K3 None varsayilani
+       | G2-birim: tests\unit\ocr\test_rapid_engine.py:282: AssertionError
+       | G4-kapsam: tests\unit\ocr\test_rapid_engine.py:282: AssertionError
+       | G5-tum: tests\unit\ocr\test_rapid_engine.py:282: AssertionError
+M14   [.X.XX] YAKALANDI
+       K4: floor -> round (x ve y)
+       hedef: K4 floor
+       | G2-birim: tests\unit\ocr\test_rapid_engine.py:341: AssertionError
+       | G4-kapsam: tests\unit\ocr\test_rapid_engine.py:341: AssertionError
+       | G5-tum: tests\unit\ocr\test_rapid_engine.py:341: AssertionError
+M15   [.X.XX] YAKALANDI
+       K4: ceil -> floor (x)
+       hedef: K4 ceil
+       | G2-birim: tests\unit\ocr\test_rapid_engine.py:341: AssertionError
+       | G4-kapsam: tests\unit\ocr\test_rapid_engine.py:341: AssertionError
+       | G5-tum: tests\unit\ocr\test_rapid_engine.py:341: AssertionError
+M16   [.XXXX] YAKALANDI
+       K4: kaydirma YALNIZ x'e (y kaydirilmiyor)
+       hedef: K4 kaydirma
+       | G2-birim: tests\unit\ocr\test_rapid_engine.py:341: AssertionError
+       | G3-real: IHLAL  [6c] iki nokta farkı (-2600,0) == (-2600,-50)  (kaydırma tam frame.rect kadar)
+       | G4-kapsam: tests\unit\ocr\test_rapid_engine.py:341: AssertionError
+       | G5-tum: tests\unit\ocr\test_rapid_engine.py:341: AssertionError
+M17   [.XXXX] YAKALANDI
+       K4: x kaydirmasi ters isaretli
+       hedef: K4 kaydirma
+       | G2-birim: tests\unit\ocr\test_rapid_engine.py:341: AssertionError
+       | G3-real: IHLAL  [6a] Frame.rect=(-2600,-50): ilk blok bbox.x=2682 negatif olmalı (görüntü-yerel x~75)
+       | G4-kapsam: tests\unit\ocr\test_rapid_engine.py:341: AssertionError
+       | G5-tum: tests\unit\ocr\test_rapid_engine.py:341: AssertionError
+M18   [.X.XX] YAKALANDI
+       K4: w'ye fazladan 1 piksel
+       hedef: K4 fazla piksel
+       | G2-birim: tests\unit\ocr\test_rapid_engine.py:341: AssertionError
+       | G4-kapsam: tests\unit\ocr\test_rapid_engine.py:341: AssertionError
+       | G5-tum: tests\unit\ocr\test_rapid_engine.py:341: AssertionError
+M18b  [.X.XX] YAKALANDI
+       K4: w = ceil(max-min) (floor/ceil ayrik uygulanmiyor)
+       hedef: K4 w formulu
+       | G2-birim: tests\unit\ocr\test_rapid_engine.py:341: AssertionError
+       | G4-kapsam: tests\unit\ocr\test_rapid_engine.py:341: AssertionError
+       | G5-tum: tests\unit\ocr\test_rapid_engine.py:341: AssertionError
+M19   [.XXXX] YAKALANDI
+       K6: model yok -> ModelMissingError yerine OcrError
+       hedef: K6 (a) siniflandirma
+       | G2-birim: with pytest.raises(ModelMissingError) as ei:
+       | G3-real: IHLAL  [7] beklenen ModelMissingError; alınan: ''  stderr: cts.errors.OcrError: model dosyasi yok: multi_PP-OCRv3_det_mo
+       | G4-kapsam: with pytest.raises(ModelMissingError) as ei:
+       | G5-tum: with pytest.raises(ModelMissingError) as ei:
+M20   [.X.XX] YAKALANDI
+       K6 (c): kare dogrulamasi YOK, bozuk kare motora gider
+       hedef: K6 (c) ContractViolation
+       | G2-birim: np.zeros((0, 0, 3), np.uint8),  # 0x0: rapidocr'da ZeroDivisionError (olcum-3)
+       | G4-kapsam: np.zeros((0, 0, 3), np.uint8),  # 0x0: rapidocr'da ZeroDivisionError (olcum-3)
+       | G5-tum: np.zeros((0, 0, 3), np.uint8),  # 0x0: rapidocr'da ZeroDivisionError (olcum-3)
+M20b  [.X.XX] YAKALANDI
+       K6 (c): dogrulama kurulumdan SONRA (bozuk karede fabrika cagrilir)
+       hedef: K6 (c) sira
+       | G2-birim: np.zeros((0, 0, 3), np.uint8),  # 0x0: rapidocr'da ZeroDivisionError (olcum-3)
+       | G4-kapsam: np.zeros((0, 0, 3), np.uint8),  # 0x0: rapidocr'da ZeroDivisionError (olcum-3)
+       | G5-tum: np.zeros((0, 0, 3), np.uint8),  # 0x0: rapidocr'da ZeroDivisionError (olcum-3)
+M21   [.X.XX] YAKALANDI
+       K6 (b): `__cause__` DUSURULMUS
+       hedef: K6 (b) __cause__
+       | G2-birim: ozgun = RuntimeError("motor patladi")
+       | G4-kapsam: ozgun = RuntimeError("motor patladi")
+       | G5-tum: ozgun = RuntimeError("motor patladi")
+M22   [.X.XX] YAKALANDI
+       K6: fabrikanin FileNotFoundError'u ModelMissingError yerine OcrError olur
+       hedef: K6 (a) kurulum
+       | G2-birim: E           FileNotFoundError: x.onnx
+       | G4-kapsam: E           FileNotFoundError: x.onnx
+       | G5-tum: E           FileNotFoundError: x.onnx
+M23   [.X.XX] YAKALANDI
+       K6 (b): tanıyıcının TranslatorError'u da OcrError'a SARILIR (ModelMissingError kaybolur)
+       hedef: K6 (b) oldugu gibi
+       | G2-birim: """Gercek fabrikanin tanıyıcısı beklenmeyen cikti tipinde `OcrError` firlatir; sarilmaz."""
+       | G4-kapsam: """Gercek fabrikanin tanıyıcısı beklenmeyen cikti tipinde `OcrError` firlatir; sarilmaz."""
+       | G5-tum: """Gercek fabrikanin tanıyıcısı beklenmeyen cikti tipinde `OcrError` firlatir; sarilmaz."""
+M36   [.X.XX] YAKALANDI
+       K6: allow_download=True'da da model_path zorlanir (indirme yolu kapali)
+       hedef: K6 allow_download
+       | G2-birim: tests\unit\ocr\test_rapid_engine.py:468: AssertionError
+       | G4-kapsam: tests\unit\ocr\test_rapid_engine.py:468: AssertionError
+       | G5-tum: tests\unit\ocr\test_rapid_engine.py:468: AssertionError
+M37   [.X.XX] YAKALANDI
+       K6 (c): (h,w,4) kabul edilir
+       hedef: K6 (c) bicim
+       | G2-birim: np.zeros((0, 0, 3), np.uint8),  # 0x0: rapidocr'da ZeroDivisionError (olcum-3)
+       | G4-kapsam: np.zeros((0, 0, 3), np.uint8),  # 0x0: rapidocr'da ZeroDivisionError (olcum-3)
+       | G5-tum: np.zeros((0, 0, 3), np.uint8),  # 0x0: rapidocr'da ZeroDivisionError (olcum-3)
+M24   [.X.XX] YAKALANDI
+       K7: logger seviyesi kurulumdan ONCE cekiliyor (kutuphane sifirlar)
+       hedef: K7 sira
+       | G2-birim: tests\unit\ocr\test_rapid_engine.py:652: AssertionError
+       | G4-kapsam: tests\unit\ocr\test_rapid_engine.py:652: AssertionError
+       | G5-tum: tests\unit\ocr\test_rapid_engine.py:652: AssertionError
+M25   [.X.XX] YAKALANDI
+       K7: `print` eklendi (metinsiz)
+       hedef: K7 print
+       | G2-birim: E                   AssertionError: assert 'print' != 'print'
+       | G4-kapsam: E                   AssertionError: assert 'print' != 'print'
+       | G5-tum: E                   AssertionError: assert 'print' != 'print'
+M25b  [.X.XX] YAKALANDI
+       K7: `sys.stdout.write(blok.text)` (print DEGIL -- AST `print` sayaci gormez)
+       hedef: K7 stdout
+       | G2-birim: E       AssertionError: stdout'a 12 karakter yazildi (sifir olmali)
+       | G4-kapsam: E       AssertionError: stdout'a 12 karakter yazildi (sifir olmali)
+       | G5-tum: E       AssertionError: stdout'a 12 karakter yazildi (sifir olmali)
+M26   [.X.XX] YAKALANDI
+       K7: seviye WARNING (bos karede WARNING basar)
+       hedef: K7 seviye
+       | G2-birim: tests\unit\ocr\test_rapid_engine.py:652: AssertionError
+       | G4-kapsam: tests\unit\ocr\test_rapid_engine.py:652: AssertionError
+       | G5-tum: tests\unit\ocr\test_rapid_engine.py:652: AssertionError
+M27   [.X.XX] YAKALANDI
+       K7: params log_level=info (kurulum sirasinda INFO satirlari)
+       hedef: K7 kurulum logu
+       | G2-birim: E       AssertionError: assert 'info' == 'error'
+       | G4-kapsam: E       AssertionError: assert 'info' == 'error'
+       | G5-tum: E       AssertionError: assert 'info' == 'error'
+M28a  [.X.XX] YAKALANDI
+       K7: modul logger'ina WARNING ile blok METNI (degisken adi `metin`, `.text`/`txts` degil)
+       hedef: K7 metin loglanmaz
+       | G2-birim: tests\unit\ocr\test_rapid_engine.py:668: AssertionError
+       | G4-kapsam: tests\unit\ocr\test_rapid_engine.py:668: AssertionError
+       | G5-tum: tests\unit\ocr\test_rapid_engine.py:668: AssertionError
+M28b  [.X.XX] YAKALANDI
+       K7: RapidOCR logger'ina INFO ile blok METNI (motor ERROR'a cektigi icin sessiz)
+       hedef: K7 metin loglanmaz
+       | G2-birim: E           AssertionError: nobetci bir log kaydina dustu
+       | G4-kapsam: E           AssertionError: nobetci bir log kaydina dustu
+       | G5-tum: E           AssertionError: nobetci bir log kaydina dustu
+M28c  [.X.XX] YAKALANDI
+       K7: uygulama logger'ina DEBUG ile blok METNI (uygulama DEBUG acinca log dosyasina sizar)
+       hedef: K7 metin loglanmaz
+       | G2-birim: E           AssertionError: nobetci bir log kaydina dustu
+       | G4-kapsam: E           AssertionError: nobetci bir log kaydina dustu
+       | G5-tum: E           AssertionError: nobetci bir log kaydina dustu
+M29   [.X.XX] YAKALANDI
+       K10: close() sonrasi recognize CALISIYOR (fabrika yeniden kurulur)
+       hedef: K10 close sonrasi
+       | G2-birim: >       with pytest.raises(OcrError):
+       | G4-kapsam: >       with pytest.raises(OcrError):
+       | G5-tum: >       with pytest.raises(OcrError):
+M30   [.X.XX] YAKALANDI
+       K10: fabrika HER cagrida yeniden kuruluyor
+       hedef: K10 tek ornek
+       | G2-birim: tests\unit\ocr\test_rapid_engine.py:820: AssertionError
+       | G4-kapsam: tests\unit\ocr\test_rapid_engine.py:820: AssertionError
+       | G5-tum: tests\unit\ocr\test_rapid_engine.py:820: AssertionError
+M31   [.X.XX] YAKALANDI
+       K10: close() `_kapali` isaretlemez -> sonraki recognize fabrikayi yeniden kurar
+       hedef: K10 close
+       | G2-birim: >       with pytest.raises(OcrError):
+       | G4-kapsam: >       with pytest.raises(OcrError):
+       | G5-tum: >       with pytest.raises(OcrError):
+M32   [.X.XX] YAKALANDI
+       K10: close() tanıyıcıyı BIRAKMAZ (oturumlar canli kalir; disaridan gorunmez)
+       hedef: K10 close birakir
+       | G2-birim: E       AssertionError: assert <function SahteFabrika.__call__.<locals>._tani at 0x000002171639B060> is None
+       | G4-kapsam: E       AssertionError: assert <function SahteFabrika.__call__.<locals>._tani at 0x000001A8AA5B3740> is None
+       | G5-tum: E       AssertionError: assert <function SahteFabrika.__call__.<locals>._tani at 0x00000210270A5940> is None
+M33   [.X.XX] YAKALANDI
+       K1: modul duzeyinde `import rapidocr`
+       hedef: K1 tembel import
+       | G2-birim: raise RuntimeError(
+       | G4-kapsam: raise RuntimeError(
+       | G5-tum: raise RuntimeError(
+M33c  [.X.XX] YAKALANDI
+       K1: varsayilan model dizini `import rapidocr` ile bulunuyor
+       hedef: K1 bariyer altinda dizin
+       | G2-birim: except importlib.metadata.PackageNotFoundError:
+       | G4-kapsam: except importlib.metadata.PackageNotFoundError:
+       | G5-tum: except importlib.metadata.PackageNotFoundError:
+M38   [.X.XX] YAKALANDI
+       K2: `language` varsayilani JAPAN
+       hedef: K2 zorunlu dil
+       | G2-birim: tests\unit\ocr\test_rapid_engine.py:239: AssertionError
+       | G4-kapsam: tests\unit\ocr\test_rapid_engine.py:239: AssertionError
+       | G5-tum: tests\unit\ocr\test_rapid_engine.py:239: AssertionError
+C01   [.....] KACTI (dogru: kontrol)
+       KONTROL: `is` -> `==` (enum uyesi icin esdeger)
+       hedef: -- kontrol --
+C02   [.....] KACTI (dogru: kontrol)
+       KONTROL: asarray -> array (kopya; sonuc ayni)
+       hedef: -- kontrol --
+C03   [.....] KACTI (dogru: kontrol)
+       KONTROL: yalniz tip ek aciklamasi
+       hedef: -- kontrol --
+C04   [.....] KACTI (dogru: kontrol)
+       KONTROL: sozluk anahtar sirasi degisti
+       hedef: -- kontrol --
+
+=== MARKDOWN TABLOSU ===
+| # | mutant | hedef | G1-mypy | G2-birim | G3-real | G4-kapsam | G5-tum |
+|---|---|---|---|---|---|---|---|
+| M01 | K5: `Global.text_score` anahtari SILINDI (kutuphane varsayilani 0.5 -> sessiz eleme) | K5 | . | X | X | X | X |
+| M02 | K5: `Global.text_score` = 0.5 yazilmis (suzgec ACIK) | K5 | . | X | X | X | X |
+| M03 | K5: yanlis anahtar adi `Global.textscore` (kutuphane sessizce kabul eder, KRT D4) | K5 | . | X | X | X | X |
+| M03b | K5: motor kendi esigini uyguluyor (puan < 0.5 atlanir) | K5 | . | X | X | X | X |
+| M03c | K5: `text` DEGISTIRILIYOR (strip) | K5 | . | X | . | X | X |
+| M04 | K11 JAPAN: Det.lang_type multi -> ch | K11 (JAPAN det) | . | X | . | X | X |
+| M05 | K11 KOREAN: Rec.lang_type korean -> japan | K11 (KOREAN rec) | . | X | . | X | X |
+| M06 | K11 CHINESE: Det.ocr_version yalniz CHINESE'de PP-OCRv5 | K11 (CHINESE version) | . | X | . | X | X |
+| M07 | K11 ENGLISH: Rec.model_type yalniz ENGLISH'te server | K11 (ENGLISH type) | . | X | . | X | X |
+| M08 | K6/K11 KOREAN: rec model DOSYASI japan (diskte var -> yanlis model sessizce yuklenir) | K11 dosya tablosu (KOREAN) | . | X | X | X | X |
+| M09 | K6/K11 ENGLISH: det model DOSYASI multi (Y3: 22 kelime kutusu) | K11 dosya tablosu (ENGLISH) | . | X | X | X | X |
+| M10 | K3: UST sinir denetimi yok (cpu_count ustu sessiz otomatik) | K3 ust sinir | . | X | . | X | X |
+| M11 | K3: ALT sinir 0'i kabul eder (0 = onnxruntime otomatik) | K3 alt sinir | . | X | . | X | X |
+| M11b | K3: tam sinir (n == cpu_count) REDDEDILIR (off-by-one) | K3 tam sinir | . | X | . | X | X |
+| M12 | K3: `inter_op_num_threads` anahtari UNUTULMUS, intra dogru | K3 inter | . | X | . | X | X |
+| M12b | K3: inter sabit 1, intra dogru | K3 inter | . | X | . | X | X |
+| M13 | K3: None -> cpu_count (min(8, ...) yok) | K3 None varsayilani | . | X | . | X | X |
+| M13b | K3: None -> 8 kosulsuz (cpu_count < 8'de sessiz otomatik) | K3 None varsayilani | . | X | . | X | X |
+| M14 | K4: floor -> round (x ve y) | K4 floor | . | X | . | X | X |
+| M15 | K4: ceil -> floor (x) | K4 ceil | . | X | . | X | X |
+| M16 | K4: kaydirma YALNIZ x'e (y kaydirilmiyor) | K4 kaydirma | . | X | X | X | X |
+| M17 | K4: x kaydirmasi ters isaretli | K4 kaydirma | . | X | X | X | X |
+| M18 | K4: w'ye fazladan 1 piksel | K4 fazla piksel | . | X | . | X | X |
+| M18b | K4: w = ceil(max-min) (floor/ceil ayrik uygulanmiyor) | K4 w formulu | . | X | . | X | X |
+| M19 | K6: model yok -> ModelMissingError yerine OcrError | K6 (a) siniflandirma | . | X | X | X | X |
+| M20 | K6 (c): kare dogrulamasi YOK, bozuk kare motora gider | K6 (c) ContractViolation | . | X | . | X | X |
+| M20b | K6 (c): dogrulama kurulumdan SONRA (bozuk karede fabrika cagrilir) | K6 (c) sira | . | X | . | X | X |
+| M21 | K6 (b): `__cause__` DUSURULMUS | K6 (b) __cause__ | . | X | . | X | X |
+| M22 | K6: fabrikanin FileNotFoundError'u ModelMissingError yerine OcrError olur | K6 (a) kurulum | . | X | . | X | X |
+| M23 | K6 (b): tanıyıcının TranslatorError'u da OcrError'a SARILIR (ModelMissingError kaybolur) | K6 (b) oldugu gibi | . | X | . | X | X |
+| M36 | K6: allow_download=True'da da model_path zorlanir (indirme yolu kapali) | K6 allow_download | . | X | . | X | X |
+| M37 | K6 (c): (h,w,4) kabul edilir | K6 (c) bicim | . | X | . | X | X |
+| M24 | K7: logger seviyesi kurulumdan ONCE cekiliyor (kutuphane sifirlar) | K7 sira | . | X | . | X | X |
+| M25 | K7: `print` eklendi (metinsiz) | K7 print | . | X | . | X | X |
+| M25b | K7: `sys.stdout.write(blok.text)` (print DEGIL -- AST `print` sayaci gormez) | K7 stdout | . | X | . | X | X |
+| M26 | K7: seviye WARNING (bos karede WARNING basar) | K7 seviye | . | X | . | X | X |
+| M27 | K7: params log_level=info (kurulum sirasinda INFO satirlari) | K7 kurulum logu | . | X | . | X | X |
+| M28a | K7: modul logger'ina WARNING ile blok METNI (degisken adi `metin`, `.text`/`txts` degil) | K7 metin loglanmaz | . | X | . | X | X |
+| M28b | K7: RapidOCR logger'ina INFO ile blok METNI (motor ERROR'a cektigi icin sessiz) | K7 metin loglanmaz | . | X | . | X | X |
+| M28c | K7: uygulama logger'ina DEBUG ile blok METNI (uygulama DEBUG acinca log dosyasina sizar) | K7 metin loglanmaz | . | X | . | X | X |
+| M29 | K10: close() sonrasi recognize CALISIYOR (fabrika yeniden kurulur) | K10 close sonrasi | . | X | . | X | X |
+| M30 | K10: fabrika HER cagrida yeniden kuruluyor | K10 tek ornek | . | X | . | X | X |
+| M31 | K10: close() `_kapali` isaretlemez -> sonraki recognize fabrikayi yeniden kurar | K10 close | . | X | . | X | X |
+| M32 | K10: close() tanıyıcıyı BIRAKMAZ (oturumlar canli kalir; disaridan gorunmez) | K10 close birakir | . | X | . | X | X |
+| M33 | K1: modul duzeyinde `import rapidocr` | K1 tembel import | . | X | . | X | X |
+| M33c | K1: varsayilan model dizini `import rapidocr` ile bulunuyor | K1 bariyer altinda dizin | . | X | . | X | X |
+| M38 | K2: `language` varsayilani JAPAN | K2 zorunlu dil | . | X | . | X | X |
+| C01 | KONTROL: `is` -> `==` (enum uyesi icin esdeger) | -- kontrol -- | . | . | . | . | . |
+| C02 | KONTROL: asarray -> array (kopya; sonuc ayni) | -- kontrol -- | . | . | . | . | . |
+| C03 | KONTROL: yalniz tip ek aciklamasi | -- kontrol -- | . | . | . | . | . |
+| C04 | KONTROL: sozluk anahtar sirasi degisti | -- kontrol -- | . | . | . | . | . |
+
+Kacan (kontrol olmayan) mutant yok.
+Kontrol mutantlarinin hepsi kacti (yanlis pozitif yok).
+exit=0 

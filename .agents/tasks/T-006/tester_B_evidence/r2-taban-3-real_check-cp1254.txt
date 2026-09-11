@@ -1,0 +1,21 @@
+# r2 taban 3 -- real_check, stdout DOSYAYA yonlendirilmis (cp1254), PYTHONIOENCODING yok -- tur 1'de burada cokuyordu -- 2026-09-11 07:38:02
+T-006 real_check - gerçek model
+  ok     [1] JAPAN: 4/4 satýr birebir  (4 blok)
+  ok     [6a] Frame.rect=(-2600,-50): ilk blok bbox.x=-2518 negatif olmalý (görüntü-yerel x~75)
+  ok     [6a] monitor_index frame'den taþýndý: 0 (beklenen 0)
+  ok     [6a] tüm bbox alanlarý type is int, json'lanabilir
+  ok     [6b] Frame.rect=(0,0): ilk blok bbox=(82,93) negatif olmamalý
+  ok     [6c] iki nokta farký (-2600,-50) == (-2600,-50)  (kaydýrma tam frame.rect kadar)
+  ok     [6c] monitor_index ikinci frame'de 1 (beklenen 1)
+  ok     [2] CHINESE modeli Japonca diyalogda 0/4 - 4 OLMAMALI (dil ölçüsü ateþliyor)
+  ok     [4] ENGLISH: 4/4 satýr birebir  (4 blok)
+  ok     [3] KOREAN: birleþik benzerlik 0.971 >= 0.95  (17 blok)
+  ok     [5] JAPAN: medyan 184 ms, 4 kutu  (eþik 300 ms)
+  ok     [5] ENGLISH: medyan 241 ms, 4 kutu  (eþik 350 ms)
+  ok     [5] KOREAN: medyan 670 ms / 17 kutu = 39 ms/kutu  (eþik 150 ms/kutu)
+  ok     [8] KR+JAPAN: 17 blok, 8 tanesi confidence<0.5 - >=1 olmalý (süzgeç KAPALI kanýtý)
+  ok     [K5] confidence tipi float (min 0.999)
+  ok     [7] model yok + allow_download=False -> ModelMissingError (__cause__ NoneType)
+
+REAL_CHECK: TEMÝZ (0 uyarý)
+exit=0

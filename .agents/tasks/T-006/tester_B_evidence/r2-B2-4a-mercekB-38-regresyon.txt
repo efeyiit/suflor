@@ -1,0 +1,48 @@
+# r2 B2-4a -- tur 1 mercek B testleri (38) guncel koda karsi -- 2026-09-11 07:45:05
+============================= test session starts =============================
+platform win32 -- Python 3.12.10, pytest-9.1.1, pluggy-1.6.0 -- C:\Users\pc\AppData\Local\Programs\Python\Python312\python.exe
+rootdir: C:\Users\pc\Desktop\efe\çeviri uygulaması
+plugins: anyio-4.15.1, cov-7.1.0
+collecting ... collected 38 items
+
+.agents/tasks/T-006/tester_B/test_mercek_B.py::test_b3_conftest_yuklenirken_yasak_kok_sys_modules_ta_yoktu PASSED [  2%]
+.agents/tasks/T-006/tester_B/test_mercek_B.py::test_b3_import_module_kesilir[rapidocr] PASSED [  5%]
+.agents/tasks/T-006/tester_B/test_mercek_B.py::test_b3_import_module_kesilir[rapidocr.main] PASSED [  7%]
+.agents/tasks/T-006/tester_B/test_mercek_B.py::test_b3_import_module_kesilir[rapidocr.inference_engine.base] PASSED [ 10%]
+.agents/tasks/T-006/tester_B/test_mercek_B.py::test_b3_import_module_kesilir[onnxruntime] PASSED [ 13%]
+.agents/tasks/T-006/tester_B/test_mercek_B.py::test_b3_dunder_import_kesilir PASSED [ 15%]
+.agents/tasks/T-006/tester_B/test_mercek_B.py::test_b3_find_spec_kesilir PASSED [ 18%]
+.agents/tasks/T-006/tester_B/test_mercek_B.py::test_b3_spec_from_file_location_kacisi_olculur[rapidocr] PASSED [ 21%]
+.agents/tasks/T-006/tester_B/test_mercek_B.py::test_b3_spec_from_file_location_kacisi_olculur[onnxruntime] PASSED [ 23%]
+.agents/tasks/T-006/tester_B/test_mercek_B.py::test_b3_sys_modules_onceden_dolu_kacisi_olculur PASSED [ 26%]
+.agents/tasks/T-006/tester_B/test_mercek_B.py::test_b3_alt_surec_kacisi_var_ama_motor_ve_testler_kullanmiyor PASSED [ 28%]
+.agents/tasks/T-006/tester_B/test_mercek_B.py::test_b3_sefin_pozitif_kontrolu_yalniz_import_module_yolunu_goruyor PASSED [ 31%]
+.agents/tasks/T-006/tester_B/test_mercek_B.py::test_b3_sefin_bariyeri_meta_path_basinda_ve_sys_modules_e_nobetci_koymuyor PASSED [ 34%]
+.agents/tasks/T-006/tester_B/test_mercek_B.py::test_b3_sahte_fabrikayla_tam_kosum_yasak_kok_yuklemez PASSED [ 36%]
+.agents/tasks/T-006/tester_B/test_mercek_B.py::test_b3_varsayilan_model_dizini_bariyer_altinda_bulucuya_sormaz PASSED [ 39%]
+.agents/tasks/T-006/tester_B/test_mercek_B.py::test_b4_her_seviyede_nobetci_hicbir_loga_ve_stdout_stderr_e_dusmez[DEBUG] PASSED [ 42%]
+.agents/tasks/T-006/tester_B/test_mercek_B.py::test_b4_her_seviyede_nobetci_hicbir_loga_ve_stdout_stderr_e_dusmez[INFO] PASSED [ 44%]
+.agents/tasks/T-006/tester_B/test_mercek_B.py::test_b4_her_seviyede_nobetci_hicbir_loga_ve_stdout_stderr_e_dusmez[WARNING] PASSED [ 47%]
+.agents/tasks/T-006/tester_B/test_mercek_B.py::test_b4_her_seviyede_nobetci_hicbir_loga_ve_stdout_stderr_e_dusmez[ERROR] PASSED [ 50%]
+.agents/tasks/T-006/tester_B/test_mercek_B.py::test_b4_pozitif_kontrol_olcu_atesliyor PASSED [ 52%]
+.agents/tasks/T-006/tester_B/test_mercek_B.py::test_b4_rapidocr_logger_kurulumdan_sonra_error PASSED [ 55%]
+.agents/tasks/T-006/tester_B/test_mercek_B.py::test_b4_bos_karede_kutuphane_warningi_stderr_e_dusmez PASSED [ 57%]
+.agents/tasks/T-006/tester_B/test_mercek_B.py::test_b4_motor_yalniz_rapidocr_logger_ina_dokunur_baska_logger_i_susturmaz PASSED [ 60%]
+.agents/tasks/T-006/tester_B/test_mercek_B.py::test_b4_hata_yollari_da_metin_tasimaz PASSED [ 63%]
+.agents/tasks/T-006/tester_B/test_mercek_B.py::test_b5_close_x2_sonra_recognize_ocrerror_ve_fabrika_yeniden_cagrilmaz PASSED [ 65%]
+.agents/tasks/T-006/tester_B/test_mercek_B.py::test_b5_close_taniyiciyi_gercekten_birakir PASSED [ 68%]
+.agents/tasks/T-006/tester_B/test_mercek_B.py::test_b5_fabrika_ilk_cagrida_firlatirsa_ikinci_recognize_yeniden_dener_ve_ornek_tutulmaz PASSED [ 71%]
+.agents/tasks/T-006/tester_B/test_mercek_B.py::test_b5_modelmissing_kurulumda_ornek_tutulmaz_dosya_gelince_kurulur PASSED [ 73%]
+.agents/tasks/T-006/tester_B/test_mercek_B.py::test_b5_kurulum_hatasindan_sonra_close_ve_kapali_davranisi PASSED [ 76%]
+.agents/tasks/T-006/tester_B/test_mercek_B.py::test_b5_iki_motor_ayni_fabrikayi_paylasirsa_durum_karismaz PASSED [ 78%]
+.agents/tasks/T-006/tester_B/test_mercek_B.py::test_b5_kapali_motorda_bozuk_kare_de_ocrerror_ve_fabrika_sayaci_sabit PASSED [ 81%]
+.agents/tasks/T-006/tester_B/test_mercek_B.py::test_b5_parametreler_close_sonrasi_da_calisir_ama_fabrikaya_gitmez PASSED [ 84%]
+.agents/tasks/T-006/tester_B/test_mercek_B.py::test_b5_taniyici_istisnasi_ornegi_dusurmez PASSED [ 86%]
+.agents/tasks/T-006/tester_B/test_mercek_B.py::test_b6_tek_pragma_ve_yalniz_varsayilan_fabrikada PASSED [ 89%]
+.agents/tasks/T-006/tester_B/test_mercek_B.py::test_b6_eksik_iki_satir_yapisal_olarak_erisilemez PASSED [ 92%]
+.agents/tasks/T-006/tester_B/test_mercek_B.py::test_b6_varsayilan_fabrika_pragma_kapsami_real_check_ile_olculuyor PASSED [ 94%]
+.agents/tasks/T-006/tester_B/test_mercek_B.py::test_b2_bosluk_suzgeci_sonrasi_liste_bicimi_de_kabul PASSED [ 97%]
+.agents/tasks/T-006/tester_B/test_mercek_B.py::test_b2_gercek_cikti_nesnesinde_fazla_alanlar_sorun_degil PASSED [100%]
+
+============================= 38 passed in 0.35s ==============================
+exit=0

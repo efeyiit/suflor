@@ -1,0 +1,7 @@
+# r2 -- src/ocr/rapid_engine.py: 19222f9 (tur 1) vs HEAD a618a1a (tur 2) AST karsilastirmasi -- 2026-09-11 07:48:48
+docstring'siz AST esit: True
+ham AST esit (docstring dahil): False
+degisen docstring'ler: ['<modul>', '_varsayilan_fabrika', 'close']
+HEAD~ (19222f9) close() govdesi: ['self._taniyici = None', 'self._kapali = True']
+tur 1 kiti: 51 mutant, tekil olmayan yama hedefi: 0
+exit=0

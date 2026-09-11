@@ -1,0 +1,20 @@
+==== T-006 TESTER B, TUR 2 -- SEF SONDASI ====
+Karar: ONAY. validate -> KABUL EDILEBILIR (17 kontrol, kanitlar dolu). Sahiplik temiz.
+B'nin mercek testleri 48 passed. A+B birlikte 154 passed.
+
+[R16] getattr(sys,'stdout').write -> SEF URETTI: AST'yi atlatiyor, K7 davranis
+  olculerinden 2'si dusuyor (108 passed / 2 failed). Olcu davranisi kancaliyor.
+[B2-1] 21 kacis yolu; bes kapidan kacan yalniz R04/R05 (handler .stream'e dogrudan
+  yazma -- recognize icinde makul yol degil) ve zaman-penceresi siniflari.
+  Davranis olcusunde yanlis pozitif yok. Kabul.
+[B2-4] B'nin tur 1 kiti: 47/47 yakalandi (tur 1'de 43), 4/4 kontrol kacti.
+
+SEFIN EK BULGUSU: A + B + urun BIRLIKTE kosunca 9 kirik -- hepsi B'nin
+  test_b3_* bariyer testleri. Sebep (sef olctu): B'nin testleri
+  match="tester-B K1 bariyeri" ariyor; sefin conftest bariyeri meta_path[0]'da
+  once ateslediginde mesaj "T-006 K1 bariyeri: ..." oluyor. IKI BARIYER DE
+  CALISIYOR; test yalniz kendi mesajini bekliyor. Urun etkilenmez. B'ye acik
+  kalem: match="K1 bariyeri" (ortak alt dizgi).
+  B tek basina 48, A+B 154, A+urun 216 -> hepsi yesil; yalniz B+urun 9 kirik.
+
+KARAR: B'nin onayi KABUL EDILEBILIR. T-006 KABUL. DALGA 1 TAMAMLANDI.
