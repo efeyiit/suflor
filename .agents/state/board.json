@@ -17,7 +17,8 @@
       "depends_on": [],
       "durum": "kabul",
       "tur": 1,
-      "donduruldu": true
+      "donduruldu": true,
+      "status": "kabul"
     },
     {
       "id": "T-002",
@@ -32,7 +33,8 @@
         "T-001"
       ],
       "durum": "kabul",
-      "tur": 2
+      "tur": 2,
+      "status": "kabul"
     },
     {
       "id": "T-003",
@@ -47,7 +49,8 @@
         "T-001"
       ],
       "durum": "kabul",
-      "tur": 2
+      "tur": 2,
+      "status": "kabul"
     },
     {
       "id": "T-004",
@@ -65,7 +68,8 @@
       "durum": "kabul",
       "tur": 7,
       "not": "KABUL (7 tur). K1-K32; K28 miras sorgusunun iki tarafi da ozgun bloktan. 125 urun testi + 623 kor tester testi. Dort tester onayi (tur 6: A/B/C, tur 7: B). Karar kirmizi takimi 7 gecis, 55+ bulgu; implementer'a giden hata SIFIR. Sefin 15 olculmus hatasi PROTOKOL 4.6'nin dokuz kuralini dogurdu. Dokuz acik kalem decision.md'de kayitli (Mn/Mc adlar, ZWJ sismesi, monitor sinir asimi, NaN tani, kit fixture/adim1_4/n23/MENU, olcek testi kararsizligi).",
-      "donduruldu": true
+      "donduruldu": true,
+      "status": "kabul"
     },
     {
       "id": "T-005",
@@ -124,7 +128,8 @@
       "durum": "acildi-paket-yok",
       "tur": 0,
       "donduruldu": false,
-      "not": "Sef olcumu (T-005 olgular.txt): gercek mss.grab medyani 13.5 ms, bolge boyutundan BAGIMSIZ; tasarim S5.7'nin 'Capture <= 10 ms' butcesi mss ile simdiden asiliyor. T-005'in CaptureBackend protokolune uyan ikinci bir backend olarak yazilacak; T-005 kapanmadan paket yazilmaz."
+      "not": "Sef olcumu (T-005 olgular.txt): gercek mss.grab medyani 13.5 ms, bolge boyutundan BAGIMSIZ; tasarim S5.7'nin 'Capture <= 10 ms' butcesi mss ile simdiden asiliyor. T-005'in CaptureBackend protokolune uyan ikinci bir backend olarak yazilacak; T-005 kapanmadan paket yazilmaz.",
+      "status": "acildi-paket-yok"
     },
     {
       "id": "T-009",
@@ -135,6 +140,12 @@
     {
       "id": "T-008",
       "title": "Satır birleştirici",
+      "status": "kabul",
+      "round": 2
+    },
+    {
+      "id": "T-007",
+      "title": "LocalNmtProvider (NLLB CT2)",
       "status": "kabul",
       "round": 2
     }
