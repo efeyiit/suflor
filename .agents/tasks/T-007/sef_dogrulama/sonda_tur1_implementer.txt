@@ -1,0 +1,18 @@
+==== T-007 TUR 1 IMPLEMENTER TESLIMI -- SEF SONDASI ====
+SAHIPLIK  src/translate/{__init__,local_nmt}.py (728 satir), tests/unit/translate/
+          test_local_nmt.py (210 test), delivery.md, evidence/ (16). Yasak listeden
+          hicbiri degismedi. Modul duzeyi ct2/spm import: 0. type-ignore: 1 (izinli).
+BES KAPI (sef kostu):
+  mypy Success · birim 210 passed · real_check TEMIZ 13/13 (cp1254'te de) ·
+  kapsam %100 · tam takim 1314 passed · delivery KABUL EDILEBILIR
+SEFIN MUTANTLARI (kum havuzu):
+  M1 Y1: ASCII nokta _TERMINATORLER'den cikarildi -> birim 11 failed,
+         real_check [4] "KR 1 cumle, dogu=False" -- kapi tam ongoruldugu gibi   YAKALANDI
+  M2 Y2: modele_gider -> True (suzgec yok)      -> birim 10 failed, real_check [4b] YAKALANDI
+  M3 K2: ensure_aligned kaldirildi              -> birim 1 failed                  YAKALANDI
+  M4 K5: yer tutucu onarimi kaldirildi          -> birim 4 failed, real_check [5]  YAKALANDI
+  (M1 ilk denemede regex'i bozdu -- sefin mutant hatasi, duzeltildi)
+IMPLEMENTER'IN ITIRAZLARI (known_gaps): K5 sayim vs `in` (O1 ile tutarli), K6 boyut
+  denetimi yok (paketin kendi olcusu dislar), K10 Logger.handle kancasi (ust kume),
+  bes sessiz karar. Hepsi makul, kabul.
+KARAR: KABUL EDILEBILIR. Tester turu (2 mercek).

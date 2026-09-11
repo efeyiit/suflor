@@ -1,0 +1,31 @@
+[0] ctranslate2 4.8.2  sentencepiece 0.2.2  python 3.12.10
+[0] repo yolu ASCII mi: False  (beklenen False: 'ceviri' -> c-cedilla)
+[1] model_file=<ASCII-disi mutlak yol> -> RuntimeError (C5 dogrulandi)
+[1] model_proto=bytes -> acildi, vocab=256000
+[1] encode(out_type=str) tip=list, eleman tipi=str, n=4
+[1] decode(list[str]) tip=str, kaynakla ayni mi=True
+[1] encode('') -> []; encode('   ') -> []
+[1] encode(chr(0x3002)*3) uzunluk -> 4
+[2] Translator(<ASCII-disi mutlak yol>) -> OK, kurulum 464 ms
+[2] translate_batch imza satiri: translate_batch(self: ctranslate2._ext.Translator, source: List[List[str]], target_prefix: Optional[List[Optional[List[str]]]] = None, *, max_batch_size: int = 0, batch_type: str = 'examples', asynchr
+[2] inspect.signature -> ValueError (pybind)
+[3] konumsal cagri -> OK, cikti tipi=list, n=4, eleman tipi=TranslationResult
+[3] tokens= anahtarli cagri -> TypeError (KRT D2 dogrulandi): translate_batch(): incompatible function arguments. The following argument types
+[3] source= anahtarli cagri -> OK
+[4] hypotheses tip=list, adet=1, hyp[0] tip=list, token tipi=str
+[4] her ciktida hyp[0][0]=='tur_Latn': True
+[4] herhangi bir hyp'de '</s>' var mi: False
+[4] cikti sayisi == girdi sayisi: True; decode([1:]) bos olan: 0
+[4] TranslationResult ozellikleri: ['attention', 'hypotheses', 'logits', 'scores']
+[5] rp=1.0 acik == gecilmemis: True
+[6] bos batch -> []
+[6] target_prefix 3 / source 2 -> hata YOK
+[7] sifir bayt model.bin -> RuntimeError: File model.bin is incomplete: failed to read a value of size
+[7] ctranslate2.contains_model(sifir bayt) = True
+[7] ctranslate2.contains_model(model.bin yok) = False
+[7] SentencePieceProcessor(model_proto=b'') -> kurulumda hata YOK
+[7] bos proto encode -> RuntimeError
+[8] Translator weakref: True; SentencePieceProcessor weakref: True
+[8] Translator.unload_model var mi: True
+[9] JP 4 cumle tek batch beam=4 8 iplik: medyan 311 ms, min 305, maks 328
+OLCUM-1 BITTI

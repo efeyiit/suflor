@@ -1,0 +1,51 @@
+ayna: C:\Users\pc\AppData\Local\Temp\scratch\C--Users-pc-Desktop-efe--eviri-uygulamas-\d52c967f-bd19-4db3-b5e9-77e6cd08b889\scratchpad\ayna
+temel (mutantsiz): exit=0  210 passed in 0.94s
+  M-01  YAKALANDI                    K3/Y1: bolme DILE gore (JP/KR/ZH -> yalniz CJK isaretleri; EN -> ASCII) -- v1 hatasi
+        ilk dusen: 1 failed, 17 passed in 0.34s
+  M-02  YAKALANDI                    K3/Y2: parca suzgeci kaldirildi -- her parca modele gider
+        ilk dusen: 1 failed, 32 passed in 0.38s
+  M-03  YAKALANDI                    K2/O3: cumle sayisi denetimi kaldirildi (kisa olan kadar zip)
+        ilk dusen: 1 failed, 8 passed in 0.32s
+  M-04  YAKALANDI                    K2: ensure_aligned cagrisi kaldirildi
+        ilk dusen: 1 failed, 13 passed in 0.25s
+  M-05  YAKALANDI                    K5/O1: sayim yerine `in` kontrolu (ikinci `%s` sessizce kaybolur)
+        ilk dusen: 1 failed, 104 passed in 0.48s
+  M-06  YAKALANDI                    K5: onarim tamamen kaldirildi
+        ilk dusen: 1 failed, 100 passed in 0.47s
+  M-07  YAKALANDI                    K8: repetition_penalty 1.0 iken de motora geciliyor
+        ilk dusen: 1 failed, 160 passed in 0.67s
+  M-08  YAKALANDI                    K8: inter_threads = threads (1 degil)
+        ilk dusen: 1 failed, 148 passed in 0.66s
+  M-09  YAKALANDI                    K9: latency kurulum suresini ICERIYOR
+        ilk dusen: 1 failed, 184 passed in 0.87s
+  M-10  YAKALANDI                    K10: close() motoru BIRAKMIYOR
+        ilk dusen: 1 failed, 190 passed in 0.91s
+  M-11  YAKALANDI                    K10: segment metni stdout'a yaziliyor
+        ilk dusen: 1 failed, 192 passed in 0.97s
+  M-12  YAKALANDI                    K10: segment metni propagate=False, adi bilinmeyen bir logger'a INFO yaziliyor
+        ilk dusen: 1 failed, 192 passed in 0.97s
+  M-13  YAKALANDI                    K4: source_lang=None sessizce JAPAN sayiliyor
+        ilk dusen: 1 failed, 50 passed in 0.42s
+  M-14  YAKALANDI                    K6/O4: yalniz model.bin + sentencepiece denetleniyor (v1 listesi)
+        ilk dusen: 1 failed, 111 passed in 0.55s
+  M-15  YAKALANDI                    K3: segment ciktisi bosluksuz birlestiriliyor
+        ilk dusen: 1 failed, 16 passed in 0.33s
+  M-16  YAKALANDI                    K9/O2: max_decoding_length 160 (demo degeri)
+        ilk dusen: 1 failed, 173 passed in 0.69s
+  M-17  YAKALANDI                    K3/Y2: hicbir parcasi modele gitmeyen segment bos string oluyor (aynen degil)
+        ilk dusen: 1 failed, 32 passed in 0.36s
+  M-18  YAKALANDI                    K4: kaynak belirteci basa degil SONA konuyor
+        ilk dusen: 1 failed, 14 passed in 0.26s
+  M-19  YAKALANDI                    K6: fabrika istisnasi sarilmadan yayiliyor (ProviderUnavailable degil)
+        ilk dusen: 1 failed, 119 passed in 0.60s
+  M-20  YAKALANDI                    K10: kapali saglayici bos istegi KABUL ediyor (kapali denetimi bos istekte atlaniyor)
+        ilk dusen: 1 failed, 187 passed in 0.85s
+  M-21  YAKALANDI                    K3: tum segmentler tek batch yerine segment basina ayri translate_batch
+        ilk dusen: 1 failed, 16 passed in 0.27s
+  M-22  YAKALANDI                    K6: hata mesaji kaynak metni tasiyor (PROTOKOL 7)
+        ilk dusen: 1 failed, 136 passed in 0.62s
+  C-1  KACTI (esdeger, beklenen)    close() satir sirasi degisti (esdeger)
+  C-2  KACTI (esdeger, beklenen)    latency carpani 1000.0 -> 1e3 (esdeger)
+  C-3  KACTI (esdeger, beklenen)    modele_gider: generator yerine liste (esdeger)
+
+MUTANT KITI TEMIZ: 22/22 mutant yakalandi, 3/3 esdeger kontrol kacti

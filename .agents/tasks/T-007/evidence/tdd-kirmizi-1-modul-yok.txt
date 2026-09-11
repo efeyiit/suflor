@@ -1,0 +1,8 @@
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests\unit\translate\test_local_nmt.py:51: in <module>
+    from src.translate import local_nmt
+E   ModuleNotFoundError: No module named 'src.translate'
+=========================== short test summary info ===========================
+ERROR tests/unit/translate/test_local_nmt.py
+!!!!!!!!!!!!!!!!!!! Interrupted: 1 error during collection !!!!!!!!!!!!!!!!!!!!
+1 error in 0.35s

@@ -1,0 +1,6 @@
+[G] yapim: +0 MB (0 olmali, tembel); ilk translate: +722 MB (model yuklendi)
+[G] close() ONCESI weakref canli: [True, True, True]
+[G] close() SONRASI weakref canli: [False, False, False] (hepsi False olmali)
+[G] close() sonrasi bellek: 751 -> 47 MB (-704 MB; model ~623 MB)
+[G] close() sonrasi translate -> ProviderUnavailable
+OLCUM-3 BITTI

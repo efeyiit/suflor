@@ -1,0 +1,10 @@
+[A] alt surec exit=0; stdout 0 bayt, stderr 0 bayt (ikisi de 0 olmali)
+[B] sifir bayt model.bin -> ProviderUnavailable, cause=RuntimeError, mesaj metin tasimiyor: True
+[C] bos proto (kopya) -> ProviderUnavailable, cause=RuntimeError, mesaj='kaynak metin tokenlestirilemedi: Runtime'
+[D] rp=1.2 -> hata yok, 2 ceviri; rp=1.0 ile ayni mi: False (C7: farkli beklenir)
+[E] parca=1 -> ciktida 'Hayır' var mi: False; 'Böyle' var mi: False; bos mu: False
+[E] parca=1 -> ciktida 'Hayır' var mi: False; 'Böyle' var mi: False; bos mu: False
+[E] parca=2 -> ciktida 'Hayır' var mi: False; 'Böyle' var mi: False; bos mu: False
+[E] parca=2 -> ciktida 'Hayır' var mi: False; 'Böyle' var mi: False; bos mu: False
+[F] ilk cagri: duvar 611 ms, latency_ms 91 ms -> kurulum haric mi: True
+OLCUM-2 BITTI
