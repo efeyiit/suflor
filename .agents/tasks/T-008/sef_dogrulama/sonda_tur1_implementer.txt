@@ -1,0 +1,22 @@
+==== T-008 TUR 1 IMPLEMENTER -- SEF SONDASI ====
+SAHIPLIK temiz. BES KAPI: mypy Success · 68 passed · real_check TEMIZ · %100 · tam takim 1427 · delivery KABUL.
+
+ITIRAZ 1 (paketin K2 tek-gecis lafzi gercek KR'de 17->9 verir, 4 degil): implementer olctu
+  (evidence/olcum-1). Satir ici y titresimi (208-212) (y,x) sirasini x sirasindan ayiriyor.
+  Uygulama: (y,x,idx) sirala -> satir bolumleme (ilk blokla dikey) -> satir ici (x,y,idx)
+  sirala -> tek gecis. Degismezler ayni. SEF KABUL: paketin algoritma METNI eksikti
+  (satir ici yeniden siralama yoktu). SEF HATASI: algoritmayi gercek veriyle kosmadan yazdim.
+
+ITIRAZ 2 (real_check #4b 10.0 mutantini dusurmuyor) -> SEF URETTI, DOGRU:
+  Menu fixture'im etiket|deger boslugu 13-16xh -> 0.75 ile 10.0 ayni sonucu verir.
+  Esik=10.0 mutanti: birim 9 failed, real_check TEMIZ (#4b ok). KAPI KORDU.
+  DUZELTME: implementer'in 1-em fixture'i (kr_menu_2sutun_1h.png, KRT'nin sentetigi)
+  fixtures/menu_KR_1em.png olarak alindi, #4c eklendi (bosluk 0.78 ve 1.06 x h):
+    dogru (0.75): 4 -> 4  TEMIZ
+    1.0         : 4 -> 3  IHLAL
+    10.0        : 4 -> 2  IHLAL
+  SEF HATASI: pozitif kontrol fixture'ini esigin AYRISTIGI noktada degil, cok uzaginda
+  kurmustum (4.6/4: ifadenin degismezden ayristigi girdi). KRT Y3 bunu soylemisti;
+  ben "menu fixture zorunlu" yazip yanlis menuyu urettim.
+
+KARAR: KABUL EDILEBILIR. Tester turu (2 mercek).

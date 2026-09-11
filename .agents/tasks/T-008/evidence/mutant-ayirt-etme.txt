@@ -1,0 +1,27 @@
+T-008 mutant kiti -- ayna: C:\Users\pc\AppData\Local\Temp\scratch\C--Users-pc-Desktop-efe--eviri-uygulamas-\d52c967f-bd19-4db3-b5e9-77e6cd08b889\scratchpad\t008_ayna
+TEMEL (mutantsiz): failed=0 passed=68 error=0
+ad    sonuc    beklenen   aciklama
+M01   X (9)    YAKALA     YATAY_BOSLUK_ESIGI 0.75 -> 10.0 (menu sutunlari birlesir)
+M02   X (3)    YAKALA     DIKEY_ORTUSME_ESIGI 0.5 -> 0.0 (degen kutular ayni satir)
+M03   X (2)    YAKALA     Y2: bosluk esigi BIRLESIK yukseklikle (grubun max h)
+M04   X (1)    YAKALA     K6: bag girdi sirasinin TERSIYLE cozulur (-idx)
+M05   X (6)    YAKALA     K3: CJK-CJK arasina da bosluk
+M06   X (3)    YAKALA     K5: confidence min -> max
+M07   X (6)    YAKALA     K5: birlesik blokta line_boxes bos
+M08   X (1)    YAKALA     K2: monitor_index denetimi yok
+M09   X (1)    YAKALA     K2: dpi_scale denetimi yok (KARAR)
+M10   X (4)    YAKALA     K2: x ilerleme `>` -> `>=` (cift tespit birlesir)
+M11   X (3)    YAKALA     K2: bosluk `<=` -> `<` (tam 0.75 ayrilir)
+M12   X (2)    YAKALA     K2: ortusme `>=` -> `>` (tam 0.5 ayrilir)
+M13   X (1)    YAKALA     K8: NaN suzgeci yok (naif min)
+M14   X (4)    YAKALA     K3: strip yok
+M15   X (3)    YAKALA     K6: son siralama yok (isleme sirasi)
+M16   X (6)    YAKALA     K2/K8: yozlasmis kutu birlesebilir
+M17   X (2)    YAKALA     K2: satir uyeligi ILK blokla degil bir ONCEKIYLE (merdiven)
+M18   X (1)    YAKALA     K2: grup ici dikey referans ILK degil SON blok (uzun kutu koprusu)
+M19   X (3)    YAKALA     K2: bosluk esigi min(h) -> max(h)
+M20   X (1)    YAKALA     K3: bos parca atlanmaz (cift bosluk)
+C-1   .        KACSIN     KONTROL: ilk siralama anahtarindan idx cikarildi (kararli sort -> esdeger)
+C-2   .        KACSIN     KONTROL: min/max argumanlari yer degistirdi (esdeger)
+
+20 davranis mutanti + 2 kontrol; beklenti tutmayan: 0 []

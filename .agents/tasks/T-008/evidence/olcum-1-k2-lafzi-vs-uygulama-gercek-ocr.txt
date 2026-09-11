@@ -1,0 +1,30 @@
+T-008 olcum 1 -- K2 lafzi vs uygulama, gercek OCR
+[A] dlg_KR gercek OCR: 17 kutu
+    kutular (idx: x y w h): 0:78,97,52,29 1:141,99,101,26 2:79,154,67,40 3:158,156,102,37 4:274,157,98,35 5:390,158,130,33 6:538,158,137,33 7:82,212,131,34 8:225,209,72,40 9:305,209,69,39 10:386,208,70,41 11:467,210,141,37 12:78,264,71,37 13:155,262,71,41 14:240,263,67,39 15:322,265,127,36 16:469,265,140,35
+    (y,x,idx) sirali dizi (idx:y,x): 0:97,78 1:99,141 2:154,79 3:156,158 4:157,274 5:158,390 6:158,538 10:208,386 8:209,225 9:209,305 11:210,467 7:212,82 13:262,155 14:263,240 12:264,78 15:265,322 16:265,469
+    PAKET LAFZI (tek gecis): 17 -> 9 grup; parca sayilari [2, 5, 1, 2, 1, 1, 2, 1, 2]
+    UYGULAMA (satir bolumleme + x sirasi): 17 -> 4 blok; line_boxes [2, 5, 5, 5]
+      blok y=97 x=78 w=164 h=29 parca x'leri [78, 141] artan=True
+      blok y=154 x=79 w=596 h=40 parca x'leri [79, 158, 274, 390, 538] artan=True
+      blok y=208 x=82 w=526 h=41 parca x'leri [82, 225, 305, 386, 467] artan=True
+      blok y=262 x=78 w=531 h=41 parca x'leri [78, 155, 240, 322, 469] artan=True
+    SONUC: lafiz 4 VERMIYOR; uygulama 4 veriyor
+    dlg_JP: 4 -> lafiz 4 / uygulama 4 (no-op bekleniyor)
+    dlg_EN: 4 -> lafiz 4 / uygulama 4 (no-op bekleniyor)
+[B] YATAY_BOSLUK_ESIGI taramasi (modul sabiti gecici olarak degistirildi)
+    menu gercek OCR: KR 13 kutu, EN 8 kutu
+      esik  dlg_KR blok  menu KR blok  menu KR satir/min  menu EN blok  menu EN satir/min  real_check #1 / #4b
+      0.57            5             9                  2             8                  2  IHLAL / ok
+      0.75            4             9                  2             8                  2  ok / ok
+       1.0            4             9                  2             8                  2  ok / ok
+       2.0            4             8                  2             8                  2  ok / ok
+      10.0            4             8                  2             8                  2  ok / ok
+[C] menu fixture: ayni satirda ardisik kutu ciftleri bosluk/min(h) (satir = round(y/50))
+    KR satir 1: 4 kutu, h=[37, 27, 29, 27], bosluk/min(h)=[14.85, 0.26, 0.22]
+    KR satir 2: 4 kutu, h=[37, 29, 31, 29], bosluk/min(h)=[13.62, 0.21, 0.17]
+    KR satir 3: 3 kutu, h=[29, 27, 26], bosluk/min(h)=[15.59, 1.04]
+    KR satir 5: 2 kutu, h=[28, 31], bosluk/min(h)=[14.11]
+    EN satir 1: 2 kutu, h=[39, 30], bosluk/min(h)=[13.37]
+    EN satir 2: 2 kutu, h=[36, 28], bosluk/min(h)=[14.18]
+    EN satir 3: 2 kutu, h=[28, 26], bosluk/min(h)=[16.27]
+    EN satir 5: 2 kutu, h=[30, 32], bosluk/min(h)=[13.1]

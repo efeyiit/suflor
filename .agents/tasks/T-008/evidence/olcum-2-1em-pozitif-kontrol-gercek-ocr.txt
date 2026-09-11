@@ -1,0 +1,23 @@
+T-008 olcum 2 -- 1-em bosluk sinifi, gercek OCR, esik taramasi
+[jp_secim_ideospace.png] JP secim satiri, ideografik bosluk (U+3000): 3 kutu
+    kutular (x,y,w,h): [(83, 92, 229, 28), (82, 147, 59, 30), (172, 147, 86, 30)]
+    ayni satir komsu ciftleri bosluk/min(h): [1.03]
+    esik->blok: 0.57->3 0.75->3 1.0->3 2.0->2 10.0->2  (beklenen: 1-em sinifi AYRI kalsin = kutu sayisi korunsun)
+[jp_secim_gap1h.png] JP secim satiri, ~1.0 x font bosluk: 2 kutu
+    kutular (x,y,w,h): [(82, 91, 59, 30), (173, 92, 85, 28)]
+    ayni satir komsu ciftleri bosluk/min(h): [1.14]
+    esik->blok: 0.57->2 0.75->2 1.0->2 2.0->1 10.0->1  (beklenen: 1-em sinifi AYRI kalsin = kutu sayisi korunsun)
+[kr_menu_2sutun_1h.png] KR etiket|deger, ~1.0 x font bosluk: 4 kutu
+    kutular (x,y,w,h): [(80, 94, 59, 35), (172, 98, 112, 31), (80, 149, 62, 37), (167, 154, 84, 32)]
+    ayni satir komsu ciftleri bosluk/min(h): [1.06, 0.78]
+    esik->blok: 0.57->4 0.75->4 1.0->3 2.0->2 10.0->2  (beklenen: 1-em sinifi AYRI kalsin = kutu sayisi korunsun)
+[kr_menu_2sutun_2h.png] KR etiket|deger, ~2.0 x font bosluk: 4 kutu
+    kutular (x,y,w,h): [(80, 94, 59, 35), (202, 98, 112, 31), (80, 150, 62, 36), (197, 154, 84, 32)]
+    ayni satir komsu ciftleri bosluk/min(h): [2.03, 1.72]
+    esik->blok: 0.57->4 0.75->4 1.0->4 2.0->3 10.0->2  (beklenen: 1-em sinifi AYRI kalsin = kutu sayisi korunsun)
+
+OZET (esik->blok):
+  jp_secim_ideospace.png: 0.57->3 0.75->3 1.0->3 2.0->2 10.0->2
+  jp_secim_gap1h.png: 0.57->2 0.75->2 1.0->2 2.0->1 10.0->1
+  kr_menu_2sutun_1h.png: 0.57->4 0.75->4 1.0->3 2.0->2 10.0->2
+  kr_menu_2sutun_2h.png: 0.57->4 0.75->4 1.0->4 2.0->3 10.0->2

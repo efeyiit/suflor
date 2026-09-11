@@ -1,0 +1,16 @@
+T-008 real_check -- gercek OCR, normalize, NMT
+  ok     [1] KR 17 blok -> 4 blok (beklenen 17 -> 4)
+  ok     [1] line_boxes uzunluklari [2, 5, 5, 5] (beklenen [2,5,5,5])
+  ok     [1] her satir bosluklu birlesmis
+  ok     [1] bbox alanlari int
+  ok     [2] JP 4 -> 4 no-op (text+bbox birebir)
+  ok     [2] EN 4 -> 4 no-op (text+bbox birebir)
+  ok     [3] normalize -> 2 segment (<= 4; birlestirme oncesi 16)
+  ok     [3] NMT kostu: bekliyor=True dogu=False  (rapor; T-009 acik)
+  ok     [3] tek kelimelik ceviri sayisi 0 (0 olmali; onceden 'Evet.' 'Seni.')
+  ok     [4b] menu KR: 13 -> 9 blok; satir basina en az 2 blok (>= 2: etiket|deger birlesmemeli)
+  ok     [4b] menu EN: 8 -> 8 blok; satir basina en az 2 blok (>= 2: etiket|deger birlesmemeli)
+  ok     [5] saflik: yasak cagri [], yasak modul []
+  ok     [6] 1000 blok medyan 2.6 ms (< 50)
+
+REAL_CHECK: TEMIZ

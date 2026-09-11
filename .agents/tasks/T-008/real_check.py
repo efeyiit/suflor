@@ -9,7 +9,8 @@ Kontroller (packet.md):
   2. JP 4 -> 4 birebir; EN 4 -> 4 birebir (no-op)
   3. UCTAN UCA: KR -> birlestir -> normalize -> <= 4 segment -> NMT -> tek kelimelik ceviri yok
      (icerik beklentisi YOK: KR tanima noktayi dusuruyor, T-009)
-  4b. menu fixture: etiket|deger satirlari asla birlesmez (Y3)
+  4b. menu fixture (13-16xh): etiket|deger asla birlesmez
+  4c. 1-em menu (0.78-1.06xh): 0.75 ayirir, 1.0+ birlestirir -- esik ayirt edici (Y3)
   5. saflik AST
   6. 1000 blok < 50 ms
 """
@@ -106,6 +107,17 @@ def main() -> int:
         en_az = min(satir.values()) if satir else 0
         (tamam if en_az >= beklenen_min else ihlal)(
             f"[4b] menu {ad}: {len(mb)} -> {len(mc)} blok; satir basina en az {en_az} blok (>= {beklenen_min}: etiket|deger birlesmemeli)")
+    # 4c 1-em menu (implementer ITIRAZ 2 + KRT Y3): etiket|deger boslugu 0.78-1.06 x h
+    # -> 0.75 ayirir, 1.0/2.0/10.0 birlestirir. Sefin 13-16xh fixture'i bunu AYIRAMIYORDU.
+    img = np.array(Image.open(KOK / ".agents" / "tasks" / "T-008" / "fixtures" / "menu_KR_1em.png").convert("RGB"))[:, :, ::-1].copy()
+    mb = _RE(language=_OL.KOREAN, threads=8).recognize(Frame(image=img, rect=Rect(0, 0, img.shape[1], img.shape[0]), captured_at=0.0, seq=0), OcrPreset.DIALOGUE)
+    mc = satirlari_birlestir(mb)
+    satir2: dict[int, int] = {}
+    for x in mc:
+        satir2[round(x.bbox.y / 40)] = satir2.get(round(x.bbox.y / 40), 0) + 1
+    en_az2 = min(satir2.values()) if satir2 else 0
+    (tamam if len(mb) == 4 and len(mc) == 4 and en_az2 >= 2 else ihlal)(
+        f"[4c] 1-em menu KR: {len(mb)} -> {len(mc)} blok; satir basina en az {en_az2} (>= 2; bosluk 0.78-1.06xh, 1.0+ esik birlestirir)")
     # 5 saflik
     src = (KOK / "src" / "ocr" / "satir_birlestirici.py").read_text(encoding="utf-8")
     agac = ast.parse(src)
