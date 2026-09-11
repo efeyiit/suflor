@@ -51,3 +51,27 @@ Makine: 32 cekirdek, ctranslate2 4.8.2, sentencepiece 0.2.2. Hepsi bu makinede k
   4. Kalite altin seti gerekiyor (tasarim 12); su an yalniz sefin gozu var.
   5. Model kaynagi: topluluk donusumu OLCUM icin kabul; uretim icin ModelManager +
      resmi donusum ayri gorev. "Ilk acilista cevrimdisi" iddiasi burada da tutmuyor.
+
+[C5] WINDOWS TUZAGI (sef olctu, demo yazarken yakalandi)
+  sentencepiece.SentencePieceProcessor(model_file=<ASCII-disi mutlak yol>) ->
+    RuntimeError NOT_FOUND. Bu depo yolu "çeviri" iceriyor; kullanici dizinleri
+    Turkce karakter tasiyabilir. Goreli yol calisir (olcum oyle yapilmisti,
+    o yuzden gorunmedi). DUZELTME: model_proto=Path(...).read_bytes().
+  ctranslate2.Translator(<ayni mutlak yol>) -> OK. Tuzak yalniz sentencepiece'te.
+  Paket kurali: model dosyalari YOL ile degil BAYT ile acilir (cv2 dersiyle ayni).
+
+[C6] PARAGRAF vs CUMLE -- NLLB birlesik segmentte anlam karistiriyor (sef olctu, demo)
+  Normalizer (T-004) uc satiri TEK segmente birlestiriyor (dogru: cevirmene
+  butun cumle gitsin diye). Ama NLLB cumle-duzeyi model; 3 cumlelik paragrafi
+  tek girdi alinca:
+    CUMLE CUMLE (C3): "Köyün ihtiyarları seni bekliyor." / "Su arabası
+      kulübesinden geçip doğuya doğru yürüyün." / "Güneş batınca yolumuzu terk
+      etmemek için."  -- uc ayri cumle, her biri kendi anlaminda
+    PARAGRAF (demo): "Köyün ihtiyarları seni bekliyor. Güneş batmadan önce
+      yolundan çıkma için su arabasından geç ve doğu tarafına git."
+      -- 2. ve 3. cumle BIRBIRINE KAYNAMIS, sira degismis, "degirmen" yine kayip
+  SONUC: LocalNmtProvider segment metnini CUMLELERE BOLUP ceviirmeli, sonra
+  birlestirmeli. Cumle bolme JP/KR/ZH icin 。！？ ve EN icin .!? uzerinden;
+  bu bir on-isleme kurali, olculmeli (pakete pozitif kontrol: bu paragraf).
+  NOT: bu, T-004'un birlestirmesini gecersiz kilmaz -- birlestirme satir
+  KIRIKLARINI kapatir (yarim cumle), cumle SINIRLARINI degil.
