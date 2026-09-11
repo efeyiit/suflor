@@ -75,3 +75,32 @@ Makine: 32 cekirdek, ctranslate2 4.8.2, sentencepiece 0.2.2. Hepsi bu makinede k
   bu bir on-isleme kurali, olculmeli (pakete pozitif kontrol: bu paragraf).
   NOT: bu, T-004'un birlestirmesini gecersiz kilmaz -- birlestirme satir
   KIRIKLARINI kapatir (yarim cumle), cumle SINIRLARINI degil.
+
+[C7] TEKRAR CEZASI: tekrari HALUSINASYONLA takas ediyor (sef olctu)
+  KR "방앗간을 지나 동쪽 길로 가십시오." (degirmeni gecip dogu yoluna gidin):
+    varsayilan              -> "Doğu'ya doğru Doğu'ya doğru yürüyün."        (tekrar)
+    repetition_penalty=1.2  -> "Doğu yoluyla Ba'at Çölü'nün üzerinden geçin." (HALUSINASYON: col yok)
+    repetition_penalty=1.5  -> "Doğu yoluyla Ba'at Çölüden geçin."           (ayni)
+    no_repeat_ngram_size=3  -> "Doğu'ya doğru Doğu Yolu'nu geçin."           (tekrar azaldi, uydurma yok)
+  HICBIR ayar dogru ceviri vermiyor -- model 방앗간'i bilmiyor. Ceza parametreleri
+  KALITE kararidir, altin set olmadan secilemez -> v1 varsayilan CEZASIZ, parametre
+  yapilandirilabilir, docstring [OLCULMUYOR]. KR ornegi pakette pozitif kontrol degil
+  "bilinen zayiflik" olarak kaydedilir.
+
+[C8] CUMLE BOLME SART (C6 dogrulandi, tek batch)
+  JP 3-cumlelik paragraf:
+    tek girdi -> "Köylerin ihtiyarları seni bekliyor. Güneş batınca yola çıkma, su
+                  arabasından geç."   (2. cumle ERIMIS, sira bozuk)
+    bolunmus (3, tek batch) -> uc cumle, her biri C3'teki kalitede, dogru sirada
+  Bolme kurali: JP/KR/ZH icin 。！？ sonrasi; EN icin .!? + bosluk. Bolmeden sonra
+  ceviriler " " ile birlestirilir (JP/ZH icin bosluksuz? -> hedef Turkce, bosluk dogru).
+
+[C9] YER TUTUCU KORUNUMU DILE BAGLI -- JAPONCA'DA KAYBOLUYOR (sef olctu)
+  EN "{0} is waiting for you at the {1}."  -> "{0} {1}'de seni bekliyor."   KORUNDU
+  EN "<T0> ... <T1>."                       -> "<T0> sizi <T1>'de bekliyor."  KORUNDU
+  JP "{0}があなたを{1}で待っています。"          -> "Seni bekliyor."               IKISI DE YOK
+  SONUC: Segment.placeholders (normalizer K-?) NMT'den Japonca'da SAG CIKMIYOR.
+  v1 karari: saglayici cikista her kaynak yer tutucusunu arar; yoksa SONA EKLER
+  (yikici degil, kaba) ve bunu docstring'e yazar. Gercek cozum Katman 0'in yer
+  tutucu stratejisi ya da Katman 2 (LLM). Sozluk (glossary_hits) ayni sebeple
+  v1'de NMT'ye zorlanamaz -> kabul edilir, uygulanmaz, [OLCULMUYOR] damgali.
