@@ -1,0 +1,149 @@
+..F...........F..FFFFF..FFFFFFFFFFFFFFFFFF...FF..........x.............. [ 78%]
+.............F.F...F                                                     [100%]
+================================== FAILURES ===================================
+E   AssertionError: assert '\u9577\u8001Marcus\u304cDe\u011firmen\u3067\u5f85\u3063\u3066\u3044\u307e\u3059\u3002' == '\u0130htiyarMarcu...irmen\u3067\u5f85\u3063\u3066\u3044\u307e\u3059\u3002'
+      
+      - \u0130htiyarMarcus\u304cDe\u011firmen\u3067\u5f85\u3063\u3066\u3044\u307e\u3059\u3002
+      ? ^^^^^^^
+      + \u9577\u8001Marcus\u304cDe\u011firmen\u3067\u5f85\u3063\u3066\u3044\u307e\u3059\u3002
+      ? ^^
+<DEPO>\\.agents\\tasks\\T-011\\tester_B\\test_mercek_b.py:99: AssertionError: assert '\u9577\u8001Marcus\u304cDe\u011firmen\u3067\u5f85\u3063\u3066\u3044\u307e\u3059\u3002' == '\u0130htiyarMarcu...irmen\u3067\u5f85\u3063\u3066\u3044\u307e\u3059\u3002'
+E   ValueError: sozluk semasi: terim '\u30de\u30eb\u30af\u30b9\u3002': kaynak cumle sonu isareti iceremez (.!?\u3002\uff01\uff1f); gomme cumle sinirini yutar
+<DEPO>\\src\\translate\\sozluk.py:658: ValueError: sozluk semasi: terim '\u30de\u30eb\u30af\u30b9\u3002': kaynak cumle sonu isareti iceremez (.!?\u3002\uff01\uff1f); gomme cumle sinirini yutar
+E   AssertionError: assert ['Marcus'] == ['Ýhtiyar', 'Marcus']
+      
+      At index 0 diff: 'Marcus' != 'Ýhtiyar'
+      Right contains one more item: 'Marcus'
+      Use -v to get more diff
+<DEPO>\.agents\tasks\T-011\tester_B\test_mercek_b.py:210: AssertionError: assert ['Marcus'] == ['Ýhtiyar', 'Marcus']
+E   AssertionError: assert [] == ['Ýhtiyar']
+      
+      Right contains one more item: 'Ýhtiyar'
+      Use -v to get more diff
+<DEPO>\.agents\tasks\T-011\tester_B\test_mercek_b.py:224: AssertionError: assert [] == ['Ýhtiyar']
+E   AssertionError: assert ['Marcus'] == ['Ýhtiyar']
+      
+      At index 0 diff: 'Marcus' != 'Ýhtiyar'
+      Use -v to get more diff
+<DEPO>\.agents\tasks\T-011\tester_B\test_mercek_b.py:224: AssertionError: assert ['Marcus'] == ['Ýhtiyar']
+E   AssertionError: assert [] == ['Ýhtiyar']
+      
+      Right contains one more item: 'Ýhtiyar'
+      Use -v to get more diff
+<DEPO>\.agents\tasks\T-011\tester_B\test_mercek_b.py:224: AssertionError: assert [] == ['Ýhtiyar']
+E   AssertionError: assert ['Deðirmen', 'Marcus'] == ['Deðirmen']
+      
+      Left contains one more item: 'Marcus'
+      Use -v to get more diff
+<DEPO>\.agents\tasks\T-011\tester_B\test_mercek_b.py:224: AssertionError: assert ['Deðirmen', 'Marcus'] == ['Deðirmen']
+E   AssertionError: assert ('{De\u011firmen}',) == ('{Deg\u0306irmen}',)
+      
+      At index 0 diff: '{De\u011firmen}' != '{Deg\u0306irmen}'
+      Use -v to get more diff
+<DEPO>\\.agents\\tasks\\T-011\\tester_B\\test_mercek_b.py:254: AssertionError: assert ('{De\u011firmen}',) == ('{Deg\u0306irmen}',)
+E   assert 0 == 1
+     +  where 0 = len(())
+<DEPO>\.agents\tasks\T-011\tester_B\test_mercek_b.py:277: assert 0 == 1
+E   AssertionError: assert 0 == 17
+     +  where 0 = len([])
+     +  and   17 = len(['\u30de\u30eb\u30af\u30b9\u3055\u3093', '\u30de\u30eb\u30af\u30b9\u69d8', '\u30de\u30eb\u30af\u30b9\u6bbf', '\u30de\u30eb\u30af\u30b9\u541b', '\u30de\u30eb\u30af\u30b9\u3061\u3083\u3093', '\u30de\u30eb\u30af\u30b9\u9054', ...])
+<DEPO>\.agents\tasks\T-011\tester_B\test_mercek_b.py:300: AssertionError: assert 0 == 17
+E   AssertionError: assert 3 == 21
+     +  where 3 = len(['\ub9c8\ub974\ucfe0\uc2a4\uc778\uac00', '\uc7a5\ub85c\ub2d8', '\uc7a5\ub85c\uc5d0\uac8c'])
+     +  and   21 = len(['\ub9c8\ub974\ucfe0\uc2a4\ub2d8', '\ub9c8\ub974\ucfe0\uc2a4\uc528', '\ub9c8\ub974\ucfe0\uc2a4\uc57c', '\ub9c8\ub974\ucfe0\uc2a4\uc544', '\ub9c8\ub974\ucfe0\uc2a4\uc5d0\uac8c', '\ub9c8\ub974\ucfe0\uc2a4\ud55c\ud14c', ...])
+<DEPO>\.agents\tasks\T-011\tester_B\test_mercek_b.py:310: AssertionError: assert 3 == 21
+E   assert 5 == 7
+     +  where 5 = sum(<generator object test_b7_sembol_kategorisi_sinir_degil_hit_duser.<locals>.<genexpr> at 0x0000014DFEF847C0>)
+<DEPO>\.agents\tasks\T-011\tester_B\test_mercek_b.py:320: assert 5 == 7
+E   assert 5 == 7
+     +  where 5 = sum(<generator object test_b7_sembol_kategorisi_sinir_degil_hit_duser.<locals>.<genexpr> at 0x0000014DFEE9B2E0>)
+<DEPO>\.agents\tasks\T-011\tester_B\test_mercek_b.py:320: assert 5 == 7
+E   assert 5 == 7
+     +  where 5 = sum(<generator object test_b7_sembol_kategorisi_sinir_degil_hit_duser.<locals>.<genexpr> at 0x0000014DFEE9BE20>)
+<DEPO>\.agents\tasks\T-011\tester_B\test_mercek_b.py:320: assert 5 == 7
+E   assert 5 == 7
+     +  where 5 = sum(<generator object test_b7_sembol_kategorisi_sinir_degil_hit_duser.<locals>.<genexpr> at 0x0000014DFEE9B5B0>)
+<DEPO>\.agents\tasks\T-011\tester_B\test_mercek_b.py:320: assert 5 == 7
+E   assert 5 == 7
+     +  where 5 = sum(<generator object test_b7_sembol_kategorisi_sinir_degil_hit_duser.<locals>.<genexpr> at 0x0000014DFEE9BB50>)
+<DEPO>\.agents\tasks\T-011\tester_B\test_mercek_b.py:320: assert 5 == 7
+E   assert 5 == 7
+     +  where 5 = sum(<generator object test_b7_sembol_kategorisi_sinir_degil_hit_duser.<locals>.<genexpr> at 0x0000014DFEF84A90>)
+<DEPO>\.agents\tasks\T-011\tester_B\test_mercek_b.py:320: assert 5 == 7
+E   assert 5 == 7
+     +  where 5 = sum(<generator object test_b7_sembol_kategorisi_sinir_degil_hit_duser.<locals>.<genexpr> at 0x0000014DFEF844F0>)
+<DEPO>\.agents\tasks\T-011\tester_B\test_mercek_b.py:320: assert 5 == 7
+E   assert 5 == 7
+     +  where 5 = sum(<generator object test_b7_sembol_kategorisi_sinir_degil_hit_duser.<locals>.<genexpr> at 0x0000014DFEF85300>)
+<DEPO>\.agents\tasks\T-011\tester_B\test_mercek_b.py:320: assert 5 == 7
+E   assert 5 == 7
+     +  where 5 = sum(<generator object test_b7_sembol_kategorisi_sinir_degil_hit_duser.<locals>.<genexpr> at 0x0000014DFEE9BB50>)
+<DEPO>\.agents\tasks\T-011\tester_B\test_mercek_b.py:320: assert 5 == 7
+E   assert 5 == 7
+     +  where 5 = sum(<generator object test_b7_sembol_kategorisi_sinir_degil_hit_duser.<locals>.<genexpr> at 0x0000014DFEE9BA60>)
+<DEPO>\.agents\tasks\T-011\tester_B\test_mercek_b.py:320: assert 5 == 7
+E   assert 5 == 7
+     +  where 5 = sum(<generator object test_b7_sembol_kategorisi_sinir_degil_hit_duser.<locals>.<genexpr> at 0x0000014DFEE9B2E0>)
+<DEPO>\.agents\tasks\T-011\tester_B\test_mercek_b.py:320: assert 5 == 7
+E   assert 5 == 7
+     +  where 5 = sum(<generator object test_b7_sembol_kategorisi_sinir_degil_hit_duser.<locals>.<genexpr> at 0x0000014DFEF849A0>)
+<DEPO>\.agents\tasks\T-011\tester_B\test_mercek_b.py:320: assert 5 == 7
+E   assert 5 == 7
+     +  where 5 = sum(<generator object test_b7_sembol_kategorisi_sinir_degil_hit_duser.<locals>.<genexpr> at 0x0000014DFEF84B80>)
+<DEPO>\.agents\tasks\T-011\tester_B\test_mercek_b.py:320: assert 5 == 7
+E   assert 5 == 7
+     +  where 5 = sum(<generator object test_b7_sembol_kategorisi_sinir_degil_hit_duser.<locals>.<genexpr> at 0x0000014DFEF853F0>)
+<DEPO>\.agents\tasks\T-011\tester_B\test_mercek_b.py:320: assert 5 == 7
+E   TypeError: placeholders bir str dizisi olmali, gelen: str
+
+The above exception was the direct cause of the following exception:
+E   src.contracts.errors.ContractViolation: segments[0].placeholders bicimi gecersiz: placeholders bir str dizisi olmali, gelen: str
+<DEPO>\src\translate\sozluk.py:436: src.contracts.errors.ContractViolation: segments[0].placeholders bicimi gecersiz: placeholders bir str dizisi olmali, gelen: str
+E   TypeError: placeholders bir str dizisi olmali, gelen: str
+
+The above exception was the direct cause of the following exception:
+E   src.contracts.errors.ContractViolation: segments[0].placeholders bicimi gecersiz: placeholders bir str dizisi olmali, gelen: str
+<DEPO>\src\translate\sozluk.py:436: src.contracts.errors.ContractViolation: segments[0].placeholders bicimi gecersiz: placeholders bir str dizisi olmali, gelen: str
+E   ValueError: sozluk semasi: terim '\u30de\u30eb\u30af\u30b9\u3002': kaynak cumle sonu isareti iceremez (.!?\u3002\uff01\uff1f); gomme cumle sinirini yutar
+<DEPO>\\src\\translate\\sozluk.py:658: ValueError: sozluk semasi: terim '\u30de\u30eb\u30af\u30b9\u3002': kaynak cumle sonu isareti iceremez (.!?\u3002\uff01\uff1f); gomme cumle sinirini yutar
+E   assert ('terim_sayisi=11' in "GlossaryStore(terim_sayisi=7, dosya='sozluk_ornek.json')")
+<DEPO>\.agents\tasks\T-011\tester_B\test_mercek_b.py:547: assert ('terim_sayisi=11' in "GlossaryStore(terim_sayisi=7, dosya='sozluk_ornek.json')")
+E   assert ((TermHit(sour... (\u9577\u8001Marcus)')) == (TermHit(sour... (\u9577\u8001Marcus)'))
+      
+      Use -v to get more diff and 6 == 10)
+     +  where 6 = len((TermHit(source_term='\u30de\u30eb\u30af\u30b9', target_term='Marcus', start=2, end=6, segment_index=0, note="karakter ad\u0131; model 'Marks/M...erm='Marcus', target_term='Marcus', start=10, end=16, segment_index=5, note='kimlik girdisi: s\u0131n\u0131r \xe7\u0131pas\u0131 (\u9577\u8001Marcus)')))
+<DEPO>\\.agents\\tasks\\T-011\\tester_B\\test_mercek_b.py:587: assert ((TermHit(sour... (\u9577\u8001Marcus)')) == (TermHit(sour... (\u9577\u8001Marcus)'))
+=========================== short test summary info ===========================
+FAILED .agents/tasks/T-011/tester_B/test_mercek_b.py::test_b1_list_tuple_generator_girdi_ayni_cikti
+FAILED .agents/tasks/T-011/tester_B/test_mercek_b.py::test_b3_kaynak_terimde_terminator_sema_kabul_eder_ve_gomme_cumle_sinirini_yutar
+FAILED .agents/tasks/T-011/tester_B/test_mercek_b.py::test_b6_kimlik_terim_komsu_sinir_cipasi_olarak_ise_yarar
+FAILED .agents/tasks/T-011/tester_B/test_mercek_b.py::test_b6_reddedilen_komsu_aday_da_sinirdir_kismi_gomme[\u9577\u8001Marcusa-beklenen0]
+FAILED .agents/tasks/T-011/tester_B/test_mercek_b.py::test_b6_reddedilen_komsu_aday_da_sinirdir_kismi_gomme[\u9577\u8001\u30de\u30eb\u30af\u30b9\u69d8-beklenen1]
+FAILED .agents/tasks/T-011/tester_B/test_mercek_b.py::test_b6_reddedilen_komsu_aday_da_sinirdir_kismi_gomme[\uc7a5\ub85c\ub9c8\ub974\ucfe0\uc2a4\ub2d8-beklenen2]
+FAILED .agents/tasks/T-011/tester_B/test_mercek_b.py::test_b6_reddedilen_komsu_aday_da_sinirdir_kismi_gomme[\u6c34\u8eca\u5c0f\u5c4b\u30de\u30eb\u30af\u30b9\u69d8-beklenen3]
+FAILED .agents/tasks/T-011/tester_B/test_mercek_b.py::test_b6_nfd_yer_tutucu_gom_sonrasi_metnin_alt_dizesi_degil_t007_onarimi_kopya_ekler
+FAILED .agents/tasks/T-011/tester_B/test_mercek_b.py::test_b6_hit_indeksleri_nfc_metne_gore_nfd_segment_text_ile_kayar
+FAILED .agents/tasks/T-011/tester_B/test_mercek_b.py::test_b7_jp_saygi_eki_ve_kopula_sinir_degil_17_17_kacak
+FAILED .agents/tasks/T-011/tester_B/test_mercek_b.py::test_b7_kr_ek_listesi_disi_ekler_sinir_degil_21_21_kacak
+FAILED .agents/tasks/T-011/tester_B/test_mercek_b.py::test_b7_sembol_kategorisi_sinir_degil_hit_duser[\u266a]
+FAILED .agents/tasks/T-011/tester_B/test_mercek_b.py::test_b7_sembol_kategorisi_sinir_degil_hit_duser[\uff5e]
+FAILED .agents/tasks/T-011/tester_B/test_mercek_b.py::test_b7_sembol_kategorisi_sinir_degil_hit_duser[\u2665]
+FAILED .agents/tasks/T-011/tester_B/test_mercek_b.py::test_b7_sembol_kategorisi_sinir_degil_hit_duser[\u2606]
+FAILED .agents/tasks/T-011/tester_B/test_mercek_b.py::test_b7_sembol_kategorisi_sinir_degil_hit_duser[\u2192]
+FAILED .agents/tasks/T-011/tester_B/test_mercek_b.py::test_b7_sembol_kategorisi_sinir_degil_hit_duser[\uff0b]
+FAILED .agents/tasks/T-011/tester_B/test_mercek_b.py::test_b7_sembol_kategorisi_sinir_degil_hit_duser[\u2661]
+FAILED .agents/tasks/T-011/tester_B/test_mercek_b.py::test_b7_sembol_kategorisi_sinir_degil_hit_duser[\u2605]
+FAILED .agents/tasks/T-011/tester_B/test_mercek_b.py::test_b7_sembol_kategorisi_sinir_degil_hit_duser[\u266b]
+FAILED .agents/tasks/T-011/tester_B/test_mercek_b.py::test_b7_sembol_kategorisi_sinir_degil_hit_duser[\xa9]
+FAILED .agents/tasks/T-011/tester_B/test_mercek_b.py::test_b7_sembol_kategorisi_sinir_degil_hit_duser[\u2122]
+FAILED .agents/tasks/T-011/tester_B/test_mercek_b.py::test_b7_sembol_kategorisi_sinir_degil_hit_duser[\xb0]
+FAILED .agents/tasks/T-011/tester_B/test_mercek_b.py::test_b7_sembol_kategorisi_sinir_degil_hit_duser[\uff04]
+FAILED .agents/tasks/T-011/tester_B/test_mercek_b.py::test_b7_sembol_kategorisi_sinir_degil_hit_duser[\uffe5]
+FAILED .agents/tasks/T-011/tester_B/test_mercek_b.py::test_b8_typeerror_siniflari_translatorerror_degil_pipeline_yakalamaz[<lambda>-lookup_segments Segment.placeholders str]
+FAILED .agents/tasks/T-011/tester_B/test_mercek_b.py::test_b8_typeerror_siniflari_translatorerror_degil_pipeline_yakalamaz[<lambda>-gom Segment.placeholders str]
+FAILED .agents/tasks/T-011/tester_B/test_mercek_b.py::test_b9_hedef_kaynagi_iceren_veya_kaynak_hedefi_iceren_kayit_semada_serbest
+FAILED .agents/tasks/T-011/tester_B/test_mercek_b.py::test_bx_docstring_repr_terim_basmaz
+FAILED .agents/tasks/T-011/tester_B/test_mercek_b.py::test_bk_real_check_kapi_yolu_ile_lookup_segments_ayni_hit_kumesi
+XFAIL .agents/tasks/T-011/tester_B/test_mercek_b.py::test_b9_k1_paket_negatifleri_eslesmez[\\uac80\\uc740 \\uc637] - paketin belgeli bilinen siniri: `\uac80`+ek `\uc740` kuraldan gecer (K1)
+30 failed, 61 passed, 1 xfailed in 0.59s
+exit=1

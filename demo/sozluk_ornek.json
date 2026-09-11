@@ -1,15 +1,59 @@
 {
   "terimler": [
-    {"kaynak": "マルクス", "hedef": "Marcus", "not": "karakter adı; model 'Marks' üretiyor"},
-    {"kaynak": "마르쿠스", "hedef": "Marcus", "not": "karakter adı"},
-    {"kaynak": "Marcus", "hedef": "Marcus"},
-    {"kaynak": "アイラ", "hedef": "Ayla", "not": "karakter adı"},
-    {"kaynak": "아일라", "hedef": "Ayla", "not": "karakter adı"},
-    {"kaynak": "水車小屋", "hedef": "Değirmen", "not": "mekân; model 'su arabası evi' üretiyor"},
-    {"kaynak": "방앗간", "hedef": "Değirmen", "not": "mekân"},
-    {"kaynak": "mill", "hedef": "Değirmen", "not": "mekân"},
-    {"kaynak": "長老", "hedef": "İhtiyar", "not": "unvan; model 'Elder' bırakıyor"},
-    {"kaynak": "장로", "hedef": "İhtiyar", "not": "unvan"},
-    {"kaynak": "elder", "hedef": "İhtiyar", "not": "unvan"}
+    {
+      "kaynak": "マルクス",
+      "hedef": "Marcus",
+      "not": "karakter adı; model 'Marks' üretiyor"
+    },
+    {
+      "kaynak": "마르쿠스",
+      "hedef": "Marcus",
+      "not": "karakter adı"
+    },
+    {
+      "kaynak": "Marcus",
+      "hedef": "Marcus",
+      "not": "kimlik girdisi: metni değiştirmez, Latin ad CJK metinde sınır çıpası (v3'te betik geçişi kuralıyla gerek kalmadı, zararsız)"
+    },
+    {
+      "kaynak": "アイラ",
+      "hedef": "Ayla",
+      "not": "karakter adı"
+    },
+    {
+      "kaynak": "아일라",
+      "hedef": "Ayla",
+      "not": "karakter adı"
+    },
+    {
+      "kaynak": "水車小屋",
+      "hedef": "Değirmen",
+      "not": "mekân; model 'su arabası evi' üretiyor"
+    },
+    {
+      "kaynak": "방앗간",
+      "hedef": "Değirmen",
+      "not": "mekân"
+    },
+    {
+      "kaynak": "mill",
+      "hedef": "Değirmen",
+      "not": "model 'mill'i zaten biliyor; yalnız tutarlılık için (K4: bilinen kelimeyi gömmek risklidir)"
+    },
+    {
+      "kaynak": "長老",
+      "hedef": "İhtiyar",
+      "not": "UNVAN (gri bölge): tek başına unvan+ad segmentinde İngilizce'ye kaymayı önler ('Elder Marcus'), ama bileşik cümlede ('köy ihtiyarı') anlam kaydırabilir — ölçüldü, T-011 kararı"
+    },
+    {
+      "kaynak": "장로",
+      "hedef": "İhtiyar",
+      "not": "UNVAN (gri bölge): tek başına unvan+ad segmentinde İngilizce'ye kaymayı önler ('Elder Marcus'), ama bileşik cümlede ('köy ihtiyarı') anlam kaydırabilir — ölçüldü, T-011 kararı"
+    },
+    {
+      "kaynak": "elder",
+      "hedef": "İhtiyar",
+      "not": "UNVAN (gri bölge): tek başına unvan+ad segmentinde İngilizce'ye kaymayı önler ('Elder Marcus'), ama bileşik cümlede ('köy ihtiyarı') anlam kaydırabilir — ölçüldü, T-011 kararı"
+    }
   ]
 }

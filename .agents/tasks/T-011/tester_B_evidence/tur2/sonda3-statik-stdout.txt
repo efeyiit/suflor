@@ -1,0 +1,39 @@
+== S1. tur-1 kacak listeleri v3'te ==
+  JP 17 eki: 17/17 eslesiyor (liste disi `????`/`??` da betik gecisiyle); KR 19 (unvansiz): 18/19, kacak: 1 (`??` listede yok)
+== S2. paket-olcum celiskileri ve 3-ek yiginlari ==
+  ?????=1 (implementer 1; paket 'eslesmez')  ???????=1 (implementer 1; paket 'eslesmez')
+  3-ek yigini (6): eslesen 0/6
+  liste disi ek (???/???/??/???/?/??/??, 7): eslesen 0/7
+== S3. KR 3-ek yayginligi: 10 dogal NPC cumlesi / 10 yigin agirlikli ==
+  dogal: 10 cumlenin 2'inde ad hit YOK
+  yigin: 10 cumlenin 6'inde ad hit YOK
+== S4. kanji ad + kanji unvan eki / hiragana ad + hiragana eki (liste disi) ==
+  kanji ad + kanji ek (12): kacak 6 (??/??/?/?/?/?? listede yok); hiragana ad + hiragana ek (10): kacak 5 (??/??/????/????/??)
+== S5. betik gecisi kotu kullanim ==
+  ???????=0 ?????=1 ??????=1 ?????=1 ????=1
+  Marcus's=1 Marcus'=1 Marcus'in=1 Marcus-san=1 Marcus_2=1 Marcus2=0
+  halfwidth katakana=0 fullwidth Latin=0 (NFC genislik katlamaz; [OLCULMUYOR] adayi)
+== S6. K2/K3 kotu kullanim ==
+  placeholders=(' ',): hit 2 (bosluk zaten sinir; korunan aralik hit'i engellemez), gomulu ok=True
+  placeholders=(terim,): lookup 0 hit; elle hit -> ContractViolation
+  fixture ile 2. gecis metin ayni=True; 2. geciste kimlik hit sayisi=1 (sessiz; CV yok)
+  hedef=baska terimin kaynagi: 2. geciste sessiz kayma var=True (CV yok; docstring 'tekrar gecirilmez')
+  hits(A) + gom(B=ters sira): CV yok, ikisi de gomuldu=True (ayni terim ayni konum; cagiran hatasi gorunmez)
+  `PLAYER_NAME` (bildirilmemis): hit=1 (`_` P* sinir; D-A5 belgeli)
+== S7. K6 sema kenarlari ==
+  kaynak='.' hedef='Nokta' -> RED: s
+  kaynak='?' hedef='Nokta' -> RED: s
+  kaynak='{' hedef='Kume' -> KABUL 
+  kaynak='{0}' hedef='S?f?r' -> KABUL 
+  kaynak='xxxxxxxxxxxx' hedef='Y' -> KABUL 
+  kaynak='xxxxxxxxxxxx' hedef='Y' -> RED: s
+  kaynak='Mr. Marcus' hedef='Marcus' -> RED: s
+  kaynak='????' hedef='Mar\x85cus' -> RED: s
+  kaynak='????' hedef='Mar\u200bcus' -> KABUL 
+  kaynak='????' hedef='Marcus\xa0' -> RED: s
+  kaynak='????' hedef='Marcus' -> KABUL 
+  kaynak='????' hedef='Marcus' -> RED: s
+== S8. zincir ==
+  windmill -> The R?zgarDe?irmen turns.
+  windmills=0 oldmillhouse=['Eski', 'De?irmen Evi'] windmillhouses=0
+exit=0

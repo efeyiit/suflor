@@ -1,0 +1,444 @@
+............F.......FF.......F.F..............................F....F.... [ 44%]
+.................F...F...............................F.................. [ 88%]
+........F..F..FF.F                                                       [100%]
+================================== FAILURES ===================================
+_ test_a1_kr_ek_simetrisi_ve_zinciri[\ubc29\uc557\uac04\uc744\ub9c8\ub974\ucfe0\uc2a4-beklenen12] _
+
+kr = GlossaryStore(terim_sayisi=2, dosya='s.json'), metin = '방앗간을마르쿠스'
+beklenen = [(0, 3)]
+
+    @pytest.mark.parametrize(
+        "metin, beklenen",
+        [
+            ("방앗간을", [(0, 3)]),            # terim metnin basinda + ek, ek metin sonunda
+            ("을방앗간", []),                  # ek SOLDA -> sinir degil (docstring: yalniz sag)
+            ("지나 방앗간", [(3, 6)]),          # terim metnin sonunda
+            ("방앗간", [(0, 3)]),              # tek basina
+            ("방앗간에서는", [(0, 3)]),         # ek zinciri 2
+            ("방앗간에서는을", []),             # ek zinciri 3 -> docstring: hayir
+            ("방앗간이가을", []),               # zinciri 3 (kisa ekler) -> hayir
+            ("방앗간이가", [(0, 3)]),           # zincir 2 pozitif kontrol
+            ("방앗간으로", [(0, 3)]),           # uzun ek 으로
+            ("방앗간로", [(0, 3)]),             # kisa ek 로
+            ("방앗간으", []),                   # 으 tek basina ek degil -> harf komsusu
+            ("방앗간을.", [(0, 3)]),            # ekten sonra noktalama
+            ("방앗간을마르쿠스", [(0, 3)]),      # ekten sonra baska terim: 방앗간 evet; 마르쿠스 solu 을 (harf) -> hayir
+            ("방앗간마르쿠스", [(0, 3), (3, 7)]),  # bitisik iki terim -> ikisi de (komsu terim kurali)
+            ("방앗간도둑", []),                 # 도 + 둑: ekten sonra sinir yok
+            ("방앗간도 둑", [(0, 3)]),           # pozitif kontrol
+            ("방앗간에서에서에서", []),          # ayni ek x3 -> hayir (zincir 2)
+            ("방앗간에서에서", [(0, 3)]),        # ayni ek x2 -> evet
+        ],
+    )
+    def test_a1_kr_ek_simetrisi_ve_zinciri(kr, metin, beklenen):
+>       assert araliklar(kr.lookup(metin)) == beklenen
+E       assert [] == [(0, 3)]
+E         
+E         Right contains one more item: (0, 3)
+E         Use -v to get more diff
+
+.agents\tasks\T-011\tester_A\test_mercek_a.py:84: AssertionError
+_ test_a1_jp_parcacik_ve_komsu_terim[\u6751\u30de\u30eb\u30af\u30b9-beklenen2] _
+
+jp = GlossaryStore(terim_sayisi=3, dosya='s.json'), metin = '村マルクス'
+beklenen = []
+
+    @pytest.mark.parametrize(
+        "metin, beklenen",
+        [
+            ("がマルクス", [(1, 5)]),           # parcacik SOLDA sinir (KR ekten farkli)
+            ("マルクスが", [(0, 4)]),
+            ("村マルクス", []),                 # kanji komsu solda
+            ("マルクス村", []),                 # kanji komsu sagda
+            ("マルクスの村", [(0, 4)]),          # の parcacik
+            ("マルクス　長老", [(0, 4), (5, 7)]),  # ideografik bosluk
+            ("長老マルクス", [(0, 2), (2, 6)]),
+            ("マルクス長老", [(0, 4), (4, 6)]),
+            ("長老マルクス水車小屋", [(0, 2), (2, 6), (6, 10)]),  # UC terim bitisik
+            ("マルクスマルクス", [(0, 4), (4, 8)]),               # ayni terim iki kez bitisik
+            ("マルクスマルクスマルクス", [(0, 4), (4, 8), (8, 12)]),
+            ("長老マルクス村", [(0, 2)]),        # マルクス sagi 村 -> ret; 長老 sagi マルクス basi -> kabul
+            ("村長老マルクス", [(3, 7)]),        # 長老 solu 村 -> ret; マルクス solu 長老 BITISI (kabul edilmemis komsu yeter -- docstring)
+            ("村長老マルクス村", []),            # ikisi de dis sinirsiz
+        ],
+    )
+    def test_a1_jp_parcacik_ve_komsu_terim(jp, metin, beklenen):
+>       assert araliklar(jp.lookup(metin)) == beklenen
+E       assert [(1, 5)] == []
+E         
+E         Left contains one more item: (1, 5)
+E         Use -v to get more diff
+
+.agents\tasks\T-011\tester_A\test_mercek_a.py:107: AssertionError
+_ test_a1_jp_parcacik_ve_komsu_terim[\u30de\u30eb\u30af\u30b9\u6751-beklenen3] _
+
+jp = GlossaryStore(terim_sayisi=3, dosya='s.json'), metin = 'マルクス村'
+beklenen = []
+
+    @pytest.mark.parametrize(
+        "metin, beklenen",
+        [
+            ("がマルクス", [(1, 5)]),           # parcacik SOLDA sinir (KR ekten farkli)
+            ("マルクスが", [(0, 4)]),
+            ("村マルクス", []),                 # kanji komsu solda
+            ("マルクス村", []),                 # kanji komsu sagda
+            ("マルクスの村", [(0, 4)]),          # の parcacik
+            ("マルクス　長老", [(0, 4), (5, 7)]),  # ideografik bosluk
+            ("長老マルクス", [(0, 2), (2, 6)]),
+            ("マルクス長老", [(0, 4), (4, 6)]),
+            ("長老マルクス水車小屋", [(0, 2), (2, 6), (6, 10)]),  # UC terim bitisik
+            ("マルクスマルクス", [(0, 4), (4, 8)]),               # ayni terim iki kez bitisik
+            ("マルクスマルクスマルクス", [(0, 4), (4, 8), (8, 12)]),
+            ("長老マルクス村", [(0, 2)]),        # マルクス sagi 村 -> ret; 長老 sagi マルクス basi -> kabul
+            ("村長老マルクス", [(3, 7)]),        # 長老 solu 村 -> ret; マルクス solu 長老 BITISI (kabul edilmemis komsu yeter -- docstring)
+            ("村長老マルクス村", []),            # ikisi de dis sinirsiz
+        ],
+    )
+    def test_a1_jp_parcacik_ve_komsu_terim(jp, metin, beklenen):
+>       assert araliklar(jp.lookup(metin)) == beklenen
+E       assert [(0, 4)] == []
+E         
+E         Left contains one more item: (0, 4)
+E         Use -v to get more diff
+
+.agents\tasks\T-011\tester_A\test_mercek_a.py:107: AssertionError
+_ test_a1_jp_parcacik_ve_komsu_terim[\u9577\u8001\u30de\u30eb\u30af\u30b9\u6751-beklenen11] _
+
+jp = GlossaryStore(terim_sayisi=3, dosya='s.json'), metin = '長老マルクス村'
+beklenen = [(0, 2)]
+
+    @pytest.mark.parametrize(
+        "metin, beklenen",
+        [
+            ("がマルクス", [(1, 5)]),           # parcacik SOLDA sinir (KR ekten farkli)
+            ("マルクスが", [(0, 4)]),
+            ("村マルクス", []),                 # kanji komsu solda
+            ("マルクス村", []),                 # kanji komsu sagda
+            ("マルクスの村", [(0, 4)]),          # の parcacik
+            ("マルクス　長老", [(0, 4), (5, 7)]),  # ideografik bosluk
+            ("長老マルクス", [(0, 2), (2, 6)]),
+            ("マルクス長老", [(0, 4), (4, 6)]),
+            ("長老マルクス水車小屋", [(0, 2), (2, 6), (6, 10)]),  # UC terim bitisik
+            ("マルクスマルクス", [(0, 4), (4, 8)]),               # ayni terim iki kez bitisik
+            ("マルクスマルクスマルクス", [(0, 4), (4, 8), (8, 12)]),
+            ("長老マルクス村", [(0, 2)]),        # マルクス sagi 村 -> ret; 長老 sagi マルクス basi -> kabul
+            ("村長老マルクス", [(3, 7)]),        # 長老 solu 村 -> ret; マルクス solu 長老 BITISI (kabul edilmemis komsu yeter -- docstring)
+            ("村長老マルクス村", []),            # ikisi de dis sinirsiz
+        ],
+    )
+    def test_a1_jp_parcacik_ve_komsu_terim(jp, metin, beklenen):
+>       assert araliklar(jp.lookup(metin)) == beklenen
+E       assert [(0, 2), (2, 6)] == [(0, 2)]
+E         
+E         Left contains one more item: (2, 6)
+E         Use -v to get more diff
+
+.agents\tasks\T-011\tester_A\test_mercek_a.py:107: AssertionError
+_ test_a1_jp_parcacik_ve_komsu_terim[\u6751\u9577\u8001\u30de\u30eb\u30af\u30b9\u6751-beklenen13] _
+
+jp = GlossaryStore(terim_sayisi=3, dosya='s.json'), metin = '村長老マルクス村'
+beklenen = []
+
+    @pytest.mark.parametrize(
+        "metin, beklenen",
+        [
+            ("がマルクス", [(1, 5)]),           # parcacik SOLDA sinir (KR ekten farkli)
+            ("マルクスが", [(0, 4)]),
+            ("村マルクス", []),                 # kanji komsu solda
+            ("マルクス村", []),                 # kanji komsu sagda
+            ("マルクスの村", [(0, 4)]),          # の parcacik
+            ("マルクス　長老", [(0, 4), (5, 7)]),  # ideografik bosluk
+            ("長老マルクス", [(0, 2), (2, 6)]),
+            ("マルクス長老", [(0, 4), (4, 6)]),
+            ("長老マルクス水車小屋", [(0, 2), (2, 6), (6, 10)]),  # UC terim bitisik
+            ("マルクスマルクス", [(0, 4), (4, 8)]),               # ayni terim iki kez bitisik
+            ("マルクスマルクスマルクス", [(0, 4), (4, 8), (8, 12)]),
+            ("長老マルクス村", [(0, 2)]),        # マルクス sagi 村 -> ret; 長老 sagi マルクス basi -> kabul
+            ("村長老マルクス", [(3, 7)]),        # 長老 solu 村 -> ret; マルクス solu 長老 BITISI (kabul edilmemis komsu yeter -- docstring)
+            ("村長老マルクス村", []),            # ikisi de dis sinirsiz
+        ],
+    )
+    def test_a1_jp_parcacik_ve_komsu_terim(jp, metin, beklenen):
+>       assert araliklar(jp.lookup(metin)) == beklenen
+E       assert [(3, 7)] == []
+E         
+E         Left contains one more item: (3, 7)
+E         Use -v to get more diff
+
+.agents\tasks\T-011\tester_A\test_mercek_a.py:107: AssertionError
+______ test_bulgu_a4_gom_nfd_segment_placeholders_text_iliskisi_bozulur _______
+
+nfc_st = GlossaryStore(terim_sayisi=4, dosya='s.json')
+
+    def test_bulgu_a4_gom_nfd_segment_placeholders_text_iliskisi_bozulur(nfc_st):
+        """ORTA: Segment.placeholders AYNEN (NFD) kopyalanir, text NFC'lenir -> girdide `yt in text` True,
+        ciktida False. T-007 K5 onarimi `kaynak.count(yt)` ile calisir; cikti segmenti kendi icinde tutarsiz."""
+        yt = NFD("{Ünlü}")
+        s = seg(yt + " noir", (yt,))
+        assert s.placeholders[0] in s.text
+        hits = tuple(dataclasses.replace(h, segment_index=0) for h in nfc_st.lookup(s.text, s.placeholders))
+        assert araliklar(hits) == [(7, 11)]
+        out = terimleri_gom((s,), hits)[0]
+>       assert out.placeholders == s.placeholders
+E       AssertionError: assert ('{Ünlü}',) == ('{Ünlü}',)
+E         
+E         At index 0 diff: '{Ünlü}' != '{Ünlü}'
+E         Use -v to get more diff
+
+.agents\tasks\T-011\tester_A\test_mercek_a.py:297: AssertionError
+______________ test_bulgu_a5_emoji_ve_sembol_komsusu_sinir_degil ______________
+
+kp = GlossaryStore(terim_sayisi=3, dosya='s.json')
+
+    def test_bulgu_a5_emoji_ve_sembol_komsusu_sinir_degil(kp):
+        """DUSUK (docstring `S*` [OLCULMUYOR] damgali): emoji (So) / $ (Sc) / + (Sm) komsusu sinir sayilmaz -> hit YOK."""
+>       assert kp.lookup("\U0001F600マルクス") == []
+E       AssertionError: assert [TermHit(sour...e, note=None)] == []
+E         
+E         Left contains one more item: TermHit(source_term='マルクス', target_term='Marcus', start=1, end=5, segment_index=None, note=None)
+E         Use -v to get more diff
+
+.agents\tasks\T-011\tester_A\test_mercek_a.py:343: AssertionError
+_______________ test_bulgu_a7_uzun_kaynak_terim_recursion_error _______________
+
+    def test_bulgu_a7_uzun_kaynak_terim_recursion_error():
+        """ORTA: `_trie_govdesi` kaynak uzunlugu kadar ozyineler; ~996+ kodpointlik kaynak terim yuklemede
+        RecursionError (ValueError degil, TranslatorError degil). Sema uzunluk siniri koymaz; docstring'in
+        red listesinde yok -> belgesiz cokme sinifi. 300 kodpoint kabul (gercekci cumle-terim gecer)."""
+>       assert len(sozluk(("a" * 300, "X"))) == 1
+                   ^^^^^^^^^^^^^^^^^^^^^^^^
+
+.agents\tasks\T-011\tester_A\test_mercek_a.py:426: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+.agents\tasks\T-011\tester_A\yardimci.py:35: in sozluk
+    return GlossaryStore(yol)
+           ^^^^^^^^^^^^^^^^^^
+src\translate\sozluk.py:766: in __init__
+    ham = _terimleri_yukle(json_path)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src\translate\sozluk.py:693: in _terimleri_yukle
+    return tuple(_kaydi_dogrula(i, k) for i, k in enumerate(kayitlar))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src\translate\sozluk.py:693: in <genexpr>
+    return tuple(_kaydi_dogrula(i, k) for i, k in enumerate(kayitlar))
+                 ^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+indeks = 0
+ham = {'kaynak': 'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa...aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa', 'hedef': 'X'}
+
+    def _kaydi_dogrula(indeks: int, ham: object) -> SozlukTerimi:
+        """K6: tek kayit -> `SozlukTerimi`; her red sinifi terim adiyla `ValueError`."""
+        if not isinstance(ham, dict):
+            raise ValueError(f"sozluk semasi: terim kaydi #{indeks} bir JSON nesnesi degil: {type(ham).__name__}")
+        kayit: dict[str, object] = {str(k): v for k, v in ham.items()}
+        kaynak = _metin_alani(kayit, _ANAHTAR_KAYNAK, f"terim kaydi #{indeks}")
+        etiket = f"terim {kaynak!r}"
+        fazla = sorted(set(kayit) - _KAYIT_ANAHTARLARI)
+        if fazla:
+            raise ValueError(f"sozluk semasi: {etiket}: bilinmeyen anahtar(lar) {fazla}; izinli: {sorted(_KAYIT_ANAHTARLARI)}")
+        if len(kaynak) > _KAYNAK_AZAMI:
+>           raise ValueError(f"sozluk semasi: {etiket}: kaynak {len(kaynak)} kodpoint, en fazla {_KAYNAK_AZAMI} olabilir")
+E           ValueError: sozluk semasi: terim 'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa': kaynak 300 kodpoint, en fazla 100 olabilir
+
+src\translate\sozluk.py:655: ValueError
+_________________ test_bulgu_a7_maliyet_hit_sayisinda_karesel _________________
+
+    def test_bulgu_a7_maliyet_hit_sayisinda_karesel():
+        """DUSUK: `_ortusur(start, end, kabul)` kabul listesini dogrusal tarar -> segment basina hit sayisinda
+        O(n^2). Hit 4x -> sure > 6x (dogrusal 4x olurdu; olculdu ~11x). Gercekci segmentte (<= 10 hit) etkisiz;
+        docstring 'metinle olcekli' der, hit yogunluguna bagli."""
+        st = sozluk(("マルクス", "Marcus"), ("長老", "İhtiyar"))
+        def olc(k):
+            metin = "長老マルクス " * k
+            t = []
+            for _ in range(3):
+                t0 = time.perf_counter(); st.lookup(metin); t.append(time.perf_counter() - t0)
+            return statistics.median(t)
+        a, b = olc(500), olc(2000)
+>       assert b / a > 6, (a, b)
+E       AssertionError: (0.002334099990548566, 0.009506299975328147)
+E       assert (0.009506299975328147 / 0.002334099990548566) > 6
+
+.agents\tasks\T-011\tester_A\test_mercek_a.py:488: AssertionError
+________ test_bulgu_a8_hedefte_yeni_satir_ve_yer_tutucu_benzeri_kabul _________
+
+    def test_bulgu_a8_hedefte_yeni_satir_ve_yer_tutucu_benzeri_kabul():
+        """DUSUK: hedefte `\\n`/`\\t` ve `%s`/`<T0>`/`[Mill]` reddedilmez (yalniz .!?。！？{}). Gomulen `\\n` T-007
+        bolmesine, `%s`/`[Mill]` segment placeholders ile cakismaya acik; docstring yalniz `{}`yi yasaklar."""
+        for hedef in ("X\nY", "X\tY", "%s", "<T0>", "[Mill]"):
+>           st = sozluk(("ab", hedef))
+                 ^^^^^^^^^^^^^^^^^^^^^
+
+.agents\tasks\T-011\tester_A\test_mercek_a.py:561: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+.agents\tasks\T-011\tester_A\yardimci.py:35: in sozluk
+    return GlossaryStore(yol)
+           ^^^^^^^^^^^^^^^^^^
+src\translate\sozluk.py:766: in __init__
+    ham = _terimleri_yukle(json_path)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src\translate\sozluk.py:693: in _terimleri_yukle
+    return tuple(_kaydi_dogrula(i, k) for i, k in enumerate(kayitlar))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src\translate\sozluk.py:693: in <genexpr>
+    return tuple(_kaydi_dogrula(i, k) for i, k in enumerate(kayitlar))
+                 ^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+indeks = 0, ham = {'kaynak': 'ab', 'hedef': 'X\nY'}
+
+    def _kaydi_dogrula(indeks: int, ham: object) -> SozlukTerimi:
+        """K6: tek kayit -> `SozlukTerimi`; her red sinifi terim adiyla `ValueError`."""
+        if not isinstance(ham, dict):
+            raise ValueError(f"sozluk semasi: terim kaydi #{indeks} bir JSON nesnesi degil: {type(ham).__name__}")
+        kayit: dict[str, object] = {str(k): v for k, v in ham.items()}
+        kaynak = _metin_alani(kayit, _ANAHTAR_KAYNAK, f"terim kaydi #{indeks}")
+        etiket = f"terim {kaynak!r}"
+        fazla = sorted(set(kayit) - _KAYIT_ANAHTARLARI)
+        if fazla:
+            raise ValueError(f"sozluk semasi: {etiket}: bilinmeyen anahtar(lar) {fazla}; izinli: {sorted(_KAYIT_ANAHTARLARI)}")
+        if len(kaynak) > _KAYNAK_AZAMI:
+            raise ValueError(f"sozluk semasi: {etiket}: kaynak {len(kaynak)} kodpoint, en fazla {_KAYNAK_AZAMI} olabilir")
+        for ch in kaynak:
+            if ch in _CUMLE_SONU:
+                raise ValueError(f"sozluk semasi: {etiket}: kaynak cumle sonu isareti iceremez ({_CUMLE_SONU}); gomme cumle sinirini yutar")
+        hedef = _metin_alani(kayit, _ANAHTAR_HEDEF, etiket)
+        for ch in hedef:
+            if ch in _CUMLE_SONU:
+                raise ValueError(f"sozluk semasi: {etiket}: hedef cumle sonu isareti iceremez ({_CUMLE_SONU}); bolmeyi tetikler")
+            if ch in _YER_TUTUCU_AYRACLARI:
+                raise ValueError(f"sozluk semasi: {etiket}: hedef yer tutucu ayraci iceremez ({_YER_TUTUCU_AYRACLARI})")
+            if unicodedata.category(ch) == "Cc":
+>               raise ValueError(f"sozluk semasi: {etiket}: hedef kontrol karakteri iceremez (U+{ord(ch):04X}); satir bolmesine gider")
+E               ValueError: sozluk semasi: terim 'ab': hedef kontrol karakteri iceremez (U+000A); satir bolmesine gider
+
+src\translate\sozluk.py:666: ValueError
+_ test_bulgu_b1_windmills_komsu_reddedilse_de_sinir_verir_kismi_kelime_gomulur _
+
+    def test_bulgu_b1_windmills_komsu_reddedilse_de_sinir_verir_kismi_kelime_gomulur():
+        """ORTA (Y1/G5 sinifi, Latin): `windmills`te `mill` adayi (sagi `s`) REDDEDILIR ama baslangici
+        `wind`e sag sinir verir -> yalniz `wind` gomulur: `Rüzgarmills`. Docstring 'komsu terimin kabul
+        edilmesi gerekmez' der (マルクス長老 icin dogru), Latin'de kelime parcasi degisir."""
+        st = sozluk(("mill", "Değirmen"), ("wind", "Rüzgar"))
+        h = st.lookup("windmills")
+>       assert araliklar(h) == [(0, 4)] and h[0].source_term == "wind"
+E       assert ([] == [(0, 4)]
+E         
+E         Right contains one more item: (0, 4)
+E         Use -v to get more diff)
+
+.agents\tasks\T-011\tester_A\test_mercek_a.py:750: AssertionError
+_ test_bulgu_c1_eszett_dal_ayrismasi_aday_kumesi_tam_degil_json_sirasina_bagli[0] _
+
+sira = 0
+
+    @pytest.mark.parametrize("sira", [0, 1])
+    def test_bulgu_c1_eszett_dal_ayrismasi_aday_kumesi_tam_degil_json_sirasina_bagli(sira):
+        """ORTA (dar sinif, olculdu): `_trie_anahtari` casefold'u coklu kodpoint uretince karakteri oldugu gibi
+        birakir -> `ß` ve `ẞ` (re.I DENK) ayri dallara duser. Alternation ILK dalda kisa terminalde durur, uzun
+        terim ikinci dalda kacar: {Maßen, Maẞer, Maße} sozlugunde metinde HARFIYEN gecen 'Maẞer' eslesmez;
+        JSON sirasi tersken eslesir. Docstring K1/2 'aday kumesi TAMDIR' ve K1/3 'JSON sirasi sonucu
+        degistirmez' iddialari bu sinifta kirilir. Urun dilleri (JP/KR/EN) icin erisilemez."""
+        ciftler = [("Maßen", "Massen"), ("Maẞer", "Masser"), ("Maße", "Masse")]
+        if sira:
+            ciftler[0], ciftler[1] = ciftler[1], ciftler[0]
+        st = sozluk(*ciftler)
+        h = st.lookup("Maẞer geht")
+        if sira == 0:
+>           assert h == []                                  # BULGU: harfiyen gecen terim kacti
+            ^^^^^^^^^^^^^^
+E           AssertionError: assert [TermHit(sour...e, note=None)] == []
+E             
+E             Left contains one more item: TermHit(source_term='Maẞer', target_term='Masser', start=0, end=5, segment_index=None, note=None)
+E             Use -v to get more diff
+
+.agents\tasks\T-011\tester_A\test_mercek_a.py:786: AssertionError
+________________ test_bulgu_c1_yunan_iota_subscript_ayni_sinif ________________
+
+    def test_bulgu_c1_yunan_iota_subscript_ayni_sinif():
+        """Ayni mekanizma: ᾈ (U+1F88) ~ ᾀ (U+1F80) re.I denk, casefold 2 kodpoint -> ayri dal; 'ᾀβδ' harfiyen gecerken kacar."""
+        assert re.fullmatch("ᾈ", "ᾀ", re.I)
+        st = sozluk(("ᾈβγ", "A"), ("ᾀβδ", "B"), ("ᾈβ", "C"))
+>       assert st.lookup("ᾀβδ x") == []                    # BULGU
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       AssertionError: assert [TermHit(sour...e, note=None)] == []
+E         
+E         Left contains one more item: TermHit(source_term='ᾀβδ', target_term='B', start=0, end=3, segment_index=None, note=None)
+E         Use -v to get more diff
+
+.agents\tasks\T-011\tester_A\test_mercek_a.py:805: AssertionError
+______________ test_c2_regex_ozel_ilk_karakterli_terimler_kacmaz ______________
+
+    def test_c2_regex_ozel_ilk_karakterli_terimler_kacmaz():
+>       st = sozluk(("]x", "A"), ("^x", "B"), ("-x", "C"), ("\\x", "D"), ("[x", "E"), (".x", "F"), ("|x", "G"), ("(x", "H"))
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.agents\tasks\T-011\tester_A\test_mercek_a.py:810: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+.agents\tasks\T-011\tester_A\yardimci.py:35: in sozluk
+    return GlossaryStore(yol)
+           ^^^^^^^^^^^^^^^^^^
+src\translate\sozluk.py:766: in __init__
+    ham = _terimleri_yukle(json_path)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src\translate\sozluk.py:693: in _terimleri_yukle
+    return tuple(_kaydi_dogrula(i, k) for i, k in enumerate(kayitlar))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src\translate\sozluk.py:693: in <genexpr>
+    return tuple(_kaydi_dogrula(i, k) for i, k in enumerate(kayitlar))
+                 ^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+indeks = 5, ham = {'kaynak': '.x', 'hedef': 'F'}
+
+    def _kaydi_dogrula(indeks: int, ham: object) -> SozlukTerimi:
+        """K6: tek kayit -> `SozlukTerimi`; her red sinifi terim adiyla `ValueError`."""
+        if not isinstance(ham, dict):
+            raise ValueError(f"sozluk semasi: terim kaydi #{indeks} bir JSON nesnesi degil: {type(ham).__name__}")
+        kayit: dict[str, object] = {str(k): v for k, v in ham.items()}
+        kaynak = _metin_alani(kayit, _ANAHTAR_KAYNAK, f"terim kaydi #{indeks}")
+        etiket = f"terim {kaynak!r}"
+        fazla = sorted(set(kayit) - _KAYIT_ANAHTARLARI)
+        if fazla:
+            raise ValueError(f"sozluk semasi: {etiket}: bilinmeyen anahtar(lar) {fazla}; izinli: {sorted(_KAYIT_ANAHTARLARI)}")
+        if len(kaynak) > _KAYNAK_AZAMI:
+            raise ValueError(f"sozluk semasi: {etiket}: kaynak {len(kaynak)} kodpoint, en fazla {_KAYNAK_AZAMI} olabilir")
+        for ch in kaynak:
+            if ch in _CUMLE_SONU:
+>               raise ValueError(f"sozluk semasi: {etiket}: kaynak cumle sonu isareti iceremez ({_CUMLE_SONU}); gomme cumle sinirini yutar")
+E               ValueError: sozluk semasi: terim '.x': kaynak cumle sonu isareti iceremez (.!?。！？); gomme cumle sinirini yutar
+
+src\translate\sozluk.py:658: ValueError
+_____ test_c4_jp_komsu_terim_reddedilse_de_sinir_verir_bilesik_parcalanir _____
+
+    def test_c4_jp_komsu_terim_reddedilse_de_sinir_verir_bilesik_parcalanir():
+        """B1'in JP karsiligi (docstring 'her betikte ayni'): {水車, 小屋} sozlugunde `水車小屋町` -> `水車` gomulur
+        (`小屋` adayi `町` yuzunden reddedilir ama baslangici sinir verir)."""
+        st = sozluk(("水車", "SuArabasi"), ("小屋", "Kulube"))
+        h = st.lookup("水車小屋町")
+>       assert araliklar(h) == [(0, 2)]
+E       assert [] == [(0, 2)]
+E         
+E         Right contains one more item: (0, 2)
+E         Use -v to get more diff
+
+.agents\tasks\T-011\tester_A\test_mercek_a.py:830: AssertionError
+=========================== short test summary info ===========================
+FAILED .agents/tasks/T-011/tester_A/test_mercek_a.py::test_a1_kr_ek_simetrisi_ve_zinciri[\ubc29\uc557\uac04\uc744\ub9c8\ub974\ucfe0\uc2a4-beklenen12]
+FAILED .agents/tasks/T-011/tester_A/test_mercek_a.py::test_a1_jp_parcacik_ve_komsu_terim[\u6751\u30de\u30eb\u30af\u30b9-beklenen2]
+FAILED .agents/tasks/T-011/tester_A/test_mercek_a.py::test_a1_jp_parcacik_ve_komsu_terim[\u30de\u30eb\u30af\u30b9\u6751-beklenen3]
+FAILED .agents/tasks/T-011/tester_A/test_mercek_a.py::test_a1_jp_parcacik_ve_komsu_terim[\u9577\u8001\u30de\u30eb\u30af\u30b9\u6751-beklenen11]
+FAILED .agents/tasks/T-011/tester_A/test_mercek_a.py::test_a1_jp_parcacik_ve_komsu_terim[\u6751\u9577\u8001\u30de\u30eb\u30af\u30b9\u6751-beklenen13]
+FAILED .agents/tasks/T-011/tester_A/test_mercek_a.py::test_bulgu_a4_gom_nfd_segment_placeholders_text_iliskisi_bozulur
+FAILED .agents/tasks/T-011/tester_A/test_mercek_a.py::test_bulgu_a5_emoji_ve_sembol_komsusu_sinir_degil
+FAILED .agents/tasks/T-011/tester_A/test_mercek_a.py::test_bulgu_a7_uzun_kaynak_terim_recursion_error
+FAILED .agents/tasks/T-011/tester_A/test_mercek_a.py::test_bulgu_a7_maliyet_hit_sayisinda_karesel
+FAILED .agents/tasks/T-011/tester_A/test_mercek_a.py::test_bulgu_a8_hedefte_yeni_satir_ve_yer_tutucu_benzeri_kabul
+FAILED .agents/tasks/T-011/tester_A/test_mercek_a.py::test_bulgu_b1_windmills_komsu_reddedilse_de_sinir_verir_kismi_kelime_gomulur
+FAILED .agents/tasks/T-011/tester_A/test_mercek_a.py::test_bulgu_c1_eszett_dal_ayrismasi_aday_kumesi_tam_degil_json_sirasina_bagli[0]
+FAILED .agents/tasks/T-011/tester_A/test_mercek_a.py::test_bulgu_c1_yunan_iota_subscript_ayni_sinif
+FAILED .agents/tasks/T-011/tester_A/test_mercek_a.py::test_c2_regex_ozel_ilk_karakterli_terimler_kacmaz
+FAILED .agents/tasks/T-011/tester_A/test_mercek_a.py::test_c4_jp_komsu_terim_reddedilse_de_sinir_verir_bilesik_parcalanir
+15 failed, 147 passed in 1.27s
+exit_code=1

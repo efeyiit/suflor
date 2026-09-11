@@ -1,6 +1,6 @@
 {
   "faz": "dalga 2",
-  "guncelleme": "T-007/T-008/T-009 KABUL; T-011 tur 1 tester asamasi; T-012 UI kabugu istegi alindi (paket yok); T-010 DXGI paket yok.",
+  "guncelleme": "T-011 KABUL (2 tur). Sirada T-012 UI kabugu (istek + on olcum var, paket yok); T-013 hedef tarafi duzeltme adayi.",
   "paralellik_tavani": 4,
   "kilitlenme_esigi": 3,
   "tasima": "alt-ajan",
@@ -162,10 +162,10 @@
         "T-001",
         "T-007"
       ],
-      "durum": "testerlar",
-      "tur": 1,
-      "status": "testerlar",
-      "not": "paket v2 (1 KRT), implementer tur 1 teslim, sef real_check 12/12; 2 kor tester kosuyor"
+      "durum": "kabul",
+      "tur": 2,
+      "status": "kabul",
+      "not": "KABUL 11 Eylul 2026: paket v3, kapi v4b 19/19, 453 test, A+B onay; bakim kalemi: JP/KR ek listeleri, zincir derinligi 3"
     },
     {
       "id": "T-012",

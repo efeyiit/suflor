@@ -8,7 +8,7 @@ Sefe aittir. Stdout yalniz ASCII; metin basilmaz (yalniz sayilar/boolean).
   3. Yer tutucu: {PLAYER} korunan aralik (+ pozitif kontrol); {0} + ad gomulu ceviride ikisi de var
   4. Unvan gri bolgesi: rapor (Elder sizmasi) + NEGATIF olcu (ham dogru -> gomulu dogru kalmali)
   5. Y-B2: JP saygi eki / KR yonelme eki ile ad gomulur; pozitif kontrol: hamda ad yok
-  6. Zincir kurali: windmills 0 hit, windmill 2, ad+ad bitisik 2 (statik)
+  6. Zincir kurali: windmills 0 hit, windmill 2, ad+ad bitisik 2 (statik) + gercek modelle windmills ham==gomulu
   7. Y1 negatif: tek kodpoint sema reddi; izinle bilesikte bos, bilinen sinir dolu (rapor)
   8. 1000 segment x fixture: lookup+gom medyan < 50 ms
 """
@@ -121,8 +121,10 @@ def main() -> int:
         tamam(f"[4a] RAPOR unvan+ad, adlar-yalniz sozluk: Elder sizmasi={'elder' in _kat(u)} Marcus={'Marcus' in u} (gri bolge, dusurmez)")
         b = "마을 장로가 마르쿠스를 불렀습니다."
         bg = cevir([b], "kor_Hang", True)[0]; bh = cevir([b], "kor_Hang", False)[0]
-        iyi = "Marcus" in bg and "kasaba" not in _kat(bg) and "ihtiyar" in _kat(bg)
-        (tamam if iyi else ihlal)(f"[4b] NEGATIF: bilesik cumlede ad gomme yapiyi bozmaz: Marcus={'Marcus' in bg} kasaba={'kasaba' in _kat(bg)} ihtiyar={'ihtiyar' in _kat(bg)} (ham: ihtiyar={'ihtiyar' in _kat(bh)})")
+        # K-B8: "ihtiyar" mutlak sarti model surumune bagli ve kirilgan; olcu = ad var + Y-B1 hatasi ("kasaba") yok + kelime sayisi hama yakin
+        oran = len(bg.split()) / max(1, len(bh.split()))
+        iyi = "Marcus" in bg and "kasaba" not in _kat(bg) and 0.6 <= oran <= 1.6
+        (tamam if iyi else ihlal)(f"[4b] NEGATIF: bilesik cumlede ad gomme yapiyi bozmaz: Marcus={'Marcus' in bg} kasaba={'kasaba' in _kat(bg)} kelime orani={oran:.2f} (ihtiyar rapor: gom={'ihtiyar' in _kat(bg)} ham={'ihtiyar' in _kat(bh)})")
 
         # 5 -- Y-B2: saygi/yonelme ekleri
         jp5 = "マルクスさんが来た。"
@@ -133,7 +135,7 @@ def main() -> int:
             g_jp = cevir([jp5], "jpn_Jpan", True)[0]; h_jp = cevir([jp5], "jpn_Jpan", False)[0]
             g_kr = cevir([kr5], "kor_Hang", True)[0]; h_kr = cevir([kr5], "kor_Hang", False)[0]
             (tamam if "Marcus" in g_jp and "Marcus" in g_kr else ihlal)(f"[5b] gomulu: JP Marcus={'Marcus' in g_jp} KR Marcus={'Marcus' in g_kr}")
-            (tamam if "Marcus" not in h_jp or "Marcus" not in h_kr else ihlal)(f"[5c] pozitif kontrol: hamda ad yok -- JP={'Marcus' not in h_jp} KR={'Marcus' not in h_kr}")
+            (tamam if "Marcus" not in h_jp and "Marcus" not in h_kr else ihlal)(f"[5c] pozitif kontrol: hamda ad yok -- JP={'Marcus' not in h_jp} KR={'Marcus' not in h_kr} (ikisi de; K-B9)")
 
         # 6 -- zincir kurali (statik)
         g6 = gecici([{"kaynak": "wind", "hedef": "Rüzgar"}, {"kaynak": "mill", "hedef": "Değirmen"}], td, "ruzgar.json")
@@ -142,6 +144,10 @@ def main() -> int:
         (tamam if n_wms == 0 and n_wm == 2 and n_adad == 2 else ihlal)(f"[6a] zincir: windmills={n_wms} (0) windmill={n_wm} (2) ad+ad bitisik={n_adad} (2)")
         n_kanji_ad = len(s.lookup("長老マルクス")); n_kata_kata = len(s.lookup("マルクスタウン"))
         (tamam if n_kanji_ad == 1 and n_kata_kata == 0 else ihlal)(f"[6b] betik gecisi: kanji+katakana ad={n_kanji_ad} (1) katakana+katakana={n_kata_kata} (0)")
+        # K-B10: zincir sinifi gercek modelle -- windmills gommesiz kalinca ham ceviri korunur (Tester-B: Ruzgarmills bozuktu)
+        w_gom = cevir(["The windmills turn slowly."], "eng_Latn", True, sozluk=g6)[0]
+        w_ham = cevir(["The windmills turn slowly."], "eng_Latn", False)[0]
+        (tamam if w_gom == w_ham and "mills" not in w_gom else ihlal)(f"[6c] zincir gercek model: windmills gomulu==ham {w_gom == w_ham}, melez kelime yok {'mills' not in w_gom}")
 
         # 7 -- Y1 negatif
         try:

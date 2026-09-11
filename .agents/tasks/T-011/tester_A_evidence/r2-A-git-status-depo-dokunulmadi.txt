@@ -1,0 +1,62 @@
+== git status --short -- src tests real_check packet fixtures (bos olmali)
+== git diff HEAD --stat -- src tests
+== HEAD
+9c8d85fe9b3ddc573b1c31e0a04fb673e17a0690
+== sha256
+8a0dd7c41c5a1ac14e8b2f476feb456c68944942505d5778305eed5dd8bf6649 *src/translate/sozluk.py
+42172d495d42b44cc4cb04afe7bddbb26efe62b1cf89351c4e3fdd61f7033865 *tests/unit/translate/test_sozluk.py
+eaf46b8e952235d5f7c301de68d620799d44eb7000d07ca0bf858bc1a00fc439 *.agents/tasks/T-011/real_check.py
+39e9bc04ae2788647b08c722ffb98f50e4502a6ced8f62762621dc862b0b8a9e *.agents/tasks/T-011/fixtures/sozluk_ornek.json
+== tester_A dizini
+.agents/tasks/T-011/tester_A:
+__pycache__
+conftest.py
+sonda_01_sinir.py
+sonda_02_ignorecase_nfc.py
+sonda_03_yertutucu_sema.py
+sonda_04_buyuk.py
+sonda_05_olcek.py
+sonda_06_gercek_model.py
+sonda_07_trie_dal.py
+sonda_r2_01_betik_tablosu.py
+sonda_r2_02_trie_ignorecase.py
+sonda_r2_03_gercek_model.py
+sonda_r2_04_sure.py
+sonda_r2_05_zincir_fuzz.py
+test_mercek_a.py
+test_mercek_a_tur2.py
+yardimci.py
+
+.agents/tasks/T-011/tester_A_evidence:
+A-birlikte-kosum.txt
+A-git-status-depo-dokunulmadi.txt
+A-implementer-test-adlari.txt
+A-mercek-testleri.txt
+r2-A-birlikte-kosum.txt
+r2-A-git-status-depo-dokunulmadi.txt
+r2-A-mercek-testleri.txt
+r2-sonda-01-betik-tablosu.txt
+r2-sonda-02-trie-ignorecase.txt
+r2-sonda-03-gercek-model-stdout.txt
+r2-sonda-03-gercek-model.txt
+r2-sonda-04-sure.txt
+r2-sonda-05-zincir-fuzz.txt
+r2-taban-1-mypy.txt
+r2-taban-2-pytest.txt
+r2-taban-3-real_check.txt
+r2-taban-4-kapsam.txt
+r2-taban-5-tum-takim.txt
+r2-tur1-testleri-v3-kodunda-ham.txt
+sonda-01-sinir.txt
+sonda-02-ignorecase-nfc.txt
+sonda-03-yertutucu-sema.txt
+sonda-04-buyuk.txt
+sonda-05-olcek.txt
+sonda-06-gercek-model-stdout.txt
+sonda-06-gercek-model.txt
+sonda-07-trie-dal.txt
+taban-1-mypy.txt
+taban-2-pytest.txt
+taban-3-real_check.txt
+taban-4-kapsam.txt
+taban-5-tum-takim.txt

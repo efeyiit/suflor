@@ -1,13 +1,15 @@
 import sys, dataclasses, json, unicodedata, random, tempfile
-sys.path.insert(0, r"C:\Users\pc\Desktop\efe\çeviri uygulaması")
+from pathlib import Path as _P
+KOK = _P(__file__).resolve().parents[4]
+sys.path.insert(0, str(KOK))
 from pathlib import Path
 from src.contracts.models import Segment, Rect, TermHit
 from src.contracts.errors import ContractViolation
 from src.translate.sozluk import GlossaryStore, terimleri_gom, ilk_harfi_buyut
 from src.translate.local_nmt import cumlelere_bol, modele_gider, _yer_tutuculari_onar
-out = open(r"C:\Users\pc\Desktop\efe\çeviri uygulaması\.agents\tasks\T-011\tester_B_evidence\sonda2-statik.txt", "w", encoding="utf-8")
+out = open(str(KOK / ".agents" / "tasks" / "T-011" / "tester_B_evidence" / "sonda2-statik.txt"), "w", encoding="utf-8")
 def p(*a): print(*a, file=out)
-s = GlossaryStore(Path(r"C:\Users\pc\Desktop\efe\çeviri uygulaması\.agents\tasks\T-011\fixtures\sozluk_ornek.json"))
+s = GlossaryStore(Path(str(KOK / ".agents" / "tasks" / "T-011" / "fixtures" / "sozluk_ornek.json")))
 R = Rect(0,0,1,1)
 p("== honorific / ek miss class ==")
 for t in ["マルクスさん", "マルクスさんが来た。", "マルクス様", "マルクス殿", "マルクス君", "マルクスちゃん", "マルクス達", "マルクスたち", "マルクスって", "マルクスだ", "マルクスです", "マルクスじゃない", "マルクスなら", "マルクスも", "マルクスへ", "マルクスから", "マルクスまで", "マルクスより", "マルクスか", "マルクスよ", "マルクスね", "マルクス!",

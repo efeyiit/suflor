@@ -1,0 +1,9 @@
+HEAD: 9c8d85f  2026-09-11 20:55:36 +0300
+--- git status --short -- src tests demo real_check packet fixtures (tester-B dokunmadi; BOS beklenir)
+ M demo/sozluk_ornek.json
+--- sha256 (olculen kaynak)
+8a0dd7c41c5a1ac14e8b2f476feb456c68944942505d5778305eed5dd8bf6649 *src/translate/sozluk.py
+42172d495d42b44cc4cb04afe7bddbb26efe62b1cf89351c4e3fdd61f7033865 *tests/unit/translate/test_sozluk.py
+eaf46b8e952235d5f7c301de68d620799d44eb7000d07ca0bf858bc1a00fc439 *.agents/tasks/T-011/real_check.py
+39e9bc04ae2788647b08c722ffb98f50e4502a6ced8f62762621dc862b0b8a9e *.agents/tasks/T-011/fixtures/sozluk_ornek.json
+f20a9b7703b794abdc7e03381da9b451596b21009fc7d7f4f538d4cb3c3bd5ea *demo/canli_cevir.py

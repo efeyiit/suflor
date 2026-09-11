@@ -5,6 +5,11 @@ uc girdilerde tutuyor mu diye olculur. Kural 10: her "eslesmez" icin ayni sinift
 bir pozitif kontrol vardir. `test_bulgu_*` adli testler MEVCUT davranisi PINLER
 (rapordaki bulgu); duzeltilirse kirilarak haber verir.
 
+TUR 2 (v3 kodu): 162 testin 15'i dustu ve yeniden nisanlandi -- sinif (a) duzeltilen bulgu pini 8
+(`_v3` ekli; eski davranis yorum satirinda), sinif (b) v3 kuraliyla degisen eski davranis 6 (betik gecisi 5,
+ek+bitisik terim 1), sinif (d) K6 kaynak terminatoru verisi 1 (`.x` -> `*x`), sinif (c) fixture v3: 0
+(bu dosya fixture kullanmaz). Yeni saldiri noktalari `test_mercek_a_tur2.py`de.
+
 Kosum: python -m pytest .agents/tasks/T-011/tester_A -q -p no:cacheprovider --import-mode=importlib
 """
 from __future__ import annotations
@@ -72,7 +77,8 @@ def jp():
         ("방앗간로", [(0, 3)]),             # kisa ek 로
         ("방앗간으", []),                   # 으 tek basina ek degil -> harf komsusu
         ("방앗간을.", [(0, 3)]),            # ekten sonra noktalama
-        ("방앗간을마르쿠스", [(0, 3)]),      # ekten sonra baska terim: 방앗간 evet; 마르쿠스 solu 을 (harf) -> hayir
+        # tur 1: ("방앗간을마르쿠스", [(0, 3)])  -- reddedilen komsu aday sinir veriyordu
+        ("방앗간을마르쿠스", []),             # v3: ek + bitisik terim zincir degil (docstring: ekten sonraki komsu aday [ÖLÇÜLMÜYOR]); 0 hit
         ("방앗간마르쿠스", [(0, 3), (3, 7)]),  # bitisik iki terim -> ikisi de (komsu terim kurali)
         ("방앗간도둑", []),                 # 도 + 둑: ekten sonra sinir yok
         ("방앗간도 둑", [(0, 3)]),           # pozitif kontrol
@@ -89,8 +95,9 @@ def test_a1_kr_ek_simetrisi_ve_zinciri(kr, metin, beklenen):
     [
         ("がマルクス", [(1, 5)]),           # parcacik SOLDA sinir (KR ekten farkli)
         ("マルクスが", [(0, 4)]),
-        ("村マルクス", []),                 # kanji komsu solda
-        ("マルクス村", []),                 # kanji komsu sagda
+        # tur 1: ("村マルクス", []), ("マルクス村", [])  -- kanji komsu sinir degildi
+        ("村マルクス", [(1, 5)]),           # v3 betik gecisi: Han|Katakana sinir
+        ("マルクス村", [(0, 4)]),           # v3 betik gecisi: Katakana|Han sinir
         ("マルクスの村", [(0, 4)]),          # の parcacik
         ("マルクス　長老", [(0, 4), (5, 7)]),  # ideografik bosluk
         ("長老マルクス", [(0, 2), (2, 6)]),
@@ -98,9 +105,10 @@ def test_a1_kr_ek_simetrisi_ve_zinciri(kr, metin, beklenen):
         ("長老マルクス水車小屋", [(0, 2), (2, 6), (6, 10)]),  # UC terim bitisik
         ("マルクスマルクス", [(0, 4), (4, 8)]),               # ayni terim iki kez bitisik
         ("マルクスマルクスマルクス", [(0, 4), (4, 8), (8, 12)]),
-        ("長老マルクス村", [(0, 2)]),        # マルクス sagi 村 -> ret; 長老 sagi マルクス basi -> kabul
-        ("村長老マルクス", [(3, 7)]),        # 長老 solu 村 -> ret; マルクス solu 長老 BITISI (kabul edilmemis komsu yeter -- docstring)
-        ("村長老マルクス村", []),            # ikisi de dis sinirsiz
+        # tur 1: ("長老マルクス村", [(0, 2)]), ("村長老マルクス", [(3, 7)]), ("村長老マルクス村", [])
+        ("長老マルクス村", [(0, 2), (2, 6)]),  # v3: マルクス sagi 村 betik gecisi -> zincir 長老+マルクス, iki dis uc sinir
+        ("村長老マルクス", [(3, 7)]),        # v3: 長老 solu 村 Han|Han -> zincir olu; マルクス solu 老 Han|Katakana -> tek basina
+        ("村長老マルクス村", [(3, 7)]),      # v3: マルクス iki ucu da betik gecisi; 長老 dis sinirsiz
     ],
 )
 def test_a1_jp_parcacik_ve_komsu_terim(jp, metin, beklenen):
@@ -285,18 +293,20 @@ def test_bulgu_a4_gom_nfd_segment_aralik_disi_kodpointler_degisir(nfc_st):
     assert out[1] is s2 and out[1].text != NFC(out[1].text)   # hit'siz komsu segment NFD kaldi
 
 
-def test_bulgu_a4_gom_nfd_segment_placeholders_text_iliskisi_bozulur(nfc_st):
-    """ORTA: Segment.placeholders AYNEN (NFD) kopyalanir, text NFC'lenir -> girdide `yt in text` True,
-    ciktida False. T-007 K5 onarimi `kaynak.count(yt)` ile calisir; cikti segmenti kendi icinde tutarsiz."""
+def test_bulgu_a4_gom_nfd_segment_placeholders_text_iliskisi_bozulur_v3(nfc_st):
+    """TUR 2 (sinif a: duzeltilen bulgu O-A4, K2 v3): hit'li segmentte `text` VE `placeholders` birlikte NFC;
+    `yt in text` iliskisi ciktida korunur. Tur 1 davranisi (pin): `out.placeholders == s.placeholders` (NFD aynen)
+    ve `out.placeholders[0] not in out.text` idi."""
     yt = NFD("{Ünlü}")
     s = seg(yt + " noir", (yt,))
     assert s.placeholders[0] in s.text
     hits = tuple(dataclasses.replace(h, segment_index=0) for h in nfc_st.lookup(s.text, s.placeholders))
     assert araliklar(hits) == [(7, 11)]
     out = terimleri_gom((s,), hits)[0]
-    assert out.placeholders == s.placeholders
-    assert out.placeholders[0] not in out.text      # iliski koptu
-    assert NFC(out.placeholders[0]) in out.text     # NFC'lenmis hali var (pozitif kontrol)
+    # tur 1: assert out.placeholders == s.placeholders; assert out.placeholders[0] not in out.text
+    assert out.placeholders == (NFC(yt),) and out.placeholders != s.placeholders
+    assert out.placeholders[0] in out.text          # iliski KORUNDU (v3)
+    assert out.text == NFC(out.text) and out.text == "{Ünlü} Kara"
 
 
 def test_a4_gom_hit_nfd_source_term_ve_target_term_kabul(nfc_st):
@@ -338,11 +348,15 @@ def test_a5_birlestirici_isaret_terimin_ucunda_harf_gibi(kp):
     assert araliklar(kp.lookup("マルクス")) == [(0, 4)]
 
 
-def test_bulgu_a5_emoji_ve_sembol_komsusu_sinir_degil(kp):
-    """DUSUK (docstring `S*` [OLCULMUYOR] damgali): emoji (So) / $ (Sc) / + (Sm) komsusu sinir sayilmaz -> hit YOK."""
-    assert kp.lookup("\U0001F600マルクス") == []
+def test_bulgu_a5_emoji_ve_sembol_komsusu_sinir_degil_v3(kp):
+    """TUR 2 (sinif b: v3 betik gecisi): emoji/sembol (S*) DIGER sinifindadir -> `😀マルクス` betik gecisiyle
+    sinir (hit), `Marcus$`/`Marcus+Marcus` DIGER|DIGER sinir DEGIL (asimetri docstring'de belgeli).
+    Tur 1 davranisi (pin): ucu de hit yok."""
+    # tur 1: assert kp.lookup("\U0001F600マルクス") == []
+    assert araliklar(kp.lookup("\U0001F600マルクス")) == [(1, 5)]
     assert kp.lookup("Marcus$") == []
     assert kp.lookup("Marcus+Marcus") == []
+    assert kp.lookup("\U0001F600Marcus") == []
     assert araliklar(kp.lookup("\U0001F600 マルクス")) == [(2, 6)]   # pozitif kontrol
 
 
@@ -419,13 +433,14 @@ def test_a6_gom_yer_tutucuyla_ortusen_elle_hit_contract_violation(metin, yt, hit
 # ---------------------------------------------------------------------------
 
 
-def test_bulgu_a7_uzun_kaynak_terim_recursion_error():
-    """ORTA: `_trie_govdesi` kaynak uzunlugu kadar ozyineler; ~996+ kodpointlik kaynak terim yuklemede
-    RecursionError (ValueError degil, TranslatorError degil). Sema uzunluk siniri koymaz; docstring'in
-    red listesinde yok -> belgesiz cokme sinifi. 300 kodpoint kabul (gercekci cumle-terim gecer)."""
-    assert len(sozluk(("a" * 300, "X"))) == 1
-    with pytest.raises(RecursionError):
-        sozluk(("a" * 2000, "X"))
+def test_bulgu_a7_uzun_kaynak_terim_recursion_error_v3():
+    """TUR 2 (sinif a: duzeltilen bulgu O-A2, K6 v3): kaynak > 100 kodpoint SEMA reddi (`ValueError`, mesajda
+    terim uzunlugu); 2000 kodpoint asla `RecursionError`. Tur 1 davranisi (pin): 300 kabul, 2000 `RecursionError`."""
+    # tur 1: assert len(sozluk(("a" * 300, "X"))) == 1 ; with pytest.raises(RecursionError): sozluk(("a" * 2000, "X"))
+    assert len(sozluk(("a" * 100, "X"))) == 1
+    for n in (101, 300, 2000):
+        with pytest.raises(ValueError, match="en fazla 100"):
+            sozluk(("a" * n, "X"))
 
 
 def test_a7_on_bin_karakterlik_segment_dogru_ve_hizli():
@@ -473,19 +488,19 @@ def test_a7_maliyet_terim_sayisindan_bagimsiz():
     assert buyuk / kucuk < 2.5, (kucuk, buyuk)
 
 
-def test_bulgu_a7_maliyet_hit_sayisinda_karesel():
-    """DUSUK: `_ortusur(start, end, kabul)` kabul listesini dogrusal tarar -> segment basina hit sayisinda
-    O(n^2). Hit 4x -> sure > 6x (dogrusal 4x olurdu; olculdu ~11x). Gercekci segmentte (<= 10 hit) etkisiz;
-    docstring 'metinle olcekli' der, hit yogunluguna bagli."""
+def test_bulgu_a7_maliyet_hit_sayisinda_karesel_v3():
+    """TUR 2 (sinif a: duzeltilen bulgu D-A1, K5 v3): konum bitmap'i -> hit sayisinda DOGRUSAL. Hit 4x -> sure
+    < 6x (olculdu ~4.1x; tur 1 ~11x). Tur 1 davranisi (pin): `b / a > 6`."""
     st = sozluk(("マルクス", "Marcus"), ("長老", "İhtiyar"))
     def olc(k):
         metin = "長老マルクス " * k
         t = []
-        for _ in range(3):
+        for _ in range(5):
             t0 = time.perf_counter(); st.lookup(metin); t.append(time.perf_counter() - t0)
         return statistics.median(t)
     a, b = olc(500), olc(2000)
-    assert b / a > 6, (a, b)
+    # tur 1: assert b / a > 6, (a, b)
+    assert b / a < 6, (a, b)
 
 
 def test_a7_regex_geri_izleme_yok_dallanan_trie():
@@ -554,10 +569,15 @@ def test_a8_sema_kabul(veri):
         assert st.lookup(veri["terimler"][0]["kaynak"]) or veri["terimler"][0]["kaynak"] == "İ"
 
 
-def test_bulgu_a8_hedefte_yeni_satir_ve_yer_tutucu_benzeri_kabul():
-    """DUSUK: hedefte `\\n`/`\\t` ve `%s`/`<T0>`/`[Mill]` reddedilmez (yalniz .!?。！？{}). Gomulen `\\n` T-007
-    bolmesine, `%s`/`[Mill]` segment placeholders ile cakismaya acik; docstring yalniz `{}`yi yasaklar."""
-    for hedef in ("X\nY", "X\tY", "%s", "<T0>", "[Mill]"):
+def test_bulgu_a8_hedefte_yeni_satir_ve_yer_tutucu_benzeri_kabul_v3():
+    """TUR 2 (sinif a: duzeltilen bulgu D-A4, K6 v3): hedefte `\\n`/`\\t` (Cc) SEMA reddi; `%s`/`<T0>`/`[Mill]`
+    yer tutucu BENZERI hedefler serbest kalir (docstring `[ÖLÇÜLMÜYOR]`, cagiran `placeholders` ile bildirir).
+    Tur 1 davranisi (pin): besi de kabul ediliyordu."""
+    # tur 1: for hedef in ("X\nY", "X\tY", "%s", "<T0>", "[Mill]"): kabul
+    for hedef in ("X\nY", "X\tY"):
+        with pytest.raises(ValueError, match="kontrol karakteri"):
+            sozluk(("ab", hedef))
+    for hedef in ("%s", "<T0>", "[Mill]"):
         st = sozluk(("ab", hedef))
         assert gom1(st, "ab") == ilk_harfi_buyut(hedef)
 
@@ -741,14 +761,15 @@ def test_bulgu_b1_windmill_wind_de_sozlukteyken_iki_hit_bilesik_bolunur():
     assert gom1(st2, "elderly") == "İhtiyarLy"
 
 
-def test_bulgu_b1_windmills_komsu_reddedilse_de_sinir_verir_kismi_kelime_gomulur():
-    """ORTA (Y1/G5 sinifi, Latin): `windmills`te `mill` adayi (sagi `s`) REDDEDILIR ama baslangici
-    `wind`e sag sinir verir -> yalniz `wind` gomulur: `Rüzgarmills`. Docstring 'komsu terimin kabul
-    edilmesi gerekmez' der (マルクス長老 icin dogru), Latin'de kelime parcasi degisir."""
+def test_bulgu_b1_windmills_komsu_reddedilse_de_sinir_verir_kismi_kelime_gomulur_v3():
+    """TUR 2 (sinif a: duzeltilen bulgu O-A3, K1 v3 ZINCIR kurali): `windmills` = `wind`+`mill`+`s`, dis uc `s`
+    sinir degil -> zincirin HICBIR uyesi eslesmez (0 hit), kaynak dokunulmaz. Tur 1 davranisi (pin): yalniz
+    `wind` -> `The Rüzgarmills turn.`"""
     st = sozluk(("mill", "Değirmen"), ("wind", "Rüzgar"))
-    h = st.lookup("windmills")
-    assert araliklar(h) == [(0, 4)] and h[0].source_term == "wind"
-    assert gom1(st, "The windmills turn.") == "The Rüzgarmills turn."
+    # tur 1: assert araliklar(h) == [(0, 4)] and h[0].source_term == "wind"; gom1(...) == "The Rüzgarmills turn."
+    assert st.lookup("windmills") == []
+    assert gom1(st, "The windmills turn.") == "The windmills turn."
+    assert araliklar(st.lookup("windmill")) == [(0, 4), (4, 8)]     # pozitif kontrol: dis uclar sinir
 
 
 def test_bulgu_b1_alt_cizgi_pc_noktalama_sinirdir():
@@ -771,21 +792,18 @@ def test_b1_kr_bilesik_negatifi_korunur_ikinci_parca_sozlukteyse_ikiye_bolunur()
 
 
 @pytest.mark.parametrize("sira", [0, 1])
-def test_bulgu_c1_eszett_dal_ayrismasi_aday_kumesi_tam_degil_json_sirasina_bagli(sira):
-    """ORTA (dar sinif, olculdu): `_trie_anahtari` casefold'u coklu kodpoint uretince karakteri oldugu gibi
-    birakir -> `ß` ve `ẞ` (re.I DENK) ayri dallara duser. Alternation ILK dalda kisa terminalde durur, uzun
-    terim ikinci dalda kacar: {Maßen, Maẞer, Maße} sozlugunde metinde HARFIYEN gecen 'Maẞer' eslesmez;
-    JSON sirasi tersken eslesir. Docstring K1/2 'aday kumesi TAMDIR' ve K1/3 'JSON sirasi sonucu
-    degistirmez' iddialari bu sinifta kirilir. Urun dilleri (JP/KR/EN) icin erisilemez."""
+def test_bulgu_c1_eszett_dal_ayrismasi_aday_kumesi_tam_degil_json_sirasina_bagli_v3(sira):
+    """TUR 2 (sinif a: duzeltilen bulgu O-A1, K1 v3): trie anahtari IGNORECASE denklik sinifinin kanonik
+    anahtari -> `ß`/`ẞ` TEK dal; {Maßen, Maẞer, Maße} sozlugunde harfiyen gecen `Maẞer` HER JSON sirasinda
+    eslesir. Tur 1 davranisi (pin): sira 0'da `[]`, sira 1'de hit."""
     ciftler = [("Maßen", "Massen"), ("Maẞer", "Masser"), ("Maße", "Masse")]
     if sira:
         ciftler[0], ciftler[1] = ciftler[1], ciftler[0]
     st = sozluk(*ciftler)
     h = st.lookup("Maẞer geht")
-    if sira == 0:
-        assert h == []                                  # BULGU: harfiyen gecen terim kacti
-    else:
-        assert [(x.start, x.end, x.target_term) for x in h] == [(0, 5, "Masser")]
+    # tur 1: if sira == 0: assert h == [] else: [(0, 5, "Masser")]
+    assert [(x.start, x.end, x.target_term) for x in h] == [(0, 5, "Masser")]
+    assert [(x.start, x.end, x.target_term) for x in st.lookup("Maßer geht")] == [(0, 5, "Masser")]
     # pozitif kontroller (iki sirada da): ilk daldaki terimler eslesir
     assert araliklar(st.lookup("Maßen geht")) == [(0, 5)]
     assert araliklar(st.lookup("Maße geht")) == [(0, 4)]
@@ -798,17 +816,21 @@ def test_c1_tek_kodpoint_casefold_ayni_dal_marcus_aurelius():
     assert [(x.start, x.end, x.target_term) for x in h] == [(0, 15, "MA")]
 
 
-def test_bulgu_c1_yunan_iota_subscript_ayni_sinif():
-    """Ayni mekanizma: ᾈ (U+1F88) ~ ᾀ (U+1F80) re.I denk, casefold 2 kodpoint -> ayri dal; 'ᾀβδ' harfiyen gecerken kacar."""
+def test_bulgu_c1_yunan_iota_subscript_ayni_sinif_v3():
+    """TUR 2 (sinif a: duzeltilen bulgu O-A1): ᾈ (U+1F88) ~ ᾀ (U+1F80) re.I denk -> tek dal; `ᾀβδ` harfiyen
+    gecerken eslesir. Tur 1 davranisi (pin): `[]`."""
     assert re.fullmatch("ᾈ", "ᾀ", re.I)
     st = sozluk(("ᾈβγ", "A"), ("ᾀβδ", "B"), ("ᾈβ", "C"))
-    assert st.lookup("ᾀβδ x") == []                    # BULGU
+    # tur 1: assert st.lookup("ᾀβδ x") == []
+    assert [(x.start, x.end, x.target_term) for x in st.lookup("ᾀβδ x")] == [(0, 3, "B")]
     assert araliklar(st.lookup("ᾀβγ x")) == [(0, 3)]   # pozitif kontrol
 
 
 def test_c2_regex_ozel_ilk_karakterli_terimler_kacmaz():
-    st = sozluk(("]x", "A"), ("^x", "B"), ("-x", "C"), ("\\x", "D"), ("[x", "E"), (".x", "F"), ("|x", "G"), ("(x", "H"))
-    for metin, hedef in [("]x", "A"), ("^x", "B"), ("-x", "C"), ("\\x", "D"), ("[x", "E"), (".x", "F"), ("|x", "G"), ("(x", "H")]:
+    """TUR 2 (sinif d): `.x` verisi K6 v3 kaynak terminator reddine takilir -> `*x` ile degistirildi (regex-ozel kalir)."""
+    # tur 1 verisi: (".x", "F") -- v3'te kaynak `.` sema reddi
+    st = sozluk(("]x", "A"), ("^x", "B"), ("-x", "C"), ("\\x", "D"), ("[x", "E"), ("*x", "F"), ("|x", "G"), ("(x", "H"))
+    for metin, hedef in [("]x", "A"), ("^x", "B"), ("-x", "C"), ("\\x", "D"), ("[x", "E"), ("*x", "F"), ("|x", "G"), ("(x", "H")]:
         h = st.lookup(metin)
         assert araliklar(h) == [(0, 2)] and h[0].target_term == hedef, metin
     assert st.lookup("ax") == [] and st.lookup("yx") == []
@@ -822,11 +844,12 @@ def test_c3_yer_tutucu_ortusmesiz_tarama_ve_bos_metin():
     assert st.lookup("{0}", ("{0}",)) == []
 
 
-def test_c4_jp_komsu_terim_reddedilse_de_sinir_verir_bilesik_parcalanir():
-    """B1'in JP karsiligi (docstring 'her betikte ayni'): {水車, 小屋} sozlugunde `水車小屋町` -> `水車` gomulur
-    (`小屋` adayi `町` yuzunden reddedilir ama baslangici sinir verir)."""
+def test_c4_jp_komsu_terim_reddedilse_de_sinir_verir_bilesik_parcalanir_v3():
+    """TUR 2 (sinif a: O-A3'un JP karsiligi, zincir kurali 'her betikte ayni'): {水車, 小屋} sozlugunde
+    `水車小屋町` -> zincir `水車`+`小屋`, sag dis uc `町` (Han|Han) sinir degil -> 0 hit, metin dokunulmaz.
+    Tur 1 davranisi (pin): `水車` gomulurdu -> `SuArabasi小屋町`."""
     st = sozluk(("水車", "SuArabasi"), ("小屋", "Kulube"))
-    h = st.lookup("水車小屋町")
-    assert araliklar(h) == [(0, 2)]
-    assert gom1(st, "水車小屋町") == "SuArabasi小屋町"
+    # tur 1: assert araliklar(h) == [(0, 2)]; gom1(...) == "SuArabasi小屋町"
+    assert st.lookup("水車小屋町") == []
+    assert gom1(st, "水車小屋町") == "水車小屋町"
     assert araliklar(st.lookup("水車小屋")) == [(0, 2), (2, 4)]     # pozitif: tam bilesik iki hit

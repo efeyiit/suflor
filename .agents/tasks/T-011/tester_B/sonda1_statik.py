@@ -1,13 +1,15 @@
 import sys, dataclasses, json
-sys.path.insert(0, r"C:\Users\pc\Desktop\efe\çeviri uygulaması")
+from pathlib import Path as _P
+KOK = _P(__file__).resolve().parents[4]
+sys.path.insert(0, str(KOK))
 from pathlib import Path
 from src.contracts.models import Segment, Rect, TermHit
 from src.contracts.errors import ContractViolation
 from src.translate.sozluk import GlossaryStore, terimleri_gom
-out = open(r"C:\Users\pc\Desktop\efe\çeviri uygulaması\.agents\tasks\T-011\tester_B_evidence\sonda1-statik.txt", "w", encoding="utf-8")
+out = open(str(KOK / ".agents" / "tasks" / "T-011" / "tester_B_evidence" / "sonda1-statik.txt"), "w", encoding="utf-8")
 def p(*a):
     print(*a, file=out)
-s = GlossaryStore(Path(r"C:\Users\pc\Desktop\efe\çeviri uygulaması\.agents\tasks\T-011\fixtures\sozluk_ornek.json"))
+s = GlossaryStore(Path(str(KOK / ".agents" / "tasks" / "T-011" / "fixtures" / "sozluk_ornek.json")))
 R = Rect(0,0,1,1)
 # 1. lookup -> gom without segment_index fill
 seg = Segment(text="長老マルクスが水車小屋で待っています。", bbox=R)

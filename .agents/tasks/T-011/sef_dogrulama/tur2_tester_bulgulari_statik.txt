@@ -1,0 +1,4 @@
+SEF YENIDEN URETIM -- tur 2 tester bulgulari (statik hit sayilari)
+O-A5/O-B8 hiragana ad + kun/sama (liste disi): [0, 0] (0 = eksik) | kontrol san: 1
+O-B8 kanji ad + senpai/sensei (liste disi): [0, 0] | kontrol sama: 1
+O-B9 KR liste disi ekler: [0, 0, 0, 0] | kontrol ege: 1

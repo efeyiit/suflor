@@ -1,0 +1,52 @@
+[KR kopula \ub2e4 (listede YOK)]
+  hits         : []
+  OZET: listede=False hit=0 ham_ad=True gomulu_ad=True
+[KR kopula \uc608\uc694 (listede YOK)]
+  hits         : []
+  OZET: listede=False hit=0 ham_ad=True gomulu_ad=True
+[KR cikma \ud55c\ud14c\uc11c (listede YOK)]
+  hits         : []
+  OZET: listede=False hit=0 ham_ad=True gomulu_ad=True
+[KR cikma \uc5d0\uac8c\uc11c (listede YOK)]
+  hits         : []
+  OZET: listede=False hit=0 ham_ad=True gomulu_ad=True
+[KR kopula \uc785\ub2c8\ub2e4 (POZITIF, listede)]
+  hits         : [(3, 7)]
+  OZET: listede=True hit=1 ham_ad=True gomulu_ad=True
+[KR kopula \uc774\ub2e4 (POZITIF, listede)]
+  hits         : [(3, 7)]
+  OZET: listede=True hit=1 ham_ad=True gomulu_ad=True
+[KR yonelme \uc5d0\uac8c (POZITIF, listede)]
+  hits         : [(0, 4)]
+  OZET: listede=True hit=1 ham_ad=False gomulu_ad=True
+[JP hiragana ad + \u304f\u3093 (listede YOK, ayni betik)]
+  hits         : []
+  OZET: listede=False hit=0 ham_ad=False gomulu_ad=False
+[JP hiragana ad + \u3055\u307e (listede YOK, ayni betik)]
+  hits         : []
+  OZET: listede=False hit=0 ham_ad=False gomulu_ad=False
+[JP hiragana ad + \u3055\u3093 (POZITIF, listede)]
+  hits         : [(0, 3)]
+  OZET: listede=True hit=1 ham_ad=False gomulu_ad=True
+[JP katakana ad + \u304f\u3093 (POZITIF, betik gecisi)]
+  hits         : [(0, 4)]
+  OZET: listede=True hit=1 ham_ad=False gomulu_ad=True
+
+== OZET TABLO (etiket | listede | hit | hamda ad | gomuluda ad)
+  KR kopula \ub2e4 (listede YOK)                        | False | 0 | True  | True
+  KR kopula \uc608\uc694 (listede YOK)                       | False | 0 | True  | True
+  KR cikma \ud55c\ud14c\uc11c (listede YOK)                       | False | 0 | True  | True
+  KR cikma \uc5d0\uac8c\uc11c (listede YOK)                       | False | 0 | True  | True
+  KR kopula \uc785\ub2c8\ub2e4 (POZITIF, listede)                 | True  | 1 | True  | True
+  KR kopula \uc774\ub2e4 (POZITIF, listede)                  | True  | 1 | True  | True
+  KR yonelme \uc5d0\uac8c (POZITIF, listede)                 | True  | 1 | False | True
+  JP hiragana ad + \u304f\u3093 (listede YOK, ayni betik)    | False | 0 | False | False
+  JP hiragana ad + \u3055\u307e (listede YOK, ayni betik)    | False | 0 | False | False
+  JP hiragana ad + \u3055\u3093 (POZITIF, listede)           | True  | 1 | False | True
+  JP katakana ad + \u304f\u3093 (POZITIF, betik gecisi)      | True  | 1 | False | True
+listede olmayan ek + 0 hit + hamda ad YOK (Y-B2 sinifi kacak): 2
+  - JP hiragana ad + \u304f\u3093 (listede YOK, ayni betik)
+  - JP hiragana ad + \u3055\u307e (listede YOK, ayni betik)
+pozitif kontrol (listede, 1 hit, gomuluda ad var): 5/5
+yazildi -> r2-sonda-03-gercek-model.txt
+exit_code=0

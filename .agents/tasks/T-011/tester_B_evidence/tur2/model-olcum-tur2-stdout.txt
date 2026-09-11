@@ -1,0 +1,70 @@
+== M1. zincir + betik gecisi, gercek model ==
+  M1-0 jpn_Jpan: hit=1 gomulu_kaynak_uzunluk=8 | ham: Marcus=False Ayla=False | gom: Marcus=True Ayla=False bitisik_MarcusAyla_ciktida=False EN=[]
+  M1-1 jpn_Jpan: hit=1 gomulu_kaynak_uzunluk=12 | ham: Marcus=False Ayla=False | gom: Marcus=True Ayla=False bitisik_MarcusAyla_ciktida=False EN=[]
+  M1-2 jpn_Jpan: hit=2 gomulu_kaynak_uzunluk=10 | ham: Marcus=False Ayla=False | gom: Marcus=True Ayla=True bitisik_MarcusAyla_ciktida=False EN=[]
+  M1-3 jpn_Jpan: hit=2 gomulu_kaynak_uzunluk=14 | ham: Marcus=False Ayla=False | gom: Marcus=True Ayla=True bitisik_MarcusAyla_ciktida=False EN=[]
+  M1-4 jpn_Jpan: hit=2 gomulu_kaynak_uzunluk=12 | ham: Marcus=False Ayla=False | gom: Marcus=True Ayla=True bitisik_MarcusAyla_ciktida=False EN=[]
+  M1-5 jpn_Jpan: hit=2 gomulu_kaynak_uzunluk=15 | ham: Marcus=False Ayla=False | gom: Marcus=True Ayla=True bitisik_MarcusAyla_ciktida=False EN=[]
+  M1-6 kor_Hang: hit=0 gomulu_kaynak_uzunluk=6 | ham: Marcus=False Ayla=False | gom: Marcus=False Ayla=False bitisik_MarcusAyla_ciktida=False EN=[]
+  M1-7 kor_Hang: hit=2 gomulu_kaynak_uzunluk=17 | ham: Marcus=False Ayla=False | gom: Marcus=True Ayla=True bitisik_MarcusAyla_ciktida=False EN=[]
+== M2. betik gecisi kotu kullanim: katakana cins isim + kanji ==
+  M2-0: hit=1 hedef_gomuluda=[True] hedef_hamda=[True] EN_gom=[] uzunluk ham=18 gom=19
+  M2-1: hit=0 hedef_gomuluda=[] hedef_hamda=[] EN_gom=['king'] uzunluk ham=18 gom=18
+  M2-2: hit=1 hedef_gomuluda=[True] hedef_hamda=[True] EN_gom=[] uzunluk ham=13 gom=13
+  M2-3: hit=1 hedef_gomuluda=[True] hedef_hamda=[False] EN_gom=[] uzunluk ham=24 gom=21
+  M2-4: hit=1 hedef_gomuluda=[True] hedef_hamda=[False] EN_gom=[] uzunluk ham=20 gom=14
+  M2-5: hit=1 hedef_gomuluda=[True] hedef_hamda=[True] EN_gom=[] uzunluk ham=21 gom=18
+  M2-6: hit=1 hedef_gomuluda=[True] hedef_hamda=[False] EN_gom=[] uzunluk ham=29 gom=14
+== M3. UNVAN OLCUMU: 10 unvan+ad segmenti, adlar-yalniz sozluk (fixture v3) ==
+  M3-0 jpn_Jpan: EN unvan ham=[] gom=[] | TR unvan ham=['ihtiyar'] gom=['ya?l?'] | ad ham=False gom=True
+  M3-1 jpn_Jpan: EN unvan ham=[] gom=[] | TR unvan ham=[] gom=[] | ad ham=False gom=True
+  M3-2 jpn_Jpan: EN unvan ham=[] gom=[] | TR unvan ham=[] gom=[] | ad ham=False gom=True
+  M3-3 jpn_Jpan: EN unvan ham=[] gom=[] | TR unvan ham=['??valye'] gom=['??valye'] | ad ham=True gom=True
+  M3-4 jpn_Jpan: EN unvan ham=[] gom=[] | TR unvan ham=['prenses'] gom=['prenses'] | ad ham=False gom=True
+  M3-5 kor_Hang: EN unvan ham=[] gom=['elder'] | TR unvan ham=['ihtiyar'] gom=[] | ad ham=True gom=True
+  M3-6 kor_Hang: EN unvan ham=[] gom=[] | TR unvan ham=[] gom=[] | ad ham=True gom=True
+  M3-7 kor_Hang: EN unvan ham=[] gom=[] | TR unvan ham=[] gom=[] | ad ham=True gom=True
+  M3-8 kor_Hang: EN unvan ham=[] gom=[] | TR unvan ham=['??valye'] gom=[] | ad ham=True gom=True
+  M3-9 kor_Hang: EN unvan ham=[] gom=[] | TR unvan ham=['prenses'] gom=['prenses'] | ad ham=True gom=True
+  [M3] 10 segment: Ingilizce unvan HAM 0/10, GOMULU 1/10 | Turkce unvan ham 6/10, gomulu 4/10 | ad dogru ham 6/10, gomulu 10/10
+  M3b-0 jpn_Jpan: EN unvan ham=[] gom=[] | ad ham=False gom=True
+  M3b-1 jpn_Jpan: EN unvan ham=[] gom=[] | ad ham=False gom=True
+  M3b-2 jpn_Jpan: EN unvan ham=[] gom=[] | ad ham=False gom=True
+  M3b-3 jpn_Jpan: EN unvan ham=[] gom=[] | ad ham=False gom=True
+  M3b-4 jpn_Jpan: EN unvan ham=[] gom=[] | ad ham=True gom=True
+  M3b-5 kor_Hang: EN unvan ham=[] gom=[] | ad ham=False gom=True
+  M3b-6 kor_Hang: EN unvan ham=[] gom=[] | ad ham=True gom=True
+  M3b-7 kor_Hang: EN unvan ham=[] gom=[] | ad ham=True gom=True
+  M3b-8 kor_Hang: EN unvan ham=[] gom=[] | ad ham=False gom=True
+  M3b-9 kor_Hang: EN unvan ham=[] gom=[] | ad ham=False gom=True
+  [M3b] 10 cumle: Ingilizce unvan HAM 0/10, GOMULU 0/10 | ad dogru ham 3/10, gomulu 10/10
+== M4. KR dogal 10 cumle: hit yok olanlarda ham ciktida ad? ==
+  M4-0: hit=1 ad ham=True gom=True
+  M4-1: hit=1 ad ham=False gom=True
+  M4-2: hit=2 ad ham=True gom=True
+  M4-3: hit=0 ad ham=True gom=True
+  M4-4: hit=1 ad ham=True gom=True
+  M4-5: hit=1 ad ham=False gom=True
+  M4-6: hit=0 ad ham=True gom=True
+  M4-7: hit=1 ad ham=True gom=True
+  M4-8: hit=1 ad ham=True gom=True
+  M4-9: hit=1 ad ham=True gom=True
+  [M4] 10 dogal cumle: hit yok 2/10; bunlarda ad hamda KAYIP 0/2; hit olanlarda gomme kazanci 2/8
+== M5. JP kanji ad + kanji ek (??), hiragana ad + ??: liste disi ==
+  M5-0: hit=0 ad ham=True gom=True EN_gom=[]
+  M5-1: hit=0 ad ham=False gom=False EN_gom=[]
+  M5-2: hit=1 ad ham=False gom=True EN_gom=[]
+  M5-3: hit=0 ad ham=False gom=False EN_gom=[]
+  M5-4: hit=0 ad ham=False gom=False EN_gom=[]
+  M5-5: hit=1 ad ham=False gom=True EN_gom=[]
+== M6. kapi denetimi: #6 zincir sinifi gercek modelle, #5c ayri ayri, #4a JP ==
+  M6-0: hit=0 gomulu_kaynak_degisti=False | ham degirmen=True | gom degirmen=True ruzgar=True bitisik_RuzgarDegirmen=False uzunluk ham=28 gom=28
+  M6-1: hit=2 gomulu_kaynak_degisti=True | ham degirmen=True | gom degirmen=True ruzgar=True bitisik_RuzgarDegirmen=False uzunluk ham=25 gom=24
+  M6-2: hit=1 gomulu_kaynak_degisti=True | ham degirmen=True | gom degirmen=True ruzgar=False bitisik_RuzgarDegirmen=False uzunluk ham=33 gom=33
+  M6-kismi (tur-1 sinifi, elle): degirmen=False ruzgar=True
+  M6-5c: hamda Marcus YOK -- JP=True KR=True (kapi `or` ile geciyor; `and` de gecer mi: True)
+  M6-4b: ham ihtiyar=True gom ihtiyar=True Marcus_gom=True kasaba_gom=False
+== M7. gomulu segment tekrar zincire (fixture ile) ==
+  M7-0: 2. gecis metin ayni=True ceviri ayni=True
+  M7-1: 2. gecis metin ayni=True ceviri ayni=True
+exit=0

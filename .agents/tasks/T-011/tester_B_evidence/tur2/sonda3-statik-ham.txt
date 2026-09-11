@@ -1,0 +1,132 @@
+== S1 ==
+JP eslesen: ['マルクスさん', 'マルクス様', 'マルクス殿', 'マルクス君', 'マルクスちゃん', 'マルクス達', 'マルクスたち', 'マルクスって', 'マルクスだ', 'マルクスじゃない', 'マルクスなら', 'マルクスから', 'マルクスまで', 'マルクスより', 'マルクスか', 'マルクスよ', 'マルクスね'] 
+JP kacak: []
+KR eslesen: ['마르쿠스님', '마르쿠스씨', '마르쿠스야', '마르쿠스아', '마르쿠스에게', '마르쿠스한테', '마르쿠스께', '마르쿠스랑', '마르쿠스처럼', '마르쿠스보다', '마르쿠스마다', '마르쿠스밖에', '마르쿠스조차', '마르쿠스들', '마르쿠스라고', '마르쿠스라면', '방앗간이다', '방앗간입니다'] 
+KR kacak: ['마르쿠스인가']
+== S2 ==
+'マルクス山': [('マルクス', 'Marcus', 0, 4)]
+'マルクス様': [('マルクス', 'Marcus', 0, 4)]
+'마르쿠스들이다': [('마르쿠스', 'Marcus', 0, 4)]
+'마르쿠스들이': [('마르쿠스', 'Marcus', 0, 4)]
+'마르쿠스님에게는': []
+'마르쿠스에게는': [('마르쿠스', 'Marcus', 0, 4)]
+'마르쿠스님께서는': []
+'마르쿠스님께서': [('마르쿠스', 'Marcus', 0, 4)]
+'마르쿠스님한테도': []
+'마르쿠스들에게': [('마르쿠스', 'Marcus', 0, 4)]
+'마르쿠스들에게는': []
+'마르쿠스에게서': []
+'마르쿠스한테서': []
+'마르쿠스으로부터': [('마르쿠스', 'Marcus', 0, 4)]
+'마르쿠스님으로부터': []
+'마르쿠스예요': []
+'마르쿠스이에요': []
+'마르쿠스요': []
+'마르쿠스가요': []
+'마르쿠스는데': []
+'마르쿠스님들은': []
+== S3 ==
+[dogal] '마르쿠스님, 어서 오세요.': ad hit=1
+[dogal] '마르쿠스님께서 부르십니다.': ad hit=1
+[dogal] '아일라는 방앗간에 있어요.': ad hit=1
+[dogal] '마르쿠스님께서는 오늘 안 계십니다.': ad hit=0
+[dogal] '이건 아일라의 검이에요.': ad hit=1
+[dogal] '마르쿠스에게 이 편지를 전해 주세요.': ad hit=1
+[dogal] '아일라한테서 들었어요.': ad hit=0
+[dogal] '마르쿠스님도 함께 가실 거예요.': ad hit=1
+[dogal] '아일라야, 조심해!': ad hit=1
+[dogal] '마르쿠스님은 마을 장로입니다.': ad hit=1
+[dogal] kacak: ['마르쿠스님께서는 오늘 안 계십니다.', '아일라한테서 들었어요.']
+[yigin] '마르쿠스님께서는 지금 안 계십니다.': ad hit=0
+[yigin] '마르쿠스님에게는 비밀이 있습니다.': ad hit=0
+[yigin] '아일라님한테도 말했어요.': ad hit=0
+[yigin] '마르쿠스님께 전해 주세요.': ad hit=1
+[yigin] '아일라님이 오셨습니다.': ad hit=1
+[yigin] '마르쿠스에게서 편지가 왔습니다.': ad hit=0
+[yigin] '마르쿠스님의 검입니다.': ad hit=1
+[yigin] '아일라님은 방앗간에 계십니다.': ad hit=1
+[yigin] '마르쿠스님들은 어디 계세요?': ad hit=0
+[yigin] '마르쿠스님께서도 동의하셨습니다.': ad hit=0
+[yigin] kacak: ['마르쿠스님께서는 지금 안 계십니다.', '마르쿠스님에게는 비밀이 있습니다.', '아일라님한테도 말했어요.', '마르쿠스에게서 편지가 왔습니다.', '마르쿠스님들은 어디 계세요?', '마르쿠스님께서도 동의하셨습니다.']
+== S4 ==
+'太郎先生': []
+'太郎先輩': []
+'太郎氏': []
+'太郎公': []
+'太郎王': []
+'太郎隊長': []
+'太郎様': [('太郎', 'Taro', 0, 2)]
+'太郎君': [('太郎', 'Taro', 0, 2)]
+'太郎達': [('太郎', 'Taro', 0, 2)]
+'太郎殿': [('太郎', 'Taro', 0, 2)]
+'太郎が': [('太郎', 'Taro', 0, 2)]
+'太郎さん': [('太郎', 'Taro', 0, 2)]
+'ひかりくん': []
+'ひかりさま': []
+'ひかりせんぱい': []
+'ひかりせんせい': []
+'ひかりたん': []
+'ひかりちゃん': [('ひかり', 'Hikari', 0, 3)]
+'ひかりさん': [('ひかり', 'Hikari', 0, 3)]
+'ひかりは': [('ひかり', 'Hikari', 0, 3)]
+'ひかりです': [('ひかり', 'Hikari', 0, 3)]
+'ひかり姫': [('ひかり', 'Hikari', 0, 3)]
+kanji kacak: ['太郎先生', '太郎先輩', '太郎氏', '太郎公', '太郎王', '太郎隊長'] 
+hiragana kacak: ['ひかりくん', 'ひかりさま', 'ひかりせんぱい', 'ひかりせんせい', 'ひかりたん']
+== S5 ==
+'ゴブリンキング': []
+'ゴブリン王': [('ゴブリン', 'Goblin', 0, 4)]
+'ゴブリン王が現れた。': [('ゴブリン', 'Goblin', 0, 4)]
+'ポーション瓶': [('ポーション', 'İksir', 0, 5)]
+'ポーション瓶を拾った。': [('ポーション', 'İksir', 0, 5)]
+'마르쿠스王': [('마르쿠스', 'Marcus', 0, 4)]
+'마르쿠스가': [('마르쿠스', 'Marcus', 0, 4)]
+'エルフ族の村': [('エルフ', 'Elf', 0, 3)]
+'ゴブリンの王': [('ゴブリン', 'Goblin', 0, 4)]
+'ゴブリン・キング': [('ゴブリン', 'Goblin', 0, 4)]
+"Marcus's": [('Marcus', 'Marcus', 0, 6)]
+"Marcus'": [('Marcus', 'Marcus', 0, 6)]
+"Marcus'ın": [('Marcus', 'Marcus', 0, 6)]
+'Marcus-san': [('Marcus', 'Marcus', 0, 6)]
+'Marcus’s': [('Marcus', 'Marcus', 0, 6)]
+'Marcusさん': [('Marcus', 'Marcus', 0, 6)]
+'Marcus様': [('Marcus', 'Marcus', 0, 6)]
+'Marcus2': []
+'Marcuss': []
+'Marcus_2': [('Marcus', 'Marcus', 0, 6)]
+"MARCUS'UN": [('MARCUS', 'Marcus', 0, 6)]
+'マルクス♪': [('マルクス', 'Marcus', 0, 4)]
+'Marcus♪': []
+'マルクス～': [('マルクス', 'Marcus', 0, 4)]
+'Marcus$': []
+'ﾏﾙｸｽ': []
+'Ｍａｒｃｕｓ': []
+== S6 ==
+bosluklu yer tutucu: hits=[('マルクス', 0), ('アイラ', 6)] gomulu='Marcusが Aylaを 待つ' ph=(' ',)
+terimle ayni yer tutucu: lookup hits=() elle hit -> ContractViolation
+fixture 2. gecis: '長老MarcusがDeğirmenで待っています。' -> '長老MarcusがDeğirmenで待っています。' hits2=[('Marcus', 'Marcus')]
+hedef baska terimin kaynagi: 'マルクスが来た。' -> 'Marcusが来た。' -> 'Marküsが来た。'
+kaydirilmis liste: hits(A) gom(B) -> ['Marcusは村にいます。', 'Marcusが来た。'] (CV yok)
+PLAYER_NAME: [('PLAYER', 'Oyuncu', 0, 6)]
+== S7 ==
+{'kaynak': '.', 'hedef': 'Nokta', 'kisa_terim_izni': True} -> RED: sozluk semasi: terim '.': kaynak cumle sonu isareti iceremez (.!?。！？); gomme cum
+{'kaynak': '。', 'hedef': 'Nokta', 'kisa_terim_izni': True} -> RED: sozluk semasi: terim '。': kaynak cumle sonu isareti iceremez (.!?。！？); gomme cum
+{'kaynak': '{', 'hedef': 'Kume', 'kisa_terim_izni': True} -> KABUL (1)
+{'kaynak': '{0}', 'hedef': 'Sıfır'} -> KABUL (1)
+{'kaynak': 'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx', 'hedef': 'Y'} -> KABUL (1)
+{'kaynak': 'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx', 'hedef': 'Y'} -> RED: sozluk semasi: terim 'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+{'kaynak': 'Mr. Marcus', 'hedef': 'Marcus'} -> RED: sozluk semasi: terim 'Mr. Marcus': kaynak cumle sonu isareti iceremez (.!?。！？); 
+{'kaynak': 'マルクス', 'hedef': 'Mar\x85cus'} -> RED: sozluk semasi: terim 'マルクス': hedef kontrol karakteri iceremez (U+0085); satir bo
+{'kaynak': 'マルクス', 'hedef': 'Mar\u200bcus'} -> KABUL (1)
+{'kaynak': 'マルクス', 'hedef': 'Marcus\xa0'} -> RED: sozluk semasi: terim 'マルクス': 'hedef' bas/son bosluk tasiyor: 'Marcus\xa0'
+{'kaynak': 'マルクス', 'hedef': 'Marcus', 'not': None} -> KABUL (1)
+{'kaynak': 'マルクス', 'hedef': 'Marcus', 'kisa_terim_izni': 1} -> RED: sozluk semasi: terim 'マルクス': 'kisa_terim_izni' bool olmali, gelen: int
+== S8 ==
+'The windmill turns.': [('wind', 'Rüzgar', 4, 8), ('mill', 'Değirmen', 8, 12)] -> 'The RüzgarDeğirmen turns.'
+'The windmills turn.': [] -> 'The windmills turn.'
+'oldmillhouse': [('old', 'Eski', 0, 3), ('millhouse', 'Değirmen Evi', 3, 12)] -> 'EskiDeğirmen Evi'
+'old millhouse': [('old', 'Eski', 0, 3), ('millhouse', 'Değirmen Evi', 4, 13)] -> 'Eski Değirmen Evi'
+'windmillhouse': [('wind', 'Rüzgar', 0, 4), ('millhouse', 'Değirmen Evi', 4, 13)] -> 'RüzgarDeğirmen Evi'
+'windmillhouses': [] -> 'windmillhouses'
+'millwind': [('mill', 'Değirmen', 0, 4), ('wind', 'Rüzgar', 4, 8)] -> 'DeğirmenRüzgar'
+'xwindmill': [] -> 'xwindmill'

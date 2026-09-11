@@ -1,0 +1,48 @@
+== kosum 1
+-- hit sayisi (bosluklu, zincirsiz): k hit -> ms   [2x hit -> ~2x sure beklenir]
+     500 hit:    1.08 ms (500 hit)
+    1000 hit:    2.15 ms (1000 hit) oran 2.00
+    2000 hit:    4.35 ms (2000 hit) oran 2.03
+    4000 hit:    9.04 ms (4000 hit) oran 2.08
+    8000 hit:   19.40 ms (8000 hit) oran 2.15
+-- zincir (bitisik, canli): k uye -> ms
+    1000 uye:    2.80 ms (1000 hit)
+    2000 uye:    5.62 ms (2000 hit) oran 2.01
+    4000 uye:   11.13 ms (4000 hit) oran 1.98
+    8000 uye:   23.36 ms (8000 hit) oran 2.10
+-- zincir OLU (sag dis uc `ー` Katakana|Katakana): k uye -> ms, 0 hit
+    1000 uye:    3.07 ms (0 hit)
+    2000 uye:    6.25 ms (0 hit) oran 2.04
+    4000 uye:   11.93 ms (0 hit) oran 1.91
+    8000 uye:   25.11 ms (0 hit) oran 2.10
+-- zincir OLU (sol dis uc): 8000 uye
+   8000 uye:   21.36 ms (0 hit)
+-- onek zinciri a2..a11 + a*10000 (tur 1: 909 hit, 850 ms)
+   910 hit, son iki: [(9988, 9998), (9998, 10000)], kaplama 10000/10000:   53.50 ms
+-- lookup_segments + terimleri_gom, 1000 segment x fixture v3 (7 terim) (real_check #8 yolu, modelsiz)
+   7 terim, 2000 hit:   11.07 ms (< 50)
+   karisik 3 dil, 4000 hit:   17.64 ms
+== kosum 2
+-- hit sayisi (bosluklu, zincirsiz): k hit -> ms   [2x hit -> ~2x sure beklenir]
+     500 hit:    1.09 ms (500 hit)
+    1000 hit:    2.13 ms (1000 hit) oran 1.95
+    2000 hit:    4.37 ms (2000 hit) oran 2.05
+    4000 hit:    9.29 ms (4000 hit) oran 2.13
+    8000 hit:   18.66 ms (8000 hit) oran 2.01
+-- zincir (bitisik, canli): k uye -> ms
+    1000 uye:    2.61 ms (1000 hit)
+    2000 uye:    5.35 ms (2000 hit) oran 2.05
+    4000 uye:   11.03 ms (4000 hit) oran 2.06
+    8000 uye:   24.53 ms (8000 hit) oran 2.22
+-- zincir OLU (sag dis uc `ー` Katakana|Katakana): k uye -> ms, 0 hit
+    1000 uye:    2.91 ms (0 hit)
+    2000 uye:    6.01 ms (0 hit) oran 2.07
+    4000 uye:   12.33 ms (0 hit) oran 2.05
+    8000 uye:   26.36 ms (0 hit) oran 2.14
+-- zincir OLU (sol dis uc): 8000 uye
+   8000 uye:   21.66 ms (0 hit)
+-- onek zinciri a2..a11 + a*10000 (tur 1: 909 hit, 850 ms)
+   910 hit, son iki: [(9988, 9998), (9998, 10000)], kaplama 10000/10000:  109.76 ms
+-- lookup_segments + terimleri_gom, 1000 segment x fixture v3 (7 terim) (real_check #8 yolu, modelsiz)
+   7 terim, 2000 hit:   25.77 ms (< 50)
+   karisik 3 dil, 4000 hit:   41.61 ms

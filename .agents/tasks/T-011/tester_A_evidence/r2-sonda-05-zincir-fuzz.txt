@@ -1,0 +1,3 @@
+metin: 40000 (5 tohum x 400 sozluk x 20), ihlal: 0
+pozitif kontrol: 2+ uyeli kabul edilen zincir kosusu 2231; zincir/ortusme yuzunden reddedilen aday 6920; aday var ama 0 hit (olu zincir) metin 2781
+yer tutuculu metin: 4500, korunan aralikli: 4500, ihlal: 0; yt bildirilince sonucu degisen metin (pozitif): 526

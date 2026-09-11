@@ -1,0 +1,4 @@
+(i) re.I denk tek-kodpoint cift sayisi (bagimsiz kapanis): 1495
+(i) ayrisan (harfiyen gecen terim kacan / capraz yazim bulunmayan) cift: 0
+(ii) casefold/lower/upper esit ama re.I denk OLMAYAN cift: 0
+(ii) ayni dala dusup erisilemez kalan (ya da yuklenemeyen) cift: 0

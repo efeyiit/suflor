@@ -1,0 +1,81 @@
+== betik sinifi tablosu (kamu API): karakter | kategori | sag: hit vermeyen terim siniflari | sol: ... | docstring | uyum
+U+030FC KATAKANA-HIRAGANA PROLONGED SOUND MARK Lm | sag=['Katakana'] sol=['Katakana']                    | Katakana  | ok
+U+0FF70 HALFWIDTH KATAKANA-HIRAGANA PROLONGED  Lm | sag=['Katakana'] sol=['Katakana']                    | Katakana  | ok
+U+0FF8F HALFWIDTH KATAKANA LETTER MA           Lo | sag=['Katakana'] sol=['Katakana']                    | Katakana  | ok
+U+0FF7D HALFWIDTH KATAKANA LETTER SU           Lo | sag=['Katakana'] sol=['Katakana']                    | Katakana  | ok
+U+031F0 KATAKANA LETTER SMALL KU               Lo | sag=['Katakana'] sol=['Katakana']                    | Katakana  | ok
+U+030F6 KATAKANA LETTER SMALL KE               Lo | sag=['Katakana'] sol=['Katakana']                    | Katakana  | ok
+U+030FD KATAKANA ITERATION MARK                Lm | sag=['Katakana'] sol=['Katakana']                    | Katakana  | ok
+U+030FE KATAKANA VOICED ITERATION MARK         Lm | sag=['Katakana'] sol=['Katakana']                    | Katakana  | ok
+U+030FB KATAKANA MIDDLE DOT                    Po | SINIR                                                | SINIR     | ok
+U+03005 IDEOGRAPHIC ITERATION MARK             Lm | sag=['Han'] sol=['Han']                              | Han       | ok
+U+03006 IDEOGRAPHIC CLOSING MARK               Lo | sag=['Han'] sol=['Han']                              | Han       | ok
+U+03007 IDEOGRAPHIC NUMBER ZERO                Nl | sag=['Han'] sol=['Han']                              | Han       | ok
+U+04E09 CJK UNIFIED IDEOGRAPH-4E09             Lo | sag=['Han'] sol=['Han']                              | Han       | ok
+U+06F22 CJK UNIFIED IDEOGRAPH-6F22             Lo | sag=['Han'] sol=['Han']                              | Han       | ok
+U+02F00 KANGXI RADICAL ONE                     So | sag=['Han'] sol=['Han']                              | Han       | ok
+U+02E80 CJK RADICAL REPEAT                     So | sag=['Han'] sol=['Han']                              | Han       | ok
+U+03400 CJK UNIFIED IDEOGRAPH-3400             Lo | sag=['Han'] sol=['Han']                              | Han       | ok
+U+08C48 CJK UNIFIED IDEOGRAPH-8C48             Lo | sag=['Han'] sol=['Han']                              | Han       | ok
+U+20000 CJK UNIFIED IDEOGRAPH-20000            Lo | sag=['Han'] sol=['Han']                              | Han       | ok
+U+2F800 CJK COMPATIBILITY IDEOGRAPH-2F800      Lo | sag=['Han'] sol=['Han']                              | Han       | ok
+U+03042 HIRAGANA LETTER A                      Lo | sag=['Hiragana'] sol=['Hiragana']                    | Hiragana  | ok
+U+0309D HIRAGANA ITERATION MARK                Lm | sag=['Hiragana'] sol=['Hiragana']                    | Hiragana  | ok
+U+0309E HIRAGANA VOICED ITERATION MARK         Lm | sag=['Hiragana'] sol=['Hiragana']                    | Hiragana  | ok
+U+03041 HIRAGANA LETTER SMALL A                Lo | sag=['Hiragana'] sol=['Hiragana']                    | Hiragana  | ok
+U+0309F HIRAGANA DIGRAPH YORI                  Lo | sag=['Hiragana'] sol=['Hiragana']                    | Hiragana  | ok
+U+0309B KATAKANA-HIRAGANA VOICED SOUND MARK    Sk | sag=['Hiragana'] sol=['Hiragana']                    | Hiragana  | ok
+U+0309C KATAKANA-HIRAGANA SEMI-VOICED SOUND MA Sk | sag=['Hiragana'] sol=['Hiragana']                    | Hiragana  | ok
+U+03099 COMBINING KATAKANA-HIRAGANA VOICED SOU Mn | sag=['DIGER', 'Han', 'Hangul', 'Hiragana', 'Katakana'] sol=['Hiragana'] | M*        | ok
+U+0309A COMBINING KATAKANA-HIRAGANA SEMI-VOICE Mn | sag=['DIGER', 'Han', 'Hangul', 'Hiragana', 'Katakana'] sol=['Hiragana'] | M*        | ok
+U+01100 HANGUL CHOSEONG KIYEOK                 Lo | sag=['Hangul'] sol=['Hangul']                        | Hangul    | ok
+U+01161 HANGUL JUNGSEONG A                     Lo | sag=['Hangul'] sol=['Hangul']                        | Hangul    | ok
+U+011A8 HANGUL JONGSEONG KIYEOK                Lo | sag=['Hangul'] sol=['Hangul']                        | Hangul    | ok
+U+03131 HANGUL LETTER KIYEOK                   Lo | sag=['Hangul'] sol=['Hangul']                        | Hangul    | ok
+U+0FFA1 HALFWIDTH HANGUL LETTER KIYEOK         Lo | sag=['Hangul'] sol=['Hangul']                        | Hangul    | ok
+U+0B098 HANGUL SYLLABLE NA                     Lo | sag=['Hangul'] sol=['Hangul']                        | Hangul    | ok
+U+0D7A3 HANGUL SYLLABLE HIH                    Lo | sag=['Hangul'] sol=['Hangul']                        | Hangul    | ok
+U+0A960 HANGUL CHOSEONG TIKEUT-MIEUM           Lo | sag=['Hangul'] sol=['Hangul']                        | Hangul    | ok
+U+0D7B0 HANGUL JUNGSEONG O-YEO                 Lo | sag=['Hangul'] sol=['Hangul']                        | Hangul    | ok
+U+0FF2D FULLWIDTH LATIN CAPITAL LETTER M       Lu | sag=['DIGER'] sol=['DIGER']                          | DIGER     | ok
+U+0FF41 FULLWIDTH LATIN SMALL LETTER A         Ll | sag=['DIGER'] sol=['DIGER']                          | DIGER     | ok
+U+00032 DIGIT TWO                              Nd | sag=['DIGER'] sol=['DIGER']                          | DIGER     | ok
+U+0FF12 FULLWIDTH DIGIT TWO                    Nd | sag=['DIGER'] sol=['DIGER']                          | DIGER     | ok
+U+02460 CIRCLED DIGIT ONE                      No | sag=['DIGER'] sol=['DIGER']                          | DIGER     | ok
+U+02162 ROMAN NUMERAL THREE                    Nl | sag=['DIGER'] sol=['DIGER']                          | DIGER     | ok
+U+0266A EIGHTH NOTE                            So | sag=['DIGER'] sol=['DIGER']                          | DIGER     | ok
+U+1F600 GRINNING FACE                          So | sag=['DIGER'] sol=['DIGER']                          | DIGER     | ok
+U+003B1 GREEK SMALL LETTER ALPHA               Ll | sag=['DIGER'] sol=['DIGER']                          | DIGER     | ok
+U+0042F CYRILLIC CAPITAL LETTER YA             Lu | sag=['DIGER'] sol=['DIGER']                          | DIGER     | ok
+U+00634 ARABIC LETTER SHEEN                    Lo | sag=['DIGER'] sol=['DIGER']                          | DIGER     | ok
+U+00905 DEVANAGARI LETTER A                    Lo | sag=['DIGER'] sol=['DIGER']                          | DIGER     | ok
+U+00E01 THAI CHARACTER KO KAI                  Lo | sag=['DIGER'] sol=['DIGER']                          | DIGER     | ok
+U+1B000 KATAKANA LETTER ARCHAIC E              Lo | sag=['DIGER'] sol=['DIGER']                          | DIGER     | ok
+U+1B100 HENTAIGANA LETTER RE-3                 Lo | sag=['DIGER'] sol=['DIGER']                          | DIGER     | ok
+U+03231 PARENTHESIZED IDEOGRAPH STOCK          So | sag=['DIGER'] sol=['DIGER']                          | DIGER     | ok
+U+03299 CIRCLED IDEOGRAPH SECRET               So | sag=['DIGER'] sol=['DIGER']                          | DIGER     | ok
+U+0337F SQUARE CORPORATION                     So | sag=['DIGER'] sol=['DIGER']                          | DIGER     | ok
+U+03192 IDEOGRAPHIC ANNOTATION ONE MARK        No | sag=['DIGER'] sol=['DIGER']                          | DIGER     | ok
+U+03036 CIRCLED POSTAL MARK                    So | sag=['DIGER'] sol=['DIGER']                          | DIGER     | ok
+U+03105 BOPOMOFO LETTER B                      Lo | sag=['DIGER'] sol=['DIGER']                          | DIGER     | ok
+U+03130 ?                                      Cn | sag=['Hangul'] sol=['Hangul']                        | Hangul    | ok
+U+03000 IDEOGRAPHIC SPACE                      Zs | SINIR                                                | SINIR     | ok
+U+00020 SPACE                                  Zs | SINIR                                                | SINIR     | ok
+U+03002 IDEOGRAPHIC FULL STOP                  Po | SINIR                                                | SINIR     | ok
+U+0300C LEFT CORNER BRACKET                    Ps | SINIR                                                | SINIR     | ok
+U+0301C WAVE DASH                              Pd | SINIR                                                | SINIR     | ok
+U+0FF0D FULLWIDTH HYPHEN-MINUS                 Pd | SINIR                                                | SINIR     | ok
+U+0005F LOW LINE                               Pc | SINIR                                                | SINIR     | ok
+U+03092 HIRAGANA LETTER WO                     Lo | SINIR                                                | SINIR     | ok
+U+0304C HIRAGANA LETTER GA                     Lo | SINIR                                                | SINIR     | ok
+U+0200B ZERO WIDTH SPACE                       Cf | sag=['DIGER'] sol=['DIGER']                          | DIGER     | ok
+U+000AD SOFT HYPHEN                            Cf | sag=['DIGER'] sol=['DIGER']                          | DIGER     | ok
+toplam 71 karakter, docstring ile uyumsuz: 0
+
+== yarim genislik katakana: NFC != NFKC (tam genislik terimi bulmaz; ayri terim olarak calisir)
+  マルクス terimi, metin ﾏﾙｸｽが: 0 hit
+  ﾏﾙｸｽ terimi, metin ﾏﾙｸｽが: 1 hit; metin マルクスが: 0 hit
+  NFKC('ﾏﾙｸｽ') == 'マルクス': True; NFC esit mi: False
+
+== Kelvin isareti U+212A: NFC -> K; source_term NFC dilim
+  hit: [(0, 6, 'Kelvin')]; source_term ASCII K mi: True

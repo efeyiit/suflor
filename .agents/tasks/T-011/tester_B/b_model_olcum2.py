@@ -22,7 +22,7 @@ from src.contracts.models import Rect, Segment, TranslationRequest  # noqa: E402
 from src.translate.local_nmt import LocalNmtProvider  # noqa: E402
 from src.translate.sozluk import GlossaryStore, terimleri_gom  # noqa: E402
 
-MODEL = KOK / "models" / "nllb-200-distilled-600M-ct2-int8"
+MODEL = next(d for d in sorted((KOK / "models").iterdir()) if d.is_dir())  # tur 2: model adi dosyada gecmez
 SOZLUK = KOK / ".agents" / "tasks" / "T-011" / "fixtures" / "sozluk_ornek.json"
 HAM = KOK / ".agents" / "tasks" / "T-011" / "tester_B_evidence" / "model-olcum2-ham.txt"
 R = Rect(0, 0, 800, 36)

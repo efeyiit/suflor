@@ -1,0 +1,94 @@
+[KR kopula 다 (listede YOK)]
+  cumle        : 그는 마르쿠스다.
+  hits         : []
+  gomulu kaynak: 그는 마르쿠스다.
+  ham ceviri   : O Marcus.
+  gomulu ceviri: O Marcus.
+  OZET: listede=False hit=0 ham_ad=True gomulu_ad=True
+[KR kopula 예요 (listede YOK)]
+  cumle        : 저는 마르쿠스예요.
+  hits         : []
+  gomulu kaynak: 저는 마르쿠스예요.
+  ham ceviri   : Ben Marcus.
+  gomulu ceviri: Ben Marcus.
+  OZET: listede=False hit=0 ham_ad=True gomulu_ad=True
+[KR cikma 한테서 (listede YOK)]
+  cumle        : 마르쿠스한테서 편지를 받았어요.
+  hits         : []
+  gomulu kaynak: 마르쿠스한테서 편지를 받았어요.
+  ham ceviri   : Marcus'tan bir mektup aldım.
+  gomulu ceviri: Marcus'tan bir mektup aldım.
+  OZET: listede=False hit=0 ham_ad=True gomulu_ad=True
+[KR cikma 에게서 (listede YOK)]
+  cumle        : 마르쿠스에게서 편지를 받았어요.
+  hits         : []
+  gomulu kaynak: 마르쿠스에게서 편지를 받았어요.
+  ham ceviri   : Marcus'tan bir mektup aldım.
+  gomulu ceviri: Marcus'tan bir mektup aldım.
+  OZET: listede=False hit=0 ham_ad=True gomulu_ad=True
+[KR kopula 입니다 (POZITIF, listede)]
+  cumle        : 저는 마르쿠스입니다.
+  hits         : [(3, 7)]
+  gomulu kaynak: 저는 Marcus입니다.
+  ham ceviri   : Ben Marcus.
+  gomulu ceviri: Ben Marcus.
+  OZET: listede=True hit=1 ham_ad=True gomulu_ad=True
+[KR kopula 이다 (POZITIF, listede)]
+  cumle        : 그는 마르쿠스이다.
+  hits         : [(3, 7)]
+  gomulu kaynak: 그는 Marcus이다.
+  ham ceviri   : O Marcus.
+  gomulu ceviri: Bu Marcus.
+  OZET: listede=True hit=1 ham_ad=True gomulu_ad=True
+[KR yonelme 에게 (POZITIF, listede)]
+  cumle        : 마르쿠스에게 편지를 보냈어요.
+  hits         : [(0, 4)]
+  gomulu kaynak: Marcus에게 편지를 보냈어요.
+  ham ceviri   : Markos'a mektup gönderdim.
+  gomulu ceviri: Marcus'a bir mektup gönderdim.
+  OZET: listede=True hit=1 ham_ad=False gomulu_ad=True
+[JP hiragana ad + くん (listede YOK, ayni betik)]
+  cumle        : ひかりくんが来た。
+  hits         : []
+  gomulu kaynak: ひかりくんが来た。
+  ham ceviri   : Bir ışık geldi.
+  gomulu ceviri: Bir ışık geldi.
+  OZET: listede=False hit=0 ham_ad=False gomulu_ad=False
+[JP hiragana ad + さま (listede YOK, ayni betik)]
+  cumle        : ひかりさまが来た。
+  hits         : []
+  gomulu kaynak: ひかりさまが来た。
+  ham ceviri   : Bir ışık geldi.
+  gomulu ceviri: Bir ışık geldi.
+  OZET: listede=False hit=0 ham_ad=False gomulu_ad=False
+[JP hiragana ad + さん (POZITIF, listede)]
+  cumle        : ひかりさんが来た。
+  hits         : [(0, 3)]
+  gomulu kaynak: Hikariさんが来た。
+  ham ceviri   : Bir ışık geldi.
+  gomulu ceviri: Hikari geldi.
+  OZET: listede=True hit=1 ham_ad=False gomulu_ad=True
+[JP katakana ad + くん (POZITIF, betik gecisi)]
+  cumle        : マルクスくんが来た。
+  hits         : [(0, 4)]
+  gomulu kaynak: Marcusくんが来た。
+  ham ceviri   : Marks geldi.
+  gomulu ceviri: Marcus geldi.
+  OZET: listede=True hit=1 ham_ad=False gomulu_ad=True
+
+== OZET TABLO (etiket | listede | hit | hamda ad | gomuluda ad)
+  KR kopula 다 (listede YOK)                        | False | 0 | True  | True
+  KR kopula 예요 (listede YOK)                       | False | 0 | True  | True
+  KR cikma 한테서 (listede YOK)                       | False | 0 | True  | True
+  KR cikma 에게서 (listede YOK)                       | False | 0 | True  | True
+  KR kopula 입니다 (POZITIF, listede)                 | True  | 1 | True  | True
+  KR kopula 이다 (POZITIF, listede)                  | True  | 1 | True  | True
+  KR yonelme 에게 (POZITIF, listede)                 | True  | 1 | False | True
+  JP hiragana ad + くん (listede YOK, ayni betik)    | False | 0 | False | False
+  JP hiragana ad + さま (listede YOK, ayni betik)    | False | 0 | False | False
+  JP hiragana ad + さん (POZITIF, listede)           | True  | 1 | False | True
+  JP katakana ad + くん (POZITIF, betik gecisi)      | True  | 1 | False | True
+listede olmayan ek + 0 hit + hamda ad YOK (Y-B2 sinifi kacak): 2
+  - JP hiragana ad + くん (listede YOK, ayni betik)
+  - JP hiragana ad + さま (listede YOK, ayni betik)
+pozitif kontrol (listede, 1 hit, gomuluda ad var): 5/5

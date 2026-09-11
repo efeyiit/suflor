@@ -1,0 +1,1 @@
+tester_B tur 2: test_sozluk.py ILK ACILIS ani (kendi testlerim 301 passed + 1 xfailed, model olcumleri M1-M7 bitti): 2026-09-11 21:20:17

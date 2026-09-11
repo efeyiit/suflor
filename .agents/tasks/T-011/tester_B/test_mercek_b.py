@@ -3,6 +3,13 @@
 Kor yazildi: `delivery.md`, `evidence/`, `sef_dogrulama/`, `test_sozluk.py` acilmadan.
 Paket: `.agents/tasks/T-011/packet.md` surum 2 (K1-K7). Kod: `src/translate/sozluk.py`.
 
+TUR 2 (paket v3, fixture v3, kod v3): 92 kosumun 30'u dustu; her biri yeniden nisanlandi ve `TUR-2 (x)` ile isaretlendi:
+  (a) duzeltilen bulgu pin'i -> v3 beklentisi (8): b3 kaynak terminator, b6 reddedilen komsu x4, b6 NFD yer tutucu, b8 CV x2
+  (b) v3 kuraliyla degisen eski davranis (17): b6 kimlik cipasi, b7 JP 17, b7 KR 21, b7 sembol x14
+  (c) fixture v3 (7 terim, unvansiz) (4): b1 list/tuple, b6 NFD indeks (`mill` yok), bx repr 11->7, bk kapi yolu 10->6
+  (d) `マルクス。` test verisi (1): b9 sema serbest listesi
+Tur-2'nin yeni testleri `test_mercek_b_tur2.py` icinde.
+
 Kos:
     python -m pytest .agents/tasks/T-011/tester_B -q -p no:cacheprovider --import-mode=importlib
 
@@ -96,7 +103,7 @@ def test_b1_list_tuple_generator_girdi_ayni_cikti(s: GlossaryStore) -> None:
     assert terimleri_gom([sg], s.lookup_segments([sg])) == beklenen
     assert terimleri_gom((x for x in [sg]), s.lookup_segments((x for x in [sg]))) == beklenen
     assert isinstance(terimleri_gom([sg], ()), tuple)
-    assert beklenen[0].text == "İhtiyarMarcusがDeğirmenで待っています。"
+    assert beklenen[0].text == "長老MarcusがDeğirmenで待っています。"  # TUR-2 (c): fixture v3 unvansiz
 
 
 def test_b1_girdi_listesi_degistirilmez(s: GlossaryStore) -> None:
@@ -166,16 +173,16 @@ def test_b3_fixture_hedefleri_terminator_icermez_parca_sayisi_korunur(s: Glossar
 
 
 def test_b3_kaynak_terimde_terminator_sema_kabul_eder_ve_gomme_cumle_sinirini_yutar(tmp_path: Path) -> None:
-    """KOTU KULLANIM TUZAGI (orta): paket K6 terminatoru yalniz HEDEFTE yasaklar. Kaynak `マルクス。` kabul
-    edilir; `彼はマルクス。 行こう。` -> `彼はMarcus 行こう。` -> T-007 2 parca yerine 1 parca; gercek modelde
-    ikinci cumle KAYBOLDU (tester_B_evidence/model-olcum-ham.txt [I]). Bu test mevcut davranisi PINLER."""
-    s2 = sozluk(tmp_path, [{"kaynak": "マルクス。", "hedef": "Marcus"}])
+    """TUR-2 (a)+(d): O-B1 duzeltildi -- kaynak `マルクス。` artik SEMADA reddedilir (K6 v3, mesajda terim ve sinif); tur 1'de
+    kabul edilip gomme cumle sinirini yutuyordu (gercek modelde ikinci cumle kayip). Pozitif kontrol: terminatorsuz kaynakla
+    ayni cumle 2 parca -> 2 parca kalir."""
+    with pytest.raises(ValueError, match="kaynak cumle sonu") as ei:
+        sozluk(tmp_path, [{"kaynak": "マルクス。", "hedef": "Marcus"}])
+    assert "マルクス。" in str(ei.value)
+    s2 = sozluk(tmp_path, [{"kaynak": "マルクス", "hedef": "Marcus"}])
     sg = seg("彼はマルクス。 行こう。")
-    hits = s2.lookup_segments((sg,))
-    assert len(hits) == 1 and hits[0].source_term == "マルクス。"
-    g = terimleri_gom((sg,), hits)[0]
-    assert g.text == "彼はMarcus 行こう。"
-    assert len(cumlelere_bol(sg.text)) == 2 and len(cumlelere_bol(g.text)) == 1
+    g = terimleri_gom((sg,), s2.lookup_segments((sg,)))[0]
+    assert g.text == "彼はMarcus。 行こう。" and len(cumlelere_bol(sg.text)) == len(cumlelere_bol(g.text)) == 2
 
 
 def test_b3_yer_tutucu_bildirilmemisse_icindeki_rakam_terim_olur(tmp_path: Path) -> None:
@@ -205,23 +212,28 @@ def test_b6_kimlik_gomme_hit_uretir_metin_ayni_nesne_yeni(s: GlossaryStore) -> N
     assert out[0].text == sg.text and out[0] == sg and out[0] is not sg
 
 
-def test_b6_kimlik_terim_komsu_sinir_cipasi_olarak_ise_yarar(s: GlossaryStore) -> None:
-    """`長老Marcus`: `長老`nun sag komsusu Latin harf; `Marcus` sozlukte oldugu icin sinir sayilir -> `長老` gomulur."""
-    assert [h.target_term for h in s.lookup("長老Marcus")] == ["İhtiyar", "Marcus"]
+def test_b6_kimlik_terim_komsu_sinir_cipasi_olarak_ise_yarar(tmp_path: Path) -> None:
+    """TUR-2 (b)+(c): v3'te betik gecisi (Han|Latin) sinirdir -- kimlik cipasi `Marcus->Marcus` GEREKMEZ (tur 1'de gerekiyordu).
+    Fixture v3 unvansiz; yerel sozlukle: cipasiz `長老Marcus` -> `長老` eslesir; cipali -> ikisi de."""
+    st = sozluk(tmp_path, [{"kaynak": "長老", "hedef": "İhtiyar"}])
+    assert [h.target_term for h in st.lookup("長老Marcus")] == ["İhtiyar"]
+    st2 = sozluk(tmp_path, [{"kaynak": "長老", "hedef": "İhtiyar"}, {"kaynak": "Marcus", "hedef": "Marcus"}], ad="s2.json")
+    assert [h.target_term for h in st2.lookup("長老Marcus")] == ["İhtiyar", "Marcus"]
 
 
 @pytest.mark.parametrize("metin,beklenen", [
-    ("長老Marcusa", ["İhtiyar"]),          # `Marcusa`: Marcus adayi REDDEDILIR (sag sinir yok) ama `長老`ya sinir verir
-    ("長老マルクス様", ["İhtiyar"]),        # unvan gomulur, ad (saygi eki yuzunden) gomulmez -> KISMI gomme
-    ("장로마르쿠스님", ["İhtiyar"]),
-    ("水車小屋マルクス様", ["Değirmen"]),
+    ("長老Marcusa", ["İhtiyar"]),                  # `Marcus` adayi olu (sag `a`); `長老` BETIK GECISIYLE (Han|Latin) eslesir
+    ("長老マルクス様", ["İhtiyar", "Marcus"]),      # tur 1: yalniz unvan (kismi gomme); v3: `様` Katakana|Han sinir -> ikisi
+    ("장로마르쿠스님", ["İhtiyar", "Marcus"]),      # Hangul|Hangul: ZINCIR, dis uclar (bas, `님` eki) sinir -> ikisi
+    ("水車小屋マルクス様", ["Değirmen", "Marcus"]),
+    ("장로마르쿠스니", []),                          # dis uc sinir degil -> zincirin HICBIR uyesi (reddedilen aday sinir vermez)
 ])
-def test_b6_reddedilen_komsu_aday_da_sinirdir_kismi_gomme(s: GlossaryStore, metin: str, beklenen: list[str]) -> None:
-    """KOTU KULLANIM / SARTNAME (orta): docstring K1 'komsu terimin KABUL edilmesi gerekmez, aday olmasi yeter'.
-    Sonuc: sinir kurali komsuyu reddederken (`マルクス様`) komsunun VARLIGI oncekine sinir verir -> `İhtiyarマルクス様`
-    (unvan gomulu, ad ham). Paketin lafzi ('baska bir terimin baslangici') buna izin verir; 'aralik disi aynen' tutar.
-    Gercek modelde etkisi: tester_B_evidence/model-olcum2-ham.txt [J]. Bu test mevcut davranisi PINLER."""
-    assert [h.target_term for h in s.lookup(metin)] == beklenen
+def test_b6_reddedilen_komsu_aday_da_sinirdir_kismi_gomme(tmp_path: Path, metin: str, beklenen: list[str]) -> None:
+    """TUR-2 (a): O-B5 duzeltildi -- v3 ZINCIR kurali: reddedilen aday komsuya sinir VERMEZ; zincir ancak iki dis ucu gercek
+    sinirsa butunuyle eslesir. Tur 1'in kismi gommesi (`İhtiyarマルクス様`) kayboldu. Fixture v3 unvansiz -> yerel sozluk."""
+    st = sozluk(tmp_path, [{"kaynak": "長老", "hedef": "İhtiyar"}, {"kaynak": "장로", "hedef": "İhtiyar"}, {"kaynak": "マルクス", "hedef": "Marcus"},
+                           {"kaynak": "마르쿠스", "hedef": "Marcus"}, {"kaynak": "水車小屋", "hedef": "Değirmen"}, {"kaynak": "Marcus", "hedef": "Marcus"}])
+    assert [h.target_term for h in st.lookup(metin)] == beklenen
 
 
 def test_b6_hedef_kaynagi_iceriyorsa_gomme_idempotent_degil_ve_sema_kabul_eder(tmp_path: Path) -> None:
@@ -243,21 +255,21 @@ def test_b6_fixture_ile_gomme_idempotent(s: GlossaryStore) -> None:
 
 
 def test_b6_nfd_yer_tutucu_gom_sonrasi_metnin_alt_dizesi_degil_t007_onarimi_kopya_ekler(s: GlossaryStore) -> None:
-    """KOTU KULLANIM TUZAGI (orta): K6 metni NFC'ler, K2 `placeholders`i AYNEN tasir. NFD yer tutucu + hit ->
-    cikti Segment'te yer tutucu artik metnin alt dizesi DEGIL; T-007 `modele_gider` onu metin sayar, K5 onarimi
-    ciktiya kopya ekler. Hit'siz segment NFD kalir (karisik normalizasyon)."""
+    """TUR-2 (a): O-B2 duzeltildi -- K2 v3 hit'i olan segmentte `placeholders` da NFC; yer tutucu ciktida alt dize KALIR,
+    T-007 K5 onarimi kopya EKLEMEZ. Hit'siz NFD segment aynen (`is`, normalize edilmez) -- bu kisim degismedi."""
     nfd = unicodedata.normalize("NFD", "{Değirmen}")
+    nfc = unicodedata.normalize("NFC", nfd)
     sg = seg(nfd + "はマルクスの家です。", (nfd,))
     assert sg.placeholders[0] in sg.text  # girdi tutarli
     g = terimleri_gom((sg,), s.lookup_segments((sg,)))[0]
     assert unicodedata.is_normalized("NFC", g.text)
-    assert g.placeholders == (nfd,)
-    assert g.placeholders[0] not in g.text  # tuzak: tutarlilik kirildi
+    assert g.placeholders == (nfc,)
+    assert g.placeholders[0] in g.text  # tutarlilik korundu
     assert modele_gider(cumlelere_bol(g.text)[0], g.placeholders) is True
     from src.translate.local_nmt import _yer_tutuculari_onar
 
-    cikti = unicodedata.normalize("NFC", nfd) + " Marcus evi"
-    assert _yer_tutuculari_onar(cikti, g.text, g.placeholders) == cikti + " " + nfd  # kopya eklendi
+    cikti = nfc + " Marcus evi"
+    assert _yer_tutuculari_onar(cikti, g.text, g.placeholders) == cikti  # kopya YOK
     # pozitif kontrol: NFC yer tutucu ile tutarlilik korunur
     nfc = unicodedata.normalize("NFC", nfd)
     sg2 = seg(nfc + "はマルクスの家です。", (nfc,))
@@ -271,7 +283,7 @@ def test_b6_nfd_yer_tutucu_gom_sonrasi_metnin_alt_dizesi_degil_t007_onarimi_kopy
 def test_b6_hit_indeksleri_nfc_metne_gore_nfd_segment_text_ile_kayar(s: GlossaryStore) -> None:
     """UI tuzagi: `Segment.text` NFD ise `TermHit.start/end` orijinal metne uymaz (K1 belgeli: indeks NFC metne gore).
     Kaynak paneli vurgulayan sonraki ajan once NFC'lemek zorunda."""
-    nfd = unicodedata.normalize("NFD", "Değirmen ") + "mill."
+    nfd = unicodedata.normalize("NFD", "Değirmen ") + "Marcus."  # TUR-2 (c): fixture v3'te `mill` yok, `Marcus` kimlik
     sg = seg(nfd)
     hits = s.lookup_segments((sg,))
     assert len(hits) == 1
@@ -293,34 +305,35 @@ KR_EK_DISI = ["마르쿠스님", "마르쿠스씨", "마르쿠스야", "마르�
 
 
 def test_b7_jp_saygi_eki_ve_kopula_sinir_degil_17_17_kacak(s: GlossaryStore) -> None:
-    """PAKET KAPSAMI (oneri, yuksek onem): K1 JP sinir listesi `をがはにのでともへや`; saygi ekleri (`さん/様/殿/君/
-    ちゃん/達/たち`) ve `って/だ/から/まで/より/か/よ/ね` sinir DEGIL -> `マルクスさん` eslesmez; gercek modelde ad
-    'Marks' kaliyor (model-olcum-ham.txt [E0], [E5]). Kod pakete uyuyor; bu test kacagi OLCER ve pinler."""
+    """TUR-2 (b): Y-B2 kapandi -- 17/17 ESLESIYOR: 15'i K1 v3 saygi/kopula listesinden, `じゃない`/`なら` (listede yok) BETIK
+    GECISIYLE (Katakana|Hiragana). Tur 1: 17/17 kacak. Gercek model (real_check #5b): 'Marcus' korunuyor."""
     kacak = [t for t in JP_SAYGI_EKI if not s.lookup(t)]
-    assert len(kacak) == len(JP_SAYGI_EKI) == 17
+    assert kacak == [] and len(JP_SAYGI_EKI) == 17
     # pozitif kontrol: paketin parcaciklari eslesir
     assert all(s.lookup("マルクス" + p) for p in "をがはにのでともへや")
 
 
-def test_b7_kr_ek_listesi_disi_ekler_sinir_degil_21_21_kacak(s: GlossaryStore) -> None:
-    """PAKET KAPSAMI (oneri, yuksek onem): KR `에게/한테/께/님/씨/야/들/랑/처럼/보다/...` ek listesinde yok ->
-    `마르쿠스에게` (Marcus'a) eslesmez; gercek modelde 'Markos'a' (model-olcum-ham.txt [E2]). `에게`: `에` ek + `게`
-    sinir degil -> zincir de kurtarmiyor."""
-    kacak = [t for t in KR_EK_DISI if not s.lookup(t)]
-    assert len(kacak) == len(KR_EK_DISI) == 21
+def test_b7_kr_ek_listesi_disi_ekler_sinir_degil_21_21_kacak(s: GlossaryStore, tmp_path: Path) -> None:
+    """TUR-2 (b)+(c): Y-B2 kapandi -- 21 girdinin 20'si ESLESIYOR (K1 v3 KR listesi); tek kacak `마르쿠스인가` (`인가` listede
+    yok, belgeli). `장로님`/`장로에게` fixture v3'te unvan olmadigi icin yerel sozlukle olculur (c)."""
+    kacak = [t for t in KR_EK_DISI if not s.lookup(t) and "장로" not in t]
+    assert kacak == ["마르쿠스인가"]
+    st = sozluk(tmp_path, [{"kaynak": "장로", "hedef": "İhtiyar"}])
+    assert st.lookup("장로님") and st.lookup("장로에게")
     assert all(s.lookup("마르쿠스" + ek) for ek in ("을", "를", "이", "가", "은", "는", "에", "에서", "으로", "로", "와", "과", "도", "의", "만", "께서", "부터", "까지"))
 
 
 @pytest.mark.parametrize("sym", ["♪", "～", "♥", "☆", "→", "＋", "♡", "★", "♫", "©", "™", "°", "＄", "￥"])
 def test_b7_sembol_kategorisi_sinir_degil_hit_duser(s: GlossaryStore, sym: str) -> None:
-    """`[ÖLÇÜLMÜYOR]` belgeli (docstring K1) -- OLCUM: fixture'in 5 cumlesine sembol eklenince 7 hit -> 5 (sonek) / 2 (onek).
-    `～` (U+FF5E, Sm) JP oyun metninde cok yaygin (`マルクス～！`); `〜` (U+301C, Pd) ise sinirdir -- ayni gorunen iki karakter farkli davranir."""
+    """TUR-2 (b): D-B1 CJK tarafinda kapandi -- sembol (`S*`) DIGER sinifinda, CJK terime bitisik sembol BETIK GECISIYLE sinir:
+    fixture v3'un 5 cumlesi (5 hit; unvansiz) sonek/onek sembolle 5/5 kalir; `マルクス～` 1. Latin terimde (`Marcus♪`) hala 0
+    (belgeli asimetri; `test_t3_sembol_asimetrisi_*`)."""
     assert unicodedata.category(sym).startswith("S")
     base = ["長老マルクス", "マルクスがあなたを待っています。", "水車小屋を過ぎて東の道を行きなさい。", "장로 마르쿠스", "방앗간을 지나 동쪽 길로 가십시오."]
-    assert sum(len(s.lookup(t)) for t in base) == 7
+    assert sum(len(s.lookup(t)) for t in base) == 5
     assert sum(len(s.lookup(t.rstrip("。") + sym)) for t in base) == 5
-    assert sum(len(s.lookup(sym + t)) for t in base) == 2
-    assert len(s.lookup("マルクス" + sym)) == 0 and len(s.lookup("マルクス〜")) == 1
+    assert sum(len(s.lookup(sym + t)) for t in base) == 5
+    assert len(s.lookup("マルクス" + sym)) == 1 and len(s.lookup("マルクス〜")) == 1 and len(s.lookup("Marcus" + sym)) == 0
 
 
 # ---------------------------------------------------------------------------
@@ -332,18 +345,26 @@ def test_b7_sembol_kategorisi_sinir_degil_hit_duser(s: GlossaryStore, sym: str) 
     (lambda s: s.lookup("マルクス", "{0}"), "lookup duz str placeholders"),
     (lambda s: s.lookup("マルクス", [1]), "lookup int oge"),
     (lambda s: s.lookup(5), "lookup int text"),
-    (lambda s: s.lookup_segments((Segment(text="マルクス", bbox=R, placeholders="{0}"),)), "lookup_segments Segment.placeholders str"),  # type: ignore[arg-type]
-    (lambda s: terimleri_gom((Segment(text="マルクス", bbox=R, placeholders="{0}"),), (TermHit("マルクス", "Marcus", 0, 4, 0),)), "gom Segment.placeholders str"),  # type: ignore[arg-type]
     (lambda s: GlossaryStore(None), "GlossaryStore(None)"),  # type: ignore[arg-type]
 ])
 def test_b8_typeerror_siniflari_translatorerror_degil_pipeline_yakalamaz(s: GlossaryStore, cagri: object, ad: str) -> None:
-    """Paket K2/K6/K7 yalniz ValueError/ContractViolation/FileNotFoundError der; kod TypeError da atar (docstring K3/K6 belgeli).
-    TypeError `TranslatorError` alt sinifi DEGIL -> `except TranslatorError` (tasarim 5.6, demo) yakalamaz. Ayni bozuk
-    Segment (`placeholders="{0}"`) T-007 `translate`ten SESSIZCE gecer (str yinelenir, her karakter str) -- iki modul
-    ayni girdiye farkli sinif veriyor; sozluk onde oldugu icin pipeline artik burada patlar (oneri: ContractViolation)."""
+    """TUR-2 (a): O-B4 duzeltildi -- DOGRUDAN `lookup(text, placeholders)` / `GlossaryStore(None)` programci hatasi olarak
+    `TypeError` KALIR (paket v3 K2 izin verir); Segment'ten turetilen bicim hatalari artik `ContractViolation` (asagida)."""
     with pytest.raises(TypeError) as ei:
         cagri(s)  # type: ignore[operator]
     assert not isinstance(ei.value, TranslatorError), ad
+
+
+@pytest.mark.parametrize("cagri,ad", [
+    (lambda s: s.lookup_segments((Segment(text="マルクス", bbox=R, placeholders="{0}"),)), "lookup_segments Segment.placeholders str"),  # type: ignore[arg-type]
+    (lambda s: terimleri_gom((Segment(text="マルクス", bbox=R, placeholders="{0}"),), (TermHit("マルクス", "Marcus", 0, 4, 0),)), "gom Segment.placeholders str"),  # type: ignore[arg-type]
+])
+def test_b8_segment_kaynakli_bicim_hatasi_contract_violation_pipeline_yakalar(s: GlossaryStore, cagri: object, ad: str) -> None:
+    """TUR-2 (a): O-B4 duzeltmesi -- `Segment(placeholders="{0}")` `lookup_segments` ve `terimleri_gom`da `ContractViolation`
+    (`TranslatorError`; tasarim 5.6 `except TranslatorError` ve demo yakalar)."""
+    with pytest.raises(ContractViolation) as ei:
+        cagri(s)  # type: ignore[operator]
+    assert isinstance(ei.value, TranslatorError), ad
 
 
 def test_b8_t007_ayni_bozuk_segmenti_kabul_eder_sozluk_reddeder() -> None:
@@ -522,10 +543,12 @@ def test_b9_uydurulmus_tek_kodpoint_reddi_latin_ve_kana_da(tmp_path: Path) -> No
 
 
 def test_b9_hedef_kaynagi_iceren_veya_kaynak_hedefi_iceren_kayit_semada_serbest(tmp_path: Path) -> None:
-    """Sema `hedef ⊇ kaynak` (idempotens kirici, b6) ve `hedef == kaynak` (kimlik) icin denetim yapmaz -- oneri kalemi."""
+    """TUR-2 (d): `hedef ⊇ kaynak` (idempotens; docstring 'tekrar gecirilmez' ile belgelendi) ve kimlik (K4 v3 gecerli) serbest
+    KALDI; `マルクス。` artik K6 v3 ile RED (O-B1)."""
     assert len(sozluk(tmp_path, [{"kaynak": "mill", "hedef": "Değirmen mill"}])) == 1
     assert len(sozluk(tmp_path, [{"kaynak": "Marcus", "hedef": "Marcus"}])) == 1
-    assert len(sozluk(tmp_path, [{"kaynak": "マルクス。", "hedef": "Marcus"}])) == 1
+    with pytest.raises(ValueError, match="kaynak cumle sonu"):
+        sozluk(tmp_path, [{"kaynak": "マルクス。", "hedef": "Marcus"}])
 
 
 # ---------------------------------------------------------------------------
@@ -544,7 +567,7 @@ def test_bx_docstring_k5_lookup_ve_gom_io_yapmaz_dosya_silinse_calisir(tmp_path:
 
 def test_bx_docstring_repr_terim_basmaz(s: GlossaryStore) -> None:
     r = repr(s)
-    assert "terim_sayisi=11" in r and "マルクス" not in r and "Marcus" not in r
+    assert "terim_sayisi=7" in r and "マルクス" not in r and "Marcus" not in r  # TUR-2 (c): fixture v3 7 terim
 
 
 def test_bx_docstring_k2_hata_mesajlari_metin_tasimaz(s: GlossaryStore) -> None:
@@ -584,4 +607,4 @@ def test_bk_real_check_kapi_yolu_ile_lookup_segments_ayni_hit_kumesi(s: Glossary
     segs = tuple(seg(t) for t in ["長老マルクス", "マルクスがあなたを待っています。", "水車小屋を過ぎて東の道を行きなさい。",
                                   "장로 마르쿠스", "방앗간을 지나 동쪽 길로 가십시오.", "The elder Marcus waits by the mill."])
     kapi = tuple(dataclasses.replace(h, segment_index=i) for i, g in enumerate(segs) for h in s.lookup(g.text, g.placeholders))
-    assert kapi == s.lookup_segments(segs) and len(kapi) == 10  # 2+1+1+2+1+3
+    assert kapi == s.lookup_segments(segs) and len(kapi) == 6  # TUR-2 (c): fixture v3 unvansiz/millsiz: 1+1+1+1+1+1
