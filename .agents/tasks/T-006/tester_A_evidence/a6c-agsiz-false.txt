@@ -1,0 +1,5 @@
+D12 japan allow_download=False ag KAPALI: kuruldu, 4 blok (ag gerekmedi)
+D12 korean allow_download=False ag KAPALI: kuruldu, 4 blok (ag gerekmedi)
+D12 chinese allow_download=False ag KAPALI: kuruldu, 4 blok (ag gerekmedi)
+D12 english allow_download=False ag KAPALI: kuruldu, 4 blok (ag gerekmedi)
+exit=0

@@ -1,0 +1,29 @@
+==== T-006 TESTER A (mercek A: sozlesme + sayisal) -- SEF SONDASI ====
+Karar: ONAY. validate -> KABUL EDILEBILIR (11 kontrol, kanitlar dolu).
+Sahiplik temiz. A'nin takimi 106 passed (bagimsiz bariyerli conftest ile).
+
+A'NIN B2 BULGUSU -> SEF URETTI, DOGRU:
+  Acik Rec.model_path verildiginde rapidocr Rec.lang_type'i YOK SAYIYOR.
+    japan dosyasi + lang_type=JAPAN : 4/4
+    japan dosyasi + lang_type=CH    : 4/4   (ayni)
+  SONUC: real_check #2'nin pozitif kontrolu (CHINESE-on-JP 0/4) DOSYA ADI
+  TABLOSUYLA atesliyor, lang_type ile degil. K11'in lang_type satiri yalniz
+  allow_download=True yolunda olculur (rapidocr dosyayi lang_type'tan cozer).
+  A o yolu requests.get yamasiyla (ag kesmeden) olctu: dort dil dogru dosyaya
+  cozuldu, CHINESE-on-JP 0/4 orada da atesledi. URUN DOGRU; kapinin GEREKCESI
+  yanlis yazilmisti. [SEF HATASI 15] -- olcunun NE olctugunu yanlis anlatmak.
+  Yukumluluk: real_check'e allow_download=True yolunda lang_type kontrolu
+  (A'nin D10 bicimi). Bu turda eklenmedi; decision.md acik kalem.
+
+A'NIN DIGER BULGULARI (bloke etmeyen, kabul):
+  B1 iki [OLCULMUYOR] yol A tarafindan olculdu ve geciyor (cevrimdisi indirme
+     -> ModelMissingError <- DownloadFileException <- ConnectionError; oturum
+     intra/inter 4/4 ve 8/8 gercek). Damgalar kaldirilabilir.
+  B3 K9: 300x80 tek satir 280 ms, 1200x400 dort satir 247 ms -> sure yalniz
+     kutu sayisina bagli DEGIL (tespit asamasi goruntu boyutuyla olcekleniyor).
+     Paketin K9 cumlesi eksik; decision.md'ye yazilir.
+  Olcu keskinligi: 3 mutant (guven yuvarlama, min yerine ilk kose, tek noktali
+     cokgen) implementer'in 95 testinden kacti, A'nin 106'sinda dustu.
+     Adlandirilmis yukumluluk.
+  known_gaps: dpi_scale numpy ise denetlenmiyor (x/y/monitor_index denetleniyor,
+     asimetri; CaptureService duzlestirdigi icin uretimde erisilemez).

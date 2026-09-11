@@ -1,0 +1,22 @@
+ayna: C:\Users\pc\AppData\Local\Temp\t006_mutantA_ah14ajlb
+TABAN      impl exit=0 95 passed in 0.44s | testerA exit=0 106 passed in 0.48s
+MA-01     : YAKALANDI    impl=DUSTU (1 failed, 24 passed in 0.38s          ) testerA=DUSTU (1 failed, 20 passed in 0.41s          ) -- K4: monitor_index sabit 0 (birlesim -1 kaybolur)
+MA-02     : YAKALANDI    impl=DUSTU (1 failed, 24 passed in 0.38s          ) testerA=DUSTU (1 failed, 20 passed in 0.34s          ) -- K4: dpi_scale sabit 1.0
+MA-03     : YAKALANDI    impl=DUSTU (1 failed, 23 passed in 0.36s          ) testerA=DUSTU (1 failed, 18 passed in 0.38s          ) -- K4: genislik kaydirilmis x ile hesaplaniyor
+MA-04     : YAKALANDI    impl=DUSTU (1 failed, 34 passed in 0.29s          ) testerA=DUSTU (1 failed, 32 passed in 0.29s          ) -- K5: confidence ham puan (np.float32 sizar)
+MA-05     : YAKALANDI    impl=DUSTU (1 failed, 16 passed in 0.26s          ) testerA=DUSTU (1 failed, 80 passed in 0.40s          ) -- K3: bool threads kabul (True==1 sessiz)
+MA-06     : YAKALANDI    impl=DUSTU (1 failed, 90 passed in 0.38s          ) testerA=DUSTU (1 failed, 99 passed in 0.39s          ) -- K11: KOREAN det multi->ch (tek dil yanlis)
+MA-07     : YAKALANDI    impl=DUSTU (1 failed, 50 passed in 0.32s          ) testerA=DUSTU (1 failed, 48 passed in 0.33s          ) -- K6c: dtype denetimi kaldirildi (int32 motora gider)
+MA-08     : YAKALANDI    impl=gecti (95 passed in 0.31s                    ) testerA=DUSTU (1 failed, 32 passed in 0.30s          ) -- K5: confidence 2 haneye yuvarlaniyor (sessiz bozulma)
+MA-09     : YAKALANDI    impl=DUSTU (1 failed, 26 passed in 0.27s          ) testerA=DUSTU (1 failed, 2 passed in 0.24s           ) -- K4: ceil yerine floor+1 (tam sayi kosede fazla piksel)
+MA-10     : YAKALANDI    impl=DUSTU (1 failed, 31 passed in 0.44s          ) testerA=DUSTU (1 failed, 32 passed in 0.53s          ) -- K5: motor duzeyinde 0.5 esigi
+MA-11     : YAKALANDI    impl=DUSTU (1 failed, 23 passed in 0.41s          ) testerA=DUSTU (1 failed, 18 passed in 0.35s          ) -- K4: y kaydirmasi rect.x ile
+MA-12     : YAKALANDI    impl=DUSTU (1 failed, 60 passed in 0.45s          ) testerA=DUSTU (1 failed, 27 passed in 0.43s          ) -- K6c: monitor_index numpy denetimi kaldirildi
+MA-13     : YAKALANDI    impl=gecti (95 passed in 0.45s                    ) testerA=DUSTU (1 failed, 9 passed in 0.33s           ) -- K4: min yerine ilk kose (egik cokgende yanlis)
+MA-14     : YAKALANDI    impl=DUSTU (1 failed, 12 passed in 0.39s          ) testerA=DUSTU (1 failed, 96 passed in 0.55s          ) -- K3: ust sinir dahil degil (threads=cpu_count reddedilir)
+MA-15     : YAKALANDI    impl=DUSTU (1 failed, 27 passed in 0.36s          ) testerA=DUSTU (1 failed, 4 passed in 0.32s           ) -- K4: floor yerine int() (negatifte sifira dogru)
+MA-16     : YAKALANDI    impl=DUSTU (1 failed, 22 passed in 0.38s          ) testerA=DUSTU (1 failed, 2 passed in 0.31s           ) -- K4: x0 np.int64 (type is int bozulur, json duser)
+MA-17     : YAKALANDI    impl=gecti (95 passed in 0.39s                    ) testerA=DUSTU (1 failed, 6 passed in 0.31s           ) -- K4: tek noktali cokgende h+1 (dejenere yol farkli)
+MA-KONTROL: KACTI ok     impl=gecti (95 passed in 0.31s                    ) testerA=gecti (106 passed in 0.32s                   ) -- davranis-esdeger: uzunluk zaten denetlendi
+MUTANT KITI A: TEMIZ
+exit=0

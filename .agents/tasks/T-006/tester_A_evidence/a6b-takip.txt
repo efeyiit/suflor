@@ -1,0 +1,15 @@
+D2 takip: okunan uzunluk 16 vs beklenen 16; benzerlik 0.938; farkli opcode'lar: [('replace', 1, 1)]
+D2 takip 28px: 1 blok, benzerlik 1.000, birebir=True
+D2 takip 48px: 1 blok, benzerlik 0.968, birebir=False
+D2 takip 64px: 1 blok, benzerlik 0.968, birebir=False
+D2 takip 1200x400 msgothic 40px: 1 blok, benzerlik 0.968, birebir=False
+D10 japan allow_download=True ag KAPALI fixture JP: kuruldu, 4 blok, 4/4 satir
+D10 english allow_download=True ag KAPALI fixture EN: kuruldu, 4 blok, 4/4 satir
+D10 korean allow_download=True ag KAPALI fixture KR: kuruldu, 17 blok, birlesik benzerlik 0.971
+D10 chinese allow_download=True ag KAPALI fixture JP: kuruldu, 4 blok, 0/4 satir
+D11 EN 300x80 14px tek satir: medyan 280 ms, 1 blok
+D11 EN 600x160 20px tek satir: medyan 246 ms, 1 blok
+D11 EN 1200x400 28px tek satir: medyan 184 ms, 1 blok
+D11 EN 2560x1440 40px tek satir: medyan 253 ms, 1 blok
+D11 EN fixture 1200x400 4 satir: medyan 247 ms
+exit=0

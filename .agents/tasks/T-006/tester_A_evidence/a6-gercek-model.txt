@@ -1,0 +1,30 @@
+[31m[ERROR] 2026-09-11 04:29:12,105 [RapidOCR] download_file.py:74: Download failed: https://www.modelscope.cn/models/RapidAI/RapidOCR/resolve/v3.9.2/onnx/PP-OCRv4/det/multi_PP-OCRv3_det_mobile.onnx[0m
+T-006 tester-A gercek model deneyleri
+  D1 300x80 14px EN: 1 blok | kutular [(12, 32, 123, 12)] | puanlar [0.966] | goruntu icinde=True | tipler duz=True | birlesik==beklenen: True
+     medyan 317 ms
+  D1b 300x80 10px EN: 1 blok | kutular [(12, 32, 91, 10)] | puanlar [0.974] | goruntu icinde=True | tipler duz=True | birlesik==beklenen: True
+  D2 2560x1440 40px JP (rect.x=-2560): 1 blok | kutular [(-2259, 1200, 613, 41)] | puanlar [0.971]
+     ilk kutu goruntu-yerel x=301, y=1200; metin cizim noktasi (300,1200) civarinda mi: True
+     birlesik==beklenen: False
+     medyan 317 ms
+  D3 2560x1440 40px EN: 1 blok | kutular [(295, 1198, 616, 56)] | puanlar [0.992] | goruntu icinde=True | tipler duz=True | birlesik==beklenen: True
+     medyan 322 ms
+  D2c 2560x1440 bos kare -> 0 blok (istisna yok)
+  D4 taban (C-bitisik kopya): 4 blok, 4/4 satir
+  D4 dilim_gorunum(420x1220 icinden): C=False W=True -> 4 blok, 4/4 satir (istisna yok)
+  D4 fortran: C=False W=True -> 4 blok, 4/4 satir (istisna yok)
+  D4 salt_okunur: C=True W=False -> 4 blok, 4/4 satir (istisna yok)
+  D4 bgra_dilimi[:,:,:3]: C=False W=True -> 4 blok, 4/4 satir (istisna yok)
+  D4 yatay_ters_gorunum[:, ::-1] (icerik aynali): C=False W=True -> 4 blok, 0/4 satir (istisna yok)
+  D5 allow_download=True, model_dir=None, ag KAPALI -> kuruldu, 4 blok, 4/4 (dosyalar yerelde; indirme gerekmedi)
+  D6 allow_download=True, BOS model_dir, ag KAPALI -> ModelMissingError; __cause__ zinciri: ModelMissingError -> DownloadFileException -> ConnectionError; dizin icerigi: []
+  D7 threads=4: text_det: intra=4 inter=4 | text_rec: intra=4 inter=4 | text_score=0.0 | use_cls=False
+  D7 threads=8: text_det: intra=8 inter=8 | text_rec: intra=8 inter=8 | text_score=0.0 | use_cls=False
+  D8 JAPAN model_path acik + Rec.lang_type='ch': 4 kutu, 4/4 satir birebir
+  D8 JAPAN model_path acik + Rec.lang_type='en': 4 kutu, 4/4 satir birebir
+  D8 JAPAN model_path acik + Rec.lang_type='korean': 4 kutu, 4/4 satir birebir
+  D8 JAPAN model_path acik + Det.lang_type='ch': 4 kutu, 4/4
+  D9 kurulu gercek motor + int32 kare -> ContractViolation (cause NoneType)
+  D9 kurulu gercek motor + 0x0 -> ContractViolation (ZeroDivisionError yuzeye cikmadi)
+  D9 1x1 -> 0 blok, istisna yok
+exit=0
