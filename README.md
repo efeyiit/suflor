@@ -64,6 +64,19 @@ SQLite · PyInstaller
 Hedef: Mod 2'de uçtan uca ≤ 160 ms (cache isabeti) / ≤ 320 ms (cache ıskası),
 oyun FPS düşüşü ≤ %3.
 
+## Kurulum ve çalıştırma
+
+```bash
+pip install -r requirements-dev.txt
+python -m pytest tests -q            # tam takım (model gerekmez)
+python demo/kabuk.py                 # UI kabuğu: üç düğme, tepsi, kenar sekmesi
+python demo/canli_cevir.py korean    # ekrandan yakala → OCR → sözlük → Türkçe (model gerekir)
+```
+
+Çeviri modeli (`models/nllb-200-distilled-600M-ct2-int8/`, ~650 MB) depoya dahil değildir; JP/KR OCR
+modelleri ilk çalıştırmada indirilir. `demo/` altındaki gösterimler kabul edilen bileşenleri
+uçtan uca gösterir; `.agents/tasks/` altında her bileşenin ölçümleri, paketleri ve kararları vardır.
+
 ## Dokümantasyon
 
 | | |

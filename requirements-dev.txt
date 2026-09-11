@@ -1,0 +1,6 @@
+# Geliştirme / test
+-r requirements.txt
+pytest==9.1.1
+pytest-cov==7.1.0
+pytest-qt==4.5.0
+mypy==2.3.1

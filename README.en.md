@@ -70,6 +70,19 @@ SQLite · PyInstaller
 Targets: end-to-end ≤ 160 ms on cache hit / ≤ 320 ms on cache miss in Mode 2, and
 ≤ 3% game FPS drop.
 
+## Install and run
+
+```bash
+pip install -r requirements-dev.txt
+python -m pytest tests -q            # full suite (no models needed)
+python demo/kabuk.py                 # UI shell: three buttons, tray, edge tab
+python demo/canli_cevir.py korean    # capture screen → OCR → glossary → Turkish (needs the model)
+```
+
+The translation model (`models/nllb-200-distilled-600M-ct2-int8/`, ~650 MB) is not in the repo; JP/KR
+OCR models download on first run. `demo/` shows accepted components end to end; `.agents/tasks/`
+holds each component's measurements, packets and decisions.
+
 ## Documentation
 
 | | |

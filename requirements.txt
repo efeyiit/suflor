@@ -1,0 +1,9 @@
+# Suflör — çalışma zamanı bağımlılıkları (Python 3.12, Windows). Sürümler bu makinede ölçülen sürümlerdir.
+PySide6==6.11.2
+numpy==2.4.6
+pillow==12.3.0
+mss==10.2.0
+rapidocr==3.9.2
+onnxruntime==1.27.0
+ctranslate2==4.8.2
+sentencepiece==0.2.2
