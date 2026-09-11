@@ -14,7 +14,7 @@ checks:
     exit_code: 0
     result: gecti
     evidence: tester_B_evidence/r2-taban-2-pytest.txt
-  - name: "taban 3 -- real_check 13/13 TEMIZ, cp1254 konsol (PYTHONIOENCODING yok), [6] medyan 331 ms; NOT: sef kararindaki '#4c {PLAYER}!' real_check'te YOK (13 kontrol) -- B2 ile kapatildi"
+  - name: "taban 3 -- real_check 13/13 TEMIZ, cp1254 konsol (PYTHONIOENCODING yok), [6] medyan 320 ms (10:20 kosumunda 331; 11:01 yeniden uretildi); NOT: sef kararindaki '#4c {PLAYER}!' real_check'te YOK (13 kontrol) -- B2 ile kapatildi"
     cmd: "python .agents/tasks/T-007/real_check.py"
     exit_code: 0
     result: gecti
@@ -24,11 +24,16 @@ checks:
     exit_code: 0
     result: gecti
     evidence: tester_B_evidence/r2-taban-4-kapsam.txt
-  - name: "taban 5 -- tam takim 1359 passed (1314 -> 1359, dusen yok)"
+  - name: "taban 5 -- tam takim: 10:20'de 1359 passed (1314 -> 1359); 11:01 yeniden kosumda 1426 passed, dusen yok -- fark T-008 implementer'inin TAKIPSIZ kirmizi-faz dosyasi (tests/unit/ocr/test_satir_birlestirici.py, 67 test; tester-B yazmadi)"
     cmd: "python -m pytest tests -q -p no:cacheprovider"
     exit_code: 0
     result: gecti
     evidence: tester_B_evidence/r2-taban-5-tum-takim.txt
+  - name: "taban 5b -- tam takim T-007 KAPSAMINA daraltilmis (PROTOKOL 4.6 sef commit disiplini: paralel gorevin takipsiz dosyasi haric): 1359 passed, sefin tabaniyla birebir; T-008'in iki takipsiz dosyasi (src/ocr/satir_birlestirici.py, tests/unit/ocr/test_satir_birlestirici.py, 10:58) belgelendi"
+    cmd: "python -m pytest tests -q -p no:cacheprovider --ignore=tests/unit/ocr/test_satir_birlestirici.py"
+    exit_code: 0
+    result: gecti
+    evidence: tester_B_evidence/r2-taban-5b-tum-takim-t007-kapsami.txt
   - name: "B1 -- yeni R2 mutantlarinin SEMANTIK on-dogrulamasi (ayna, ayri surec): 33 davranis mutanti amaclanan farki uretiyor, 4 kontrol (R2-C07/YT-09/10/11) sondada ESDEGER -- kit hatasi yok (tur 1 K3-07 dersi)"
     cmd: "TESTER_B_SCRATCH=<scratch> python .agents/tasks/T-007/tester_B/r2_mutant_semantik.py"
     exit_code: 0
@@ -64,7 +69,7 @@ checks:
     exit_code: 1
     result: kaldi
     evidence: tester_B_evidence/r2-B4-mercek-testleri-regresyon-ilk.txt
-  - name: "mercek-B testleri TUMU: 55 (tur 1, yeniden nisanli) + 98 (tur 2: test_mercek_B_r2.py) = 153 passed"
+  - name: "mercek-B testleri TUMU: 55 (tur 1, yeniden nisanli) + 107 (tur 2: test_mercek_B_r2.py; 98 + 9-noktali kapanis kumesi testi) = 162 passed (ilk kosum 153 idi, kapanis testi eklenince 11:02 yeniden kosuldu)"
     cmd: "python -m pytest .agents/tasks/T-007/tester_B -q -p no:cacheprovider -rfE"
     exit_code: 0
     result: gecti
@@ -74,7 +79,7 @@ checks:
     exit_code: 0
     result: gecti
     evidence: tester_B_evidence/r2-B4-bariyer-kosum-bicimleri.txt
-  - name: "B2-4 -- sefin bariyeriyle BIRLIKTE iki sirada 412 passed (259 + 153)"
+  - name: "B2-4 -- sefin bariyeriyle BIRLIKTE iki sirada 421 passed (259 + 162; ilk kosum 412 idi, 11:02 yeniden kosuldu)"
     cmd: "python -m pytest tests/unit/translate .agents/tasks/T-007/tester_B -q -p no:cacheprovider  (ve ters sira)"
     exit_code: 0
     result: gecti
@@ -84,12 +89,12 @@ checks:
     exit_code: 0
     result: gecti
     evidence: tester_B_evidence/r2-B4-totoloji-tarama.txt
-  - name: "sahiplik: git status --short -- src tests real_check.py packet.md conftest.py sef_karari-tur2.md sef_dogrulama/ BOS (ayna agaclari depo disi)"
+  - name: "sahiplik: git status --short -- src tests real_check.py packet.md conftest.py sef_karari-tur2.md sef_dogrulama/ -> izlenen dosyalarda degisiklik YOK (git diff --stat HEAD bos), translate kapsami temiz; src/tests altindaki tek sey T-008 implementer'inin iki TAKIPSIZ dosyasi (satir_birlestirici, 10:58; r2-taban-5b-*) -- tester-B'nin degil; ayna agaclari depo disi"
     cmd: "git status --short -- src tests .agents/tasks/T-007/real_check.py .agents/tasks/T-007/packet.md tests/unit/translate/conftest.py .agents/tasks/T-007/sef_karari-tur2.md .agents/tasks/T-007/sef_dogrulama"
     exit_code: 0
     result: gecti
     evidence: tester_B_evidence/r2-git-status-src-tests.txt
-  - name: "GOZLEM (sefe): tester_B/ altinda bu oturumun YAZMADIGI iki degisiklik belirdi (b2_totoloji_tarama.py etiket satiri 10:42:50 + r2-B4-totoloji-tarama.txt yeniden yazildi; r2-B1-mutant-kiti-ek-YT12.txt 10:55:42) -- ayni gorevle ikinci bir Tester-B sureci calisiyor olabilir; bu verdict 10:57 sonrasi yazildi"
+  - name: "GOZLEM (sefe): tester_B/ altinda bu oturumun YAZMADIGI iki degisiklik belirdi (b2_totoloji_tarama.py etiket satiri 10:42:50 + r2-B4-totoloji-tarama.txt yeniden yazildi; r2-B1-mutant-kiti-ek-YT12.txt 10:55:42) -- ayni gorevle ikinci bir Tester-B sureci calisiyor olabilir; bu verdict 10:57 sonrasi yazildi. EK (ikinci Tester-B oturumu, 11:02): kiti sonuna kadar bekledi, ozet/ayirt-etme/YT-12 kanitlarini bagimsiz dogruladi (ayni sonuclar), tabani yeniden uretti (taban 1-5, 5b), mercek/birlikte kosumlarini guncel sayiyla tazeledi (162/421), yinelenen kapanis testini kaldirdi; karar ve siniflandirma DEGISMEDI"
     cmd: "ls -la --time-style=full-iso .agents/tasks/T-007/tester_B .agents/tasks/T-007/tester_B_evidence; git diff -- .agents/tasks/T-007/tester_B/b2_totoloji_tarama.py"
     exit_code: 0
     result: gecti
@@ -99,13 +104,13 @@ blocking_issues: []
 
 # T-007 · Tester-B · mercek B (test kalitesi) · tur 2
 
-**Karar: ONAY.** Tur 1'in bloke edicisi (K3-03/K3-05 beş kapıdan geçiyordu) **kapandı**: tur 1 kitinin 53 davranış mutantının **53'ü** yakalanıyor (K3-03 `?` 4 testle, K3-05 `！` 3 testle, K10-08/09 1–2 testle), 6/6 kontrol kaçıyor. Tur 2'nin üç kalemi değişmez düzeyinde yeniden ölçüldü (33 yeni davranış mutantı + 4 yeni kontrol + 98 yeni mercek testi + gerçek model). **13 yeni mutant beş kapıdan kaçıyor; hiçbiri ret eşiğini (ürünü bozan **ve** erişilebilir) geçmiyor** — hepsi keskinlik/bilgi sınıfı, her biri için ayırt eden hazır ölçü `tester_B/test_mercek_B_r2.py`'de (13/13 ✗→✓, mutasyonsuz 107 passed). §7: Hakem gerekmiyor.
+**Karar: ONAY.** Tur 1'in bloke edicisi (K3-03/K3-05 beş kapıdan geçiyordu) **kapandı**: tur 1 kitinin 53 davranış mutantının **53'ü** yakalanıyor (K3-03 `?` 4 testle, K3-05 `！` 3 testle, K10-08/09 1–2 testle), 6/6 kontrol kaçıyor. Tur 2'nin üç kalemi değişmez düzeyinde yeniden ölçüldü (33 yeni davranış mutantı + 4 yeni kontrol + 98 yeni mercek testi + gerçek model). **13 yeni mutant beş kapıdan kaçıyor; hiçbiri ret eşiğini (ürünü bozan **ve** erişilebilir) geçmiyor** — hepsi keskinlik/bilgi sınıfı, her biri için ayırt eden hazır ölçü `tester_B/test_mercek_B_r2.py`'de (13/13 ✗→✓, mutasyonsuz 107 passed). Bu verdict iki Tester-B oturumunun ortak ürünü: ilki kit/mercek/ayırt etme ve metni yazdı, ikincisi (şefin "tamamlama" görevi) kanıtları bağımsız doğruladı, tabanı yeniden üretti ve sayıları tazeledi — iki oturum aynı sonuca vardı. §7: Hakem gerekmiyor.
 
 Kör çalıştım: `tester_A/` okunmadı. `delivery.md` (round 2, `known_gaps`) şefin bu turdaki talimatıyla, kit ve mercek testleri **tasarlanıp koşulduktan sonra** okundu (kaçanların hangisini bildiğine bakmak için — aşağıda). Tüm sayılar bu makinede koşuldu; ham çıktılar `tester_B_evidence/r2-*`; mutasyonlar iki ayna ağacında, depoya yazılmadı.
 
 ## 0 · Şefin tabanı — birebir (cp1254)
 
-mypy 0 · birim **255** · real_check **13/13** TEMİZ ([6] medyan 331 ms) · kapsam **%100** (243 ifade, 1 pragma) · tam takım **1359**. Not: `sef_karari-tur2.md` T2-2 ölçüsü olarak `real_check #4c` yazıyor; `real_check.py`'de #4c **yok** (13 kontrol, şefe ait). B2'de kendi gerçek-model ölçümümle kapattım.
+mypy 0 · birim **255** · real_check **13/13** TEMİZ ([6] medyan 331 ms; 11:01 yeniden üretimde 320 ms) · kapsam **%100** (243 ifade, 1 pragma) · tam takım **1359** (11:01: 1426 = 1359 + T-008'in takipsiz 67 testi; aşağıda). Not: `sef_karari-tur2.md` T2-2 ölçüsü olarak `real_check #4c` yazıyor; `real_check.py`'de #4c **yok** (13 kontrol, şefe ait). B2'de kendi gerçek-model ölçümümle kapattım.
 
 ## B2-1 · T2-1 gerçekten kapandı mı? — Evet; ölçü değişmezi kancalıyor, biçimi değil
 
@@ -161,7 +166,8 @@ Uç durumlar (`test_r2_t22_modele_gider_yardimcisi_uc_durumlar`, 21 nokta): çı
 
 * **Tur 1 kiti:** 53/53 yakalandı, 6/6 kontrol kaçtı (tur 1: 49/53). Tahminden sapan 6 kalem tur 1'dekilerle aynı (K4-02 real_check kör, K4-07/K8-04/R2-K3-12/R2-K3-19 beklenenden fazla, K10-08 artık yakalanıyor). K3-08 hedef satırı T2-2 ile değiştiği için kitte güncellendi (`kalan`).
 * **Tur 1 mercek testleri (55):** 54 geçti, 1 kırık — `test_b2_gercek_adli_testler_listesi` (ad listesi karakterizasyonu; yeni `test_k6_motor_ciktisi_nobetcisi_gercekten_motora_ulasiyor_pozitif_kontrol` eklendi). **Benim testimin kırılganlığı**, teslim regresyonu değil; yeniden nişanlandı (yeni testin gövdesi gerçek pozitif kontrol: nöbetçi `r.translations`'a ulaşıyor). Şefin beklediği "üç kırık" A'nın dizinindeydi; dördüncü kırık **yok**.
-* **Bariyer:** `pytest tests` → toplama sonunda `meta_path[0] _T007Bariyer` (`[1] _T006Bariyer`), translate testleri 259/259 setup anında başta, yasak kök 0; üç koşum biçiminde aynı. `tests/unit/translate` **dizininden** `pytest .` hâlâ `ModuleNotFoundError: src` — şef "tur sonrası ekler" demişti, henüz eklenmemiş (bilgi, kapıyı etkilemez). Kendi bariyerimle birlikte iki sırada 412 passed.
+* **Bariyer:** `pytest tests` → toplama sonunda `meta_path[0] _T007Bariyer` (`[1] _T006Bariyer`), translate testleri 259/259 setup anında başta, yasak kök 0; üç koşum biçiminde aynı. `tests/unit/translate` **dizininden** `pytest .` hâlâ `ModuleNotFoundError: src` — şef "tur sonrası ekler" demişti, henüz eklenmemiş (bilgi, kapıyı etkilemez). Kendi bariyerimle birlikte iki sırada 421 passed (259 + 162).
+* **Tam takım (şefe, 4.6 commit disiplini):** 11:01 yeniden koşumda 1426 passed — 1359 + T-008 implementer'ının **takipsiz** `tests/unit/ocr/test_satir_birlestirici.py` (67 test, 10:58). T-007 kapsamına daraltınca 1359, şefin tabanıyla birebir (`r2-taban-5b-*`). Bu iki takipsiz dosya `git add -A` ile T-007 commit'ine süpürülmemeli.
 * **Totoloji:** 109 fonksiyon; assert'siz 0, sabit 0, çok-ifadeli `raises` 0, türetilmiş referans 0; damga 4 + `hasattr` 1 (tur 1 ile aynı); `raises` `match=` 1/37 (yalnız T2-3 pozitif kontrol — istenen buydu).
 
 ## B2-5 · Orantı — ret eşiği geçilmiyor
@@ -174,4 +180,4 @@ Uç durumlar (`test_r2_t22_modele_gider_yardimcisi_uc_durumlar`, 21 nokta): çı
 
 ## Dosyalar
 
-`tester_B/`: `mutant_kiti.py` (53+6 tur 1 + **34+4 R2**, `dosya` alanı ile TEST dosyası mutantları), `r2_mutant_semantik.py`, `r2_ayirt_etme.py`, `r2_gercek_model_t22.py`, `r2_ozet_tablo.py`, `test_mercek_B_r2.py` (98), `test_mercek_B.py` (55, 1 yeniden nişan). `tester_B_evidence/r2-*`: taban 1–5, B1 (kit, YT-12, semantik, özet), B1b ayırt etme, B2 gerçek model, B4 (mercek ilk/tümü, bariyer, birlikte, totoloji), git status, eşzamanlı yazım gözlemi.
+`tester_B/`: `mutant_kiti.py` (53+6 tur 1 + **34+4 R2**, `dosya` alanı ile TEST dosyası mutantları), `r2_mutant_semantik.py`, `r2_ayirt_etme.py`, `r2_gercek_model_t22.py`, `r2_ozet_tablo.py`, `test_mercek_B_r2.py` (107: 98 + 9-noktalı kapanış kümesi testi), `test_mercek_B.py` (55, 1 yeniden nişan). `tester_B_evidence/r2-*`: taban 1–5 + 5b (T-007 kapsamı), B1 (kit, YT-12 — `r2-B1-mutant-kiti-YT-12.txt` ve ikinci oturumun aynı sonuçlu `…-ek-YT12.txt` tekrarı, semantik, özet), B1b ayırt etme, B2 gerçek model, B4 (mercek ilk/tümü, bariyer, birlikte, totoloji), git status, eşzamanlı yazım gözlemi.

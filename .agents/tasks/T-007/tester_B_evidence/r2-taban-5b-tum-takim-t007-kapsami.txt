@@ -1,0 +1,15 @@
+=== T-007 KAPSAMINA DARALTILMIS tam takim (PROTOKOL 4.6 sef commit disiplini: paralel gorevin kirmizi-faz dosyalari haric) ===
+python -m pytest tests -q -p no:cacheprovider --ignore=tests/unit/ocr/test_satir_birlestirici.py
+...............................................................          [100%]
+1359 passed in 4.69s
+exit=0
+
+=== neden: 11:01'de tam takim 1426 (10:20'de 1359). Fark = T-008 implementer'inin TAKIPSIZ dosyasi (tester-B yazmadi) ===
+?? src/ocr/satir_birlestirici.py
+?? tests/unit/ocr/test_satir_birlestirici.py
+10:58:06 src/ocr/satir_birlestirici.py
+10:58:24 tests/unit/ocr/test_satir_birlestirici.py
+git log -1 (T-008 paketi): e700d33 T-008 paketi sürüm 1: satır birleştirici (normalize öncesi saf fonksiyon), sekiz değişmez, uçtan uca kapı
+python -m pytest tests/unit/ocr/test_satir_birlestirici.py --collect-only -q -p no:cacheprovider | tail -1:
+67 tests collected in 0.09s
+tarih: 2026-09-11 11:02:18
