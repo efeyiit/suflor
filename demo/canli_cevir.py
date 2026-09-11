@@ -3,7 +3,7 @@
 Çalıştır:  python demo/canli_cevir.py [japan|korean|chinese|english]
 
 Zincir:  CaptureService (T-005) → ChangeDetector (T-002) → RapidOcrEngine (T-006)
-         → TextNormalizer (T-004) → yerel NMT (NLLB-200 600M int8, CTranslate2)
+         → SatırBirleştirici (T-008) → TextNormalizer (T-004) → yerel NMT (NLLB-200 600M int8, CTranslate2)
 
 Çeviri adımı ürünün kendi bileşeni `LocalNmtProvider` (T-007) ile yapılır.
 Model `models/nllb-200-distilled-600M-ct2-int8/` altında olmalı.
@@ -28,6 +28,7 @@ from src.capture.service import CaptureService, MssBackend  # noqa: E402
 from src.contracts.errors import ModelMissingError, OcrError  # noqa: E402
 from src.contracts.models import Frame, OcrPreset, Rect, Segment, TextBlock, TranslationRequest  # noqa: E402
 from src.ocr.normalizer import normalize  # noqa: E402
+from src.ocr.satir_birlestirici import satirlari_birlestir  # noqa: E402
 from src.ocr.rapid_engine import OcrLanguage, RapidOcrEngine  # noqa: E402
 from src.translate.local_nmt import LocalNmtProvider  # noqa: E402
 
@@ -66,7 +67,7 @@ class CeviriIsi(QtCore.QObject):
         t0 = time.perf_counter()
         try:
             bloklar = self._motor.recognize(kare, self._preset)
-            segmentler = normalize(bloklar, self._preset)
+            segmentler = normalize(satirlari_birlestir(bloklar), self._preset)  # T-008: kelime kutulari -> satir
         except (OcrError, ModelMissingError) as hata:
             self.bitti.emit([], [Segment(text=f"[hata] {hata}", bbox=kare.rect)], [""], 0.0, 0.0)
             return

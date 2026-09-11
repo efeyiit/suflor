@@ -9,7 +9,7 @@
    segmentler listelenir.
 
 Zincir:  CaptureService (T-005) → ChangeDetector (T-002) → RapidOcrEngine (T-006)
-         → TextNormalizer (T-004).  Çeviri henüz yok — sıradaki dalga.
+         → SatırBirleştirici (T-008) → TextNormalizer (T-004).  Çeviri henüz yok — sıradaki dalga.
 
 Bu bir GÖSTERİMDİR, ürünün arayüzü değil. Hiçbir OCR metni konsola yazılmaz
 (PROTOKOL §7); yalnız pencerede gösterilir.
@@ -32,6 +32,7 @@ from src.capture.service import CaptureService, MssBackend  # noqa: E402
 from src.contracts.errors import ModelMissingError, OcrError  # noqa: E402
 from src.contracts.models import Frame, OcrPreset, Rect, Segment, TextBlock  # noqa: E402
 from src.ocr.normalizer import normalize  # noqa: E402
+from src.ocr.satir_birlestirici import satirlari_birlestir  # noqa: E402
 from src.ocr.rapid_engine import OcrLanguage, RapidOcrEngine  # noqa: E402
 
 YENILEME_MS = 100
@@ -52,7 +53,7 @@ class OkumaIsi(QtCore.QObject):
         t0 = time.perf_counter()
         try:
             bloklar = self._motor.recognize(kare, self._preset)
-            segmentler = normalize(bloklar, self._preset)
+            segmentler = normalize(satirlari_birlestir(bloklar), self._preset)  # T-008: kelime kutulari -> satir
         except (OcrError, ModelMissingError) as hata:
             bloklar, segmentler = [], [Segment(text=f"[hata] {hata}", bbox=kare.rect)]
         self.bitti.emit(bloklar, segmentler, (time.perf_counter() - t0) * 1000.0)
