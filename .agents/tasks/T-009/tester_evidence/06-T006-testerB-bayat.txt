@@ -1,0 +1,8 @@
+================================== FAILURES ===================================
+=========================== short test summary info ===========================
+FAILED .agents/tasks/T-006/tester_B/test_mercek_B.py::test_b3_sahte_fabrikayla_tam_kosum_yasak_kok_yuklemez
+FAILED .agents/tasks/T-006/tester_B/test_mercek_B.py::test_b5_modelmissing_kurulumda_ornek_tutulmaz_dosya_gelince_kurulur
+FAILED .agents/tasks/T-006/tester_B/test_mercek_B.py::test_b5_iki_motor_ayni_fabrikayi_paylasirsa_durum_karismaz
+FAILED .agents/tasks/T-006/tester_B/test_mercek_B.py::test_b6_eksik_iki_satir_yapisal_olarak_erisilemez
+4 failed, 44 passed in 0.55s
+exit=1

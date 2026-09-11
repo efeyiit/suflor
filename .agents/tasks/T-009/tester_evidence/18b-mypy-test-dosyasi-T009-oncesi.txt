@@ -1,0 +1,2 @@
+tests\unit\ocr\test_rapid_engine.py:310: error: Unused "type: ignore" comment  [unused-ignore]
+Found 1 error in 1 file (checked 1 source file)

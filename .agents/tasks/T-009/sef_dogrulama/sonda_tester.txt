@@ -1,0 +1,8 @@
+==== T-009 TESTER -- SEF SONDASI ====
+Karar: ONAY. validate KABUL EDILEBILIR (27 kontrol). Sahiplik temiz. Tester 41 passed.
+Tester+urun birlikte 2 kirik: `import conftest` urun conftest'ine cozuluyor (modul adi
+  cakismasi, T-006 B sinifi). Urun etkilenmez; tester yukumlulugu.
+GOZLEM (sef uretti): ch det + KR v5 -> 4 kutu, bosluklu birebir 4/4, '.'=3. DOGRU.
+  Tek fixture; menu olcumu olmadan tabloya girmez. Acik kalem (yeni olcum gorevi).
+Delivery'ye iki duzeltme (T-006 A 2 nokta bayat, B 4 ikame hedefi) -> decision.md'de.
+KARAR: T-009 KABUL.

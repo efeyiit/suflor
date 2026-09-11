@@ -1,0 +1,9 @@
+=== M8: JAPAN Rec.ocr_version etiketi v5 (kutuphanede JP v5 YOK), dosya v4 kalir -- acik yolda sessiz mi?
+  (a) birim 119 : exit=1 3 failed, 116 passed in 0.89s  dusen: test_k11_dil_tablosu_alti_anahtar[japan], test_k11_t009_japan_ikisi_de_v4, test_k11_t009_v5_yalniz_korean
+  (b) tester 41 : exit=1 4 failed, 37 passed in 0.35s  dusen: test_t1_det_v4_rec_dile_ozel_acik_yol[japan], test_t1_det_v4_rec_dile_ozel_indirme_yolu[japan], test_t1_v5_kumesi_tam_olarak_korean, test_t1_iki_nokta_korean_japan_ayrisir
+  (c) gercek model:
+      [M8] modul=C:\Users\pc\AppData\Local\Temp\scratch\C--Users-pc-Desktop-efe--eviri-uygulamas-\d52c967f-bd19-4db3-b5e9-77e6cd08b889\scratchpad\ayna\M8\src\ocr\rapid_engine.py  ayna_icinde=True
+        JAPAN     4 blok  '.'=0  birebir 4/4 (fixture JP)  rec=PPOCRV5 det=PPOCRV4  rec_dosya=japan_PP-OCRv4_rec_mobile.onnx det_dosya=multi_PP-OCRv3_det_mobile.onnx
+        ENGLISH   4 blok  '.'=2  birebir 4/4 (fixture EN)  rec=PPOCRV4 det=PPOCRV4  rec_dosya=en_PP-OCRv4_rec_mobile.onnx det_dosya=ch_PP-OCRv4_det_mobile.onnx
+        KOREAN   17 blok  '.'=3  birebir 0/4 (fixture KR)  rec=PPOCRV5 det=PPOCRV4  rec_dosya=korean_PP-OCRv5_rec_mobile.onnx det_dosya=multi_PP-OCRv3_det_mobile.onnx  kelime 17/17  medyan 340 ms
+        CHINESE   4 blok  '.'=0  birebir 0/4 (fixture JP)  rec=PPOCRV4 det=PPOCRV4  rec_dosya=ch_PP-OCRv4_rec_mobile.onnx det_dosya=ch_PP-OCRv4_det_mobile.onnx

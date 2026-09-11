@@ -1,0 +1,6 @@
+mutant_kiti.py: satir 147: ikame hedefi kaynakta YOK -> '(OcrLanguage.JAPAN, "multi", "japan"),'
+mutant_kiti.py: satir 150: ikame hedefi kaynakta YOK -> '(OcrLanguage.KOREAN, "multi", "korean"),'
+mutant_kiti.py: satir 153: ikame hedefi kaynakta YOK -> '"Det.ocr_version": _OCR_SURUMU,'
+mutant_kiti.py: satir 161: ikame hedefi kaynakta YOK -> '(OcrLanguage.KOREAN, "multi_PP-OCRv3_det_mobile.onnx", "korean_PP-OCRv4_rec_mobile.onnx"),'
+mutant_kiti.py: 26 ikame hedefi, 4 tanesi mevcut kaynakta bulunamiyor
+r2_mutant_kiti.py: 0 ikame hedefi, 0 tanesi mevcut kaynakta bulunamiyor

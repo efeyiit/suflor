@@ -1,0 +1,6 @@
+modul: C:\Users\pc\AppData\Local\Temp\scratch\C--Users-pc-Desktop-efe--eviri-uygulamas-\d52c967f-bd19-4db3-b5e9-77e6cd08b889\scratchpad\ayna\M7\src\ocr\rapid_engine.py
+4 blok
+  blok 0: uzunluk 7, bosluk 1, beklenen kelime sayisi 2, bosluklu birebir=True, bosluksuz birebir=True, guven 0.997
+  blok 1: uzunluk 21, bosluk 4, beklenen kelime sayisi 5, bosluklu birebir=True, bosluksuz birebir=True, guven 0.985
+  blok 2: uzunluk 19, bosluk 4, beklenen kelime sayisi 5, bosluklu birebir=True, bosluksuz birebir=True, guven 0.994
+  blok 3: uzunluk 19, bosluk 4, beklenen kelime sayisi 5, bosluklu birebir=True, bosluksuz birebir=True, guven 0.991

@@ -1,0 +1,17 @@
+T-009 tester gercek model  kok=C:\Users\pc\Desktop\efe\çeviri uygulamasý  
+  modul: C:\Users\pc\Desktop\efe\çeviri uygulamasý\src\ocr\rapid_engine.py
+  ok     [G1] JAPAN 4/4 (4 blok)
+  ok     [G2] ENGLISH 4/4 (4 blok)
+  ok     [G3] KOREAN 17 blok, '.'=3 (==3), benzerlik 1.000 (>=0.95)
+  ok     [G7] KOREAN kelime dogrulugu 17/17 (blok metni == beklenen kelime, nokta dahil)
+  ok     [G3b] noktali bloklar beklenen uc cumle sonuyla birebir: True
+  ok     [G4] CHINESE modeli dlg_JP'de 0/4 (4 OLMAMALI; 4 blok)
+  ok     [G5] KR OCR medyan 327 ms (min 302, max 347; <= 400)
+         japan   Rec.ocr_version=PPOCRV4 Det.ocr_version=PPOCRV4 rec_dosya=japan_PP-OCRv4_rec_mobile.onnx ok
+         en      Rec.ocr_version=PPOCRV4 Det.ocr_version=PPOCRV4 rec_dosya=en_PP-OCRv4_rec_mobile.onnx ok
+         korean  Rec.ocr_version=PPOCRV5 Det.ocr_version=PPOCRV4 rec_dosya=korean_PP-OCRv5_rec_mobile.onnx ok
+         ch      Rec.ocr_version=PPOCRV4 Det.ocr_version=PPOCRV4 rec_dosya=ch_PP-OCRv4_rec_mobile.onnx ok
+  ok     [G6] gercek yolda enum uyeleri + dosya adi dort dilde tabloyla ayni (4 yakalama)
+
+TESTER_GERCEK: TEMIZ
+exit=0

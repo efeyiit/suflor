@@ -1,0 +1,16 @@
+ayna agaci: C:\Users\pc\AppData\Local\Temp\t006_tester_B_mutroot   (depo YAZILMAZ)
+kapilar PYTHONIOENCODING=utf-8 ile kosar (real_check cp1254'te coker -- kit notu)
+
+TABAN (mutasyonsuz ayna):
+  G1-mypy    exit=0    8.5s  Success: no issues found in 1 source file
+  G2-birim   exit=0    1.4s  119 passed in 0.72s
+  G3-real    exit=0   16.1s  REAL_CHECK: TEMÝZ (2 uyarý)
+  G4-kapsam  exit=0    1.9s  119 passed in 1.07s
+  G5-tum     exit=0   10.7s  1444 passed in 10.07s
+
+MUTANT KITI -- her mutant icin hangi kapi YAKALAR (X) / KACIRIR (.)
+kapilar: G1-mypy | G2-birim | G3-real | G4-kapsam | G5-tum
+
+M04: yama hedefi 0 kez bulundu (1 olmali) -> src/ocr/rapid_engine.py
+'    (OcrLanguage.JAPAN, "multi", "japan"),'
+exit=1

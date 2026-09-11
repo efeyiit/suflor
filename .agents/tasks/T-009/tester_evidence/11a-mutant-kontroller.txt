@@ -1,0 +1,18 @@
+=== C0: KONTROL: degisiklik yok (ayna kurulumu dogru mu)
+  (a) birim 119 : exit=0 119 passed in 0.83s
+  (b) tester 41 : exit=0 41 passed in 0.46s
+  (c) gercek model:
+      [C0] modul=C:\Users\pc\AppData\Local\Temp\scratch\C--Users-pc-Desktop-efe--eviri-uygulamas-\d52c967f-bd19-4db3-b5e9-77e6cd08b889\scratchpad\ayna\C0\src\ocr\rapid_engine.py  ayna_icinde=True
+        JAPAN     4 blok  '.'=0  birebir 4/4 (fixture JP)  rec=PPOCRV4 det=PPOCRV4  rec_dosya=japan_PP-OCRv4_rec_mobile.onnx det_dosya=multi_PP-OCRv3_det_mobile.onnx
+        ENGLISH   4 blok  '.'=2  birebir 4/4 (fixture EN)  rec=PPOCRV4 det=PPOCRV4  rec_dosya=en_PP-OCRv4_rec_mobile.onnx det_dosya=ch_PP-OCRv4_det_mobile.onnx
+        KOREAN   17 blok  '.'=3  birebir 0/4 (fixture KR)  rec=PPOCRV5 det=PPOCRV4  rec_dosya=korean_PP-OCRv5_rec_mobile.onnx det_dosya=multi_PP-OCRv3_det_mobile.onnx  kelime 17/17  medyan 491 ms
+        CHINESE   4 blok  '.'=0  birebir 0/4 (fixture JP)  rec=PPOCRV4 det=PPOCRV4  rec_dosya=ch_PP-OCRv4_rec_mobile.onnx det_dosya=ch_PP-OCRv4_det_mobile.onnx
+=== C1: KONTROL: yalniz yorum satiri (olcu bosa ateslemiyor mu)
+  (a) birim 119 : exit=0 119 passed in 1.07s
+  (b) tester 41 : exit=0 41 passed in 0.39s
+  (c) gercek model:
+      [C1] modul=C:\Users\pc\AppData\Local\Temp\scratch\C--Users-pc-Desktop-efe--eviri-uygulamas-\d52c967f-bd19-4db3-b5e9-77e6cd08b889\scratchpad\ayna\C1\src\ocr\rapid_engine.py  ayna_icinde=True
+        JAPAN     4 blok  '.'=0  birebir 4/4 (fixture JP)  rec=PPOCRV4 det=PPOCRV4  rec_dosya=japan_PP-OCRv4_rec_mobile.onnx det_dosya=multi_PP-OCRv3_det_mobile.onnx
+        ENGLISH   4 blok  '.'=2  birebir 4/4 (fixture EN)  rec=PPOCRV4 det=PPOCRV4  rec_dosya=en_PP-OCRv4_rec_mobile.onnx det_dosya=ch_PP-OCRv4_det_mobile.onnx
+        KOREAN   17 blok  '.'=3  birebir 0/4 (fixture KR)  rec=PPOCRV5 det=PPOCRV4  rec_dosya=korean_PP-OCRv5_rec_mobile.onnx det_dosya=multi_PP-OCRv3_det_mobile.onnx  kelime 17/17  medyan 329 ms
+        CHINESE   4 blok  '.'=0  birebir 0/4 (fixture JP)  rec=PPOCRV4 det=PPOCRV4  rec_dosya=ch_PP-OCRv4_rec_mobile.onnx det_dosya=ch_PP-OCRv4_det_mobile.onnx

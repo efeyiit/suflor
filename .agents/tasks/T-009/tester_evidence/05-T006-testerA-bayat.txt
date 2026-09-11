@@ -1,0 +1,41 @@
+        `ModelMissingError` firlatir (K6). Testler ve `real_check` bunu
+        fabrikasiz da gozlemleyebilsin diye PUBLIC'tir (KARAR: paket
+        sessizdi).
+        """
+        det_dil, rec_dil, rec_surumu = _dil_satiri(self._language)
+        p: dict[str, object] = {
+            "Global.text_score": 0.0,  # K5
+            "Global.use_cls": False,  # K3 / O3
+            "Global.log_level": "error",  # K7 (kurulum sirasi)
+            "EngineConfig.onnxruntime.intra_op_num_threads": self._threads,  # K3
+            "EngineConfig.onnxruntime.inter_op_num_threads": self._threads,  # K3
+            "Det.engine_type": _MOTOR,  # K11
+            "Det.ocr_version": _TESPIT_SURUMU,
+            "Det.model_type": _MODEL_TIPI,
+            "Det.lang_type": det_dil,
+            "Rec.engine_type": _MOTOR,
+            "Rec.ocr_version": rec_surumu,  # K11 / T-009 K1: dile ozel (KOREAN v5)
+            "Rec.model_type": _MODEL_TIPI,
+            "Rec.lang_type": rec_dil,
+        }
+        if self._allow_download:
+            if self._model_dir is not None:
+                p["Global.model_root_dir"] = self._model_dir
+            return p
+    
+        dizin = self._model_dir if self._model_dir is not None else varsayilan_model_dizini()
+        det_ad, rec_ad = beklenen_model_dosyalari(self._language)
+        det_yol, rec_yol = dizin / det_ad, dizin / rec_ad
+        eksik = [ad for ad, yol in ((det_ad, det_yol), (rec_ad, rec_yol)) if not yol.is_file()]
+        if eksik:
+>           raise ModelMissingError(
+                f"model dosyasi yok: {', '.join(eksik)} (dizin: {dizin}); "
+                "allow_download=False oldugu icin indirilmedi"
+            )
+E           src.contracts.errors.ModelMissingError: model dosyasi yok: korean_PP-OCRv5_rec_mobile.onnx (dizin: C:\Users\pc\AppData\Local\Temp\pytest-of-pc\pytest-2330\test_a5_k11_dort_dil_alti_anah1); allow_download=False oldugu icin indirilmedi
+
+src\ocr\rapid_engine.py:685: ModelMissingError
+=========================== short test summary info ===========================
+FAILED .agents/tasks/T-006/tester_A/test_a_sozlesme_sayisal.py::test_a5_k11_dort_dil_alti_anahtar_birebir[korean]
+1 failed, 105 passed in 0.60s
+exit=1

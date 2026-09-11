@@ -1,0 +1,55 @@
+[31m[ERROR] 2026-09-11 14:01:09,431 [RapidOCR] base.py:158: Unsupported configuration:
+  engine_type   = onnxruntime
+  ocr_version   = PP-OCRv5
+  task_type     = det
+  lang_type     = multi
+  model_type     = mobile
+
+Please refer to the official model list for supported combinations:
+https://rapidai.github.io/RapidOCRDocs/main/model_list/
+
+Example valid usage:
+  from rapidocr import LangRec, OCRVersion, RapidOCR
+  engine = RapidOCR(params={'Rec.ocr_version': OCRVersion.PPOCRV5, 'Rec.lang_type': LangRec.CH, 'Rec.model_type': 'mobile'})[0m
+[31m[ERROR] 2026-09-11 14:01:09,431 [RapidOCR] base.py:158: Unsupported configuration:
+  engine_type   = onnxruntime
+  ocr_version   = PP-OCRv5
+  task_type     = det
+  lang_type     = en
+  model_type     = mobile
+
+Please refer to the official model list for supported combinations:
+https://rapidai.github.io/RapidOCRDocs/main/model_list/
+
+Example valid usage:
+  from rapidocr import LangRec, OCRVersion, RapidOCR
+  engine = RapidOCR(params={'Rec.ocr_version': OCRVersion.PPOCRV5, 'Rec.lang_type': LangRec.CH, 'Rec.model_type': 'mobile'})[0m
+[31m[ERROR] 2026-09-11 14:01:09,431 [RapidOCR] base.py:158: Unsupported configuration:
+  engine_type   = onnxruntime
+  ocr_version   = PP-OCRv5
+  task_type     = rec
+  lang_type     = japan
+  model_type     = mobile
+
+Please refer to the official model list for supported combinations:
+https://rapidai.github.io/RapidOCRDocs/main/model_list/
+
+Example valid usage:
+  from rapidocr import LangRec, OCRVersion, RapidOCR
+  engine = RapidOCR(params={'Rec.ocr_version': OCRVersion.PPOCRV5, 'Rec.lang_type': LangRec.CH, 'Rec.model_type': 'mobile'})[0m
+Det:
+  det multi   PP-OCRv4  -> multi_PP-OCRv3_det_mobile.onnx', 'SHA256': '5582933662898cd2b4c2eae8a7e5e4fbdff84773711f29db00a1cbd185059001'}
+  det multi   PP-OCRv5  -> ValueError: Invalid OCR configuration.
+  det ch      PP-OCRv4  -> ch_PP-OCRv4_det_mobile.onnx', 'SHA256': 'd2a7720d45a54257208b1e13e36a8479894cb74155a5efe29462512d42f49da9'}
+  det ch      PP-OCRv5  -> ch_PP-OCRv5_det_mobile.onnx', 'SHA256': '4d97c44a20d30a81aad087d6a396b08f786c4635742afc391f6621f5c6ae78ae'}
+  det en      PP-OCRv4  -> en_PP-OCRv3_det_mobile.onnx', 'SHA256': 'ea07c15d38ac40cd69da3c493444ec75b44ff23840553ff8ba102c1219ed39c2'}
+  det en      PP-OCRv5  -> ValueError: Invalid OCR configuration.
+Rec:
+  rec korean  PP-OCRv4  -> korean_PP-OCRv4_rec_mobile.onnx', 'SHA256': 'ab151ba9065eccd98f884cf4d927db091be86137276392072edd4f9d43ad7426'}
+  rec korean  PP-OCRv5  -> korean_PP-OCRv5_rec_mobile.onnx', 'SHA256': 'cd6e2ea50f6943ca7271eb8c56a877a5a90720b7047fe9c41a2e541a25773c9b'}
+  rec japan   PP-OCRv4  -> japan_PP-OCRv4_rec_mobile.onnx', 'SHA256': 'e1075a67dba758ecfc7ebc78a10ae61c95ac8fb66a9c86fab5541e33f085cb7a'}
+  rec japan   PP-OCRv5  -> ValueError: Invalid OCR configuration.
+  rec en      PP-OCRv4  -> en_PP-OCRv4_rec_mobile.onnx', 'SHA256': 'e8770c967605983d1570cdf5352041dfb68fa0c21664f49f47b155abd3e0e318'}
+  rec en      PP-OCRv5  -> en_PP-OCRv5_rec_mobile.onnx', 'SHA256': 'c3461add59bb4323ecba96a492ab75e06dda42467c9e3d0c18db5d1d21924be8'}
+  rec ch      PP-OCRv4  -> ch_PP-OCRv4_rec_mobile.onnx', 'SHA256': '48fc40f24f6d2a207a2b1091d3437eb3cc3eb6b676dc3ef9c37384005483683b'}
+  rec ch      PP-OCRv5  -> ch_PP-OCRv5_rec_mobile.onnx', 'SHA256': '5825fc7ebf84ae7a412be049820b4d86d77620f204a041697b0494669b1742c5'}

@@ -1,0 +1,3 @@
+korean_PP-OCRv5_rec_mobile.onnx: 13488748 bayt, sha256 ESLESIYOR
+korean_PP-OCRv4_rec_mobile.onnx: 24067780 bayt, sha256 ESLESIYOR
+multi_PP-OCRv3_det_mobile.onnx: 2421639 bayt, sha256 ESLESIYOR

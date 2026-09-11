@@ -125,6 +125,18 @@
       "tur": 0,
       "donduruldu": false,
       "not": "Sef olcumu (T-005 olgular.txt): gercek mss.grab medyani 13.5 ms, bolge boyutundan BAGIMSIZ; tasarim S5.7'nin 'Capture <= 10 ms' butcesi mss ile simdiden asiliyor. T-005'in CaptureBackend protokolune uyan ikinci bir backend olarak yazilacak; T-005 kapanmadan paket yazilmaz."
+    },
+    {
+      "id": "T-009",
+      "title": "Korece tanıma PP-OCRv5",
+      "status": "kabul",
+      "round": 1
+    },
+    {
+      "id": "T-008",
+      "title": "Satır birleştirici",
+      "status": "tester",
+      "round": 2
     }
   ],
   "sozlesmeler_donduruldu": true,
