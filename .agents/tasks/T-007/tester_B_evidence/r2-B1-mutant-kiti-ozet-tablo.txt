@@ -1,0 +1,121 @@
+=== TUR 1 KITI (53 davranis + 6 kontrol) -- regresyon ===
+davranis mutanti: 53  yakalanan: 53  kacan: []
+kontrol mutanti: 6  kacan (dogru): 6  yakalanan (yanlis pozitif): []
+kapi basina yakalama (davranis mutantlari):
+  G1-mypy      2 / 53
+  G2-birim    53 / 53
+  G3-real     10 / 53
+  G4-kapsam   53 / 53
+  G5-tum      53 / 53
+
+=== TUR 2 EKLERI (R2-*) ===
+davranis mutanti: 33  yakalanan: 21  kacan: ['R2-K3-16', 'R2-K3-17', 'R2-K3-18a', 'R2-K3-18b', 'R2-K3-18c', 'R2-K3-18d', 'R2-K3-18e', 'R2-K3-18f', 'R2-K3-18g', 'R2-K3-18h', 'R2-K10-10', 'R2-K10-11']
+kontrol mutanti: 4  kacan (dogru): 4  yakalanan (yanlis pozitif): []
+kapi basina yakalama (davranis mutantlari):
+  G1-mypy      0 / 33
+  G2-birim    21 / 33
+  G3-real      3 / 33
+  G4-kapsam   21 / 33
+  G5-tum      21 / 33
+
+| mutant | G1 | G2 | G3 | G4 | G5 | sonuc | beklenen |
+|---|---|---|---|---|---|---|---|
+| K3-01 | . | X | X | X | X | YAKALANDI | G2 G4 G5 G3 |
+| K3-02 | . | X | . | X | X | YAKALANDI | G2 G4 G5 |
+| K3-03 | . | X | . | X | X | YAKALANDI | G2 G4 G5 |
+| K3-04 | . | X | X | X | X | YAKALANDI | G2 G4 G5 G3 |
+| K3-05 | . | X | . | X | X | YAKALANDI | G2 G4 G5 |
+| K3-06 | . | X | . | X | X | YAKALANDI | G2 G4 G5 |
+| K3-07 | . | X | . | X | X | YAKALANDI | G2 G4 G5 |
+| K3-08 | . | X | . | X | X | YAKALANDI | G2 G4 G5 |
+| K3-09 | . | X | . | X | X | YAKALANDI | G2 G4 G5 |
+| K3-10 | . | X | . | X | X | YAKALANDI | G2 G4 G5 |
+| K3-11 | . | X | X | X | X | YAKALANDI | G2 G4 G5 G3 |
+| K2-01 | . | X | . | X | X | YAKALANDI | G2 G4 G5 |
+| K2-02 | . | X | . | X | X | YAKALANDI | G2 G4 G5 (yalniz AST) |
+| K2-03 | . | X | . | X | X | YAKALANDI | G2 G4 G5 |
+| K4-01 | . | X | . | X | X | YAKALANDI | G2 G4 G5 |
+| K4-02 | . | X | . | X | X | YAKALANDI | G2 G4 G5 G3 |
+| K4-03 | . | X | . | X | X | YAKALANDI | G2 G4 G5 |
+| K4-04 | . | X | X | X | X | YAKALANDI | G2 G4 G5 G3 |
+| K4-05 | . | X | X | X | X | YAKALANDI | G2 G4 G5 G3 |
+| K4-06 | . | X | X | X | X | YAKALANDI | G2 G4 G5 G3 |
+| K4-07 | . | X | X | X | X | YAKALANDI | G2 G4 G5 |
+| K5-01 | . | X | . | X | X | YAKALANDI | G2 G4 G5 |
+| K5-02 | . | X | . | X | X | YAKALANDI | G2 G4 G5 |
+| K5-03 | . | X | . | X | X | YAKALANDI | G2 G4 G5 |
+| K5-04 | . | X | X | X | X | YAKALANDI | G2 G4 G5 G3 |
+| K6-01 | . | X | . | X | X | YAKALANDI | G2 G4 G5 |
+| K6-02 | . | X | . | X | X | YAKALANDI | G2 G4 G5 |
+| K6-03 | . | X | . | X | X | YAKALANDI | G2 G4 G5 |
+| K6-04 | . | X | . | X | X | YAKALANDI | G2 G4 G5 |
+| K6-05 | . | X | X | X | X | YAKALANDI | G2 G4 G5 G3 |
+| K6-06 | . | X | . | X | X | YAKALANDI | G2 G4 G5 (test paketten sert) |
+| K6-07 | . | X | . | X | X | YAKALANDI | G2 G4 G5 |
+| K6-08 | . | X | . | X | X | YAKALANDI | G2 G4 G5 |
+| K7-01 | . | X | X | X | X | YAKALANDI | G2 G4 G5 (AST) G3 (#7) |
+| K7-02 | . | X | . | X | X | YAKALANDI | G2 G4 G5 (yalniz AST) |
+| K8-01 | . | X | . | X | X | YAKALANDI | G2 G4 G5 |
+| K8-02 | . | X | . | X | X | YAKALANDI | G2 G4 G5 |
+| K8-03 | . | X | . | X | X | YAKALANDI | G2 G4 G5 |
+| K8-04 | X | X | . | X | X | YAKALANDI | G2 G4 G5 |
+| K8-05 | . | X | . | X | X | YAKALANDI | G2 G4 G5 |
+| K8-06 | . | X | . | X | X | YAKALANDI | G2 G4 G5 |
+| K9-01 | . | X | . | X | X | YAKALANDI | G2 G4 G5 |
+| K9-02 | . | X | . | X | X | YAKALANDI | G2 G4 G5 |
+| K10-01 | . | X | . | X | X | YAKALANDI | G2 G4 G5 |
+| K10-02 | . | X | . | X | X | YAKALANDI | G2 G4 G5 |
+| K10-03 | . | X | . | X | X | YAKALANDI | G2 G4 G5 |
+| K10-04 | . | X | . | X | X | YAKALANDI | G2 G4 G5 (davranis + AST) |
+| K10-05 | . | X | . | X | X | YAKALANDI | G2 G4 G5 |
+| K10-06 | . | X | . | X | X | YAKALANDI | G2 G4 G5 (kanca) |
+| K10-07 | . | X | . | X | X | YAKALANDI | G2 G4 G5 |
+| K10-08 | . | X | . | X | X | YAKALANDI | ? (nobetci sahte ciktida yok) |
+| K10-09 | . | X | . | X | X | YAKALANDI | ? |
+| K1-01 | X | X | . | X | X | YAKALANDI | G1 G2 G4 G5 (bariyer toplama aninda) |
+| C01 | . | . | . | . | . | KACTI (dogru: kontrol) | ..... |
+| C02 | . | . | . | . | . | KACTI (dogru: kontrol) | ..... |
+| C03 | . | . | . | . | . | KACTI (dogru: kontrol) | ..... |
+| C04 | . | . | . | . | . | KACTI (dogru: kontrol) | ..... |
+| C05 | . | . | . | . | . | KACTI (dogru: kontrol) | ..... |
+| C06 | . | . | . | . | . | KACTI (dogru: kontrol) | ..... |
+| R2-K3-12 | . | X | X | X | X | YAKALANDI | G2 G4 G5 |
+| R2-K3-13 | . | X | . | X | X | YAKALANDI | G2 G4 G5 |
+| R2-K3-14 | . | X | . | X | X | YAKALANDI | G2 G4 G5 |
+| R2-K3-15 | . | X | . | X | X | YAKALANDI | G2 G4 G5 |
+| R2-K3-16 | . | . | . | . | . | *** HICBIR KAPI YAKALAMADI *** | ? |
+| R2-K3-17 | . | . | . | . | . | *** HICBIR KAPI YAKALAMADI *** | ? |
+| R2-K3-18a | . | . | . | . | . | *** HICBIR KAPI YAKALAMADI *** | ? |
+| R2-K3-18b | . | . | . | . | . | *** HICBIR KAPI YAKALAMADI *** | ? |
+| R2-K3-18c | . | . | . | . | . | *** HICBIR KAPI YAKALAMADI *** | ? |
+| R2-K3-18d | . | . | . | . | . | *** HICBIR KAPI YAKALAMADI *** | ? |
+| R2-K3-18e | . | . | . | . | . | *** HICBIR KAPI YAKALAMADI *** | ? |
+| R2-K3-18f | . | . | . | . | . | *** HICBIR KAPI YAKALAMADI *** | ? |
+| R2-K3-18g | . | . | . | . | . | *** HICBIR KAPI YAKALAMADI *** | ? |
+| R2-K3-18h | . | . | . | . | . | *** HICBIR KAPI YAKALAMADI *** | ? |
+| R2-K3-19 | . | X | X | X | X | YAKALANDI | G2 G4 G5 |
+| R2-K3-20 | . | X | . | X | X | YAKALANDI | G2 G4 G5 |
+| R2-K3-21 | . | X | . | X | X | YAKALANDI | G2 G4 G5 |
+| R2-C07 | . | . | . | . | . | KACTI (dogru: kontrol) | ..... |
+| R2-YT-01 | . | X | . | X | X | YAKALANDI | G2 G4 G5 |
+| R2-YT-02 | . | X | . | X | X | YAKALANDI | G2 G4 G5 |
+| R2-YT-03 | . | X | . | X | X | YAKALANDI | G2 G4 G5 |
+| R2-YT-04 | . | X | . | X | X | YAKALANDI | G2 G4 G5 |
+| R2-YT-05 | . | X | . | X | X | YAKALANDI | G2 G4 G5 |
+| R2-YT-06 | . | X | . | X | X | YAKALANDI | G2 G4 G5 |
+| R2-YT-07 | . | X | X | X | X | YAKALANDI | G2 G4 G5 G3 |
+| R2-YT-08 | . | X | . | X | X | YAKALANDI | G2 G4 G5 |
+| R2-YT-09 | . | . | . | . | . | KACTI (dogru: kontrol) | ..... |
+| R2-YT-10 | . | . | . | . | . | KACTI (dogru: kontrol) | ..... |
+| R2-YT-11 | . | . | . | . | . | KACTI (dogru: kontrol) | ..... |
+| R2-K10-10 | . | . | . | . | . | *** HICBIR KAPI YAKALAMADI *** | ? |
+| R2-K10-11 | . | . | . | . | . | *** HICBIR KAPI YAKALAMADI *** | ? |
+| R2-K10-12 | . | X | . | X | X | YAKALANDI | G2 G4 G5 |
+| R2-K10-13 | . | X | . | X | X | YAKALANDI | G2 G4 G5 |
+| R2-K10-14 | . | X | . | X | X | YAKALANDI | G2 G4 G5 |
+| R2-K10-15 | . | X | . | X | X | YAKALANDI | G2 G4 G5 |
+| R2-M-01 | . | X | . | X | X | YAKALANDI | G2 G4 G5 |
+| R2-M-02 | . | X | . | X | X | YAKALANDI | G2 G4 G5 |
+
+=== R2-YT-12 (ayri kosum, r2-B1-mutant-kiti-YT-12.txt) ===
+R2-YT-12 [.....] *** HICBIR KAPI YAKALAMADI ***   (beklenen: ?)

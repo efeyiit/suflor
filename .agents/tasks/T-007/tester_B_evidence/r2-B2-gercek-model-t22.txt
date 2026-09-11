@@ -1,0 +1,9 @@
+T2-2 gercek model (depo kodu, mutasyonsuz) -- ceviri metni basilmaz; stderr bayt: 0
+  '{PLAYER}!'            yt=['{PLAYER}']           modele_giden_parca=0  fabrika=0  cikti==kaynak=True  cikti_karakter=9  yt_ciktida={'{PLAYER}': True}
+  '{0}!'                 yt=['{0}']                modele_giden_parca=0  fabrika=0  cikti==kaynak=True  cikti_karakter=4  yt_ciktida={'{0}': True}
+  '{0}。'                 yt=['{0}']                modele_giden_parca=0  fabrika=0  cikti==kaynak=True  cikti_karakter=4  yt_ciktida={'{0}': True}
+  '{0} {1}!'             yt=['{0}', '{1}']         modele_giden_parca=0  fabrika=0  cikti==kaynak=True  cikti_karakter=8  yt_ciktida={'{0}': True, '{1}': True}
+  '<T0>?!'               yt=['<T0>']               modele_giden_parca=0  fabrika=0  cikti==kaynak=True  cikti_karakter=6  yt_ciktida={'<T0>': True}
+  '{PLAYER}!'            yt=[]                     modele_giden_parca=1  fabrika=1  cikti==kaynak=False  cikti_karakter=15  yt_ciktida={}
+  '{PLAYER} is here.'    yt=['{PLAYER}']           modele_giden_parca=1  fabrika=1  cikti==kaynak=False  cikti_karakter=22  yt_ciktida={'{PLAYER}': True}
+  '{0}! Wait!'           yt=['{0}']                modele_giden_parca=1  fabrika=1  cikti==kaynak=False  cikti_karakter=18  yt_ciktida={'{0}': True}

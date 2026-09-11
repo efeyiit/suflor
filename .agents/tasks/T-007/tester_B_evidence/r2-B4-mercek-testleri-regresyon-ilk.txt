@@ -1,0 +1,24 @@
+..................F....................................                  [100%]
+================================== FAILURES ===================================
+_____________________ test_b2_gercek_adli_testler_listesi _____________________
+
+    def test_b2_gercek_adli_testler_listesi() -> None:
+        """Adinda 'gercek/gerçek' gecen teslim testleri: hangisi gercege dokunuyor? (weakref+gc: olcuyor; 'gercek fabrika': AST -- K1 geregi kosamaz)."""
+        agac = ast.parse(TESLIM_TEST.read_text(encoding="utf-8"))
+        adlar = sorted(d.name for d in ast.walk(agac) if isinstance(d, ast.FunctionDef) and d.name.startswith("test_") and re.search(r"gercek|gerçek", d.name))
+>       assert adlar == [
+            "test_k10_close_motoru_ve_encode_decode_yu_gercekten_birakir_weakref",
+            "test_k7_gercek_fabrika_model_proto_var_model_file_yok",
+        ], adlar
+E       AssertionError: ['test_k10_close_motoru_ve_encode_decode_yu_gercekten_birakir_weakref', 'test_k6_motor_ciktisi_nobetcisi_gercekten_motora_ulasiyor_pozitif_kontrol', 'test_k7_gercek_fabrika_model_proto_var_model_file_yok']
+E       assert ['test_k10_cl...del_file_yok'] == ['test_k10_cl...del_file_yok']
+E         
+E         At index 1 diff: 'test_k6_motor_ciktisi_nobetcisi_gercekten_motora_ulasiyor_pozitif_kontrol' != 'test_k7_gercek_fabrika_model_proto_var_model_file_yok'
+E         Left contains one more item: 'test_k7_gercek_fabrika_model_proto_var_model_file_yok'
+E         Use -v to get more diff
+
+.agents\tasks\T-007\tester_B\test_mercek_B.py:305: AssertionError
+=========================== short test summary info ===========================
+FAILED .agents/tasks/T-007/tester_B/test_mercek_B.py::test_b2_gercek_adli_testler_listesi
+1 failed, 54 passed in 0.67s
+exit=1

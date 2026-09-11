@@ -100,7 +100,7 @@ def main() -> int:
             private.append(t.name)
 
     print(f"dosya: {DOSYA.relative_to(KOK)}")
-    print(f"test fonksiyonu: {len(testler)}   parametreli ornek (AST yaklasik): {param_sayisi}; pytest sayimi 210 (taban-2)")
+    print(f"test fonksiyonu: {len(testler)}   parametreli ornek (AST yaklasik): {param_sayisi}; pytest sayimi icin taban-2 kanitina bak (tur 1: 210, tur 2: 255)")
     print()
     for baslik, liste in [
         ("ASSERT'SIZ (totoloji adayi)", assertsiz),

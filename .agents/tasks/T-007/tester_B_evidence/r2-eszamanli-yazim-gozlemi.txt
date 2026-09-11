@@ -1,0 +1,20 @@
+Tester-B (bu oturum) tarafindan YAZILMAYAN, tester_B/ altinda tur 2 kosumu sirasinda beliren degisiklikler (gozlem, 10:56:43):
+
+1) b2_totoloji_tarama.py 10:42:50 -- etiket satiri degistirilmis (bu oturum dokunmadi):
+-    print(f"test fonksiyonu: {len(testler)}   parametreli ornek (AST yaklasik): {param_sayisi}; pytest sayimi 210 (taban-2)")
++    print(f"test fonksiyonu: {len(testler)}   parametreli ornek (AST yaklasik): {param_sayisi}; pytest sayimi icin taban-2 kanitina bak (tur 1: 210, tur 2: 255)")
+   ve r2-B4-totoloji-tarama.txt ayni saniyede yeniden yazilmis (bu oturumun kosumu eski etiketle 10:3x'te idi).
+
+2) r2-B1-mutant-kiti-ek-YT12.txt 10:55:42 -- bu oturumun r2-B1-mutant-kiti-YT-12.txt (10:54:48) kosumunun bir dakika sonra tekrari; icerik ayni sonuc ([.....] R2-YT-12), sureler farkli:
+6c6
+<   G2-birim   exit=0     1.5s  255 passed in 1.12s
+---
+>   G2-birim   exit=0     1.5s  255 passed in 1.11s
+8,9c8,9
+<   G4-kapsam  exit=0     2.0s  255 passed in 1.46s
+<   G5-tum     exit=0     5.5s  1359 passed in 5.06s
+---
+>   G4-kapsam  exit=0     2.0s  255 passed in 1.44s
+>   G5-tum     exit=0     5.5s  1359 passed in 5.05s
+
+Yorum: ayni gorevle calisan ikinci bir Tester-B sureci olabilir (ayni dosya adlari/dizin). Bu oturumun verdict-B.md'si 10:56:43 sonrasinda yazilir; ustune yazilirsa sef ayirt etsin.

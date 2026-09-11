@@ -1,0 +1,118 @@
+TABAN (mutasyonsuz):
+  'A, B.'                      -> ['A, B.']
+  'A; B.'                      -> ['A; B.']
+  'A… B.'                      -> ['A… B.']
+  'A， B.'                      -> ['A， B.']
+  'A． B.'                      -> ['A． B.']
+  'A\\nB.'                     -> ['A\nB.']
+  'A'                          -> ['A']
+  'A。B'                        -> ['A。', 'B']
+  'A\\n'                       -> ['A']
+  'A. B'                       -> ['A.', 'B']
+  'Wait... what?!'             -> ['Wait...', 'what?!']
+  'A. 」 B.'                    -> ['A. 」', 'B.']
+  'A.』 B.'                     -> ['A.』', 'B.']
+  'A.） B.'                     -> ['A.）', 'B.']
+  'A.) B.'                     -> ['A.)', 'B.']
+  'A." B.'                     -> ['A."', 'B.']
+  "A.' B."                     -> ["A.'", 'B.']
+  'A.” B.'                     -> ['A.”', 'B.']
+  'A.’ B.'                     -> ['A.’', 'B.']
+  'A.» B.'                     -> ['A.»', 'B.']
+  'mg {PLAYER}! []'            -> True
+  'mg {PLAYER}! [PLAYER]'      -> False
+  'mg {0} {1}! [0,1]'          -> False
+  'mg {0}{0}! [0]'             -> False
+  'mg %s! [%s]'                -> False
+  'mg <T0>! [<T0>]'            -> False
+  'mg {0}5! [0]'               -> True
+  'mg {0} ç [0]'               -> True
+  'mg {0}}! [0]'               -> False
+  'mg {{0}! [0]'               -> False
+  'mg {0} a {1} [0,1]'         -> True
+  "mg ! ['']"                  -> False
+  'mg 。。。'                     -> False
+
+R2-K3-12   1 fark
+    'A, B.'                      ['A, B.']  ->  ['A,', 'B.']
+R2-K3-13   1 fark
+    'A; B.'                      ['A; B.']  ->  ['A;', 'B.']
+R2-K3-14   1 fark
+    'A… B.'                      ['A… B.']  ->  ['A…', 'B.']
+R2-K3-15   1 fark
+    'A， B.'                      ['A， B.']  ->  ['A，', 'B.']
+R2-K3-16   1 fark
+    'A． B.'                      ['A． B.']  ->  ['A．', 'B.']
+R2-K3-17   1 fark
+    'A\\nB.'                     ['A\nB.']  ->  ['A', 'B.']
+R2-K3-18a  1 fark
+    'A.』 B.'                     ['A.』', 'B.']  ->  ['A.', '』 B.']
+R2-K3-18b  1 fark
+    'A.） B.'                     ['A.）', 'B.']  ->  ['A.', '） B.']
+R2-K3-18c  1 fark
+    'A.) B.'                     ['A.)', 'B.']  ->  ['A.', ') B.']
+R2-K3-18d  1 fark
+    'A." B.'                     ['A."', 'B.']  ->  ['A.', '" B.']
+R2-K3-18e  1 fark
+    "A.' B."                     ["A.'", 'B.']  ->  ['A.', "' B."]
+R2-K3-18f  1 fark
+    'A.” B.'                     ['A.”', 'B.']  ->  ['A.', '” B.']
+R2-K3-18g  1 fark
+    'A.’ B.'                     ['A.’', 'B.']  ->  ['A.', '’ B.']
+R2-K3-18h  1 fark
+    'A.» B.'                     ['A.»', 'B.']  ->  ['A.', '» B.']
+R2-K3-19   4 fark
+    'A'                          ['A']  ->  []
+    'A. B'                       ['A.', 'B']  ->  ['A.']
+    'A\\n'                       ['A']  ->  []
+    'A。B'                        ['A。', 'B']  ->  ['A。']
+R2-K3-20   1 fark
+    'A. 」 B.'                    ['A. 」', 'B.']  ->  ['A.', '」 B.']
+R2-K3-21   1 fark
+    'Wait... what?!'             ['Wait...', 'what?!']  ->  ['Wait.', '.', '.', 'what?', '!']
+R2-C07     ESDEGER (sondada fark yok)
+R2-YT-01   ESDEGER (sondada fark yok)   (sonda ayirt etmiyor -- kit sonucuna bak)
+R2-YT-02   7 fark
+    'mg %s! [%s]'                False  ->  True
+    'mg <T0>! [<T0>]'            False  ->  True
+    'mg {0} {1}! [0,1]'          False  ->  True
+    'mg {0}{0}! [0]'             False  ->  True
+    'mg {0}}! [0]'               False  ->  True
+    'mg {PLAYER}! [PLAYER]'      False  ->  True
+    'mg {{0}! [0]'               False  ->  True
+R2-YT-03   1 fark
+    'mg {0} {1}! [0,1]'          False  ->  True
+R2-YT-04   1 fark
+    'mg {0}{0}! [0]'             False  ->  True
+R2-YT-05   3 fark
+    'mg %s! [%s]'                False  ->  True
+    'mg <T0>! [<T0>]'            False  ->  True
+    'mg {PLAYER}! []'            True  ->  False
+R2-YT-06   7 fark
+    'mg %s! [%s]'                False  ->  True
+    'mg <T0>! [<T0>]'            False  ->  True
+    'mg {0} {1}! [0,1]'          False  ->  True
+    'mg {0}{0}! [0]'             False  ->  True
+    'mg {0}}! [0]'               False  ->  True
+    'mg {PLAYER}! [PLAYER]'      False  ->  True
+    'mg {{0}! [0]'               False  ->  True
+R2-YT-07   9 fark
+    "mg ! ['']"                  False  ->  True
+    'mg %s! [%s]'                False  ->  True
+    'mg <T0>! [<T0>]'            False  ->  True
+    'mg {0} {1}! [0,1]'          False  ->  True
+    'mg {0}{0}! [0]'             False  ->  True
+    'mg {0}}! [0]'               False  ->  True
+    'mg {PLAYER}! [PLAYER]'      False  ->  True
+    'mg {{0}! [0]'               False  ->  True
+    'mg 。。。'                     False  ->  True
+R2-YT-08   ESDEGER (sondada fark yok)   (sonda ayirt etmiyor -- kit sonucuna bak)
+R2-YT-09   ESDEGER (sondada fark yok)
+R2-YT-10   ESDEGER (sondada fark yok)
+R2-YT-11   ESDEGER (sondada fark yok)
+R2-K10-10  ESDEGER (sondada fark yok)   (sonda ayirt etmiyor -- kit sonucuna bak)
+R2-K10-11  ESDEGER (sondada fark yok)   (sonda ayirt etmiyor -- kit sonucuna bak)
+R2-K10-12  ESDEGER (sondada fark yok)   (sonda ayirt etmiyor -- kit sonucuna bak)
+R2-K10-13  ESDEGER (sondada fark yok)   (sonda ayirt etmiyor -- kit sonucuna bak)
+R2-K10-14  ESDEGER (sondada fark yok)   (sonda ayirt etmiyor -- kit sonucuna bak)
+R2-K10-15  ESDEGER (sondada fark yok)   (sonda ayirt etmiyor -- kit sonucuna bak)

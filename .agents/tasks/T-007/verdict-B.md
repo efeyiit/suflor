@@ -1,201 +1,177 @@
 ---
 task: T-007
 role: tester
-round: 1
-decision: ret
+round: 2
+decision: onay
 checks:
   - name: "taban 1 -- mypy --strict temiz"
     cmd: "python -m mypy --strict --explicit-package-bases src/translate/local_nmt.py"
     exit_code: 0
     result: gecti
-    evidence: tester_B_evidence/taban-1-mypy.txt
-  - name: "taban 2 -- birim 210 passed"
+    evidence: tester_B_evidence/r2-taban-1-mypy.txt
+  - name: "taban 2 -- birim 255 passed (210 -> 255)"
     cmd: "python -m pytest tests/unit/translate/test_local_nmt.py -q -p no:cacheprovider"
     exit_code: 0
     result: gecti
-    evidence: tester_B_evidence/taban-2-pytest.txt
-  - name: "taban 3 -- real_check 13/13 TEMIZ, cp1254 konsol (PYTHONIOENCODING yok), medyan 315 ms"
+    evidence: tester_B_evidence/r2-taban-2-pytest.txt
+  - name: "taban 3 -- real_check 13/13 TEMIZ, cp1254 konsol (PYTHONIOENCODING yok), [6] medyan 331 ms; NOT: sef kararindaki '#4c {PLAYER}!' real_check'te YOK (13 kontrol) -- B2 ile kapatildi"
     cmd: "python .agents/tasks/T-007/real_check.py"
     exit_code: 0
     result: gecti
-    evidence: tester_B_evidence/taban-3-real_check-cp1254.txt
-  - name: "taban 4 -- kapsam %100 (239 ifade, 1 pragma: _varsayilan_fabrika, K1 gerekceli)"
+    evidence: tester_B_evidence/r2-taban-3-real_check-cp1254.txt
+  - name: "taban 4 -- kapsam %100 (243 ifade, 1 pragma)"
     cmd: "python -m pytest tests/unit/translate/test_local_nmt.py -q -p no:cacheprovider --cov=src.translate.local_nmt --cov-fail-under=90 --cov-report=term-missing"
     exit_code: 0
     result: gecti
-    evidence: tester_B_evidence/taban-4-kapsam.txt
-  - name: "taban 5 -- tam takim 1314 passed"
+    evidence: tester_B_evidence/r2-taban-4-kapsam.txt
+  - name: "taban 5 -- tam takim 1359 passed (1314 -> 1359, dusen yok)"
     cmd: "python -m pytest tests -q -p no:cacheprovider"
     exit_code: 0
     result: gecti
-    evidence: tester_B_evidence/taban-5-tum-takim.txt
-  - name: "B1 -- mutant kiti: 53 davranis mutanti x 5 kapi ayna agacinda (models/ dahil, cp1254): 49 YAKALANDI, 4 KACTI (K3-03 '?', K3-05 U+FF01 -> BLOKE; K10-08/09 -> keskinlik); 6/6 kontrol kacti (yanlis pozitif yok)"
+    evidence: tester_B_evidence/r2-taban-5-tum-takim.txt
+  - name: "B1 -- yeni R2 mutantlarinin SEMANTIK on-dogrulamasi (ayna, ayri surec): 33 davranis mutanti amaclanan farki uretiyor, 4 kontrol (R2-C07/YT-09/10/11) sondada ESDEGER -- kit hatasi yok (tur 1 K3-07 dersi)"
+    cmd: "TESTER_B_SCRATCH=<scratch> python .agents/tasks/T-007/tester_B/r2_mutant_semantik.py"
+    exit_code: 0
+    result: gecti
+    evidence: tester_B_evidence/r2-B1-mutant-semantik.txt
+  - name: "B1/B2-4 -- mutant kiti (tur 1 53+6 REGRESYON + tur 2 R2 33+4) x 5 kapi, ayna agaci (models/ dahil, cp1254): tur 1 53/53 YAKALANDI (K3-03, K3-05, K10-08, K10-09 ✗->✓), 6/6 kontrol kacti; R2 21/33 yakalandi, 4/4 kontrol kacti, 12 kacan (asagida siniflandi: bloke eden YOK)"
     cmd: "TESTER_B_SCRATCH=<scratch> python .agents/tasks/T-007/tester_B/mutant_kiti.py"
     exit_code: 0
+    result: gecti
+    evidence: tester_B_evidence/r2-B1-mutant-kiti.txt
+  - name: "B1 -- R2-YT-12 (segment izolasyonu; kit koşumu basladiktan sonra eklendi) ayri kosum: [.....] kacti -> keskinlik"
+    cmd: "TESTER_B_SCRATCH=<scratch> python .agents/tasks/T-007/tester_B/mutant_kiti.py R2-YT-12"
+    exit_code: 0
+    result: gecti
+    evidence: tester_B_evidence/r2-B1-mutant-kiti-YT-12.txt
+  - name: "B1 -- kapi basina ozet tablo (tur 1: G2 53/53, G3 10/53; R2: G2 21/33, G3 3/33)"
+    cmd: "python .agents/tasks/T-007/tester_B/r2_ozet_tablo.py tester_B_evidence/r2-B1-mutant-kiti.txt"
+    exit_code: 0
+    result: gecti
+    evidence: tester_B_evidence/r2-B1-mutant-kiti-ozet-tablo.txt
+  - name: "B1b -- AYIRT ETME: 13 kacan R2 mutanti x {teslim testleri, mercek-B r2 testleri} ayri aynada: teslim 13/13 `.` (kitle tutarli), mercek-B r2 13/13 `X`; mutasyonsuz taban 255 + 107 passed (yanlis pozitif yok) -> her kacan sinif icin hazir olcu var"
+    cmd: "TESTER_B_SCRATCH=<scratch> python .agents/tasks/T-007/tester_B/r2_ayirt_etme.py"
+    exit_code: 0
+    result: gecti
+    evidence: tester_B_evidence/r2-B1b-ayirt-etme.txt
+  - name: "B2 -- T2-2 GERCEK MODELDE (depo kodu, ayri surec, motor sarmalanip parca sayildi, metin basilmadi): `{PLAYER}!`/`{0}!`/`{0}。`/`{0} {1}!`/`<T0>?!` -> giden 0, FABRIKA 0 (motor kurulmadi), cikti == kaynak; pozitif kontroller (bildirilmemis `{PLAYER}!`, `{PLAYER} is here.`, `{0}! Wait!`) -> giden 1; stderr 0 bayt"
+    cmd: "python .agents/tasks/T-007/tester_B/r2_gercek_model_t22.py"
+    exit_code: 0
+    result: gecti
+    evidence: tester_B_evidence/r2-B2-gercek-model-t22.txt
+  - name: "B2-4 -- tur 1 mercek-B testleri (55) yeni teslimde: 54 passed, 1 failed (`test_b2_gercek_adli_testler_listesi`: ad listesi karakterizasyonu, yeni `test_k6_..._gercekten_..._pozitif_kontrol` eklendi -- BENIM testimin kirilganligi, teslim regresyonu DEGIL; yeniden nisanlandi)"
+    cmd: "python -m pytest .agents/tasks/T-007/tester_B -q -p no:cacheprovider -rfE  (yeniden nisan ONCESI)"
+    exit_code: 1
     result: kaldi
-    evidence: tester_B_evidence/B1-mutant-kiti.txt
-  - name: "B1 -- K3-07 duzeltilmis kosum (ilk surum regex'i bozan gecersiz mutantti, kit hatasi): `」` kapanis kumesinden eksik -> [.X.XX] yakalandi"
-    cmd: "TESTER_B_SCRATCH=<scratch> python .agents/tasks/T-007/tester_B/mutant_kiti.py K3-07"
+    evidence: tester_B_evidence/r2-B4-mercek-testleri-regresyon-ilk.txt
+  - name: "mercek-B testleri TUMU: 55 (tur 1, yeniden nisanli) + 98 (tur 2: test_mercek_B_r2.py) = 153 passed"
+    cmd: "python -m pytest .agents/tasks/T-007/tester_B -q -p no:cacheprovider -rfE"
     exit_code: 0
     result: gecti
-    evidence: tester_B_evidence/B1-mutant-kiti-K3-07-duzeltilmis.txt
-  - name: "B1 -- kapi basina ozet tablo (G1 2/53, G2 49/53, G3 10/53, G4 49/53, G5 49/53)"
-    cmd: "python - (betik kanit dosyasinin basinda; iki kit ciktisini birlestirir)"
+    evidence: tester_B_evidence/r2-B4-mercek-testleri-tumu.txt
+  - name: "B2-4 -- bariyer kosum bicimleri: `pytest tests` / `tests/unit/translate` / dosya -> toplama sonunda meta_path[0] _T007Bariyer, translate testleri 259/259 setup aninda basta, yasak kok sys.modules 0; `tests/unit/translate` DIZININDEN `pytest .` hala `src` import edemiyor (sef 'tur sonrasi ekler' demisti -- henuz eklenmemis, bilgi)"
+    cmd: "PYTHONPATH=.agents/tasks/T-007/tester_B TB_GOZLEM=<dosya> python -m pytest tests -q -p no:cacheprovider -p tb_gozlem_plugin  (+2 bicim + dizinden)"
     exit_code: 0
     result: gecti
-    evidence: tester_B_evidence/B1-mutant-kiti-ozet-tablo.txt
-  - name: "B1b -- kacan K3-03/K3-05'in bolme etkisi (teslimin regex'i, kume eksik): KR 3->2, EN 2->1, JP 2->1 parca"
-    cmd: "python - (betik kanit dosyasinin basinda)"
-    exit_code: 0
-    result: kaldi
-    evidence: tester_B_evidence/B1b-kacan-mutant-urun-etkisi.txt
-  - name: "B1b -- AYIRT ETME: onerilen test ekleri (a)(b)(c) mutasyonsuz src'de 220 passed (yanlis pozitif yok); K3-03/K3-05/K10-08/K10-09 dordu de yakalanir"
-    cmd: "TESTER_B_SCRATCH=<scratch> python .agents/tasks/T-007/tester_B/mercekB_ayirt_etme.py"
-    exit_code: 0
-    result: gecti
-    evidence: tester_B_evidence/B1b-mercekB-ayirt-etme.txt
-  - name: "B1c -- kacan mutantlar GERCEK MODELDE: '?' eksik -> EN 2 cumle tek parca, 'hazir' KAYIP; U+FF01 eksik -> JP 2 cumle tek parca, 'dur' KAYIP (Y1 kusuru geri geliyor)"
-    cmd: "TESTER_B_SCRATCH=<scratch> python .agents/tasks/T-007/tester_B/b1c_kacan_mutant_gercek_model.py"
-    exit_code: 0
-    result: kaldi
-    evidence: tester_B_evidence/B1c-kacan-mutant-gercek-model.txt
-  - name: "B2 -- totoloji taramasi (97 fonksiyon / 210 ornek): assert'siz 0, sabit 0, cok-ifadeli raises 0, turetilmis referans 0; damga (yalniz __doc__) 4, yalniz hasattr 1"
-    cmd: "python .agents/tasks/T-007/tester_B/b2_totoloji_tarama.py"
-    exit_code: 0
-    result: gecti
-    evidence: tester_B_evidence/B2-totoloji-tarama.txt
-  - name: "B3 -- bariyer kosum bicimleri: `pytest tests` / `tests/unit` / `tests/unit/translate` / dosya -> bariyer toplama sonunda meta_path[0], 214/214 translate testinde basta, yasak kok sys.modules'ta 0; translate dizininden kosum src import edemiyor (bilgi)"
-    cmd: "PYTHONPATH=.agents/tasks/T-007/tester_B TB_GOZLEM=<dosya> python -m pytest tests -q -p no:cacheprovider -p tb_gozlem_plugin  (+3 bicim)"
-    exit_code: 0
-    result: gecti
-    evidence: tester_B_evidence/B3-bariyer-kosum-bicimleri.txt
-  - name: "B3 -- sefin bariyeriyle BIRLIKTE her iki sirada 269 passed; hangi bariyer meta_path[0] olursa olsun match='K1 bariyeri' tutuyor"
+    evidence: tester_B_evidence/r2-B4-bariyer-kosum-bicimleri.txt
+  - name: "B2-4 -- sefin bariyeriyle BIRLIKTE iki sirada 412 passed (259 + 153)"
     cmd: "python -m pytest tests/unit/translate .agents/tasks/T-007/tester_B -q -p no:cacheprovider  (ve ters sira)"
     exit_code: 0
     result: gecti
-    evidence: tester_B_evidence/B3-birlikte-kosum.txt
-  - name: "B4 -- gercek model ayri surecte: kurulum + 7 istek + close x2 -> stdout 0 / stderr 0 bayt; pozitif kontrol os.write(2) 1 bayt; CT2 DEBUG'da 2053 bayt (kanal gorunur, saglayici seviyeye dokunmuyor); sentencepiece roundtrip/`▁` olgulari; translate_batch 31 parametre"
-    cmd: "python .agents/tasks/T-007/tester_B/b4_gercek_surec_sondasi.py"
+    evidence: tester_B_evidence/r2-B4-birlikte-kosum.txt
+  - name: "B2-4 -- totoloji taramasi 109 fonksiyon: assert'siz 0, sabit 0, cok-ifadeli raises 0, turetilmis referans 0; damga 4 + hasattr 1 (tur 1 ile ayni); raises match= 1/37 (yalniz T2-3 pozitif kontrol -- istenen buydu)"
+    cmd: "python .agents/tasks/T-007/tester_B/b2_totoloji_tarama.py"
     exit_code: 0
     result: gecti
-    evidence: tester_B_evidence/B4-gercek-surec-sondasi.txt
-  - name: "mercek B testleri (55): B2 sahte gerceklik, B3 kacis yollari, B4 kanca/kor nokta + teslim olcusu gercek sinifta 5 kanal + 7 pozitif kontrol dogru sebeple, B5 omur/hata (22), B6 kapsam durustlugu"
-    cmd: "python -m pytest .agents/tasks/T-007/tester_B -v -p no:cacheprovider"
+    evidence: tester_B_evidence/r2-B4-totoloji-tarama.txt
+  - name: "sahiplik: git status --short -- src tests real_check.py packet.md conftest.py sef_karari-tur2.md sef_dogrulama/ BOS (ayna agaclari depo disi)"
+    cmd: "git status --short -- src tests .agents/tasks/T-007/real_check.py .agents/tasks/T-007/packet.md tests/unit/translate/conftest.py .agents/tasks/T-007/sef_karari-tur2.md .agents/tasks/T-007/sef_dogrulama"
     exit_code: 0
     result: gecti
-    evidence: tester_B_evidence/B-mercek-testleri-tek-basina.txt
-  - name: "sahiplik: git status --short -- src tests real_check.py packet.md conftest.py BOS (ayna agaci kullanildi)"
-    cmd: "git status --short -- src tests .agents/tasks/T-007/real_check.py .agents/tasks/T-007/packet.md tests/unit/translate/conftest.py"
+    evidence: tester_B_evidence/r2-git-status-src-tests.txt
+  - name: "GOZLEM (sefe): tester_B/ altinda bu oturumun YAZMADIGI iki degisiklik belirdi (b2_totoloji_tarama.py etiket satiri 10:42:50 + r2-B4-totoloji-tarama.txt yeniden yazildi; r2-B1-mutant-kiti-ek-YT12.txt 10:55:42) -- ayni gorevle ikinci bir Tester-B sureci calisiyor olabilir; bu verdict 10:57 sonrasi yazildi"
+    cmd: "ls -la --time-style=full-iso .agents/tasks/T-007/tester_B .agents/tasks/T-007/tester_B_evidence; git diff -- .agents/tasks/T-007/tester_B/b2_totoloji_tarama.py"
     exit_code: 0
     result: gecti
-    evidence: tester_B_evidence/git-status-src-tests.txt
-blocking_issues:
-  - "K3 (Y1) olcusu alti terminatorun DORDUNDE kosuyor: `?` (U+003F) ve `！` (U+FF01) hicbir testte ayirt edici konumda degil. Kumeden biri dusurulunce (K3-03, K3-05) mypy/birim/real_check/kapsam/tam takim BESI DE YESIL (B1-mutant-kiti.txt). Gercek modelde urun etkisi olculdu (B1c): EN `Are you ready? The village elder…` tek parca -> tek cumle, 'hazir' KAYIP; JP `止まれ！村の長老が…` tek parca -> 'dur' KAYIP -- KRT Y1'in duzelttigi cumle-kaybi kusuru. Erisilebilir (tek karakterlik sabit), urunu bozan, bes kapidan gecen -> ret esigi. Duzeltme ~10 satir test (feedback-B.md §3), ayirt etme olculdu: yamali testlerle 4/4 yakalanir, mutasyonsuz src 220 passed."
+    evidence: tester_B_evidence/r2-eszamanli-yazim-gozlemi.txt
+blocking_issues: []
 ---
 
-# T-007 · Tester-B · mercek B (test kalitesi, K1 bariyeri, ömür, loglama, hata taksonomisi) · tur 1
+# T-007 · Tester-B · mercek B (test kalitesi) · tur 2
 
-**Karar: RET — kod doğru, ölçü eksik.** Ret eşiği "ürünü bozan **ve** erişilebilir mutant beş kapıdan geçiyor": iki mutant geçiyor (K3-03, K3-05), ikisinin de ürün etkisi gerçek modelle ölçüldü (bir cümle çeviride kayboluyor — Y1'in düzelttiği sınıf). Düzeltme yalnız test dosyasında, ayırt etme gücü ölçüldü (`feedback-B.md`). Onun dışında teslim sağlam: 53 davranış mutantının 49'u yakalandı, kontrol mutantlarının hiçbiri yakalanmadı, K1 bariyeri dört koşum biçiminde de yerinde, gerçek modelle ayrı süreçte sıfır bayt, ömür/hata sınıfları 22 ek testle doğrulandı.
+**Karar: ONAY.** Tur 1'in bloke edicisi (K3-03/K3-05 beş kapıdan geçiyordu) **kapandı**: tur 1 kitinin 53 davranış mutantının **53'ü** yakalanıyor (K3-03 `?` 4 testle, K3-05 `！` 3 testle, K10-08/09 1–2 testle), 6/6 kontrol kaçıyor. Tur 2'nin üç kalemi değişmez düzeyinde yeniden ölçüldü (33 yeni davranış mutantı + 4 yeni kontrol + 98 yeni mercek testi + gerçek model). **13 yeni mutant beş kapıdan kaçıyor; hiçbiri ret eşiğini (ürünü bozan **ve** erişilebilir) geçmiyor** — hepsi keskinlik/bilgi sınıfı, her biri için ayırt eden hazır ölçü `tester_B/test_mercek_B_r2.py`'de (13/13 ✗→✓, mutasyonsuz 107 passed). §7: Hakem gerekmiyor.
 
-Kör çalıştım: `tester_A*` okunmadı. `delivery.md` ölçümler ve karar **bittikten sonra**, şefin bu turdaki açık talimatıyla ("Teslim: … delivery.md") yalnız `known_gaps`'in bulgularımı kapsayıp kapsamadığına bakmak için okundu (kapsamıyor: K3 ölçüsü "12 metin × 3 dil" diye yazılmış, işaret başına iddia yok; K6/K10 nöbetçi testi yalnız *kaynak* metin). Tüm sayılar bu makinede koşuldu; ham çıktılar `tester_B_evidence/`; mutasyonlar iki ayrı ayna ağacında (`t007_tester_B_mutroot`, `t007_tester_B_ayirt`), depoya yazılmadı (`git-status-src-tests.txt`).
+Kör çalıştım: `tester_A/` okunmadı. `delivery.md` (round 2, `known_gaps`) şefin bu turdaki talimatıyla, kit ve mercek testleri **tasarlanıp koşulduktan sonra** okundu (kaçanların hangisini bildiğine bakmak için — aşağıda). Tüm sayılar bu makinede koşuldu; ham çıktılar `tester_B_evidence/r2-*`; mutasyonlar iki ayna ağacında, depoya yazılmadı.
 
-## 0 · Şefin tabanı — birebir (cp1254, PYTHONIOENCODING yok)
+## 0 · Şefin tabanı — birebir (cp1254)
 
-| kapı | şef | ben |
-|---|---|---|
-| mypy | 0 | 0 |
-| birim | 210 | 210 |
-| real_check | 13/13 | 13/13 TEMİZ, `[6]` medyan 315 ms |
-| kapsam | %100 | %100 (239 ifade, 1 pragma) |
-| tam takım | 1314 | 1314 |
+mypy 0 · birim **255** · real_check **13/13** TEMİZ ([6] medyan 331 ms) · kapsam **%100** (243 ifade, 1 pragma) · tam takım **1359**. Not: `sef_karari-tur2.md` T2-2 ölçüsü olarak `real_check #4c` yazıyor; `real_check.py`'de #4c **yok** (13 kontrol, şefe ait). B2'de kendi gerçek-model ölçümümle kapattım.
 
-## B1 · Mutant kiti — 53 davranış + 6 kontrol × 5 kapı (`B1-mutant-kiti.txt`, özet `B1-mutant-kiti-ozet-tablo.txt`)
+## B2-1 · T2-1 gerçekten kapandı mı? — Evet; ölçü değişmezi kancalıyor, biçimi değil
 
-Kit (`tester_B/mutant_kiti.py`) depoyu `src/tests/real_check/fixtures/models(4 dosya)` ile ayna ağacına kopyalar, tek satır değiştirir, paketin beş kabul komutunu koşar (pytest'e yalnız `-p no:cacheprovider -rfE`; `PYTHONIOENCODING` **silinerek** — cp1254). Taban 5/5 yeşil. `beklenen` sütunu koşumdan **önce** yazıldı.
+**Yeniden koşum (`r2-B1-mutant-kiti.txt`):** K3-01..06 altısı da `[.X.XX]`/`[.XXXX]`; K3-03 → `test_k3b_bolme…[A? B.]`, `test_k3b_her_terminator_tek_basina_boler[U+003F]`, `…_diger_isaretler_yokken…[U+003F]` (+1); K3-05 aynı desen `[U+FF01]`. `TERMINATORLER` sabiti test dosyasında paket metninden bağımsız yazılı (4.6/8).
 
-| # | sınıf | mutant | üründe ne olur | 5 kapı | yakalayan |
-|---|---|---|---|---|---|
-| K3-01 | K3 | `.` eksik | KR/EN paragraf bölünmez (Y1 aynen) | `.XXXX` | `test_k3b` ×11, real_check `[4]` |
-| K3-02 | K3 | `!` eksik | `A! B.` tek parça | `.X.XX` | `test_k3b` ×3 |
-| **K3-03** | **K3** | **`?` eksik** | **EN/KR `A? B.` tek parça → cümle kaybı** | **`.....`** | **—** |
-| K3-04 | K3 | `。` eksik | JP paragraf bölünmez (C8) | `.XXXX` | 13 test, real_check `[3]` |
-| **K3-05** | **K3** | **`！` (U+FF01) eksik** | **JP `A！B。` tek parça → cümle kaybı** | **`.....`** | **—** |
-| K3-06 | K3 | `？` eksik | `A？B。` tek parça | `.X.XX` | `test_k3b` ×2 |
-| K3-07 | K3 | `」` kapanış kümesinden eksik | `」` sonraki cümleye yapışır | `.X.XX` | `test_k3b[A.」B.]` ×5 (düzeltilmiş koşum; ilk sürüm regex'i bozuyordu — kit hatam) |
-| K3-08 | K3 | `isalnum`→`isalpha` | `42`, `5`, `3.` modele gitmez | `.X.XX` | `test_k3c[3.5]`, `modele_gider("5")` |
-| K3-09/10/11 | K3 | kırpma yok / `""` birleştirme / geçiş segmenti boş | boşluklu parça / bitişik cümle / `。。。` silinir | `.X.XX` / `.X.XX` / `.XXXX` | k3b / k3a / k3c + real_check `[4b]` |
-| K2-01 | K2 | cümle sayısı denetimi yok | kayma sessiz / ham IndexError | `.X.XX` | `test_k2_*` |
-| K2-02 | K2 | `ensure_aligned` atlanmış | davranış aynı — **yalnız AST** yakalar | `.X.XX` | `test_k2_ast_…` (1 test) |
-| K2-03 | K2 | `detected_lang=None` | | `.X.XX` | `test_k2_sonuc_alanlari` |
-| K4-01..04 | K4 | JA `ja`→zho / KO `kor_hang`→jpn / ZH `chinese`→kor / EN `en_Latn` | yanlış belirteç, CT2 hata vermez | `.X.XX` ×3, `.XXXX` | 24 noktalı `test_k4_uc_bicim` (biçim başına); **K4-02'yi real_check görmedi** — KR metin JP belirteciyle de "bekliyor+doğu" verdi (içerik kontrolü zayıf, paket bunu kabul ediyor) |
-| K4-05 | K4 | hedef `eng_Latn` | çeviri İngilizce | `.XXXX` | `target_prefix` testleri, real_check `[2]` |
-| K4-06 | K4 | `.lower()` yok | `jpn_Jpan` reddedilir | `.XXXX` | |
-| K4-07 | K4 | kaynak belirteci yok | kalite düşer | `.XXXX` | 57 test, real_check `[2]` "değirmen YOK" |
-| K5-01..04 | K5 | `in` / başa ekle / dedup yok / onarım yok | ikinci `%s` kaybı / konum / fazla kopya / `{0}` kaybı | `.X.XX` ×3, `.XXXX` | `test_k5_*`; K5-04 real_check `[5]` |
-| K6-01..04 | K6 | dört dosyadan biri denetlenmiyor (**her biri ayrı**) | `ProviderUnavailable` yerine | `.X.XX` ×4 | `test_k6_dort_dosyadan_biri…[<ad>]` + `zorunlu_model_dosyalari` |
-| K6-05 | K6 | `ModelMissingError`→`ProviderUnavailable` | indirme dalı tetiklenmez | `.XXXX` | real_check `[8]` de |
-| K6-06 | K6 | FNF eşlemesi kaldırılmış (**paket lafzı**) | paket lafzıyla uyumlu | `.X.XX` | `test_k6_fabrika_istisnasi…` e3 — **testler paketin ötesini kilitliyor** (bilgi, aşağıda) |
-| K6-07/08 | K6 | `from None` / `TranslatorError` sarılır | | `.X.XX` | |
-| K7-01 | K7 | `model_file=` | ASCII-dışı dizinde kurulamaz | `.XXXX` | AST + real_check `[7]` |
-| K7-02 | K7 | `.resolve()` yok | real_check mutlak yol verir → ayrışmaz; **yalnız AST** | `.X.XX` | |
-| K8-01..06 | K8 | inter=threads / rp 1.0 geçiliyor / mdl 1024 / mdl geçilmiyor / üst sınır yok / None→cpu | | `.X.XX` ×5, K8-04 `XX.XX` | K8-04'ü **mypy** de yakaladı (`**dict[str, object]` vs varsayılanlı Protocol) |
-| K9-01/02 | K9 | kurulum dahil / sabit 0 | | `.X.XX` | `test_k9_ilk_cagri…` (fabrika 100 ms) / `test_k9_latency_motor…` |
-| K10-01/02/03 | K10 | kapalı translate çalışır / motor bırakılmaz / tek örnek yok | model yeniden yüklenir / 700 MB kalır / her karede 470 ms | `.X.XX` | close / weakref / sayaç testleri |
-| K10-04 | K10 | `sys.stdout.write(çeviri)` | konsola metin | `.X.XX` | soğuk+sıcak (capfd) + AST |
-| K10-05 | K10 | adlı logger INFO | log dosyasına metin | `.X.XX` | caplog |
-| K10-06 | K10 | `propagate=False` bilinmeyen logger INFO | | `.X.XX` | **yalnız `Logger.handle` kancası** ("nobetci bir log kaydina dustu") — kanca gerçekten ekliyor |
-| K10-07 | K10 | hata mesajına **kaynak** metin | | `.X.XX` | `test_k6_hata_mesajlari…` |
-| **K10-08** | K10 | sayı uyuşmazlığı mesajına **motor çıktısı** (`{cikti!r}`) | çeviri metni istisna→log | **`.....`** | — (nöbetçi testi bu yolda `"x"` hipotezi) |
-| **K10-09** | K10 | bozuk-çıktı mesajına `{nesne!r}` | | **`.....`** | — |
-| K1-01 | K1 | modül düzeyi `import ctranslate2` | | `XX.XX` | mypy (`import-untyped`) + bariyer |
-| C01–C06 | kontrol | `tokenler and`→`len>0`; `extend`→döngü; tip ek açıklaması; dict satır sırası; join→`+`; parantez | eşdeğer | `.....` ×6 | **hiçbiri yakalanmadı** — yanlış pozitif yok |
+**Yeni varyantlar — küme sınırı, kapanış kümesi, regex yapısı (semantik ön-doğrulama `r2-B1-mutant-semantik.txt`: her mutant amaçlanan farkı üretiyor, kontroller eşdeğer):**
 
-Kapı başına: mypy 2/53 · birim 49/53 · real_check 10/53 · kapsam 49/53 · tam takım 49/53. Yalnız AST'nin yakaladığı iki mekanizma mutantı (K2-02, K7-02) paketin kendi istediği AST ölçüleri; davranışsal olarak ayrışmıyorlar (K2-02: hizalama yapısal; K7-02: real_check mutlak yol verir) — kabul, bilgi.
+| # | mutant | 5 kapı | yakalayan / sınıf |
+|---|---|---|---|
+| R2-K3-12 | `,` fazladan (virgülde böler) | `.XXXX` | negatif kontrol `[virgul]` **+ real_check [2]** ("değirmen YOK") — **bulgu değil, ölçü var** |
+| R2-K3-13/14/15 | `;` / `…` / `，` fazladan | `.X.XX` | negatif kontrol |
+| **R2-K3-16** | `．` (U+FF0E) fazladan | **`.....`** | belgeli sınır ("`．` terminatör DEĞİL") teslim dosyasında ölçülmüyor; `delivery.md` A'nın `A．B．` satırının bunu kilitlediğini ve şefin A'yı regresyon olarak koştuğunu yazıyor. Ürün: `．` bölünse kayıp yok. **Bilgi.** |
+| **R2-K3-17** | `\n` fazladan | **`.....`** | **Erişilemez:** `src/ocr/normalizer.py` `_collapse_intraline` blok içi `\n`'leri Segment üretiminden önce tek satıra indiriyor. **Bilgi.** |
+| R2-K3-18a..h | kapanış kümesinden `』` `）` `)` `"` `'` `”` `’` `»` **her biri ayrı** eksik | **`.....` ×8** | Kapanış değişmezi ("terminatörden sonraki kapanış işareti cümleye dahil") **9 noktanın 1'inde** (`」`, K3-07) ölçülüyor — T2-1 ile aynı 4.6/7 deseni. Ürün etkisi: `A.” B.` → `A.` + `” B.`; kayıp **yok**, uydurma **yok** (tek başına kapanış Y2 süzgeciyle aynen geçer), işaret sonraki cümleyle modele gider → noktalama yerleşimi (kalite). **Keskinlik**, ret değil. Hazır ölçü: `test_r2_k3_her_kapanis_isareti_tek_basina_onceki_cumleye_dahil[9]` → 8/8 ✗→✓. |
+| R2-K3-19 | `\Z` kuyruk dalı yok (noktalamasız metin hiç parça üretmez → çevrilmez) | `.XXXX` | 21 test + real_check [8] |
+| R2-K3-20 | terminatör–kapanış arası `\s*` yok | `.X.XX` | `[A. 」 B.]` |
+| R2-K3-21 | `[T]+` → `[T]` (`...` üçe bölünür) | `.X.XX` | `[Wait... what?!]` |
+| R2-C07 | `\Z` → `$` (kontrol) | `.....` | doğru: eşdeğer |
 
-**Tahminden sapanlar (6):** K3-03/K3-05 beklenenden **az** (bulgu); K3-07 ilk sürüm kit hatası (düzeltildi, `B1-mutant-kiti-K3-07-duzeltilmis.txt`); K4-02 real_check'i **kör** buldu; K4-07 ve K8-04 beklenenden **fazla** yakalandı (real_check `[2]`, mypy).
+Ek değişmez ölçüsü (`test_r2_k3_fuzz_degismezi_1000_rastgele_metin`, seed 7): 1000 rastgele karışımda (harf + 6 terminatör + 9 kapanış + küme dışı 13 işaret) ham birleşim = kaynak, her parçada ilk terminatörden sonra yalnız terminatör/kapanış/boşluk, son parça dışında her parça terminatörle biter, terminatör+harf ardışıklığı hep iki parçada → geçiyor; 42 nokta × 7 konum (`A{t} B`, bitişik, başta, ardışık, kapanışlı, boşluklu kapanış, üçlü) geçiyor.
 
-### Bloke eden: K3-03 / K3-05 — neden kaçıyor, üründe ne yapıyor
+## B2-2 · T2-2 değişmezi kancalanıyor — 8/8 davranış mutantı yakalandı, 3/3 kontrol kaçtı
 
-AST ile bakıldı: teslimde `?` yalnız `"Wait... what?!"` (ardından `!` böler) ve `"c! e?"` (**sonda**, `\Z` kuyruğu) girdilerinde; `！` yalnız `"A。？！"`/`"!?.。！？"` gibi harfsiz parçalarda (Y2 süzgeci yutar). Hiçbirinde işaretten sonra **harf içeren ikinci cümle** yok → işaret düşse de bölünme aynı. real_check `[3]` yalnız `。`, `[4]` yalnız `.` içerir. PROTOKOL 4.6/7 (ölçü, parametre uzayının noktalarında koşmalı) ve 4.6/10 (sınıf başına pozitif kontrol): altı işaretin **ikisi** ölçülmüyor.
+| # | mutant | 5 kapı | yakalayan |
+|---|---|---|---|
+| R2-YT-01 | çağrı yerinde yer tutucular geçilmiyor (tur 1 davranışı) | `.X.XX` | `test_k3e_*` |
+| R2-YT-02 | gövdede çıkarım yok | `.X.XX` | `test_k3e_*` |
+| R2-YT-03 | yalnız **ilk** yer tutucu çıkarılıyor | `.X.XX` | `[iki-yt]`, `[iki-yt-bitisik]` +3 |
+| R2-YT-04 | her yer tutucunun yalnız **ilk geçişi** çıkarılıyor | `.X.XX` | **yalnız** `test_k3e_modele_gider_yardimcisi_…` (`{0}{0}!`) — sağlayıcı düzeyinde fixture yok; helper public API olduğu için kabul (bilgi) |
+| R2-YT-05 | çıkarım **regex** `\{…\}`, liste yok sayılıyor | `.X.XX` | `bildirilmemisse_metindir`, `[yuzde-s]`, `[acili]`, `[koseli]` +3 |
+| R2-YT-06 | çıkarım yerine tam eşitlik (`parca in yer_tutucular`) | `.X.XX` | `[unlem]`, `[JP-nokta]` … |
+| R2-YT-07 | ölçüt `isalnum` → "boş değil" | `.XXXX` | + real_check [4b] |
+| R2-YT-08 | karar parça yerine **segment** metniyle | `.X.XX` | `[vokatif+cumle]`, `[sinirda-nokta]` |
+| **R2-YT-12** | karar **tüm segmentlerin** yer tutucu birleşimiyle (izolasyon yok) | **`.....`** | segment A `{0}` bildirir, B'de bildirilmemiş `{0}!` metin olmalı → mutantta çevrilmez. Nadir (normalizer segment başına bildirir). **Keskinlik**; hazır ölçü `test_r2_t22_segment_izolasyonu…` ✗→✓ |
+| R2-YT-09/10/11 | `yt in kalan` ön koşulu / boşlukla değiştirme / `if yt` yok (kontrol) | `.....` | doğru: eşdeğer |
+| K3-08 | `isalnum`→`isalpha` (hedef `kalan`'a güncellendi) | `.X.XX` | `[rakam-kalir]`, `test_k3c[3.5]` |
 
-Ürün etkisi — teslimin regex'i, kümesi eksik (`B1b-kacan-mutant-urun-etkisi.txt`): KR (KRT Y1'in örneği) 3→2 parça, EN 2→1, JP `！,。` 2→1, JP `！？。` 3→2. **Gerçek modelle** (`B1c-…`, ayrı süreç, motor sarmalanarak parça sayıldı, metin basılmadı): `?` eksik → EN "Are you ready? The village elder is waiting for you." **1 parça → 1 cümle, "hazır" yok** (teslim: 2 → 3 cümle, üç anahtar var); `！` eksik → JP "止まれ！村の長老が…" **1 parça → 1 cümle, "dur" yok**; JP "待って！本当に行くの？" 2→1. Bu, KRT Y1'in "ikinci cümle tamamen kayboluyordu" bulgusunun aynısı. Tek karakterlik sabitte bir eksik = erişilebilir; cümle kaybı = ürünü bozan; beş kapı yeşil = ret eşiği.
+Uç durumlar (`test_r2_t22_modele_gider_yardimcisi_uc_durumlar`, 21 nokta): çıkarım **tam alt dize** (`{0}}!` → `}!` gitmez; `{{0}!` gitmez; `{0}}` bildirilmişse de gitmez); `{0} a {1}` → gider; Unicode `{0} ç` / `{0}村` / `{0} ３` → gider; liste boş ya da `("",)` iken `{0}!` → gider; `PLAYER!`+`("PLAYER",)` → gitmez, `PLAYERS!` → gider; büyük/küçük harf duyarlı; örtüşen yer tutucularda çıkarım sırası sonucu değiştirmiyor. Sağlayıcı düzeyinde: 9 yalnız-noktalama kalıntısı → fabrika 0, çıktı aynen; aynı parça yalnız `placeholders` farkıyla iki kola ayrılıyor (pozitif/negatif çift).
 
-**Ayırt etme (`B1b-mercekB-ayirt-etme.txt`):** `test_k3b` parametrize'ına iki satır + "her terminatör tek başına böler" testi (6 nokta) + nöbetçi testine iki motor-çıktısı satırı → mutasyonsuz src **220 passed** (yanlış pozitif yok); K3-03 ✗→**✓(2)**, K3-05 ✗→**✓(2)**, K10-08 ✗→✓(1), K10-09 ✗→✓(1); K3-01/02/04/06 birer test daha. Tam yama `feedback-B.md` §3–§4.
+**Gerçek model (`r2-B2-gercek-model-t22.txt`):** `{PLAYER}!`, `{0}!`, `{0}。`, `{0} {1}!`, `<T0>?!` → modele giden **0**, **fabrika 0** (motor hiç kurulmadı), çıktı == kaynak, yer tutucu çıktıda; bildirilmemiş `{PLAYER}!` / `{PLAYER} is here.` / `{0}! Wait!` → giden 1. stderr 0 bayt.
 
-## B2 · Totoloji ve sahte-gerçeklik — bulgu yok, iki not
+**Bilgi (K5, tur 1 kabul, docstring `max(1, sayım)`):** bildirilen ama **metinde geçmeyen** yer tutucu çıktıya eklenir (`{0} ç` + `("{0}","{1}")` → `… {1}`; `test_r2_t22_bilgi_…`). Normalizer yer tutucuyu metinden çıkardığı için erişilemez; `delivery.md` de aynı notu düşmüş. T2-2 bulgusu değil.
 
-* **Tarama** (`B2-totoloji-tarama.txt`, 97 fonksiyon/210 örnek): assert'siz 0, sabit 0, çok-ifadeli `raises` 0, beklenen değeri denetlenen modülden türeten assert 0 (referanslar sabit: NLLB kodları, dosya adları, `MAKS_COZUM`, biçim tabloları — 4.6/8 tutuyor). Damga testleri (yalnız `__doc__`) **4** + yalnız `hasattr` **1** (`last_timing`) — davranışsız ama paket "hem docstring" istediği için var; kapsamı taşımıyorlar (%100 onlarsız da tutar: hepsi docstring okur). `pytest.raises` 37/37 `match`'siz — tip yeter, mesaj sözleşme değil, kabul.
-* **Sahte motor gerçek CT2 biçiminde** (`test_b2_sahte_motor_…`): her girdi için `.hypotheses`, `hypotheses[0][0]=="tur_Latn"`, `</s>` yok, sayı == girdi, `source` **konumsal** (AST: `translate_batch(tokenler, target_prefix=…, beam_size=…, max_decoding_length=…, **ek)`; anahtarlar gerçek imzanın 31 parametresinin alt kümesi — imza B4 [D]'de ayrı süreçte gerçek kütüphaneden okundu, testteki sabitle eşit).
-* **Sahte `encode`/`decode` düşük sadakatli ama yeterli:** tek token / `"".join`. Gerçek sentencepiece (B4 [D]): ilk parça `▁` ile başlıyor, `decode(encode(x)) == x` 6/6, `encode("")==[]`, `decode([])==""`. Sağlayıcı encode çıktısını **yalnız yıldızla yayıyor**, decode'a hipotezi **aynen** veriyor (AST testi `test_b2_saglayici_token_duzeyinde_islem_yapmiyor…`) — token düzeyinde mantık olmadığı için `▁`/boşluk davranışı sağlayıcıyı ayırmaz. Real_check ve olcum-2 gerçek yolu kapatıyor.
-* "Gerçek" adlı iki test: weakref testi gerçekten ölçüyor (gc + pozitif kontrol); `test_k7_gercek_fabrika_…` **AST** (K1 gereği koşamaz) — ad yanıltıcı değil, gövde belli. Kabul.
+## B2-3 · T2-3
 
-## B3 · Bariyer — dört koşum biçiminde yerinde; kaçış yolları ölçüldü
+**Nöbetçi motor çıktısını görüyor mu:** K10-08 (`{cikti!r}`) → `[sayi-nobetcili-cikti]`; K10-09 (`{nesne!r}`) → `[bozuk-nesne-nobetcili]`, `[bos-hipotez-nobetcili-nesne]`; R2-K10-12 (`{tokenler!r}`) → `[int-token-nobetcili-hipotez]`; R2-K10-13 (`{metinler!r}`) → `[decode-tip-nobetcili-nesne]`; R2-K10-14 (decode istisnasına hipotez tokenleri) → `[decode]` (echo motor: kaynak nöbetçisi); R2-K10-15 (encode istisnasına parçalar) → `[encode]`. Beş nöbetçili fabrikanın **iddia ettiği raise satırına düştüğü** ayrıca ölçüldü (`test_r2_t23_nobetci_testinin_bes_motor_yolu_…`: mesaj alt dizeleri `kadar hipotez dondurmedi` / `hipotez listesi yok ya da bos` / `hipotez tokenleri str degil` / `decode str dondurmedi`).
 
-* **Ölçüldü** (`B3-bariyer-kosum-bicimleri.txt`, gözlem eklentisi bariyeri **kurmaz**, yalnız bakar): `pytest tests`, `tests/unit`, `tests/unit/translate`, dosya adı — dördünde de toplama sonunda `meta_path[0] = _T007Bariyer` (tam takımda `[1] _T006Bariyer`), translate testlerinin **214/214**'ünde setup anında başta, yasak kök `sys.modules`'ta **0** (oturum başı/sonu). Bilgi: `tests/unit/translate` **dizininden** `pytest .` → `ModuleNotFoundError: src` (translate conftest'i depo kökünü `sys.path`e eklemiyor; contracts/ocr ekliyor). Kabul komutları kökten koşuyor, kapıyı etkilemez.
-* **Kendi bariyerim** (`tb_bariyer.py`, mesaj "tester-B T-007 K1 bariyeri") şefinkiyle **birlikte** her iki sırada 269 passed; `meta_path[0]` sıraya göre `TesterBBariyer` ya da `_T007Bariyer`, `match="K1 bariyeri"` ikisinde de tutuyor (`B3-birlikte-kosum.txt`).
-* **Kaçış yolları** (`test_b3_*`): `importlib.import_module` ✗, `__import__` ✗, `spec_from_file_location(paket __init__)` → `__init__` içindeki alt-modül importu meta_path'ten geçer → ✗ (`submodule_search_locations` verilerek pakete tam şans tanındı); **`sys.modules` ön-yükleme** bariyeri atlar (karakterizasyon; bu süreçte ön-yüklü kök **0**, `ONCEDEN_YUKLU==()`); **`.pyd`'yi `ExtensionFileLoader` ile doğrudan yükleme** meta_path'i hiç sormaz (yasak kökle adlandırılsa da yüklenir; bariyer sorgu sayacı değişmez) — bariyerin tek gerçek kör noktası; motor ve teslim testleri bu API'lerin hiçbirini kullanmıyor (AST sayacı 0/0). Şefin pozitif kontrolü yalnız `import_module` yolunu sınıyor (3 ad); `__import__`/statement aynı mekanizma, yeter.
+**Kaçan iki yol (keskinlik, gerçek CT2'de erişilemez):** **R2-K10-10** `motor dizi yerine X dondurdu` mesajına `{cikti!r}` (motor düz `str` döndürürse çeviri metni mesaja) ve **R2-K10-11** `hipotez token dizisi degil` mesajına `{ilk!r}` (hipotez düz `str` ise) → `[.....]`; teslimin nöbetçi testi bu yolları nöbetçisiz (`None`/`7`/`"tur_Latn x"`) sınıyor. Gerçek CT2 hep liste/liste-of-str döndürür (olcum-1) → erişilebilirlik düşük; T2-3 (1)'in "2 parametre satırı" lafzını implementer 5 satıra genişletmiş, 6. ve 7. yol kalmış. Hazır ölçü: `test_r2_t23_nobetcisiz_kalan_yollar_da_motor_ciktisini_tasimaz[5]` (2+2 ✗→✓).
 
-## B4 · K10 kanal ölçüsü — T-006 tur 2 deseninin üst kümesi; gerçek süreçte 0 bayt
+**`match=` doğru sebebi sabitliyor mu — evet (test-of-test, TEST dosyası mutantı):** R2-M-01 `_StdoutaYazan` stderr'e yazınca `[stdout]` **düşüyor** (`.X.XX`, "Regex pattern did not match"); R2-M-02 `_UyariVeren` logger'a yazınca `[warnings]` düşüyor. Mercek testi 7 sahtenin **her biri** için kanalı değiştirip teslimin `match=` değerini parametrize tablosundan **okuyarak** (kopyalamadan) düşmeyi doğruluyor (`test_r2_t23_match_kanal_degisince_duser…[7]`); değişmemiş 7 sahte teslimin kendi `match=`iyle geçiyor (pozitif kontrol).
 
-* **Desen farkı:** T-006 bilinen kütüphane logger'ına `caplog.handler` takıyordu; T-007'de ad bilinmiyor → `logging.Logger.handle` monkeypatch. Ölçüldü (`test_b4_logger_handle_kancasi_…`): `propagate=False` + INFO logger'a yazılan kayıt **kök caplog'da yok, kancada var** → gerçekten ekliyor (K10-06 mutantı da yalnız bununla düştü). **Kör noktaları** (karakterizasyon): `Handler.handle(record)` **doğrudan** (T-006 R04/R05 sınıfı) kancayı ve `caplog.records`'u atlar; seviye altı kayıt (`WARNING` logger'da `.info`) görünmez ama hiçbir yere de gitmez. Ölçü üç noktada (soğuk/sıcak/hata yolu) — 4.6/7 tutuyor.
-* **Teslim ölçüsü gerçek sınıfta ateşliyor:** `LocalNmtProvider` + kanala yazan enjekte `decode` ile aynı `_k10_kanal_olcusu` 5 kanalda **doğru mesajla** düşüyor (`match=`: stdout'a / stderr'e / log kaydina ×2 / warnings kaydina), sessiz gerçek sınıf geçiyor; teslimin 7 pozitif kontrolü de doğru sebeple düşüyor (`match=` ile yeniden koşuldu) — teslimde `match=` yok (keskinlik, feedback §4-d).
-* **Gerçek modelle ayrı süreç** (`B4-gercek-surec-sondasi.txt`, `capture_output` fd düzeyi): kurulum + JP 4 / KR tek segment / EN 2 / JP yer tutucu / boş / geçiş / rakam + `close()` ×2 → **stdout 0 bayt, stderr 0 bayt**, exit 0. Pozitif kontrol: `os.write(2, b"x")` → 1 bayt (yakalama çalışıyor); **CT2 seviyesi DEBUG'a çekilince aynı akış 2053 bayt** stderr → C++ log kanalı bu ölçüyle **görünüyor**, A'daki sıfır anlamlı: sağlayıcı seviyeye dokunmuyor, CT2 varsayılanı 30 (WARNING). Ek gözlem: ilk `translate` duvar 916 ms / `latency_ms` 358 (kurulum düşülmüş, K9); `"42"`/`"3.5"` gerçek modelde 2/4 karakter (ondalık bölünmesi belgeli zayıflık, aynen).
-* Hata mesajı sınıfı: kaynak metin 7 yolda taşınmıyor (teslim testi + K10-07 yakalandı); **motor çıktısı** iki yolda ölçülmüyor (K10-08/09, `test_b4_hata_mesaji_motor_ciktisini_da_tasimaz…` bugünkü kodda geçiyor) — gerçek CT2 bu yolları üretmez (D2), keskinlik.
+## B2-4 · Regresyon
 
-## B5 · Ömür ve hata taksonomisi — 22 test, bulgu yok
+* **Tur 1 kiti:** 53/53 yakalandı, 6/6 kontrol kaçtı (tur 1: 49/53). Tahminden sapan 6 kalem tur 1'dekilerle aynı (K4-02 real_check kör, K4-07/K8-04/R2-K3-12/R2-K3-19 beklenenden fazla, K10-08 artık yakalanıyor). K3-08 hedef satırı T2-2 ile değiştiği için kitte güncellendi (`kalan`).
+* **Tur 1 mercek testleri (55):** 54 geçti, 1 kırık — `test_b2_gercek_adli_testler_listesi` (ad listesi karakterizasyonu; yeni `test_k6_motor_ciktisi_nobetcisi_gercekten_motora_ulasiyor_pozitif_kontrol` eklendi). **Benim testimin kırılganlığı**, teslim regresyonu değil; yeniden nişanlandı (yeni testin gövdesi gerçek pozitif kontrol: nöbetçi `r.translations`'a ulaşıyor). Şefin beklediği "üç kırık" A'nın dizinindeydi; dördüncü kırık **yok**.
+* **Bariyer:** `pytest tests` → toplama sonunda `meta_path[0] _T007Bariyer` (`[1] _T006Bariyer`), translate testleri 259/259 setup anında başta, yasak kök 0; üç koşum biçiminde aynı. `tests/unit/translate` **dizininden** `pytest .` hâlâ `ModuleNotFoundError: src` — şef "tur sonrası ekler" demişti, henüz eklenmemiş (bilgi, kapıyı etkilemez). Kendi bariyerimle birlikte iki sırada 412 passed.
+* **Totoloji:** 109 fonksiyon; assert'siz 0, sabit 0, çok-ifadeli `raises` 0, türetilmiş referans 0; damga 4 + `hasattr` 1 (tur 1 ile aynı); `raises` `match=` 1/37 (yalnız T2-3 pozitif kontrol — istenen buydu).
 
-`close()` ×2 sessiz; sonrası dört istek biçimi (dolu/boş/geçiş/geçersiz dil) → `ProviderUnavailable`, fabrika ve motor sayacı **değişmez**, gözlem özellikleri çalışır; hiç kurulmamışta `close()` → fabrika 0. Fabrika ilk çağrıda `RuntimeError` → `ProviderUnavailable(__cause__)`, ikinci `translate` **yeniden dener** (sayaç 2, sonra 3 ile başarır) — paket sessiz, **docstring belgeliyor** ("sonraki translate kurulumu YENIDEN dener", `test_b5_…_belgeli` docstring'de arıyor). `ModelMissingError` fabrikadan olduğu gibi + yeniden denenir; `KeyboardInterrupt` sarılmaz, örnek tutulmaz, sonra çalışır; 2'li demet → `ProviderUnavailable(ValueError)`. İki sağlayıcı aynı fabrika: **her biri kendi kurulumunu yapar** (paylaşım yok, sayaç 2), biri kapanınca diğeri çalışır. Dört dosyanın **her biri** için `ModelMissingError` sayaç 0, mesajda yalnız eksik ad, `__cause__` yok, dosya konunca **aynı örnek** kurulur; dizin yok / dizin dosya → aynı; sıfır bayt varlık denetimini geçer (docstring "boyut denetlenmez"). `ContractViolation` ve motor istisnası sonrası sağlayıcı kullanılabilir kalır (motor önbellekte, fabrika 1). Kardeş sınıflar düz (birbirinden türemez). Kapalı sağlayıcı tip-hatalı isteği de `ProviderUnavailable` ile reddeder (sıra: kapalı → doğrulama).
+## B2-5 · Orantı — ret eşiği geçilmiyor
 
-**Şefe bilgi (K6-06):** teslim `FileNotFoundError` → `ModelMissingError` eşlemesi yapıyor ve testi var; paket K6(b) "kurulum istisnası → `ProviderUnavailable`" der. Paket lafzına uyan uygulama birim kapısında düşer. Docstring belgeliyor; karara yazılacak sapma, implementer'a iş değil.
+13 kaçan mutantın hiçbiri **ürünü bozan ∧ erişilebilir** değil: R2-K3-17 ve R2-YT-12 erişilemez/nadir; R2-K3-16 belgeli ve (delivery'ye göre) A'nın dizininde ölçülü; R2-K3-18a..h erişilebilir ama kayıpsız/uydurmasız (kalite); R2-K10-10/11 gerçek motorla erişilemez. Tur 1'in ret gerekçesi (cümle kaybı, tek karakterlik sabit) bu turda 53/53 ile kapandı. §7 gereği Hakem'e gitmiyor.
 
-## B6 · Kapsam dürüstlüğü — %100 gerçek
+**Şefe kayıt (bloke etmeyen, karara/env.md'ye yazılabilir):** (1) kapanış kümesi 9 noktanın 1'inde ölçülüyor — hazır 9-noktalı test `tester_B/test_mercek_B_r2.py::test_r2_k3_her_kapanis_isareti_tek_basina_onceki_cumleye_dahil`; (2) motor çıktısı nöbetçisi 7 yolun 5'inde — `dizi yerine` ve `ilk` str yolları için 5 satır hazır; (3) segment izolasyonu — 1 test hazır; (4) `．`/`\n` küme sınırı negatif kontrolde yok — 13 işaretli negatif kontrol hazır; (5) real_check #4c yok; (6) K5 `max(1,…)` bildirilen-ama-yok yer tutucuyu ekler (erişilemez, belgeli); (7) translate dizininden koşum hâlâ kırık (şef).
 
-Tek pragma (`_varsayilan_fabrika` `def` satırı, `no cover`), gerekçesi K1: gövde `ctranslate2`/`sentencepiece` import ediyor, bariyer altında koşamaz, `real_check` #1–#8 kapatıyor; başka hiçbir fonksiyon bu kökleri import etmiyor (AST). Kapsam için yazılmış davranışsız test: 4 damga + 1 `hasattr` (yukarıda) — hepsi docstring/öznitelik okuyor, kapsama katkıları yok. `_uyum_fabrika` satırı modül yüklemesiyle kapsanıyor (Protocol uyumunu mypy denetliyor).
-
-## Ölçülmeyen sınır (dürüst damga)
-
-Zaman penceresi dışı yazım (atexit/Timer), dosya sistemi kanalı, `Handler.handle` doğrudan, `.pyd` doğrudan yükleme — mutant kurulmadı ya da karakterizasyon; T-006 tur 2'de de aynı sınırlar. Kalite (altın set yok) paketin kendi `[ÖLÇÜLMÜYOR]`'u.
+**Gözlem (şefe):** koşum sırasında `tester_B/` altında bu oturumun yazmadığı iki değişiklik belirdi (`r2-eszamanli-yazim-gozlemi.txt`): aynı görevle ikinci bir Tester-B süreci çalışıyor olabilir; bu verdict onun ardından yazıldı, üstüne yazılırsa zaman damgasından ayırt edilebilir.
 
 ## Dosyalar
 
-`tester_B/`: `mutant_kiti.py` (53+6, `TB_DRY=1` kuru koşum), `mercekB_ayirt_etme.py`, `b1c_kacan_mutant_gercek_model.py`, `b2_totoloji_tarama.py`, `b4_gercek_surec_sondasi.py`, `tb_gozlem_plugin.py`, `tb_bariyer.py` + `conftest.py` (kendi bariyerim), `test_mercek_B.py` (55). `tester_B_evidence/`: taban 1–5, B1 (+K3-07 düzeltilmiş, özet tablo), B1b ×2, B1c, B2, B3 ×2, B4, mercek testleri, git status. `feedback-B.md`: yeniden üretim + yama + ayırt etme.
+`tester_B/`: `mutant_kiti.py` (53+6 tur 1 + **34+4 R2**, `dosya` alanı ile TEST dosyası mutantları), `r2_mutant_semantik.py`, `r2_ayirt_etme.py`, `r2_gercek_model_t22.py`, `r2_ozet_tablo.py`, `test_mercek_B_r2.py` (98), `test_mercek_B.py` (55, 1 yeniden nişan). `tester_B_evidence/r2-*`: taban 1–5, B1 (kit, YT-12, semantik, özet), B1b ayırt etme, B2 gerçek model, B4 (mercek ilk/tümü, bariyer, birlikte, totoloji), git status, eşzamanlı yazım gözlemi.

@@ -1,0 +1,29 @@
+=== python -m pytest tests -q -p no:cacheprovider -p tb_gozlem_plugin (depo kokunden) ===
+1359 passed in 5.22s
+oturum basi: meta_path bariyerleri=[]  yasak sys.modules=[]  cwd=C:\Users\pc\Desktop\efe\çeviri uygulaması
+toplama sonu: meta_path bariyerleri=['[0] _T007Bariyer', '[1] _T006Bariyer']  yasak sys.modules=[]  toplanan=1359
+translate testleri: {'toplam': 259, 'bariyer_basta': 259, 'bariyer_yok': 0}
+oturum sonu: meta_path bariyerleri=['[0] _T007Bariyer', '[1] _T006Bariyer']  yasak sys.modules=[]  exit=0
+
+=== python -m pytest tests/unit/translate -q -p no:cacheprovider -p tb_gozlem_plugin (depo kokunden) ===
+259 passed in 1.43s
+oturum basi: meta_path bariyerleri=['[0] _T007Bariyer']  yasak sys.modules=[]  cwd=C:\Users\pc\Desktop\efe\çeviri uygulaması
+toplama sonu: meta_path bariyerleri=['[0] _T007Bariyer']  yasak sys.modules=[]  toplanan=259
+translate testleri: {'toplam': 259, 'bariyer_basta': 259, 'bariyer_yok': 0}
+oturum sonu: meta_path bariyerleri=['[0] _T007Bariyer']  yasak sys.modules=[]  exit=0
+
+=== python -m pytest tests/unit/translate/test_local_nmt.py -q -p no:cacheprovider -p tb_gozlem_plugin (depo kokunden) ===
+255 passed in 1.04s
+oturum basi: meta_path bariyerleri=['[0] _T007Bariyer']  yasak sys.modules=[]  cwd=C:\Users\pc\Desktop\efe\çeviri uygulaması
+toplama sonu: meta_path bariyerleri=['[0] _T007Bariyer']  yasak sys.modules=[]  toplanan=255
+translate testleri: {'toplam': 255, 'bariyer_basta': 255, 'bariyer_yok': 0}
+oturum sonu: meta_path bariyerleri=['[0] _T007Bariyer']  yasak sys.modules=[]  exit=0
+
+=== tests/unit/translate dizininden 'python -m pytest .' (sef karari: conftest kok ekler mi?) ===
+ERROR test_local_nmt.py
+!!!!!!!!!!!!!!!!!!! Interrupted: 1 error during collection !!!!!!!!!!!!!!!!!!!!
+1 error in 0.14s
+oturum basi: meta_path bariyerleri=['[0] _T007Bariyer']  yasak sys.modules=[]  cwd=C:\Users\pc\Desktop\efe\çeviri uygulaması\tests\unit\translate
+toplama sonu: meta_path bariyerleri=['[0] _T007Bariyer']  yasak sys.modules=[]  toplanan=4
+translate testleri: {'toplam': 0, 'bariyer_basta': 0, 'bariyer_yok': 0}
+oturum sonu: meta_path bariyerleri=['[0] _T007Bariyer']  yasak sys.modules=[]  exit=2

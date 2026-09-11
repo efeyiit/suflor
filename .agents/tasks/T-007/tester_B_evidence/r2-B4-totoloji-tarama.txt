@@ -1,0 +1,20 @@
+dosya: tests\unit\translate\test_local_nmt.py
+test fonksiyonu: 109   parametreli ornek (AST yaklasik): 242; pytest sayimi icin taban-2 kanitina bak (tur 1: 210, tur 2: 255)
+
+ASSERT'SIZ (totoloji adayi): 0
+SABIT assert: 0
+pytest.raises blogunda >1 ifade: 0
+beklenen deger denetlenen modulden turetilmis (assert f(x) == g(x)): 0
+yalniz __doc__ (damga, davranissiz): 4
+    test_k3_olculmuyor_damgasi_bilinen_zayifliklar_docstringde
+    test_k5_olculmuyor_damgasi_docstringde
+    test_k8_olculmuyor_damgasi_ceza_kalitesi_docstringde
+    test_k10_olculmuyor_damgalari_docstringlerde
+yalniz hasattr: 1
+    test_k9_sure_tutulmaz_last_timing_yok
+private erisim (local_nmt._*): 1
+    test_k10_olculmuyor_damgalari_docstringlerde
+pytest.raises match= KULLANMAYAN test: 36 / raises kullanan 37  (bilgi: tip yeter, mesaj sozlesme degil)
+
+SONUC: assert'siz 0, sabit 0
+exit=0

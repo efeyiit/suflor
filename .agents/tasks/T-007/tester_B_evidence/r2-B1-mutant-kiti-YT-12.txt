@@ -1,0 +1,27 @@
+ayna agaci: C:\Users\pc\AppData\Local\Temp\scratch\C--Users-pc-Desktop-efe--eviri-uygulamas-\d52c967f-bd19-4db3-b5e9-77e6cd08b889\scratchpad\t007_tester_B_mutroot   (depo YAZILMAZ; models/ 4 dosya kopyalandi)
+kapilar PYTHONIOENCODING'siz (cp1254) kosar; real_check yalniz ASCII basar
+
+TABAN (mutasyonsuz ayna):
+  G1-mypy    exit=0     2.2s  Success: no issues found in 1 source file
+  G2-birim   exit=0     1.5s  255 passed in 1.12s
+  G3-real    exit=0     5.5s  REAL_CHECK: TEMIZ (0 uyari)
+  G4-kapsam  exit=0     2.0s  255 passed in 1.46s
+  G5-tum     exit=0     5.5s  1359 passed in 5.06s
+
+MUTANT KITI -- her mutant icin hangi kapi YAKALAR (X) / KACIRIR (.)
+kapilar: G1-mypy | G2-birim | G3-real | G4-kapsam | G5-tum
+
+R2-YT-12 [.....] *** HICBIR KAPI YAKALAMADI ***   (beklenen: ?)
+        T2-2: karar SEGMENTIN kendi yer tutuculariyla degil istekteki TUM segmentlerin birlesimiyle -- baska segmentin bildirdigi `{0}` bu segmentte metin olmaktan cikar
+        hedef: T2-2 segment izolasyonu
+        urun etkisi: segment A `{0}` bildirir, segment B'de bildirilmemis `{0}!` METIN olmali ve gitmeli; mutantta gitmez (cevrilmez). Nadir; keskinlik sinifi
+
+=== MARKDOWN TABLOSU ===
+| # | mutant | hedef | G1-mypy | G2-birim | G3-real | G4-kapsam | G5-tum |
+|---|---|---|---|---|---|---|---|
+| R2-YT-12 | T2-2: karar SEGMENTIN kendi yer tutuculariyla degil istekteki TUM segmentlerin birlesimiyle -- baska segmentin bildirdigi `{0}` bu segmentte metin olmaktan cikar | T2-2 segment izolasyonu | . | . | . | . | . |
+
+HICBIR KAPININ YAKALAMADIGI MUTANTLAR (1): R2-YT-12
+Kontrol mutantlarinin hepsi kacti (yanlis pozitif yok).
+Tahminden sapan yok.
+exit=0

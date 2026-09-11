@@ -1,0 +1,43 @@
+=== git status --short -- src tests .agents/tasks/T-007/real_check.py .agents/tasks/T-007/packet.md tests/unit/translate/conftest.py .agents/tasks/T-007/sef_karari-tur2.md .agents/tasks/T-007/sef_dogrulama ===
+(bos = temiz)
+
+=== tester-B'nin bu turda yazdigi/degistirdigi dosyalar (git status --short -- .agents/tasks/T-007/tester_B .agents/tasks/T-007/tester_B_evidence .agents/tasks/T-007/verdict-B.md) ===
+ M .agents/tasks/T-007/tester_B/b2_totoloji_tarama.py
+ M .agents/tasks/T-007/tester_B/mutant_kiti.py
+ M .agents/tasks/T-007/tester_B/test_mercek_B.py
+?? .agents/tasks/T-007/tester_B/r2_ayirt_etme.py
+?? .agents/tasks/T-007/tester_B/r2_gercek_model_t22.py
+?? .agents/tasks/T-007/tester_B/r2_mutant_semantik.py
+?? .agents/tasks/T-007/tester_B/r2_ozet_tablo.py
+?? .agents/tasks/T-007/tester_B/test_mercek_B_r2.py
+?? .agents/tasks/T-007/tester_B_evidence/r2-B1-mutant-kiti-YT-12.txt
+?? .agents/tasks/T-007/tester_B_evidence/r2-B1-mutant-kiti-ek-YT12.txt
+?? .agents/tasks/T-007/tester_B_evidence/r2-B1-mutant-kiti-ozet-tablo.txt
+?? .agents/tasks/T-007/tester_B_evidence/r2-B1-mutant-kiti.txt
+?? .agents/tasks/T-007/tester_B_evidence/r2-B1-mutant-semantik.txt
+?? .agents/tasks/T-007/tester_B_evidence/r2-B1b-ayirt-etme.txt
+?? .agents/tasks/T-007/tester_B_evidence/r2-B2-gercek-model-t22.txt
+?? .agents/tasks/T-007/tester_B_evidence/r2-B4-bariyer-kosum-bicimleri.txt
+?? .agents/tasks/T-007/tester_B_evidence/r2-B4-birlikte-kosum.txt
+?? .agents/tasks/T-007/tester_B_evidence/r2-B4-mercek-testleri-regresyon-ilk.txt
+?? .agents/tasks/T-007/tester_B_evidence/r2-B4-mercek-testleri-tumu.txt
+?? .agents/tasks/T-007/tester_B_evidence/r2-B4-totoloji-tarama.txt
+?? .agents/tasks/T-007/tester_B_evidence/r2-git-status-src-tests.txt
+?? .agents/tasks/T-007/tester_B_evidence/r2-taban-1-mypy.txt
+?? .agents/tasks/T-007/tester_B_evidence/r2-taban-2-pytest.txt
+?? .agents/tasks/T-007/tester_B_evidence/r2-taban-3-real_check-cp1254.txt
+?? .agents/tasks/T-007/tester_B_evidence/r2-taban-4-kapsam.txt
+?? .agents/tasks/T-007/tester_B_evidence/r2-taban-5-tum-takim.txt
+
+=== ayna agaclari (depo disi) ===
+C:/Users/pc/AppData/Local/Temp/scratch/C--Users-pc-Desktop-efe--eviri-uygulamas-/d52c967f-bd19-4db3-b5e9-77e6cd08b889/scratchpad/t007_tester_B_ayirt
+C:/Users/pc/AppData/Local/Temp/scratch/C--Users-pc-Desktop-efe--eviri-uygulamas-/d52c967f-bd19-4db3-b5e9-77e6cd08b889/scratchpad/t007_tester_B_mutroot
+
+=== SON KONTROL (10:59:31) git status --short -- src tests ===
+?? src/ocr/satir_birlestirici.py
+?? tests/unit/ocr/test_satir_birlestirici.py
+NOT: yukaridaki iki takipsiz dosya (src/ocr/satir_birlestirici.py, tests/unit/ocr/test_satir_birlestirici.py) 10:55-10:59 arasinda belirdi; T-007/translate DISI (ocr), bu oturum yazmadi -- paralel baska bir gorevin implementer'i. Oturum basindaki git snapshot'inda da src/ocr/ ve tests/unit/ocr/ takipsizdi.
+2026-09-11 10:58:06.598859700 src/ocr/satir_birlestirici.py
+2026-09-11 10:58:24.359185400 tests/unit/ocr/test_satir_birlestirici.py
+translate kapsami:
+(bos = temiz)

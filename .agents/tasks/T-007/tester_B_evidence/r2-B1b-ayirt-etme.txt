@@ -1,0 +1,44 @@
+ayna: C:\Users\pc\AppData\Local\Temp\scratch\C--Users-pc-Desktop-efe--eviri-uygulamas-\d52c967f-bd19-4db3-b5e9-77e6cd08b889\scratchpad\t007_tester_B_ayirt
+TABAN (mutasyonsuz):
+  teslim       exit=0  255 passed in 1.65s
+  mercek-B r2  exit=0  107 passed in 0.49s
+
+R2-K3-16   K3 (T2-1): terminator kumesine FAZLADAN `U+FF0E tam genislik nokta` ('．') eklendi -- orada BOLER
+    teslim: . 255 passed in 1.13s
+    mercek-B r2: X 2 failed, 105 passed in 0.48s  | test_r2_k3_kume_disi_isaret_bolmez[U+FF0E]; test_r2_k3_fuzz_degismezi_1000_rastgele_metin
+R2-K3-17   K3 (T2-1): terminator kumesine FAZLADAN `satir sonu` ('\\n') eklendi -- orada BOLER
+    teslim: . 255 passed in 1.14s
+    mercek-B r2: X 14 failed, 93 passed in 0.52s  | test_r2_k3_kume_disi_isaret_bolmez[U+002C]; test_r2_k3_kume_disi_isaret_bolmez[U+003B]; test_r2_k3_kume_disi_isaret_bolmez[U+003A]; test_r2_k3_kume_disi_isaret_bolmez[U+2026] ...
+R2-K3-18a  K3 (T2-1 varyant): kapanis kumesinden `U+300F` ('』') EKSIK -- terminatorden sonraki `』` SONRAKI parcaya yapisi
+    teslim: . 255 passed in 1.02s
+    mercek-B r2: X 1 failed, 106 passed in 0.49s  | test_r2_k3_her_kapanis_isareti_tek_basina_onceki_cumleye_dahil[U+300F]
+R2-K3-18b  K3 (T2-1 varyant): kapanis kumesinden `U+FF09` ('）') EKSIK -- terminatorden sonraki `）` SONRAKI parcaya yapisi
+    teslim: . 255 passed in 1.04s
+    mercek-B r2: X 1 failed, 106 passed in 0.39s  | test_r2_k3_her_kapanis_isareti_tek_basina_onceki_cumleye_dahil[U+FF09]
+R2-K3-18c  K3 (T2-1 varyant): kapanis kumesinden `ASCII parantez` (')') EKSIK -- terminatorden sonraki `)` SONRAKI parcay
+    teslim: . 255 passed in 1.06s
+    mercek-B r2: X 1 failed, 106 passed in 0.60s  | test_r2_k3_her_kapanis_isareti_tek_basina_onceki_cumleye_dahil[U+0029]
+R2-K3-18d  K3 (T2-1 varyant): kapanis kumesinden `ASCII cift tirnak` ('"') EKSIK -- terminatorden sonraki `"` SONRAKI par
+    teslim: . 255 passed in 1.72s
+    mercek-B r2: X 1 failed, 106 passed in 0.60s  | test_r2_k3_her_kapanis_isareti_tek_basina_onceki_cumleye_dahil[U+0022]
+R2-K3-18e  K3 (T2-1 varyant): kapanis kumesinden `ASCII tek tirnak` ("'") EKSIK -- terminatorden sonraki `'` SONRAKI parc
+    teslim: . 255 passed in 1.05s
+    mercek-B r2: X 1 failed, 106 passed in 0.49s  | test_r2_k3_her_kapanis_isareti_tek_basina_onceki_cumleye_dahil[U+0027]
+R2-K3-18f  K3 (T2-1 varyant): kapanis kumesinden `U+201D` ('”') EKSIK -- terminatorden sonraki `”` SONRAKI parcaya yapisi
+    teslim: . 255 passed in 1.13s
+    mercek-B r2: X 1 failed, 106 passed in 0.46s  | test_r2_k3_her_kapanis_isareti_tek_basina_onceki_cumleye_dahil[U+201D]
+R2-K3-18g  K3 (T2-1 varyant): kapanis kumesinden `U+2019` ('’') EKSIK -- terminatorden sonraki `’` SONRAKI parcaya yapisi
+    teslim: . 255 passed in 1.01s
+    mercek-B r2: X 1 failed, 106 passed in 0.48s  | test_r2_k3_her_kapanis_isareti_tek_basina_onceki_cumleye_dahil[U+2019]
+R2-K3-18h  K3 (T2-1 varyant): kapanis kumesinden `U+00BB` ('»') EKSIK -- terminatorden sonraki `»` SONRAKI parcaya yapisi
+    teslim: . 255 passed in 1.04s
+    mercek-B r2: X 1 failed, 106 passed in 0.53s  | test_r2_k3_her_kapanis_isareti_tek_basina_onceki_cumleye_dahil[U+00BB]
+R2-YT-12   T2-2: karar SEGMENTIN kendi yer tutuculariyla degil istekteki TUM segmentlerin birlesimiyle -- baska segmentin
+    teslim: . 255 passed in 1.03s
+    mercek-B r2: X 1 failed, 106 passed in 0.71s  | test_r2_t22_segment_izolasyonu_baska_segmentin_yer_tutucusu_bu_segmentte_metindir
+R2-K10-10  T2-3: `motor dizi yerine X dondurdu` mesajina MOTOR CIKTISI (`{cikti!r}`) -- motor duz str dondurse ceviri met
+    teslim: . 255 passed in 1.54s
+    mercek-B r2: X 2 failed, 105 passed in 0.60s  | test_r2_t23_nobetcisiz_kalan_yollar_da_motor_ciktisini_tasimaz[dizi-yerine-str]; test_r2_t23_nobetcisiz_kalan_yollar_da_motor_ciktisini_tasimaz[dizi-yerine-bytes]
+R2-K10-11  T2-3: `hipotez token dizisi degil` mesajina hipotezin kendisi (`{ilk!r}`) -- hipotez duz str ise ceviri metni 
+    teslim: . 255 passed in 1.05s
+    mercek-B r2: X 2 failed, 105 passed in 0.48s  | test_r2_t23_nobetcisiz_kalan_yollar_da_motor_ciktisini_tasimaz[ilk-str]; test_r2_t23_nobetcisiz_kalan_yollar_da_motor_ciktisini_tasimaz[ilk-bytes]

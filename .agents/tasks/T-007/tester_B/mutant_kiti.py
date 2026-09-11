@@ -40,7 +40,8 @@ KOK = SCRATCH / "t007_tester_B_mutroot"
 DRY = os.environ.get("TB_DRY", "") == "1"
 
 MOTOR = "src/translate/local_nmt.py"
-GERI_ALINAN = (MOTOR,)
+TEST = "tests/unit/translate/test_local_nmt.py"
+GERI_ALINAN = (MOTOR, TEST)  # tur 2: `match=` test-of-test mutantlari TEST dosyasina yama yapar
 
 AYNALANAN_DIZINLER = ("src", "tests", ".agents/tasks/T-007/fixtures")
 AYNALANAN_DOSYALAR = (".agents/tasks/T-004/olcu_kiti.py", ".agents/tasks/T-007/real_check.py")
@@ -68,6 +69,7 @@ class Mutant:
     beklenen: str  # kosumdan ONCE yazilan tahmin: hangi kapi yakalar
     kontrol: bool = False
     urun_etkisi: str = ""
+    dosya: str = MOTOR  # tur 2: yama hedefi dosyasi (varsayilan kaynak; `match=` mutantlari TEST)
 
 
 def _y(eski: str, yeni: str) -> tuple[str, str]:
@@ -77,7 +79,7 @@ def _y(eski: str, yeni: str) -> tuple[str, str]:
 # --- yama hedefleri (kaynaktan birebir; tekillik kurulumda dogrulanir) --------
 TERM = '_TERMINATORLER: Final = ".!?。！？"\n'
 KAPANIS = '_KAPANIS_ISARETLERI: Final = "」』）)\\"\'”’»"\n'
-ISALNUM = "    return any(ch.isalnum() for ch in parca)\n"
+ISALNUM = "    return any(ch.isalnum() for ch in kalan)\n"  # tur 2: T2-2 `kalan` (tur 1 hedefi `parca` idi)
 SAYI_DENETIMI = (
     "    if len(cikti) != beklenen:\n"
     "        raise ContractViolation(\n"
@@ -343,6 +345,143 @@ MUTANTLAR: list[Mutant] = [
            "KONTROL: parantezleme (esdeger)", "-- kontrol --", ".....", kontrol=True),
 ]
 
+# =====================================================================================
+# TUR 2 (R2-*): sef karari T2-1 / T2-2 / T2-3 -- olcu DEGISMEZI mi yoksa yazildigi
+# BICIMI mi kancaliyor? Yeni mutantlar tur 1 kimliklerine dokunmaz.
+# =====================================================================================
+REGEX_1 = '    f"[^{re.escape(_TERMINATORLER)}]*[{re.escape(_TERMINATORLER)}]+(?:\\\\s*[{re.escape(_KAPANIS_ISARETLERI)}]+)*"\n'
+REGEX_2 = '    f"|[^{re.escape(_TERMINATORLER)}]+\\\\Z"\n'
+MG_DONGU = (
+    "    kalan = parca\n"
+    "    for yt in yer_tutucular:\n"
+    "        if yt:\n"
+    '            kalan = kalan.replace(yt, "")\n'
+)
+MG_CAGRI = "                if modele_gider(parca, segment.placeholders):  # T2-2: yer tutucular cikarildiktan sonra karar\n"
+DIZI_MSG = '        raise ProviderUnavailable(f"motor dizi yerine {type(cikti).__name__} dondurdu")\n'
+ILK_MSG = '            raise ProviderUnavailable(f"hipotez token dizisi degil: {type(ilk).__name__}")\n'
+TOKEN_STR_MSG = '            raise ProviderUnavailable("hipotez tokenleri str degil")\n'
+DECODE_STR_MSG = '            raise ProviderUnavailable("decode str dondurmedi")\n'
+COZUM_MSG = '            raise ProviderUnavailable(f"ceviri cozumlenemedi: {type(e).__name__}") from e\n'
+TOKENLESTIRME_MSG = '            raise ProviderUnavailable(f"kaynak metin tokenlestirilemedi: {type(e).__name__}") from e\n'
+# test dosyasi (match= test-of-test)
+T_STDOUT_YAZAN = "        sys.stdout.write(NOBETCILER[0])\n        return _sonuc(NOBETCILER[0])\n"
+T_UYARI_VEREN = "        warnings.warn(NOBETCILER[0], stacklevel=2)\n        return _sonuc(NOBETCILER[0])\n"
+
+
+def _term_fazla(mid: str, isaret: str, ad: str, beklenen: str, etki: str, kontrol: bool = False) -> Mutant:
+    return Mutant(
+        mid, [_y(TERM, f'_TERMINATORLER: Final = ".!?。！？{isaret}"\n')],
+        f"K3 (T2-1): terminator kumesine FAZLADAN `{ad}` ({isaret!r}) eklendi -- orada BOLER", f"K3 kume siniri {ad}",
+        beklenen, kontrol=kontrol, urun_etkisi=etki,
+    )
+
+
+def _kapanis_eksik(mid: str, isaret: str, ad: str) -> Mutant:
+    kume = "」』）)\"'”’»".replace(isaret, "")
+    kume_py = kume.replace("\\", "\\\\").replace('"', '\\"')
+    return Mutant(
+        mid, [_y(KAPANIS, f'_KAPANIS_ISARETLERI: Final = "{kume_py}"\n')],
+        f"K3 (T2-1 varyant): kapanis kumesinden `{ad}` ({isaret!r}) EKSIK -- terminatorden sonraki `{isaret}` SONRAKI parcaya yapisir",
+        f"K3 kapanis {ad}", "?", urun_etkisi=f"`A.{isaret} B.` -> `A.` + `{isaret} B.`: kapanis isareti yanlis cumleyle modele gider (kayip yok, kucuk kalite etkisi)",
+    )
+
+
+MUTANTLAR += [
+    # ---- B2-1: T2-1 gercekten kapandi mi? kume SINIRI (fazladan isaret) ------------------
+    _term_fazla("R2-K3-12", ",", "ASCII virgul", "G2 G4 G5", "`A, B.` virgulde bolunur -> iki yarim cumle ayri cevrilir (baglam kaybi); negatif kontrol testi [virgul] yakalamali"),
+    _term_fazla("R2-K3-13", ";", "noktali virgul", "G2 G4 G5", "`A; B.` bolunur; negatif kontrol [noktali-virgul]"),
+    _term_fazla("R2-K3-14", "…", "U+2026 uc nokta", "G2 G4 G5", "docstring `…` terminator DEGILDIR der; negatif kontrol [U+2026]"),
+    _term_fazla("R2-K3-15", "，", "U+FF0C tam genislik virgul", "G2 G4 G5", "negatif kontrol [U+FF0C]"),
+    _term_fazla("R2-K3-16", "．", "U+FF0E tam genislik nokta", "?", "docstring `．` terminator DEGILDIR der ama negatif kontrol listesinde YOK -- belgeli sinir olculuyor mu?"),
+    _term_fazla("R2-K3-17", "\\n", "satir sonu", "?", "OCR segmenti icindeki satir kirilmasi cumle sayilir: `Village elder\\nis waiting.` iki yarim parca olarak gider (baglam kaybi); testlerde `A。\\nB。` var ama satir ici kirilma yok"),
+    # ---- B2-1: kapanis kumesinden BIRI eksik (K3-07 `」` tur 1'de yakalandi; kalan 8 ayri ayri) --
+    _kapanis_eksik("R2-K3-18a", "』", "U+300F"),
+    _kapanis_eksik("R2-K3-18b", "）", "U+FF09"),
+    _kapanis_eksik("R2-K3-18c", ")", "ASCII parantez"),
+    _kapanis_eksik("R2-K3-18d", '"', "ASCII cift tirnak"),
+    _kapanis_eksik("R2-K3-18e", "'", "ASCII tek tirnak"),
+    _kapanis_eksik("R2-K3-18f", "”", "U+201D"),
+    _kapanis_eksik("R2-K3-18g", "’", "U+2019"),
+    _kapanis_eksik("R2-K3-18h", "»", "U+00BB"),
+    # ---- B2-1: regex yapisi -------------------------------------------------------------
+    Mutant("R2-K3-19", [_y(REGEX_2, '    f""  # MUTANT: kuyruk dali yok\n')],
+           "K3: `\\\\Z` KUYRUK dali YOK -- terminatorsuz metin/kuyruk HIC parca uretmez (segment aynen, cevrilmez)",
+           "K3 kuyruk", "G2 G4 G5",
+           urun_etkisi="noktalamasiz segment (menu etiketi, isim, `A。B`nin `B`si) CEVRILMEZ, kaynak aynen doner -- sessiz"),
+    Mutant("R2-K3-20", [_y(REGEX_1, '    f"[^{re.escape(_TERMINATORLER)}]*[{re.escape(_TERMINATORLER)}]+(?:[{re.escape(_KAPANIS_ISARETLERI)}]+)*"\n')],
+           "K3: terminator ile kapanis isareti arasinda BOSLUK kabul edilmiyor (`\\\\s*` yok)", "K3 bosluklu kapanis", "G2 G4 G5",
+           urun_etkisi="`A. 」 B.` -> `」 B.` modele gider"),
+    Mutant("R2-K3-21", [_y(REGEX_1, '    f"[^{re.escape(_TERMINATORLER)}]*[{re.escape(_TERMINATORLER)}](?:\\\\s*[{re.escape(_KAPANIS_ISARETLERI)}]+)*"\n')],
+           "K3: ardisik terminatorler TEK parcada kalmiyor (`[T]+` -> `[T]`): `Wait...` -> `Wait.` `.` `.`", "K3 ardisik terminator", "G2 G4 G5",
+           urun_etkisi="`...`/`？！` parcalanir; Y2 suzgeci tek isaretleri yutar ama cikti `Wait. . .` olur"),
+    Mutant("R2-C07", [_y(REGEX_2, '    f"|[^{re.escape(_TERMINATORLER)}]+$"\n')],
+           "KONTROL: kuyruk dalinda `\\\\Z` -> `$` (findall icin esdeger: greedy `[^T]+` sondaki `\\\\n`i de yutar)", "-- kontrol --", ".....", kontrol=True),
+    # ---- B2-2: T2-2 -- modele_gider(parca, yer_tutucular) degismezi mi kancalaniyor? -------
+    Mutant("R2-YT-01", [_y(MG_CAGRI, "                if modele_gider(parca):  # MUTANT: yer tutucular gecilmiyor\n")],
+           "T2-2: CAGRI YERINDE yer tutucular gecilmiyor (tur 1 davranisi) -- `{PLAYER}!` modele gider", "T2-2 cagri", "G2 G4 G5",
+           urun_etkisi="`{PLAYER}!` -> model uydurur (`- Hayir, hayir. {PLAYER}`; sef uretti)"),
+    Mutant("R2-YT-02", [_y(MG_DONGU, "    kalan = parca\n")],
+           "T2-2: govdede CIKARIM YAPILMIYOR (liste yok sayilir)", "T2-2 cikarim yok", "G2 G4 G5",
+           urun_etkisi="ayni: `{PLAYER}!` gider"),
+    Mutant("R2-YT-03", [_y(MG_DONGU, MG_DONGU.replace("for yt in yer_tutucular:", "for yt in yer_tutucular[:1]:"))],
+           "T2-2: yalniz ILK yer tutucu cikariliyor", "T2-2 ilk yt", "G2 G4 G5",
+           urun_etkisi="`{0} {1}!` -> `{1}` kalir (rakam) -> gider -> uydurma"),
+    Mutant("R2-YT-04", [_y(MG_DONGU, MG_DONGU.replace('kalan.replace(yt, "")', 'kalan.replace(yt, "", 1)'))],
+           "T2-2: her yer tutucunun yalniz ILK GECISI cikariliyor", "T2-2 ilk gecis", "G2 G4 G5",
+           urun_etkisi="`{0}{0}!` / `{0} {0}.` gider -> uydurma (nadir)"),
+    Mutant("R2-YT-05", [_y(MG_DONGU, "    kalan = re.sub(r\"\\{[^{}]*\\}\", \"\", parca)  # MUTANT: regex, liste yok sayilir\n")],
+           "T2-2: cikarim TAM ALT DIZE degil REGEX (`{...}`), bildirilen liste YOK SAYILIR", "T2-2 regex", "G2 G4 G5",
+           urun_etkisi="bildirilmemis `{PLAYER}!` cevrilmez (metin olmali); `%s!`/`<T0>!`/`[Marcus]!` gider (uydurma)"),
+    Mutant("R2-YT-06", [_y(MG_DONGU, "    kalan = parca\n    if parca.strip() in yer_tutucular:\n        return False\n")],
+           "T2-2: cikarim yerine TAM ESITLIK (`parca in yer_tutucular`) -- `{PLAYER}!` (unlemli) esit degil, gider", "T2-2 esitlik", "G2 G4 G5",
+           urun_etkisi="hitap kalibi `{PLAYER}!` yine uydurmaya gider"),
+    Mutant("R2-YT-07", [_y(ISALNUM, "    return bool(kalan.strip())\n")],
+           "T2-2/Y2: harf/rakam yerine `bos degil` -- `{0}!` -> `!` kalir -> gider", "T2-2 suzgec olcutu", "G2 G4 G5 G3",
+           urun_etkisi="Y2 suzgeci de bozulur (`。。。` gider, real_check #4b)"),
+    Mutant("R2-YT-08", [_y(MG_CAGRI, "                if modele_gider(segment.text, segment.placeholders):  # MUTANT: parca degil segment\n")],
+           "T2-2: karar PARCA yerine SEGMENT metniyle veriliyor -- `{PLAYER}! Wait!` segmentinde `{PLAYER}!` parcasi gider", "T2-2 parca/segment", "G2 G4 G5",
+           urun_etkisi="vokatif + cumle kalibinda `{PLAYER}!` yine modele gider"),
+    Mutant("R2-YT-12", [_y(MG_CAGRI, "                if modele_gider(parca, [yt for s in request.segments for yt in s.placeholders]):  # MUTANT: TUM segmentlerin yer tutuculari\n")],
+           "T2-2: karar SEGMENTIN kendi yer tutuculariyla degil istekteki TUM segmentlerin birlesimiyle -- baska segmentin bildirdigi `{0}` bu segmentte metin olmaktan cikar",
+           "T2-2 segment izolasyonu", "?",
+           urun_etkisi="segment A `{0}` bildirir, segment B'de bildirilmemis `{0}!` METIN olmali ve gitmeli; mutantta gitmez (cevrilmez). Nadir; keskinlik sinifi"),
+    Mutant("R2-YT-09", [_y(MG_DONGU, MG_DONGU.replace("        if yt:\n", "        if yt and yt in kalan:\n"))],
+           "KONTROL: `yt in kalan` on kosulu (esdeger: replace zaten yoksa dokunmaz)", "-- kontrol --", ".....", kontrol=True),
+    Mutant("R2-YT-10", [_y(MG_DONGU, MG_DONGU.replace('kalan.replace(yt, "")', 'kalan.replace(yt, " ")'))],
+           "KONTROL: yer tutucu bos dize yerine BOSLUKLA degistiriliyor (bosluk harf/rakam degil: esdeger)", "-- kontrol --", ".....", kontrol=True),
+    Mutant("R2-YT-11", [_y(MG_DONGU, MG_DONGU.replace("        if yt:\n            kalan = kalan.replace(yt, \"\")\n", "        kalan = kalan.replace(yt, \"\")\n"))],
+           "KONTROL: `if yt` korumasi yok (`str.replace(\"\", \"\")` no-op: esdeger)", "-- kontrol --", ".....", kontrol=True),
+    # ---- B2-3: T2-3 -- hata mesaji nobetcisi MOTOR CIKTISINI goruyor mu? (K10-08/09 tur 1'de kacti) --
+    Mutant("R2-K10-10", [_y(DIZI_MSG, '        raise ProviderUnavailable(f"motor dizi yerine {type(cikti).__name__} dondurdu: {cikti!r}")\n')],
+           "T2-3: `motor dizi yerine X dondurdu` mesajina MOTOR CIKTISI (`{cikti!r}`) -- motor duz str dondurse ceviri metni mesaja", "K10 hata mesaji dizi-yerine", "?",
+           urun_etkisi="gercek CT2 hep liste dondurur -> erisilemez; keskinlik sinifi (nobetci testinde bu yol var mi?)"),
+    Mutant("R2-K10-11", [_y(ILK_MSG, '            raise ProviderUnavailable(f"hipotez token dizisi degil: {type(ilk).__name__}: {ilk!r}")\n')],
+           "T2-3: `hipotez token dizisi degil` mesajina hipotezin kendisi (`{ilk!r}`) -- hipotez duz str ise ceviri metni mesaja", "K10 hata mesaji ilk", "?",
+           urun_etkisi="gercek CT2 hipotezi liste -> erisilemez; keskinlik sinifi"),
+    Mutant("R2-K10-12", [_y(TOKEN_STR_MSG, '            raise ProviderUnavailable(f"hipotez tokenleri str degil: {tokenler!r}")\n')],
+           "T2-3: `hipotez tokenleri str degil` mesajina token listesi", "K10 hata mesaji tokenler", "G2 G4 G5",
+           urun_etkisi="[int-token-nobetcili-hipotez] yakalamali"),
+    Mutant("R2-K10-13", [_y(DECODE_STR_MSG, '            raise ProviderUnavailable(f"decode str dondurmedi: {metinler!r}")\n')],
+           "T2-3: `decode str dondurmedi` mesajina decode donusleri", "K10 hata mesaji decode", "G2 G4 G5",
+           urun_etkisi="[decode-tip-nobetcili-nesne] yakalamali"),
+    Mutant("R2-K10-14", [_y(COZUM_MSG, '            raise ProviderUnavailable(f"ceviri cozumlenemedi: {type(e).__name__}: {hipotezler!r}") from e\n')],
+           "T2-3: decode istisnasi mesajina HIPOTEZ TOKENLERI (motor ciktisi)", "K10 hata mesaji cozum", "G2 G4 G5",
+           urun_etkisi="[decode] yolu: sahte motor echo -> hipotezde KAYNAK nobetcisi var -> kaynak nobetcisi yakalar"),
+    Mutant("R2-K10-15", [_y(TOKENLESTIRME_MSG, '            raise ProviderUnavailable(f"kaynak metin tokenlestirilemedi: {type(e).__name__}: {parcalar!r}") from e\n')],
+           "T2-3/K10-07 kardesi: encode istisnasi mesajina KAYNAK parcalar", "K10 hata mesaji encode", "G2 G4 G5",
+           urun_etkisi="[encode] yolu kaynak nobetcisi tasir -> yakalamali"),
+    # ---- B2-3: `match=` DOGRU SEBEBI sabitliyor mu? (TEST dosyasi mutanti: sahte saglayicinin KANALI degisir) --
+    Mutant("R2-M-01", [_y(T_STDOUT_YAZAN, "        sys.stderr.write(NOBETCILER[0])  # MUTANT: kanal stdout -> stderr\n        return _sonuc(NOBETCILER[0])\n")],
+           "MATCH testi: `_StdoutaYazan` artik STDERR'e yaziyor -- olcu yine duser ama sebep `stderr'e`; `match=\"stdout'a\"` DUSMELI (yanlis sebeple gecis yok)",
+           "T2-3 match= stdout", "G2 G4 G5", dosya=TEST,
+           urun_etkisi="X = match dogru sebebi sabitliyor; `.` = match bos (yanlis sebeple 'atesliyor' sanilir)"),
+    Mutant("R2-M-02", [_y(T_UYARI_VEREN, '        logging.getLogger("suflor.translate").debug("segment %s", NOBETCILER[0])  # MUTANT: kanal warnings -> logger\n        return _sonuc(NOBETCILER[0])\n')],
+           "MATCH testi: `_UyariVeren` artik LOGGER'a yaziyor -- sebep `log kaydina`; `match=\"warnings kaydina\"` DUSMELI",
+           "T2-3 match= warnings", "G2 G4 G5", dosya=TEST,
+           urun_etkisi="X = match dogru sebebi sabitliyor"),
+]
+
 
 def _kapi_kos(argv: list[str]) -> tuple[int, str, float]:
     env = dict(os.environ, PYTHONDONTWRITEBYTECODE="1")
@@ -354,7 +493,7 @@ def _kapi_kos(argv: list[str]) -> tuple[int, str, float]:
 
 
 def _uygula(mut: Mutant) -> None:
-    p = KOK / MOTOR
+    p = KOK / mut.dosya
     metin = p.read_text(encoding="utf-8")
     for eski, yeni in mut.yamalar:
         n = metin.count(eski)
@@ -407,7 +546,7 @@ def main() -> None:
                 continue
             _uygula(mut)
             try:
-                py_compile.compile(str(KOK / MOTOR), doraise=True)
+                py_compile.compile(str(KOK / mut.dosya), doraise=True)
                 print(f"  {mut.mid:7s} yama OK, derlendi")
             finally:
                 _geri_al()

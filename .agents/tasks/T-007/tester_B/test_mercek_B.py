@@ -304,12 +304,16 @@ def test_b2_gercek_adli_testler_listesi() -> None:
     adlar = sorted(d.name for d in ast.walk(agac) if isinstance(d, ast.FunctionDef) and d.name.startswith("test_") and re.search(r"gercek|gerçek", d.name))
     assert adlar == [
         "test_k10_close_motoru_ve_encode_decode_yu_gercekten_birakir_weakref",
+        "test_k6_motor_ciktisi_nobetcisi_gercekten_motora_ulasiyor_pozitif_kontrol",  # tur 2 (T2-3): YENIDEN NISANLANDI
         "test_k7_gercek_fabrika_model_proto_var_model_file_yok",
     ], adlar
     weak = next(d for d in ast.walk(agac) if isinstance(d, ast.FunctionDef) and d.name == adlar[0])
     src = ast.unparse(weak)
     assert "weakref.ref" in src and "gc.collect()" in src and "is not None for z in zayif" in src  # pozitif kontrol var
-    fab = next(d for d in ast.walk(agac) if isinstance(d, ast.FunctionDef) and d.name == adlar[1])
+    nob = next(d for d in ast.walk(agac) if isinstance(d, ast.FunctionDef) and d.name == adlar[1])
+    src_nob = ast.unparse(nob)
+    assert "MOTOR_NOBETCISI" in src_nob and "r.translations == (MOTOR_NOBETCISI,)" in src_nob  # nobetci ciktiya ULASIYOR: T2-3 pozitif kontrol gercek
+    fab = next(d for d in ast.walk(agac) if isinstance(d, ast.FunctionDef) and d.name == adlar[2])
     assert "_varsayilan_fabrika" in ast.unparse(fab) and "ast." in ast.unparse(fab)  # AST: mekanizma olcusu, kosmaz
 
 
