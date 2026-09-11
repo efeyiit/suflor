@@ -1,12 +1,17 @@
 """Suflör — canlı ÇEVİRİ gösterimi: ekrandan yakala → oku → birleştir → Türkçe'ye çevir.
 
-Çalıştır:  python demo/canli_cevir.py [japan|korean|chinese|english]
+Çalıştır:  python demo/canli_cevir.py [japan|korean|chinese|english] [sözlük.json | -]
 
 Zincir:  CaptureService (T-005) → ChangeDetector (T-002) → RapidOcrEngine (T-006)
-         → SatırBirleştirici (T-008) → TextNormalizer (T-004) → yerel NMT (NLLB-200 600M int8, CTranslate2)
+         → SatırBirleştirici (T-008) → TextNormalizer (T-004)
+         → GlossaryStore + terimleri_gom (T-011, Katman 0) → yerel NMT (NLLB-200 600M int8, CTranslate2)
 
 Çeviri adımı ürünün kendi bileşeni `LocalNmtProvider` (T-007) ile yapılır.
 Model `models/nllb-200-distilled-600M-ct2-int8/` altında olmalı.
+
+Sözlük (T-011): ikinci argüman JSON yolu; verilmezse `demo/sozluk_ornek.json`, `-` ise sözlük yok.
+Eşleşen terimler kaynağa hedef biçimiyle gömülür (`방앗간을` → `Değirmen을`); kaynak panosu
+modele giden gömülü metni gösterir, Türkçe panoda gömülen terimler kalın yazılır.
 
 Hiçbir OCR/çeviri metni konsola yazılmaz (PROTOKOL §7); yalnız pencerede.
 """
@@ -31,9 +36,11 @@ from src.ocr.normalizer import normalize  # noqa: E402
 from src.ocr.satir_birlestirici import satirlari_birlestir  # noqa: E402
 from src.ocr.rapid_engine import OcrLanguage, RapidOcrEngine  # noqa: E402
 from src.translate.local_nmt import LocalNmtProvider  # noqa: E402
+from src.translate.sozluk import GlossaryStore, terimleri_gom  # noqa: E402
 
 YENILEME_MS = 100
 MODEL_DIZINI = Path(__file__).resolve().parent.parent / "models" / "nllb-200-distilled-600M-ct2-int8"
+VARSAYILAN_SOZLUK = Path(__file__).resolve().parent / "sozluk_ornek.json"
 NLLB_KODU = {
     OcrLanguage.JAPAN: "jpn_Jpan",
     OcrLanguage.KOREAN: "kor_Hang",
@@ -43,20 +50,30 @@ NLLB_KODU = {
 
 
 class GosterimCevirici:
-    """`LocalNmtProvider` (T-007) üzerinde ince sarmalayıcı: segment listesi -> Türkçe listesi."""
+    """`LocalNmtProvider` (T-007) üzerinde ince sarmalayıcı: segment listesi -> Türkçe listesi.
 
-    def __init__(self, kaynak_kodu: str) -> None:
+    Sözlük verilmişse T-011 zinciri çeviriden ÖNCE koşar: `lookup_segments` -> `terimleri_gom`;
+    motor gömülü metni görür. Dönüş: (gömülü segmentler, çeviriler, gömülen hedef terimler).
+    """
+
+    def __init__(self, kaynak_kodu: str, sozluk: GlossaryStore | None = None) -> None:
         self._saglayici = LocalNmtProvider(model_dir=MODEL_DIZINI, threads=8)
         self._kaynak = kaynak_kodu
+        self._sozluk = sozluk
 
-    def cevir(self, segmentler: list[Segment]) -> list[str]:
+    def cevir(self, segmentler: list[Segment]) -> tuple[list[Segment], list[str], list[str]]:
         if not segmentler:
-            return []
-        istek = TranslationRequest(segments=tuple(segmentler), source_lang=self._kaynak, target_lang="tr")
-        return list(self._saglayici.translate(istek).translations)
+            return [], [], []
+        gomulu, terimler = list(segmentler), []
+        if self._sozluk is not None:
+            hits = self._sozluk.lookup_segments(segmentler)
+            gomulu = list(terimleri_gom(segmentler, hits))
+            terimler = [h.target_term for h in hits]
+        istek = TranslationRequest(segments=tuple(gomulu), source_lang=self._kaynak, target_lang="tr")
+        return gomulu, list(self._saglayici.translate(istek).translations), terimler
 
 class CeviriIsi(QtCore.QObject):
-    bitti = QtCore.Signal(object, object, object, float, float)  # bloklar, segmentler, çeviriler, ocr_ms, cev_ms
+    bitti = QtCore.Signal(object, object, object, object, float, float)  # bloklar, gömülü segmentler, çeviriler, terimler, ocr_ms, cev_ms
 
     def __init__(self, motor: RapidOcrEngine, cevirici: GosterimCevirici, preset: OcrPreset) -> None:
         super().__init__()
@@ -69,12 +86,12 @@ class CeviriIsi(QtCore.QObject):
             bloklar = self._motor.recognize(kare, self._preset)
             segmentler = normalize(satirlari_birlestir(bloklar), self._preset)  # T-008: kelime kutulari -> satir
         except (OcrError, ModelMissingError) as hata:
-            self.bitti.emit([], [Segment(text=f"[hata] {hata}", bbox=kare.rect)], [""], 0.0, 0.0)
+            self.bitti.emit([], [Segment(text=f"[hata] {hata}", bbox=kare.rect)], [""], [], 0.0, 0.0)
             return
         t1 = time.perf_counter()
-        ceviriler = self._cevirici.cevir(list(segmentler))
+        gomulu, ceviriler, terimler = self._cevirici.cevir(list(segmentler))  # T-011: sözlük çeviriden önce
         t2 = time.perf_counter()
-        self.bitti.emit(bloklar, segmentler, ceviriler, (t1 - t0) * 1000, (t2 - t1) * 1000)
+        self.bitti.emit(bloklar, gomulu, ceviriler, terimler, (t1 - t0) * 1000, (t2 - t1) * 1000)
 
 
 class CanliCeviriPenceresi(QtWidgets.QWidget):
@@ -97,7 +114,7 @@ class CanliCeviriPenceresi(QtWidgets.QWidget):
         self._ekran.setStyleSheet("background:#101418; border:1px solid #2a3138;")
 
         self._kaynak = QtWidgets.QPlainTextEdit(readOnly=True)
-        self._kaynak.setPlaceholderText("kaynak (normalize edilmiş)")
+        self._kaynak.setPlaceholderText("kaynak (normalize edilmiş, sözlük terimleri gömülü)")
         self._kaynak.setStyleSheet(
             "QPlainTextEdit{background:#12171d; border:1px solid #232a33; padding:8px;"
             "font-family:'Yu Gothic UI','Malgun Gothic','Segoe UI'; font-size:13px; color:#9fb3c8;}")
@@ -150,17 +167,31 @@ class CanliCeviriPenceresi(QtWidgets.QWidget):
             self._istek.emit(kare)
         self._ciz(kare)
 
-    @QtCore.Slot(object, object, object, float, float)
+    @QtCore.Slot(object, object, object, object, float, float)
     def _bitti(self, bloklar: list[TextBlock], segmentler: list[Segment], ceviriler: list[str],
-               ocr_ms: float, cev_ms: float) -> None:
+               terimler: list[str], ocr_ms: float, cev_ms: float) -> None:
         self._isliyor = False
         self._son_bloklar = bloklar
         self._kaynak.setPlainText("\n\n".join((f"{s.speaker}: " if s.speaker else "") + s.text for s in segmentler))
         self._turkce.setPlainText("\n\n".join(
             (f"{s.speaker}: " if s.speaker else "") + c for s, c in zip(segmentler, ceviriler)))
+        self._terimleri_vurgula(terimler)
+        sozluk = f"   sözlük {len(terimler)} terim" if terimler else ""
         self._serit.setText(
             f"  bölge {self._bolge.w}x{self._bolge.h} @ ({self._bolge.x},{self._bolge.y})   "
-            f"OCR {ocr_ms:4.0f} ms   çeviri {cev_ms:4.0f} ms   {len(bloklar)} blok → {len(segmentler)} segment")
+            f"OCR {ocr_ms:4.0f} ms   çeviri {cev_ms:4.0f} ms   {len(bloklar)} blok → {len(segmentler)} segment{sozluk}")
+
+    def _terimleri_vurgula(self, terimler: list[str]) -> None:
+        """Türkçe panoda gömülen hedef terimlerin geçişlerini kalın + sarı yapar (yalnız görsel)."""
+        belge = self._turkce.document()
+        bicim = QtGui.QTextCharFormat()
+        bicim.setFontWeight(QtGui.QFont.Weight.Bold)
+        bicim.setForeground(QtGui.QColor(255, 214, 102))
+        for terim in set(terimler):
+            imlec = belge.find(terim)
+            while not imlec.isNull():
+                imlec.mergeCharFormat(bicim)
+                imlec = belge.find(terim, imlec)
 
     def _ciz(self, kare: Frame) -> None:
         pix = QtGui.QPixmap.fromImage(_frame_to_qimage(kare))
@@ -181,10 +212,12 @@ def main() -> int:
     except ValueError:
         print(f"dil tanınmadı: {dil_adi!r}; seçenekler: {[d.value for d in OcrLanguage]}")
         return 2
+    sozluk_arg = sys.argv[2] if len(sys.argv) > 2 else str(VARSAYILAN_SOZLUK)
+    sozluk = None if sozluk_arg == "-" else GlossaryStore(Path(sozluk_arg))  # şema hatası -> ValueError, açık
     uygulama = QtWidgets.QApplication(sys.argv)
     servis = CaptureService(MssBackend())
     motor = RapidOcrEngine(language=dil, threads=8, allow_download=True)
-    cevirici = GosterimCevirici(NLLB_KODU[dil])
+    cevirici = GosterimCevirici(NLLB_KODU[dil], sozluk)
     birlesim = union_bbox(servis.monitors)
     pencereler: list[QtWidgets.QWidget] = []
 

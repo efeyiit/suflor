@@ -1,0 +1,15 @@
+{
+  "terimler": [
+    {"kaynak": "マルクス", "hedef": "Marcus", "not": "karakter adı; model 'Marks' üretiyor"},
+    {"kaynak": "마르쿠스", "hedef": "Marcus", "not": "karakter adı"},
+    {"kaynak": "Marcus", "hedef": "Marcus"},
+    {"kaynak": "アイラ", "hedef": "Ayla", "not": "karakter adı"},
+    {"kaynak": "아일라", "hedef": "Ayla", "not": "karakter adı"},
+    {"kaynak": "水車小屋", "hedef": "Değirmen", "not": "mekân; model 'su arabası evi' üretiyor"},
+    {"kaynak": "방앗간", "hedef": "Değirmen", "not": "mekân"},
+    {"kaynak": "mill", "hedef": "Değirmen", "not": "mekân"},
+    {"kaynak": "長老", "hedef": "İhtiyar", "not": "unvan; model 'Elder' bırakıyor"},
+    {"kaynak": "장로", "hedef": "İhtiyar", "not": "unvan"},
+    {"kaynak": "elder", "hedef": "İhtiyar", "not": "unvan"}
+  ]
+}

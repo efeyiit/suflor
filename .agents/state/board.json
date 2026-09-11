@@ -1,6 +1,6 @@
 {
-  "faz": "dalga 1",
-  "guncelleme": "T-004 KABUL (7 tur). T-005 implementer tamam, sef dogruladi, testerlar sirada.",
+  "faz": "dalga 2",
+  "guncelleme": "T-007/T-008/T-009 KABUL; T-011 tur 1 tester asamasi; T-012 UI kabugu istegi alindi (paket yok); T-010 DXGI paket yok.",
   "paralellik_tavani": 4,
   "kilitlenme_esigi": 3,
   "tasima": "alt-ajan",
@@ -86,8 +86,8 @@
         "T-001",
         "T-003"
       ],
-      "durum": "testerlar",
-      "tur": 1,
+      "durum": "kabul",
+      "tur": 3,
       "not": "IMPLEMENTER TAMAM, SEF DOGRULADI. Bes kabul komutu exit 0; 159 yeni test; kapsam %98.83; pytest tests -> 981 passed. GERCEK EKRANDA CALISIYOR: iki monitor dogru, negatif koordinat (-2000,300)->mi=0, yayilan bolge mi=-1, tam ekran (1440,2560,3), bellek paylasimi False, numpy sizintisi yok, seq dogru artiyor. Implementer kendi olcumuyle iki kendi hatasini buldu (pragma yeri, docstring'de yanlis ms) ve paketin iki iddiasini bagimsiz yeniden uretti. Dort tester sirada.",
       "status": "kabul",
       "round": 3
@@ -106,8 +106,8 @@
         "T-004",
         "T-005"
       ],
-      "durum": "acildi-paket-yok",
-      "tur": 0,
+      "durum": "kabul",
+      "tur": 2,
       "donduruldu": false,
       "not": "ZORUNLU cikis sozlesmesi maddesi (T-004 K32'den): motorun urettigi her TextBlock.text NFC normalize edilmis olacak. Gerekce (sef olcumu): normalize() codepoint sayan iki esik tasiyor (max_group_chars, _MAX_SPEAKER_NAME_LEN) ve isalpha() tabanli ad suzgeci; ayni gorunen metin NFD geldiginde bolumleme degisiyor (3 blokluk govde NFC'de 1 segment, NFD'de 3) ve NFD adlar konusmaci sayilmiyor. Paket yazilirken bu madde ve olcusu (NFC==NFD ayniyeti testi) eklenecek.",
       "status": "kabul",
@@ -148,6 +148,43 @@
       "title": "LocalNmtProvider (NLLB CT2)",
       "status": "kabul",
       "round": 2
+    },
+    {
+      "id": "T-011",
+      "baslik": "GlossaryStore + terimleri_gom: oyuna ozel terimler kaynaga hedef bicimiyle gomulur (Katman 0)",
+      "dalga": 2,
+      "seviye": "B",
+      "owns": [
+        "src/translate/sozluk.py",
+        "tests/unit/translate/test_sozluk.py"
+      ],
+      "depends_on": [
+        "T-001",
+        "T-007"
+      ],
+      "durum": "testerlar",
+      "tur": 1,
+      "status": "testerlar",
+      "not": "paket v2 (1 KRT), implementer tur 1 teslim, sef real_check 12/12; 2 kor tester kosuyor"
+    },
+    {
+      "id": "T-012",
+      "baslik": "UI kabugu: ana pencere uc dugme (kapat / tepsi / kenar sekmesi) + kenar sekmesinden Anlik & Bolge izle",
+      "dalga": 3,
+      "seviye": "B",
+      "owns": [
+        "src/ui/**",
+        "tests/unit/ui/**"
+      ],
+      "depends_on": [
+        "T-005",
+        "T-007",
+        "T-011"
+      ],
+      "durum": "istek-alindi",
+      "tur": 0,
+      "status": "istek-alindi",
+      "not": "kullanici istegi 11 Eylul 2026: .agents/tasks/T-012/istek.md; paket yok"
     }
   ],
   "sozlesmeler_donduruldu": true,
