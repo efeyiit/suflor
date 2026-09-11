@@ -7,8 +7,9 @@ Sefe aittir; implementer kosar ama YAZMAZ. Stdout yalniz ASCII; metin basilmaz.
 Kontroller (packet.md):
   1. KR 17 blok -> 4 blok, line_boxes [2,5,5,5]
   2. JP 4 -> 4 birebir; EN 4 -> 4 birebir (no-op)
-  3. UCTAN UCA: KR -> birlestir -> normalize -> <= 4 segment -> NMT -> anahtarlar var,
-     tek kelimelik ceviri yok
+  3. UCTAN UCA: KR -> birlestir -> normalize -> <= 4 segment -> NMT -> tek kelimelik ceviri yok
+     (icerik beklentisi YOK: KR tanima noktayi dusuruyor, T-009)
+  4b. menu fixture: etiket|deger satirlari asla birlesmez (Y3)
   4. idempotens (KR gercek cikti)
   5. saflik AST
   6. 1000 blok < 50 ms
@@ -88,13 +89,27 @@ def main() -> int:
         r = p.translate(TranslationRequest(segments=tuple(segs), source_lang="kor_Hang", target_lang="tr"))
         birlesik = " ".join(r.translations).lower().replace("ğ", "g")
         tek_kelime = [t for t in r.translations if len(t.strip().rstrip(".!?").split()) <= 1]
-        (tamam if "bekliyor" in birlesik and "dogu" in birlesik else ihlal)(
-            f"[3] NMT: bekliyor={'bekliyor' in birlesik} dogu={'dogu' in birlesik}")
+        # v1 burada "dogu" bekliyordu -- OLCULMEDEN yazilmisti (sef hatasi, 4.6/10): KR tanima
+        # noktayi dusuruyor, cumle kaybi T-009'un konusu. Birlestirmenin garantisi: kelime-kelime YOK.
+        tamam(f"[3] NMT kostu: bekliyor={'bekliyor' in birlesik} dogu={'dogu' in birlesik}  (rapor; T-009 acik)")
         (tamam if not tek_kelime else ihlal)(f"[3] tek kelimelik ceviri sayisi {len(tek_kelime)} (0 olmali; onceden 'Evet.' 'Seni.')")
         p.close()
     else:
         ihlal("[3] NMT modeli yok ya da segment yok")
 
+    # 4b menu fixture (Y3 pozitif kontrol): etiket|deger asla birlesmez
+    from src.ocr.rapid_engine import OcrLanguage as _OL
+    for ad, dil, beklenen_min in (("KR", _OL.KOREAN, 2), ("EN", _OL.ENGLISH, 2)):
+        img = np.array(Image.open(KOK / ".agents" / "tasks" / "T-008" / "fixtures" / "menu_KR_EN.png").convert("RGB"))[:, :, ::-1].copy()
+        from src.ocr.rapid_engine import RapidOcrEngine as _RE
+        mb = _RE(language=dil, threads=8).recognize(Frame(image=img, rect=Rect(0, 0, 900, 300), captured_at=0.0, seq=0), OcrPreset.DIALOGUE)
+        mc = satirlari_birlestir(mb)
+        satir: dict[int, int] = {}
+        for x in mc:
+            satir[round(x.bbox.y / 50)] = satir.get(round(x.bbox.y / 50), 0) + 1
+        en_az = min(satir.values()) if satir else 0
+        (tamam if en_az >= beklenen_min else ihlal)(
+            f"[4b] menu {ad}: {len(mb)} -> {len(mc)} blok; satir basina en az {en_az} blok (>= {beklenen_min}: etiket|deger birlesmemeli)")
     # 5 saflik
     src = (KOK / "src" / "ocr" / "satir_birlestirici.py").read_text(encoding="utf-8")
     agac = ast.parse(src)

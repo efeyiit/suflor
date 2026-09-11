@@ -1,0 +1,14 @@
+==== T-008 KRT-1 -- SEFIN YENIDEN URETIMLERI ====
+Y1: KR 17 blokta '.' = 0 (kaynakta 3). Satir sonlari '리고/니다/시오/시오'. Uc det modeli
+    (MULTI/CH/EN) kutuyu x~675'e kadar uzatiyor, hicbirinde nokta -> TANIMA dusuruyor.
+    Birlestir+normalize -> govde 58 kar, 0 nokta -> NMT 8 kelime, "dogu" YOK;
+    nokta elle eklenince 15 kelime, "dogu" VAR. DOGRU. real_check #3'un "dogu"
+    beklentisi OLCULMEDEN yazilmisti -> SEF HATASI (4.6/10, ucuncu tekrar).
+    Kapsam: T-008 yalniz kelime->satir; cumle siniri T-009 (acildi, olgular yazildi).
+Y3: Menu fixture uretildi (menu_KR_EN.png): etiket|deger boslugu 13-16xh (ayri kalmali),
+    deger ici 0.17-0.26 (birlesmeli), gri: "/"-"150" 1.04. KR kelime max 0.57 (S6).
+    KRT'nin 0.75 onerisi kabul; gri bolge [0.6,0.95] damgali. DOGRU.
+Y2: (KRT olctu, sef kabul) birlesik h ile esik buyuyor -> idempotens tutmaz. K4 kaldirildi,
+    algoritma orijinal h ile tek gecis olarak tanimlandi.
+O: NaN sira bagimliligi, (y,x) baglari, S6 "yapisal olarak imkansiz" geri cekildi,
+   50 ms butcesi bilincli (O(n log n) zorlar), sef_dogrulama bu dosya.
