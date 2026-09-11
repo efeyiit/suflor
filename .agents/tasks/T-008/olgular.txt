@@ -1,0 +1,43 @@
+==== T-008 (AYNI-SATIR KELIME BIRLESTIRME) -- SEFIN ON OLCUMLERI ====
+Demo (canli_cevir.py) Korece ile kosulunca bulundu; T-004 ile T-006 arasinda
+ENTEGRASYON boslugu. Ne T-004'un ne T-006'nin kabul kapisi bunu goremezdi:
+T-004 satir-duzeyi bloklarla test edildi, T-006 kutu sayisini olctu ama
+birlestirme onun isi degil.
+
+[S1] KORECE TESPIT KELIME KUTUSU VERIYOR (T-006 O5'te olculmustu, sonucu simdi gorundu)
+  dlg_KR.png 1200x400: 17 blok. 2. satir: 5 kutu, x=79..675, h=33-40,
+  ardisik yatay bosluklar 12/14/18/18 px (~0.4 x h). Japonca ve Ingilizce
+  tespit satir kutusu veriyor (4 blok) -> sorun yalniz KR'de gorunur.
+
+[S2] NORMALIZER YATAYDA BIRLESTIRMIYOR (sef olctu)
+  normalize(17 KR blok, DIALOGUE) -> 16 segment. Normalizer'in "yatay ortusme"
+  kriteri (K11) DIKEY gruplama on kosuludur: iki blok ayni sutundaysa (yatay
+  ortusme >= esik) alt alta gruplanabilir. Ayni satirdaki kelimeler yatayda
+  ORTUSMEZ (bosluk pozitif) -> hicbir zaman gruplanmaz. Tasarim 5.2 "OCR iki
+  satira bolunmus cumle verir" diyor; "bir satiri N kelimeye boler" ongorulmemis.
+
+[S3] SONUC: KELIME KELIME CEVIRI
+  16 segment tek tek NMT'ye gidiyor: "İhtiyar / Marcus. / Kasaba. / Bir ihtiyar /
+  Seni. / Bekliyor. / Evet."  (있습니다 -> "Evet." halusinasyon: tek kelimelik
+  parca, T-007 Y2 sinifinin kelime versiyonu). Korece icin urun BOZUK.
+
+[S4] ADAY COZUM YERI
+  (a) T-006 icinde KR icin kutu birlestirme -- TextBlock.text'i bosluk ile
+      birlestirir; TextBlock semantigi "OCR ham blogu" -> dogru yer degil.
+  (b) T-004 normalizer'a ON-ADIM: ayni satir + kucuk x-boslugu -> tek blok.
+      Normalizer'in isi tam bu ("OCR ciktisini temiz segmentlere cevirme").
+      Ama T-004 dondurulmus: 125 urun + 623 kor test. On-adim eklemek K23'un
+      iki-gecis yapisina dokunmamali; yeni bir K olarak yazilir, ayri gorev.
+  (c) Bagimsiz yeni bilesen (src/ocr/satir_birlestirici.py), normalize'dan
+      ONCE pipeline'da cagrilir. T-004'e dokunmaz, ayri test edilir. TERCIH.
+
+[S5] BIRLESTIRME KURALI ICIN OLCULECEKLER (paket yazilmadan)
+  - Dikey ortusme esigi: ayni satir = min(h) * ? ortusme (KR'de h farki 33-40)
+  - Yatay bosluk esigi: KR'de 0.4 x h; satir SONU ile bir sonraki satirin BASI
+    arasinda bosluk NEGATIF (x geri sarar) -> dogal sinir
+  - Birlestirme karakteri: KR/EN bosluk, JP/ZH bossuz -> betik (script) ile
+    karar, dil parametresi degil (JP satirinda Latin kelime olabilir)
+  - Konusmaci etiketi: "장로 마르쿠스" iki kutu -> birlestirilince normalizer'in
+    K9 etiket kurali calisir mi
+  - Guven: birlesik blogun confidence'i = min? ortalama? (normalizer esik uygular)
+  - Kutu: eksen hizali birlesim; line_boxes'a parcalar konur (TextBlock alani var)

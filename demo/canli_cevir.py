@@ -5,8 +5,7 @@
 Zincir:  CaptureService (T-005) → ChangeDetector (T-002) → RapidOcrEngine (T-006)
          → TextNormalizer (T-004) → yerel NMT (NLLB-200 600M int8, CTranslate2)
 
-ÇEVİRİ ADIMI BU DOSYADA GÖSTERİM AMAÇLIDIR: `src/translate/` bileşeni (T-007)
-henüz yazılmadı; burada yalnız ölçülmüş çağrı biçimi (`olgular.txt` C4) kullanılır.
+Çeviri adımı ürünün kendi bileşeni `LocalNmtProvider` (T-007) ile yapılır.
 Model `models/nllb-200-distilled-600M-ct2-int8/` altında olmalı.
 
 Hiçbir OCR/çeviri metni konsola yazılmaz (PROTOKOL §7); yalnız pencerede.
@@ -27,9 +26,10 @@ from src.capture.change_detector import ChangeDetector  # noqa: E402
 from src.capture.monitors import union_bbox  # noqa: E402
 from src.capture.service import CaptureService, MssBackend  # noqa: E402
 from src.contracts.errors import ModelMissingError, OcrError  # noqa: E402
-from src.contracts.models import Frame, OcrPreset, Rect, Segment, TextBlock  # noqa: E402
+from src.contracts.models import Frame, OcrPreset, Rect, Segment, TextBlock, TranslationRequest  # noqa: E402
 from src.ocr.normalizer import normalize  # noqa: E402
 from src.ocr.rapid_engine import OcrLanguage, RapidOcrEngine  # noqa: E402
+from src.translate.local_nmt import LocalNmtProvider  # noqa: E402
 
 YENILEME_MS = 100
 MODEL_DIZINI = Path(__file__).resolve().parent.parent / "models" / "nllb-200-distilled-600M-ct2-int8"
@@ -42,30 +42,17 @@ NLLB_KODU = {
 
 
 class GosterimCevirici:
-    """Gösterim için yerel NMT sarmalayıcı — ölçülmüş çağrı biçimi (olgular.txt C4)."""
+    """`LocalNmtProvider` (T-007) üzerinde ince sarmalayıcı: segment listesi -> Türkçe listesi."""
 
     def __init__(self, kaynak_kodu: str) -> None:
-        import ctranslate2  # tembel: yalnız gösterimde
-        import sentencepiece as spm
-
-        if not (MODEL_DIZINI / "model.bin").exists():
-            raise ModelMissingError(f"çeviri modeli yok: {MODEL_DIZINI}")
-        # model_proto=bytes: sentencepiece ASCII-dışı yolu (bu depoda `çeviri`) AÇAMIYOR
-        # (ölçüldü: RuntimeError NOT_FOUND). ctranslate2 aynı yolu açabiliyor.
-        self._sp = spm.SentencePieceProcessor(model_proto=(MODEL_DIZINI / "sentencepiece.bpe.model").read_bytes())
-        self._tr = ctranslate2.Translator(str(MODEL_DIZINI), device="cpu", compute_type="int8",
-                                          inter_threads=1, intra_threads=8)
+        self._saglayici = LocalNmtProvider(model_dir=MODEL_DIZINI, threads=8)
         self._kaynak = kaynak_kodu
 
-    def cevir(self, cumleler: list[str]) -> list[str]:
-        if not cumleler:
+    def cevir(self, segmentler: list[Segment]) -> list[str]:
+        if not segmentler:
             return []
-        tok = [[self._kaynak] + self._sp.encode(c, out_type=str) + ["</s>"] for c in cumleler]
-        out = self._tr.translate_batch(tok, target_prefix=[["tur_Latn"]] * len(tok),
-                                       beam_size=4, max_decoding_length=160,
-                                       repetition_penalty=1.2)
-        return [self._sp.decode(o.hypotheses[0][1:]) for o in out]
-
+        istek = TranslationRequest(segments=tuple(segmentler), source_lang=self._kaynak, target_lang="tr")
+        return list(self._saglayici.translate(istek).translations)
 
 class CeviriIsi(QtCore.QObject):
     bitti = QtCore.Signal(object, object, object, float, float)  # bloklar, segmentler, çeviriler, ocr_ms, cev_ms
@@ -84,7 +71,7 @@ class CeviriIsi(QtCore.QObject):
             self.bitti.emit([], [Segment(text=f"[hata] {hata}", bbox=kare.rect)], [""], 0.0, 0.0)
             return
         t1 = time.perf_counter()
-        ceviriler = self._cevirici.cevir([s.text for s in segmentler])
+        ceviriler = self._cevirici.cevir(list(segmentler))
         t2 = time.perf_counter()
         self.bitti.emit(bloklar, segmentler, ceviriler, (t1 - t0) * 1000, (t2 - t1) * 1000)
 
