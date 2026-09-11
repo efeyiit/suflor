@@ -41,3 +41,31 @@ birlestirme onun isi degil.
     K9 etiket kurali calisir mi
   - Guven: birlesik blogun confidence'i = min? ortalama? (normalizer esik uygular)
   - Kutu: eksen hizali birlesim; line_boxes'a parcalar konur (TextBlock alani var)
+
+[S6] GEOMETRI OLCUMU (sef, uc fixture, gercek OCR ciktisi)
+  KR 17 blok -> 4 satir (dikey ortusme >= 0.5*min h ile):
+    satir ici DIKEY ORTUSME: hepsi 1.00 (kutular ayni satir bandinda, tam)
+    satir ici X-BOSLUK / min h: 0.17 .. 0.57 (medyan ~0.4)
+    satir SONU -> sonraki satir BASI x-farki: -163, -593, -530 (NEGATIF -- x geri sarar)
+    h araligi: 26-29 (etiket satiri), 33-41 (govde)
+  JP 4 blok -> 4 satir (zaten satir; 1 kutu/satir)   -> birlestirme NO-OP
+  EN 4 blok -> 4 satir (zaten satir; 1 kutu/satir)   -> birlestirme NO-OP
+  ESIK KARARI ICIN VERI: ayni satir = dikey ortusme >= 0.5*min(h) (olculen 1.0,
+  pay bol); ayni satirda komsu = x-bosluk <= 1.0*min(h) (olculen max 0.57;
+  satir gecisi negatif oldugu icin yanlis birlestirme yapisal olarak imkansiz --
+  ama iki SUTUNLU duzen (menu) icin bu esik olculmeli: sutun arasi bosluk > 1h
+  ise ayrilir, degilse birlesir. Menu fixture'i yok -> [OLCULMUYOR] damgasi.
+
+[S7] BIRLESTIRME KARAKTERI: BETIK (script) ile, dil parametresi DEGIL
+  unicodedata.name ile ilk harfin betigi: HANGUL / CJK (HIRAGANA, KATAKANA,
+  CJK UNIFIED) / LATIN. HANGUL ve LATIN arasi bosluk, CJK arasi bossuz.
+  Karisik (CJK + LATIN kelime, orn. JP satirinda "HP") -> ikisinden biri LATIN
+  ise bosluk. Olculdu: 장로->HANGUL 村の->CJK elder->LATIN マルクス->CJK.
+
+[S8] IDEMPOTENS: birlestirme ciktisina tekrar uygulaninca ayni sonuc (JP/EN'de
+  zaten 1 kutu/satir; KR'de birlesmis 4 satir tekrar 4). Paket olcusu.
+
+[S9] GUVEN VE KUTU: birlesik blogun confidence = min(parcalar) (normalizer'in
+  esigi en zayif kelimeye gore karar versin -- kaybetmektense tut); bbox =
+  eksen hizali birlesim; line_boxes = parcalarin bbox'lari (TextBlock alani var,
+  T-001'de bu amacla konmus).
