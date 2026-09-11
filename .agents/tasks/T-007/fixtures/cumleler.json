@@ -1,0 +1,19 @@
+{
+  "JP": [
+    "長老マルクス",
+    "村の長老があなたを待っています。",
+    "水車小屋を過ぎて東の道を行きなさい。",
+    "日が暮れたら道を外れないように。"
+  ],
+  "JP_paragraf": "村の長老があなたを待っています。水車小屋を過ぎて東の道を行きなさい。日が暮れたら道を外れないように。",
+  "JP_yer_tutucu": "{0}があなたを{1}で待っています。",
+  "EN": [
+    "The village elder is waiting for you.",
+    "Take the eastern road past the mill, and do not stray after dark."
+  ],
+  "EN_yer_tutucu": "{0} is waiting for you at the {1}.",
+  "KR": [
+    "마을 장로가 당신을 기다리고 있습니다.",
+    "방앗간을 지나 동쪽 길로 가십시오."
+  ]
+}
