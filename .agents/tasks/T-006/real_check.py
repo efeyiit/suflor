@@ -10,6 +10,7 @@ Kontroller (packet.md "Kabul kapısı"):
   1. JAPAN  -> 4/4 satır birebir
   2. Aynı görüntü CHINESE -> 4/4 DEĞİL   (K2'nin pozitif kontrolü, §4.6/10)
   3. KOREAN -> okuma sırasında birleştirilince benzerlik >= 0.95
+     (T-009 sonrası v5 tanıma noktaları verir; v4'te noktalar düşüyordu — O5)
   4. ENGLISH -> 4/4
   5. Süreler K9'a göre RAPORLANIR (eşik aşımı uyarı, düşürmez)
   6. bbox ekran koordinatında: Frame.rect=(-2600,-50,…) ile ilk satır bbox.x < 0,
