@@ -31,6 +31,6 @@ $ git status --short (tumu) -- yalniz tester_B/ ve tester_B_evidence/ ve verdict
 ?? .agents/tasks/T-006/tester_B_evidence/r2-tur1-isaretleri-yeniden-nisan.txt
 
 ayna agaclari (depo disi):
-C:/Users/pc/AppData/Local/Temp/scratch/C--Users-pc-Desktop-efe--eviri-uygulamas-/d52c967f-bd19-4db3-b5e9-77e6cd08b889/scratchpad/kit_r2/t006_tester_B_mutroot
-C:/Users/pc/AppData/Local/Temp/scratch/C--Users-pc-Desktop-efe--eviri-uygulamas-/d52c967f-bd19-4db3-b5e9-77e6cd08b889/scratchpad/kit_tur1/t006_tester_B_mutroot
+C:/Users/<kullanici>/AppData/Local/Temp/scratch/C--Users-pc-Desktop-efe--eviri-uygulamas-/d52c967f-bd19-4db3-b5e9-77e6cd08b889/scratchpad/kit_r2/t006_tester_B_mutroot
+C:/Users/<kullanici>/AppData/Local/Temp/scratch/C--Users-pc-Desktop-efe--eviri-uygulamas-/d52c967f-bd19-4db3-b5e9-77e6cd08b889/scratchpad/kit_tur1/t006_tester_B_mutroot
 exit=0

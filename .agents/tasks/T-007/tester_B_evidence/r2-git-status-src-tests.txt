@@ -30,8 +30,8 @@
 ?? .agents/tasks/T-007/tester_B_evidence/r2-taban-5-tum-takim.txt
 
 === ayna agaclari (depo disi) ===
-C:/Users/pc/AppData/Local/Temp/scratch/C--Users-pc-Desktop-efe--eviri-uygulamas-/d52c967f-bd19-4db3-b5e9-77e6cd08b889/scratchpad/t007_tester_B_ayirt
-C:/Users/pc/AppData/Local/Temp/scratch/C--Users-pc-Desktop-efe--eviri-uygulamas-/d52c967f-bd19-4db3-b5e9-77e6cd08b889/scratchpad/t007_tester_B_mutroot
+C:/Users/<kullanici>/AppData/Local/Temp/scratch/C--Users-pc-Desktop-efe--eviri-uygulamas-/d52c967f-bd19-4db3-b5e9-77e6cd08b889/scratchpad/t007_tester_B_ayirt
+C:/Users/<kullanici>/AppData/Local/Temp/scratch/C--Users-pc-Desktop-efe--eviri-uygulamas-/d52c967f-bd19-4db3-b5e9-77e6cd08b889/scratchpad/t007_tester_B_mutroot
 
 === SON KONTROL (10:59:31) git status --short -- src tests ===
 ?? src/ocr/satir_birlestirici.py

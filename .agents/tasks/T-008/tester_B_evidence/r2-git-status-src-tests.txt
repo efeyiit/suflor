@@ -5,7 +5,7 @@ HEAD: 019b9ae
 sha256 depo vs ayna:
 79f56a9c456b61b9f1808b52286529fcb1e25704b2d8a409dee1cf3b2e02fb41 *src/ocr/satir_birlestirici.py
 ef20da313f30ce2d91311183413c03b448c3c78a6cc538cd43a65825bf304b46 *tests/unit/ocr/test_satir_birlestirici.py
-79f56a9c456b61b9f1808b52286529fcb1e25704b2d8a409dee1cf3b2e02fb41 *C:/Users/pc/AppData/Local/Temp/scratch/C--Users-pc-Desktop-efe--eviri-uygulamas-/d52c967f-bd19-4db3-b5e9-77e6cd08b889/scratchpad/t008_tester_B_ayna/src/ocr/satir_birlestirici.py
-ef20da313f30ce2d91311183413c03b448c3c78a6cc538cd43a65825bf304b46 *C:/Users/pc/AppData/Local/Temp/scratch/C--Users-pc-Desktop-efe--eviri-uygulamas-/d52c967f-bd19-4db3-b5e9-77e6cd08b889/scratchpad/t008_tester_B_ayna/tests/unit/ocr/test_satir_birlestirici.py
+79f56a9c456b61b9f1808b52286529fcb1e25704b2d8a409dee1cf3b2e02fb41 *C:/Users/<kullanici>/AppData/Local/Temp/scratch/C--Users-pc-Desktop-efe--eviri-uygulamas-/d52c967f-bd19-4db3-b5e9-77e6cd08b889/scratchpad/t008_tester_B_ayna/src/ocr/satir_birlestirici.py
+ef20da313f30ce2d91311183413c03b448c3c78a6cc538cd43a65825bf304b46 *C:/Users/<kullanici>/AppData/Local/Temp/scratch/C--Users-pc-Desktop-efe--eviri-uygulamas-/d52c967f-bd19-4db3-b5e9-77e6cd08b889/scratchpad/t008_tester_B_ayna/tests/unit/ocr/test_satir_birlestirici.py
 
 git diff HEAD -- src tests | wc -l: 0

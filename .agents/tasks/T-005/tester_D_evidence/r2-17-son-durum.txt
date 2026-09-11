@@ -31,7 +31,7 @@ $ git diff --stat -- src tests
 (bos)
 
 $ ayna agacinin yeri (depo DISI):
-C:/Users/pc/AppData/Local/Temp/scratch/.../scratchpad/t005_tester_D_mutroot
+C:/Users/<kullanici>/AppData/Local/Temp/scratch/.../scratchpad/t005_tester_D_mutroot
 
 === SON KONTROL (butun kosumlardan SONRA) ===
 $ git status --short -- src tests

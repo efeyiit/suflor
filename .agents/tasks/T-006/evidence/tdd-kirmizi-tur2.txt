@@ -5,7 +5,7 @@ FFFF                                                                     [100%]
 ================================== FAILURES ===================================
 _______________ test_k7_soguk_motor_hicbir_kanala_metin_yazmaz ________________
 
-tmp_path = WindowsPath('C:/Users/pc/AppData/Local/Temp/pytest-of-pc/pytest-705/test_k7_soguk_motor_hicbir_kan0')
+tmp_path = WindowsPath('C:/Users/<kullanici>/AppData/Local/Temp/pytest-of-<kullanici>/pytest-705/test_k7_soguk_motor_hicbir_kan0')
 kutuphane_logger_geri_al = None
 capfd = <_pytest.capture.CaptureFixture object at 0x0000020B33BB0DA0>
 caplog = <_pytest.logging.LogCaptureFixture object at 0x0000020B33BB11C0>
@@ -65,7 +65,7 @@ E         + NÖBETÇİ-7f3a長老-9c1e
 tests\unit\ocr\test_rapid_engine.py:779: AssertionError
 _________ test_k7_sicak_motor_kutuphane_logger_i_acikken_metin_yazmaz _________
 
-tmp_path = WindowsPath('C:/Users/pc/AppData/Local/Temp/pytest-of-pc/pytest-705/test_k7_sicak_motor_kutuphane_0')
+tmp_path = WindowsPath('C:/Users/<kullanici>/AppData/Local/Temp/pytest-of-<kullanici>/pytest-705/test_k7_sicak_motor_kutuphane_0')
 kutuphane_logger_geri_al = None
 capfd = <_pytest.capture.CaptureFixture object at 0x0000020B33B71940>
 caplog = <_pytest.logging.LogCaptureFixture object at 0x0000020B33BB3050>
@@ -151,7 +151,7 @@ E         Use -v to get more diff
 tests\unit\ocr\test_rapid_engine.py:939: AssertionError
 _____________ test_k10_close_taniyiciyi_gercekten_birakir_weakref _____________
 
-tmp_path = WindowsPath('C:/Users/pc/AppData/Local/Temp/pytest-of-pc/pytest-705/test_k10_close_taniyiciyi_gerc0')
+tmp_path = WindowsPath('C:/Users/<kullanici>/AppData/Local/Temp/pytest-of-<kullanici>/pytest-705/test_k10_close_taniyiciyi_gerc0')
 
     def test_k10_close_taniyiciyi_gercekten_birakir_weakref(tmp_path: Path) -> None:
         """Tur 2 (T2-2): `close()` sonrasi motor tanıyıcıya referans TUTMAZ.

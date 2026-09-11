@@ -17,7 +17,7 @@ exit=0
 [r2_sira_plugin] son 3: ['test_k10_close_taniyiciyi_gercekten_birakir_weakref', 'test_k6_bozuk_cikti_ocrerror[c11]', 'test_k3_threads_tamsayi_olmayan_typeerror[2.0]']
 110 passed in 0.51s
   konsola sizan nobetci parcasi (7f3a/9c1e) satir sayisi: 0
-grep: C:/Users/pc/AppData/Local/Temp/scratch/C--Users-pc-Desktop-efe--eviri-uygulamas-/d52c967f-bd19-4db3-b5e9-77e6cd08b889/scratchpad/iz_rastgele:1.txt: No such file or directory
+grep: C:/Users/<kullanici>/AppData/Local/Temp/scratch/C--Users-pc-Desktop-efe--eviri-uygulamas-/d52c967f-bd19-4db3-b5e9-77e6cd08b889/scratchpad/iz_rastgele:1.txt: No such file or directory
 
 == TB_SIRA=rastgele:7  (tam 110, ileri/ters/rastgele) ==
 exit=0
@@ -25,7 +25,7 @@ exit=0
 [r2_sira_plugin] son 3: ['test_k6_kare_bicimi_contractviolation_motor_cagrilmaz[image2]', 'test_k3_threads_tamsayi_olmayan_typeerror[4.5]', 'test_k6_model_dir_str_kabul']
 110 passed in 0.44s
   konsola sizan nobetci parcasi (7f3a/9c1e) satir sayisi: 0
-grep: C:/Users/pc/AppData/Local/Temp/scratch/C--Users-pc-Desktop-efe--eviri-uygulamas-/d52c967f-bd19-4db3-b5e9-77e6cd08b889/scratchpad/iz_rastgele:7.txt: No such file or directory
+grep: C:/Users/<kullanici>/AppData/Local/Temp/scratch/C--Users-pc-Desktop-efe--eviri-uygulamas-/d52c967f-bd19-4db3-b5e9-77e6cd08b889/scratchpad/iz_rastgele:7.txt: No such file or directory
 
 == TB_SIRA=rastgele:42  (tam 110, ileri/ters/rastgele) ==
 exit=0
@@ -33,7 +33,7 @@ exit=0
 [r2_sira_plugin] son 3: ['test_varsayilan_model_dizini_rapidocr_yuklemeden_bulunur', 'test_k3_threads_sifir_ve_negatif_valueerror[-1]', 'test_k7_ast_print_yok_logging_metin_yok']
 110 passed in 0.46s
   konsola sizan nobetci parcasi (7f3a/9c1e) satir sayisi: 0
-grep: C:/Users/pc/AppData/Local/Temp/scratch/C--Users-pc-Desktop-efe--eviri-uygulamas-/d52c967f-bd19-4db3-b5e9-77e6cd08b889/scratchpad/iz_rastgele:42.txt: No such file or directory
+grep: C:/Users/<kullanici>/AppData/Local/Temp/scratch/C--Users-pc-Desktop-efe--eviri-uygulamas-/d52c967f-bd19-4db3-b5e9-77e6cd08b889/scratchpad/iz_rastgele:42.txt: No such file or directory
 
 == TB_SIRA=k7once  (tam 110, ileri/ters/rastgele) ==
 exit=0

@@ -1,4 +1,4 @@
-### commit: f75d4d4  (TEMIZ CHECKOUT: C:/Users/pc/AppData/Local/Temp/scratch/C--Users-pc-Desktop-efe--eviri-uygulamas-/d52c967f-bd19-4db3-b5e9-77e6cd08b889/scratchpad/wt-chk)
+### commit: f75d4d4  (TEMIZ CHECKOUT: C:/Users/<kullanici>/AppData/Local/Temp/scratch/C--Users-pc-Desktop-efe--eviri-uygulamas-/d52c967f-bd19-4db3-b5e9-77e6cd08b889/scratchpad/wt-chk)
 
 ### HEAD'de takipli mi?
   src/capture/service.py                     commit'te YOK

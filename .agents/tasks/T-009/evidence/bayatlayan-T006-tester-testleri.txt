@@ -3,7 +3,7 @@
 ================================== FAILURES ===================================
 ______________ test_a5_k11_dort_dil_alti_anahtar_birebir[korean] ______________
 
-tmp_path = WindowsPath('C:/Users/pc/AppData/Local/Temp/pytest-of-pc/pytest-2323/test_a5_k11_dort_dil_alti_anah1')
+tmp_path = WindowsPath('C:/Users/<kullanici>/AppData/Local/Temp/pytest-of-<kullanici>/pytest-2323/test_a5_k11_dort_dil_alti_anah1')
 dil = 'korean'
 
     @pytest.mark.parametrize("dil", ["japan", "korean", "chinese", "english"])
@@ -61,12 +61,12 @@ self = <src.ocr.rapid_engine.RapidOcrEngine object at 0x000001E96565AD50>
                 f"model dosyasi yok: {', '.join(eksik)} (dizin: {dizin}); "
                 "allow_download=False oldugu icin indirilmedi"
             )
-E           src.contracts.errors.ModelMissingError: model dosyasi yok: korean_PP-OCRv5_rec_mobile.onnx (dizin: C:\Users\pc\AppData\Local\Temp\pytest-of-pc\pytest-2323\test_a5_k11_dort_dil_alti_anah1); allow_download=False oldugu icin indirilmedi
+E           src.contracts.errors.ModelMissingError: model dosyasi yok: korean_PP-OCRv5_rec_mobile.onnx (dizin: C:\Users\<kullanici>\AppData\Local\Temp\pytest-of-<kullanici>\pytest-2323\test_a5_k11_dort_dil_alti_anah1); allow_download=False oldugu icin indirilmedi
 
 src\ocr\rapid_engine.py:685: ModelMissingError
 ____________ test_b3_sahte_fabrikayla_tam_kosum_yasak_kok_yuklemez ____________
 
-tmp_path = WindowsPath('C:/Users/pc/AppData/Local/Temp/pytest-of-pc/pytest-2323/test_b3_sahte_fabrikayla_tam_k0')
+tmp_path = WindowsPath('C:/Users/<kullanici>/AppData/Local/Temp/pytest-of-<kullanici>/pytest-2323/test_b3_sahte_fabrikayla_tam_k0')
 
     def test_b3_sahte_fabrikayla_tam_kosum_yasak_kok_yuklemez(tmp_path: Path) -> None:
         f = Fabrika(dolu("a", "b"))
@@ -124,12 +124,12 @@ self = <src.ocr.rapid_engine.RapidOcrEngine object at 0x000001E9656A6EA0>
                 f"model dosyasi yok: {', '.join(eksik)} (dizin: {dizin}); "
                 "allow_download=False oldugu icin indirilmedi"
             )
-E           src.contracts.errors.ModelMissingError: model dosyasi yok: korean_PP-OCRv5_rec_mobile.onnx (dizin: C:\Users\pc\AppData\Local\Temp\pytest-of-pc\pytest-2323\test_b3_sahte_fabrikayla_tam_k0); allow_download=False oldugu icin indirilmedi
+E           src.contracts.errors.ModelMissingError: model dosyasi yok: korean_PP-OCRv5_rec_mobile.onnx (dizin: C:\Users\<kullanici>\AppData\Local\Temp\pytest-of-<kullanici>\pytest-2323\test_b3_sahte_fabrikayla_tam_k0); allow_download=False oldugu icin indirilmedi
 
 src\ocr\rapid_engine.py:685: ModelMissingError
 _____ test_b5_modelmissing_kurulumda_ornek_tutulmaz_dosya_gelince_kurulur _____
 
-tmp_path = WindowsPath('C:/Users/pc/AppData/Local/Temp/pytest-of-pc/pytest-2323/test_b5_modelmissing_kurulumda0')
+tmp_path = WindowsPath('C:/Users/<kullanici>/AppData/Local/Temp/pytest-of-<kullanici>/pytest-2323/test_b5_modelmissing_kurulumda0')
 
     def test_b5_modelmissing_kurulumda_ornek_tutulmaz_dosya_gelince_kurulur(tmp_path: Path) -> None:
         """Gercek senaryo: allow_download=False, model sonradan diske konur -> ayni motor kendini kurar."""
@@ -193,12 +193,12 @@ self = <src.ocr.rapid_engine.RapidOcrEngine object at 0x000001E96565B860>
                 f"model dosyasi yok: {', '.join(eksik)} (dizin: {dizin}); "
                 "allow_download=False oldugu icin indirilmedi"
             )
-E           src.contracts.errors.ModelMissingError: model dosyasi yok: korean_PP-OCRv5_rec_mobile.onnx (dizin: C:\Users\pc\AppData\Local\Temp\pytest-of-pc\pytest-2323\test_b5_modelmissing_kurulumda0); allow_download=False oldugu icin indirilmedi
+E           src.contracts.errors.ModelMissingError: model dosyasi yok: korean_PP-OCRv5_rec_mobile.onnx (dizin: C:\Users\<kullanici>\AppData\Local\Temp\pytest-of-<kullanici>\pytest-2323\test_b5_modelmissing_kurulumda0); allow_download=False oldugu icin indirilmedi
 
 src\ocr\rapid_engine.py:685: ModelMissingError
 _________ test_b5_iki_motor_ayni_fabrikayi_paylasirsa_durum_karismaz __________
 
-tmp_path = WindowsPath('C:/Users/pc/AppData/Local/Temp/pytest-of-pc/pytest-2323/test_b5_iki_motor_ayni_fabrika0')
+tmp_path = WindowsPath('C:/Users/<kullanici>/AppData/Local/Temp/pytest-of-<kullanici>/pytest-2323/test_b5_iki_motor_ayni_fabrika0')
 
     def test_b5_iki_motor_ayni_fabrikayi_paylasirsa_durum_karismaz(tmp_path: Path) -> None:
         f = Fabrika(dolu("x"))
@@ -258,7 +258,7 @@ self = <src.ocr.rapid_engine.RapidOcrEngine object at 0x000001E965659670>
                 f"model dosyasi yok: {', '.join(eksik)} (dizin: {dizin}); "
                 "allow_download=False oldugu icin indirilmedi"
             )
-E           src.contracts.errors.ModelMissingError: model dosyasi yok: korean_PP-OCRv5_rec_mobile.onnx (dizin: C:\Users\pc\AppData\Local\Temp\pytest-of-pc\pytest-2323\test_b5_iki_motor_ayni_fabrika0); allow_download=False oldugu icin indirilmedi
+E           src.contracts.errors.ModelMissingError: model dosyasi yok: korean_PP-OCRv5_rec_mobile.onnx (dizin: C:\Users\<kullanici>\AppData\Local\Temp\pytest-of-<kullanici>\pytest-2323\test_b5_iki_motor_ayni_fabrika0); allow_download=False oldugu icin indirilmedi
 
 src\ocr\rapid_engine.py:685: ModelMissingError
 ______________ test_b6_eksik_iki_satir_yapisal_olarak_erisilemez ______________

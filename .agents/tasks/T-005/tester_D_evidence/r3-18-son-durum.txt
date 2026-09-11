@@ -5,7 +5,7 @@
 [cikti sonu]
 
 === ayna agaci (depo DISINDA) ===
-C:/Users/pc/AppData/Local/Temp/scratch/.../scratchpad/t005_tester_D_mutroot
+C:/Users/<kullanici>/AppData/Local/Temp/scratch/.../scratchpad/t005_tester_D_mutroot
 src
 tests
 

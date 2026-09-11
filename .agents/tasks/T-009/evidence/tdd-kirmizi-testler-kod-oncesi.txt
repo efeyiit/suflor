@@ -3,7 +3,7 @@
 ================================== FAILURES ===================================
 _________________ test_k6_model_var_acik_yol_gecilir[korean] __________________
 
-tmp_path = WindowsPath('C:/Users/pc/AppData/Local/Temp/pytest-of-pc/pytest-2300/test_k6_model_var_acik_yol_gec1')
+tmp_path = WindowsPath('C:/Users/<kullanici>/AppData/Local/Temp/pytest-of-<kullanici>/pytest-2300/test_k6_model_var_acik_yol_gec1')
 dil = <OcrLanguage.KOREAN: 'korean'>
 
     @pytest.mark.parametrize("dil", list(OcrLanguage))
@@ -62,12 +62,12 @@ self = <src.ocr.rapid_engine.RapidOcrEngine object at 0x00000163951AE810>
                 f"model dosyasi yok: {', '.join(eksik)} (dizin: {dizin}); "
                 "allow_download=False oldugu icin indirilmedi"
             )
-E           src.contracts.errors.ModelMissingError: model dosyasi yok: korean_PP-OCRv4_rec_mobile.onnx (dizin: C:\Users\pc\AppData\Local\Temp\pytest-of-pc\pytest-2300\test_k6_model_var_acik_yol_gec1); allow_download=False oldugu icin indirilmedi
+E           src.contracts.errors.ModelMissingError: model dosyasi yok: korean_PP-OCRv4_rec_mobile.onnx (dizin: C:\Users\<kullanici>\AppData\Local\Temp\pytest-of-<kullanici>\pytest-2300\test_k6_model_var_acik_yol_gec1); allow_download=False oldugu icin indirilmedi
 
 src\ocr\rapid_engine.py:655: ModelMissingError
 __________________ test_k11_dil_tablosu_alti_anahtar[korean] __________________
 
-tmp_path = WindowsPath('C:/Users/pc/AppData/Local/Temp/pytest-of-pc/pytest-2300/test_k11_dil_tablosu_alti_anah1')
+tmp_path = WindowsPath('C:/Users/<kullanici>/AppData/Local/Temp/pytest-of-<kullanici>/pytest-2300/test_k11_dil_tablosu_alti_anah1')
 dil = <OcrLanguage.KOREAN: 'korean'>
 
     @pytest.mark.parametrize("dil", list(OcrLanguage))
@@ -125,12 +125,12 @@ self = <src.ocr.rapid_engine.RapidOcrEngine object at 0x00000163951AD610>
                 f"model dosyasi yok: {', '.join(eksik)} (dizin: {dizin}); "
                 "allow_download=False oldugu icin indirilmedi"
             )
-E           src.contracts.errors.ModelMissingError: model dosyasi yok: korean_PP-OCRv4_rec_mobile.onnx (dizin: C:\Users\pc\AppData\Local\Temp\pytest-of-pc\pytest-2300\test_k11_dil_tablosu_alti_anah1); allow_download=False oldugu icin indirilmedi
+E           src.contracts.errors.ModelMissingError: model dosyasi yok: korean_PP-OCRv4_rec_mobile.onnx (dizin: C:\Users\<kullanici>\AppData\Local\Temp\pytest-of-<kullanici>\pytest-2300\test_k11_dil_tablosu_alti_anah1); allow_download=False oldugu icin indirilmedi
 
 src\ocr\rapid_engine.py:655: ModelMissingError
 _____________________ test_k11_t009_korean_rec_v5_det_v4 ______________________
 
-tmp_path = WindowsPath('C:/Users/pc/AppData/Local/Temp/pytest-of-pc/pytest-2300/test_k11_t009_korean_rec_v5_de0')
+tmp_path = WindowsPath('C:/Users/<kullanici>/AppData/Local/Temp/pytest-of-<kullanici>/pytest-2300/test_k11_t009_korean_rec_v5_de0')
 
     def test_k11_t009_korean_rec_v5_det_v4(tmp_path: Path) -> None:
         """Nokta 1: KOREAN'da yalniz REC v5; DET v4 kalir (det degismedi, T-009 K1)."""
@@ -189,12 +189,12 @@ self = <src.ocr.rapid_engine.RapidOcrEngine object at 0x0000016394D11700>
                 f"model dosyasi yok: {', '.join(eksik)} (dizin: {dizin}); "
                 "allow_download=False oldugu icin indirilmedi"
             )
-E           src.contracts.errors.ModelMissingError: model dosyasi yok: korean_PP-OCRv4_rec_mobile.onnx (dizin: C:\Users\pc\AppData\Local\Temp\pytest-of-pc\pytest-2300\test_k11_t009_korean_rec_v5_de0); allow_download=False oldugu icin indirilmedi
+E           src.contracts.errors.ModelMissingError: model dosyasi yok: korean_PP-OCRv4_rec_mobile.onnx (dizin: C:\Users\<kullanici>\AppData\Local\Temp\pytest-of-<kullanici>\pytest-2300\test_k11_t009_korean_rec_v5_de0); allow_download=False oldugu icin indirilmedi
 
 src\ocr\rapid_engine.py:655: ModelMissingError
 _______________________ test_k11_t009_v5_yalniz_korean ________________________
 
-tmp_path = WindowsPath('C:/Users/pc/AppData/Local/Temp/pytest-of-pc/pytest-2300/test_k11_t009_v5_yalniz_korean0')
+tmp_path = WindowsPath('C:/Users/<kullanici>/AppData/Local/Temp/pytest-of-<kullanici>/pytest-2300/test_k11_t009_v5_yalniz_korean0')
 
     def test_k11_t009_v5_yalniz_korean(tmp_path: Path) -> None:
         """v5 alan TEK dil KOREAN; baska bir dile sizmis v5 gercek modelde `ValueError` olurdu (JP)."""
@@ -253,12 +253,12 @@ self = <src.ocr.rapid_engine.RapidOcrEngine object at 0x000001639500AC00>
                 f"model dosyasi yok: {', '.join(eksik)} (dizin: {dizin}); "
                 "allow_download=False oldugu icin indirilmedi"
             )
-E           src.contracts.errors.ModelMissingError: model dosyasi yok: korean_PP-OCRv4_rec_mobile.onnx (dizin: C:\Users\pc\AppData\Local\Temp\pytest-of-pc\pytest-2300\test_k11_t009_v5_yalniz_korean0); allow_download=False oldugu icin indirilmedi
+E           src.contracts.errors.ModelMissingError: model dosyasi yok: korean_PP-OCRv4_rec_mobile.onnx (dizin: C:\Users\<kullanici>\AppData\Local\Temp\pytest-of-<kullanici>\pytest-2300\test_k11_t009_v5_yalniz_korean0); allow_download=False oldugu icin indirilmedi
 
 src\ocr\rapid_engine.py:655: ModelMissingError
 ________________ test_k11_t009_korean_model_yok_v5_adi_mesajda ________________
 
-tmp_path = WindowsPath('C:/Users/pc/AppData/Local/Temp/pytest-of-pc/pytest-2300/test_k11_t009_korean_model_yok0')
+tmp_path = WindowsPath('C:/Users/<kullanici>/AppData/Local/Temp/pytest-of-<kullanici>/pytest-2300/test_k11_t009_korean_model_yok0')
 
     def test_k11_t009_korean_model_yok_v5_adi_mesajda(tmp_path: Path) -> None:
         """`allow_download=False` + bos `model_dir`: KOREAN icin v5 rec dosyasi ARANIR; mesajda v5 adi, v4 adi YOK."""
@@ -268,12 +268,12 @@ tmp_path = WindowsPath('C:/Users/pc/AppData/Local/Temp/pytest-of-pc/pytest-2300/
             m.recognize(kare(), OcrPreset.DIALOGUE)
         mesaj = str(ei.value)
 >       assert "korean_PP-OCRv5_rec_mobile.onnx" in mesaj
-E       AssertionError: assert 'korean_PP-OCRv5_rec_mobile.onnx' in 'model dosyasi yok: multi_PP-OCRv3_det_mobile.onnx, korean_PP-OCRv4_rec_mobile.onnx (dizin: C:\\Users\\pc\\AppData\\Local\\Temp\\pytest-of-pc\\pytest-2300\\test_k11_t009_korean_model_yok0); allow_download=False oldugu icin indirilmedi'
+E       AssertionError: assert 'korean_PP-OCRv5_rec_mobile.onnx' in 'model dosyasi yok: multi_PP-OCRv3_det_mobile.onnx, korean_PP-OCRv4_rec_mobile.onnx (dizin: C:\\Users\\pc\\AppData\\Local\\Temp\\pytest-of-<kullanici>\\pytest-2300\\test_k11_t009_korean_model_yok0); allow_download=False oldugu icin indirilmedi'
 
 tests\unit\ocr\test_rapid_engine.py:1137: AssertionError
 _______ test_k11_t009_korean_yalniz_v4_dosyasi_varsa_yine_modelmissing ________
 
-tmp_path = WindowsPath('C:/Users/pc/AppData/Local/Temp/pytest-of-pc/pytest-2300/test_k11_t009_korean_yalniz_v40')
+tmp_path = WindowsPath('C:/Users/<kullanici>/AppData/Local/Temp/pytest-of-<kullanici>/pytest-2300/test_k11_t009_korean_yalniz_v40')
 
     def test_k11_t009_korean_yalniz_v4_dosyasi_varsa_yine_modelmissing(tmp_path: Path) -> None:
         """Dizinde det + ESKI v4 rec var, v5 yok -> yine `ModelMissingError` (v4 dosyasina DUSULMEZ); mesajda yalniz v5 adi."""
@@ -289,7 +289,7 @@ E       Failed: DID NOT RAISE ModelMissingError
 tests\unit\ocr\test_rapid_engine.py:1150: Failed
 _______________ test_k11_t009_korean_v5_dosyasi_varsa_acik_yol ________________
 
-tmp_path = WindowsPath('C:/Users/pc/AppData/Local/Temp/pytest-of-pc/pytest-2300/test_k11_t009_korean_v5_dosyas0')
+tmp_path = WindowsPath('C:/Users/<kullanici>/AppData/Local/Temp/pytest-of-<kullanici>/pytest-2300/test_k11_t009_korean_v5_dosyas0')
 
     def test_k11_t009_korean_v5_dosyasi_varsa_acik_yol(tmp_path: Path) -> None:
         """v5 dosyasi varsa `Rec.model_path` ona cozulur; v4 dosyasi dizinde OLMASA da."""
@@ -348,7 +348,7 @@ self = <src.ocr.rapid_engine.RapidOcrEngine object at 0x00000163950840B0>
                 f"model dosyasi yok: {', '.join(eksik)} (dizin: {dizin}); "
                 "allow_download=False oldugu icin indirilmedi"
             )
-E           src.contracts.errors.ModelMissingError: model dosyasi yok: korean_PP-OCRv4_rec_mobile.onnx (dizin: C:\Users\pc\AppData\Local\Temp\pytest-of-pc\pytest-2300\test_k11_t009_korean_v5_dosyas0); allow_download=False oldugu icin indirilmedi
+E           src.contracts.errors.ModelMissingError: model dosyasi yok: korean_PP-OCRv4_rec_mobile.onnx (dizin: C:\Users\<kullanici>\AppData\Local\Temp\pytest-of-<kullanici>\pytest-2300\test_k11_t009_korean_v5_dosyas0); allow_download=False oldugu icin indirilmedi
 
 src\ocr\rapid_engine.py:655: ModelMissingError
 ___________________ test_k11_t009_docstring_tablosu_guncel ____________________

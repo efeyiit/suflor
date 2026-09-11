@@ -1,4 +1,4 @@
-AYNA TUR 1 KODU (referans = satirin ILK blogu, ef397e3~1) -- ayni fixture'lar; TESTER_A_KOK=C:/Users/pc/AppData/Local/Temp/scratch/C--Users-pc-Desktop-efe--eviri-uygulamas-/d52c967f-bd19-4db3-b5e9-77e6cd08b889/scratchpad/ayna_tur1
+AYNA TUR 1 KODU (referans = satirin ILK blogu, ef397e3~1) -- ayni fixture'lar; TESTER_A_KOK=C:/Users/<kullanici>/AppData/Local/Temp/scratch/C--Users-pc-Desktop-efe--eviri-uygulamas-/d52c967f-bd19-4db3-b5e9-77e6cd08b889/scratchpad/ayna_tur1
 Tester-A tur 2 -- gercek OCR: etiket varyantlari + 'en kisa referans' siniri
 
 [A] etiket koprusu varyantlari (KR font 30; etiket 60 px dikey ortali dy=-10, tur 1 ret geometrisi)

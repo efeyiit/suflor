@@ -32,7 +32,7 @@
                 f"model dosyasi yok: {', '.join(eksik)} (dizin: {dizin}); "
                 "allow_download=False oldugu icin indirilmedi"
             )
-E           src.contracts.errors.ModelMissingError: model dosyasi yok: korean_PP-OCRv5_rec_mobile.onnx (dizin: C:\Users\pc\AppData\Local\Temp\pytest-of-pc\pytest-2330\test_a5_k11_dort_dil_alti_anah1); allow_download=False oldugu icin indirilmedi
+E           src.contracts.errors.ModelMissingError: model dosyasi yok: korean_PP-OCRv5_rec_mobile.onnx (dizin: C:\Users\pc\AppData\Local\Temp\pytest-of-<kullanici>\pytest-2330\test_a5_k11_dort_dil_alti_anah1); allow_download=False oldugu icin indirilmedi
 
 src\ocr\rapid_engine.py:685: ModelMissingError
 =========================== short test summary info ===========================
