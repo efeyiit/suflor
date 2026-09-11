@@ -12,7 +12,7 @@ Kontroller (packet.md "Kabul kapisi"):
   1. JP 4 cumle -> 4 ceviri, bos degil, hizali, provider_id
   2. EN 2 cumle -> "bekliyor" ve "degirmen" gecer (zayif icerik kontrolu)
   3. C8 pozitif kontrol: JP 3-cumlelik TEK segment -> >=3 cumle ve uc anahtar
-  4. KR 2 cumle -> hizali, bos degil (kalite olculmez, C7)
+  4. KR 2 cumle TEK segment -> >=2 cumle + anahtarlar (Y1); 4b: yalniz noktalama aynen (Y2)
   5. yer tutucu: JP {0}/{1} -> ciktida var (onarim); EN -> var (model korudu)
   6. sure: JP 4 cumle tek batch medyan <= 200 ms (UYARI esigi)
   7. ASCII-disi model_dir kopyasi -> calisir (C5)
@@ -100,10 +100,16 @@ def main() -> int:
     (tamam if n >= 3 and all(anahtar) else ihlal)(
         f"[3] JP paragraf tek segment -> {n} cumle, anahtarlar ihtiyar/dogu/gunes = {anahtar}  (tek girdide 2. cumle eriyordu)")
 
-    # 4 KR hizali
-    r = p.translate(istek(FX["KR"], "kor_Hang"))
-    (tamam if len(r.translations) == 2 and all(t.strip() for t in r.translations) else ihlal)(f"[4] KR -> {len(r.translations)} ceviri, hizali")
+    # 4 KR: TEK segment (Y1 pozitif kontrolu -- v1 onceden bolunmus gonderiyordu, kapi kordu)
+    r = p.translate(istek([" ".join(FX["KR"])], "kor_Hang"))
+    c = r.translations[0]; n = cumle_say(c); cl = c.lower().replace("ğ", "g")
+    (tamam if n >= 2 and "bekliyor" in cl and "dogu" in cl else ihlal)(
+        f"[4] KR 2 cumle TEK segment -> {n} cumle, bekliyor={'bekliyor' in cl} dogu={'dogu' in cl}  (ASCII nokta bolunmezse 2. cumle kaybolur)")
 
+    # 4b Y2 pozitif kontrolu: yalniz noktalama parcasi modele gitmez, aynen gecer
+    r = p.translate(istek(["。。。"], "jpn_Jpan"))   # 。。。
+    (tamam if r.translations[0].strip() == "。。。" else ihlal)(
+        f"[4b] '...' (JP) -> aynen mi: {r.translations[0].strip() == chr(0x3002)*3}  (v1'de 'Hayir, hayir.' uyduruluyordu)")
     # 5 yer tutucu
     r = p.translate(istek([FX["JP_yer_tutucu"]], "jpn_Jpan", ("{0}", "{1}")))
     (tamam if "{0}" in r.translations[0] and "{1}" in r.translations[0] else ihlal)(

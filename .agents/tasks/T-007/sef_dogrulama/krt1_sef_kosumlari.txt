@@ -1,0 +1,10 @@
+==== T-007 KRT-1 -- SEFIN YENIDEN URETIMLERI ====
+Y1 KR ASCII nokta: KR paragraf noktalamasi ['.']; paket kurali (。！？) 1 parca;
+   tek girdi -> "Şehrin ihtiyarı seni bekliyor." (2. cumle KAYIP);
+   bolunmus -> 2 cumle. DOGRU. Kural noktalamaya gore yeniden yazildi.
+Y2 yalniz-noktalama: ？->"- Hayır, hayır."  」->"\"Böyle bir şey."  。。。/.../bosluk->"Hayır, hayır."
+   5/5 halusinasyon. DOGRU. Parca suzgeci eklendi.
+Y3 beam/sure JP 4 cumle: beam=4 316 ms, beam=2 234, beam=1 183. 200 ms beam=4'te
+   ulasilamaz. DOGRU. Butce 350'ye cekildi (olculen 307-316 + pay); 79 ms/cumle
+   tasarim 4.2 araliginda. SEF HATASI: butceyi olcmeden yazmistim (4.6/3).
+O1-O6 kabul; paket v2'ye islendi. O5 (sef_dogrulama yoktu) -> bu dosya.
