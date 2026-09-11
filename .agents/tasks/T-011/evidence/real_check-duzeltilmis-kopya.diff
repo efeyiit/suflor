@@ -1,0 +1,49 @@
+1c1
+< """T-011 kabul kapisi -- gercek NMT ile sozluk gomme.
+---
+> """T-011 kabul kapisi -- IMPLEMENTER'IN DUZELTILMIS KOPYASI (sefin dosyasi degismedi).
+3c3,9
+<     python .agents/tasks/T-011/real_check.py
+---
+>     python .agents/tasks/T-011/evidence/real_check-duzeltilmis-kopya.py
+> 
+> Sefin real_check.py'sinden iki fark (kapi itirazi, bkz. delivery.md):
+>   (1) #6a: `chr(44608)` (U+AE40) yerine gecici sozluge yazilan terimin kendisi aranir (U+AC80).
+>   (2) #3c: `cevir()` segmentlere `placeholders` verir; #3c `("{0}",)` ile cagrilir
+>       (paket K3: "real_check #3 segmentlere placeholders verir"; T-007 K5 onarimi ancak boyle devreye girer).
+> Gerisi birebir ayni.
+23c29
+< KOK = Path(__file__).resolve().parents[3]
+---
+> KOK = Path(__file__).resolve().parents[4]
+29c35
+< SOZLUK = Path(__file__).resolve().parent / "fixtures" / "sozluk_ornek.json"
+---
+> SOZLUK = Path(__file__).resolve().parents[1] / "fixtures" / "sozluk_ornek.json"
+42c48
+<     print("T-011 real_check -- sozluk gomme, gercek NMT")
+---
+>     print("T-011 real_check (implementer duzeltilmis kopya) -- sozluk gomme, gercek NMT")
+51,52c57,58
+<     def cevir(metinler: list[str], dil: str, gom: bool) -> list[str]:
+<         segs = tuple(Segment(text=t, bbox=Rect(0, i * 40, 800, 36)) for i, t in enumerate(metinler))
+---
+>     def cevir(metinler: list[str], dil: str, gom: bool, yer_tutucular: tuple[str, ...] = ()) -> list[str]:
+>         segs = tuple(Segment(text=t, bbox=Rect(0, i * 40, 800, 36), placeholders=yer_tutucular) for i, t in enumerate(metinler))
+87c93
+<     c3 = cevir(["{0}マルクスは村にいます。"], "jpn_Jpan", True)[0]
+---
+>     c3 = cevir(["{0}マルクスは村にいます。"], "jpn_Jpan", True, ("{0}",))[0]
+95c101,102
+<         kotu.write_text(json.dumps({"terimler": [{"kaynak": "검", "hedef": "Kılıç"}]}, ensure_ascii=False), encoding="utf-8")
+---
+>         TEK_HECE = "검"  # U+AC80
+>         kotu.write_text(json.dumps({"terimler": [{"kaynak": TEK_HECE, "hedef": "Kılıç"}]}, ensure_ascii=False), encoding="utf-8")
+99c106
+<             (tamam if chr(44608) in str(e) else ihlal)(f"[6a] tek heceli KR terim reddedildi, mesajda terim var={chr(44608) in str(e)}")
+---
+>             (tamam if TEK_HECE in str(e) else ihlal)(f"[6a] tek heceli KR terim reddedildi, mesajda terim var={TEK_HECE in str(e)}")
+101c108
+<         izin.write_text(json.dumps({"terimler": [{"kaynak": "검", "hedef": "Kılıç", "kisa_terim_izni": True}]}, ensure_ascii=False), encoding="utf-8")
+---
+>         izin.write_text(json.dumps({"terimler": [{"kaynak": TEK_HECE, "hedef": "Kılıç", "kisa_terim_izni": True}]}, ensure_ascii=False), encoding="utf-8")

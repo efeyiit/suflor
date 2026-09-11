@@ -1,0 +1,9 @@
+T-011 kapi itirazi olcumu
+[6a] kapinin aradigi kod noktasi: U+AE40 (chr(44608))
+[6a] real_check gecici sozlugundeki terimin kod noktasi: U+AC80 (uzunluk 1)
+[6a] ikisi ayni mi: False
+[6a] ValueError; mesajda GERCEK terim (U+AC80) var: True; mesajda chr(44608) var: False
+[3c] gomulu KAYNAK metinde {0} sayisi: 1; Marcus var: True
+[3c-a] HAM, placeholders=():        Marcus=True {0}=False  (yer tutucu dususu modelin, gommeden bagimsiz)
+[3c-b] GOMULU, placeholders=():     Marcus=True {0}=False  (kapinin cevir() yolu)
+[3c-c] GOMULU, placeholders=('{0}',): Marcus=True {0}=True  (paket K3'un dedigi yol)

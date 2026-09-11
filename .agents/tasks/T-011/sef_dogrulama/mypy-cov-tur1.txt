@@ -1,0 +1,11 @@
+Success: no issues found in 2 source files
+mypy exit=0
+
+Name                      Stmts   Miss  Cover   Missing
+-------------------------------------------------------
+src\translate\sozluk.py     301      0   100%
+-------------------------------------------------------
+TOTAL                       301      0   100%
+Required test coverage of 95% reached. Total coverage: 100.00%
+256 passed in 2.46s
+cov exit=0

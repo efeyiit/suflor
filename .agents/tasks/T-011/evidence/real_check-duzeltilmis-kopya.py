@@ -1,6 +1,12 @@
-"""T-011 kabul kapisi -- gercek NMT ile sozluk gomme.
+"""T-011 kabul kapisi -- IMPLEMENTER'IN DUZELTILMIS KOPYASI (sefin dosyasi degismedi).
 
-    python .agents/tasks/T-011/real_check.py
+    python .agents/tasks/T-011/evidence/real_check-duzeltilmis-kopya.py
+
+Sefin real_check.py'sinden iki fark (kapi itirazi, bkz. delivery.md):
+  (1) #6a: `chr(44608)` (U+AE40) yerine gecici sozluge yazilan terimin kendisi aranir (U+AC80).
+  (2) #3c: `cevir()` segmentlere `placeholders` verir; #3c `("{0}",)` ile cagrilir
+      (paket K3: "real_check #3 segmentlere placeholders verir"; T-007 K5 onarimi ancak boyle devreye girer).
+Gerisi birebir ayni.
 
 Sefe aittir. Stdout yalniz ASCII; metin basilmaz (yalniz sayilar/boolean).
   1. G1'in 6 cumlesi: lookup -> gom -> translate -> hedef terim var (6/6)
@@ -20,14 +26,13 @@ import sys
 import time
 from pathlib import Path
 
-KOK = Path(__file__).resolve().parents[3]
+KOK = Path(__file__).resolve().parents[4]
 sys.path.insert(0, str(KOK))
 
 from src.contracts.models import Rect, Segment, TranslationRequest  # noqa: E402
 
 MODEL = KOK / "models" / "nllb-200-distilled-600M-ct2-int8"
-SOZLUK = Path(__file__).resolve().parent / "fixtures" / "sozluk_ornek.json"
-TEK_HECE = "검"   # tek hangul hecesi (kilic); #6 sema reddi -- kod noktasi tek yerden
+SOZLUK = Path(__file__).resolve().parents[1] / "fixtures" / "sozluk_ornek.json"
 ihlaller: list[str] = []
 
 
@@ -40,7 +45,7 @@ def tamam(m: str) -> None:
 
 
 def main() -> int:
-    print("T-011 real_check -- sozluk gomme, gercek NMT")
+    print("T-011 real_check (implementer duzeltilmis kopya) -- sozluk gomme, gercek NMT")
     try:
         from src.translate.sozluk import GlossaryStore, terimleri_gom
     except Exception as e:  # noqa: BLE001
@@ -81,23 +86,19 @@ def main() -> int:
         f"[4] unvan: Elder={'Elder' in u} Ihtiyar={'İhtiyar' in u} Marcus={'Marcus' in u}")
 
     # 3 yer tutucu (Y2)
-    import tempfile
-    from src.translate.sozluk import GlossaryStore as _GS
-    with tempfile.TemporaryDirectory() as td3:
-        oy = Path(td3) / "oyuncu.json"
-        oy.write_text(json.dumps({"terimler": [{"kaynak": "PLAYER", "hedef": "Oyuncu"}]}, ensure_ascii=False), encoding="utf-8")
-        g3 = _GS(oy)
-        h_yok = g3.lookup("{PLAYER}は村にいます", ("{PLAYER}",))
-        h_kontrol = g3.lookup("{PLAYER}は村にいます", ())   # pozitif kontrol: yer tutucu bildirilmezse eslesmeli
+    h_yok = s.lookup("{PLAYER}は村にいます", ("{PLAYER}",))
     h_var = s.lookup("{0}マルクス", ("{0}",))
-    (tamam if not h_yok and len(h_kontrol) == 1 else ihlal)(f"[3a] {{PLAYER}} korunan aralikta: {len(h_yok)} hit; bildirilmezse {len(h_kontrol)} hit (kontrol)")
+    (tamam if not any(x.source_term.lower() == "player" for x in h_yok) else ihlal)(f"[3a] {{PLAYER}} icinde terim eslesmedi: {len(h_yok)} hit")
     (tamam if any(x.target_term == "Marcus" for x in h_var) else ihlal)(f"[3b] {{0}} bitisik: Marcus hit var ({len(h_var)})")
     c3 = cevir(["{0}マルクスは村にいます。"], "jpn_Jpan", True, ("{0}",))[0]
     (tamam if "Marcus" in c3 and "{0}" in c3 else ihlal)(f"[3c] gomulu+yer tutucu ceviri: Marcus={'Marcus' in c3} {{0}}={'{0}' in c3}")
 
     # 6 Y1 negatif: tek heceli KR terim semada reddedilir
+    import tempfile
+    from src.translate.sozluk import GlossaryStore as _GS
     with tempfile.TemporaryDirectory() as td:
         kotu = Path(td) / "kotu.json"
+        TEK_HECE = "검"  # U+AC80
         kotu.write_text(json.dumps({"terimler": [{"kaynak": TEK_HECE, "hedef": "Kılıç"}]}, ensure_ascii=False), encoding="utf-8")
         try:
             _GS(kotu); ihlal("[6a] tek heceli KR terim kabul edildi (ValueError bekleniyordu)")

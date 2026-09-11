@@ -1,0 +1,10 @@
+T-011 K5 sure olcumu -- python 3.12.10, 1000 segment, 7 kosum medyani (ms)
+  yukleme fixture v2 ( 11 terim):    1.3 ms
+  yukleme   50 terim ( 50 terim):    2.6 ms
+  yukleme  500 terim (500 terim):   10.5 ms
+  JP x fixture v2: lookup_segments+gom   15.2 ms | kapi yolu (lookup+replace+gom)   20.9 ms | hit 3000 | butce 50
+  JP x   50 terim: lookup_segments+gom   15.3 ms | kapi yolu (lookup+replace+gom)   20.1 ms | hit 3000 | butce 50
+  JP x  500 terim: lookup_segments+gom   15.4 ms | kapi yolu (lookup+replace+gom)   21.0 ms | hit 3000 | butce 50
+  EN x fixture v2: lookup_segments+gom   15.5 ms | kapi yolu (lookup+replace+gom)   18.2 ms | hit 3000 | butce 50
+  EN x   50 terim: lookup_segments+gom   16.2 ms | kapi yolu (lookup+replace+gom)   22.1 ms | hit 3000 | butce 50
+  EN x  500 terim: lookup_segments+gom   15.4 ms | kapi yolu (lookup+replace+gom)   20.3 ms | hit 3000 | butce 50
