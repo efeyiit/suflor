@@ -1,0 +1,16 @@
+git status --short -- src tests .agents/tasks/T-008/real_check.py .agents/tasks/T-008/packet.md:
+(bos olmali -- takipsiz src/ocr ve tests/unit/ocr/test_satir_birlestirici.py implementer'in, oturum basinda da takipsizdi; asagida sha256 ile degismedigi gosterilir)
+
+sha256 (depo) vs (ayna, geri alinmis):
+74cea0c64fa779e56aa43cde6336fa07e61d54805800e250b958fe4a2e610679 *src/ocr/satir_birlestirici.py
+c44edd78e765d15819cce02facdb6103249c75deba79fd1254e0ee41aba9095d *tests/unit/ocr/test_satir_birlestirici.py
+a9f16173bb649c1c29f1a37d7dd6e234141acc903b4e717e3b68c23f31b4114a *.agents/tasks/T-008/real_check.py
+74cea0c64fa779e56aa43cde6336fa07e61d54805800e250b958fe4a2e610679 *C:/Users/pc/AppData/Local/Temp/scratch/C--Users-pc-Desktop-efe--eviri-uygulamas-/d52c967f-bd19-4db3-b5e9-77e6cd08b889/scratchpad/t008_tester_B_ayna/src/ocr/satir_birlestirici.py
+
+depo dosyalarinin mtime'i (oturum basi 11:09-11:11 idi):
+-rw-r--r-- 1 pc 197121  8369 13:11 .agents/tasks/T-008/real_check.py
+-rw-r--r-- 1 pc 197121 18041 11:06 src/ocr/satir_birlestirici.py
+-rw-r--r-- 1 pc 197121 26102 11:02 tests/unit/ocr/test_satir_birlestirici.py
+
+models/ junction hedefi degismedi:
+-rw-r--r-- 1 pc 197121 622595991 09-11_07:33 models/nllb-200-distilled-600M-ct2-int8/model.bin

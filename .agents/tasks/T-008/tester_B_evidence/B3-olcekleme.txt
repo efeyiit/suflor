@@ -1,0 +1,5 @@
+yerlesim              1k ms   10k ms   100k ms  10k/1k  100k/10k   (n log n: ~13 / ~12; n^2: ~100)
+rastgele               3.17    28.41     673.3     9.0      23.7
+tek-satir-zincir       1.80    23.44     300.8    13.0      12.8
+hepsi-bagli            1.51    22.92     271.0    15.1      11.8
+sutun                  1.44    20.76     264.4    14.4      12.7

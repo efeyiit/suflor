@@ -1,0 +1,54 @@
+FFF..................................................................... [ 20%]
+........................................................................ [ 41%]
+........................................................................ [ 62%]
+........................................................................ [ 83%]
+........................................................                 [100%]
+================================== FAILURES ===================================
+_________________ test_bariyer_gercekten_atesliyor[rapidocr] __________________
+
+ad = 'rapidocr'
+
+    @pytest.mark.parametrize("ad", ["rapidocr", "rapidocr.main", "onnxruntime"])
+    def test_bariyer_gercekten_atesliyor(ad: str) -> None:
+        sys.modules.pop(ad, None)
+>       with pytest.raises(RuntimeError, match="T-006 K1 bariyeri"):
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       AssertionError: Regex pattern did not match.
+E         Expected regex: 'T-006 K1 bariyeri'
+E         Actual message: "tester-B T-008 K1 bariyeri: 'rapidocr' birim testte import edilemez"
+
+tests\unit\ocr\test_conftest_bariyer.py:17: AssertionError
+_______________ test_bariyer_gercekten_atesliyor[rapidocr.main] _______________
+
+ad = 'rapidocr.main'
+
+    @pytest.mark.parametrize("ad", ["rapidocr", "rapidocr.main", "onnxruntime"])
+    def test_bariyer_gercekten_atesliyor(ad: str) -> None:
+        sys.modules.pop(ad, None)
+>       with pytest.raises(RuntimeError, match="T-006 K1 bariyeri"):
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       AssertionError: Regex pattern did not match.
+E         Expected regex: 'T-006 K1 bariyeri'
+E         Actual message: "tester-B T-008 K1 bariyeri: 'rapidocr' birim testte import edilemez"
+
+tests\unit\ocr\test_conftest_bariyer.py:17: AssertionError
+________________ test_bariyer_gercekten_atesliyor[onnxruntime] ________________
+
+ad = 'onnxruntime'
+
+    @pytest.mark.parametrize("ad", ["rapidocr", "rapidocr.main", "onnxruntime"])
+    def test_bariyer_gercekten_atesliyor(ad: str) -> None:
+        sys.modules.pop(ad, None)
+>       with pytest.raises(RuntimeError, match="T-006 K1 bariyeri"):
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       AssertionError: Regex pattern did not match.
+E         Expected regex: 'T-006 K1 bariyeri'
+E         Actual message: "tester-B T-008 K1 bariyeri: 'onnxruntime' birim testte import edilemez"
+
+tests\unit\ocr\test_conftest_bariyer.py:17: AssertionError
+=========================== short test summary info ===========================
+FAILED tests/unit/ocr/test_conftest_bariyer.py::test_bariyer_gercekten_atesliyor[rapidocr]
+FAILED tests/unit/ocr/test_conftest_bariyer.py::test_bariyer_gercekten_atesliyor[rapidocr.main]
+FAILED tests/unit/ocr/test_conftest_bariyer.py::test_bariyer_gercekten_atesliyor[onnxruntime]
+3 failed, 341 passed in 7.83s
+exit=1

@@ -1,0 +1,8 @@
+models/: junction (salt okunur kullanim; depo dosyalarina yazilmaz)
+ayna: C:\Users\pc\AppData\Local\Temp\scratch\C--Users-pc-Desktop-efe--eviri-uygulamas-\d52c967f-bd19-4db3-b5e9-77e6cd08b889\scratchpad\t008_tester_B_ayna
+TABAN  teslim exit=0 (68 passed in 0.29s) | mercek-B exit=0 (36 passed, 1 deselected in 3.72s)
+
+mid   teslim   mercek-B  dusen mercek-B testleri
+M23   .        X         test_b1_ek_k3_uyumluluk_ideografi_cjk
+M40   .        X         test_b1_ek_k6_birlesik_grup_ile_tekil_blok_bagi_en_kucuk_indeks
+M41   .        X         test_b1_ek_k6_ayni_x_farkli_y_permutasyon_bagimsiz

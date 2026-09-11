@@ -1,0 +1,46 @@
+============================= test session starts =============================
+platform win32 -- Python 3.12.10, pytest-9.1.1, pluggy-1.6.0 -- C:\Users\pc\AppData\Local\Programs\Python\Python312\python.exe
+rootdir: C:\Users\pc\Desktop\efe\çeviri uygulamasý
+plugins: anyio-4.15.1, cov-7.1.0
+collecting ... collected 37 items
+
+.agents/tasks/T-008/tester_B/test_mercek_B.py::test_b2_teslim_68_test_topluyor PASSED [  2%]
+.agents/tasks/T-008/tester_B/test_mercek_B.py::test_b2_her_test_fonksiyonunda_assert_ya_da_raises_var PASSED [  5%]
+.agents/tasks/T-008/tester_B/test_mercek_B.py::test_b2_sabit_ya_da_kendine_esit_assert_yok PASSED [  8%]
+.agents/tasks/T-008/tester_B/test_mercek_B.py::test_b2_yalniz_kendine_bagli_testler_listesi_ve_cipalari PASSED [ 10%]
+.agents/tasks/T-008/tester_B/test_mercek_B.py::test_b2_esik_sinir_noktalari_teslimde_var PASSED [ 13%]
+.agents/tasks/T-008/tester_B/test_mercek_B.py::test_b2_yatay_esik_ikinci_parametre_noktasi[h20] PASSED [ 16%]
+.agents/tasks/T-008/tester_B/test_mercek_B.py::test_b2_yatay_esik_ikinci_parametre_noktasi[h33-tek] PASSED [ 18%]
+.agents/tasks/T-008/tester_B/test_mercek_B.py::test_b2_yatay_esik_ikinci_parametre_noktasi[h100] PASSED [ 21%]
+.agents/tasks/T-008/tester_B/test_mercek_B.py::test_b2_dikey_esik_ikinci_parametre_noktasi[h20] PASSED [ 24%]
+.agents/tasks/T-008/tester_B/test_mercek_B.py::test_b2_dikey_esik_ikinci_parametre_noktasi[h33-tek] PASSED [ 27%]
+.agents/tasks/T-008/tester_B/test_mercek_B.py::test_b2_dikey_esik_ikinci_parametre_noktasi[h100] PASSED [ 29%]
+.agents/tasks/T-008/tester_B/test_mercek_B.py::test_b2_real_check_model_pinli_sabitler_belgelendi PASSED [ 32%]
+.agents/tasks/T-008/tester_B/test_mercek_B.py::test_b3_ast_saflik_bagimsiz_denetim PASSED [ 35%]
+.agents/tasks/T-008/tester_B/test_mercek_B.py::test_b3_girdi_listesi_ve_bloklar_degismez_id_ve_esitlik PASSED [ 37%]
+.agents/tasks/T-008/tester_B/test_mercek_B.py::test_b3_deterministik_100_rastgele_girdi_x2_ve_permutasyon PASSED [ 40%]
+.agents/tasks/T-008/tester_B/test_mercek_B.py::test_b3_ayri_surec_farkli_hash_tohumu_ayni_cikti PASSED [ 43%]
+.agents/tasks/T-008/tester_B/test_mercek_B.py::test_b3_1000_blok_50_ms_altinda_dort_yerlesim[rastgele] PASSED [ 45%]
+.agents/tasks/T-008/tester_B/test_mercek_B.py::test_b3_1000_blok_50_ms_altinda_dort_yerlesim[tek-satir-zincir] PASSED [ 48%]
+.agents/tasks/T-008/tester_B/test_mercek_B.py::test_b3_1000_blok_50_ms_altinda_dort_yerlesim[hepsi-bagli] PASSED [ 51%]
+.agents/tasks/T-008/tester_B/test_mercek_B.py::test_b3_1000_blok_50_ms_altinda_dort_yerlesim[sutun] PASSED [ 54%]
+.agents/tasks/T-008/tester_B/test_mercek_B.py::test_b3_olcekleme_n_log_n_1k_10k[rastgele] PASSED [ 56%]
+.agents/tasks/T-008/tester_B/test_mercek_B.py::test_b3_olcekleme_n_log_n_1k_10k[tek-satir-zincir] PASSED [ 59%]
+.agents/tasks/T-008/tester_B/test_mercek_B.py::test_b3_olcekleme_n_log_n_1k_10k[hepsi-bagli] PASSED [ 62%]
+.agents/tasks/T-008/tester_B/test_mercek_B.py::test_b3_olcekleme_n_log_n_1k_10k[sutun] PASSED [ 64%]
+.agents/tasks/T-008/tester_B/test_mercek_B.py::test_b3_100k_blok_saniye_altinda PASSED [ 67%]
+.agents/tasks/T-008/tester_B/test_mercek_B.py::test_b4_pragma_ve_kapsam_yapilandirmasi_yok PASSED [ 70%]
+.agents/tasks/T-008/tester_B/test_mercek_B.py::test_b4_her_test_ciktiya_ya_da_kaynaga_bakan_assert_tasiyor PASSED [ 72%]
+.agents/tasks/T-008/tester_B/test_mercek_B.py::test_b4_sabit_degerleri_testi_tek_basina_esik_mutantini_tutmuyor_belge PASSED [ 75%]
+.agents/tasks/T-008/tester_B/test_mercek_B.py::test_b5_kendi_bariyerim_atesliyor[rapidocr] PASSED [ 78%]
+.agents/tasks/T-008/tester_B/test_mercek_B.py::test_b5_kendi_bariyerim_atesliyor[rapidocr.main] PASSED [ 81%]
+.agents/tasks/T-008/tester_B/test_mercek_B.py::test_b5_kendi_bariyerim_atesliyor[onnxruntime] PASSED [ 83%]
+.agents/tasks/T-008/tester_B/test_mercek_B.py::test_b5_modul_yasak_kok_import_etmiyor PASSED [ 86%]
+.agents/tasks/T-008/tester_B/test_mercek_B.py::test_b5_sefin_bariyeri_teslim_dosyasi_kosarken_68_68_aktif PASSED [ 89%]
+.agents/tasks/T-008/tester_B/test_mercek_B.py::test_b5_bariyer_bu_dizin_sefin_diziniyle_birlikte_kosunca_da_tutar PASSED [ 91%]
+.agents/tasks/T-008/tester_B/test_mercek_B.py::test_b1_ek_k6_ayni_x_farkli_y_permutasyon_bagimsiz PASSED [ 94%]
+.agents/tasks/T-008/tester_B/test_mercek_B.py::test_b1_ek_k6_birlesik_grup_ile_tekil_blok_bagi_en_kucuk_indeks PASSED [ 97%]
+.agents/tasks/T-008/tester_B/test_mercek_B.py::test_b1_ek_k3_uyumluluk_ideografi_cjk PASSED [100%]
+
+============================= 37 passed in 4.19s ==============================
+exit=0

@@ -1,0 +1,4 @@
+japan_PP-OCRv4_rec_mobile.onnx: sozluk 4399 karakter; uyumluluk ideografi 0 (kod noktalari: []); hiragana 83 katakana 86 cjk-unified 3955 hangul 0 ideographic-iteration/closing-mark 2
+korean_PP-OCRv4_rec_mobile.onnx: sozluk 3688 karakter; uyumluluk ideografi 76 (kod noktalari: ['0xf902', '0xf904', '0xf90a', '0xf90c', '0xf90f', '0xf915', '0xf91c', '0xf91d', '0xf91f', '0xf92c', '0xf92d', '0xf933'] ...); hiragana 0 katakana 6 cjk-unified 1640 hangul 1775 ideographic-iteration/closing-mark 0
+korean_PP-OCRv5_rec_mobile.onnx: sozluk 11945 karakter; uyumluluk ideografi 0 (kod noktalari: []); hiragana 0 katakana 0 cjk-unified 0 hangul 11504 ideographic-iteration/closing-mark 0
+ch_PP-OCRv4_rec_mobile.onnx: sozluk 6623 karakter; uyumluluk ideografi 2 (kod noktalari: ['0xf92c', '0xf979']); hiragana 1 katakana 4 cjk-unified 6278 hangul 2 ideographic-iteration/closing-mark 2

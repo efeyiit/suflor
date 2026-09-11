@@ -1,0 +1,59 @@
+mid   G1G2G3G4G5  G2 dusen sabit haric sonuc                  sinif / aciklama
+M01   [.X.XX]            3           2 YAKALANDI              K2 dikey esik -- K2: DIKEY 0.5 -> 0.0 (yalnizca degen kutular da ayni satir)
+M02   [.X.XX]            5           4 YAKALANDI              K2 dikey esik -- K2: DIKEY 0.5 -> 0.9 (KR y-titresimli kelimeler ayri satir)
+M03   [.X.XX]            5           4 YAKALANDI              K2 yatay esik -- K2: YATAY 0.75 -> 0.6 (KR 0.57 hala birlesir; 0.74 sinir testi ayirir)
+M04   [.XXXX]            3           2 YAKALANDI              K2 yatay esik -- K2: YATAY 0.75 -> 0.9 (1-em KR 0.78 birlesir)
+M05   [.XXXX]            3           2 YAKALANDI              K2 yatay esik -- K2: YATAY 0.75 -> 1.0 (paket v1 degeri; KRT Y3)
+M06   [.XXXX]            9           8 YAKALANDI              K2 yatay esik -- K2: YATAY 0.75 -> 10.0 (menu sutunlari birlesir)
+M07   [.XXXX]            3           3 YAKALANDI              K2 min(h) -- K2: bosluk esigi min(h) -> max(h)
+M08   [.X.XX]            1           1 YAKALANDI              K2 min(h) -- K2: dikey esik min(h) -> max(h)
+M09   [.X.XX]            2           2 YAKALANDI              K2 birlesik yukseklik -- K2 (Y2): komsuluk grubun BIRLESIK bbox'ina gore (birlesik h ile esik)
+M10   [.X.XX]            4           4 YAKALANDI              K2 x ilerleme -- K2: x ilerleme `>` -> `>=` (ayni x'teki cift tespit birlesir)
+M11   [.X.XX]            1           1 YAKALANDI              K2 monitor_index -- K2: monitor_index denetimi YOK (yuzey anahtarindan cikarildi)
+M12   [.X.XX]            1           1 YAKALANDI              K2 dpi_scale -- K2: dpi_scale denetimi YOK (KARAR; K5 'ilk parcadan' sessiz kopya)
+M13   [.XXXX]            8           8 YAKALANDI              K2 satir ici siralama -- K2: satir ici x siralamasi YOK -- paket lafzinin (y,x) sirasi (ITIRAZ 1'in tersi: 17 -> 9)
+M14   [.X.XX]            2           2 YAKALANDI              K2 sinir -- K2: ortusme `>=` -> `>` (tam 0.5 ayrilir)
+M15   [.X.XX]            3           3 YAKALANDI              K2 sinir -- K2: bosluk `<=` -> `<` (tam 0.75 ayrilir)
+M16   [.X.XX]            2           2 YAKALANDI              K2 satir referansi -- K2: satir uyeligi ILK blokla degil bir ONCEKIYLE (merdiven tek satir)
+M17   [.X.XX]            1           1 YAKALANDI              K2 grup referansi -- K2: grup ici dikey referans ILK degil SON blok (uzun kutu koprusu)
+M18   [.X.XX]            2           2 YAKALANDI              K2 grup referansi -- K2: grup icinde dikey ortusme HIC denetlenmiyor (yalniz yatay)
+M19   [.X.XX]            6           6 YAKALANDI              K3 CJK bosluk -- K3: CJK-CJK arasina da bosluk
+M20   [.XXXX]            1           1 YAKALANDI              K3 Hangul -- K3: Hangul da CJK sayilir -> KR kelimeler BOSSUZ birlesir
+M21   [.X.XX]            1           1 YAKALANDI              K3 ilk harf -- K3: ilk HARF degil ilk KARAKTER (tirnakla baslayan katakana LATIN)
+M22   [.X.XX]            4           4 YAKALANDI              K3 strip -- K3: strip yok
+M23   [.....]            0           0 *** KACTI ***          K3 uyumluluk -- K3: uyumluluk ideograflari (U+F900..) CJK sayilmiyor -- docstring 'CJK'dir' der
+M24   [.X.XX]            3           3 YAKALANDI              K3 betik kumesi -- K3: HIRAGANA CJK degil
+M25   [.X.XX]            2           2 YAKALANDI              K3 betik kumesi -- K3: KATAKANA CJK degil
+M26   [.X.XX]            5           5 YAKALANDI              K3 karisik -- K3: bosluk yalniz LATIN-LATIN arasinda (karisik betik bossuz)
+M27   [.X.XX]            3           3 YAKALANDI              K5 confidence -- K5: confidence min -> max
+M28   [.X.XX]            3           3 YAKALANDI              K5 confidence -- K5: confidence ILK parcadan
+M29   [.X.XX]            3           3 YAKALANDI              K5 confidence -- K5: confidence ORTALAMA
+M30   [.X.XX]            1           1 YAKALANDI              K8 NaN -- K8: NaN suzgeci yok (naif min, sira bagimli)
+M31   [.X.XX]            1           1 YAKALANDI              K8 NaN -- K8: hepsi NaN -> 0.0 (NaN degil)
+M32   [.XXXX]            6           6 YAKALANDI              K5 line_boxes -- K5: birlesik blokta line_boxes BOS
+M33   [.X.XX]            5           5 YAKALANDI              K5 line_boxes -- K5: line_boxes TERS x sirasinda
+M34   [.X.XX]            4           4 YAKALANDI              K5 bbox -- K5: bbox birlesim yerine ILK parcanin bbox'i
+M35   [.X.XX]            1           1 YAKALANDI              K5 bbox -- K5: birlesik h yalniz ilk parcadan (alt kenar birlesmez)
+M36   [.X.XX]            2           2 YAKALANDI              K5 tek parca -- K5/K8: tek parca `is` yerine ESIT KOPYA
+M37   [.X.XX]            1           1 YAKALANDI              K6 bag -- K6: bag girdi sirasinin TERSIYLE (-idx)
+M38   [.XXXX]           14          14 YAKALANDI              K6 sira -- K6: cikti TERS okuma sirasinda
+M39   [.X.XX]            3           3 YAKALANDI              K6 sira -- K6: son siralama YOK (yuzey/satir isleme sirasi)
+M40   [.....]            0           0 *** KACTI ***          K6 bag keskinlik -- K6: bag EN KUCUK degil EN BUYUK girdi indeksiyle (birlesik grup vs tekil, ayni (y,x))
+M41   [.....]            0           0 *** KACTI ***          K6 satir ici bag keskinlik -- K2/K6: satir ici siralama (x, idx) -- y anahtari yok
+M42   [.X.XX]            1           1 YAKALANDI              K8 bos -- K8: bos girdi -> ValueError
+M43   [.X.XX]            4           4 YAKALANDI              K8 yozlasmis -- K8: h=0/w=0 yozlasmis DEGIL (birlesebilir)
+M44   [.X.XX]            5           5 YAKALANDI              K8 yozlasmis -- K8: yozlasmis icin HEM h HEM w <= 0 gerekir
+M45   [.X.XX]            2           2 YAKALANDI              K8 yozlasmis -- K8: negatif h/w yozlasmis DEGIL
+M46   [.X.XX]            1           1 YAKALANDI              K1 saflik -- K1: modul duzeyi MUTABLE (`_ONBELLEK: dict = {}`)
+M47   [.XXXX]            1           1 YAKALANDI              K1 saflik -- K1: modul duzeyinde `import os`
+C-6   [.....]            0           0 kontrol KACTI          -- kontrol -- -- KONTROL: ciktiya etkisiz ek siralama (yalniz sure; 1000 blok butcesi hassas mi?)
+C-1   [.....]            0           0 kontrol KACTI          -- kontrol -- -- KONTROL: ilk siralama anahtari (y,x,idx) -> (y,x) -- kararli sort + enumerate = esdeger
+C-2   [.....]            0           0 kontrol KACTI          -- kontrol -- -- KONTROL: min -> sorted()[0] (esdeger)
+C-3   [.....]            0           0 kontrol KACTI          -- kontrol -- -- KONTROL: min x yerine x-sirali ilk parcanin x'i (esdeger)
+C-4   [.....]            0           0 kontrol KACTI          -- kontrol -- -- KONTROL: min idx -> sorted()[0] (esdeger)
+C-5   [.....]            0           0 kontrol KACTI          -- kontrol -- -- KONTROL: monitor_index SON parcadan (yuzey bolumlemesi -> hepsi ayni; esdeger)
+
+davranis mutanti 47: yakalanan 44, kacan 3 ['M23', 'M40', 'M41']
+kontrol 6: kacan 6, yakalanan (yanlis pozitif) []
+kapi basina yakalama: G1-mypy 0/47, G2-birim 44/47, G3-real 9/47, G4-kapsam 44/47, G5-tum 44/47
+yalniz real_check ile yakalanan: []; G2'de YALNIZ sabit-pin testiyle yakalanan: []

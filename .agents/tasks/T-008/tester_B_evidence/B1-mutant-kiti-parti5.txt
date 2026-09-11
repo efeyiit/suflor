@@ -1,0 +1,40 @@
+models/: junction (salt okunur kullanim; depo dosyalarina yazilmaz)
+ayna agaci: C:\Users\pc\AppData\Local\Temp\scratch\C--Users-pc-Desktop-efe--eviri-uygulamas-\d52c967f-bd19-4db3-b5e9-77e6cd08b889\scratchpad\t008_tester_B_ayna   (depo YAZILMAZ)
+kapilar PYTHONIOENCODING'siz (cp1254) kosar; real_check yalniz ASCII basar
+
+MUTANT KITI -- her mutant icin hangi kapi YAKALAR (X) / KACIRIR (.)
+kapilar: G1-mypy | G2-birim | G3-real | G4-kapsam | G5-tum
+
+M47   [.XXXX] YAKALANDI   G2 dusen=1  (beklenen: G2 G3 G4 G5)
+       K1: modul duzeyinde `import os`
+       urun: I/O kapisi
+       G2-birim: E       AssertionError: assert not ({'__future__', 'collections', 'math', 'os', 'src', 'typing', ...} & {'io', 'logging', 'os', 'pathlib', '
+       G3-real: IHLAL  [5] saflik: yasak cagri [], yasak modul ['os']
+       G4-kapsam: E       AssertionError: assert not ({'__future__', 'collections', 'math', 'os', 'src', 'typing', ...} & {'io', 'logging', 'os', 'pathlib', '
+       G5-tum: E       AssertionError: assert not ({'__future__', 'collections', 'math', 'os', 'src', 'typing', ...} & {'io', 'logging', 'os', 'pathlib', '
+         G2-birim: FAILED tests/unit/ocr/test_satir_birlestirici.py::test_k1_saflik_ast_yasak_cagri_modul_ve_mutable_yok
+         G4-kapsam: FAILED tests/unit/ocr/test_satir_birlestirici.py::test_k1_saflik_ast_yasak_cagri_modul_ve_mutable_yok
+         G5-tum: FAILED tests/unit/ocr/test_satir_birlestirici.py::test_k1_saflik_ast_yasak_cagri_modul_ve_mutable_yok
+       sureler: 3s 1s 12s 1s 8s
+C-6   [.....] KACTI (dogru: kontrol)   G2 dusen=0  (beklenen: .....)
+       KONTROL: ciktiya etkisiz ek siralama (yalniz sure; 1000 blok butcesi hassas mi?)
+       sureler: 0s 1s 12s 1s 8s
+C-1   [.....] KACTI (dogru: kontrol)   G2 dusen=0  (beklenen: .....)
+       KONTROL: ilk siralama anahtari (y,x,idx) -> (y,x) -- kararli sort + enumerate = esdeger
+       sureler: 0s 1s 12s 1s 7s
+C-2   [.....] KACTI (dogru: kontrol)   G2 dusen=0  (beklenen: .....)
+       KONTROL: min -> sorted()[0] (esdeger)
+       sureler: 0s 1s 12s 1s 7s
+C-3   [.....] KACTI (dogru: kontrol)   G2 dusen=0  (beklenen: .....)
+       KONTROL: min x yerine x-sirali ilk parcanin x'i (esdeger)
+       sureler: 0s 1s 12s 1s 7s
+C-4   [.....] KACTI (dogru: kontrol)   G2 dusen=0  (beklenen: .....)
+       KONTROL: min idx -> sorted()[0] (esdeger)
+       sureler: 0s 1s 12s 1s 7s
+C-5   [.....] KACTI (dogru: kontrol)   G2 dusen=0  (beklenen: .....)
+       KONTROL: monitor_index SON parcadan (yuzey bolumlemesi -> hepsi ayni; esdeger)
+       sureler: 0s 1s 12s 1s 7s
+
+kacan davranis mutanti: []
+yakalanan kontrol (yanlis pozitif): []
+tahminden sapan: []

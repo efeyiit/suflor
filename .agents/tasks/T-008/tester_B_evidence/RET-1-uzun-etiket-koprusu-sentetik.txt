@@ -1,0 +1,83 @@
+============================= test session starts =============================
+platform win32 -- Python 3.12.10, pytest-9.1.1, pluggy-1.6.0 -- C:\Users\pc\AppData\Local\Programs\Python\Python312\python.exe
+rootdir: C:\Users\pc\Desktop\efe\çeviri uygulamasý
+plugins: anyio-4.15.1, cov-7.1.0
+collecting ... collected 4 items
+
+.agents/tasks/T-008/tester_B/test_mercek_B_ret.py::test_ret_uzun_etiket_solda_iki_satiri_tek_bloga_almamali[satir2-x+5-fermuar] FAILED [ 25%]
+.agents/tasks/T-008/tester_B/test_mercek_B_ret.py::test_ret_uzun_etiket_solda_iki_satiri_tek_bloga_almamali[satir2-x-ayni] FAILED [ 50%]
+.agents/tasks/T-008/tester_B/test_mercek_B_ret.py::test_ret_uzun_etiket_solda_iki_satiri_tek_bloga_almamali[satir2-x+12] FAILED [ 75%]
+.agents/tasks/T-008/tester_B/test_mercek_B_ret.py::test_ret_pozitif_kontrol_etiketsiz_iki_satir_dogru PASSED [100%]
+
+================================== FAILURES ===================================
+_ test_ret_uzun_etiket_solda_iki_satiri_tek_bloga_almamali[satir2-x+5-fermuar] _
+
+kayma = 5
+
+    @pytest.mark.parametrize("kayma", [5, 0, 12], ids=["satir2-x+5-fermuar", "satir2-x-ayni", "satir2-x+12"])
+    def test_ret_uzun_etiket_solda_iki_satiri_tek_bloga_almamali(kayma: int) -> None:
+        cikti = satirlari_birlestir(_kopru_fixture(etiket=True, kayma=kayma))
+        metinler = [c.text for c in cikti]
+        # DEGISMEZ 1: hicbir blok farkli satirlardan parca tasimaz
+        karisik = [c.text for c in cikti if not _parcalar_ayni_satirda(c)]
+>       assert karisik == [], f"farkli satirlar tek blokta: {karisik}; cikti {metinler}"
+E       AssertionError: farkli satirlar tek blokta: ['T a d b e c f']; cikti ['T a d b e c f']
+E       assert ['T a d b e c f'] == []
+E         
+E         Left contains one more item: 'T a d b e c f'
+E         
+E         Full diff:
+E         - []
+E         + [
+E         +     'T a d b e c f',
+E         + ]
+
+.agents\tasks\T-008\tester_B\test_mercek_B_ret.py:53: AssertionError
+___ test_ret_uzun_etiket_solda_iki_satiri_tek_bloga_almamali[satir2-x-ayni] ___
+
+kayma = 0
+
+    @pytest.mark.parametrize("kayma", [5, 0, 12], ids=["satir2-x+5-fermuar", "satir2-x-ayni", "satir2-x+12"])
+    def test_ret_uzun_etiket_solda_iki_satiri_tek_bloga_almamali(kayma: int) -> None:
+        cikti = satirlari_birlestir(_kopru_fixture(etiket=True, kayma=kayma))
+        metinler = [c.text for c in cikti]
+        # DEGISMEZ 1: hicbir blok farkli satirlardan parca tasimaz
+        karisik = [c.text for c in cikti if not _parcalar_ayni_satirda(c)]
+        assert karisik == [], f"farkli satirlar tek blokta: {karisik}; cikti {metinler}"
+        # DEGISMEZ 2: iki satirin kelimeleri kendi icinde birlesik kalir (etiketsiz pozitif kontrolle ayni)
+>       assert "a b c" in " | ".join(metinler) and "d e f" in " | ".join(metinler), metinler
+E       AssertionError: ['T a', 'b', 'c', 'd', 'e', 'f']
+E       assert ('a b c' in 'T a | b | c | d | e | f')
+E        +  where 'T a | b | c | d | e | f' = <built-in method join of str object at 0x000002BF89F39FE0>(['T a', 'b', 'c', 'd', 'e', 'f'])
+E        +    where <built-in method join of str object at 0x000002BF89F39FE0> = ' | '.join
+
+.agents\tasks\T-008\tester_B\test_mercek_B_ret.py:55: AssertionError
+____ test_ret_uzun_etiket_solda_iki_satiri_tek_bloga_almamali[satir2-x+12] ____
+
+kayma = 12
+
+    @pytest.mark.parametrize("kayma", [5, 0, 12], ids=["satir2-x+5-fermuar", "satir2-x-ayni", "satir2-x+12"])
+    def test_ret_uzun_etiket_solda_iki_satiri_tek_bloga_almamali(kayma: int) -> None:
+        cikti = satirlari_birlestir(_kopru_fixture(etiket=True, kayma=kayma))
+        metinler = [c.text for c in cikti]
+        # DEGISMEZ 1: hicbir blok farkli satirlardan parca tasimaz
+        karisik = [c.text for c in cikti if not _parcalar_ayni_satirda(c)]
+>       assert karisik == [], f"farkli satirlar tek blokta: {karisik}; cikti {metinler}"
+E       AssertionError: farkli satirlar tek blokta: ['T a d b e c f']; cikti ['T a d b e c f']
+E       assert ['T a d b e c f'] == []
+E         
+E         Left contains one more item: 'T a d b e c f'
+E         
+E         Full diff:
+E         - []
+E         + [
+E         +     'T a d b e c f',
+E         + ]
+
+.agents\tasks\T-008\tester_B\test_mercek_B_ret.py:53: AssertionError
+=========================== short test summary info ===========================
+FAILED .agents/tasks/T-008/tester_B/test_mercek_B_ret.py::test_ret_uzun_etiket_solda_iki_satiri_tek_bloga_almamali[satir2-x+5-fermuar]
+FAILED .agents/tasks/T-008/tester_B/test_mercek_B_ret.py::test_ret_uzun_etiket_solda_iki_satiri_tek_bloga_almamali[satir2-x-ayni]
+FAILED .agents/tasks/T-008/tester_B/test_mercek_B_ret.py::test_ret_uzun_etiket_solda_iki_satiri_tek_bloga_almamali[satir2-x+12]
+========================= 3 failed, 1 passed in 0.29s =========================
+exit=1

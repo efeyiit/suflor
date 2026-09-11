@@ -1,0 +1,6 @@
+gercek OCR kutu sayisi 17; KR_GEOMETRI kutu sayisi 17
+birebir esit (girdi sirasinda): True
+kume olarak esit: True
+metni bos olan kutu: 0; bas/son boslugu olan: 0; ic boslugu olan: 0
+confidence NaN: 0; line_boxes bos: 17/17
+ayni (y,x) cifti: 0; ayni x farkli y cifti (satir ici, M41 sinifi): 0

@@ -1,6 +1,6 @@
 # Şef Kararı — T-008, Tur 2
 
-Tester A **ret** (B koşuyor). Şef gerçek OCR'la üretti: iki satırı kaplayan büyük etiket kutusu (konuşmacı portresi / 2× başlık) satır bölümlemesini kandırıyor — 11 kutu → **1 blok**, iki satırın kelimeleri iç içe → kelime-kelime çeviri geri geliyor (S3).
+Tester A **ret** · Tester B **ret** (aynı sınıf, bağımsız — sentetik OCR'sız). Şef gerçek OCR'la üretti: iki satırı kaplayan büyük etiket kutusu (konuşmacı portresi / 2× başlık) satır bölümlemesini kandırıyor — 11 kutu → **1 blok**, iki satırın kelimeleri iç içe → kelime-kelime çeviri geri geliyor (S3).
 
 **Şefin hatası:** KRT-1 O2 bu sınıfı adlandırmıştı; paket `[ÖLÇÜLMÜYOR] (fixture yok)` bıraktı. Fixture 10 dakikalık işti; Tester-A üretti. "Ölçülmüyor" damgası, **ölçülebilir** bir sınıfı örtmek için kullanılamaz — §4.6/10'un öteki yüzü.
 
@@ -14,7 +14,10 @@ Tester A **ret** (B koşuyor). Şef gerçek OCR'la üretti: iki satırı kaplaya
 
 **Bayatlayacaklar:** A'nın `_SINIF` etiketli 2 testi (mevcut bozuk davranışı sabitliyordu) — A yeniden nişanlar. Implementer'ın 68'inde bayatlayan **yok** (A ölçtü).
 
-## T2-2 · Belge
+## T2-2 · K6 aynı-x çifti (Tester-B M41, küçük)
+Satır içi sıralamada `(x, y, idx)` yerine `(x, idx)` kullanan mutant hiçbir fixture'da ayrışmıyor — aynı `x`'li iki kutu yok. Bir fixture: aynı satırda `x` eşit, `y` farklı iki kutu → çıktı sırası `y`'ye göre. B'nin hazır testi `tester_B/`de; implementer kendi dosyasına eşdeğerini yazar. Ayrıca teslimdeki `test_k2_grup_icinde_dikey_ortusme_grubun_ilk_bloguyla` uzun kutuyu ortaya koyuyor (erişilebilir geometriyi kaçırıyor) — sola alınır.
+
+## T2-3 · Belge
 Docstring K2 adım 3 metni; `[ÖLÇÜLMÜYOR] (fixture yok)` damgası **kaldırılır** (artık ölçülüyor); K6 cümlesi daraltılır (A: bağ çıktı anahtarında da doğuyor, ürün etkisi yok).
 
 ## Neden KRT yok

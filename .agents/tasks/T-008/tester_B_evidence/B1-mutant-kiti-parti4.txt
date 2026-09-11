@@ -1,0 +1,184 @@
+models/: junction (salt okunur kullanim; depo dosyalarina yazilmaz)
+ayna agaci: C:\Users\pc\AppData\Local\Temp\scratch\C--Users-pc-Desktop-efe--eviri-uygulamas-\d52c967f-bd19-4db3-b5e9-77e6cd08b889\scratchpad\t008_tester_B_ayna   (depo YAZILMAZ)
+kapilar PYTHONIOENCODING'siz (cp1254) kosar; real_check yalniz ASCII basar
+
+MUTANT KITI -- her mutant icin hangi kapi YAKALAR (X) / KACIRIR (.)
+kapilar: G1-mypy | G2-birim | G3-real | G4-kapsam | G5-tum
+
+M34   [.X.XX] YAKALANDI   G2 dusen=4  (beklenen: G2 G4 G5)
+       K5: bbox birlesim yerine ILK parcanin bbox'i
+       urun: kaplama yalniz ilk kelimeyi kapsar
+       G2-birim: E       AssertionError: assert Rect(x=0, y=0...dpi_scale=1.0) == Rect(x=0, y=0...dpi_scale=1.0)
+       G4-kapsam: E       AssertionError: assert Rect(x=0, y=0...dpi_scale=1.0) == Rect(x=0, y=0...dpi_scale=1.0)
+       G5-tum: E       AssertionError: assert Rect(x=0, y=0...dpi_scale=1.0) == Rect(x=0, y=0...dpi_scale=1.0)
+         G2-birim: FAILED tests/unit/ocr/test_satir_birlestirici.py::test_k3_bos_parca_metne_katilmaz_kutusu_katilir
+         G2-birim: FAILED tests/unit/ocr/test_satir_birlestirici.py::test_k4_ikinci_uygulama_sabit_nokta_degil_pozitif_kontrol
+         G2-birim: FAILED tests/unit/ocr/test_satir_birlestirici.py::test_k5_uc_parcali_bbox_birlesim_confidence_min_line_boxes_x_sirali
+         G2-birim: FAILED tests/unit/ocr/test_satir_birlestirici.py::test_k5_negatif_koordinat_normal
+         G4-kapsam: FAILED tests/unit/ocr/test_satir_birlestirici.py::test_k3_bos_parca_metne_katilmaz_kutusu_katilir
+         G4-kapsam: FAILED tests/unit/ocr/test_satir_birlestirici.py::test_k4_ikinci_uygulama_sabit_nokta_degil_pozitif_kontrol
+         G4-kapsam: FAILED tests/unit/ocr/test_satir_birlestirici.py::test_k5_uc_parcali_bbox_birlesim_confidence_min_line_boxes_x_sirali
+         G4-kapsam: FAILED tests/unit/ocr/test_satir_birlestirici.py::test_k5_negatif_koordinat_normal
+         G5-tum: FAILED tests/unit/ocr/test_satir_birlestirici.py::test_k3_bos_parca_metne_katilmaz_kutusu_katilir
+         G5-tum: FAILED tests/unit/ocr/test_satir_birlestirici.py::test_k4_ikinci_uygulama_sabit_nokta_degil_pozitif_kontrol
+         G5-tum: FAILED tests/unit/ocr/test_satir_birlestirici.py::test_k5_uc_parcali_bbox_birlesim_confidence_min_line_boxes_x_sirali
+         G5-tum: FAILED tests/unit/ocr/test_satir_birlestirici.py::test_k5_negatif_koordinat_normal
+       sureler: 4s 1s 15s 2s 9s
+M35   [.X.XX] YAKALANDI   G2 dusen=1  (beklenen: G2 G4 G5)
+       K5: birlesik h yalniz ilk parcadan (alt kenar birlesmez)
+       urun: kaplama alt kenari kisa kalir
+       G2-birim: E       AssertionError: assert Rect(x=10, y=...pi_scale=1.25) == Rect(x=10, y=...pi_scale=1.25)
+       G4-kapsam: E       AssertionError: assert Rect(x=10, y=...pi_scale=1.25) == Rect(x=10, y=...pi_scale=1.25)
+       G5-tum: E       AssertionError: assert Rect(x=10, y=...pi_scale=1.25) == Rect(x=10, y=...pi_scale=1.25)
+         G2-birim: FAILED tests/unit/ocr/test_satir_birlestirici.py::test_k5_uc_parcali_bbox_birlesim_confidence_min_line_boxes_x_sirali
+         G4-kapsam: FAILED tests/unit/ocr/test_satir_birlestirici.py::test_k5_uc_parcali_bbox_birlesim_confidence_min_line_boxes_x_sirali
+         G5-tum: FAILED tests/unit/ocr/test_satir_birlestirici.py::test_k5_uc_parcali_bbox_birlesim_confidence_min_line_boxes_x_sirali
+       sureler: 0s 1s 13s 2s 10s
+M36   [.X.XX] YAKALANDI   G2 dusen=2  (beklenen: G2 G4 G5)
+       K5/K8: tek parca `is` yerine ESIT KOPYA
+       urun: ayni nesne garantisi (docstring) bozulur; `==` tutar
+       G2-birim: E       AssertionError: assert TextBlock(text='a', bbox=Rect(x=0, y=0, w=50, h=20, monitor_index=0, dpi_scale=1.0), confidence=1.0, line_box
+       G4-kapsam: E       AssertionError: assert TextBlock(text='a', bbox=Rect(x=0, y=0, w=50, h=20, monitor_index=0, dpi_scale=1.0), confidence=1.0, line_box
+       G5-tum: E       AssertionError: assert TextBlock(text='a', bbox=Rect(x=0, y=0, w=50, h=20, monitor_index=0, dpi_scale=1.0), confidence=1.0, line_box
+         G2-birim: FAILED tests/unit/ocr/test_satir_birlestirici.py::test_k5_tek_parca_ayni_nesne_line_boxes_dokunulmaz
+         G2-birim: FAILED tests/unit/ocr/test_satir_birlestirici.py::test_k8_tek_blok_ayni_nesne
+         G4-kapsam: FAILED tests/unit/ocr/test_satir_birlestirici.py::test_k5_tek_parca_ayni_nesne_line_boxes_dokunulmaz
+         G4-kapsam: FAILED tests/unit/ocr/test_satir_birlestirici.py::test_k8_tek_blok_ayni_nesne
+         G5-tum: FAILED tests/unit/ocr/test_satir_birlestirici.py::test_k5_tek_parca_ayni_nesne_line_boxes_dokunulmaz
+         G5-tum: FAILED tests/unit/ocr/test_satir_birlestirici.py::test_k8_tek_blok_ayni_nesne
+       sureler: 1s 1s 15s 2s 10s
+M37   [.X.XX] YAKALANDI   G2 dusen=1  (beklenen: G2 G4 G5)
+       K6: bag girdi sirasinin TERSIYLE (-idx)
+       urun: ayni (y,x) cift tespitte sira tersine doner
+       G2-birim: E       AssertionError: assert ['a', 'b c'] == ['a', 'b', 'c']
+       G4-kapsam: E       AssertionError: assert ['a', 'b c'] == ['a', 'b', 'c']
+       G5-tum: E       AssertionError: assert ['a', 'b c'] == ['a', 'b', 'c']
+         G2-birim: FAILED tests/unit/ocr/test_satir_birlestirici.py::test_k6_bagli_durumda_satir_referansi_ilk_girdi_blogu
+         G4-kapsam: FAILED tests/unit/ocr/test_satir_birlestirici.py::test_k6_bagli_durumda_satir_referansi_ilk_girdi_blogu
+         G5-tum: FAILED tests/unit/ocr/test_satir_birlestirici.py::test_k6_bagli_durumda_satir_referansi_ilk_girdi_blogu
+       sureler: 1s 1s 15s 2s 8s
+M38   [.XXXX] YAKALANDI   G2 dusen=14  (beklenen: G2 G3 G4 G5)
+       K6: cikti TERS okuma sirasinda
+       urun: normalizer yeniden siralar ama sozlesme bozuk
+       G2-birim: E       AssertionError: assert ['C', 'A b'] == ['A b', 'C']
+       G3-real: IHLAL  [1] line_boxes uzunluklari [5, 5, 5, 2] (beklenen [2,5,5,5])
+       G4-kapsam: E       AssertionError: assert ['C', 'A b'] == ['A b', 'C']
+       G5-tum: E       AssertionError: assert ['C', 'A b'] == ['A b', 'C']
+         G2-birim: FAILED tests/unit/ocr/test_satir_birlestirici.py::test_k2_esik_orijinal_yukseklikle_birlesik_degil_y2
+         G2-birim: FAILED tests/unit/ocr/test_satir_birlestirici.py::test_k2_x_ilerlemeyen_kutu_yeni_grup_acar
+         G2-birim: FAILED tests/unit/ocr/test_satir_birlestirici.py::test_k2_iki_satir_x_geri_sarar_ayri_bloklar
+         G2-birim: FAILED tests/unit/ocr/test_satir_birlestirici.py::test_k2_kr_geometrisi_17_kutu_4_satir_2_5_5_5
+         G2-birim: ... +10
+         G4-kapsam: FAILED tests/unit/ocr/test_satir_birlestirici.py::test_k2_esik_orijinal_yukseklikle_birlesik_degil_y2
+         G4-kapsam: FAILED tests/unit/ocr/test_satir_birlestirici.py::test_k2_x_ilerlemeyen_kutu_yeni_grup_acar
+         G4-kapsam: FAILED tests/unit/ocr/test_satir_birlestirici.py::test_k2_iki_satir_x_geri_sarar_ayri_bloklar
+         G4-kapsam: FAILED tests/unit/ocr/test_satir_birlestirici.py::test_k2_kr_geometrisi_17_kutu_4_satir_2_5_5_5
+         G4-kapsam: ... +10
+         G5-tum: FAILED tests/unit/ocr/test_satir_birlestirici.py::test_k2_esik_orijinal_yukseklikle_birlesik_degil_y2
+         G5-tum: FAILED tests/unit/ocr/test_satir_birlestirici.py::test_k2_x_ilerlemeyen_kutu_yeni_grup_acar
+         G5-tum: FAILED tests/unit/ocr/test_satir_birlestirici.py::test_k2_iki_satir_x_geri_sarar_ayri_bloklar
+         G5-tum: FAILED tests/unit/ocr/test_satir_birlestirici.py::test_k2_kr_geometrisi_17_kutu_4_satir_2_5_5_5
+         G5-tum: ... +10
+       sureler: 0s 1s 12s 2s 8s
+M39   [.X.XX] YAKALANDI   G2 dusen=3  (beklenen: G2 G4 G5)
+       K6: son siralama YOK (yuzey/satir isleme sirasi)
+       urun: yozlasmis kutular basa gelir; monitorler sirasiz
+       G2-birim: E       AssertionError: assert ['m0-ust', 'm0', 'm1'] == ['m0-ust', 'm1', 'm0']
+       G4-kapsam: E       AssertionError: assert ['m0-ust', 'm0', 'm1'] == ['m0-ust', 'm1', 'm0']
+       G5-tum: E       AssertionError: assert ['m0-ust', 'm0', 'm1'] == ['m0-ust', 'm1', 'm0']
+         G2-birim: FAILED tests/unit/ocr/test_satir_birlestirici.py::test_k6_bagli_durum_farkli_monitorlerde_de_girdi_indeksi
+         G2-birim: FAILED tests/unit/ocr/test_satir_birlestirici.py::test_k6_cikti_y_x_sirasinda_satir_icinde_de
+         G2-birim: FAILED tests/unit/ocr/test_satir_birlestirici.py::test_k8_yozlasmis_kutular_okuma_sirasinda_yerinde
+         G4-kapsam: FAILED tests/unit/ocr/test_satir_birlestirici.py::test_k6_bagli_durum_farkli_monitorlerde_de_girdi_indeksi
+         G4-kapsam: FAILED tests/unit/ocr/test_satir_birlestirici.py::test_k6_cikti_y_x_sirasinda_satir_icinde_de
+         G4-kapsam: FAILED tests/unit/ocr/test_satir_birlestirici.py::test_k8_yozlasmis_kutular_okuma_sirasinda_yerinde
+         G5-tum: FAILED tests/unit/ocr/test_satir_birlestirici.py::test_k6_bagli_durum_farkli_monitorlerde_de_girdi_indeksi
+         G5-tum: FAILED tests/unit/ocr/test_satir_birlestirici.py::test_k6_cikti_y_x_sirasinda_satir_icinde_de
+         G5-tum: FAILED tests/unit/ocr/test_satir_birlestirici.py::test_k8_yozlasmis_kutular_okuma_sirasinda_yerinde
+       sureler: 0s 1s 11s 1s 8s
+M40   [.....] *** HICBIR KAPI YAKALAMADI ***   G2 dusen=0  (beklenen: ? (bagli+birlesik fixture yok))
+       K6: bag EN KUCUK degil EN BUYUK girdi indeksiyle (birlesik grup vs tekil, ayni (y,x))
+       urun: nadir: birlesik grup ile ayni (y,x)'teki tekil blogun sirasi
+       sureler: 0s 1s 12s 1s 8s
+M41   [.....] *** HICBIR KAPI YAKALAMADI ***   G2 dusen=0  (beklenen: ? (ayni x farkli y fixture yok))
+       K2/K6: satir ici siralama (x, idx) -- y anahtari yok
+       urun: ayni x, farkli y iki kutuda hangisi gruba once girer degisir
+       sureler: 0s 1s 12s 1s 8s
+M42   [.X.XX] YAKALANDI   G2 dusen=1  (beklenen: G2 G4 G5)
+       K8: bos girdi -> ValueError
+       urun: OCR bos kare verince pipeline patlar
+       G2-birim: >           raise ValueError("bos girdi")
+       G4-kapsam: >           raise ValueError("bos girdi")
+       G5-tum: >           raise ValueError("bos girdi")
+         G2-birim: FAILED tests/unit/ocr/test_satir_birlestirici.py::test_k8_bos_girdi_bos_liste
+         G4-kapsam: FAILED tests/unit/ocr/test_satir_birlestirici.py::test_k8_bos_girdi_bos_liste
+         G5-tum: FAILED tests/unit/ocr/test_satir_birlestirici.py::test_k8_bos_girdi_bos_liste
+       sureler: 0s 1s 12s 1s 7s
+M43   [.X.XX] YAKALANDI   G2 dusen=4  (beklenen: G2 G4 G5)
+       K8: h=0/w=0 yozlasmis DEGIL (birlesebilir)
+       urun: sifir yukseklikli kutu komsusuyla birlesir
+       G2-birim: tests\unit\ocr\test_satir_birlestirici.py:255: AssertionError
+       G4-kapsam: tests\unit\ocr\test_satir_birlestirici.py:255: AssertionError
+       G5-tum: tests\unit\ocr\test_satir_birlestirici.py:255: AssertionError
+         G2-birim: FAILED tests/unit/ocr/test_satir_birlestirici.py::test_k2_yozlasmis_kutu_hicbir_seyle_birlesmez_ve_aynen_gecer[w0]
+         G2-birim: FAILED tests/unit/ocr/test_satir_birlestirici.py::test_k2_yozlasmis_kutu_hicbir_seyle_birlesmez_ve_aynen_gecer[h0]
+         G2-birim: FAILED tests/unit/ocr/test_satir_birlestirici.py::test_k2_yozlasmis_kutu_hicbir_seyle_birlesmez_ve_aynen_gecer[w0h0]
+         G2-birim: FAILED tests/unit/ocr/test_satir_birlestirici.py::test_k8_yozlasmis_kutular_okuma_sirasinda_yerinde
+         G4-kapsam: FAILED tests/unit/ocr/test_satir_birlestirici.py::test_k2_yozlasmis_kutu_hicbir_seyle_birlesmez_ve_aynen_gecer[w0]
+         G4-kapsam: FAILED tests/unit/ocr/test_satir_birlestirici.py::test_k2_yozlasmis_kutu_hicbir_seyle_birlesmez_ve_aynen_gecer[h0]
+         G4-kapsam: FAILED tests/unit/ocr/test_satir_birlestirici.py::test_k2_yozlasmis_kutu_hicbir_seyle_birlesmez_ve_aynen_gecer[w0h0]
+         G4-kapsam: FAILED tests/unit/ocr/test_satir_birlestirici.py::test_k8_yozlasmis_kutular_okuma_sirasinda_yerinde
+         G5-tum: FAILED tests/unit/ocr/test_satir_birlestirici.py::test_k2_yozlasmis_kutu_hicbir_seyle_birlesmez_ve_aynen_gecer[w0]
+         G5-tum: FAILED tests/unit/ocr/test_satir_birlestirici.py::test_k2_yozlasmis_kutu_hicbir_seyle_birlesmez_ve_aynen_gecer[h0]
+         G5-tum: FAILED tests/unit/ocr/test_satir_birlestirici.py::test_k2_yozlasmis_kutu_hicbir_seyle_birlesmez_ve_aynen_gecer[w0h0]
+         G5-tum: FAILED tests/unit/ocr/test_satir_birlestirici.py::test_k8_yozlasmis_kutular_okuma_sirasinda_yerinde
+       sureler: 0s 1s 12s 1s 7s
+M44   [.X.XX] YAKALANDI   G2 dusen=5  (beklenen: G2 G4 G5)
+       K8: yozlasmis icin HEM h HEM w <= 0 gerekir
+       urun: w=0 kutu birlesir
+       G2-birim: tests\unit\ocr\test_satir_birlestirici.py:255: AssertionError
+       G4-kapsam: tests\unit\ocr\test_satir_birlestirici.py:255: AssertionError
+       G5-tum: tests\unit\ocr\test_satir_birlestirici.py:255: AssertionError
+         G2-birim: FAILED tests/unit/ocr/test_satir_birlestirici.py::test_k2_yozlasmis_kutu_hicbir_seyle_birlesmez_ve_aynen_gecer[w0]
+         G2-birim: FAILED tests/unit/ocr/test_satir_birlestirici.py::test_k2_yozlasmis_kutu_hicbir_seyle_birlesmez_ve_aynen_gecer[h0]
+         G2-birim: FAILED tests/unit/ocr/test_satir_birlestirici.py::test_k2_yozlasmis_kutu_hicbir_seyle_birlesmez_ve_aynen_gecer[w-neg]
+         G2-birim: FAILED tests/unit/ocr/test_satir_birlestirici.py::test_k2_yozlasmis_kutu_hicbir_seyle_birlesmez_ve_aynen_gecer[h-neg]
+         G2-birim: ... +1
+         G4-kapsam: FAILED tests/unit/ocr/test_satir_birlestirici.py::test_k2_yozlasmis_kutu_hicbir_seyle_birlesmez_ve_aynen_gecer[w0]
+         G4-kapsam: FAILED tests/unit/ocr/test_satir_birlestirici.py::test_k2_yozlasmis_kutu_hicbir_seyle_birlesmez_ve_aynen_gecer[h0]
+         G4-kapsam: FAILED tests/unit/ocr/test_satir_birlestirici.py::test_k2_yozlasmis_kutu_hicbir_seyle_birlesmez_ve_aynen_gecer[w-neg]
+         G4-kapsam: FAILED tests/unit/ocr/test_satir_birlestirici.py::test_k2_yozlasmis_kutu_hicbir_seyle_birlesmez_ve_aynen_gecer[h-neg]
+         G4-kapsam: ... +1
+         G5-tum: FAILED tests/unit/ocr/test_satir_birlestirici.py::test_k2_yozlasmis_kutu_hicbir_seyle_birlesmez_ve_aynen_gecer[w0]
+         G5-tum: FAILED tests/unit/ocr/test_satir_birlestirici.py::test_k2_yozlasmis_kutu_hicbir_seyle_birlesmez_ve_aynen_gecer[h0]
+         G5-tum: FAILED tests/unit/ocr/test_satir_birlestirici.py::test_k2_yozlasmis_kutu_hicbir_seyle_birlesmez_ve_aynen_gecer[w-neg]
+         G5-tum: FAILED tests/unit/ocr/test_satir_birlestirici.py::test_k2_yozlasmis_kutu_hicbir_seyle_birlesmez_ve_aynen_gecer[h-neg]
+         G5-tum: ... +1
+       sureler: 0s 1s 11s 1s 8s
+M45   [.X.XX] YAKALANDI   G2 dusen=2  (beklenen: G2 G4 G5)
+       K8: negatif h/w yozlasmis DEGIL
+       urun: negatif yukseklik esigi negatif yapar (KRT D2)
+       G2-birim: tests\unit\ocr\test_satir_birlestirici.py:255: AssertionError
+       G4-kapsam: tests\unit\ocr\test_satir_birlestirici.py:255: AssertionError
+       G5-tum: tests\unit\ocr\test_satir_birlestirici.py:255: AssertionError
+         G2-birim: FAILED tests/unit/ocr/test_satir_birlestirici.py::test_k2_yozlasmis_kutu_hicbir_seyle_birlesmez_ve_aynen_gecer[w-neg]
+         G2-birim: FAILED tests/unit/ocr/test_satir_birlestirici.py::test_k2_yozlasmis_kutu_hicbir_seyle_birlesmez_ve_aynen_gecer[h-neg]
+         G4-kapsam: FAILED tests/unit/ocr/test_satir_birlestirici.py::test_k2_yozlasmis_kutu_hicbir_seyle_birlesmez_ve_aynen_gecer[w-neg]
+         G4-kapsam: FAILED tests/unit/ocr/test_satir_birlestirici.py::test_k2_yozlasmis_kutu_hicbir_seyle_birlesmez_ve_aynen_gecer[h-neg]
+         G5-tum: FAILED tests/unit/ocr/test_satir_birlestirici.py::test_k2_yozlasmis_kutu_hicbir_seyle_birlesmez_ve_aynen_gecer[w-neg]
+         G5-tum: FAILED tests/unit/ocr/test_satir_birlestirici.py::test_k2_yozlasmis_kutu_hicbir_seyle_birlesmez_ve_aynen_gecer[h-neg]
+       sureler: 0s 1s 12s 1s 8s
+M46   [.X.XX] YAKALANDI   G2 dusen=1  (beklenen: G2 G4 G5)
+       K1: modul duzeyi MUTABLE (`_ONBELLEK: dict = {}`)
+       urun: paylasilan durum kapisi acilir
+       G2-birim: E           AssertionError: AnnAssign(target=Name(id='_ONBELLEK', ctx=Store()), annotation=Subscript(value=Name(id='dict', ctx=Load()), slic
+       G4-kapsam: E           AssertionError: AnnAssign(target=Name(id='_ONBELLEK', ctx=Store()), annotation=Subscript(value=Name(id='dict', ctx=Load()), slic
+       G5-tum: E           AssertionError: AnnAssign(target=Name(id='_ONBELLEK', ctx=Store()), annotation=Subscript(value=Name(id='dict', ctx=Load()), slic
+         G2-birim: FAILED tests/unit/ocr/test_satir_birlestirici.py::test_k1_saflik_ast_yasak_cagri_modul_ve_mutable_yok
+         G4-kapsam: FAILED tests/unit/ocr/test_satir_birlestirici.py::test_k1_saflik_ast_yasak_cagri_modul_ve_mutable_yok
+         G5-tum: FAILED tests/unit/ocr/test_satir_birlestirici.py::test_k1_saflik_ast_yasak_cagri_modul_ve_mutable_yok
+       sureler: 0s 1s 12s 1s 8s
+
+kacan davranis mutanti: ['M40', 'M41']
+yakalanan kontrol (yanlis pozitif): []
+tahminden sapan: []

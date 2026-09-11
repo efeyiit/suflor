@@ -1,0 +1,14 @@
+==== T-008 TESTER B (mercek B) -- SEF SONDASI ====
+Karar: RET. validate KABUL EDILEBILIR. Sahiplik temiz.
+B1 kit: 47 davranis -> 44 yakalandi, 3 kacti (M23 uyumluluk ideografi, M40 bag max-idx,
+  M41 satir ici (x,idx)); 6/6 kontrol kacti. Kacanlar urunu bozmuyor -> keskinlik.
+RET B-1: A ile AYNI SINIF (iki satir yuksekliginde sol etiket iki satiri fermuarliyor),
+  sentetik OCR'siz 3/3 dusuyor, etiketsiz pozitif kontrol geciyor. Sef A'nin fixture'iyla
+  gercek OCR'da uretmisti (11->1). IKI TESTER BAGIMSIZ AYNI SINIF -> tur 2 T2-1 (ADAY E).
+  B ayrica: teslimin test_k2_grup_icinde_dikey_ortusme_grubun_ilk_bloguyla testi uzun
+  kutuyu ORTAYA koyup erisilebilir geometriyi kaciriyor (mekanizma kancasi, 4.6/7).
+  Duzeltmede bayatlar; M16-M18 yeniden nisanlanir.
+B2-B5: determinizm/permutasyon testlerine bagimsiz cipa, esik fixture'lari h=20/33 eklendi,
+  1k->10k orani 9-15 (n log n), bariyer aktif. Sefin test_conftest_bariyer match'i
+  birlikte kosumda kirilgan (bilgi) -> acik kalem.
+KARAR: B'nin RET'i KABUL; tur 2 kapsami: T2-1 (E) + M41 icin ayni-x cifti fixture'i (kucuk).

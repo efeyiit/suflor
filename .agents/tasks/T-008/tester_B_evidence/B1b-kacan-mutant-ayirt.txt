@@ -1,0 +1,8 @@
+M23 (uyumluluk ideografi CJK degil): uyum+cjk komsu -> orijinal bosluk sayisi 0, mutant 1 -> AYRISTI (olcu bos)
+M40 (bag max idx): monitorler arasi (y,x) bagi -> orijinal ['p q', 's'], mutant ['s', 'p q'] -> AYRISTI
+M40 tek yuzey rastgele 3000 girdi (cift tespitli): ayrisan 438
+M41 (satir ici (x,idx), y yok): girdi ['a', 'b', 'c'] -> orijinal ['a', 'b c'], mutant ['a', 'b c'] -> esdeger
+M41 (satir ici (x,idx), y yok): girdi ['b', 'a', 'c'] -> orijinal ['a', 'b c'], mutant ['a c', 'b'] -> AYRISTI
+M41 rastgele 3000 girdi (ayni x farkli y): ayrisan 801
+
+SONUC: 4 ayrisma kaydi -> kacan mutantlar davranis-esdeger DEGIL; olculeri bos (§4.6/10).
