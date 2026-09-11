@@ -1,0 +1,50 @@
+=== pytest tests -p tb_gozlem_plugin ===
+.....                                                                    [100%]
+1085 passed in 4.60s
+toplama-oncesi test_change_detector.py          bariyer=False yasak_yuklu=[]
+toplama-oncesi test_dpi.py                      bariyer=False yasak_yuklu=[]
+toplama-oncesi test_monitors.py                 bariyer=False yasak_yuklu=[]
+toplama-oncesi test_service.py                  bariyer=False yasak_yuklu=[]
+toplama-oncesi test_errors.py                   bariyer=False yasak_yuklu=[]
+toplama-oncesi test_interfaces.py               bariyer=False yasak_yuklu=[]
+toplama-oncesi test_models.py                   bariyer=False yasak_yuklu=[]
+toplama-oncesi test_conftest_bariyer.py         bariyer=True yasak_yuklu=[]
+toplama-oncesi test_normalizer.py               bariyer=True yasak_yuklu=[]
+toplama-oncesi test_rapid_engine.py             bariyer=True yasak_yuklu=[]
+oturum-sonu bariyer_sayisi=1 yasak_yuklu=[] exitstatus=0
+
+=== pytest tests/unit/ocr/test_rapid_engine.py -p tb_gozlem_plugin ===
+.......................                                                  [100%]
+95 passed in 0.37s
+toplama-oncesi test_conftest_bariyer.py         bariyer=True yasak_yuklu=[]
+toplama-oncesi test_normalizer.py               bariyer=True yasak_yuklu=[]
+toplama-oncesi test_rapid_engine.py             bariyer=True yasak_yuklu=[]
+oturum-sonu bariyer_sayisi=1 yasak_yuklu=[] exitstatus=0
+
+=== pytest tests/unit/ocr -p tb_gozlem_plugin ===
+........                                                                 [100%]
+224 passed in 3.23s
+toplama-oncesi test_conftest_bariyer.py         bariyer=True yasak_yuklu=[]
+toplama-oncesi test_normalizer.py               bariyer=True yasak_yuklu=[]
+toplama-oncesi test_rapid_engine.py             bariyer=True yasak_yuklu=[]
+oturum-sonu bariyer_sayisi=1 yasak_yuklu=[] exitstatus=0
+
+=== pytest tests/unit/capture tests/unit/ocr/test_rapid_engine.py -p tb_gozlem_plugin ===
+..................................................                       [100%]
+842 passed in 1.40s
+toplama-oncesi test_conftest_bariyer.py         bariyer=True yasak_yuklu=[]
+toplama-oncesi test_normalizer.py               bariyer=True yasak_yuklu=[]
+toplama-oncesi test_rapid_engine.py             bariyer=True yasak_yuklu=[]
+toplama-oncesi test_change_detector.py          bariyer=True yasak_yuklu=[]
+toplama-oncesi test_dpi.py                      bariyer=True yasak_yuklu=[]
+toplama-oncesi test_monitors.py                 bariyer=True yasak_yuklu=[]
+toplama-oncesi test_service.py                  bariyer=True yasak_yuklu=[]
+oturum-sonu bariyer_sayisi=1 yasak_yuklu=[] exitstatus=0
+
+=== pytest --noconftest tests/unit/ocr/test_rapid_engine.py (bariyer KURULMAZ; testler yine de kutuphaneyi yuklemiyor mu?) ===
+.......................                                                  [100%]
+95 passed in 0.28s
+toplama-oncesi test_conftest_bariyer.py         bariyer=False yasak_yuklu=[]
+toplama-oncesi test_normalizer.py               bariyer=False yasak_yuklu=[]
+toplama-oncesi test_rapid_engine.py             bariyer=False yasak_yuklu=[]
+oturum-sonu bariyer_sayisi=0 yasak_yuklu=[] exitstatus=0

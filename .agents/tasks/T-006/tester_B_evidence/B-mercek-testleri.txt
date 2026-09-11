@@ -1,0 +1,45 @@
+============================= test session starts =============================
+platform win32 -- Python 3.12.10, pytest-9.1.1, pluggy-1.6.0 -- C:\Users\pc\AppData\Local\Programs\Python\Python312\python.exe
+rootdir: C:\Users\pc\Desktop\efe\çeviri uygulaması
+plugins: cov-7.1.0
+collecting ... collected 36 items
+
+.agents/tasks/T-006/tester_B/test_mercek_B.py::test_b3_conftest_yuklenirken_yasak_kok_sys_modules_ta_yoktu PASSED [  2%]
+.agents/tasks/T-006/tester_B/test_mercek_B.py::test_b3_import_module_kesilir[rapidocr] PASSED [  5%]
+.agents/tasks/T-006/tester_B/test_mercek_B.py::test_b3_import_module_kesilir[rapidocr.main] PASSED [  8%]
+.agents/tasks/T-006/tester_B/test_mercek_B.py::test_b3_import_module_kesilir[rapidocr.inference_engine.base] PASSED [ 11%]
+.agents/tasks/T-006/tester_B/test_mercek_B.py::test_b3_import_module_kesilir[onnxruntime] PASSED [ 13%]
+.agents/tasks/T-006/tester_B/test_mercek_B.py::test_b3_dunder_import_kesilir PASSED [ 16%]
+.agents/tasks/T-006/tester_B/test_mercek_B.py::test_b3_find_spec_kesilir PASSED [ 19%]
+.agents/tasks/T-006/tester_B/test_mercek_B.py::test_b3_spec_from_file_location_kacisi_olculur[rapidocr] PASSED [ 22%]
+.agents/tasks/T-006/tester_B/test_mercek_B.py::test_b3_spec_from_file_location_kacisi_olculur[onnxruntime] PASSED [ 25%]
+.agents/tasks/T-006/tester_B/test_mercek_B.py::test_b3_sys_modules_onceden_dolu_kacisi_olculur PASSED [ 27%]
+.agents/tasks/T-006/tester_B/test_mercek_B.py::test_b3_alt_surec_kacisi_var_ama_motor_ve_testler_kullanmiyor PASSED [ 30%]
+.agents/tasks/T-006/tester_B/test_mercek_B.py::test_b3_sefin_pozitif_kontrolu_yalniz_import_module_yolunu_goruyor PASSED [ 33%]
+.agents/tasks/T-006/tester_B/test_mercek_B.py::test_b3_sefin_bariyeri_meta_path_basinda_ve_sys_modules_e_nobetci_koymuyor PASSED [ 36%]
+.agents/tasks/T-006/tester_B/test_mercek_B.py::test_b3_sahte_fabrikayla_tam_kosum_yasak_kok_yuklemez PASSED [ 38%]
+.agents/tasks/T-006/tester_B/test_mercek_B.py::test_b3_varsayilan_model_dizini_bariyer_altinda_bulucuya_sormaz PASSED [ 41%]
+.agents/tasks/T-006/tester_B/test_mercek_B.py::test_b4_her_seviyede_nobetci_hicbir_loga_ve_stdout_stderr_e_dusmez[DEBUG] PASSED [ 44%]
+.agents/tasks/T-006/tester_B/test_mercek_B.py::test_b4_her_seviyede_nobetci_hicbir_loga_ve_stdout_stderr_e_dusmez[INFO] PASSED [ 47%]
+.agents/tasks/T-006/tester_B/test_mercek_B.py::test_b4_her_seviyede_nobetci_hicbir_loga_ve_stdout_stderr_e_dusmez[WARNING] PASSED [ 50%]
+.agents/tasks/T-006/tester_B/test_mercek_B.py::test_b4_her_seviyede_nobetci_hicbir_loga_ve_stdout_stderr_e_dusmez[ERROR] PASSED [ 52%]
+.agents/tasks/T-006/tester_B/test_mercek_B.py::test_b4_pozitif_kontrol_olcu_atesliyor PASSED [ 55%]
+.agents/tasks/T-006/tester_B/test_mercek_B.py::test_b4_rapidocr_logger_kurulumdan_sonra_error PASSED [ 58%]
+.agents/tasks/T-006/tester_B/test_mercek_B.py::test_b4_bos_karede_kutuphane_warningi_stderr_e_dusmez PASSED [ 61%]
+.agents/tasks/T-006/tester_B/test_mercek_B.py::test_b4_motor_yalniz_rapidocr_logger_ina_dokunur_baska_logger_i_susturmaz PASSED [ 63%]
+.agents/tasks/T-006/tester_B/test_mercek_B.py::test_b4_hata_yollari_da_metin_tasimaz PASSED [ 66%]
+.agents/tasks/T-006/tester_B/test_mercek_B.py::test_b5_close_x2_sonra_recognize_ocrerror_ve_fabrika_yeniden_cagrilmaz PASSED [ 69%]
+.agents/tasks/T-006/tester_B/test_mercek_B.py::test_b5_close_taniyiciyi_gercekten_birakir PASSED [ 72%]
+.agents/tasks/T-006/tester_B/test_mercek_B.py::test_b5_fabrika_ilk_cagrida_firlatirsa_ikinci_recognize_yeniden_dener_ve_ornek_tutulmaz PASSED [ 75%]
+.agents/tasks/T-006/tester_B/test_mercek_B.py::test_b5_modelmissing_kurulumda_ornek_tutulmaz_dosya_gelince_kurulur PASSED [ 77%]
+.agents/tasks/T-006/tester_B/test_mercek_B.py::test_b5_kurulum_hatasindan_sonra_close_ve_kapali_davranisi PASSED [ 80%]
+.agents/tasks/T-006/tester_B/test_mercek_B.py::test_b5_iki_motor_ayni_fabrikayi_paylasirsa_durum_karismaz PASSED [ 83%]
+.agents/tasks/T-006/tester_B/test_mercek_B.py::test_b5_kapali_motorda_bozuk_kare_de_ocrerror_ve_fabrika_sayaci_sabit PASSED [ 86%]
+.agents/tasks/T-006/tester_B/test_mercek_B.py::test_b5_parametreler_close_sonrasi_da_calisir_ama_fabrikaya_gitmez PASSED [ 88%]
+.agents/tasks/T-006/tester_B/test_mercek_B.py::test_b5_taniyici_istisnasi_ornegi_dusurmez PASSED [ 91%]
+.agents/tasks/T-006/tester_B/test_mercek_B.py::test_b6_tek_pragma_ve_yalniz_varsayilan_fabrikada PASSED [ 94%]
+.agents/tasks/T-006/tester_B/test_mercek_B.py::test_b6_eksik_iki_satir_yapisal_olarak_erisilemez PASSED [ 97%]
+.agents/tasks/T-006/tester_B/test_mercek_B.py::test_b6_varsayilan_fabrika_pragma_kapsami_real_check_ile_olculuyor PASSED [100%]
+
+============================= 36 passed in 0.55s ==============================
+exit=0

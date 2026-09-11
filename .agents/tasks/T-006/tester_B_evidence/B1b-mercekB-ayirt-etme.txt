@@ -1,0 +1,66 @@
+(not: ayna agaci yolu maskelendi -- oturum gecici dizini; olcum satirlari degismedi)
+ayna: <oturum-scratchpad>\mercekB\t006_tester_B_mutroot
+TABAN mercek B: exit=0  38 passed in 0.30s
+
+M25   mercekB=X  YAKALANDI  -- K7: `print` eklendi (metinsiz)
+       5 failed, 33 passed in 0.40s
+       | FAILED .agents/tasks/T-006/tester_B/test_mercek_B.py::test_b4_her_seviyede_nobetci_hicbir_loga_ve_stdout_stderr_e_dusmez[DEBUG]
+       | FAILED .agents/tasks/T-006/tester_B/test_mercek_B.py::test_b4_her_seviyede_nobetci_hicbir_loga_ve_stdout_stderr_e_dusmez[INFO]
+       | FAILED .agents/tasks/T-006/tester_B/test_mercek_B.py::test_b4_her_seviyede_nobetci_hicbir_loga_ve_stdout_stderr_e_dusmez[WARNING]
+       | FAILED .agents/tasks/T-006/tester_B/test_mercek_B.py::test_b4_her_seviyede_nobetci_hicbir_loga_ve_stdout_stderr_e_dusmez[ERROR]
+M25b  mercekB=X  YAKALANDI  -- K7: `sys.stdout.write(blok.text)` (print DEGIL -- AST `print` sayaci gormez)
+       4 failed, 34 passed in 0.36s
+       | FAILED .agents/tasks/T-006/tester_B/test_mercek_B.py::test_b4_her_seviyede_nobetci_hicbir_loga_ve_stdout_stderr_e_dusmez[DEBUG]
+       | FAILED .agents/tasks/T-006/tester_B/test_mercek_B.py::test_b4_her_seviyede_nobetci_hicbir_loga_ve_stdout_stderr_e_dusmez[INFO]
+       | FAILED .agents/tasks/T-006/tester_B/test_mercek_B.py::test_b4_her_seviyede_nobetci_hicbir_loga_ve_stdout_stderr_e_dusmez[WARNING]
+       | FAILED .agents/tasks/T-006/tester_B/test_mercek_B.py::test_b4_her_seviyede_nobetci_hicbir_loga_ve_stdout_stderr_e_dusmez[ERROR]
+M26   mercekB=X  YAKALANDI  -- K7: seviye WARNING (bos karede WARNING basar)
+       3 failed, 35 passed in 0.34s
+       | FAILED .agents/tasks/T-006/tester_B/test_mercek_B.py::test_b4_rapidocr_logger_kurulumdan_sonra_error
+       | FAILED .agents/tasks/T-006/tester_B/test_mercek_B.py::test_b4_bos_karede_kutuphane_warningi_stderr_e_dusmez
+       | FAILED .agents/tasks/T-006/tester_B/test_mercek_B.py::test_b4_motor_yalniz_rapidocr_logger_ina_dokunur_baska_logger_i_susturmaz
+M28a  mercekB=X  YAKALANDI  -- K7: modul logger'ina WARNING ile blok METNI (degisken adi `metin`, `.text`/`txts` degil)
+       4 failed, 34 passed in 0.36s
+       | FAILED .agents/tasks/T-006/tester_B/test_mercek_B.py::test_b4_her_seviyede_nobetci_hicbir_loga_ve_stdout_stderr_e_dusmez[DEBUG]
+       | FAILED .agents/tasks/T-006/tester_B/test_mercek_B.py::test_b4_her_seviyede_nobetci_hicbir_loga_ve_stdout_stderr_e_dusmez[INFO]
+       | FAILED .agents/tasks/T-006/tester_B/test_mercek_B.py::test_b4_her_seviyede_nobetci_hicbir_loga_ve_stdout_stderr_e_dusmez[WARNING]
+       | FAILED .agents/tasks/T-006/tester_B/test_mercek_B.py::test_b4_hata_yollari_da_metin_tasimaz
+M28b  mercekB=X  YAKALANDI  -- K7: RapidOCR logger'ina INFO ile blok METNI (motor ERROR'a cektigi icin sessiz)
+       2 failed, 36 passed in 0.34s
+       | FAILED .agents/tasks/T-006/tester_B/test_mercek_B.py::test_b4_her_seviyede_nobetci_hicbir_loga_ve_stdout_stderr_e_dusmez[DEBUG]
+       | FAILED .agents/tasks/T-006/tester_B/test_mercek_B.py::test_b4_her_seviyede_nobetci_hicbir_loga_ve_stdout_stderr_e_dusmez[INFO]
+M28c  mercekB=X  YAKALANDI  -- K7: uygulama logger'ina DEBUG ile blok METNI (uygulama DEBUG acinca log dosyasina sizar)
+       2 failed, 36 passed in 0.32s
+       | FAILED .agents/tasks/T-006/tester_B/test_mercek_B.py::test_b4_her_seviyede_nobetci_hicbir_loga_ve_stdout_stderr_e_dusmez[DEBUG]
+       | FAILED .agents/tasks/T-006/tester_B/test_mercek_B.py::test_b4_hata_yollari_da_metin_tasimaz
+M29   mercekB=X  YAKALANDI  -- K10: close() sonrasi recognize CALISIYOR (fabrika yeniden kurulur)
+       4 failed, 34 passed in 0.35s
+       | FAILED .agents/tasks/T-006/tester_B/test_mercek_B.py::test_b5_close_x2_sonra_recognize_ocrerror_ve_fabrika_yeniden_cagrilmaz
+       | FAILED .agents/tasks/T-006/tester_B/test_mercek_B.py::test_b5_kurulum_hatasindan_sonra_close_ve_kapali_davranisi
+       | FAILED .agents/tasks/T-006/tester_B/test_mercek_B.py::test_b5_iki_motor_ayni_fabrikayi_paylasirsa_durum_karismaz
+       | FAILED .agents/tasks/T-006/tester_B/test_mercek_B.py::test_b5_kapali_motorda_bozuk_kare_de_ocrerror_ve_fabrika_sayaci_sabit
+M30   mercekB=X  YAKALANDI  -- K10: fabrika HER cagrida yeniden kuruluyor
+       6 failed, 32 passed in 0.36s
+       | FAILED .agents/tasks/T-006/tester_B/test_mercek_B.py::test_b4_pozitif_kontrol_olcu_atesliyor
+       | FAILED .agents/tasks/T-006/tester_B/test_mercek_B.py::test_b4_bos_karede_kutuphane_warningi_stderr_e_dusmez
+       | FAILED .agents/tasks/T-006/tester_B/test_mercek_B.py::test_b5_close_x2_sonra_recognize_ocrerror_ve_fabrika_yeniden_cagrilmaz
+       | FAILED .agents/tasks/T-006/tester_B/test_mercek_B.py::test_b5_fabrika_ilk_cagrida_firlatirsa_ikinci_recognize_yeniden_dener_ve_ornek_tutulma
+M31   mercekB=X  YAKALANDI  -- K10: close() `_kapali` isaretlemez -> sonraki recognize fabrikayi yeniden kurar
+       4 failed, 34 passed in 0.35s
+       | FAILED .agents/tasks/T-006/tester_B/test_mercek_B.py::test_b5_close_x2_sonra_recognize_ocrerror_ve_fabrika_yeniden_cagrilmaz
+       | FAILED .agents/tasks/T-006/tester_B/test_mercek_B.py::test_b5_kurulum_hatasindan_sonra_close_ve_kapali_davranisi
+       | FAILED .agents/tasks/T-006/tester_B/test_mercek_B.py::test_b5_iki_motor_ayni_fabrikayi_paylasirsa_durum_karismaz
+       | FAILED .agents/tasks/T-006/tester_B/test_mercek_B.py::test_b5_kapali_motorda_bozuk_kare_de_ocrerror_ve_fabrika_sayaci_sabit
+M32   mercekB=X  YAKALANDI  -- K10: close() tanıyıcıyı BIRAKMAZ (oturumlar canli kalir; disaridan gorunmez)
+       2 failed, 36 passed in 0.34s
+       | FAILED .agents/tasks/T-006/tester_B/test_mercek_B.py::test_b5_close_taniyiciyi_gercekten_birakir
+       | FAILED .agents/tasks/T-006/tester_B/test_mercek_B.py::test_b5_iki_motor_ayni_fabrikayi_paylasirsa_durum_karismaz
+C01   mercekB=.  KACTI (kontrol: kacmali)  -- KONTROL: `is` -> `==` (enum uyesi icin esdeger)
+       38 passed in 0.27s
+C02   mercekB=.  KACTI (kontrol: kacmali)  -- KONTROL: asarray -> array (kopya; sonuc ayni)
+       38 passed in 0.38s
+C03   mercekB=.  KACTI (kontrol: kacmali)  -- KONTROL: yalniz tip ek aciklamasi
+       38 passed in 0.35s
+C04   mercekB=.  KACTI (kontrol: kacmali)  -- KONTROL: sozluk anahtar sirasi degisti
+       38 passed in 0.38s
+exit=0

@@ -1,0 +1,5 @@
+(1) M25b + gercek model + stdout dosyaya yonlendirilmis (cp1254):
+     SONUC: UnicodeEncodeError: 'charmap' codec can't encode characters in position 0-5: character maps to <unde (stdout.encoding=cp1254)
+(2) M25b + sys.stdout=None (pencereli paket) + sahte fabrika:
+     SONUC: AttributeError: 'NoneType' object has no attribute 'write'
+ayna geri alindi

@@ -1,0 +1,68 @@
+dosya: tests\unit\ocr\test_rapid_engine.py
+test fonksiyonu: 56
+
+test                                                           assert raises raises>1 except sabit param
+test_k1_modul_duzeyinde_rapidocr_import_yok                         2      0        0      0     0     1
+test_k1_langrec_langdet_adi_modul_duzeyinde_gecmez                  1      0        0      0     0     1
+test_k1_sahte_fabrikayla_kosum_rapidocr_yuklemez                    1      0        0      0     0     1
+test_varsayilan_model_dizini_rapidocr_yuklemeden_bulunur            2      0        0      1     0     1
+test_varsayilan_model_dizini_paket_yoksa_modelmissing               0      1        0      0     0     1
+test_uyum_ocrengine_altsinifi                                       3      0        0      0     0     1
+test_k2_language_parametresinin_varsayilani_yok                     2      1        0      0     0     1
+test_k2_dil_dogrulanir                                              2      1        0      0     0     1
+test_k2_ocrlanguage_degerleri                                       1      0        0      0     0     1
+test_k3_threads_iki_anahtara_aynen_gider                            3      0        0      0     0     2
+test_k3_threads_none_min8_cpu                                       2      0        0      0     0     1
+test_k3_threads_cpu_ustu_valueerror_sessiz_otomatik_degil           0      2        0      0     0     1
+test_k3_threads_sifir_ve_negatif_valueerror                         0      1        0      0     0     3
+test_k3_threads_tamsayi_olmayan_typeerror                           0      1        0      0     0     4
+test_k3_threads_numpy_tamsayi_duz_int_olur                          1      0        0      0     0     1
+test_k3_cpu_count_none_ise_bir_sayilir                              1      1        0      0     0     1
+test_k4_bbox_kaydirma_tam_rect_kadar_ve_duz_int                     3      0        0      0     0     3
+test_k4_iki_nokta_farki_tam_kaydirma                                2      0        0      0     0     1
+test_k4_tam_sayi_koseli_cokgen_fazla_piksel_yok                     1      0        0      0     0     1
+test_k4_goruntu_disina_tasan_cokgen_kirpilmaz                       1      0        0      0     0     1
+test_k4_dejenere_cokgen_w0_oldugu_gibi_gecer                        1      0        0      0     0     1
+test_k4_line_boxes_bos_ve_sira_korunur                              2      0        0      0     0     1
+test_k5_text_score_sifir_params                                     1      0        0      0     0     1
+test_k5_uc_blok_aynen_metin_degismez                                3      0        0      0     0     1
+test_k5_bos_sonuc_boxes_none_bos_liste                              3      0        0      0     0     1
+test_k5_nan_puan_aynen_float                                        1      0        0      0     0     1
+test_k5_numpy_puan_duz_float                                        1      0        0      0     0     1
+test_k6_model_yok_fabrika_cagrilmadan_modelmissing                  3      1        0      0     0     1
+test_k6_yalniz_rec_eksikse_adi_mesajda                              1      1        0      0     0     1
+test_k6_model_var_acik_yol_gecilir                                  4      0        0      0     0     4
+test_k6_model_dir_str_kabul                                         1      0        0      0     0     1
+test_k6_allow_download_true_model_path_yok                          4      0        0      0     0     1
+test_k6_allow_download_bool_olmali                                  0      1        0      0     0     1
+test_k6_taniyici_istisnasi_ocrerror_cause_korunur                   1      1        0      0     0     1
+test_k6_taniyici_sozlesme_hatasi_oldugu_gibi_gecer                  1      1        0      0     0     1
+test_k6_fabrika_istisnasi_siniflandirilir                           4      4        0      0     0     1
+test_k6_fabrika_hatasindan_sonra_yeniden_denenebilir                1      1        0      0     0     1
+test_k6_kare_bicimi_contractviolation_motor_cagrilmaz               1      1        0      0     0     9
+test_k6_frame_olmayan_girdi_contractviolation                       1      2        0      0     0     1
+test_k6_1x1_kare_taniyiciya_gider                                   2      0        0      0     0     1
+test_k6_goruntu_aynen_kopyasiz_gecer                                1      0        0      0     0     1
+test_k6_rect_duz_int_degilse_contractviolation                      1      2        0      0     0     1
+test_k6_bozuk_cikti_ocrerror                                        0      1        0      0     0    18
+test_k6_hata_mesaji_ocr_metni_tasimaz                               1      1        0      0     0     1
+test_k7_ast_print_yok_logging_metin_yok                             2      0        0      0     0     1
+test_k7_logger_seviyesi_fabrikadan_sonra_error                      2      0        0      0     0     1
+test_k7_nobetci_metin_loga_dusmez                                   3      0        0      0     0     1
+test_k7_pozitif_kontrol_seviye_dusurulmezse_uyari_gecer             1      0        0      0     0     1
+test_k8_dort_preset_ayni_cikti                                      3      0        0      0     0     1
+test_k8_olculmuyor_damgasi_docstringde                              2      0        0      0     0     1
+test_k10_tembel_tek_ornek_close_idempotent                          3      1        0      0     0     1
+test_k10_init_model_kontrolu_yapmaz                                 0      1        0      0     0     1
+test_k10_close_kurulmamis_motorda_da_sessiz                         1      1        0      0     0     1
+test_k11_dil_tablosu_alti_anahtar                                   5      0        0      0     0     4
+test_k11_params_anahtar_kumesi_sabit                                1      0        0      0     0     1
+test_k11_params_her_cagri_taze_kopya                                1      0        0      0     0     1
+
+parametrize ile toplam test ornegi (kaba): 95
+
+BAYRAKLAR:
+  - test_varsayilan_model_dizini_rapidocr_yuklemeden_bulunur: except govdesi var: except importlib.metadata.PackageNotFoundError:
+    pytest.skip('rapidocr dagitimi kurulu degil; diz
+
+adinda 'gercek' gecen testler:

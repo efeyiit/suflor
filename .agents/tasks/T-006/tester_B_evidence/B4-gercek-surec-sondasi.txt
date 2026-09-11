@@ -1,0 +1,52 @@
+B4/B2 gercek surec sondasi -- PYTHONIOENCODING verilmedi, konsol kodlamasi gercek
+
+[A] exit=0  stdout=0 bayt  stderr=0 bayt
+   import_sonrasi_rapidocr_yuklu: False
+   yapim_sonrasi_rapidocr_yuklu: False
+
+[B] exit=0  stdout=0 bayt  stderr=0 bayt
+   import_sonrasi_rapidocr_yuklu: False
+   yapim_sonrasi_rapidocr_yuklu: False
+   blok_sayilari: [4, 4, 0, 0, 17]
+   RapidOCR_level_sonda: ERROR
+
+[C] exit=0  stdout=0 bayt  stderr=333 bayt
+   stderr ilk 600 bayt: b"DEBUG:PIL.Image:Importing PngImagePlugin\r\nDEBUG:PIL.PngImagePlugin:STREAM b'IHDR' 16 13\r\nDEBUG:PIL.PngImagePlugin:STREAM b'IDAT' 41 45214\r\nDEBUG:PIL.PngImagePlugin:STREAM b'IHDR' 16 13\r\nDEBUG:PIL.PngImagePlugin:STREAM b'IDAT' 41 45214\r\nDEBUG:PIL.PngImagePlugin:STREAM b'IHDR' 16 13\r\nDEBUG:PIL.PngImagePlugin:STREAM b'IDAT' 41 21274\r\n"
+   import_sonrasi_rapidocr_yuklu: False
+   yapim_sonrasi_rapidocr_yuklu: False
+   blok_sayilari: [4, 4, 0, 0, 17]
+   RapidOCR_level_sonda: ERROR
+
+[D] exit=0  stdout=0 bayt  stderr=103 bayt
+   stderr ilk 600 bayt: b'\x1b[33m[WARNING] 2026-09-11 04:35:00,925 [RapidOCR] main.py:132: The text detection result is empty\x1b[0m\r\n'
+   import_sonrasi_rapidocr_yuklu: False
+   yapim_sonrasi_rapidocr_yuklu: False
+   blok_sayilari: [4, 4, 0, 0, 17, 0]
+   RapidOCR_level_sonda: DEBUG
+
+[E] exit=0  stdout=0 bayt  stderr=0 bayt
+   import_sonrasi_rapidocr_yuklu: False
+   yapim_sonrasi_rapidocr_yuklu: False
+   cikti_tipi: RapidOCROutput
+   boxes_tipi: ndarray
+   boxes_dtype: float32
+   boxes_shape: [4, 4, 2]
+   txts_tipi: tuple
+   txts_eleman_tipi: str
+   txts_n: 4
+   scores_tipi: tuple
+   scores_eleman_tipi: float
+   scores_eleman_python_float: True
+   bos_cikti_tipi: RapidOCROutput
+   bos_alanlar: [True, True, True]
+   1x1_alanlar: [True, True, True]
+   RapidOCR_level: ERROR
+   RapidOCR_propagate: False
+   RapidOCR_handlers: ['StreamHandler:INFO']
+   logger_envanteri: ['RapidOCR']
+   sys_modules_rapid_onnx: ['onnxruntime', 'rapidocr']
+
+recognize'in yazdigi (B - A): stdout 0 bayt, stderr 0 bayt
+kok DEBUG altinda recognize (C - A): stdout 0 bayt, stderr 333 bayt
+D (RapidOCR logger'i uygulama DEBUG'a acarsa, bos kare): stdout 0 stderr 103 bayt
+A/B/C: import + yapim + recognize sifir bayt (K7 gercek yolda tutuyor)

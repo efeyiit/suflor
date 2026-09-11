@@ -1,20 +1,20 @@
-"""T-006 kabul kapısı — GERÇEK modelle, şefin üç fixture'ı üzerinde.
+"""T-006 kabul kapısı - GERÇEK modelle, şefin üç fixture'ı üzerinde.
 
     python .agents/tasks/T-006/real_check.py
 
 Şefe aittir; implementer koşar ama YAZMAZ. Birim testleri (K1) gerçek modele
 hiç dokunmaz; gerçek davranış yalnız burada ölçülür. Modeller diskte olmalı
-(rapidocr ilk kullanımda indirir — O4).
+(rapidocr ilk kullanımda indirir - O4).
 
 Kontroller (packet.md "Kabul kapısı"):
-  1. JAPAN  → 4/4 satır birebir
-  2. Aynı görüntü CHINESE → 4/4 DEĞİL   (K2'nin pozitif kontrolü, §4.6/10)
-  3. KOREAN → okuma sırasında birleştirilince benzerlik ≥ 0.95
-  4. ENGLISH → 4/4
+  1. JAPAN  -> 4/4 satır birebir
+  2. Aynı görüntü CHINESE -> 4/4 DEĞİL   (K2'nin pozitif kontrolü, §4.6/10)
+  3. KOREAN -> okuma sırasında birleştirilince benzerlik >= 0.95
+  4. ENGLISH -> 4/4
   5. Süreler K9'a göre RAPORLANIR (eşik aşımı uyarı, düşürmez)
   6. bbox ekran koordinatında: Frame.rect=(-2600,-50,…) ile ilk satır bbox.x < 0,
      ve aynı görüntü Frame.rect=(0,0,…) ile bbox.x >= 0  (iki nokta, §4.6/7)
-  7. allow_download=False + model yok → ModelMissingError (ayrı süreçte)
+  7. allow_download=False + model yok -> ModelMissingError (ayrı süreçte)
 
 Bu dosya hiçbir OCR metnini stdout'a yazmaz (PROTOKOL §7); yalnızca
 eşleşme sayısı ve süre yazar. Beklenen metinler burada sabit, çıktı metni
@@ -81,10 +81,10 @@ def okuma_sirasi(bloklar: list[TextBlock]) -> list[TextBlock]:
     """Satır kümeleme y-BOŞLUĞUNA göre; sabit kova DEĞİL.
 
     v1 `round(y/25)` kullanıyordu: aynı satırın kelimeleri y=212 ve 213'te kova
-    sınırına bölünüyor (212→8, 213→9), bir kelime satırın önüne kaçıyordu
+    sınırına bölünüyor (212->8, 213->9), bir kelime satırın önüne kaçıyordu
     (implementer tur 1'de ölçtü, şef doğruladı: KR 0.932 vs 0.971). Şimdi:
     y'ye göre sırala, bir önceki satırın y'sinden 20 px'ten fazla uzaksa yeni
-    satır. Fixture'da satır aralığı 54 px, satır içi sapma ≤ 4 px.
+    satır. Fixture'da satır aralığı 54 px, satır içi sapma <= 4 px.
     """
     if not bloklar:
         return []
@@ -143,7 +143,7 @@ def bbox_tipleri_duz_int(bloklar: list[TextBlock]) -> bool:
 
 
 def main() -> int:
-    print("T-006 real_check — gerçek model")
+    print("T-006 real_check - gerçek model")
     try:
         from src.ocr.rapid_engine import OcrLanguage, RapidOcrEngine
     except Exception as e:  # noqa: BLE001
@@ -163,11 +163,11 @@ def main() -> int:
     # --- 6. bbox ekran koordinatı, iki nokta ----------------------------------
     if b_jp:
         ilk = okuma_sirasi(b_jp)[0]
-        # v1 burada `y < 0` da istiyordu: YAPISAL OLARAK YANLIŞ — ilk satır görüntü-yerel
-        # y=93'te, rect.y=-50 ile 43 ≥ 0; hiçbir doğru uygulamada tutmazdı (implementer ölçtü,
+        # v1 burada `y < 0` da istiyordu: YAPISAL OLARAK YANLIŞ - ilk satır görüntü-yerel
+        # y=93'te, rect.y=-50 ile 43 >= 0; hiçbir doğru uygulamada tutmazdı (implementer ölçtü,
         # şef doğruladı). Kaydırmanın asıl ölçüsü [6c]'nin iki-nokta farkıdır.
         (tamam if ilk.bbox.x < 0 else ihlal)(
-            f"[6a] Frame.rect=(-2600,-50): ilk blok bbox.x={ilk.bbox.x} negatif olmalı (görüntü-yerel x≈75)")
+            f"[6a] Frame.rect=(-2600,-50): ilk blok bbox.x={ilk.bbox.x} negatif olmalı (görüntü-yerel x~75)")
         (tamam if ilk.bbox.monitor_index == 0 else ihlal)(
             f"[6a] monitor_index frame'den taşındı: {ilk.bbox.monitor_index} (beklenen 0)")
         (tamam if bbox_tipleri_duz_int(b_jp) else ihlal)("[6a] tüm bbox alanları type is int, json'lanabilir")
@@ -187,7 +187,7 @@ def main() -> int:
     # --- 2. CHINESE aynı görüntüde 4/4 DEĞİL (pozitif kontrol) ---------------
     zh = RapidOcrEngine(language=OcrLanguage.CHINESE, threads=8, allow_download=False)
     n_zh = satir_esle(zh.recognize(f_jp, OcrPreset.DIALOGUE), BEKLENEN["JP"])
-    (tamam if n_zh < 4 else ihlal)(f"[2] CHINESE modeli Japonca diyalogda {n_zh}/4 — 4 OLMAMALI (dil ölçüsü ateşliyor)")
+    (tamam if n_zh < 4 else ihlal)(f"[2] CHINESE modeli Japonca diyalogda {n_zh}/4 - 4 OLMAMALI (dil ölçüsü ateşliyor)")
 
     # --- 4. ENGLISH 4/4 -------------------------------------------------------
     en = RapidOcrEngine(language=OcrLanguage.ENGLISH, threads=8, allow_download=False)
@@ -197,12 +197,12 @@ def main() -> int:
     # "ELDER MARCUS" başlığı tek kelime gibi okunabilir (O4: 'ELDERMARCUS'); boşluksuz eşleme bunu tolere eder
     (tamam if n_en == 4 else ihlal)(f"[4] ENGLISH: {n_en}/4 satır birebir  ({len(b_en)} blok)")
 
-    # --- 3. KOREAN benzerlik ≥ 0.95 ------------------------------------------
+    # --- 3. KOREAN benzerlik >= 0.95 ------------------------------------------
     kr = RapidOcrEngine(language=OcrLanguage.KOREAN, threads=8, allow_download=False)
     f_kr = kare("KR", NEG)
     b_kr = kr.recognize(f_kr, OcrPreset.DIALOGUE)
     bz = birlesik_benzerlik(b_kr, BEKLENEN["KR"])
-    (tamam if bz >= 0.95 else ihlal)(f"[3] KOREAN: birleşik benzerlik {bz:.3f} ≥ 0.95  ({len(b_kr)} blok)")
+    (tamam if bz >= 0.95 else ihlal)(f"[3] KOREAN: birleşik benzerlik {bz:.3f} >= 0.95  ({len(b_kr)} blok)")
 
     # --- 5. Süreler (rapor; K9) ----------------------------------------------
     for ad, motor, f, esik in (("JAPAN", jp, f_jp, 300.0), ("ENGLISH", en, f_en, 350.0)):
@@ -218,12 +218,12 @@ def main() -> int:
     b_kr_jp = jp.recognize(f_kr, OcrPreset.DIALOGUE)
     dusuk = sum(1 for b in b_kr_jp if b.confidence < 0.5)
     (tamam if dusuk >= 1 else ihlal)(
-        f"[8] KR+JAPAN: {len(b_kr_jp)} blok, {dusuk} tanesi confidence<0.5 — ≥1 olmalı (süzgeç KAPALI kanıtı)")
+        f"[8] KR+JAPAN: {len(b_kr_jp)} blok, {dusuk} tanesi confidence<0.5 - >=1 olmalı (süzgeç KAPALI kanıtı)")
     if b_kr:
         gmin = min(b.confidence for b in b_kr)
         (tamam if type(gmin) is float else ihlal)(f"[K5] confidence tipi float (min {gmin:.3f})")
 
-    # --- 7. model yok → ModelMissingError (ayrı süreç) -------------------------
+    # --- 7. model yok -> ModelMissingError (ayrı süreç) -------------------------
     kod = (
         "import sys, tempfile, pathlib; sys.path.insert(0, %r)\n"
         "from src.ocr.rapid_engine import OcrLanguage, RapidOcrEngine\n"
@@ -241,7 +241,7 @@ def main() -> int:
     r = subprocess.run([sys.executable, "-c", kod], capture_output=True, text=True, timeout=120, cwd=str(KOK))
     son = (r.stdout.strip().splitlines() or [""])[-1]
     if son.startswith("MME"):
-        tamam(f"[7] model yok + allow_download=False → ModelMissingError (__cause__ {son.split()[1] if len(son.split())>1 else '?'})")
+        tamam(f"[7] model yok + allow_download=False -> ModelMissingError (__cause__ {son.split()[1] if len(son.split())>1 else '?'})")
     else:
         ihlal(f"[7] beklenen ModelMissingError; alınan: {son!r}  stderr: {r.stderr.strip()[-200:]}")
 

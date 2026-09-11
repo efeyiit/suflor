@@ -1,0 +1,33 @@
+==== T-006 TESTER B (mercek B: test kalitesi + bariyer + omur + loglama) -- SEF SONDASI ====
+Karar: RET. validate -> KABUL EDILEBILIR (13 kontrol, kanitlar dolu). Sahiplik temiz.
+
+[B-cp1254] real_check'te '≈' (U+2248) -> SEF URETTI
+  PYTHONIOENCODING=cp1254 ile: exit 1, "UnicodeEncodeError: 'charmap' codec can't
+  encode character '\u2248'". SEF HATASI 17 -- paketin kendi uyardigi tuzak,
+  sefin duzeltmesiyle kapiya girdi. B'nin kiti bu yuzden UTF-8 zorunlu kosuyordu;
+  aksi halde 51/51 mutant "yakalandi" gorunurdu (kapi kodun kalitesinden BAGIMSIZ
+  dusuyor -- T-005 v2 sinifi). DUZELTILDI: stdout'a giden ozel isaretler ASCII;
+  cp1254 altinda TEMIZ.
+
+[B1 / M25b] sys.stdout.write(blok.text) bes kapidan geciyor -> SEF URETTI
+  Kum havuzunda recognize sonuna sys.stdout.write(_b.text) eklendi:
+    mypy    Success
+    birim   95 passed          <- KOR
+    real_check gecti (stdout'u denetlemiyor)
+  K7 olcusu 'print' ADINI sayiyordu; sys.stdout.write, os.write, logger degiskeni
+  'metin' gorunmez. SEF HATASI 16 -- 4.6/7 (mekanizma kancasi), ucuncu tekrar.
+  Urun etkisi (B olctu, sef kabul): cp1254 -> UnicodeEncodeError; pythonw ->
+  AttributeError her recognize'da. Sefin kendi esigine gore RET.
+
+[B1 / M28b, M28c] logger'a metin: ayni sinif, kabul.
+[B1 / M32] close() taniyiciyi birakmiyor: ikincil, ayni turda kapatilacak (1 satir).
+[B1] 4 kontrol mutanti kacti -> yanlis pozitif yok.
+
+[B3] Bariyer 4 import yolunda tutuyor; 'pytest tests' kokunden de kurulu.
+     Paketin K1 metni (nobetci+sayac) conftest'le uyusmuyor -> belge notu.
+[B4] Gercek model ayri surecte: stdout 0 / stderr 0 bayt. Kod DOGRU, olcu yoktu.
+[B5] Omur: close x2, kapali recognize -> OcrError, fabrika sayaci sabit. Fabrika
+     hatasinda yeniden deneme var, paket sessiz -> yukumluluk.
+[B6] Kapsam durust; tek pragma gerekceli.
+
+KARAR: B'nin RET'i KABUL. T-006 tur 2: sef_karari-tur2.md (T2-1 bloke, T2-2 ikincil).
