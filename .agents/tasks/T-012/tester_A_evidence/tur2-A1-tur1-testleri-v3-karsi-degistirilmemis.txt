@@ -1,0 +1,61 @@
+kenar = <Kenar.SAG: 'sag'>, yaricap = 80, acilma_ms = 20, kapanma_ms = 20
+yoklama_ms = 10
+imlec_konumu = <function test_e_sinir_yaricap_panel_yuksekliginin_yarisindan_buyukse_salinim_PIN.<locals>.<lambda> at 0x00000234DBFA8FE0>
+
+    def __init__(
+        self,
+        ekran: QScreen,
+        *,
+        kenar: Kenar = Kenar.SAG,
+        yaricap: int = 26,
+        acilma_ms: int = 120,
+        kapanma_ms: int = 450,
+        yoklama_ms: int = 60,
+        imlec_konumu: Callable[[], QPoint] | None = None,
+    ) -> None:
+        if not 1 <= yaricap <= _YARICAP_AZAMI:
+>           raise ValueError(f"1 <= yaricap <= {_YARICAP_AZAMI} olmali (panel sekmeyi kapsamali): {yaricap}")
+E           ValueError: 1 <= yaricap <= 66 olmali (panel sekmeyi kapsamali): 80
+
+src\ui\kenar_sekmesi.py:222: ValueError
+__ test_g_k4_mod_tiki_sonrasi_imlec_disk_icindeyse_panel_yeniden_acilir_PIN ___
+
+qtbot = <pytestqt.qtbot.QtBot object at 0x00000234DBF65670>
+sekme_fab = <function sekme_fab.<locals>.yap at 0x00000234DBFABB00>
+imlec = [PySide6.QtCore.QPoint(795, 399), PySide6.QtCore.QPoint(8, 0)]
+
+    def test_g_k4_mod_tiki_sonrasi_imlec_disk_icindeyse_panel_yeniden_acilir_PIN(qtbot, sekme_fab, imlec) -> None:
+        """[PIN/orta] Mod tikinda imlec kapali sekmenin diski icinde kaliyorsa (dugmenin sag ucu, kenara <= 26 px) panel
+        `acilma_ms` sonra YENIDEN acilir: docstring 'once kapanir sonra sinyal' iddiasi tutar (sinyal aninda kapali) ama
+        ertelenmis Snapshot karesine panel girer. Pozitif kontrol: imlec disk disinda (dugme ortasi) -> acik kalmaz."""
+        s = sekme_fab()  # urun degerleri
+        s.show()
+        k = s.frameGeometry()
+        for nokta, yeniden in ((QPoint(k.right() - 4, k.center().y()), True), (QPoint(k.right() - 100, k.center().y()), False)):
+            imlec[0] = k.center()
+            qtbot.waitUntil(lambda: s.acik, timeout=120 + 2 * 60 + 300)
+            assert s.frameGeometry().contains(nokta)  # nokta acik paneldedir (tiklanabilir)
+            imlec[0] = nokta
+            n: list[int] = []
+            s.anlik_cevir.connect(lambda: n.append(1))
+            s.dugme_anlik.click()
+            assert n == [1] and s.acik is False
+            qtbot.wait(120 + 4 * 60)
+>           assert s.acik is yeniden, (nokta, s.acik)
+E           AssertionError: (PySide6.QtCore.QPoint(795, 399), False)
+E           assert False is True
+E            +  where False = <src.ui.kenar_sekmesi.KenarSekmesi(0x234d9a60d30) at 0x00000234DB6C1F40>.acik
+
+.agents\tasks\T-012\tester_A\test_mercek_a.py:1171: AssertionError
+---------------------------- Captured Qt messages -----------------------------
+QtWarningMsg: This plugin does not support raise()
+QtWarningMsg: This plugin does not support raise()
+=========================== short test summary info ===========================
+FAILED .agents/tasks/T-012/tester_A/test_mercek_a.py::test_b_k1_show_minimized_sonra_tepsi_sonra_goster_kucultulmus_kalir_PIN
+FAILED .agents/tasks/T-012/tester_A/test_mercek_a.py::test_d_omur_kapat_sonrasi_dusurulen_ana_pencere_sekmeyi_sizdirir_PIN
+FAILED .agents/tasks/T-012/tester_A/test_mercek_a.py::test_e_geometri_yaricap_ekrandan_buyuk_y_ust_kenara
+FAILED .agents/tasks/T-012/tester_A/test_mercek_a.py::test_e_geometri_ust_sinir_overflow_ayri_surec_PIN
+FAILED .agents/tasks/T-012/tester_A/test_mercek_a.py::test_e_sinir_yaricap_panel_yuksekliginin_yarisindan_buyukse_salinim_PIN
+FAILED .agents/tasks/T-012/tester_A/test_mercek_a.py::test_g_k4_mod_tiki_sonrasi_imlec_disk_icindeyse_panel_yeniden_acilir_PIN
+6 failed, 233 passed in 20.83s
+exit=1

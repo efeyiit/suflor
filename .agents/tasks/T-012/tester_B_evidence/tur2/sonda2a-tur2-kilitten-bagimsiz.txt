@@ -1,0 +1,20 @@
+sonda_2a: birincil avail 2048x1104 dpr=1.25 tepsi=True oturum kilitli=True (on plan sureci=lockapp.exe giris masaustu=Default)
+S8 sekme hwnd'sine gercek WM_CLOSE (kenar durumunda) -> goster()
+  ok     [S8 tepsili=True] once uclu/durum/sekme-hwnd-gorunur/Shell-ikon=((False, True, True), 'kenar', True, True) -> WM_CLOSE(sekme): kapandi=1 cikis=0 durum=gorunur uclu=(True, False, False) ana-hwnd gorunur=True sekme-hwnd gorunur=False Shell ikon var=False yokluyor=False
+  ok     [S8 tepsili=True] yeniden kenara al: uclu=(False, True, True) yokluyor=True yeni sekme-hwnd gorunur=True hwnd degisti=True (eski hwnd yikildi; hwnd onbellekleyen cagiran icin belge)
+  ok     [S8 tepsili=False] once uclu/durum/sekme-hwnd-gorunur/Shell-ikon=((False, True, False), 'kenar', True, False) -> WM_CLOSE(sekme): kapandi=1 cikis=0 durum=gorunur uclu=(True, False, False) ana-hwnd gorunur=True sekme-hwnd gorunur=False Shell ikon var=False yokluyor=False
+  ok     [S8 tepsili=False] yeniden kenara al: uclu=(False, True, False) yokluyor=True yeni sekme-hwnd gorunur=True hwnd degisti=True (eski hwnd yikildi; hwnd onbellekleyen cagiran icin belge)
+S9 Win32 capture: gercek hwnd'ye WM_LBUTTONDOWN -> Qt SetCapture? -> hide() -> GetCapture?
+  bilgi  [S9] press geldi=1 -> GetCapture==hwnd (Qt capture aldi)=True; hide() sonrasi GetCapture=0 (0 ise OS SW_HIDE'da capture'i birakir); gizli pencereye POST edilen release Qt'ye ulasti=0
+  ok     [S9] hide() capture'i birakiyor: gercek release gizli katmana OS tarafindan gitmez (D-B10 yalniz Qt-ici/QTest yolunda; belge)
+S10 deleteLater + Python referansi tutuluyor (O-B5) gercek ekranda
+  BULGU  [S10 duzeltme=False] C++ AnaPencere olu=True sekme sarmalayici canli=True sekme hwnd EnumWindows'ta GORUNUR=True yokluyor=True Shell ikon var=False -> ZOMBI: ana pencere yok, ikon yok, yarim daire ekranda
+  ok     [S10 duzeltme=True] C++ AnaPencere olu=True sekme sarmalayici canli=False sekme hwnd EnumWindows'ta GORUNUR=False yokluyor=False Shell ikon var=False
+S11 K5 balon (gercek tepsi)
+  bilgi  [S11] tepsiye_al: Shell ikon var=True balon bayragi=True (balon penceresi kilitli oturumda gorulemez -- sef kilit acikken: balon ~6 s, sag alt)
+  bilgi  [S11] ikinci tepsiye_al: ikon var=True (balon bir daha gosterilmez: bayrak True)
+  ok     [S11] kapat: Shell'de ikon yok=True
+
+SONDA_2A: 1 bulgu
+  - [S10 duzeltme=False] C++ AnaPencere olu=True sekme sarmalayici canli=True sekme hwnd EnumWindows'ta GORUNUR=True yokluyor=True Shell ikon var=False -> ZOMBI: ana pencere yok, ikon yok, yarim daire ekranda
+exit=0

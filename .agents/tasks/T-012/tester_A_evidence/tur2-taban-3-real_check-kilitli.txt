@@ -1,0 +1,6 @@
+# taban 3 -- real_check v3 (gercek ekran) KOSULMADI: oturum kilitli (LogonUI calisiyor). Sef kilit acilinca kosar.
+tarih: 2026-09-13 00:51
+Get-Process LogonUI -> 
+pid=13444, pid=66928
+
+Kilitliyken yapilabilen: QT_QPA_PLATFORM=windows ile yalniz pencere geometrisi (girdi/on plan yok) -> sonda_a_02 'windows' kosumu (ayni sonuc: O-A2).

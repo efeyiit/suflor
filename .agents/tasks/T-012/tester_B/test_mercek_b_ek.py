@@ -203,11 +203,10 @@ def test_c2x9_kenar_sol_ana_pencere_ve_panel_sol_kenarda(qtbot, imlec: Imlec) ->
     p.kapat()
 
 
-def test_c2x10_app_quit_gorunur_pencereleri_kapatir_gizli_ana_pencere_kapat_almaz() -> None:
-    """Qt 6.11 `QApplication.quit()` once GORUNUR ust-duzey pencereleri `close()` eder (biri `ignore()` ederse quit iptal;
-    sira rastgele). Kenar durumunda: sekme (gorunur) closeEvent alir ve gizlenir; ana pencere GIZLI oldugundan closeEvent
-    ALMAZ -> `kapat()` yok, `cikis_istendi` 0, tepsi ikonu surec bitene kadar kalir, `durum` KENAR. Sonraki ajan
-    `app.quit()` ile cikarsa (demo Esc yolu) kabuk temiz kapanmaz. Taze surec (pytest'in dongusunu bozmamak icin)."""
+def test_c2x10_app_quit_kenar_durumunda_kabugu_temiz_kapatir_TUR2_TERS() -> None:
+    """TUR 1: `app.quit()` kenar durumunda gizli ana pencere closeEvent almiyordu (cikis 0, ikon kaliyordu). TUR 2 (O-B1 yan etkisi):
+    closeAllWindows -> sekme.close() -> `kapandi` -> `goster()` (ana pencere gorunur) -> closeAllWindows onu da kapatir -> `kapat()`
+    -> cikis 1, uclu (F,F,F), kapandi True. Taze surec."""
     kod = "\n".join([
         "from PySide6.QtCore import QTimer",
         "from PySide6.QtWidgets import QApplication",
@@ -223,7 +222,7 @@ def test_c2x10_app_quit_gorunur_pencereleri_kapatir_gizli_ana_pencere_kapat_alma
     ])
     r = taze_surec(kod)
     assert r.returncode == 0, (r.returncode, r.stderr[-800:])
-    assert "RC 0 UCLU False False True KAPANDI False CIKIS 0 DURUM kenar" in r.stdout, (r.stdout, r.stderr[-800:])
+    assert "RC 0 UCLU False False False KAPANDI True CIKIS 1 DURUM gorunur" in r.stdout, (r.stdout, r.stderr[-800:])
 
 
 # =====================================================================================
@@ -248,11 +247,9 @@ DEMO_KURULUM = (
 )
 
 
-def test_f1_demo_bagla_bolge_izle_secim_katmani_esc_uygulamayi_kapatir() -> None:
-    """GERCEK CAGIRAN: demo/kabuk.py `_bagla` -> `bolge_izle_istendi` -> `SecimKatmani`. Kullanici secimi Esc ile IPTAL
-    ederse `SecimKatmani.keyPressEvent` `QApplication.quit()` cagirir: surec BITER, kabuk `kapat()` cagrilmamis
-    (`kapandi` False, `cikis_istendi` 0), tepsi ikonu/sekme gizlenmeden `exec()` doner. Kenar durumunda: sekme
-    gorunurken 'Bolge izle' -> Esc -> UYGULAMA KAPANIR. Olcum: cikis kodu 0 (quit), kapandi False, cikis 0."""
+def test_f1_demo_bagla_bolge_izle_secim_katmani_esc_uygulamayi_KAPATMAZ_TUR2_TERS() -> None:
+    """TUR 1 (Y-B1: Esc -> quit, surec bitiyordu) -> TUR 2 TERS (sef duzeltmesi): Esc -> `iptal` -> katman kapanir, surec YASAR
+    (exec donmez, 1.5 s sonra bizim exit(9)), kabuk kapatilmamis (kapandi False), sekme GERI gelmis (O-B2), durum kenar."""
     kod = DEMO_KURULUM + (
         "def adimlar(app, pencere):\n"
         "    pencere.kenara_al()\n"
@@ -262,17 +259,16 @@ def test_f1_demo_bagla_bolge_izle_secim_katmani_esc_uygulamayi_kapatir() -> None
         "        print('KATMAN', len(katmanlar), 'UCLU', pencere.isVisible(), pencere.sekme.isVisible())\n"
         "        if katmanlar: QTest.keyClick(katmanlar[0], QtCore.Qt.Key.Key_Escape)\n"
         "    QtCore.QTimer.singleShot(400, esc)\n"
+        "    QtCore.QTimer.singleShot(1500, lambda: (print('YASIYOR'), app.exit(9)))\n"
         "rc = calistir([], calistirici=sarici)\n"
         "p = durum['p']\n"
         "print('RC', rc, 'KAPANDI', p.kapandi, 'CIKIS', durum.get('cikis', 0), 'SEKME_GORUNUR', p.sekme.isVisible(), 'DURUM', str(p.durum))\n"
     )
     r = taze_surec(kod)
     assert r.returncode == 0, (r.returncode, r.stderr[-1500:])
-    assert "KATMAN 1 UCLU False True" in r.stdout, (r.stdout, r.stderr[-800:])
-    assert "ZAMAN_ASIMI" not in r.stdout, r.stdout
-    # olculen gercek: exec() dondu (Esc -> quit), kabuk kapatilmadi (`kapandi` False, `cikis_istendi` 0); sekme gizli cunku
-    # Qt 6.11 `QApplication.quit()` once GORUNUR ust-duzey pencereleri kapatir (ana pencere gizli -> closeEvent ALMAZ)
-    assert "RC 0 KAPANDI False CIKIS 0 SEKME_GORUNUR False DURUM kenar" in r.stdout, (r.stdout, r.stderr[-800:])
+    assert "KATMAN 1 UCLU False False" in r.stdout, (r.stdout, r.stderr[-800:])  # secim boyunca sekme gizli (O-B2)
+    assert "YASIYOR" in r.stdout and "ZAMAN_ASIMI" not in r.stdout, r.stdout
+    assert "RC 9 KAPANDI False CIKIS 0 SEKME_GORUNUR True DURUM kenar" in r.stdout, (r.stdout, r.stderr[-800:])
 
 
 def test_f2_demo_bagla_anlik_cevir_kenardan_pencereyi_getirir_ve_kapat_cikar() -> None:

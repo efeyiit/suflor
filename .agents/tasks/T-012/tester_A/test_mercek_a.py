@@ -2,6 +2,8 @@
 
 Kor testler: delivery.md / evidence / sef_dogrulama / implementer testleri OKUNMADAN yazildi.
 Garanti alani = src/ui/*.py docstring'leri + packet.md v2 (K1-K8).
+Tur 2 (paket v3): 6 test `_v3` olarak ters cevrildi (Y-A1 gizli sizinti, O-A1 mandal, D-A1 showNormal, D-A3/D-A4 ust sinir);
+3 Y-A1 DOCSTRING testi degismeden yesile dondu. Yeni ▲▲ testleri `test_mercek_a_tur2.py`de.
 
 Bolumler:
   A  K1 durum makinesi -- 5 baslangic satiri x 22 eylem tablosu (uclu + durum + cikis sayisi + yoklayici)
@@ -307,20 +309,26 @@ def test_b_k1_kapat_sonrasi_dis_show_pencereyi_gosterir_ama_kapandi_kalir_PIN(qt
     assert uclu(p) == (False, False, False) and len(n) == 1
 
 
-def test_b_k1_show_minimized_sonra_tepsi_sonra_goster_kucultulmus_kalir_PIN(qtbot, pencere_fab) -> None:
-    """[PIN/dusuk] Pencere kucultulmusken (Win+D sinifi) `tepsiye_al()` -> `goster()`: isVisible True ama
-    isMinimized True kalir -- `goster()` docstring'i 'pencere one gelir' der; showNormal yok.
-    Pozitif kontrol: kucultulmemis pencerede goster sonrasi isMinimized False."""
-    p = kur(pencere_fab, "G")
-    assert p.isMinimized() is False
-    p.showMinimized()
-    qtbot.wait(20)
-    assert p.isMinimized() is True and p.isVisible() is True
-    p.tepsiye_al()
-    p.goster()
-    qtbot.wait(20)
-    assert uclu(p) == (True, False, False)
-    assert p.isMinimized() is True  # PIN: kullanici pencereyi gormez (gorev cubugunda kucultulmus)
+def test_b_k1_show_minimized_sonra_tepsi_sonra_goster_normale_doner_v3(qtbot, pencere_fab) -> None:
+    """[v3 -- tur 1 PIN ters cevrildi, D-A1 duzeltildi] Pencere kucultulmusken (Win+D sinifi) `tepsiye_al()` -> `goster()`
+    ve `kenara_al()` -> `goster()`: `showNormal()` ile geri gelir, isMinimized False. Tur 1'de True kaliyordu."""
+    for ara in ("tepsiye_al", "kenara_al"):
+        p = kur(pencere_fab, "G")
+        assert p.isMinimized() is False
+        p.showMinimized()
+        qtbot.wait(20)
+        assert p.isMinimized() is True and p.isVisible() is True  # pozitif kontrol: kucultme offscreen'de olculuyor
+        getattr(p, ara)()
+        p.goster()
+        qtbot.wait(20)
+        assert uclu(p) == (True, False, False) and p.durum is KabukDurumu.GORUNUR
+        assert p.isMinimized() is False, ara  # v3: showNormal
+        p.showMinimized()
+        qtbot.wait(20)
+        p.goster()  # dogrudan gorunur durumda da
+        qtbot.wait(20)
+        assert p.isMinimized() is False and p.isVisible() is True
+        p.kapat()
 
 
 def test_b_k1_kenar_durumunda_panel_acikken_goster_ve_kapat(qtbot, pencere_fab, imlec) -> None:
@@ -449,19 +457,18 @@ def test_d_omur_ana_pencere_referansi_dusunce_sekme_silinir_DOCSTRING(qtbot, ekr
             s.hide()
 
 
-def test_d_omur_kapat_sonrasi_dusurulen_ana_pencere_sekmeyi_sizdirir_PIN(qtbot, ekran, imlec) -> None:
-    """[PIN/bilgi] `kapat()` + referans dusurme: sekme GIZLI ama Python/C++ nesnesi yasar (sizinti; gorunur zombi degil).
-    Y-A1'in zararsiz yuzu."""
+def test_d_omur_kapat_sonrasi_dusurulen_ana_pencere_sekme_silinir_v3(qtbot, ekran, imlec) -> None:
+    """[v3 -- tur 1 PIN ters cevrildi, Y-A1 gizli sizinti yuzu] `kapat()` + referans dusurme: sekme de (gizli olsa da)
+    toplanir; tur 1'de Python/C++ nesnesi yasiyordu (her ornek sizardi)."""
     p = AnaPencere(ekran, tepsi_kullanilabilir=True, imlec_konumu=lambda: QPoint(imlec[0]))
     p.show()
     p.kenara_al()
     p.kapat()
-    ws = weakref.ref(p.sekme)
+    ws, wt = weakref.ref(p.sekme), weakref.ref(p.tepsi)
     del p
     gc.collect()
     qtbot.wait(30)
-    s = ws()
-    assert s is not None and shiboken6.isValid(s) and s.isVisible() is False and s.yokluyor is False  # PIN
+    assert ws() is None and wt() is None  # v3
 
 
 def test_d_omur_mekanizma_pozitif_kontrol_lambda_baglantisi_sarmalayiciyi_tutar(qtbot) -> None:
@@ -716,7 +723,7 @@ def test_e_kenar_sekmesi_yaricap_1_calisir(qtbot, sekme_fab, imlec) -> None:
     assert s.frameGeometry().size() == PANEL_BOYUTU and s.frameGeometry().contains(imlec[0])
 
 
-def test_e_geometri_yaricap_ekrandan_buyuk_y_ust_kenara(ekran) -> None:
+def test_e_geometri_yaricap_ekrandan_buyuk_y_ust_kenara_v3(qtbot, ekran) -> None:
     """Docstring: ekran 2r'den kisaysa y = top; sekme ustten tasmaz, alt tasmayi kabul eder."""
     e = QRect(ekran.availableGeometry())
     r = e.height()  # 2r = 2*height > height
@@ -724,35 +731,44 @@ def test_e_geometri_yaricap_ekrandan_buyuk_y_ust_kenara(ekran) -> None:
         assert y_sinirla(e, y, r) == e.top()
         k = sekme_kapali_dikdortgeni(e, y, r, Kenar.SAG)
         assert k.top() == e.top() and k.right() == e.right() and k.bottom() > e.bottom()
-    s = KenarSekmesi(ekran, yaricap=r)
+    with pytest.raises(ValueError):  # v3: yaricap > 66 yapicida reddedilir (D-A3/D-A4 ust siniri); saf fonksiyon kabul eder
+        KenarSekmesi(ekran, yaricap=r)
+    # ayni sinif KenarSekmesi'nde: ekran 2r'den kisa (sahte availableGeometryChanged 30x30, r=66) -> y = top, alt tasma
+    s = KenarSekmesi(ekran, yaricap=66)
     try:
         s.show()
-        assert s.frameGeometry().top() == e.top() and s.frameGeometry().right() == e.right()
-        assert s.y == e.top()
+        minik = QRect(0, 0, 30, 30)
+        ekran.availableGeometryChanged.emit(minik)
+        qtbot.wait(10)
+        assert s.y == minik.top() and s.frameGeometry().top() == minik.top() and s.frameGeometry().right() == minik.right()
+        assert s.frameGeometry().bottom() > minik.bottom()
         s.y = 10**6
-        assert s.y == e.top()
+        assert s.y == minik.top()
     finally:
+        ekran.availableGeometryChanged.emit(e)
+        qtbot.wait(10)
         s.hide()
 
 
-def test_e_geometri_ust_sinir_overflow_ayri_surec_PIN() -> None:
-    """[PIN/bilgi] Ust sinir dogrulanmaz: yaricap/acilma_ms/yoklama_ms/kapanma_ms >= 2**31 ve yaricap >= 2**30 (2r tasar)
-    `ValueError` degil `OverflowError` verir; yaricap 2**30-1 kabul edilir ve Qt geometriyi 16777215'e KIRPAR. yaricap
-    tasmasi `availableGeometryChanged.connect` (yapici, `_kapat()` oncesi) SONRASINDA atar -> yarim kurulu nesne sinyale
-    bagli kalir (Y-A1 sizintisiyla kalici) ve sonraki ekran degisimlerinde yuvasi istisna atar; bu yuzden AYRI SURECTE olculur."""
+def test_e_geometri_ust_sinir_valueerror_ayri_surec_v3() -> None:
+    """[v3 -- tur 1 PIN ters cevrildi, D-A4 duzeltildi] Ust sinirlar dogrulanir: yaricap 67 / 2**30 / 2**31, acilma/kapanma/yoklama
+    2**31 -> `ValueError` (OverflowError degil); tam sinir degerleri (66, 2**31-1) kabul; basarisiz yapimdan sonra
+    `availableGeometryChanged` yayimi stderr'e HICBIR SEY yazmaz (yarim kurulu nesne sinyale bagli kalmadi). Ayri surec:
+    tur 1'de bu sinif kaliciydi; simdi temiz oldugunu ayni sekilde olcuyoruz."""
     kod = "\n".join([
         "import os, sys, json; os.environ['QT_QPA_PLATFORM']='offscreen'; sys.path.insert(0, sys.argv[1])",
         "from PySide6 import QtGui, QtWidgets, QtCore",
         "from src.ui.kenar_sekmesi import KenarSekmesi",
         "app = QtWidgets.QApplication([]); e = QtGui.QGuiApplication.primaryScreen(); r = {}",
-        "for ad, kw in (('yaricap_2_31', dict(yaricap=2**31)), ('yaricap_2_30', dict(yaricap=2**30)), ('acilma_2_31', dict(acilma_ms=2**31)),"
-        " ('yoklama_2_31', dict(yoklama_ms=2**31)), ('kapanma_2_31', dict(kapanma_ms=2**31))):",
+        "for ad, kw in (('yaricap_67', dict(yaricap=67)), ('yaricap_2_30', dict(yaricap=2**30)), ('yaricap_2_31', dict(yaricap=2**31)),"
+        " ('acilma_2_31', dict(acilma_ms=2**31)), ('yoklama_2_31', dict(yoklama_ms=2**31)), ('kapanma_2_31', dict(kapanma_ms=2**31))):",
         "    try: KenarSekmesi(e, **kw); r[ad] = 'kabul'",
         "    except Exception as x: r[ad] = type(x).__name__",
-        "s = KenarSekmesi(e, yaricap=2**30-1, acilma_ms=2**31-1, kapanma_ms=2**31-1, yoklama_ms=2**31-1); s.show()",
-        "r['buyuk_geo'] = [s.frameGeometry().width(), s.frameGeometry().height(), s.yokluyor]",
+        "r['ust_duzey'] = len(QtWidgets.QApplication.topLevelWidgets()); r['tum'] = len(QtWidgets.QApplication.allWidgets())",
+        "s = KenarSekmesi(e, yaricap=66, acilma_ms=2**31-1, kapanma_ms=2**31-1, yoklama_ms=2**31-1); s.show()",
+        "r['sinir_geo'] = [s.frameGeometry().width(), s.frameGeometry().height(), s.yokluyor]",
         "e.availableGeometryChanged.emit(QtCore.QRect(0, 0, 500, 500))",
-        "r['sinyal_sonrasi'] = 'ok'",
+        "r['sinyal_sonrasi'] = [s.frameGeometry().right(), s.ekran_dikdortgeni.width()]",
         "print(json.dumps(r))",
     ])
     import json
@@ -760,10 +776,12 @@ def test_e_geometri_ust_sinir_overflow_ayri_surec_PIN() -> None:
     r = subprocess.run([sys.executable, "-c", kod, str(KOK)], capture_output=True, text=True, timeout=120, env=ortam, cwd=str(KOK))
     assert r.returncode == 0, r.stderr[-800:]
     sonuc = json.loads(r.stdout.strip().splitlines()[-1])
-    assert sonuc["yaricap_2_31"] == "OverflowError" and sonuc["yaricap_2_30"] == "OverflowError"
-    assert sonuc["acilma_2_31"] == "OverflowError" and sonuc["yoklama_2_31"] == "OverflowError" and sonuc["kapanma_2_31"] == "OverflowError"
-    assert sonuc["buyuk_geo"] == [16777215, 16777215, True]  # PIN: Qt kirpar, cokmez
-    assert "OverflowError" in r.stderr and sonuc["sinyal_sonrasi"] == "ok"  # yarim kurulu nesnenin yuvasi tasar (stderr), surec devam eder
+    for ad in ("yaricap_67", "yaricap_2_30", "yaricap_2_31", "acilma_2_31", "yoklama_2_31", "kapanma_2_31"):
+        assert sonuc[ad] == "ValueError", (ad, sonuc[ad])
+    assert sonuc["ust_duzey"] == 0 and sonuc["tum"] == 0  # basarisiz yapim hicbir Qt nesnesi birakmadi
+    assert sonuc["sinir_geo"] == [66, 132, True]
+    assert sonuc["sinyal_sonrasi"] == [499, 500]
+    assert "OverflowError" not in r.stderr and "RuntimeError" not in r.stderr and "Traceback" not in r.stderr, r.stderr[-800:]
 
 
 def test_e_geometri_bos_ve_negatif_qrect_cokmez() -> None:
@@ -912,25 +930,28 @@ def test_e_sinir_kenar_degisimi_panel_acikken(qtbot, sekme_fab, imlec) -> None:
     assert s.frameGeometry().right() == e.right()
 
 
-def test_e_sinir_yaricap_panel_yuksekliginin_yarisindan_buyukse_salinim_PIN(qtbot, ekran) -> None:
-    """[PIN/dusuk] yaricap > PANEL_BOYUTU.height()//2 (=66) kabul edilir ama panel sekmeyi KAPSAMAZ (docstring kosulu);
-    disk icinde-panel disinda bir imlec noktasinda panel acilir/kapanir/acilir (salinim). Urun degeri 26 etkilenmez.
-    Pozitif kontrol: yaricap 26'da ayni gorece nokta salinmaz."""
-    for yaricap, salinmali in ((80, True), (26, False)):
+def test_e_sinir_yaricap_panel_yuksekliginin_yarisi_ust_sinir_salinim_yok_v3(qtbot, ekran) -> None:
+    """[v3 -- tur 1 PIN ters cevrildi, D-A3 duzeltildi] yaricap > 66 (= PANEL_BOYUTU.height()//2) artik `ValueError`;
+    66 ve 26'da disk icindeki her nokta acik panelin de icindedir -> tur 1'in salinim noktasinda (disk kosesi) panel
+    acilir ve ACIK KALIR (0 gecis). Pozitif kontrol: olcu tur 1'de yaricap 80'de >= 4 gecis sayiyordu."""
+    with pytest.raises(ValueError):
+        KenarSekmesi(ekran, yaricap=80)
+    for yaricap in (66, 26, 1):
         konum = [QPoint(DISARI)]
         s = KenarSekmesi(ekran, yaricap=yaricap, acilma_ms=20, kapanma_ms=20, yoklama_ms=10, imlec_konumu=lambda: konum[0])
         s.show()
         try:
             k = s.frameGeometry()
-            konum[0] = QPoint(k.right() - 2, k.top() + 5)
+            konum[0] = QPoint(k.right(), k.top())  # disk kosesi (kenar tarafi): en uzak nokta
             assert sekme_icinde(k, konum[0], yaricap, Kenar.SAG) is True
-            assert sekme_acik_dikdortgeni(s.ekran_dikdortgeni, s.y, yaricap, PANEL_BOYUTU, Kenar.SAG).contains(konum[0]) is not salinmali
+            assert sekme_acik_dikdortgeni(s.ekran_dikdortgeni, s.y, yaricap, PANEL_BOYUTU, Kenar.SAG).contains(konum[0])
+            qtbot.waitUntil(lambda: s.acik, timeout=500)
             degisim, onceki = 0, s.acik
             for _ in range(40):
                 qtbot.wait(10)
                 if s.acik != onceki:
                     degisim, onceki = degisim + 1, s.acik
-            assert (degisim >= 4) is salinmali, (yaricap, degisim)
+            assert degisim == 0 and s.acik is True, (yaricap, degisim)
         finally:
             s.hide()
 
@@ -1151,14 +1172,14 @@ def test_g_k4_sirasi_ana_pencere_duzeyinde(qtbot, pencere_fab, imlec) -> None:
     assert goruldu == [(False, (False, True, True))] and p.durum is KabukDurumu.KENAR
 
 
-def test_g_k4_mod_tiki_sonrasi_imlec_disk_icindeyse_panel_yeniden_acilir_PIN(qtbot, sekme_fab, imlec) -> None:
-    """[PIN/orta] Mod tikinda imlec kapali sekmenin diski icinde kaliyorsa (dugmenin sag ucu, kenara <= 26 px) panel
-    `acilma_ms` sonra YENIDEN acilir: docstring 'once kapanir sonra sinyal' iddiasi tutar (sinyal aninda kapali) ama
-    ertelenmis Snapshot karesine panel girer. Pozitif kontrol: imlec disk disinda (dugme ortasi) -> acik kalmaz."""
+def test_g_k4_mod_tiki_sonrasi_imlec_disk_icindeyse_panel_yeniden_acilmaz_v3(qtbot, sekme_fab, imlec) -> None:
+    """[v3 -- tur 1 PIN ters cevrildi, O-A1 duzeltildi] Mod tikinda imlec kapali diskin icinde kalsa da (dugmenin kenara
+    yakin ucu) panel `acilma_ms + 4*yoklama_ms` sonra HALA kapali; disk disinda da kapali; diskten cikip girince acilir
+    (pozitif kontrol: mandal tek atimlik). Urun sayaclari."""
     s = sekme_fab()  # urun degerleri
     s.show()
     k = s.frameGeometry()
-    for nokta, yeniden in ((QPoint(k.right() - 4, k.center().y()), True), (QPoint(k.right() - 100, k.center().y()), False)):
+    for nokta in (QPoint(k.right() - 4, k.center().y()), QPoint(k.right() - 100, k.center().y())):
         imlec[0] = k.center()
         qtbot.waitUntil(lambda: s.acik, timeout=120 + 2 * 60 + 300)
         assert s.frameGeometry().contains(nokta)  # nokta acik paneldedir (tiklanabilir)
@@ -1168,10 +1189,15 @@ def test_g_k4_mod_tiki_sonrasi_imlec_disk_icindeyse_panel_yeniden_acilir_PIN(qtb
         s.dugme_anlik.click()
         assert n == [1] and s.acik is False
         qtbot.wait(120 + 4 * 60)
-        assert s.acik is yeniden, (nokta, s.acik)
+        assert s.acik is False, (nokta, s.acik)  # v3: mandal
         s.anlik_cevir.disconnect()
         imlec[0] = QPoint(DISARI)
-        qtbot.waitUntil(lambda: not s.acik, timeout=450 + 2 * 60 + 300)
+        qtbot.wait(3 * 60)
+        assert s.acik is False
+    imlec[0] = k.center()  # pozitif kontrol: diskten ciktiktan sonra girince acilir
+    qtbot.waitUntil(lambda: s.acik, timeout=120 + 2 * 60 + 300)
+    imlec[0] = QPoint(DISARI)
+    qtbot.waitUntil(lambda: not s.acik, timeout=450 + 2 * 60 + 300)
 
 
 def test_g_yeniden_giris_mod_dinleyicisi_goster_kapat_kenara_al(qtbot, pencere_fab, imlec) -> None:

@@ -1,0 +1,46 @@
+# kilit durumu: LogonUI calisiyor (KILITLI) -> real_check v3 ve gercek fare olcumleri sefe kaldi; sonda_a_02 'windows' platformunda yalniz geometri olctu (girdi/on plan yok)
+tarih: 2026-09-13 00:49
+
+# git status --short (tester_A disi bos olmali)
+ M .agents/tasks/T-012/tester_A/test_mercek_a.py
+ M .agents/tasks/T-012/tester_B/sonda_1a_kilitten_bagimsiz.py
+ M .agents/tasks/T-012/tester_B/test_mercek_b.py
+ M .agents/tasks/T-012/tester_B/test_mercek_b_ek.py
+?? .agents/tasks/T-012/tester_A/sonda_a_02_close_geometri_bayat.py
+?? .agents/tasks/T-012/tester_A/test_mercek_a_tur2.py
+?? .agents/tasks/T-012/tester_A_evidence/tur2-A-birlikte-kosum.txt
+?? .agents/tasks/T-012/tester_A_evidence/tur2-A-git-status-depo-dokunulmadi.txt
+?? .agents/tasks/T-012/tester_A_evidence/tur2-A-implementer-test-adlari.txt
+?? .agents/tasks/T-012/tester_A_evidence/tur2-A-mercek-kararlilik-x3.txt
+?? .agents/tasks/T-012/tester_A_evidence/tur2-A-mercek-testleri-v.txt
+?? .agents/tasks/T-012/tester_A_evidence/tur2-A-sonda-01-omur-zombi-v3.txt
+?? .agents/tasks/T-012/tester_A_evidence/tur2-A-sonda-02-close-geometri-bayat-offscreen.txt
+?? .agents/tasks/T-012/tester_A_evidence/tur2-A-sonda-02-close-geometri-bayat-windows-platform-kilitli.txt
+?? .agents/tasks/T-012/tester_A_evidence/tur2-A1-tur1-testleri-v3-karsi-degistirilmemis.txt
+?? .agents/tasks/T-012/tester_A_evidence/tur2-taban-1-mypy.txt
+?? .agents/tasks/T-012/tester_A_evidence/tur2-taban-1b-mypy-src-ui-ve-testler.txt
+?? .agents/tasks/T-012/tester_A_evidence/tur2-taban-2-pytest-ui.txt
+?? .agents/tasks/T-012/tester_A_evidence/tur2-taban-4-kapsam.txt
+?? .agents/tasks/T-012/tester_A_evidence/tur2-taban-5-tum-takim.txt
+?? .agents/tasks/T-012/tester_B/olcum_k5_balon_sonrasi_ikon_kalintisi.py
+?? .agents/tasks/T-012/tester_B/olcum_ob5_duzeltme_uc_yol.py
+?? .agents/tasks/T-012/tester_B/olcum_ob5_zombi_ve_duzeltme.py
+?? .agents/tasks/T-012/tester_B/sonda_2a_tur2_kilitten_bagimsiz.py
+?? .agents/tasks/T-012/tester_B/test_mercek_b_tur2.py
+?? .agents/tasks/T-012/tester_B_evidence/tur2/
+
+# git diff HEAD --stat -- src tests demo .agents/tasks/T-012/real_check.py .agents/tasks/T-012/packet.md .agents/tasks/T-012/evidence
+(bos = dokunulmadi)
+
+# HEAD
+f94e012
+
+# sha256 src/ui + real_check + conftest
+21c25bec6e76fb6f04da11f0cde6f52bbe279dce6b79be7430eeb61c55f005d4 *src/ui/__init__.py
+55bc7e296903230cd6582909c0754b8ae2d79d4b70bd1be9eb8f67926362cbb7 *src/ui/__main__.py
+c7af01a79068503868cad570f14d96f359a9698c898c36e09ba5eb8a7d183332 *src/ui/geometri.py
+5c0e30cb2b62c738357fa06b042bb85c1c73ce56d8f34ec64125c17ea0f676ca *src/ui/kabuk.py
+7fda6b4a8fe1a78b732bf880268e48bcb63511c824e5d39d72eef393827abf05 *src/ui/kenar_sekmesi.py
+35b69c7825bb2c8e0e2207ccd7d708b69dafa4656e4907dba91277d4cbd23a19 *src/ui/uygulama.py
+335e3501786a809d84b9da389d7ea16ddd80815ba5ca06d2a44dee949e1fa322 *.agents/tasks/T-012/real_check.py
+d8bc361bc79f313a923fc2fbcab21302ff84786087570cfa764702b106565c97 *tests/unit/ui/conftest.py

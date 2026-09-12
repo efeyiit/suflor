@@ -1,0 +1,5 @@
+del_gc: sekme sarmalayici canli=False cpp gecerli=False gorunur ust-duzey=[]
+deleteLater_del: sekme sarmalayici canli=False cpp gecerli=False gorunur ust-duzey=[]
+kapat_sonra_del: sekme sarmalayici canli=False cpp gecerli=False gorunur ust-duzey=[]
+OK cokme yok
+exit=0

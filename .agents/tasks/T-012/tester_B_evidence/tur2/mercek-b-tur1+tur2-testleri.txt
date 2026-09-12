@@ -1,0 +1,9 @@
+........................................................................ [ 50%]
+...............................ss......x........................x.....   [100%]
+=========================== short test summary info ===========================
+SKIPPED [1] .agents\tasks\T-012\tester_B\test_mercek_b_tur2.py:197: dugme_bolge: dugmenin hicbir noktasi kapali diskin icinde degil -> mandal sinifi bu dugmeden dogmaz
+SKIPPED [1] .agents\tasks\T-012\tester_B\test_mercek_b_tur2.py:197: dugme_goster: dugmenin hicbir noktasi kapali diskin icinde degil -> mandal sinifi bu dugmeden dogmaz
+XFAIL .agents/tasks/T-012/tester_B/test_mercek_b_tur2.py::test_i2b_k1_omur_KOTU_KULLANIM_deleteLater_python_referansi_dusurulmeden - BULGU O-B5: `deleteLater()` + Python referansi tutuluyor -> C++ AnaPencere olu, sekme GORUNUR+YOKLUYOR (zombi, Y-A1 sinifi, ikinci yol); 1 satir: `self.destroyed.connect(self._sekme.deleteLater)` (olculdu, uc yolda cokme yok)
+XFAIL .agents/tasks/T-012/tester_B/test_mercek_b_tur2.py::test_j1_secim_katmani_press_esc_release_secildi_yayar_mi - BULGU D-B10 (sef, demo): Esc `_basla`yi sifirlamiyor; Esc'ten SONRA gelen release `secildi` yayar -> iptal edilen secim izleme penceresi acar (Qt olay yolu: QTest ile olculdu; gercek OS'te capture SW_HIDE ile birakiliyor mu -> sonda_2a S9)
+138 passed, 2 skipped, 2 xfailed in 35.72s
+exit=0

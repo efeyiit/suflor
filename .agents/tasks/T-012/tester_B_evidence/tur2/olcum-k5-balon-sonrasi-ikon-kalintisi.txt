@@ -1,0 +1,19 @@
+senaryo balon=False
+  taze: Shell ikon rect=None tray-hwnd sayisi=1 QSystemTrayIcon.isVisible=False
+  tepsiye_al: Shell ikon rect=(2298, 1380, 2338, 1440) tray-hwnd sayisi=1 QSystemTrayIcon.isVisible=True
+  kapat +0.3s: Shell ikon rect=None tray-hwnd sayisi=0 QSystemTrayIcon.isVisible=False
+  kapat +1s: Shell ikon rect=None tray-hwnd sayisi=0 QSystemTrayIcon.isVisible=False
+  kapat +3s: Shell ikon rect=None tray-hwnd sayisi=0 QSystemTrayIcon.isVisible=False
+  kapat +7s: Shell ikon rect=None tray-hwnd sayisi=0 QSystemTrayIcon.isVisible=False
+  kapat +10s: Shell ikon rect=None tray-hwnd sayisi=0 QSystemTrayIcon.isVisible=False
+  del sonrasi: Shell ikon rect=None
+senaryo balon=True
+  taze: Shell ikon rect=None tray-hwnd sayisi=1 QSystemTrayIcon.isVisible=False
+  tepsiye_al: Shell ikon rect=(2298, 1380, 2338, 1440) tray-hwnd sayisi=1 QSystemTrayIcon.isVisible=True
+  kapat +0.3s: Shell ikon rect=None tray-hwnd sayisi=0 QSystemTrayIcon.isVisible=False
+  kapat +1s: Shell ikon rect=None tray-hwnd sayisi=0 QSystemTrayIcon.isVisible=False
+  kapat +3s: Shell ikon rect=None tray-hwnd sayisi=0 QSystemTrayIcon.isVisible=False
+  kapat +7s: Shell ikon rect=None tray-hwnd sayisi=0 QSystemTrayIcon.isVisible=False
+  kapat +10s: Shell ikon rect=None tray-hwnd sayisi=0 QSystemTrayIcon.isVisible=False
+  del sonrasi: Shell ikon rect=None
+exit=0

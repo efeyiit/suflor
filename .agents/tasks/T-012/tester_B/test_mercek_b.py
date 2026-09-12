@@ -57,6 +57,9 @@ def merkez(s: KenarSekmesi) -> QPoint:
 
 
 def ac(qtbot, s: KenarSekmesi, imlec: Imlec) -> None:
+    """Tur 2 (paket v3 K4 mandal): mod tiki sonrasi imlec diskten BIR KEZ cikmadan panel acilmaz -> once disari, sonra diske."""
+    imlec.p = UZAK
+    qtbot.wait(2 * YOKLAMA)
     imlec.p = merkez(s)
     qtbot.waitUntil(lambda: s.acik, timeout=ACILMA + 2 * YOKLAMA + 300)
 
@@ -325,25 +328,23 @@ def test_b7_kapat_sonrasi_durum_son_durumu_gosterir_kapandi_ayirt_eder(qtbot, pe
     assert p.durum is KabukDurumu.KENAR and uclu(p) == (False, False, False) and p.kapandi
 
 
-@pytest.mark.xfail(strict=True, reason="BULGU O-B1: sekme hwnd'sine WM_CLOSE / `sekme.close()` -> uclu (F,F,T) ama durum KENAR (tepsi satiri); durum ile uclu ayrisir, kabuk fark etmez")
-def test_x1_sekmeye_close_durum_ile_uclu_ayrisir(qtbot, pencere: AnaPencere) -> None:
-    """Paket K1: `durum` ile uclu tablosu birebir. `KenarSekmesi` closeEvent'i override etmiyor: dis WM_CLOSE
-    (ya da sonraki ajanin `pencere.sekme.close()` cagrisi) sekmeyi gizler; uclu TEPSI satirina duser, `durum`
-    KENAR kalir. Kullanici icin: sekme yok, tepsi ikonu var -> geri yol var (tepsi), ZOMBI DEGIL."""
+def test_x1_sekmeye_close_durum_ile_uclu_ayrismaz_TUR2_TERS(qtbot, pencere: AnaPencere) -> None:
+    """TUR 1 xfail (O-B1) -> TUR 2 TERS: `KenarSekmesi.closeEvent` -> `kapandi` -> `AnaPencere.goster()`: `durum` GORUNUR,
+    uclu (T,F,F) = tablo satiri; durum ile uclu ayrismaz."""
     p = pencere
     p.kenara_al(); qtbot.wait(20)
     p.sekme.close(); qtbot.wait(20)
-    assert uclu(p) == TABLO[p.durum], (p.durum, uclu(p))
+    assert p.durum is KabukDurumu.GORUNUR and uclu(p) == TABLO[p.durum] == (True, False, False), (p.durum, uclu(p))
 
 
-@pytest.mark.xfail(strict=True, reason="BULGU O-B1 (tepsisiz): sekme.close() -> (F,F,F) durum KENAR, kapandi False, cikis yok = ZOMBI (Y1 sinifi, dis yol)")
-def test_x2_tepsisizken_sekmeye_close_zombi(qtbot, pencere_tepsisiz: AnaPencere) -> None:
+def test_x2_tepsisizken_sekmeye_close_zombi_degil_TUR2_TERS(qtbot, pencere_tepsisiz: AnaPencere) -> None:
+    """TUR 1 xfail (O-B1 tepsisiz zombi) -> TUR 2 TERS: (T,F,F), kapandi False, cikis 0 -- geri donus var."""
     p = pencere_tepsisiz
     sayac: list[int] = []
     p.cikis_istendi.connect(lambda: sayac.append(1))
     p.kenara_al(); qtbot.wait(20)
     p.sekme.close(); qtbot.wait(20)
-    assert not (uclu(p) == (False, False, False) and not p.kapandi and sayac == []), (p.durum, uclu(p), p.kapandi, sayac)
+    assert uclu(p) == (True, False, False) and p.durum is KabukDurumu.GORUNUR and not p.kapandi and sayac == [], (p.durum, uclu(p), p.kapandi, sayac)
 
 
 # =====================================================================================
@@ -487,10 +488,9 @@ def test_c6_bildir_sik_cagri_offscreen_hata_vermez(qtbot, pencere: AnaPencere) -
     pencere.tepsi.bildir("x", "y", -5)
 
 
-def test_c7_mod_tiki_sonrasi_imlec_disk_icinde_kalirsa_panel_yeniden_acilir(qtbot, pencere: AnaPencere, imlec: Imlec) -> None:
-    """K4 ▲ 'sinyal oncesi panel kapanir' TUTUYOR; ama tik noktasi kapali sekme diskinin icindeyse
-    (mod dugmesinin kenara yakin ucu) panel `acilma_ms` sonra YENIDEN ACILIR -> Snapshot yakalamasi
-    sinyalden > ~180 ms sonra yapilirsa panel metni kareye girer. Sonraki ajana belge (O-B2)."""
+def test_c7_mod_tiki_sonrasi_imlec_disk_icinde_kalsa_da_panel_yeniden_ACILMAZ_TUR2_TERS(qtbot, pencere: AnaPencere, imlec: Imlec) -> None:
+    """TUR 1 (D-B6: yeniden aciliyordu) -> TUR 2 TERS (paket v3 K4 mandal): tik noktasi kapali diskin icindeyse ve imlec
+    orada kalirsa panel `acilma_ms + 3*yoklama` sonra HALA kapali; diskten cikip girince acilir; merkez tiki zaten disk disi."""
     p = pencere
     p.kenara_al(); qtbot.wait(20)
     s = p.sekme
@@ -504,8 +504,10 @@ def test_c7_mod_tiki_sonrasi_imlec_disk_icinde_kalirsa_panel_yeniden_acilir(qtbo
     s.anlik_cevir.connect(lambda: aninda.append(s.acik))
     QTest.mouseClick(d, Qt.MouseButton.LeftButton, pos=QPoint(d.width() - 4, d.height() // 2))
     assert aninda == [False]
-    qtbot.waitUntil(lambda: s.acik, timeout=ACILMA + 2 * YOKLAMA + 300)
-    # merkez tiki (kullanicinin dogal tiki) diskin DISINDA: yeniden acilmaz
+    qtbot.wait(ACILMA + 3 * YOKLAMA)
+    assert s.acik is False, "mandal: imlec diskte kalsa da yeniden acilmamali (tur 1'de aciliyordu)"
+    ac(qtbot, s, imlec)  # diskten cik -> gir: acilir (pozitif kontrol)
+    # merkez tiki (kullanicinin dogal tiki) diskin DISINDA: mandal hemen kalkar, imlec disarida -> kapali kalir
     imlec.p = d.mapToGlobal(d.rect().center())
     assert not sekme_icinde(kapali, imlec.p, R, Kenar.SAG)
     s.dugme_anlik.click()

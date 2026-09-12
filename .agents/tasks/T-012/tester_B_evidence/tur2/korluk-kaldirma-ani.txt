@@ -1,0 +1,2 @@
+2026-09-13 00:43:15
+tur 2: tests/unit/ui/test_*.py, evidence/**, delivery.md, sef_dogrulama/** bu andan itibaren YALNIZ test kalitesi / kapi denetimi icin acildi (kendi testlerim + sonda_1a/2a bitti); tester_A* acilmadi

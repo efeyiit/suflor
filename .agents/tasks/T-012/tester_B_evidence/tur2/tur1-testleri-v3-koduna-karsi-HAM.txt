@@ -1,0 +1,71 @@
+....F...................FF...............F............F........F........ [ 72%]
+......................FF...                                              [100%]
+================================== FAILURES ===================================
+_______________ test_a5_imlec_gelince_iki_ceviri_secenegi_cikar _______________
+.agents\tasks\T-012\tester_B\test_mercek_b.py:193: in test_a5_imlec_gelince_iki_ceviri_secenegi_cikar
+    ac(qtbot, s, imlec)
+.agents\tasks\T-012\tester_B\test_mercek_b.py:61: in ac
+    qtbot.waitUntil(lambda: s.acik, timeout=ACILMA + 2 * YOKLAMA + 300)
+E   pytestqt.exceptions.TimeoutError: waitUntil timed out in 540 milliseconds
+---------------------------- Captured Qt messages -----------------------------
+QtWarningMsg: This plugin does not support propagateSizeHints()
+QtWarningMsg: This plugin does not support raise()
+QtWarningMsg: This plugin does not support raise()
+________________ test_x1_sekmeye_close_durum_ile_uclu_ayrisir _________________
+[XPASS(strict)] BULGU O-B1: sekme hwnd'sine WM_CLOSE / `sekme.close()` -> uclu (F,F,T) ama durum KENAR (tepsi satiri); durum ile uclu ayrisir, kabuk fark etmez
+___________________ test_x2_tepsisizken_sekmeye_close_zombi ___________________
+[XPASS(strict)] BULGU O-B1 (tepsisiz): sekme.close() -> (F,F,F) durum KENAR, kapandi False, cikis yok = ZOMBI (Y1 sinifi, dis yol)
+___ test_c7_mod_tiki_sonrasi_imlec_disk_icinde_kalirsa_panel_yeniden_acilir ___
+.agents\tasks\T-012\tester_B\test_mercek_b.py:507: in test_c7_mod_tiki_sonrasi_imlec_disk_icinde_kalirsa_panel_yeniden_acilir
+    qtbot.waitUntil(lambda: s.acik, timeout=ACILMA + 2 * YOKLAMA + 300)
+E   pytestqt.exceptions.TimeoutError: waitUntil timed out in 540 milliseconds
+---------------------------- Captured Qt messages -----------------------------
+QtWarningMsg: This plugin does not support propagateSizeHints()
+QtWarningMsg: This plugin does not support raise()
+QtWarningMsg: This plugin does not support raise()
+_____ test_c16_mod_sinyali_kenar_durumunu_degistirmez_demo_goster_cagirir _____
+.agents\tasks\T-012\tester_B\test_mercek_b.py:616: in test_c16_mod_sinyali_kenar_durumunu_degistirmez_demo_goster_cagirir
+    ac(qtbot, p.sekme, imlec)
+.agents\tasks\T-012\tester_B\test_mercek_b.py:61: in ac
+    qtbot.waitUntil(lambda: s.acik, timeout=ACILMA + 2 * YOKLAMA + 300)
+E   pytestqt.exceptions.TimeoutError: waitUntil timed out in 540 milliseconds
+---------------------------- Captured Qt messages -----------------------------
+QtWarningMsg: This plugin does not support propagateSizeHints()
+QtWarningMsg: This plugin does not support raise()
+QtWarningMsg: This plugin does not support raise()
+________ test_d5_k4_mod_tiki_once_panel_kapanir_sonra_sinyal_uc_dugme _________
+.agents\tasks\T-012\tester_B\test_mercek_b.py:726: in test_d5_k4_mod_tiki_once_panel_kapanir_sonra_sinyal_uc_dugme
+    ac(qtbot, s, imlec)
+.agents\tasks\T-012\tester_B\test_mercek_b.py:61: in ac
+    qtbot.waitUntil(lambda: s.acik, timeout=ACILMA + 2 * YOKLAMA + 300)
+E   pytestqt.exceptions.TimeoutError: waitUntil timed out in 540 milliseconds
+---------------------------- Captured Qt messages -----------------------------
+QtWarningMsg: This plugin does not support raise()
+QtWarningMsg: This plugin does not support raise()
+_ test_c2x10_app_quit_gorunur_pencereleri_kapatir_gizli_ana_pencere_kapat_almaz _
+.agents\tasks\T-012\tester_B\test_mercek_b_ek.py:226: in test_c2x10_app_quit_gorunur_pencereleri_kapatir_gizli_ana_pencere_kapat_almaz
+    assert "RC 0 UCLU False False True KAPANDI False CIKIS 0 DURUM kenar" in r.stdout, (r.stdout, r.stderr[-800:])
+E   AssertionError: ('RC 0 UCLU False False False KAPANDI True CIKIS 1 DURUM gorunur
+E     ', '')
+E   assert 'RC 0 UCLU False False True KAPANDI False CIKIS 0 DURUM kenar' in 'RC 0 UCLU False False False KAPANDI True CIKIS 1 DURUM gorunur\n'
+E    +  where 'RC 0 UCLU False False False KAPANDI True CIKIS 1 DURUM gorunur\n' = CompletedProcess(args=['<python>', '-c', "import sys; sy... str(p.durum))\n"], returncode=0, stdout='RC 0 UCLU False False False KAPANDI True CIKIS 1 DURUM gorunur\n', stderr='').stdout
+_____ test_f1_demo_bagla_bolge_izle_secim_katmani_esc_uygulamayi_kapatir ______
+.agents\tasks\T-012\tester_B\test_mercek_b_ek.py:271: in test_f1_demo_bagla_bolge_izle_secim_katmani_esc_uygulamayi_kapatir
+    assert "KATMAN 1 UCLU False True" in r.stdout, (r.stdout, r.stderr[-800:])
+E   AssertionError: ('KATMAN 1 UCLU False False
+E     ZAMAN_ASIMI
+E     RC 9 KAPANDI False CIKIS 0 SEKME_GORUNUR True DURUM kenar
+E     ', '')
+E   assert 'KATMAN 1 UCLU False True' in 'KATMAN 1 UCLU False False\nZAMAN_ASIMI\nRC 9 KAPANDI False CIKIS 0 SEKME_GORUNUR True DURUM kenar\n'
+E    +  where 'KATMAN 1 UCLU False False\nZAMAN_ASIMI\nRC 9 KAPANDI False CIKIS 0 SEKME_GORUNUR True DURUM kenar\n' = CompletedProcess(args=['<python>', '-c', "import sys; sy...tdout='KATMAN 1 UCLU False False\nZAMAN_ASIMI\nRC 9 KAPANDI False CIKIS 0 SEKME_GORUNUR True DURUM kenar\n', stderr='').stdout
+=========================== short test summary info ===========================
+FAILED .agents/tasks/T-012/tester_B/test_mercek_b.py::test_a5_imlec_gelince_iki_ceviri_secenegi_cikar
+FAILED .agents/tasks/T-012/tester_B/test_mercek_b.py::test_x1_sekmeye_close_durum_ile_uclu_ayrisir
+FAILED .agents/tasks/T-012/tester_B/test_mercek_b.py::test_x2_tepsisizken_sekmeye_close_zombi
+FAILED .agents/tasks/T-012/tester_B/test_mercek_b.py::test_c7_mod_tiki_sonrasi_imlec_disk_icinde_kalirsa_panel_yeniden_acilir
+FAILED .agents/tasks/T-012/tester_B/test_mercek_b.py::test_c16_mod_sinyali_kenar_durumunu_degistirmez_demo_goster_cagirir
+FAILED .agents/tasks/T-012/tester_B/test_mercek_b.py::test_d5_k4_mod_tiki_once_panel_kapanir_sonra_sinyal_uc_dugme
+FAILED .agents/tasks/T-012/tester_B/test_mercek_b_ek.py::test_c2x10_app_quit_gorunur_pencereleri_kapatir_gizli_ana_pencere_kapat_almaz
+FAILED .agents/tasks/T-012/tester_B/test_mercek_b_ek.py::test_f1_demo_bagla_bolge_izle_secim_katmani_esc_uygulamayi_kapatir
+8 failed, 91 passed in 25.54s
+exit=1

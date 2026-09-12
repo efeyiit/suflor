@@ -1,0 +1,9 @@
+=== kosum 1 ===
+378 passed in 61.20s (0:01:01)
+exit=0
+=== kosum 2 ===
+378 passed in 60.41s (0:01:00)
+exit=0
+=== kosum 3 ===
+378 passed in 60.44s (0:01:00)
+exit=0

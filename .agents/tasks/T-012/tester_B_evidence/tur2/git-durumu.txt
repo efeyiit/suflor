@@ -1,0 +1,14 @@
+HEAD f94e012
+git status --short (src tests demo real_check packet):
+(bos = dokunulmadi)
+
+sha256 src/ui:
+21c25bec6e76fb6f04da11f0cde6f52bbe279dce6b79be7430eeb61c55f005d4 *src/ui/__init__.py
+55bc7e296903230cd6582909c0754b8ae2d79d4b70bd1be9eb8f67926362cbb7 *src/ui/__main__.py
+c7af01a79068503868cad570f14d96f359a9698c898c36e09ba5eb8a7d183332 *src/ui/geometri.py
+5c0e30cb2b62c738357fa06b042bb85c1c73ce56d8f34ec64125c17ea0f676ca *src/ui/kabuk.py
+7fda6b4a8fe1a78b732bf880268e48bcb63511c824e5d39d72eef393827abf05 *src/ui/kenar_sekmesi.py
+35b69c7825bb2c8e0e2207ccd7d708b69dafa4656e4907dba91277d4cbd23a19 *src/ui/uygulama.py
+5e27004ffe2ba19075acdd1407b9fa52518ce36a1a5498440197993801f33ff1 *demo/kabuk.py
+3bfdcde1bb8a4b77bc3f8f26fff6f799081f787050cd709fce8f61ac31823bd6 *demo/bolge_izle.py
+335e3501786a809d84b9da389d7ea16ddd80815ba5ca06d2a44dee949e1fa322 *.agents/tasks/T-012/real_check.py

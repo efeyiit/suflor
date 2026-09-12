@@ -1,0 +1,33 @@
+T-012 tester-A sonda 02 -- close + acik panel geometri (platform=offscreen)
+[hide] acik=True frame=(600,334,200,132) geo=(200,132) win=PySide6.QtCore.QSize(200, 132)
+[hide] sonra: acik=False gorunur=False frame=(774,374,26,52) geo=(26,52) win=PySide6.QtCore.QSize(200, 132)
+[hide] yeniden show: acik=False frame=(774,374,26,52) geo=(26,52) win=PySide6.QtCore.QSize(26, 52) kapali_beklenen=(774,374,26,52)
+[hide] nokta (779,379) sekme_icinde=False (kapali 26x52 dikdortgende olsaydi disk disi: False beklenir)
+  ok    [hide] yeniden show sonrasi boyut 26x52 (26x52 beklenir); saydam noktada 120 ms hover acik=False
+
+[close] acik=True frame=(600,334,200,132) geo=(200,132) win=PySide6.QtCore.QSize(200, 132)
+[close] sonra: acik=False gorunur=False frame=(774,374,200,132) geo=(200,132) win=PySide6.QtCore.QSize(200, 132)
+[close] yeniden show: acik=False frame=(774,374,200,132) geo=(200,132) win=PySide6.QtCore.QSize(200, 132) kapali_beklenen=(774,374,26,52)
+[close] nokta (779,379) sekme_icinde=True (kapali 26x52 dikdortgende olsaydi disk disi: False beklenir)
+  IHLAL [close] yeniden show sonrasi boyut 200x132 (26x52 beklenir); saydam noktada 120 ms hover acik=True
+
+[closeEvent_sendEvent] acik=True frame=(600,334,200,132) geo=(200,132) win=PySide6.QtCore.QSize(200, 132)
+[closeEvent_sendEvent] sonra: acik=False gorunur=True frame=(774,374,26,52) geo=(26,52) win=PySide6.QtCore.QSize(26, 52)
+[closeEvent_sendEvent] yeniden show: acik=False frame=(774,374,26,52) geo=(26,52) win=PySide6.QtCore.QSize(26, 52) kapali_beklenen=(774,374,26,52)
+[closeEvent_sendEvent] nokta (779,379) sekme_icinde=False (kapali 26x52 dikdortgende olsaydi disk disi: False beklenir)
+  ok    [closeEvent_sendEvent] yeniden show sonrasi boyut 26x52 (26x52 beklenir); saydam noktada 120 ms hover acik=False
+
+[closeAllWindows] acik=True frame=(600,334,200,132) geo=(200,132) win=PySide6.QtCore.QSize(200, 132)
+[closeAllWindows] sonra: acik=False gorunur=False frame=(774,374,200,132) geo=(200,132) win=PySide6.QtCore.QSize(200, 132)
+[closeAllWindows] yeniden show: acik=False frame=(774,374,200,132) geo=(200,132) win=PySide6.QtCore.QSize(200, 132) kapali_beklenen=(774,374,26,52)
+[closeAllWindows] nokta (779,379) sekme_icinde=True (kapali 26x52 dikdortgende olsaydi disk disi: False beklenir)
+  IHLAL [closeAllWindows] yeniden show sonrasi boyut 200x132 (26x52 beklenir); saydam noktada 120 ms hover acik=True
+
+[AnaPencere] acik=True frame=(600,334,200,132) geo=(200,132) win=PySide6.QtCore.QSize(200, 132)
+[AnaPencere] close sonra: durum=gorunur acik=False frame=(774,374,200,132) geo=(200,132) win=PySide6.QtCore.QSize(200, 132)
+[AnaPencere] kenara_al sonra: frame=(774,374,200,132) geo=(200,132) win=PySide6.QtCore.QSize(200, 132) kapali_beklenen=(774,374,26,52)
+[AnaPencere] saydam noktada hover (urun sayaclari): acik=True
+[AnaPencere] imlec disari 700 ms: acik=False frame=(774,374,26,52) geo=(26,52) win=PySide6.QtCore.QSize(26, 52)  (bir acilip kapanma kendini toparlar)
+
+SONDA: 3 IHLAL (O-A2): ['close', 'closeAllWindows', 'AnaPencere: kenara_al sonrasi saydam alanda hover panel acti']
+exit=1

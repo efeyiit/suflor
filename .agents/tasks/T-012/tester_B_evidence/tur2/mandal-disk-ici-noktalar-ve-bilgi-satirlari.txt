@@ -1,0 +1,10 @@
+BILGI dugme_anlik: disk ici tik noktasi yerel=(177,21) dugme=178x31 (kenardan 0 px iceride)
+.BILGI dugme_bolge: disk ici tik noktasi yerel=(177,0) dugme=178x31 (kenardan 0 px iceride)
+.sBILGI kapandi yikimda dis dinleyiciye ulasti=0
+.BILGI Esc sonrasi release: QTest yolu secildi=1 dogrudan olay secildi=1 _basla sifirlandi=False
+x
+=========================== short test summary info ===========================
+SKIPPED [1] .agents\tasks\T-012\tester_B\test_mercek_b_tur2.py:197: dugme_goster: dugmenin hicbir pikseli kapali diskin icinde degil -> mandal sinifi bu dugmeden dogmaz
+XFAIL .agents/tasks/T-012/tester_B/test_mercek_b_tur2.py::test_j1_secim_katmani_press_esc_release_secildi_yayar_mi - BULGU D-B10 (sef, demo): Esc `_basla`yi sifirlamiyor; Esc'ten SONRA gelen release `secildi` yayar -> iptal edilen secim izleme penceresi acar (Qt olay yolu: QTest ile olculdu; gercek OS'te capture SW_HIDE ile birakiliyor mu -> sonda_2a S9)
+3 passed, 1 skipped, 38 deselected, 1 xfailed in 3.46s
+exit=0

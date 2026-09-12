@@ -1,0 +1,10 @@
+=== O-A2 sonda_a_02 (offscreen) ===
+[AnaPencere] close sonra: durum=gorunur acik=False frame=(774,374,200,132) geo=(200,132) win=PySide6.QtCore.QSize(200, 132)
+[AnaPencere] kenara_al sonra: frame=(774,374,200,132) geo=(200,132) win=PySide6.QtCore.QSize(200, 132) kapali_beklenen=(774,374,26,52)
+[AnaPencere] saydam noktada hover (urun sayaclari): acik=True
+[AnaPencere] imlec disari 700 ms: acik=False frame=(774,374,26,52) geo=(26,52) win=PySide6.QtCore.QSize(26, 52)  (bir acilip kapanma kendini toparlar)
+
+SONDA: 3 IHLAL (O-A2): ['close', 'closeAllWindows', 'AnaPencere: kenara_al sonrasi saydam alanda hover panel acti']
+=== O-B5 olcum_ob5 ===
+duzeltme=False: sekme canli=True gorunur=True yoklayici okuyor=True sag tik emit=1 hata=None hover panel acildi=True
+duzeltme=True: sekme canli=False gorunur=False yoklayici okuyor=False sag tik emit=0 hata=None hover panel acildi=None

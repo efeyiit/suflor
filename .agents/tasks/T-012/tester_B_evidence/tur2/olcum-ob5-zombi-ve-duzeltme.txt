@@ -1,0 +1,3 @@
+duzeltme=False: sekme canli=True gorunur=True yoklayici okuyor=True sag tik emit=1 hata=None hover panel acildi=True
+duzeltme=True: sekme canli=False gorunur=False yoklayici okuyor=False sag tik emit=0 hata=None hover panel acildi=None
+exit=0

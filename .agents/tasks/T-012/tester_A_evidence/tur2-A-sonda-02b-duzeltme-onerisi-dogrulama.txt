@@ -1,0 +1,15 @@
+# O-A2 duzeltme onerisi dogrulamasi (alt sinif; src/ui degistirilmedi). Duzeltilmis: showEvent -> _konumlan(); DuzeltilmisB: hideEvent sonrasi 0 ms ertelemeli _konumlan (ISE YARAMAZ)
+## offscreen
+KenarSekmesi   close            yeniden show boyut=200x132 BAYAT
+KenarSekmesi   closeAllWindows  yeniden show boyut=200x132 BAYAT
+Duzeltilmis    close            yeniden show boyut=26x52 ok
+Duzeltilmis    closeAllWindows  yeniden show boyut=26x52 ok
+DuzeltilmisB   close            yeniden show boyut=200x132 BAYAT
+DuzeltilmisB   closeAllWindows  yeniden show boyut=200x132 BAYAT
+## windows platformu (kilitli; yalniz geometri)
+KenarSekmesi   close            yeniden show boyut=200x132 BAYAT
+KenarSekmesi   closeAllWindows  yeniden show boyut=200x132 BAYAT
+Duzeltilmis    close            yeniden show boyut=26x52 ok
+Duzeltilmis    closeAllWindows  yeniden show boyut=26x52 ok
+DuzeltilmisB   close            yeniden show boyut=200x132 BAYAT
+DuzeltilmisB   closeAllWindows  yeniden show boyut=200x132 BAYAT

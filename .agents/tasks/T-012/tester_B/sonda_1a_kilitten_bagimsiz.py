@@ -244,7 +244,8 @@ def main() -> int:  # noqa: C901
     z4 = z_indeks({"sekme": s_hwnd, "katman": katman_hwnd})
     print(f"  bilgi  [S6c] demo SecimKatmani benzeri (Tool+topmost tum ekran) sekmeden sonra: z={z3} katman ustte={z3['katman'] < z3['sekme']}; panel acilinca z={z4} panel katmanin USTUNE cikti={z4['sekme'] < z4['katman']}")
     if z4["sekme"] < z4["katman"]:
-        bulgu("[S6c] bolge secimi sirasinda imlec sekme diskine girerse panel SECIM KATMANININ USTUNE cikar (_ac raise_); demo/kabuk.py secim sirasinda sekmeyi gizlemiyor")
+        bilgi_s6c = "[S6c] kabuk duzeyinde panel Tool+topmost katmanin ustune cikar (_ac raise_, K3 karari) -- TUR 2: demo/kabuk.py secim boyunca sekmeyi gizliyor (O-B2 duzeltildi, test_h5/test_j2), bulgu degil"
+        print(f"  bilgi  {bilgi_s6c}")
     s._kapat(); katman.hide(); bekle(100)  # noqa: SLF001
     p.kapat(); bekle(200)
 
