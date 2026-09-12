@@ -1,0 +1,12 @@
+KRT-1 madde 4/6 -- z-sirasi ve odak
+
+oturum kilitli=True
+Z1 oyun1 showFullScreen (TOPMOST=False) -> z-sirasi ust->alt: ['sekme', 'oyun1(fullscreen,normal)']
+Z2 oyun2 showFullScreen+StaysOnTop (TOPMOST=True) sekmeden SONRA -> z-sirasi: ['oyun2(fullscreen,StaysOnTop)', 'sekme']
+Z3 sekme.raise_() -> z-sirasi: ['sekme', 'oyun2(fullscreen,StaysOnTop)']
+Z3b oyun2.raise_() (oyun kendini yeniden ustte tutarsa) -> z-sirasi: ['oyun2(fullscreen,StaysOnTop)', 'sekme']
+O1 ana pencere show(): activeWindow=QWidget (kilitliyken odak alinamayabilir)
+O1 odak CALAN sekme varyanti show() -> activeWindow=None (sekme mi=False) -> real_check [3] bu varyantta ates eder mi: False [kilitli=True]
+O2 ek: Tool ozel durumu (windows platformu, kilitli oturum) -- show() sonrasi activeWindow
+   Window+Frameless+StaysOnTop (Tool DEGIL, NoFocus yok, SWA yok): activeWindow=bu pencere
+   Tool+Frameless+StaysOnTop (NoFocus yok, SWA yok): activeWindow=None

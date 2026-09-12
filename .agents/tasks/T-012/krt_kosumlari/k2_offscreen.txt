@@ -1,0 +1,60 @@
+OLGU platform=offscreen isSystemTrayAvailable=False supportsMessages=False
+OLGU ekran sayisi=1 birincil avail=(0, 0, 800, 800) dpr=1.0
+.OLGU activeWindow [tam-sekme (NoFocus+SWA)]: once=None sonra=QWidget isActiveWindow=True
+.OLGU activeWindow [NoFocus yok, SWA var]: once=None sonra=QWidget isActiveWindow=True
+.OLGU activeWindow [NoFocus var, SWA yok]: once=None sonra=QWidget isActiveWindow=True
+.OLGU activeWindow [ikisi de yok (odak calan varyant)]: once=None sonra=QWidget isActiveWindow=True
+.OLGU activeWindow [duz QWidget (Tool degil, hicbir sey yok)]: once=None sonra=QWidget isActiveWindow=True
+.OLGU duz widget show()+activateWindow(): activeWindow=QWidget
+OLGU sekme(NoFocus) show()+activateWindow(): activeWindow=QWidget (sekme mi=True)
+.OLGU bayraklar show() sonrasi: Tool=True StaysOnTop=True NoFocus=True translucent=True -> bu test yalnizca 'bayrak set edildi mi' der, ustte kalma DAVRANISINI olcmez
+.OLGU QCursor.setPos(2547,696) -> pos=(2547,696) calisiyor=True
+OLGU QCursor.setPos(-100,-100) (ekran disi) -> pos=(-100,-100)
+.OLGU pytest-qt qapp.quitOnLastWindowClosed varsayilan=True
+OLGU ana.hide() (tepsiye al gibi): lastWindowClosed=0
+OLGU sekme.hide(): lastWindowClosed=0
+OLGU ana.close() (sekme hala gorunur, ebeveynsiz Tool): lastWindowClosed=0
+OLGU sekme.close(): lastWindowClosed=0 -> ebeveynsiz Tool pencere 'son pencere' sayiliyor mu: False
+OLGU close sonrasi qtbot.wait(100) gercek sure=106 ms (100'un altindaysa quit() ic dongüyü kirdi)
+.OLGU Ana close+deleteLater+del+gc: once gorunur=2 sonra gorunur ust-duzey=[] yoklayici hala atiyor=False (0 tik/100ms)
+.OLGU ebeveynli sekme: isWindow=True gorunur=True geometri=(2534, 670, 26, 52) Tool=True
+OLGU ana.hide() -> ebeveynli sekme gorunur=True (kenara al: ana gizli, sekme gorunur OLMALI)
+OLGU ana silindi -> yoklayici atiyor=False gorunur ust-duzey=[]
+.OLGU mouseMove DUGME BASILI DEGIL (mouseTracking=False): mouseMoveEvent sayisi=0 QCursor.pos=(2547,5696)
+OLGU mouseMove DUGME BASILI: mouseMoveEvent sayisi=1 olay=[(5026, 5696, 1)] -> (pos.y, globalPos.y, buttons)
+.OLGU repaint 26x52 kapali sekme: medyan=0.043 ms max=0.73 ms (<16 esigi: 0.3% dolu)
+OLGU repaint 200x132 acik panel (stylesheet, 3 cocuk): medyan=0.208 ms max=1.82 ms
+OLGU pozitif kontrol paintEvent 20 ms uyur: repaint medyan=21.8 ms -> olcu ates eder mi=True
+.OLGU kapat() -> close() -> closeEvent -> kapat(): cikis_istendi=2 (ozyineleme sonlandi: True)
+.OLGU waitUntil yuk=False: acilma medyan=173 max=188 ms (sinir 240, asim=0/30) | kapanma medyan=515 max=530 ms (sinir 570, asim=0/30)
+.OLGU waitUntil yuk=True: acilma medyan=223 max=394 ms (sinir 240, asim=11/30) | kapanma medyan=550 max=699 ms (sinir 570, asim=11/30)
+.OLGU 20x (50 ms iceri/50 ms disari), yoklama 60: acilma sayisi=0 (paket: 'titreme zamanlayicilari sifirlar' -> beklenen 0?)
+.
+=================================== PASSES ====================================
+=========================== short test summary info ===========================
+PASSED .agents/tasks/T-012/krt_kosumlari/test_k2_offscreen_olculemez.py::test_o1_platform_ve_tepsi
+PASSED .agents/tasks/T-012/krt_kosumlari/test_k2_offscreen_olculemez.py::test_o2_activeWindow_offscreen[tam-sekme (NoFocus+SWA)-2361355-True]
+PASSED .agents/tasks/T-012/krt_kosumlari/test_k2_offscreen_olculemez.py::test_o2_activeWindow_offscreen[NoFocus yok, SWA var-264203-True]
+PASSED .agents/tasks/T-012/krt_kosumlari/test_k2_offscreen_olculemez.py::test_o2_activeWindow_offscreen[NoFocus var, SWA yok-2361355-False]
+PASSED .agents/tasks/T-012/krt_kosumlari/test_k2_offscreen_olculemez.py::test_o2_activeWindow_offscreen[ikisi de yok (odak calan varyant)-264203-False]
+PASSED .agents/tasks/T-012/krt_kosumlari/test_k2_offscreen_olculemez.py::test_o2_activeWindow_offscreen[duz QWidget (Tool degil, hicbir sey yok)-0-False]
+PASSED .agents/tasks/T-012/krt_kosumlari/test_k2_offscreen_olculemez.py::test_o2b_activeWindow_pozitif_kontrol_activateWindow
+PASSED .agents/tasks/T-012/krt_kosumlari/test_k2_offscreen_olculemez.py::test_o3_bayraklar_platformdan_bagimsiz
+PASSED .agents/tasks/T-012/krt_kosumlari/test_k2_offscreen_olculemez.py::test_o4_QCursor_offscreen
+PASSED .agents/tasks/T-012/krt_kosumlari/test_k2_offscreen_olculemez.py::test_o5_quitOnLastWindowClosed_ve_hide_close
+PASSED .agents/tasks/T-012/krt_kosumlari/test_k2_offscreen_olculemez.py::test_o6_ebeveynsiz_sekme_omru
+PASSED .agents/tasks/T-012/krt_kosumlari/test_k2_offscreen_olculemez.py::test_o6b_ebeveynli_sekme_omru
+PASSED .agents/tasks/T-012/krt_kosumlari/test_k2_offscreen_olculemez.py::test_o7_QTest_mouseMove_dugme_durumu
+PASSED .agents/tasks/T-012/krt_kosumlari/test_k2_offscreen_olculemez.py::test_o8_repaint_suresi_kucuk_ve_buyuk
+PASSED .agents/tasks/T-012/krt_kosumlari/test_k2_offscreen_olculemez.py::test_o9_kapat_iki_kez_cikis_sayaci
+PASSED .agents/tasks/T-012/krt_kosumlari/test_k2_offscreen_olculemez.py::test_o10_waitUntil_payi[False]
+PASSED .agents/tasks/T-012/krt_kosumlari/test_k2_offscreen_olculemez.py::test_o10_waitUntil_payi[True]
+PASSED .agents/tasks/T-012/krt_kosumlari/test_k2_offscreen_olculemez.py::test_o11_hizli_iceri_disari_ornekleme
+18 passed in 48.86s
+OLGU offscreen tepsi: available=False show() sonrasi isVisible()=True -> dogal 'gorunur = ikon.isVisible()' uygulamasi K5'i offscreen'de IHLAL eder mi: True
+OLGU offscreen showMessage(): hata yok
+.OLGU test A bitti: kenar durumunda, sekme gorunur=True
+.OLGU test B basinda gorunur ust-duzey=['QWidget'] (bos olmali; degilse K1 'gorunur ust-duzey 0' testi siraya bagli)
+.OLGU offscreen: ana aktif=True -> sekme.show() sonrasi aktif=sekme: True (ana kaldi: False) -> K3 olcusu 'degismez' offscreen'de KALIR (dogru kodda bile)
+.
+4 passed, 18 deselected in 0.18s

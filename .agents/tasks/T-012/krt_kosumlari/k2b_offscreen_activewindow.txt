@@ -1,0 +1,4 @@
+platform offscreen
+ana show+activate -> activeWindow is ana: True
+NoFocus+SWA (dogru): show() sonrasi activeWindow -> sekme=True ana=False None=False
+odak-alan (yanlis): show() sonrasi activeWindow -> sekme=True ana=False None=False

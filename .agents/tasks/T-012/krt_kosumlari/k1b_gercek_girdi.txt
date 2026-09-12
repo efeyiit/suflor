@@ -1,0 +1,20 @@
+KRT-1 madde 1/4/6 (devam) -- gercek OS girdisi, kilit tespiti duzeltildi
+
+P0 giris masaustu='Default' (Default=acik) | eski betigin okudugu SessionFlags=0 (0 -> 'kilitli' saymisti)
+ekran avail=(0,0,2560,1392) dpr=1.0 ekranlar=2
+on-plan (ana pencere gosterildi): BIZIM:AnaPencere
+kenara al: sekme=(2534,670,26,52) on-plan=BIZIM:QLabel tepsi=True
+sahne activateWindow(): on-plan=BIZIM:QLabel (BIZIM:QLabel beklenir; degilse foreground kilidi)
+P8 kose(alpha0): bizim=True hwnd=0x470f7a sinif='Qt6112QWindowIcon' | sekme_hwnd=0x3c085e sahne_hwnd=0x470f7a
+P8 kose imlecteyken yoklayici 'icinde' sayar mi: frameGeometry.contains=True acilma_timer=True
+P8 merkez(alpha235): bizim=True hwnd=0x3c085e sinif='Qt6112QWindowToolSaveBits' (sekme beklenir)
+P1 gercek OS surukleme +150: y 670 -> 819 (beklenen 820) surukleme sirasinda acik gorundu=True on-plan=BIZIM:QLabel
+P1 surukleme bittikten 200 ms sonra (imlec hala sekmede): acik=True acilma_timer=False
+P1 sonrasi: acik=False
+P9 QTest: imlec once=(2226,829) press sonrasi=(2224,822) mouseMove(+5000) sonrasi=(2224,820) release sonrasi=(2224,798) | sekme y=1340 alt sinir=1340 acik=False
+P9 mouseMove sonrasi gercek imlec sekmenin icinde mi: False (ekran geometry.bottom=1439 avail.bottom=1391)
+P5 acildi=False 2003 ms
+    (gercek tik ATLANDI: imlec altindaki pencere bizim degil @ 2633,1402 sinif='')
+P5 gercek sol tik panel dugmesi: basildi=False sinyal=0 on-plan once=BIZIM:QLabel sonra=BIZIM:QLabel acik=False (on-plan degismemeli: NoFocus)
+P4 gercek sag tik: basildi=True pencere gorunur=True sekme gorunur=False on-plan once=BIZIM:QLabel sonra=BIZIM:AnaPencere (BIZIM:AnaPencere beklenir)
+P10 WM_CLOSE gorunur durumda: pencere gorunur=False gorunur ust-duzey=[] tepsi=True sekme=False yoklayici=True -> ulasilabilir yol var mi=True

@@ -1,0 +1,5 @@
+KRT-1 madde 4 (devam) -- bosta CPU, isinma sonrasi 5 s, windows platformu
+
+yoklama=60 ms: CPU %0.31 (process_time/duvar, 5 s) yoklama sayisi=80 CPU/yoklama=0.195 ms
+yoklama=30 ms: CPU %1.56 (process_time/duvar, 5 s) yoklama sayisi=159 CPU/yoklama=0.491 ms
+yoklama=yok ms: CPU %0.00 (process_time/duvar, 5 s) yoklama sayisi=0 CPU/yoklama=0.000 ms

@@ -1,0 +1,5 @@
+KRT-1 -- taze baslangic + WM_CLOSE (demo/kabuk.py, quitOnLastWindowClosed=False)
+
+once: pencere=True tepsi=False sekme=False
+WM_CLOSE +700 ms: exec() hala donuyor=True pencere=False tepsi=False sekme=False gorunur ust-duzey=[] yoklayici=True
+-> kullanicinin ulasabilecegi yol (tepsi ikonu / sekme / pencere) var mi: False

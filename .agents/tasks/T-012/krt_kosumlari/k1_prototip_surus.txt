@@ -1,0 +1,23 @@
+KRT-1 madde 1 -- demo/kabuk.py gercek ekran surusu
+
+oturum kilitli (WTS_SESSIONSTATE_LOCK)=True -> kilitliyse gercek OS girdisi atlanir, on-plan/hit-test kilit ekranini gorur
+ekran avail=(0,0,2560,1392) dpr=1.0 ekranlar=2
+on-plan (ana pencere gosterildi): baska-surec
+P1 kenara al: sekme=(2534,670,26,52) on-plan=baska-surec tepsi=True
+P1 QTest surukleme +200: y 670 -> 870 (beklenen 870) acik=False
+P1 gercek surukleme oncesi imlec altinda bizim pencere=False kilitli=True
+P2 hizli iceri-disari 10x50/50 ms: acilma sayisi=1 son acik=True acilma_timer_aktif=False
+P2 sonrasi bekleme: acik=False
+P3 acildi=True 175 ms
+P3 iceri-disari(100ms)-iceri: acik kaldi=True
+P3 panel=(2360,830,200,132) dugme sayisi=2 metinler=['⚡  Anlık çeviri', '▭  Bölge izle']
+    (gercek tik ATLANDI: oturum kilitli, OS girdisi gonderilmez)
+P5 gercek sol tik panel dugmesi: basildi=False sinyal=0 on-plan once=baska-surec sonra=baska-surec acik=True
+P8 hit-test: kose(alpha0) bizim=False hwnd=0x570128 | merkez bizim=False hwnd=0x570128 sekme_hwnd=0x360f84 sahne_hwnd=0x3b12ce
+P8 kose imlecteyken yoklayici 'icinde' sayar mi: frameGeometry.contains=True acilma_timer=True
+    (gercek tik ATLANDI: oturum kilitli, OS girdisi gonderilmez)
+P4 gercek sag tik: basildi=False pencere gorunur=False sekme gorunur=True on-plan=baska-surec
+P6 tepsi menusu: ['Pencereyi göster', 'Kenara al', '---', 'Çıkış'] tepsi gorunur (gorunur durumda)=True
+P6 tepsiye al: pencere=False tepsi=True sekme=False supportsMessages=True
+P6 goster: pencere=True tepsi=True on-plan=baska-surec
+P7 close() gorunur durumda: gorunur ust-duzey=[] tepsi=True sekme=False yoklayici calisiyor=True -> kullanici hicbir yerden ulasamaz=False

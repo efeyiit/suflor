@@ -1,0 +1,23 @@
+KRT-1 madde 4 -- gercek exec() dongusu, windows platformu (oturum kilitli olabilir)
+
+[A] rc=0 sure=1.2s
+A: 700 ms sonra surec HALA YASIYOR; gorunur ust-duzey=['S'] -> app.quit()
+A: exec() dondu 1011 ms sonra (300 ms'de eylem; <=600 ise kendiliginden cikti) rc=0
+[B] rc=0 sure=0.5s
+B: exec() dondu 313 ms sonra (300 ms'de eylem; <=600 ise kendiliginden cikti) rc=0
+[C] rc=0 sure=1.3s
+C: 700 ms sonra surec HALA YASIYOR; gorunur ust-duzey=[] -> app.quit()
+C: exec() dondu 1033 ms sonra (300 ms'de eylem; <=600 ise kendiliginden cikti) rc=0
+[D] rc=0 sure=1.2s
+D: 700 ms sonra surec HALA YASIYOR; gorunur ust-duzey=[] -> app.quit()
+D: exec() dondu 1009 ms sonra (300 ms'de eylem; <=600 ise kendiliginden cikti) rc=0
+[E] rc=0 sure=10.2s
+E: yoklama=True: CPU %2.18 (process_time/duvar, 5.0 s) yoklama sayisi=79
+E: yoklama=False: CPU %0.31 (process_time/duvar, 5.0 s) yoklama sayisi=0
+[F] rc=0 sure=0.8s
+F: windows platformu repaint 26x52 katmanli: medyan=0.242 ms max=1.52 ms
+F: windows platformu repaint 200x132 panel: medyan=0.827 ms max=2.13 ms
+E2 (duz fonksiyon, 5 s, tek cekirdek CPU %):
+   yoklama 60 ms: CPU %0.31 (79 yoklama, 0.198 ms CPU/yoklama)
+   yoklama 100 ms: CPU %0.63 (45 yoklama, 0.695 ms CPU/yoklama)
+   yoklama 250 ms: CPU %0.00 (19 yoklama, 0.000 ms CPU/yoklama)

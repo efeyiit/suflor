@@ -1,0 +1,41 @@
+KRT-1 madde 3 -- geometri
+
+G1 ekranlar (mantiksal):
+   XG27ACS (2)    geometry=(0, 0, 2560, 1440) avail=(0, 0, 2560, 1392) dpr=1.0 fiziksel=2560x1440 birincil=True
+   XG27ACS (1)    geometry=(-2560, 0, 2048, 1152) avail=(-2560, 0, 2048, 1104) dpr=1.25 fiziksel=2560x1440 birincil=False
+G1 sol monitor mantiksal sag kenari=-513 birincil sol kenari=0 -> mantiksal BOSLUK=512 px (dpr 1.25 ile fiziksel sag kenar=-1)
+G2 paket OLCU tablosu (3 ekran x 2 kenar x 5 y), r=26, panel 200x132:
+   birincil 2560x1392 sag y=-1000: kapali=(2534, 0, 26, 52) acik=(2360, 0, 200, 132) icinde=True bitisik=True
+   birincil 2560x1392 sag y=9999: kapali=(2534, 1340, 26, 52) acik=(2360, 1260, 200, 132) icinde=True bitisik=True
+   birincil 2560x1392 sol y=-1000: kapali=(0, 0, 26, 52) acik=(0, 0, 200, 132) icinde=True bitisik=True
+   birincil 2560x1392 sol y=9999: kapali=(0, 1340, 26, 52) acik=(0, 1260, 200, 132) icinde=True bitisik=True
+   sol -2560 (paket: 2560x1440) sag y=-1000: kapali=(-26, 0, 26, 52) acik=(-200, 0, 200, 132) icinde=True bitisik=True
+   sol -2560 (paket: 2560x1440) sag y=9999: kapali=(-26, 1388, 26, 52) acik=(-200, 1308, 200, 132) icinde=True bitisik=True
+   sol -2560 (paket: 2560x1440) sol y=-1000: kapali=(-2560, 0, 26, 52) acik=(-2560, 0, 200, 132) icinde=True bitisik=True
+   sol -2560 (paket: 2560x1440) sol y=9999: kapali=(-2560, 1388, 26, 52) acik=(-2560, 1308, 200, 132) icinde=True bitisik=True
+   sol -2560 (GERCEK mantiksal, dpr1.25: 2048x1104) sag y=-1000: kapali=(-538, 0, 26, 52) acik=(-712, 0, 200, 132) icinde=True bitisik=True
+   sol -2560 (GERCEK mantiksal, dpr1.25: 2048x1104) sag y=9999: kapali=(-538, 1052, 26, 52) acik=(-712, 972, 200, 132) icinde=True bitisik=True
+   sol -2560 (GERCEK mantiksal, dpr1.25: 2048x1104) sol y=-1000: kapali=(-2560, 0, 26, 52) acik=(-2560, 0, 200, 132) icinde=True bitisik=True
+   sol -2560 (GERCEK mantiksal, dpr1.25: 2048x1104) sol y=9999: kapali=(-2560, 1052, 26, 52) acik=(-2560, 972, 200, 132) icinde=True bitisik=True
+   1280x720 sag y=-1000: kapali=(1254, 0, 26, 52) acik=(1080, 0, 200, 132) icinde=True bitisik=True
+   1280x720 sag y=9999: kapali=(1254, 668, 26, 52) acik=(1080, 588, 200, 132) icinde=True bitisik=True
+   1280x720 sol y=-1000: kapali=(0, 0, 26, 52) acik=(0, 0, 200, 132) icinde=True bitisik=True
+   1280x720 sol y=9999: kapali=(0, 668, 26, 52) acik=(0, 588, 200, 132) icinde=True bitisik=True
+G2 ihlal=0 (paketin formulleri kendi icinde tutarli); U2 ile birebir: (2534, 670, 26, 52) == (2534,670,26,52)
+G2 y_sinirla monoton=True aralik=[0,1340] (paket: [0, 1340])
+G2 panel merkez y=695 sekme merkez y=695 fark=0 (U3 paneli (2360,630,200,132) ile ayni: True)
+G2 y=0'da panel=(2360, 0, 200, 132) sekme=(2534, 0, 26, 52) -> panel sekmenin merkezine hizali DEGIL (sikistirildi), imlec sekmeden panele gecerken dikdortgen degisir
+G3 gorev cubugu konumu simulasyonu (birincil fiziksel 2560x1440, cubuk 48 px):
+   cubuk altta (bu makine)  avail=(0, 0, 2560, 1392): sag sekme x-araligi=[2534,2559] fiziksel sag kenar=2559 -> FIZIKSEL kenara bitisik=True | sol sekme [0,25] fiziksel sol kenar=0 -> bitisik=True
+   cubuk SAGDA              avail=(0, 0, 2512, 1440): sag sekme x-araligi=[2486,2511] fiziksel sag kenar=2559 -> FIZIKSEL kenara bitisik=False | sol sekme [0,25] fiziksel sol kenar=0 -> bitisik=True
+   cubuk SOLDA              avail=(48, 0, 2512, 1440): sag sekme x-araligi=[2534,2559] fiziksel sag kenar=2559 -> FIZIKSEL kenara bitisik=True | sol sekme [48,73] fiziksel sol kenar=0 -> bitisik=False
+   cubuk ustte              avail=(0, 48, 2560, 1392): sag sekme x-araligi=[2534,2559] fiziksel sag kenar=2559 -> FIZIKSEL kenara bitisik=True | sol sekme [0,25] fiziksel sol kenar=0 -> bitisik=True
+G3 not: cubuk sagdayken 'kenara at' hareketi cubuga varir, sekmeye degil (cubuk kendi ustte-kalan bandi); paket geometry() mi availableGeometry() mi secimini yalniz 'mantiksal piksel' diye gecer
+G4 sol monitor (dpr 1.25) sag kenar sekmesi: istenen=(-538, 525, 26, 52) frameGeometry=(-538, 525, 26, 52) ekran=XG27ACS (1) GetWindowRect fiziksel=(-32,656,1,721) -> fiziksel sag kenar 0 == -1 (birincile bitisik): False
+G4 QCursor.setPos(-525,550) -> pos=(-525,550) frameGeometry.contains=True screenAt=XG27ACS (1)
+G4 imlec birincil (0,550) -> pos=(0,550) sekme contains=False; fiziksel olarak sekmeye 1 px mesafede ama mantiksal fark=513 px
+G5 screenAt((-600,500)) = XG27ACS (1)
+G5 screenAt((-512,500)) = None
+G5 screenAt((-300,500)) = None
+G5 screenAt((-1,500)) = None
+G5 screenAt((0,500)) = XG27ACS (2)

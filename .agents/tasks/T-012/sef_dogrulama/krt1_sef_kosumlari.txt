@@ -1,0 +1,15 @@
+=== Y1 k6_wm_close_taze ===
+once: pencere=True tepsi=False sekme=False
+WM_CLOSE +700 ms: exec() hala donuyor=True pencere=False tepsi=False sekme=False gorunur ust-duzey=[] yoklayici=True
+-> kullanicinin ulasabilecegi yol (tepsi ikonu / sekme / pencere) var mi: False
+exec() 1097 ms sonra dondu rc=0 (1100 ms'de quit; daha erkense kendiliginden cikti)
+=== Y3 k2b offscreen activeWindow ===
+offscreen: NoFocus+SWA sekme show() sonrasi activeWindow = sekme
+=== Y2 surukleme sirasinda panel aciliyor ===
+KRT k1b P1 (gercek OS mouse_event, +150 px): surukleme sirasinda acik=True, birakinca 200 ms sonra acik=True.
+Sef: kod okumasiyla dogrulandi -- demo/kabuk.py KenarSekmesi._yokla() acilma sayacini _surukleme'ye bakmadan
+baslatiyor; mouseMoveEvent acikken _kapali_geometri() uyguluyor -> 26x52 pencerede kirpilmis panel.
+Paket K4 OLCU yalniz "surukleme sirasinda disari" olcuyordu -> sinif hic olculmuyordu (kural 10). KABUL.
+=== O8 sayilar ===
+Paket girisindeki 193/469 ms: ilk kosumun (arka plan sahnesi eklenmeden once) degeri; olgular.txt ustune yazildi
+(145/478), KRT tekrari 129-153 / 476-478. Sef hatasi: ham dosya saklanmadan sayi yazildi (§4.6/3). v2'de duzeltildi.
