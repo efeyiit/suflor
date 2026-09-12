@@ -1,0 +1,6 @@
+$ python .agents/tasks/T-012/evidence/olcum-paint-ve-giris-noktasi.py
+(1) paint 100 kare medyani (offscreen, 5 tekrar) kapali=[0.085, 0.087, 0.078, 0.068, 0.065] ms acik=[0.135, 0.164, 0.16, 0.133, 0.152] ms; acik mi=True; hepsi < 16: True; paintEvent cagri sayisi kapali=500 toplam=1001 (500 + 500 beklenir: repaint gercekten ciziyor)
+(2) taze surec calistir(): rc=0 stdout='QApplication yeni kuruldu: True quitOnLastWindowClosed: False exec suresi ms: 313 kapandi: True gorunur ust-duzey: []' stderr_bos=True
+(3) python -m src.ui (offscreen): 2 s sonra ayakta=True stderr_bos=True (sonra terminate edildi)
+
+[exit 0]

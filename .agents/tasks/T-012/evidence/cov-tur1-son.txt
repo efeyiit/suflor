@@ -1,0 +1,21 @@
+$ python -m pytest tests/unit/ui -q -p no:cacheprovider --cov=src.ui --cov-fail-under=95 --cov-report=term-missing
+........................................................................ [ 37%]
+........................................................................ [ 75%]
+..............................................                           [100%]
+=============================== tests coverage ================================
+______________ coverage: platform win32, python 3.12.10-final-0 _______________
+
+Name                      Stmts   Miss  Cover   Missing
+-------------------------------------------------------
+src\ui\__init__.py            1      0   100%
+src\ui\__main__.py            3      0   100%
+src\ui\geometri.py           30      0   100%
+src\ui\kabuk.py             222      0   100%
+src\ui\kenar_sekmesi.py     209      0   100%
+src\ui\uygulama.py           22      2    91%   36, 40
+-------------------------------------------------------
+TOTAL                       487      2    99%
+Required test coverage of 95% reached. Total coverage: 99.59%
+190 passed in 13.02s
+
+[exit 0]

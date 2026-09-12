@@ -1,0 +1,4 @@
+$ python -m mypy --strict --explicit-package-bases tests/unit/ui/test_geometri.py tests/unit/ui/test_kenar_sekmesi.py tests/unit/ui/test_kabuk.py tests/unit/ui/test_uygulama.py
+Success: no issues found in 4 source files
+
+[exit 0]

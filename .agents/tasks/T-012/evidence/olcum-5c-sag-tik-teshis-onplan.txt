@@ -1,0 +1,36 @@
+[sarici] deneme 1: fare bosta bekleme 6.0 s; sarici on planda=True
+T-012 [5c] teshis -- gercek ekran
+fare bosta bekleme 6.0 s
+
+[V6] tepsi > sahneonplan > soltik > hoverac > paneltik > uzaklas > hoverac > hoverkapat > surukle > uzaklas > sagtik
+    tepsi > goster > QTest kenar: durum=kenar uclu=(False, True, True)
+    sahne on planda=True
+    sol tik sonrasi: acik=True surukleniyor=False
+    hover ac: acik=True 153 ms
+    panel dugmesi gercek tik: clicked=1 acik=False
+    uzaklas 700 ms: acik=False
+    hover ac: acik=True 341 ms
+    hover kapat: acik=False 472 ms
+    surukleme: y=1340 (alt sinir 1340) acik=False surukleniyor=False
+      Qt olaylari: ['MouseButtonPress:LeftButton@2555,695', 'MouseButtonRelease:LeftButton@2555,1439']
+      WM iletileri: ['WM_MOUSEACTIVATE', 'WM_LBUTTONDOWN', 'WM_WINDOWPOSCHANGED', 'WM_WINDOWPOSCHANGED', 'WM_LBUTTONUP', 'WM_CAPTURECHANGED', 'WM_MOUSELEAVE']
+    uzaklas 700 ms: acik=False
+    sag tik ONCESI: acik=False surukleniyor=False yokluyor=True y=1340 durum=kenar frameGeometry=(2534,1340,26,52) GetWindowRect=(2534, 1340, 2560, 1392) GetCapture=0 imlec=(2555, 1365)
+    hedef=(2555,1365) altindaki pencere: hwnd=BASKA sinif='Windows.UI.Core.CoreWindow'
+    sag tik SONRASI: IHLAL uclu=(False, True, True) durum=kenar on plan=baska
+      Qt olaylari: []
+      WM iletileri: ['WM_ACTIVATEAPP', 'WM_WINDOWPOSCHANGED']
+
+[V7] sahneonplan > surukle > uzaklas > sagtik
+    sahne on planda=True
+    surukleme: y=1340 (alt sinir 1340) acik=False surukleniyor=False
+      Qt olaylari: ['MouseButtonPress:LeftButton@2555,695', 'MouseButtonRelease:LeftButton@2555,1439']
+      WM iletileri: ['WM_MOUSEACTIVATE', 'WM_LBUTTONDOWN', 'WM_WINDOWPOSCHANGED', 'WM_WINDOWPOSCHANGED', 'WM_LBUTTONUP', 'WM_CAPTURECHANGED', 'WM_MOUSELEAVE']
+    uzaklas 700 ms: acik=False
+    sag tik ONCESI: acik=False surukleniyor=False yokluyor=True y=1340 durum=kenar frameGeometry=(2534,1340,26,52) GetWindowRect=(2534, 1340, 2560, 1392) GetCapture=0 imlec=(2555, 1365)
+    hedef=(2555,1365) altindaki pencere: hwnd=BIZIM:KenarSekmesi sinif='Qt6112QWindowToolSaveBits'
+    sag tik SONRASI: OK uclu=(True, False, False) durum=gorunur on plan=AnaPencere
+      Qt olaylari: ['MouseButtonPress:RightButton@2555,1365']
+      WM iletileri: ['WM_MOUSEACTIVATE', 'WM_RBUTTONDOWN', 'WM_CAPTURECHANGED', 'WM_WINDOWPOSCHANGED']
+
+[sarici] real_check rc=0

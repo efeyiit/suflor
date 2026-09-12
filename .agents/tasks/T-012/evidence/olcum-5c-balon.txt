@@ -1,0 +1,19 @@
+T-012 [5c] balon olcumu -- gercek ekran
+tepsi kullanilabilir=True bildirim destegi=True
+
+[A] bildir=ACIK; tik noktasi=(2555,1366); kapali sekme alt-sinir rect=(2534, 1340, 2560, 1392)
+    kenara al + y=alt: acik=False frameGeometry=(2534,1340,26,52) GetWindowRect=(2534, 1340, 2560, 1392)
+    t=  0.32 s  nokta altinda: BASKA sinif='Windows.UI.Core.CoreWindow' baslik='Yeni bildirim' rect=(2164, 1239, 2560, 1392)
+    t=  6.66 s  nokta altinda: SEKME
+    SONUC: orten pencere t=0.32..6.56 s (omur ~6.2 s); rect=(2164, 1239, 2560, 1392); sekme alt-sinir rect ile kesisir=True
+
+[B] bildir=KAPALI; tik noktasi=(2555,1366); kapali sekme alt-sinir rect=(2534, 1340, 2560, 1392)
+    kenara al + y=alt: acik=False frameGeometry=(2534,1340,26,52) GetWindowRect=(2534, 1340, 2560, 1392)
+    t=  0.32 s  nokta altinda: SEKME
+    SONUC: 12 s boyunca nokta hep bizim/masaustu; orten pencere YOK
+
+[C] bildir=ACIK; tik noktasi=(2555,1366); kapali sekme alt-sinir rect=(2534, 1340, 2560, 1392)
+    kenara al + y=alt: acik=False frameGeometry=(2534,1340,26,52) GetWindowRect=(2534, 1340, 2560, 1392)
+    t=  0.32 s  nokta altinda: BASKA sinif='Windows.UI.Core.CoreWindow' baslik='Yeni bildirim' rect=(2164, 1239, 2560, 1392)
+    t=  6.63 s  nokta altinda: SEKME
+    SONUC: orten pencere t=0.32..6.53 s (omur ~6.2 s); rect=(2164, 1239, 2560, 1392); sekme alt-sinir rect ile kesisir=True

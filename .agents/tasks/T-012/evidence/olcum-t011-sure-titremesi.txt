@@ -1,0 +1,6 @@
+$ python .agents/tasks/T-012/evidence/olcum-t011-sure-titremesi.py
+T-011 K5 8000 uyeli zincir sure olcumu; cekirdek=32 izleyici=yok
+[bosta] gecerli/olu ms: 27.9/26.3, 27.9/26.8, 28.4/26.9, 27.6/26.5, 28.0/26.8  -> sinir 60 ms asimi 0/5
+[2 is parcacigi CPU yuku (ayni surec, GIL paylasimi)] gecerli/olu ms: 90.7/74.5, 69.9/78.0, 105.8/58.9, 90.6/90.6, 75.0/75.7  -> sinir 60 ms asimi 5/5
+
+[exit 0]

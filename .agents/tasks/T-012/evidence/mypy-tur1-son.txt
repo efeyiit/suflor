@@ -1,0 +1,4 @@
+$ python -m mypy --strict --explicit-package-bases src/ui
+Success: no issues found in 6 source files
+
+[exit 0]

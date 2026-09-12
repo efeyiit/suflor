@@ -1,0 +1,24 @@
+[sarici] deneme 1: fare bosta bekleme 125.1 s; sarici on planda=True
+T-012 real_check v2 -- UI kabugu, gercek ekran
+  ok     [0] sabitler: yaricap/acilma/kapanma/yoklama/panel = (26, 120, 450, 60, 200, 132)
+  ok     [1a] tepsiye al: uclu=(False, False, True) (F,F,T) durum=tepsi
+  ok     [1b] goster: uclu=(True, False, False) (T,F,F) durum=gorunur
+  ok     [2a] kenara al: uclu=(False, True, True) (F,T,T) bitisik=True dikey orta=True geo=(2534,670,26,52) durum=kenar
+  ok     [2b] sekme bayraklari Tool/Frameless/StaysOnTop/NoFocus/translucent/ShowWithoutActivating hepsi=True
+  ok     [3a] sekmeye gercek sol tik: on plan sahne kaldi=True
+  ok     [3b] panel dugmesine gercek tik: clicked=1 on plan sahne=True
+  ok     [9] mod tiki sonrasi panel kapali=True boyut=(26,52)
+  ok     [4a] acilma: acik=True 162 ms (<= 390) panel bitisik=True ekran icinde=True
+  ok     [4b] kapanma: kapandi=True 488 ms (<= 720)
+  ok     [5a] asagi surukleme: y=1340 alt sinir=1340
+  ok     [5b] surukleme sirasinda panel acilmadi=True, sonrasinda acik=False (False beklenir; KRT Y2)
+  ok     [5c] sag tik: uclu=(True, False, False) (T,F,F) durum=gorunur
+  ok     [7] paintEvent medyan kapali 0.23 ms, acik 0.19 ms (< 16)
+  ok     [8] RAPOR ikinci monitor dpr=1.25: sekme fiziksel sag=1 monitor calisma alani sag=0 fark=+1 px (0 hedef, +-1 kabul)
+  ok     [6a] WM_CLOSE: cikis_istendi=1 (1) uclu=(False, False, False) (F,F,F)
+  ok     [6b] ikinci kapat(): cikis_istendi=1 (hala 1)
+  ok     [6c] gorunur ust-duzey (sahne haric)=0 (0)
+
+REAL_CHECK: TEMIZ
+
+[sarici] real_check rc=0

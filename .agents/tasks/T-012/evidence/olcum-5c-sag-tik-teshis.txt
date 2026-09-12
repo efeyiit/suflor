@@ -1,0 +1,73 @@
+$ python .agents/tasks/T-012/evidence/olcum-5c-sag-tik-teshis.py onplansiz  (on plan ALINMADAN (dogrudan): V1-V5 hepsi OK -- ihlal on plan/tepsi turu olmadan uretilemiyor)
+T-012 [5c] teshis -- gercek ekran
+fare bosta bekleme 18.4 s
+
+[V1] surukle > uzaklas > sagtik
+    surukleme: y=1340 (alt sinir 1340) acik=False surukleniyor=False
+      Qt olaylari: ['MouseButtonPress:LeftButton@2554,695', 'MouseButtonRelease:LeftButton@2550,1365']
+      WM iletileri: ['WM_MOUSEACTIVATE', 'WM_LBUTTONDOWN', 'WM_WINDOWPOSCHANGED', 'WM_WINDOWPOSCHANGED', 'WM_LBUTTONUP', 'WM_CAPTURECHANGED', 'WM_MOUSELEAVE']
+    uzaklas 700 ms: acik=False
+    sag tik ONCESI: acik=False surukleniyor=False yokluyor=True y=1340 durum=kenar frameGeometry=(2534,1340,26,52) GetWindowRect=(2534, 1340, 2560, 1392) GetCapture=0 imlec=(2559, 1350)
+    hedef=(2555,1365) altindaki pencere: hwnd=BIZIM:KenarSekmesi sinif='Qt6112QWindowToolSaveBits'
+    sag tik SONRASI: OK uclu=(True, False, False) durum=gorunur on plan=AnaPencere
+      Qt olaylari: ['MouseButtonPress:RightButton@2559,1348']
+      WM iletileri: ['WM_MOUSEACTIVATE', 'WM_RBUTTONDOWN', 'WM_CAPTURECHANGED', 'WM_WINDOWPOSCHANGED', 'WM_MOUSELEAVE']
+
+[V2] hoverac > hoverkapat > surukle > uzaklas > sagtik
+    hover ac: acik=True 290 ms
+    hover kapat: acik=False 317 ms
+    surukleme: y=670 (alt sinir 1340) acik=False surukleniyor=False
+      Qt olaylari: []
+      WM iletileri: ['WM_MOUSELEAVE']
+    uzaklas 700 ms: acik=False
+    sag tik ONCESI: acik=False surukleniyor=False yokluyor=True y=670 durum=kenar frameGeometry=(2534,670,26,52) GetWindowRect=(2534, 670, 2560, 722) GetCapture=0 imlec=(2559, 692)
+    hedef=(2555,695) altindaki pencere: hwnd=BIZIM:KenarSekmesi sinif='Qt6112QWindowToolSaveBits'
+    sag tik SONRASI: OK uclu=(True, False, False) durum=gorunur on plan=AnaPencere
+      Qt olaylari: ['MouseButtonPress:RightButton@2559,692']
+      WM iletileri: ['WM_MOUSEACTIVATE', 'WM_RBUTTONDOWN', 'WM_CAPTURECHANGED', 'WM_WINDOWPOSCHANGED', 'WM_ACTIVATEAPP', 'WM_MOUSELEAVE']
+
+[V3] soltik > hoverac > paneltik > uzaklas > surukle > uzaklas > sagtik
+    sol tik sonrasi: acik=False surukleniyor=False
+    hover ac: acik=False 3154 ms
+    panel dugmesi gercek tik: clicked=0 acik=False
+    uzaklas 700 ms: acik=False
+    surukleme: y=1340 (alt sinir 1340) acik=False surukleniyor=False
+      Qt olaylari: ['MouseButtonPress:LeftButton@2555,695', 'MouseButtonRelease:LeftButton@2553,1439']
+      WM iletileri: ['WM_MOUSEACTIVATE', 'WM_LBUTTONDOWN', 'WM_WINDOWPOSCHANGED', 'WM_WINDOWPOSCHANGED', 'WM_LBUTTONUP', 'WM_CAPTURECHANGED', 'WM_MOUSELEAVE']
+    uzaklas 700 ms: acik=False
+    sag tik ONCESI: acik=False surukleniyor=False yokluyor=True y=1340 durum=kenar frameGeometry=(2534,1340,26,52) GetWindowRect=(2534, 1340, 2560, 1392) GetCapture=0 imlec=(2555, 1365)
+    hedef=(2555,1365) altindaki pencere: hwnd=BIZIM:KenarSekmesi sinif='Qt6112QWindowToolSaveBits'
+    sag tik SONRASI: OK uclu=(True, False, False) durum=gorunur on plan=AnaPencere
+      Qt olaylari: ['MouseButtonPress:RightButton@2555,1365']
+      WM iletileri: ['WM_MOUSEACTIVATE', 'WM_RBUTTONDOWN', 'WM_CAPTURECHANGED', 'WM_WINDOWPOSCHANGED', 'WM_ACTIVATEAPP', 'WM_MOUSELEAVE']
+
+[V4] soltik > hoverac > paneltik > uzaklas > hoverac > hoverkapat > surukle > uzaklas > sagtik
+    sol tik sonrasi: acik=True surukleniyor=False
+    hover ac: acik=True 152 ms
+    panel dugmesi gercek tik: clicked=1 acik=False
+    uzaklas 700 ms: acik=False
+    hover ac: acik=True 323 ms
+    hover kapat: acik=False 487 ms
+    surukleme: y=1340 (alt sinir 1340) acik=False surukleniyor=False
+      Qt olaylari: ['MouseButtonPress:LeftButton@2555,695', 'MouseButtonRelease:LeftButton@2555,1439']
+      WM iletileri: ['WM_MOUSEACTIVATE', 'WM_LBUTTONDOWN', 'WM_WINDOWPOSCHANGED', 'WM_WINDOWPOSCHANGED', 'WM_LBUTTONUP', 'WM_CAPTURECHANGED', 'WM_MOUSELEAVE']
+    uzaklas 700 ms: acik=False
+    sag tik ONCESI: acik=False surukleniyor=False yokluyor=True y=1340 durum=kenar frameGeometry=(2534,1340,26,52) GetWindowRect=(2534, 1340, 2560, 1392) GetCapture=0 imlec=(2555, 1365)
+    hedef=(2555,1365) altindaki pencere: hwnd=BIZIM:KenarSekmesi sinif='Qt6112QWindowToolSaveBits'
+    sag tik SONRASI: OK uclu=(True, False, False) durum=gorunur on plan=AnaPencere
+      Qt olaylari: ['MouseButtonPress:RightButton@2555,1365']
+      WM iletileri: ['WM_MOUSEACTIVATE', 'WM_RBUTTONDOWN', 'WM_CAPTURECHANGED', 'WM_WINDOWPOSCHANGED', 'WM_ACTIVATEAPP', 'WM_MOUSELEAVE']
+
+[V5] surukle > uzaklas > beklesekmede > sagtik
+    surukleme: y=1340 (alt sinir 1340) acik=False surukleniyor=False
+      Qt olaylari: ['MouseButtonPress:LeftButton@2555,695', 'MouseButtonRelease:LeftButton@2555,1439']
+      WM iletileri: ['WM_MOUSEACTIVATE', 'WM_LBUTTONDOWN', 'WM_WINDOWPOSCHANGED', 'WM_WINDOWPOSCHANGED', 'WM_LBUTTONUP', 'WM_CAPTURECHANGED', 'WM_MOUSELEAVE']
+    uzaklas 700 ms: acik=False
+    imlec sekmede 700 ms: acik=True
+    sag tik ONCESI: acik=True surukleniyor=False yokluyor=True y=1340 durum=kenar frameGeometry=(2360,1260,200,132) GetWindowRect=(2360, 1260, 2560, 1392) GetCapture=0 imlec=(2555, 1325)
+    hedef=(2555,1325) altindaki pencere: hwnd=BIZIM:KenarSekmesi sinif='Qt6112QWindowToolSaveBits'
+    sag tik SONRASI: OK uclu=(True, False, False) durum=gorunur on plan=AnaPencere
+      Qt olaylari: ['MouseButtonPress:RightButton@2555,1325']
+      WM iletileri: ['WM_MOUSEACTIVATE', 'WM_RBUTTONDOWN', 'WM_CAPTURECHANGED', 'WM_WINDOWPOSCHANGED', 'WM_ACTIVATEAPP']
+
+[exit 0]

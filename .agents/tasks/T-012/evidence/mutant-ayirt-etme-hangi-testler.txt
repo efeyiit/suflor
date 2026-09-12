@@ -1,0 +1,241 @@
+T-012 mutant basina dusen testler (ayna kosumu)
+
+== M01 [X (4)] K1: closeEvent ignore edilir (kapat cagrilmaz) -> Alt+F4/WM_CLOSE zombi
+  test_k1_close_event_gorunur_durumunda_kapat_ile_esdeger
+  test_k1_close_event_ignore_edilmez
+  test_k1_close_gizli_durumlarda_da_kapatir[tepsi]
+  test_k1_close_gizli_durumlarda_da_kapatir[kenar]
+
+== M02 [X (3)] K1: kapat() idempotent degil (kapandi bayragi yok) -> cikis_istendi ikinci kez
+  test_k1_kapat_iki_kez_tek_sinyal
+  test_k1_close_sonra_kapat_ikinci_sinyal_yok
+  test_k1_kapat_sonra_close_ikinci_sinyal_yok
+
+== M03 [X (7)] K1: goster() tepsi ikonunu gizlemez -> gorunur uclusu (T,F,T)
+  test_k1_tepsi_to_gorunur
+  test_k1_kenar_to_gorunur_tepsi_ikonu_da_gizlenir
+  test_k1_gorunur_yollari_hepsi_ayni_uclu
+  test_k1_kenara_al_iki_kez_idempotent
+  test_k5_ikona_tik_goster[Trigger]
+  test_k5_ikona_tik_goster[DoubleClick]
+  test_k8_surukleme_sonrasi_sag_tik_pencereyi_getirir
+
+== M04 [X (2)] K5: tepsi yokken tepsiye_al() kenara dusmez -> pencere gizli, ikon yok, sekme yok (kilit)
+  test_k5_tepsi_yoksa_tepsiye_al_kenara_duser
+  test_k5_ana_pencere_varsayilan_offscreen_tepsi_yok
+
+== M05 [X (2)] K4 (Y2): surukleme sirasinda yoklayici acilma sayacini baslatir
+  test_k4_surukleme_sirasinda_sayac_baslamaz
+  test_k4_surukleme_calisan_acilma_sayacini_durdurur
+
+== M05b [X (1)] K4 (Y2): basinca calisan acilma sayaci durdurulmaz
+  test_k4_surukleme_calisan_acilma_sayacini_durdurur
+
+== M06 [X (5)] K4 (O9): mod tiki paneli kapatmadan sinyal yayar
+  test_k4_mod_tiki_once_panel_kapanir_sonra_sinyal[dugme_anlik]
+  test_k4_mod_tiki_once_panel_kapanir_sonra_sinyal[dugme_bolge]
+  test_k4_mod_tiki_sonrasi_kapanma_sayaci_paneli_tekrar_acmaz
+  test_k4_gercek_tik_ile_dugme_sinyali
+  test_k8_panelde_dugme_goster
+
+== M07 [X (6)] K4: yoklayici gizliyken de calisir (init'te baslar, hide durdurmaz)
+  test_k1_kenar_to_gorunur_tepsi_ikonu_da_gizlenir
+  test_k1_kapat_gorunur_durumundan
+  test_k1_kapat_her_durumdan[tepsi]
+  test_k1_kapat_her_durumdan[kenar]
+  test_k4_imlec_konumu_sekmeye_enjekte_edilir
+  test_k4_yoklayici_yalniz_gorunurken
+
+== M08 [X (22)] K4: imlec_konumu yok sayilir, dogrudan QCursor.pos okunur
+  test_k4_imlec_konumu_sekmeye_enjekte_edilir
+  test_k3_kapali_ve_acik_boyutlar
+  test_k2_kenar_degisince_yeniden_konumlanir
+  test_k2_acik_panel_ekran_icinde_ust_ve_alt_sinirda
+  test_k4_iceri_gelince_acilir_alt_sinir_deterministik
+  test_k4_disari_cikinca_kapanir_alt_sinir_deterministik
+  test_k4_iceri_disari_iceri_titremesi_acik_kalir
+  test_k4_panel_uzerinde_gezinirken_acik_kalir
+  test_k4_saydam_kosede_acilmaz_merkezde_acilir
+  test_k4_imlec_yalniz_enjekte_edilen_callable_ile_okunur
+  test_k4_yoklayici_yalniz_gorunurken
+  test_k4_acikken_gizlenirse_kapali_olarak_geri_gelir
+  test_k4_surukleme_sirasinda_sayac_baslamaz
+  test_k4_surukleme_calisan_acilma_sayacini_durdurur
+  test_k4_acikken_sol_tik_surukleme_baslatmaz
+  test_k4_mod_tiki_once_panel_kapanir_sonra_sinyal[dugme_anlik]
+  test_k4_mod_tiki_once_panel_kapanir_sonra_sinyal[dugme_bolge]
+  test_k4_mod_tiki_sonrasi_kapanma_sayaci_paneli_tekrar_acmaz
+  test_k4_gercek_tik_ile_dugme_sinyali
+  test_k8_sag_tik_acikken_de_pencereyi_goster
+  test_k8_panelde_dugme_goster
+  test_k6_paint_100_kare_medyani_kapali_ve_acik
+
+== M09 [X (5)] K2 (D1): disk yerine dikdortgen ici (saydam kose 'icinde')
+  test_k2_sekme_icinde_kapali_merkez_icerde_kose_disarida[sag]
+  test_k2_sekme_icinde_kapali_merkez_icerde_kose_disarida[sol]
+  test_k2_sekme_icinde_kapali_disk_kenar_ustunde_merkezli
+  test_k2_sekme_icinde_kapali_yarim_daire_alani_dikdortgenden_kucuk
+  test_k4_saydam_kosede_acilmaz_merkezde_acilir
+
+== M10 [X (20)] K2: sol kenar x yanlis (+1)
+  test_k2_izgara_kapali_ekran_icinde_ve_kenara_bitisik[birincil_2560x1392-sol-y-1000]
+  test_k2_izgara_kapali_ekran_icinde_ve_kenara_bitisik[birincil_2560x1392-sol-y0]
+  test_k2_izgara_kapali_ekran_icinde_ve_kenara_bitisik[birincil_2560x1392-sol-y400]
+  test_k2_izgara_kapali_ekran_icinde_ve_kenara_bitisik[birincil_2560x1392-sol-y1339]
+  test_k2_izgara_kapali_ekran_icinde_ve_kenara_bitisik[birincil_2560x1392-sol-y9999]
+  test_k2_izgara_kapali_ekran_icinde_ve_kenara_bitisik[sol_-2560_2560x1440-sol-y-1000]
+  test_k2_izgara_kapali_ekran_icinde_ve_kenara_bitisik[sol_-2560_2560x1440-sol-y0]
+  test_k2_izgara_kapali_ekran_icinde_ve_kenara_bitisik[sol_-2560_2560x1440-sol-y400]
+  test_k2_izgara_kapali_ekran_icinde_ve_kenara_bitisik[sol_-2560_2560x1440-sol-y1339]
+  test_k2_izgara_kapali_ekran_icinde_ve_kenara_bitisik[sol_-2560_2560x1440-sol-y9999]
+  test_k2_izgara_kapali_ekran_icinde_ve_kenara_bitisik[sol_-2560_2048x1152_dpr1.25-sol-y-1000]
+  test_k2_izgara_kapali_ekran_icinde_ve_kenara_bitisik[sol_-2560_2048x1152_dpr1.25-sol-y0]
+  test_k2_izgara_kapali_ekran_icinde_ve_kenara_bitisik[sol_-2560_2048x1152_dpr1.25-sol-y400]
+  test_k2_izgara_kapali_ekran_icinde_ve_kenara_bitisik[sol_-2560_2048x1152_dpr1.25-sol-y1339]
+  test_k2_izgara_kapali_ekran_icinde_ve_kenara_bitisik[sol_-2560_2048x1152_dpr1.25-sol-y9999]
+  test_k2_negatif_koordinatli_monitor_sag_kenar
+  test_k2_kenar_dize_olarak_da_kabul
+  test_k2_kenar_parametresi_sekmeye_gecer
+  test_k2_sol_kenar_yapicidan
+  test_k2_kenar_degisince_yeniden_konumlanir
+
+== M11 [X (40)] K2: y sinirlanmaz
+  test_k2_y_sinirla_araligi[birincil_2560x1392]
+  test_k2_y_sinirla_araligi[sol_-2560_2560x1440]
+  test_k2_y_sinirla_araligi[sol_-2560_2048x1152_dpr1.25]
+  test_k2_y_sinirla_birincil_araligi_paketle_ayni
+  test_k2_y_sinirla_ekran_sekmeden_kisa_ise_ust_kenar
+  test_k2_izgara_kapali_ekran_icinde_ve_kenara_bitisik[birincil_2560x1392-sag-y-1000]
+  test_k2_izgara_kapali_ekran_icinde_ve_kenara_bitisik[birincil_2560x1392-sag-y9999]
+  test_k2_izgara_kapali_ekran_icinde_ve_kenara_bitisik[birincil_2560x1392-sol-y-1000]
+  test_k2_izgara_kapali_ekran_icinde_ve_kenara_bitisik[birincil_2560x1392-sol-y9999]
+  test_k2_izgara_kapali_ekran_icinde_ve_kenara_bitisik[sol_-2560_2560x1440-sag-y-1000]
+  test_k2_izgara_kapali_ekran_icinde_ve_kenara_bitisik[sol_-2560_2560x1440-sag-y9999]
+  test_k2_izgara_kapali_ekran_icinde_ve_kenara_bitisik[sol_-2560_2560x1440-sol-y-1000]
+  test_k2_izgara_kapali_ekran_icinde_ve_kenara_bitisik[sol_-2560_2560x1440-sol-y9999]
+  test_k2_izgara_kapali_ekran_icinde_ve_kenara_bitisik[sol_-2560_2048x1152_dpr1.25-sag-y-1000]
+  test_k2_izgara_kapali_ekran_icinde_ve_kenara_bitisik[sol_-2560_2048x1152_dpr1.25-sag-y1339]
+  test_k2_izgara_kapali_ekran_icinde_ve_kenara_bitisik[sol_-2560_2048x1152_dpr1.25-sag-y9999]
+  test_k2_izgara_kapali_ekran_icinde_ve_kenara_bitisik[sol_-2560_2048x1152_dpr1.25-sol-y-1000]
+  test_k2_izgara_kapali_ekran_icinde_ve_kenara_bitisik[sol_-2560_2048x1152_dpr1.25-sol-y1339]
+  test_k2_izgara_kapali_ekran_icinde_ve_kenara_bitisik[sol_-2560_2048x1152_dpr1.25-sol-y9999]
+  test_k2_izgara_acik_ekran_icinde_bitisik_ve_sekmeyi_kapsar[birincil_2560x1392-sag-y-1000]
+  test_k2_izgara_acik_ekran_icinde_bitisik_ve_sekmeyi_kapsar[birincil_2560x1392-sag-y9999]
+  test_k2_izgara_acik_ekran_icinde_bitisik_ve_sekmeyi_kapsar[birincil_2560x1392-sol-y-1000]
+  test_k2_izgara_acik_ekran_icinde_bitisik_ve_sekmeyi_kapsar[birincil_2560x1392-sol-y9999]
+  test_k2_izgara_acik_ekran_icinde_bitisik_ve_sekmeyi_kapsar[sol_-2560_2560x1440-sag-y-1000]
+  test_k2_izgara_acik_ekran_icinde_bitisik_ve_sekmeyi_kapsar[sol_-2560_2560x1440-sag-y9999]
+  test_k2_izgara_acik_ekran_icinde_bitisik_ve_sekmeyi_kapsar[sol_-2560_2560x1440-sol-y-1000]
+  test_k2_izgara_acik_ekran_icinde_bitisik_ve_sekmeyi_kapsar[sol_-2560_2560x1440-sol-y9999]
+  test_k2_izgara_acik_ekran_icinde_bitisik_ve_sekmeyi_kapsar[sol_-2560_2048x1152_dpr1.25-sag-y-1000]
+  test_k2_izgara_acik_ekran_icinde_bitisik_ve_sekmeyi_kapsar[sol_-2560_2048x1152_dpr1.25-sag-y1339]
+  test_k2_izgara_acik_ekran_icinde_bitisik_ve_sekmeyi_kapsar[sol_-2560_2048x1152_dpr1.25-sag-y9999]
+  test_k2_izgara_acik_ekran_icinde_bitisik_ve_sekmeyi_kapsar[sol_-2560_2048x1152_dpr1.25-sol-y-1000]
+  test_k2_izgara_acik_ekran_icinde_bitisik_ve_sekmeyi_kapsar[sol_-2560_2048x1152_dpr1.25-sol-y1339]
+  test_k2_izgara_acik_ekran_icinde_bitisik_ve_sekmeyi_kapsar[sol_-2560_2048x1152_dpr1.25-sol-y9999]
+  test_k2_negatif_koordinatli_monitor_sag_kenar
+  test_k2_kucuk_ekran_1280x720_kenarlar
+  test_k2_farkli_yaricap_ve_panel_boyutu_parametrik
+  test_k8_surukleme_sonrasi_sag_tik_pencereyi_getirir
+  test_k2_y_yazilinca_sinirlanir_ve_tasinir
+  test_k2_available_geometry_changed_sahte_sinyal_yeni_x
+  test_k4_surukleme_y_tasir_ve_sinira_kilitlenir
+
+== M12 [X (1)] K3: WindowDoesNotAcceptFocus bayragi eksik
+  test_k3_bayraklar_ve_oznitelikler
+
+== M13 [X (26)] K2: acik panel ekran disina tasar (sikistirma yok)
+  test_k2_izgara_acik_ekran_icinde_bitisik_ve_sekmeyi_kapsar[birincil_2560x1392-sag-y-1000]
+  test_k2_izgara_acik_ekran_icinde_bitisik_ve_sekmeyi_kapsar[birincil_2560x1392-sag-y0]
+  test_k2_izgara_acik_ekran_icinde_bitisik_ve_sekmeyi_kapsar[birincil_2560x1392-sag-y1339]
+  test_k2_izgara_acik_ekran_icinde_bitisik_ve_sekmeyi_kapsar[birincil_2560x1392-sag-y9999]
+  test_k2_izgara_acik_ekran_icinde_bitisik_ve_sekmeyi_kapsar[birincil_2560x1392-sol-y-1000]
+  test_k2_izgara_acik_ekran_icinde_bitisik_ve_sekmeyi_kapsar[birincil_2560x1392-sol-y0]
+  test_k2_izgara_acik_ekran_icinde_bitisik_ve_sekmeyi_kapsar[birincil_2560x1392-sol-y1339]
+  test_k2_izgara_acik_ekran_icinde_bitisik_ve_sekmeyi_kapsar[birincil_2560x1392-sol-y9999]
+  test_k2_izgara_acik_ekran_icinde_bitisik_ve_sekmeyi_kapsar[sol_-2560_2560x1440-sag-y-1000]
+  test_k2_izgara_acik_ekran_icinde_bitisik_ve_sekmeyi_kapsar[sol_-2560_2560x1440-sag-y0]
+  test_k2_izgara_acik_ekran_icinde_bitisik_ve_sekmeyi_kapsar[sol_-2560_2560x1440-sag-y9999]
+  test_k2_izgara_acik_ekran_icinde_bitisik_ve_sekmeyi_kapsar[sol_-2560_2560x1440-sol-y-1000]
+  test_k2_izgara_acik_ekran_icinde_bitisik_ve_sekmeyi_kapsar[sol_-2560_2560x1440-sol-y0]
+  test_k2_izgara_acik_ekran_icinde_bitisik_ve_sekmeyi_kapsar[sol_-2560_2560x1440-sol-y9999]
+  test_k2_izgara_acik_ekran_icinde_bitisik_ve_sekmeyi_kapsar[sol_-2560_2048x1152_dpr1.25-sag-y-1000]
+  test_k2_izgara_acik_ekran_icinde_bitisik_ve_sekmeyi_kapsar[sol_-2560_2048x1152_dpr1.25-sag-y0]
+  test_k2_izgara_acik_ekran_icinde_bitisik_ve_sekmeyi_kapsar[sol_-2560_2048x1152_dpr1.25-sag-y1339]
+  test_k2_izgara_acik_ekran_icinde_bitisik_ve_sekmeyi_kapsar[sol_-2560_2048x1152_dpr1.25-sag-y9999]
+  test_k2_izgara_acik_ekran_icinde_bitisik_ve_sekmeyi_kapsar[sol_-2560_2048x1152_dpr1.25-sol-y-1000]
+  test_k2_izgara_acik_ekran_icinde_bitisik_ve_sekmeyi_kapsar[sol_-2560_2048x1152_dpr1.25-sol-y0]
+  test_k2_izgara_acik_ekran_icinde_bitisik_ve_sekmeyi_kapsar[sol_-2560_2048x1152_dpr1.25-sol-y1339]
+  test_k2_izgara_acik_ekran_icinde_bitisik_ve_sekmeyi_kapsar[sol_-2560_2048x1152_dpr1.25-sol-y9999]
+  test_k2_acik_panel_ust_ve_alt_sinirda_ekrana_sikistirilir
+  test_k2_negatif_koordinatli_monitor_sag_kenar
+  test_k2_kucuk_ekran_1280x720_kenarlar
+  test_k2_acik_panel_ekran_icinde_ust_ve_alt_sinirda
+
+== M14 [X (1)] K2: availableGeometryChanged bagli degil
+  test_k2_available_geometry_changed_sahte_sinyal_yeni_x
+
+== M15 [X (2)] K2 (D5): sol kenarda cizim aynalanmaz
+  test_k2_cizim_sol_kenar_aynali
+  test_k2_cizim_kenar_degisince_ayna_degisir
+
+== M16 [X (3)] K1: kapat() sekmeyi gizlemez (yoklayici calisir, sekme gorunur kalir)
+  test_k1_kapat_her_durumdan[kenar]
+  test_k1_close_gizli_durumlarda_da_kapatir[kenar]
+  test_k5_tepsi_yoksa_tepsiye_al_kenara_duser
+
+== M17 [X (3)] K5: tepsi yokken de ikon.show() cagrilir ve gorunur() = isVisible (dogal yanlis uygulama; offscreen'de True)
+  test_k5_tepsi_yoksa_tepsiye_al_kenara_duser
+  test_k5_tepsi_yokken_gorunur_daima_false
+  test_k5_ana_pencere_varsayilan_offscreen_tepsi_yok
+
+== M17b [X (1)] K5: yalniz goster() kosulu kaldirildi (gorunur() hala kullanilabilir ile AND)
+  test_k5_tepsi_yokken_gorunur_daima_false
+
+== M18 [X (3)] K5: her activated sebebi (Context dahil) pencereyi gosterir
+  test_k5_ikona_diger_tik_gostermez[Context]
+  test_k5_ikona_diger_tik_gostermez[MiddleClick]
+  test_k5_ikona_diger_tik_gostermez[Unknown]
+
+== M19 [X (1)] K4: icerideyken kapanma sayaci durdurulmaz (titremede kapanir)
+  test_k4_iceri_disari_iceri_titremesi_acik_kalir
+
+== M20 [X (1)] K1 (Y1): calistir setQuitOnLastWindowClosed(False) ayarlamaz
+  test_calistir_uygulamayi_kurar_ve_calistiriciyi_cagirir
+
+== M21 [X (1)] K1 (Y1): calistir cikis_istendi -> app.quit baglamaz
+  test_calistir_cikis_istendi_quit_baglar_gercek_exec
+
+== M22 [X (1)] K1: kenar -> tepsi gecisi acilir (kenar korunmaz)
+  test_k1_kenar_to_tepsi_yolu_yok
+
+== M23 [X (1)] K1: kapat() sonrasi goster() diriltir
+  test_k1_kapat_sonrasi_dirilme_yok
+
+== M24 [X (1)] K6 pozitif kontrol: kaynaga print eklendi (AST olcusu ateslemeli)
+  test_k6_k7_kaynak_yasak_ad_ve_import_icermez[kabuk.py]
+
+== M25 [X (2)] K7 pozitif kontrol: src.capture import edildi (AST + taze surec olcusu ateslemeli)
+  (dusen yok)
+
+== M26 [X (1)] K5 ([5c] kok neden): tepsiye_al() balon gosterir (prototipteki bildir cagrisi geri geldi)
+  test_k5_tepsiye_al_bildirim_balonu_gostermez
+
+== M27 [X (2)] K8 (sef hipotezi [5c]): sag tik press yerine release'te yayilir
+  test_k8_sag_tik_pencereyi_goster
+  test_k8_sag_tik_acikken_de_pencereyi_goster
+
+== M28 [X (4)] K4 (sef hipotezi [5c]): birakinca surukleme bayragi temizlenmez (takili kalir) -> yoklayici hic acmaz
+  test_k8_surukleme_sonrasi_sag_tik_pencereyi_getirir
+  test_k4_surukleme_sirasinda_sayac_baslamaz
+  test_k4_surukleme_calisan_acilma_sayacini_durdurur
+  test_k4_surukleme_y_tasir_ve_sinira_kilitlenir
+
+== C-1 [.] KONTROL: kenara_al icinde hide() ve tepsi.goster() sirasi degisti -- esdeger
+  (dusen yok)
+
+== C-2 [.] KONTROL: disk esitsizligi `**` ile yazildi -- esdeger
+  (dusen yok)
+
+== C-3 [.] KONTROL: _konumlan gecici degiskenle -- esdeger
+  (dusen yok)

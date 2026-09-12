@@ -202,14 +202,16 @@ def main() -> int:
     if len(ekranlar) >= 2:
         e2 = ekranlar[1] if ekranlar[0] is ekran else ekranlar[0]
         p2 = AnaPencere(e2); p2.show(); bekle(200); p2.kenara_al(); bekle(300)
-        r = wintypes.RECT(); u32.GetWindowRect(wintypes.HWND(int(p2.sekme.winId())), ctypes.byref(r))
-        g2 = e2.geometry(); dpr = e2.devicePixelRatio()
-        fiz_sag = int(round((g2.right() + 1) * dpr)) if g2.x() >= 0 else int(round((g2.right() + 1) * dpr))
-        # fiziksel sag kenar: mantiksal (right+1) * dpr; monitorun sol ucu fiziksel = x_mantiksal * (birincil dpr) kabulu ile +-1 px
-        fark = abs(r.right - fiz_sag)
-        # RAPOR (dusurmez): Qt'nin mantiksal->fiziksel eslemesi dpr != 1 monitorde birim testte olculemez (paket K2 [OLCULMUYOR birim]);
-        # KRT G4 prototipte 1 px tasma olctu. Sayi kaydedilir, karar sefin.
-        tamam(f"[8] RAPOR ikinci monitor dpr={dpr}: sekme fiziksel sag={r.right} beklenen~{fiz_sag} fark={fark} (<= 1 hedef)")
+        hwnd2 = wintypes.HWND(int(p2.sekme.winId()))
+        r = wintypes.RECT(); u32.GetWindowRect(hwnd2, ctypes.byref(r))
+        # bagimsiz referans (kural 8): sekmenin uzerinde durdugu monitorun FIZIKSEL dikdortgeni (Win32), Qt'den degil
+        class _MI(ctypes.Structure):
+            _fields_ = [("cbSize", wintypes.DWORD), ("rcMonitor", wintypes.RECT), ("rcWork", wintypes.RECT), ("dwFlags", wintypes.DWORD)]
+        mi = _MI(); mi.cbSize = ctypes.sizeof(_MI)
+        u32.GetMonitorInfoW(u32.MonitorFromWindow(hwnd2, 2), ctypes.byref(mi))
+        dpr = e2.devicePixelRatio(); fark = r.right - mi.rcWork.right
+        # RAPOR (dusurmez): dpr != 1 monitorde mantiksal->fiziksel yuvarlama; KRT G4 prototipte +1 px tasma olctu (paket K2 [OLCULMUYOR birim])
+        tamam(f"[8] RAPOR ikinci monitor dpr={dpr}: sekme fiziksel sag={r.right} monitor calisma alani sag={mi.rcWork.right} fark={fark:+d} px (0 hedef, +-1 kabul)")
         p2.kapat(); bekle(200)
     else:
         tamam("[8] ikinci monitor yok -- atlandi")

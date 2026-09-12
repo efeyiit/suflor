@@ -1,0 +1,21 @@
+$ python -m pytest tests/unit/ui/test_kabuk.py -q -p no:cacheprovider --no-header -rf --tb=short -k balonu_gostermez or surukleme_sonrasi_sag_tik  (TDD KIRMIZI: [5c] kok neden testi duzeltme ONCESI kodda; K8 sag tik yolu offscreen zaten yesil (kusur offscreen'de degil, balonda))
+F.                                                                       [100%]
+================================== FAILURES ===================================
+________________ test_k5_tepsiye_al_bildirim_balonu_gostermez _________________
+tests\unit\ui\test_kabuk.py:373: in test_k5_tepsiye_al_bildirim_balonu_gostermez
+    assert uclu(pencere) == TEPSI and cagri == []
+E   AssertionError: assert ((False, False, True) == (False, False, True)
+E     
+E     Use -v to get more diff and [('Suflör ark...on: 0>, 2500)] == []
+E     
+E     Left contains one more item: ('Suflör arka planda', 'Tepsi ikonuna tıklayınca pencere geri gelir.', <MessageIcon.NoIcon: 0>, 2500)
+E     Use -v to get more diff)
+---------------------------- Captured Qt messages -----------------------------
+QtWarningMsg: QFontDatabase: Cannot find font directory <yol>
+Note that Qt no longer ships fonts. Deploy some (from https://dejavu-fonts.github.io/ for example) or switch to fontconfig.
+QtWarningMsg: This plugin does not support propagateSizeHints()
+=========================== short test summary info ===========================
+FAILED tests/unit/ui/test_kabuk.py::test_k5_tepsiye_al_bildirim_balonu_gostermez
+1 failed, 1 passed, 56 deselected in 0.14s
+
+[exit 1]
