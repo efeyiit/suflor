@@ -1,4 +1,4 @@
-"""T-012 kabul kapisi v2 -- UI kabugu GERCEK ekranda (offscreen degil, Windows).
+"""T-012 kabul kapisi v3 -- UI kabugu GERCEK ekranda (offscreen degil, Windows).
 
     python .agents/tasks/T-012/real_check.py
 
@@ -8,7 +8,7 @@ Sefe aittir. Stdout ASCII. Ekran goruntuleri temsili arka plan uzerinde (masaust
   2. kenara al -> (F,T,T); kapali sekme sag kenara bitisik, dikey orta; bayraklar
   3. GERCEK OS tiki (mouse_event): sekmeye tik -> on plan sahne kalir; panel dugmesine tik -> clicked 1, on plan sahne (KRT Y3)
   4. acilma <= 120+2*60+150, kapanma <= 450+2*60+150
-  5. surukleme sinira kilitlenir; surukleme sonrasi acik False (KRT Y2); sag tik -> gorunur
+  5. surukleme YUKARI ust sinira kilitlenir (sag alt balon alani); surukleme sonrasi acik False (KRT Y2); sag tik -> gorunur
   6. WM_CLOSE -> cikis_istendi 1, ucluk (F,F,F); kapat() ikinci cagri sinyal uretmez (KRT Y1)
   7. paintEvent 100 kare medyan < 16 ms, acik ve kapali
   8. ikinci monitor varsa: fiziksel sag kenar == monitorun fiziksel sag kenari (+-1 px)
@@ -69,7 +69,7 @@ def uclu(p: object) -> tuple[bool, bool, bool]:
 
 
 def main() -> int:
-    print("T-012 real_check v2 -- UI kabugu, gercek ekran")
+    print("T-012 real_check v3 -- UI kabugu, gercek ekran")
     try:
         from src.ui.geometri import PANEL_BOYUTU, Kenar
         from src.ui.kabuk import AnaPencere, KabukDurumu
@@ -164,18 +164,18 @@ def main() -> int:
     kapanma = (time.perf_counter() - t0) * 1000
     (tamam if not s.acik and kapanma <= ust_k else ihlal)(f"[4b] kapanma: kapandi={not s.acik} {kapanma:.0f} ms (<= {ust_k})")
 
-    # 5 surukleme (gercek OS): sinira kilitlenir, panel acilmaz
+    # 5 surukleme (gercek OS): YUKARI ust sinira kilitlenir (sag alt kose Windows balon alani -- tur 1 [5c]), panel acilmaz
     fg3 = s.frameGeometry()
     bas = QtCore.QPoint(fg3.right() - 4, fg3.center().y())
     QtGui.QCursor.setPos(bas); bekle(80)
     u32.mouse_event(0x0002, 0, 0, 0, 0); bekle(60)
     acik_gorunen = False
     for adim in range(1, 11):
-        QtGui.QCursor.setPos(QtCore.QPoint(bas.x(), bas.y() + adim * 400)); bekle(60)
+        QtGui.QCursor.setPos(QtCore.QPoint(bas.x(), max(0, bas.y() - adim * 400))); bekle(60)
         acik_gorunen = acik_gorunen or s.acik
     u32.mouse_event(0x0004, 0, 0, 0, 0); bekle(120)
-    alt_sinir = g.bottom() - 2 * yar + 1
-    (tamam if s.y == alt_sinir else ihlal)(f"[5a] asagi surukleme: y={s.y} alt sinir={alt_sinir}")
+    ust_sinir = g.top()
+    (tamam if s.y == ust_sinir else ihlal)(f"[5a] yukari surukleme: y={s.y} ust sinir={ust_sinir}")
     (tamam if not acik_gorunen and not s.acik else ihlal)(f"[5b] surukleme sirasinda panel acilmadi={not acik_gorunen}, sonrasinda acik={s.acik} (False beklenir; KRT Y2)")
     fg4 = s.frameGeometry()
     QtGui.QCursor.setPos(QtCore.QPoint(g.x() + 100, g.y() + 100)); bekle(700)

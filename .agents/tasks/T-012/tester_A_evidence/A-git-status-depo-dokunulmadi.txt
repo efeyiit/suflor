@@ -1,0 +1,37 @@
+git status --short -- src tests demo real_check packet (BOS beklenir):
+(bitti)
+
+git diff HEAD --stat -- src tests demo:
+(bitti)
+
+sha256:
+21c25bec6e76fb6f04da11f0cde6f52bbe279dce6b79be7430eeb61c55f005d4 *src/ui/__init__.py
+55bc7e296903230cd6582909c0754b8ae2d79d4b70bd1be9eb8f67926362cbb7 *src/ui/__main__.py
+d9afa59867d4f82a51d8e61be17444c5f32bc143590dec015540f45f1e519ed8 *src/ui/geometri.py
+100c4fcbdd41122d27e4d6319a309c1107181e52c3531e5dcee6d59818ee69a9 *src/ui/kabuk.py
+7b42ba8b78ce8b8f522060a66216141c5ec68affac333fb1b1399bd2dcd4ad0f *src/ui/kenar_sekmesi.py
+35b69c7825bb2c8e0e2207ccd7d708b69dafa4656e4907dba91277d4cbd23a19 *src/ui/uygulama.py
+900925f7282455236b25911637f96816edb06ac50a5245ed32b5c2e65cf292f0 T-012/real_check.py
+d8bc361bc79f313a923fc2fbcab21302ff84786087570cfa764702b106565c97 *tests/unit/ui/conftest.py
+
+HEAD: 7c430eb
+tester_A yazilanlar:
+.agents/tasks/T-012/tester_A:
+__pycache__
+conftest.py
+sonda_a_01_omur_zombi.py
+test_mercek_a.py
+
+.agents/tasks/T-012/tester_A_evidence:
+A-birlikte-kosum.txt
+A-git-status-depo-dokunulmadi.txt
+A-implementer-test-adlari.txt
+A-mercek-kararlilik-2-3.txt
+A-mercek-testleri.txt
+A-sonda-01-omur-zombi.txt
+taban-1-mypy.txt
+taban-2-pytest-ui.txt
+taban-3-real_check.txt
+taban-4-kapsam.txt
+taban-5-tum-takim.txt
+taban-5b-tum-takim-tekrar.txt

@@ -1,0 +1,8 @@
+........................xx.............................................. [ 72%]
+...........................                                              [100%]
+=========================== short test summary info ===========================
+XFAIL .agents/tasks/T-012/tester_B/test_mercek_b.py::test_x1_sekmeye_close_durum_ile_uclu_ayrisir - BULGU O-B1: sekme hwnd'sine WM_CLOSE / `sekme.close()` -> uclu (F,F,T) ama durum KENAR (tepsi satiri); durum ile uclu ayrisir, kabuk fark etmez
+XFAIL .agents/tasks/T-012/tester_B/test_mercek_b.py::test_x2_tepsisizken_sekmeye_close_zombi - BULGU O-B1 (tepsisiz): sekme.close() -> (F,F,F) durum KENAR, kapandi False, cikis yok = ZOMBI (Y1 sinifi, dis yol)
+97 passed, 2 xfailed in 17.25s
+
+exit=0

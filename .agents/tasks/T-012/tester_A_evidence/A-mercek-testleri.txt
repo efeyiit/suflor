@@ -1,0 +1,360 @@
+============================= test session starts =============================
+collecting ... collected 239 items
+
+.agents/tasks/T-012/tester_A/test_mercek_a.py::test_a_k1_gecis_tablosu[G-goster] PASSED
+.agents/tasks/T-012/tester_A/test_mercek_a.py::test_a_k1_gecis_tablosu[G-tepsiye_al] PASSED
+.agents/tasks/T-012/tester_A/test_mercek_a.py::test_a_k1_gecis_tablosu[G-kenara_al] PASSED
+.agents/tasks/T-012/tester_A/test_mercek_a.py::test_a_k1_gecis_tablosu[G-kapat] PASSED
+.agents/tasks/T-012/tester_A/test_mercek_a.py::test_a_k1_gecis_tablosu[G-close] PASSED
+.agents/tasks/T-012/tester_A/test_mercek_a.py::test_a_k1_gecis_tablosu[G-closeEvent] PASSED
+.agents/tasks/T-012/tester_A/test_mercek_a.py::test_a_k1_gecis_tablosu[G-dugme_kapat] PASSED
+.agents/tasks/T-012/tester_A/test_mercek_a.py::test_a_k1_gecis_tablosu[G-dugme_tepsi] PASSED
+.agents/tasks/T-012/tester_A/test_mercek_a.py::test_a_k1_gecis_tablosu[G-dugme_kenar] PASSED
+.agents/tasks/T-012/tester_A/test_mercek_a.py::test_a_k1_gecis_tablosu[G-tepsi_trigger] PASSED
+.agents/tasks/T-012/tester_A/test_mercek_a.py::test_a_k1_gecis_tablosu[G-tepsi_doubleclick] PASSED
+.agents/tasks/T-012/tester_A/test_mercek_a.py::test_a_k1_gecis_tablosu[G-tepsi_context] PASSED
+.agents/tasks/T-012/tester_A/test_mercek_a.py::test_a_k1_gecis_tablosu[G-tepsi_middle] PASSED
+.agents/tasks/T-012/tester_A/test_mercek_a.py::test_a_k1_gecis_tablosu[G-tepsi_unknown] PASSED
+.agents/tasks/T-012/tester_A/test_mercek_a.py::test_a_k1_gecis_tablosu[G-menu_goster] PASSED
+.agents/tasks/T-012/tester_A/test_mercek_a.py::test_a_k1_gecis_tablosu[G-menu_kenar] PASSED
+.agents/tasks/T-012/tester_A/test_mercek_a.py::test_a_k1_gecis_tablosu[G-menu_cikis] PASSED
+.agents/tasks/T-012/tester_A/test_mercek_a.py::test_a_k1_gecis_tablosu[G-sekme_sag_tik] PASSED
+.agents/tasks/T-012/tester_A/test_mercek_a.py::test_a_k1_gecis_tablosu[G-sekme_dugme_goster] PASSED
+.agents/tasks/T-012/tester_A/test_mercek_a.py::test_a_k1_gecis_tablosu[G-sekme_dugme_anlik] PASSED
+.agents/tasks/T-012/tester_A/test_mercek_a.py::test_a_k1_gecis_tablosu[G-sekme_dugme_bolge] PASSED
+.agents/tasks/T-012/tester_A/test_mercek_a.py::test_a_k1_gecis_tablosu[G-dugme_anlik] PASSED
+.agents/tasks/T-012/tester_A/test_mercek_a.py::test_a_k1_gecis_tablosu[G-dugme_bolge] PASSED
+.agents/tasks/T-012/tester_A/test_mercek_a.py::test_a_k1_gecis_tablosu[T-goster] PASSED
+.agents/tasks/T-012/tester_A/test_mercek_a.py::test_a_k1_gecis_tablosu[T-tepsiye_al] PASSED
+.agents/tasks/T-012/tester_A/test_mercek_a.py::test_a_k1_gecis_tablosu[T-kenara_al] PASSED
+.agents/tasks/T-012/tester_A/test_mercek_a.py::test_a_k1_gecis_tablosu[T-kapat] PASSED
+.agents/tasks/T-012/tester_A/test_mercek_a.py::test_a_k1_gecis_tablosu[T-close] PASSED
+.agents/tasks/T-012/tester_A/test_mercek_a.py::test_a_k1_gecis_tablosu[T-closeEvent] PASSED
+.agents/tasks/T-012/tester_A/test_mercek_a.py::test_a_k1_gecis_tablosu[T-dugme_kapat] PASSED
+.agents/tasks/T-012/tester_A/test_mercek_a.py::test_a_k1_gecis_tablosu[T-dugme_tepsi] PASSED
+.agents/tasks/T-012/tester_A/test_mercek_a.py::test_a_k1_gecis_tablosu[T-dugme_kenar] PASSED
+.agents/tasks/T-012/tester_A/test_mercek_a.py::test_a_k1_gecis_tablosu[T-tepsi_trigger] PASSED
+.agents/tasks/T-012/tester_A/test_mercek_a.py::test_a_k1_gecis_tablosu[T-tepsi_doubleclick] PASSED
+.agents/tasks/T-012/tester_A/test_mercek_a.py::test_a_k1_gecis_tablosu[T-tepsi_context] PASSED
+.agents/tasks/T-012/tester_A/test_mercek_a.py::test_a_k1_gecis_tablosu[T-tepsi_middle] PASSED
+.agents/tasks/T-012/tester_A/test_mercek_a.py::test_a_k1_gecis_tablosu[T-tepsi_unknown] PASSED
+.agents/tasks/T-012/tester_A/test_mercek_a.py::test_a_k1_gecis_tablosu[T-menu_goster] PASSED
+.agents/tasks/T-012/tester_A/test_mercek_a.py::test_a_k1_gecis_tablosu[T-menu_kenar] PASSED
+.agents/tasks/T-012/tester_A/test_mercek_a.py::test_a_k1_gecis_tablosu[T-menu_cikis] PASSED
+.agents/tasks/T-012/tester_A/test_mercek_a.py::test_a_k1_gecis_tablosu[T-sekme_sag_tik] PASSED
+.agents/tasks/T-012/tester_A/test_mercek_a.py::test_a_k1_gecis_tablosu[T-sekme_dugme_goster] PASSED
+.agents/tasks/T-012/tester_A/test_mercek_a.py::test_a_k1_gecis_tablosu[T-sekme_dugme_anlik] PASSED
+.agents/tasks/T-012/tester_A/test_mercek_a.py::test_a_k1_gecis_tablosu[T-sekme_dugme_bolge] PASSED
+.agents/tasks/T-012/tester_A/test_mercek_a.py::test_a_k1_gecis_tablosu[T-dugme_anlik] PASSED
+.agents/tasks/T-012/tester_A/test_mercek_a.py::test_a_k1_gecis_tablosu[T-dugme_bolge] PASSED
+.agents/tasks/T-012/tester_A/test_mercek_a.py::test_a_k1_gecis_tablosu[K-goster] PASSED
+.agents/tasks/T-012/tester_A/test_mercek_a.py::test_a_k1_gecis_tablosu[K-tepsiye_al] PASSED
+.agents/tasks/T-012/tester_A/test_mercek_a.py::test_a_k1_gecis_tablosu[K-kenara_al] PASSED
+.agents/tasks/T-012/tester_A/test_mercek_a.py::test_a_k1_gecis_tablosu[K-kapat] PASSED
+.agents/tasks/T-012/tester_A/test_mercek_a.py::test_a_k1_gecis_tablosu[K-close] PASSED
+.agents/tasks/T-012/tester_A/test_mercek_a.py::test_a_k1_gecis_tablosu[K-closeEvent] PASSED
+.agents/tasks/T-012/tester_A/test_mercek_a.py::test_a_k1_gecis_tablosu[K-dugme_kapat] PASSED
+.agents/tasks/T-012/tester_A/test_mercek_a.py::test_a_k1_gecis_tablosu[K-dugme_tepsi] PASSED
+.agents/tasks/T-012/tester_A/test_mercek_a.py::test_a_k1_gecis_tablosu[K-dugme_kenar] PASSED
+.agents/tasks/T-012/tester_A/test_mercek_a.py::test_a_k1_gecis_tablosu[K-tepsi_trigger] PASSED
+.agents/tasks/T-012/tester_A/test_mercek_a.py::test_a_k1_gecis_tablosu[K-tepsi_doubleclick] PASSED
+.agents/tasks/T-012/tester_A/test_mercek_a.py::test_a_k1_gecis_tablosu[K-tepsi_context] PASSED
+.agents/tasks/T-012/tester_A/test_mercek_a.py::test_a_k1_gecis_tablosu[K-tepsi_middle] PASSED
+.agents/tasks/T-012/tester_A/test_mercek_a.py::test_a_k1_gecis_tablosu[K-tepsi_unknown] PASSED
+.agents/tasks/T-012/tester_A/test_mercek_a.py::test_a_k1_gecis_tablosu[K-menu_goster] PASSED
+.agents/tasks/T-012/tester_A/test_mercek_a.py::test_a_k1_gecis_tablosu[K-menu_kenar] PASSED
+.agents/tasks/T-012/tester_A/test_mercek_a.py::test_a_k1_gecis_tablosu[K-menu_cikis] PASSED
+.agents/tasks/T-012/tester_A/test_mercek_a.py::test_a_k1_gecis_tablosu[K-sekme_sag_tik] PASSED
+.agents/tasks/T-012/tester_A/test_mercek_a.py::test_a_k1_gecis_tablosu[K-sekme_dugme_goster] PASSED
+.agents/tasks/T-012/tester_A/test_mercek_a.py::test_a_k1_gecis_tablosu[K-sekme_dugme_anlik] PASSED
+.agents/tasks/T-012/tester_A/test_mercek_a.py::test_a_k1_gecis_tablosu[K-sekme_dugme_bolge] PASSED
+.agents/tasks/T-012/tester_A/test_mercek_a.py::test_a_k1_gecis_tablosu[K-dugme_anlik] PASSED
+.agents/tasks/T-012/tester_A/test_mercek_a.py::test_a_k1_gecis_tablosu[K-dugme_bolge] PASSED
+.agents/tasks/T-012/tester_A/test_mercek_a.py::test_a_k1_gecis_tablosu[K0-goster] PASSED
+.agents/tasks/T-012/tester_A/test_mercek_a.py::test_a_k1_gecis_tablosu[K0-tepsiye_al] PASSED
+.agents/tasks/T-012/tester_A/test_mercek_a.py::test_a_k1_gecis_tablosu[K0-kenara_al] PASSED
+.agents/tasks/T-012/tester_A/test_mercek_a.py::test_a_k1_gecis_tablosu[K0-kapat] PASSED
+.agents/tasks/T-012/tester_A/test_mercek_a.py::test_a_k1_gecis_tablosu[K0-close] PASSED
+.agents/tasks/T-012/tester_A/test_mercek_a.py::test_a_k1_gecis_tablosu[K0-closeEvent] PASSED
+.agents/tasks/T-012/tester_A/test_mercek_a.py::test_a_k1_gecis_tablosu[K0-dugme_kapat] PASSED
+.agents/tasks/T-012/tester_A/test_mercek_a.py::test_a_k1_gecis_tablosu[K0-dugme_tepsi] PASSED
+.agents/tasks/T-012/tester_A/test_mercek_a.py::test_a_k1_gecis_tablosu[K0-dugme_kenar] PASSED
+.agents/tasks/T-012/tester_A/test_mercek_a.py::test_a_k1_gecis_tablosu[K0-tepsi_trigger] PASSED
+.agents/tasks/T-012/tester_A/test_mercek_a.py::test_a_k1_gecis_tablosu[K0-tepsi_doubleclick] PASSED
+.agents/tasks/T-012/tester_A/test_mercek_a.py::test_a_k1_gecis_tablosu[K0-tepsi_context] PASSED
+.agents/tasks/T-012/tester_A/test_mercek_a.py::test_a_k1_gecis_tablosu[K0-tepsi_middle] PASSED
+.agents/tasks/T-012/tester_A/test_mercek_a.py::test_a_k1_gecis_tablosu[K0-tepsi_unknown] PASSED
+.agents/tasks/T-012/tester_A/test_mercek_a.py::test_a_k1_gecis_tablosu[K0-menu_goster] PASSED
+.agents/tasks/T-012/tester_A/test_mercek_a.py::test_a_k1_gecis_tablosu[K0-menu_kenar] PASSED
+.agents/tasks/T-012/tester_A/test_mercek_a.py::test_a_k1_gecis_tablosu[K0-menu_cikis] PASSED
+.agents/tasks/T-012/tester_A/test_mercek_a.py::test_a_k1_gecis_tablosu[K0-sekme_sag_tik] PASSED
+.agents/tasks/T-012/tester_A/test_mercek_a.py::test_a_k1_gecis_tablosu[K0-sekme_dugme_goster] PASSED
+.agents/tasks/T-012/tester_A/test_mercek_a.py::test_a_k1_gecis_tablosu[K0-sekme_dugme_anlik] PASSED
+.agents/tasks/T-012/tester_A/test_mercek_a.py::test_a_k1_gecis_tablosu[K0-sekme_dugme_bolge] PASSED
+.agents/tasks/T-012/tester_A/test_mercek_a.py::test_a_k1_gecis_tablosu[K0-dugme_anlik] PASSED
+.agents/tasks/T-012/tester_A/test_mercek_a.py::test_a_k1_gecis_tablosu[K0-dugme_bolge] PASSED
+.agents/tasks/T-012/tester_A/test_mercek_a.py::test_a_k1_gecis_tablosu[G0-goster] PASSED
+.agents/tasks/T-012/tester_A/test_mercek_a.py::test_a_k1_gecis_tablosu[G0-tepsiye_al] PASSED
+.agents/tasks/T-012/tester_A/test_mercek_a.py::test_a_k1_gecis_tablosu[G0-kenara_al] PASSED
+.agents/tasks/T-012/tester_A/test_mercek_a.py::test_a_k1_gecis_tablosu[G0-kapat] PASSED
+.agents/tasks/T-012/tester_A/test_mercek_a.py::test_a_k1_gecis_tablosu[G0-close] PASSED
+.agents/tasks/T-012/tester_A/test_mercek_a.py::test_a_k1_gecis_tablosu[G0-closeEvent] PASSED
+.agents/tasks/T-012/tester_A/test_mercek_a.py::test_a_k1_gecis_tablosu[G0-dugme_kapat] PASSED
+.agents/tasks/T-012/tester_A/test_mercek_a.py::test_a_k1_gecis_tablosu[G0-dugme_tepsi] PASSED
+.agents/tasks/T-012/tester_A/test_mercek_a.py::test_a_k1_gecis_tablosu[G0-dugme_kenar] PASSED
+.agents/tasks/T-012/tester_A/test_mercek_a.py::test_a_k1_gecis_tablosu[G0-tepsi_trigger] PASSED
+.agents/tasks/T-012/tester_A/test_mercek_a.py::test_a_k1_gecis_tablosu[G0-tepsi_doubleclick] PASSED
+.agents/tasks/T-012/tester_A/test_mercek_a.py::test_a_k1_gecis_tablosu[G0-tepsi_context] PASSED
+.agents/tasks/T-012/tester_A/test_mercek_a.py::test_a_k1_gecis_tablosu[G0-tepsi_middle] PASSED
+.agents/tasks/T-012/tester_A/test_mercek_a.py::test_a_k1_gecis_tablosu[G0-tepsi_unknown] PASSED
+.agents/tasks/T-012/tester_A/test_mercek_a.py::test_a_k1_gecis_tablosu[G0-menu_goster] PASSED
+.agents/tasks/T-012/tester_A/test_mercek_a.py::test_a_k1_gecis_tablosu[G0-menu_kenar] PASSED
+.agents/tasks/T-012/tester_A/test_mercek_a.py::test_a_k1_gecis_tablosu[G0-menu_cikis] PASSED
+.agents/tasks/T-012/tester_A/test_mercek_a.py::test_a_k1_gecis_tablosu[G0-sekme_sag_tik] PASSED
+.agents/tasks/T-012/tester_A/test_mercek_a.py::test_a_k1_gecis_tablosu[G0-sekme_dugme_goster] PASSED
+.agents/tasks/T-012/tester_A/test_mercek_a.py::test_a_k1_gecis_tablosu[G0-sekme_dugme_anlik] PASSED
+.agents/tasks/T-012/tester_A/test_mercek_a.py::test_a_k1_gecis_tablosu[G0-sekme_dugme_bolge] PASSED
+.agents/tasks/T-012/tester_A/test_mercek_a.py::test_a_k1_gecis_tablosu[G0-dugme_anlik] PASSED
+.agents/tasks/T-012/tester_A/test_mercek_a.py::test_a_k1_gecis_tablosu[G0-dugme_bolge] PASSED
+.agents/tasks/T-012/tester_A/test_mercek_a.py::test_a_k1_kurulum_satirlari_pozitif_kontrol PASSED
+.agents/tasks/T-012/tester_A/test_mercek_a.py::test_b_k1_kapat_sonrasi_dirilme_yok_ve_tek_sinyal[G] PASSED
+.agents/tasks/T-012/tester_A/test_mercek_a.py::test_b_k1_kapat_sonrasi_dirilme_yok_ve_tek_sinyal[T] PASSED
+.agents/tasks/T-012/tester_A/test_mercek_a.py::test_b_k1_kapat_sonrasi_dirilme_yok_ve_tek_sinyal[K] PASSED
+.agents/tasks/T-012/tester_A/test_mercek_a.py::test_b_k1_kapat_sonrasi_dirilme_yok_ve_tek_sinyal[K0] PASSED
+.agents/tasks/T-012/tester_A/test_mercek_a.py::test_b_k1_kapat_sonrasi_dirilme_yok_ve_tek_sinyal[G0] PASSED
+.agents/tasks/T-012/tester_A/test_mercek_a.py::test_b_k1_gorunur_ust_duzey_kapat_sonrasi_sifir[G] PASSED
+.agents/tasks/T-012/tester_A/test_mercek_a.py::test_b_k1_gorunur_ust_duzey_kapat_sonrasi_sifir[T] PASSED
+.agents/tasks/T-012/tester_A/test_mercek_a.py::test_b_k1_gorunur_ust_duzey_kapat_sonrasi_sifir[K] PASSED
+.agents/tasks/T-012/tester_A/test_mercek_a.py::test_b_k1_gorunur_ust_duzey_kapat_sonrasi_sifir[K0] PASSED
+.agents/tasks/T-012/tester_A/test_mercek_a.py::test_b_k1_gorunur_ust_duzey_kapat_sonrasi_sifir[G0] PASSED
+.agents/tasks/T-012/tester_A/test_mercek_a.py::test_b_k1_idempotent_x2_ve_ucgen PASSED
+.agents/tasks/T-012/tester_A/test_mercek_a.py::test_b_k1_dis_hide_gorunur_durumunda_uc_gizli_kapandi_degil_PIN PASSED
+.agents/tasks/T-012/tester_A/test_mercek_a.py::test_b_k1_dis_show_tepsi_durumunda_tablo_disi_uclu_PIN PASSED
+.agents/tasks/T-012/tester_A/test_mercek_a.py::test_b_k1_kapat_sonrasi_dis_show_pencereyi_gosterir_ama_kapandi_kalir_PIN PASSED
+.agents/tasks/T-012/tester_A/test_mercek_a.py::test_b_k1_show_minimized_sonra_tepsi_sonra_goster_kucultulmus_kalir_PIN PASSED
+.agents/tasks/T-012/tester_A/test_mercek_a.py::test_b_k1_kenar_durumunda_panel_acikken_goster_ve_kapat PASSED
+.agents/tasks/T-012/tester_A/test_mercek_a.py::test_b_k1_kapat_sirasinda_surukleme_yarida PASSED
+.agents/tasks/T-012/tester_A/test_mercek_a.py::test_c_k1_rastgele_yuruyus_ulasilamaz_uclu_yok[1] PASSED
+.agents/tasks/T-012/tester_A/test_mercek_a.py::test_c_k1_rastgele_yuruyus_ulasilamaz_uclu_yok[2] PASSED
+.agents/tasks/T-012/tester_A/test_mercek_a.py::test_c_k1_rastgele_yuruyus_ulasilamaz_uclu_yok[3] PASSED
+.agents/tasks/T-012/tester_A/test_mercek_a.py::test_c_k1_rastgele_yuruyus_ulasilamaz_uclu_yok[4] PASSED
+.agents/tasks/T-012/tester_A/test_mercek_a.py::test_c_k1_rastgele_yuruyus_ulasilamaz_uclu_yok[5] PASSED
+.agents/tasks/T-012/tester_A/test_mercek_a.py::test_c_k1_rastgele_yuruyus_ulasilamaz_uclu_yok[6] PASSED
+.agents/tasks/T-012/tester_A/test_mercek_a.py::test_c_k1_rastgele_yuruyus_ulasilamaz_uclu_yok[7] PASSED
+.agents/tasks/T-012/tester_A/test_mercek_a.py::test_c_k1_rastgele_yuruyus_ulasilamaz_uclu_yok[8] PASSED
+.agents/tasks/T-012/tester_A/test_mercek_a.py::test_c_k1_rastgele_yuruyus_pozitif_kontrol_ihlal_yakalanir PASSED
+.agents/tasks/T-012/tester_A/test_mercek_a.py::test_d_omur_delete_later_python_referansi_tutulurken_sekme_zombi_PIN PASSED
+.agents/tasks/T-012/tester_A/test_mercek_a.py::test_d_omur_delete_later_referans_birakilinca_sekme_silinir_DOCSTRING FAILED
+.agents/tasks/T-012/tester_A/test_mercek_a.py::test_d_omur_ana_pencere_referansi_dusunce_sekme_silinir_DOCSTRING FAILED
+.agents/tasks/T-012/tester_A/test_mercek_a.py::test_d_omur_kapat_sonrasi_dusurulen_ana_pencere_sekmeyi_sizdirir_PIN PASSED
+.agents/tasks/T-012/tester_A/test_mercek_a.py::test_d_omur_mekanizma_pozitif_kontrol_lambda_baglantisi_sarmalayiciyi_tutar PASSED
+.agents/tasks/T-012/tester_A/test_mercek_a.py::test_d_omur_tepsi_ikonu_ana_pencere_silinince_gecersiz PASSED
+.agents/tasks/T-012/tester_A/test_mercek_a.py::test_d_omur_iki_ana_pencere_bagimsiz PASSED
+.agents/tasks/T-012/tester_A/test_mercek_a.py::test_d_omur_kenar_sekmesi_tek_basina_calisir PASSED
+.agents/tasks/T-012/tester_A/test_mercek_a.py::test_d_omur_kenar_sekmesi_tek_basina_referans_dusunce_silinir_DOCSTRING FAILED
+.agents/tasks/T-012/tester_A/test_mercek_a.py::test_d_omur_imlec_konumu_istisna_atarsa_yoklayici_calisir_durum_degismez_PIN Exceptions caught in Qt event loop:
+________________________________________________________________________________
+Traceback (most recent call last):
+  File "<depo>\src\ui\kenar_sekmesi.py", line 343, in _yokla
+    icinde = sekme_icinde(self.frameGeometry(), self._imlec_konumu(), self._yaricap, self._kenar)
+                                                ^^^^^^^^^^^^^^^^^^^^
+  File "<depo>\.agents\tasks\T-012\tester_A\test_mercek_a.py", line 565, in kotu
+    raise RuntimeError("imlec yok")
+RuntimeError: imlec yok
+________________________________________________________________________________
+Exceptions caught in Qt event loop:
+________________________________________________________________________________
+Traceback (most recent call last):
+  File "<depo>\src\ui\kenar_sekmesi.py", line 343, in _yokla
+    icinde = sekme_icinde(self.frameGeometry(), self._imlec_konumu(), self._yaricap, self._kenar)
+                                                ^^^^^^^^^^^^^^^^^^^^
+  File "<depo>\.agents\tasks\T-012\tester_A\test_mercek_a.py", line 565, in kotu
+    raise RuntimeError("imlec yok")
+RuntimeError: imlec yok
+________________________________________________________________________________
+Exceptions caught in Qt event loop:
+________________________________________________________________________________
+Traceback (most recent call last):
+  File "<depo>\src\ui\kenar_sekmesi.py", line 343, in _yokla
+    icinde = sekme_icinde(self.frameGeometry(), self._imlec_konumu(), self._yaricap, self._kenar)
+                                                ^^^^^^^^^^^^^^^^^^^^
+  File "<depo>\.agents\tasks\T-012\tester_A\test_mercek_a.py", line 565, in kotu
+    raise RuntimeError("imlec yok")
+RuntimeError: imlec yok
+________________________________________________________________________________
+PASSED
+.agents/tasks/T-012/tester_A/test_mercek_a.py::test_d_omur_ekran_none_birincil_ekran PASSED
+.agents/tasks/T-012/tester_A/test_mercek_a.py::test_d_omur_ekran_none_ve_birincil_yoksa_runtime_error PASSED
+.agents/tasks/T-012/tester_A/test_mercek_a.py::test_d_takma_ad_ekran_dikdortgeni_kopya PASSED
+.agents/tasks/T-012/tester_A/test_mercek_a.py::test_d_takma_ad_panel_boyutu_final_ama_mutable_PIN PASSED
+.agents/tasks/T-012/tester_A/test_mercek_a.py::test_d_takma_ad_kenar_ve_y_atamasi_atomik PASSED
+.agents/tasks/T-012/tester_A/test_mercek_a.py::test_d_takma_ad_ana_pencere_kenar_str_ve_gecersiz PASSED
+.agents/tasks/T-012/tester_A/test_mercek_a.py::test_d_omur_calistir_enjekte_calistirici_ile_quit_baglantisi_ve_temizlik PASSED
+.agents/tasks/T-012/tester_A/test_mercek_a.py::test_e_geometri_yaricap_1_sinir[sag-e0] PASSED
+.agents/tasks/T-012/tester_A/test_mercek_a.py::test_e_geometri_yaricap_1_sinir[sag-e1] PASSED
+.agents/tasks/T-012/tester_A/test_mercek_a.py::test_e_geometri_yaricap_1_sinir[sag-e2] PASSED
+.agents/tasks/T-012/tester_A/test_mercek_a.py::test_e_geometri_yaricap_1_sinir[sag-e3] PASSED
+.agents/tasks/T-012/tester_A/test_mercek_a.py::test_e_geometri_yaricap_1_sinir[sag-e4] PASSED
+.agents/tasks/T-012/tester_A/test_mercek_a.py::test_e_geometri_yaricap_1_sinir[sol-e0] PASSED
+.agents/tasks/T-012/tester_A/test_mercek_a.py::test_e_geometri_yaricap_1_sinir[sol-e1] PASSED
+.agents/tasks/T-012/tester_A/test_mercek_a.py::test_e_geometri_yaricap_1_sinir[sol-e2] PASSED
+.agents/tasks/T-012/tester_A/test_mercek_a.py::test_e_geometri_yaricap_1_sinir[sol-e3] PASSED
+.agents/tasks/T-012/tester_A/test_mercek_a.py::test_e_geometri_yaricap_1_sinir[sol-e4] PASSED
+.agents/tasks/T-012/tester_A/test_mercek_a.py::test_e_geometri_saf_fonksiyonlar_sifir_negatif_yaricap_cokmez[0] PASSED
+.agents/tasks/T-012/tester_A/test_mercek_a.py::test_e_geometri_saf_fonksiyonlar_sifir_negatif_yaricap_cokmez[-1] PASSED
+.agents/tasks/T-012/tester_A/test_mercek_a.py::test_e_geometri_saf_fonksiyonlar_sifir_negatif_yaricap_cokmez[-26] PASSED
+.agents/tasks/T-012/tester_A/test_mercek_a.py::test_e_kenar_sekmesi_yaricap_sifir_negatif_valueerror[0] PASSED
+.agents/tasks/T-012/tester_A/test_mercek_a.py::test_e_kenar_sekmesi_yaricap_sifir_negatif_valueerror[-1] PASSED
+.agents/tasks/T-012/tester_A/test_mercek_a.py::test_e_kenar_sekmesi_yaricap_1_calisir PASSED
+.agents/tasks/T-012/tester_A/test_mercek_a.py::test_e_geometri_yaricap_ekrandan_buyuk_y_ust_kenara PASSED
+.agents/tasks/T-012/tester_A/test_mercek_a.py::test_e_geometri_ust_sinir_overflow_ayri_surec_PIN PASSED
+.agents/tasks/T-012/tester_A/test_mercek_a.py::test_e_geometri_bos_ve_negatif_qrect_cokmez PASSED
+.agents/tasks/T-012/tester_A/test_mercek_a.py::test_e_geometri_panel_ekrandan_buyuk_kenara_bitisik_ust_kenar PASSED
+.agents/tasks/T-012/tester_A/test_mercek_a.py::test_e_geometri_y_sinirla_monoton_idempotent_ve_uclar PASSED
+.agents/tasks/T-012/tester_A/test_mercek_a.py::test_e_geometri_sekme_icinde_kose_ve_kenar_pikselleri[sag] PASSED
+.agents/tasks/T-012/tester_A/test_mercek_a.py::test_e_geometri_sekme_icinde_kose_ve_kenar_pikselleri[sol] PASSED
+.agents/tasks/T-012/tester_A/test_mercek_a.py::test_e_geometri_sekme_icinde_disk_sayimi_yarim_daire_alani PASSED
+.agents/tasks/T-012/tester_A/test_mercek_a.py::test_e_sinir_y_tipleri PASSED
+.agents/tasks/T-012/tester_A/test_mercek_a.py::test_e_sinir_available_geometry_changed_y_sinir_disi_kalinca_sikistirilir PASSED
+.agents/tasks/T-012/tester_A/test_mercek_a.py::test_e_sinir_available_geometry_changed_panel_acikken PASSED
+.agents/tasks/T-012/tester_A/test_mercek_a.py::test_e_sinir_kenar_degisimi_panel_acikken PASSED
+.agents/tasks/T-012/tester_A/test_mercek_a.py::test_e_sinir_yaricap_panel_yuksekliginin_yarisindan_buyukse_salinim_PIN PASSED
+.agents/tasks/T-012/tester_A/test_mercek_a.py::test_f_zaman_acilma_0_kapanma_0 PASSED
+.agents/tasks/T-012/tester_A/test_mercek_a.py::test_f_zaman_kapanma_yoklamadan_kisa PASSED
+.agents/tasks/T-012/tester_A/test_mercek_a.py::test_f_zaman_cok_buyuk_acilma_hic_acilmaz PASSED
+.agents/tasks/T-012/tester_A/test_mercek_a.py::test_f_zaman_yoklama_0_valueerror_ve_1_calisir 
+[bilgi] 400 ms: yoklama_ms=1 -> 25 cagri, CPU 0.000; yoklama_ms=60 -> 6 cagri, CPU 0.078
+PASSED
+.agents/tasks/T-012/tester_A/test_mercek_a.py::test_f_zaman_hide_show_yoklayici_ve_cagri_sayaci PASSED
+.agents/tasks/T-012/tester_A/test_mercek_a.py::test_f_zaman_hide_acilma_sayacini_sifirlar PASSED
+.agents/tasks/T-012/tester_A/test_mercek_a.py::test_f_zaman_surukleme_birakilmadan_hide PASSED
+.agents/tasks/T-012/tester_A/test_mercek_a.py::test_f_zaman_surukleme_sirasinda_sag_tik PASSED
+.agents/tasks/T-012/tester_A/test_mercek_a.py::test_f_zaman_surukleme_sinira_kilitlenir_ve_acik_degismez[hizli] PASSED
+.agents/tasks/T-012/tester_A/test_mercek_a.py::test_f_zaman_surukleme_sinira_kilitlenir_ve_acik_degismez[urun] PASSED
+.agents/tasks/T-012/tester_A/test_mercek_a.py::test_f_zaman_acik_panelde_sol_tik_surukleme_baslatmaz PASSED
+.agents/tasks/T-012/tester_A/test_mercek_a.py::test_g_cikis_istendi_her_yoldan_tam_bir_kez[G-kapat] PASSED
+.agents/tasks/T-012/tester_A/test_mercek_a.py::test_g_cikis_istendi_her_yoldan_tam_bir_kez[G-close] PASSED
+.agents/tasks/T-012/tester_A/test_mercek_a.py::test_g_cikis_istendi_her_yoldan_tam_bir_kez[G-closeEvent] PASSED
+.agents/tasks/T-012/tester_A/test_mercek_a.py::test_g_cikis_istendi_her_yoldan_tam_bir_kez[G-dugme_kapat] PASSED
+.agents/tasks/T-012/tester_A/test_mercek_a.py::test_g_cikis_istendi_her_yoldan_tam_bir_kez[G-menu_cikis] PASSED
+.agents/tasks/T-012/tester_A/test_mercek_a.py::test_g_cikis_istendi_her_yoldan_tam_bir_kez[T-kapat] PASSED
+.agents/tasks/T-012/tester_A/test_mercek_a.py::test_g_cikis_istendi_her_yoldan_tam_bir_kez[T-close] PASSED
+.agents/tasks/T-012/tester_A/test_mercek_a.py::test_g_cikis_istendi_her_yoldan_tam_bir_kez[T-closeEvent] PASSED
+.agents/tasks/T-012/tester_A/test_mercek_a.py::test_g_cikis_istendi_her_yoldan_tam_bir_kez[T-dugme_kapat] PASSED
+.agents/tasks/T-012/tester_A/test_mercek_a.py::test_g_cikis_istendi_her_yoldan_tam_bir_kez[T-menu_cikis] PASSED
+.agents/tasks/T-012/tester_A/test_mercek_a.py::test_g_cikis_istendi_her_yoldan_tam_bir_kez[K-kapat] PASSED
+.agents/tasks/T-012/tester_A/test_mercek_a.py::test_g_cikis_istendi_her_yoldan_tam_bir_kez[K-close] PASSED
+.agents/tasks/T-012/tester_A/test_mercek_a.py::test_g_cikis_istendi_her_yoldan_tam_bir_kez[K-closeEvent] PASSED
+.agents/tasks/T-012/tester_A/test_mercek_a.py::test_g_cikis_istendi_her_yoldan_tam_bir_kez[K-dugme_kapat] PASSED
+.agents/tasks/T-012/tester_A/test_mercek_a.py::test_g_cikis_istendi_her_yoldan_tam_bir_kez[K-menu_cikis] PASSED
+.agents/tasks/T-012/tester_A/test_mercek_a.py::test_g_cikis_istendi_her_yoldan_tam_bir_kez[K0-kapat] PASSED
+.agents/tasks/T-012/tester_A/test_mercek_a.py::test_g_cikis_istendi_her_yoldan_tam_bir_kez[K0-close] PASSED
+.agents/tasks/T-012/tester_A/test_mercek_a.py::test_g_cikis_istendi_her_yoldan_tam_bir_kez[K0-closeEvent] PASSED
+.agents/tasks/T-012/tester_A/test_mercek_a.py::test_g_cikis_istendi_her_yoldan_tam_bir_kez[K0-dugme_kapat] PASSED
+.agents/tasks/T-012/tester_A/test_mercek_a.py::test_g_cikis_istendi_her_yoldan_tam_bir_kez[K0-menu_cikis] PASSED
+.agents/tasks/T-012/tester_A/test_mercek_a.py::test_g_mod_sinyalleri_dinleyicisiz_hata_vermez_ve_durum_degismez PASSED
+.agents/tasks/T-012/tester_A/test_mercek_a.py::test_g_k4_sirasi_sinyal_aninda_panel_kapali[dugme_anlik] PASSED
+.agents/tasks/T-012/tester_A/test_mercek_a.py::test_g_k4_sirasi_sinyal_aninda_panel_kapali[dugme_bolge] PASSED
+.agents/tasks/T-012/tester_A/test_mercek_a.py::test_g_k4_sirasi_sinyal_aninda_panel_kapali[dugme_goster] PASSED
+.agents/tasks/T-012/tester_A/test_mercek_a.py::test_g_k4_sirasi_ana_pencere_duzeyinde PASSED
+.agents/tasks/T-012/tester_A/test_mercek_a.py::test_g_k4_mod_tiki_sonrasi_imlec_disk_icindeyse_panel_yeniden_acilir_PIN PASSED
+.agents/tasks/T-012/tester_A/test_mercek_a.py::test_g_yeniden_giris_mod_dinleyicisi_goster_kapat_kenara_al PASSED
+.agents/tasks/T-012/tester_A/test_mercek_a.py::test_g_yeniden_giris_cikis_dinleyicisi_kapat_close_goster PASSED
+.agents/tasks/T-012/tester_A/test_mercek_a.py::test_g_tepsi_yokken_tepsi_sinyalleri_yine_calisir PASSED
+.agents/tasks/T-012/tester_A/test_mercek_a.py::test_g_tepsi_kullanilabilir_pozitif_kontrol PASSED
+.agents/tasks/T-012/tester_A/test_mercek_a.py::test_h_k6_k7_ast_yasak_ad_ve_import_yok[kabuk.py] PASSED
+.agents/tasks/T-012/tester_A/test_mercek_a.py::test_h_k6_k7_ast_yasak_ad_ve_import_yok[kenar_sekmesi.py] PASSED
+.agents/tasks/T-012/tester_A/test_mercek_a.py::test_h_k6_k7_ast_yasak_ad_ve_import_yok[geometri.py] PASSED
+.agents/tasks/T-012/tester_A/test_mercek_a.py::test_h_k6_k7_ast_yasak_ad_ve_import_yok[__init__.py] PASSED
+.agents/tasks/T-012/tester_A/test_mercek_a.py::test_h_k6_k7_ast_yasak_ad_ve_import_yok[__main__.py] PASSED
+.agents/tasks/T-012/tester_A/test_mercek_a.py::test_h_k6_k7_ast_yasak_ad_ve_import_yok[uygulama.py] PASSED
+.agents/tasks/T-012/tester_A/test_mercek_a.py::test_h_k6_ast_pozitif_kontrol PASSED
+.agents/tasks/T-012/tester_A/test_mercek_a.py::test_h_k7_taze_surecte_pipeline_modulu_yuklenmez PASSED
+.agents/tasks/T-012/tester_A/test_mercek_a.py::test_h_k7_taze_surec_pozitif_kontrol PASSED
+.agents/tasks/T-012/tester_A/test_mercek_a.py::test_h_enum_uyeleri_baglayici PASSED
+
+================================== FAILURES ===================================
+____ test_d_omur_delete_later_referans_birakilinca_sekme_silinir_DOCSTRING ____
+
+qtbot = <pytestqt.qtbot.QtBot object at 0x0000019FD6E8B8C0>
+ekran = <PySide6.QtGui.QScreen(0x19fd4cf69f0, name="") at 0x0000019FD59BBAC0>
+imlec = [PySide6.QtCore.QPoint(-10000, -10000), PySide6.QtCore.QPoint(0, 0)]
+
+    def test_d_omur_delete_later_referans_birakilinca_sekme_silinir_DOCSTRING(qtbot, ekran, imlec) -> None:
+        """Docstring K1: 'Sekme EBEVEYNSIZ Tool penceredir (Python sahipligi: AnaPencere silinince silinir)'.
+        OLCUM: AnaPencere `deleteLater` + referans birakma + gc -> sekme yasiyor ve GORUNUR (Y-A1)."""
+        once = set(id(w) for w in gorunur_ust_duzey())
+        p = AnaPencere(ekran, tepsi_kullanilabilir=True, imlec_konumu=lambda: QPoint(imlec[0]))
+        p.show()
+        p.kenara_al()
+        assert len([w for w in gorunur_ust_duzey() if id(w) not in once]) == 1
+        wp, ws = weakref.ref(p), weakref.ref(p.sekme)
+        p.deleteLater()
+        del p
+        qtbot.wait(50)
+        gc.collect()
+        qtbot.wait(20)
+        assert wp() is None  # AnaPencere sarmalayicisi toplandi (C++ de silindi)
+        try:
+>           assert ws() is None, "sekme sarmalayicisi hala canli"
+E           AssertionError: sekme sarmalayicisi hala canli
+E           assert <src.ui.kenar_sekmesi.KenarSekmesi(0x19fd6a0a900) at 0x0000019FD6E6AB40> is None
+E            +  where <src.ui.kenar_sekmesi.KenarSekmesi(0x19fd6a0a900) at 0x0000019FD6E6AB40> = <weakref at 0x0000019FD6E4E9D0; to 'KenarSekmesi' at 0x0000019FD6E6AB40>()
+
+.agents\tasks\T-012\tester_A\test_mercek_a.py:423: AssertionError
+______ test_d_omur_ana_pencere_referansi_dusunce_sekme_silinir_DOCSTRING ______
+
+qtbot = <pytestqt.qtbot.QtBot object at 0x0000019FD6DB6960>
+ekran = <PySide6.QtGui.QScreen(0x19fd4cf69f0, name="") at 0x0000019FD59BBAC0>
+imlec = [PySide6.QtCore.QPoint(-10000, -10000), PySide6.QtCore.QPoint(0, 0)]
+
+    def test_d_omur_ana_pencere_referansi_dusunce_sekme_silinir_DOCSTRING(qtbot, ekran, imlec) -> None:
+        """Ayni iddia, deleteLater'siz: kenar durumundaki AnaPencere'nin son Python referansi dusuruldugunde (Python
+        sahipligi -> C++ AnaPencere silinir) sekme de silinmeli. OLCUM: sekme yasiyor, gorunur, yokluyor; sag tik sinyali
+        aliciya ulasmaz (pencere yok) -> geri donus yolu olmayan ZOMBI ust-duzey pencere (Y-A1)."""
+        once = set(id(w) for w in gorunur_ust_duzey())
+        p = AnaPencere(ekran, tepsi_kullanilabilir=True, imlec_konumu=lambda: QPoint(imlec[0]))
+        p.show()
+        p.kenara_al()
+        wp, ws = weakref.ref(p), weakref.ref(p.sekme)
+        del p
+        gc.collect()
+        qtbot.wait(30)
+        assert wp() is None
+        s = ws()
+        try:
+>           assert s is None, f"sekme canli: gorunur={s.isVisible()} yokluyor={s.yokluyor}"
+E           AssertionError: sekme canli: gorunur=True yokluyor=True
+E           assert <src.ui.kenar_sekmesi.KenarSekmesi(0x19fd70ec160) at 0x0000019FD6D95400> is None
+
+.agents\tasks\T-012\tester_A\test_mercek_a.py:445: AssertionError
+___ test_d_omur_kenar_sekmesi_tek_basina_referans_dusunce_silinir_DOCSTRING ___
+
+qtbot = <pytestqt.qtbot.QtBot object at 0x0000019FD6F8C410>
+ekran = <PySide6.QtGui.QScreen(0x19fd4cf69f0, name="") at 0x0000019FD59BBAC0>
+imlec = [PySide6.QtCore.QPoint(-10000, -10000), PySide6.QtCore.QPoint(0, 0)]
+
+    def test_d_omur_kenar_sekmesi_tek_basina_referans_dusunce_silinir_DOCSTRING(qtbot, ekran, imlec) -> None:
+        """Python sahipligi iddiasinin en yalin hali: ebeveynsiz KenarSekmesi'nin son referansi dusunce silinmeli.
+        OLCUM: `__init__` icindeki `clicked.connect(lambda: self._mod_tiki(...))` kapanislari Qt baglantisinda self'i
+        tutar -> sarmalayici hic toplanmaz, pencere gorunur kalir (Y-A1 koku)."""
+        once = set(id(w) for w in gorunur_ust_duzey())
+        s = KenarSekmesi(ekran, imlec_konumu=lambda: QPoint(imlec[0]), **HIZLI)
+        s.show()
+        ws = weakref.ref(s)
+        del s
+        gc.collect()
+        qtbot.wait(20)
+        try:
+>           assert ws() is None, "KenarSekmesi sarmalayicisi toplanmadi"
+E           AssertionError: KenarSekmesi sarmalayicisi toplanmadi
+E           assert <src.ui.kenar_sekmesi.KenarSekmesi(0x19fd70ee4d0) at 0x0000019FD6F05800> is None
+E            +  where <src.ui.kenar_sekmesi.KenarSekmesi(0x19fd70ee4d0) at 0x0000019FD6F05800> = <weakref at 0x0000019FD6ECB1F0; to 'KenarSekmesi' at 0x0000019FD6F05800>()
+
+.agents\tasks\T-012\tester_A\test_mercek_a.py:554: AssertionError
+=========================== short test summary info ===========================
+FAILED .agents/tasks/T-012/tester_A/test_mercek_a.py::test_d_omur_delete_later_referans_birakilinca_sekme_silinir_DOCSTRING
+FAILED .agents/tasks/T-012/tester_A/test_mercek_a.py::test_d_omur_ana_pencere_referansi_dusunce_sekme_silinir_DOCSTRING
+FAILED .agents/tasks/T-012/tester_A/test_mercek_a.py::test_d_omur_kenar_sekmesi_tek_basina_referans_dusunce_silinir_DOCSTRING
+======================= 3 failed, 236 passed in 21.86s ========================
+exit_code=1

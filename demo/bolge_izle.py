@@ -117,9 +117,13 @@ class SecimKatmani(QtWidgets.QWidget):
         )
         self.close()
 
+    iptal = QtCore.Signal()
+
     def keyPressEvent(self, e: QtGui.QKeyEvent) -> None:
         if e.key() == QtCore.Qt.Key.Key_Escape:
-            QtWidgets.QApplication.quit()
+            # T-012 Tester-B Y-B1: Esc UYGULAMAYI degil yalniz secim katmanini kapatir
+            self.iptal.emit()
+            self.close()
 
 
 class IzlemePenceresi(QtWidgets.QWidget):
@@ -235,6 +239,7 @@ def main() -> int:
 
     katman = SecimKatmani(birlesim)
     katman.secildi.connect(bolge_secildi)
+    katman.iptal.connect(uygulama.quit)  # bu gosterimde katman tek pencere: iptal = cikis
     katman.show()
     katman.activateWindow()
     pencereler.append(katman)

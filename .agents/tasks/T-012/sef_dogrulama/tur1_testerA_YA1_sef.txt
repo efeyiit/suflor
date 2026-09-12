@@ -1,0 +1,4 @@
+SEF YENIDEN URETIM Y-A1: kenar durumunda AnaPencere dusuruluyor (del + gc)
+sekme nesnesi hayatta= True | gorunur= True | yoklayici aktif= True
+pencereyi_goster alici sayisi= 0 (0 = sag tik bos: zombi)
+pozitif kontrol: bagli-yontem baglantili QWidget toplandi= True

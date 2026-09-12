@@ -1,0 +1,19 @@
+........................................................................ [ 16%]
+........................................................................ [ 33%]
+........................................................................ [ 50%]
+........................................................................ [ 67%]
+.............................................FF.....F................... [ 83%]
+.....................................................................    [100%]
+E           AssertionError: sekme sarmalayicisi hala canli
+E           assert <src.ui.kenar_sekmesi.KenarSekmesi(0x24feee850a0) at 0x0000024FEDB306C0> is None
+E            +  where <src.ui.kenar_sekmesi.KenarSekmesi(0x24feee850a0) at 0x0000024FEDB306C0> = <weakref at 0x0000024FED747650; to 'KenarSekmesi' at 0x0000024FEDB306C0>()
+E           AssertionError: sekme canli: gorunur=True yokluyor=True
+E           assert <src.ui.kenar_sekmesi.KenarSekmesi(0x24feee884f0) at 0x0000024FED79FD00> is None
+E           AssertionError: KenarSekmesi sarmalayicisi toplanmadi
+E           assert <src.ui.kenar_sekmesi.KenarSekmesi(0x24feed09750) at 0x0000024FED7BBC80> is None
+E            +  where <src.ui.kenar_sekmesi.KenarSekmesi(0x24feed09750) at 0x0000024FED7BBC80> = <weakref at 0x0000024FED7D7FB0; to 'KenarSekmesi' at 0x0000024FED7BBC80>()
+FAILED .agents/tasks/T-012/tester_A/test_mercek_a.py::test_d_omur_delete_later_referans_birakilinca_sekme_silinir_DOCSTRING
+FAILED .agents/tasks/T-012/tester_A/test_mercek_a.py::test_d_omur_ana_pencere_referansi_dusunce_sekme_silinir_DOCSTRING
+FAILED .agents/tasks/T-012/tester_A/test_mercek_a.py::test_d_omur_kenar_sekmesi_tek_basina_referans_dusunce_silinir_DOCSTRING
+3 failed, 426 passed in 35.50s
+exit_code=1

@@ -1,0 +1,45 @@
+[sarici] deneme 1: fare bosta bekleme 6.0 s; sarici on planda=False
+sonda_1: birincil 2048x1104 dpr=1.25 tepsi=True on_plan_bizim=False
+S1/S2 Alt-Tab adaylari ve tepsi ikonu (bagimsiz kanal)
+  ok     [S2a] taze gorunur: tepsi ikonu Shell'de yok=True
+  BULGU  [S1a] gorunur: Alt-Tab adaylari=['Qt6112QWindowIcon', 'Qt6112QWindowIcon'] (1 beklenir)
+  ok     [S2b] tepsi: ikon Shell'de var=True rect=(2258, 1380, 2298, 1440)
+  BULGU  [S1b] tepsi: Alt-Tab adaylari=['Qt6112QWindowIcon'] (0 beklenir)
+  bilgi  [S9] ikon rect=(2258, 1380, 2298, 1440) TrayNotifyWnd=(2259, 1380, 2560, 1440) ikon TrayNotify icinde=True tasma penceresi gorunur=False rect merkezindeki pencere sinifi='LockScreenBackstopFrame'
+S3 tepsi ikonuna gercek tik
+  BULGU  [S3a] tepsi ikonuna sol tik: uclu=(False, False, True) durum=tepsi (T,F,F gorunur beklenir)
+  BULGU  [S3b] tik sonrasi on plan ana pencere=False (on plan sinifi='')
+  ok     [S2c] goster sonrasi ikon Shell'de yok=True
+S4 kenar: Alt-Tab, ikon, sag tik on plan
+  BULGU  [S1c] kenar: Alt-Tab adaylari=['Qt6112QWindowIcon'] (0 beklenir); sekme exstyle TOOLWINDOW=True TOPMOST=True NOACTIVATE=True
+  ok     [S2d] kenar: ikon Shell'de var=True
+  BULGU  [S4a] kenara al sonrasi on plan sahne=False
+  BULGU  [S4b] sekmeye gercek sag tik: uclu=(False, True, True) (T,F,F)
+  BULGU  [S4c] sag tik sonrasi on plan ana pencere=False (sinif='')
+S5 WM_CLOSE uc durumda
+  ok     [S2e] kapat: ikon Shell'de yok=True cikis=1
+  ok     [S5 gorunur] once=((True, False, False), <KabukDurumu.GORUNUR: 'gorunur'>) -> WM_CLOSE: cikis=1 uclu=(False, False, False) ikon yok=True gorunur ust-duzey=0 yokluyor=False
+  ok     [S5 tepsi] once=((False, False, True), <KabukDurumu.TEPSI: 'tepsi'>) -> WM_CLOSE: cikis=1 uclu=(False, False, False) ikon yok=True gorunur ust-duzey=0 yokluyor=False
+  ok     [S5 kenar] once=((False, True, True), <KabukDurumu.KENAR: 'kenar'>) -> WM_CLOSE: cikis=1 uclu=(False, False, False) ikon yok=True gorunur ust-duzey=0 yokluyor=False
+S6 z-sirasi: sekmeden sonra gosterilen topmost oyun / Tool+topmost secim katmani
+  bilgi  [S6a] topmost oyun sekmeden sonra: z (kucuk=ustte) {'sekme': 8, 'oyun': 7}; sekme merkezindeki pencere=LockScreenBackstopFrame (belgeli sinir: oyun ustte)
+  bilgi  [S6b] imlec sekmede: acik=True (311 ms) -> z {'sekme': 7, 'oyun': 8}; _ac() raise_() sekmeyi ustune aldi mi=True
+  bilgi  [S6c] demo SecimKatmani benzeri (Tool+topmost, tum ekran) sekmeden sonra: z {'sekme': 8, 'katman': 7}; imlec sekmede acik=True -> z {'sekme': 7, 'katman': 8}; panel katmanin USTUNE cikti=True
+  BULGU  [S6c] bolge secimi sirasinda (katman acik) imlec sekme diskine girerse panel KATMANIN USTUNE cikar (_ac raise_) -- demo entegrasyonu: secim sirasinda sekme gizlenmeli/yoklayici durmali
+S7 ikinci monitor (dpr != 1)
+  bilgi  [S7] ikinci monitor yok -- atlandi
+S8 tepsi balonu suresi (bildir ms=1000)
+  bilgi  [S8] oncesinde toast var=False; gorundu=False (0 ms) kayboldu=False (0 ms) -> gorunur sure ~0 ms (istenen 1000)
+
+SONDA_1: 9 bulgu
+  - [S1a] gorunur: Alt-Tab adaylari=['Qt6112QWindowIcon', 'Qt6112QWindowIcon'] (1 beklenir)
+  - [S1b] tepsi: Alt-Tab adaylari=['Qt6112QWindowIcon'] (0 beklenir)
+  - [S3a] tepsi ikonuna sol tik: uclu=(False, False, True) durum=tepsi (T,F,F gorunur beklenir)
+  - [S3b] tik sonrasi on plan ana pencere=False (on plan sinifi='')
+  - [S1c] kenar: Alt-Tab adaylari=['Qt6112QWindowIcon'] (0 beklenir); sekme exstyle TOOLWINDOW=True TOPMOST=True NOACTIVATE=True
+  - [S4a] kenara al sonrasi on plan sahne=False
+  - [S4b] sekmeye gercek sag tik: uclu=(False, True, True) (T,F,F)
+  - [S4c] sag tik sonrasi on plan ana pencere=False (sinif='')
+  - [S6c] bolge secimi sirasinda (katman acik) imlec sekme diskine girerse panel KATMANIN USTUNE cikar (_ac raise_) -- demo entegrasyonu: secim sirasinda sekme gizlenmeli/yoklayici durmali
+
+[sarici] real_check rc=0

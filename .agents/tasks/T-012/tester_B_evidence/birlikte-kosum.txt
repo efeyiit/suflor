@@ -1,0 +1,3 @@
+.                                                                        [100%]
+287 passed, 2 xfailed in 30.67s
+exit=0 (287 passed + 2 xfailed: tests/unit/ui 190 + tester_B 97+2)

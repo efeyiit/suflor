@@ -1,0 +1,11 @@
+T-012 tester-A sonda 01 -- omur / zombi sekme (offscreen)
+  ok     [1] AnaPencere sarmalayicisi toplandi=True
+  IHLAL  [1] sekme silindi=False; gorunur ust-duzey=['KenarSekmesi']
+         [1] zombi: gorunur=True yokluyor=True sag tik sinyal=1 (alici pencere yok) -> geri donus yolu yok
+  IHLAL  [2] deleteLater: AnaPencere toplandi=True sekme silindi=False gorunur=['KenarSekmesi']
+  IHLAL  [3] tek basina KenarSekmesi son referans dusunce silindi=False gorunur=['KenarSekmesi']
+  bilgi  [4] kapat()+dusurme: sekme yasiyor=True gorunur=False (gizli sizinti, zombi degil)
+  ok     [5] pozitif kontrol: lambda baglantili canli kaldi=True, bagli yontemli canli kaldi=False
+
+SONDA: 3 IHLAL (Y-A1)
+exit_code=1

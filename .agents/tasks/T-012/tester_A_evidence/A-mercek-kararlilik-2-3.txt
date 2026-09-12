@@ -1,0 +1,9 @@
+FAILED .agents/tasks/T-012/tester_A/test_mercek_a.py::test_d_omur_delete_later_referans_birakilinca_sekme_silinir_DOCSTRING
+FAILED .agents/tasks/T-012/tester_A/test_mercek_a.py::test_d_omur_ana_pencere_referansi_dusunce_sekme_silinir_DOCSTRING
+FAILED .agents/tasks/T-012/tester_A/test_mercek_a.py::test_d_omur_kenar_sekmesi_tek_basina_referans_dusunce_silinir_DOCSTRING
+3 failed, 236 passed in 22.86s
+FAILED .agents/tasks/T-012/tester_A/test_mercek_a.py::test_d_omur_delete_later_referans_birakilinca_sekme_silinir_DOCSTRING
+FAILED .agents/tasks/T-012/tester_A/test_mercek_a.py::test_d_omur_ana_pencere_referansi_dusunce_sekme_silinir_DOCSTRING
+FAILED .agents/tasks/T-012/tester_A/test_mercek_a.py::test_d_omur_kenar_sekmesi_tek_basina_referans_dusunce_silinir_DOCSTRING
+3 failed, 236 passed in 22.62s
+exit_code_son=0

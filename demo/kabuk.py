@@ -29,7 +29,7 @@ from src.capture.monitors import union_bbox  # noqa: E402
 from src.capture.service import CaptureService, MssBackend  # noqa: E402
 from src.contracts.models import Rect  # noqa: E402
 from src.ui.geometri import Kenar  # noqa: E402
-from src.ui.kabuk import AnaPencere  # noqa: E402
+from src.ui.kabuk import AnaPencere, KabukDurumu  # noqa: E402
 from src.ui.uygulama import calistir  # noqa: E402
 
 
@@ -43,14 +43,24 @@ def _bagla(app: QtWidgets.QApplication, pencere: AnaPencere) -> int:
         if birlesim is None:
             return
         katman = SecimKatmani(birlesim)
+        # Tester-B O-B2: secim sirasinda imlec sekmeye gelirse panel katmanin ustune cikiyordu -> secim boyunca sekme gizli
+        sekme_gizlendi = pencere.sekme.isVisible()
+        if sekme_gizlendi:
+            pencere.sekme.hide()
+
+        def bitti() -> None:
+            if sekme_gizlendi and pencere.durum == KabukDurumu.KENAR and not pencere.kapandi:
+                pencere.sekme.show()
 
         def secildi(bolge: Rect) -> None:
             izleme = IzlemePenceresi(servis, bolge)
             izleme.resize(max(420, min(900, bolge.w)), max(220, min(560, bolge.h + 40)))
             izleme.show()
             pencereler.append(izleme)
+            bitti()
 
         katman.secildi.connect(secildi)
+        katman.iptal.connect(bitti)  # Tester-B Y-B1: Esc uygulamayi kapatmaz, secimi iptal eder
         katman.show()
         katman.activateWindow()
         pencereler.append(katman)

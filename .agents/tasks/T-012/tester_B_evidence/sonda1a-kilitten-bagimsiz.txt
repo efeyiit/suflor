@@ -1,0 +1,34 @@
+sonda_1a: birincil avail 2048x1104 dpr=1.25 monitor sayisi=1 tepsi=True oturum kilitli=True (on plan sureci=lockapp.exe giris masaustu=Default)
+S1/S2 Alt-Tab adaylari ve tepsi ikonu (bagimsiz kanal)
+  ok     [S2a] taze gorunur: tepsi ikonu Shell'de yok=True
+  ok     [S1a] gorunur: Alt-Tab adaylari=['Qt6112QWindowIcon'] (1 beklenir)
+  ok     [S2b] tepsi: ikon Shell'de var=True rect=(2298, 1380, 2338, 1440)
+  ok     [S1b] tepsi: Alt-Tab adaylari=[] (0 beklenir)
+  ok     [S2c] goster: ikon Shell'de yok=True uclu=(True, False, False)
+  ok     [S1c] kenar: Alt-Tab adaylari=[] (0 beklenir); sekme exstyle TOOLWINDOW=True TOPMOST=True NOACTIVATE=True
+  ok     [S2d] kenar: ikon Shell'de var=True
+  ok     [S2e] kapat: ikon Shell'de yok=True cikis=1 Alt-Tab adaylari=[]
+S5 WM_CLOSE uc durumda (PostMessage gercek hwnd)
+  ok     [S5 gorunur] once=((True, False, False), 'gorunur') -> WM_CLOSE: cikis=1 uclu=(False, False, False) Shell ikon yok=True gorunur ust-duzey=0 yokluyor=False durum=gorunur
+  ok     [S5 gorunur] ikinci kapat(): cikis=1 (1)
+  ok     [S5 tepsi] once=((False, False, True), 'tepsi') -> WM_CLOSE: cikis=1 uclu=(False, False, False) Shell ikon yok=True gorunur ust-duzey=0 yokluyor=False durum=tepsi
+  ok     [S5 tepsi] ikinci kapat(): cikis=1 (1)
+  ok     [S5 kenar] once=((False, True, True), 'kenar') -> WM_CLOSE: cikis=1 uclu=(False, False, False) Shell ikon yok=True gorunur ust-duzey=0 yokluyor=False durum=kenar
+  ok     [S5 kenar] ikinci kapat(): cikis=1 (1)
+S6 z-sirasi (EnumWindows; kucuk indeks = ustte)
+  bilgi  [S6a] topmost oyun sekmeden sonra: z={'sekme': 8, 'oyun': 7} -> oyun ustte=True (belgeli sinir K3 [OLCULMUYOR])
+  bilgi  [S6b] _ac() sonrasi: z={'sekme': 7, 'oyun': 8} -> raise_ sekmeyi topmost oyunun ustune aldi=True
+  bilgi  [S6b'] _kapat() sonrasi: z={'sekme': 7, 'oyun': 8} -> sekme hala ustte=True (kapali sekme oyunun ustunde kalir mi)
+  bilgi  [S6c] demo SecimKatmani benzeri (Tool+topmost tum ekran) sekmeden sonra: z={'sekme': 8, 'katman': 7} katman ustte=True; panel acilinca z={'sekme': 7, 'katman': 8} panel katmanin USTUNE cikti=True
+  BULGU  [S6c] bolge secimi sirasinda imlec sekme diskine girerse panel SECIM KATMANININ USTUNE cikar (_ac raise_); demo/kabuk.py secim sirasinda sekmeyi gizlemiyor
+S7 DPI: birincil ve (varsa) diger monitorler
+  bilgi  [S7 ekran0 birincil] dpr=1.25 avail=(0,0,2048,1104) sekme mantiksal=(2022,526,26,52) fiziksel=(2528, 658, 2561, 723) monitor calisma=(0,0,2560,1380) monitor=(0,0,2560,1440) sag fark=+1 px
+  ok     [S7 ekran0 birincil] mantiksal: sag kenara bitisik=True ekran icinde=True
+  ok     [S7 ekran0 birincil] fiziksel sag kenar farki +1 (|.|<=1 kabul)
+  BULGU  [S7 ekran0 birincil] sekme 1 fiziksel px monitorun OTESINE tasiyor (KRT G4 sinifi)
+  ok     [S7 ekran0 birincil] panel mantiksal=(1848,486,200,132) icinde=True fiziksel=(2310, 608, 2560, 773) monitor icinde(+1 tolerans)=True sag fark=+0
+  ok     [S7 ekran0 birincil] SOL: mantiksal=(0,526,26,52) fiziksel=(0, 658, 33, 723) sol fark=+0
+
+SONDA_1A: 2 bulgu
+  - [S6c] bolge secimi sirasinda imlec sekme diskine girerse panel SECIM KATMANININ USTUNE cikar (_ac raise_); demo/kabuk.py secim sirasinda sekmeyi gizlemiyor
+  - [S7 ekran0 birincil] sekme 1 fiziksel px monitorun OTESINE tasiyor (KRT G4 sinifi)

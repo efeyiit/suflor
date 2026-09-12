@@ -1,0 +1,2 @@
+2026-09-12 22:54:43
+kendi testlerim (test_mercek_b.py 85, test_mercek_b_ek.py 14; sonda_1a) tamamlandiktan sonra tests/unit/ui/test_*.py ve evidence/mutant-kiti.py yalniz test kalitesi/kapi denetimi icin acildi; delivery.md/sef_dogrulama/tester_A henuz acilmadi

@@ -1,0 +1,5 @@
+bekle_ve_kos.py 90 dk ile ayri surec olarak baslatildi (pid 67696); bu dosya baslatma anindaki oturum durumudur.
+zaman: 2026-09-12 23:03:17
+oturum kilitli = True ( on plan sureci=lockapp.exe giris masaustu=Default )
+kilit acilirsa: sonda1b-gercek-girdi.txt ve taban-3-real_check-sarici.txt yazilir; bekle-ve-kos.log surec bitince dolar (stdout tamponlu).
+kilit acilmazsa: gercek fare girdisi kalemleri (S3 tepsi tiki+on plan, S4 sag tik on plan, S8 balon suresi, S9 tasma) bu turda OLCULEMEDI; sef/implementer 18/18 kosumlarina dayanilir.
