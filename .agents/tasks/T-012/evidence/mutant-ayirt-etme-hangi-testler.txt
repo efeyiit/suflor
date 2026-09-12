@@ -11,18 +11,21 @@ T-012 mutant basina dusen testler (ayna kosumu)
   test_k1_close_sonra_kapat_ikinci_sinyal_yok
   test_k1_kapat_sonra_close_ikinci_sinyal_yok
 
-== M03 [X (7)] K1: goster() tepsi ikonunu gizlemez -> gorunur uclusu (T,F,T)
+== M03 [X (9)] K1: goster() tepsi ikonunu gizlemez -> gorunur uclusu (T,F,T)
   test_k1_tepsi_to_gorunur
   test_k1_kenar_to_gorunur_tepsi_ikonu_da_gizlenir
   test_k1_gorunur_yollari_hepsi_ayni_uclu
   test_k1_kenara_al_iki_kez_idempotent
+  test_k1_sekme_dis_close_kenar_durumunda_gorunure_doner[tepsi_var]
+  test_k1_goster_kucultulmus_pencereyi_geri_getirir
   test_k5_ikona_tik_goster[Trigger]
   test_k5_ikona_tik_goster[DoubleClick]
   test_k8_surukleme_sonrasi_sag_tik_pencereyi_getirir
 
-== M04 [X (2)] K5: tepsi yokken tepsiye_al() kenara dusmez -> pencere gizli, ikon yok, sekme yok (kilit)
+== M04 [X (3)] K5: tepsi yokken tepsiye_al() kenara dusmez -> pencere gizli, ikon yok, sekme yok (kilit)
   test_k5_tepsi_yoksa_tepsiye_al_kenara_duser
   test_k5_ana_pencere_varsayilan_offscreen_tepsi_yok
+  test_k5_tepsi_yokken_tepsiye_al_balon_sayacini_tuketmez
 
 == M05 [X (2)] K4 (Y2): surukleme sirasinda yoklayici acilma sayacini baslatir
   test_k4_surukleme_sirasinda_sayac_baslamaz
@@ -31,22 +34,27 @@ T-012 mutant basina dusen testler (ayna kosumu)
 == M05b [X (1)] K4 (Y2): basinca calisan acilma sayaci durdurulmaz
   test_k4_surukleme_calisan_acilma_sayacini_durdurur
 
-== M06 [X (5)] K4 (O9): mod tiki paneli kapatmadan sinyal yayar
+== M06 [X (7)] K4 (O9): mod tiki paneli kapatmadan sinyal yayar
   test_k4_mod_tiki_once_panel_kapanir_sonra_sinyal[dugme_anlik]
   test_k4_mod_tiki_once_panel_kapanir_sonra_sinyal[dugme_bolge]
   test_k4_mod_tiki_sonrasi_kapanma_sayaci_paneli_tekrar_acmaz
+  test_k4_mod_tiki_sonrasi_imlec_diskte_kalsa_da_yeniden_acilmaz_ciktiktan_sonra_acilir[dugme_anlik]
+  test_k4_mod_tiki_sonrasi_imlec_diskte_kalsa_da_yeniden_acilmaz_ciktiktan_sonra_acilir[dugme_bolge]
   test_k4_gercek_tik_ile_dugme_sinyali
   test_k8_panelde_dugme_goster
 
-== M07 [X (6)] K4: yoklayici gizliyken de calisir (init'te baslar, hide durdurmaz)
+== M07 [X (9)] K4: yoklayici gizliyken de calisir (init'te baslar, hide durdurmaz)
   test_k1_kenar_to_gorunur_tepsi_ikonu_da_gizlenir
   test_k1_kapat_gorunur_durumundan
   test_k1_kapat_her_durumdan[tepsi]
   test_k1_kapat_her_durumdan[kenar]
+  test_k1_sekme_dis_close_kenar_durumunda_gorunure_doner[tepsi_var]
+  test_k1_sekme_dis_close_kenar_durumunda_gorunure_doner[tepsi_yok]
   test_k4_imlec_konumu_sekmeye_enjekte_edilir
   test_k4_yoklayici_yalniz_gorunurken
+  test_k1_kapandi_sinyali_close_ile_yayilir_hide_ile_yayilmaz
 
-== M08 [X (22)] K4: imlec_konumu yok sayilir, dogrudan QCursor.pos okunur
+== M08 [X (26)] K4: imlec_konumu yok sayilir, dogrudan QCursor.pos okunur
   test_k4_imlec_konumu_sekmeye_enjekte_edilir
   test_k3_kapali_ve_acik_boyutlar
   test_k2_kenar_degisince_yeniden_konumlanir
@@ -65,6 +73,10 @@ T-012 mutant basina dusen testler (ayna kosumu)
   test_k4_mod_tiki_once_panel_kapanir_sonra_sinyal[dugme_anlik]
   test_k4_mod_tiki_once_panel_kapanir_sonra_sinyal[dugme_bolge]
   test_k4_mod_tiki_sonrasi_kapanma_sayaci_paneli_tekrar_acmaz
+  test_k4_mod_tiki_sonrasi_imlec_diskte_kalsa_da_yeniden_acilmaz_ciktiktan_sonra_acilir[dugme_anlik]
+  test_k4_mod_tiki_sonrasi_imlec_diskte_kalsa_da_yeniden_acilmaz_ciktiktan_sonra_acilir[dugme_bolge]
+  test_k4_mod_tiki_mandali_gizlenip_gosterilince_sifirlanir
+  test_k1_kapandi_sinyali_close_ile_yayilir_hide_ile_yayilmaz
   test_k4_gercek_tik_ile_dugme_sinyali
   test_k8_sag_tik_acikken_de_pencereyi_goster
   test_k8_panelde_dugme_goster
@@ -184,10 +196,12 @@ T-012 mutant basina dusen testler (ayna kosumu)
   test_k1_close_gizli_durumlarda_da_kapatir[kenar]
   test_k5_tepsi_yoksa_tepsiye_al_kenara_duser
 
-== M17 [X (3)] K5: tepsi yokken de ikon.show() cagrilir ve gorunur() = isVisible (dogal yanlis uygulama; offscreen'de True)
+== M17 [X (5)] K5: tepsi yokken de ikon.show() cagrilir ve gorunur() = isVisible (dogal yanlis uygulama; offscreen'de True)
+  test_k1_sekme_dis_close_kenar_durumunda_gorunure_doner[tepsi_yok]
   test_k5_tepsi_yoksa_tepsiye_al_kenara_duser
   test_k5_tepsi_yokken_gorunur_daima_false
   test_k5_ana_pencere_varsayilan_offscreen_tepsi_yok
+  test_k5_tepsi_yokken_tepsiye_al_balon_sayacini_tuketmez
 
 == M17b [X (1)] K5: yalniz goster() kosulu kaldirildi (gorunur() hala kullanilabilir ile AND)
   test_k5_tepsi_yokken_gorunur_daima_false
@@ -218,8 +232,52 @@ T-012 mutant basina dusen testler (ayna kosumu)
 == M25 [X (2)] K7 pozitif kontrol: src.capture import edildi (AST + taze surec olcusu ateslemeli)
   (dusen yok)
 
-== M26 [X (1)] K5 ([5c] kok neden): tepsiye_al() balon gosterir (prototipteki bildir cagrisi geri geldi)
-  test_k5_tepsiye_al_bildirim_balonu_gostermez
+== M26 [X (2)] K5 (tur 2): balon HER tepsiye_al()'da (surec basina bir kez sayaci yok)
+  test_k5_ilk_tepsiye_al_surec_basina_bir_kez_balon
+  test_k5_balon_surec_basina_bir_kez_ikinci_ornek_de_gostermez
+
+== M26b [X (3)] K5 (tur 2): balon HIC gosterilmez (tur-1 davranisi geri geldi)
+  test_k5_ilk_tepsiye_al_surec_basina_bir_kez_balon
+  test_k5_balon_surec_basina_bir_kez_ikinci_ornek_de_gostermez
+  test_k5_tepsi_yokken_tepsiye_al_balon_sayacini_tuketmez
+
+== M26c [X (1)] K5 (tur 2): sayac ORNEK basina (ikinci AnaPencere de balon gosterir)
+  test_k5_balon_surec_basina_bir_kez_ikinci_ornek_de_gostermez
+
+== M29 [X (4)] K1 omur (Y-A1): uc dugme baglantisi LAMBDA ile (self kapanista) -> sekme hic silinmez, zombi
+  test_k1_omur_kenar_durumunda_ana_pencere_dusunce_sekme_silinir[del_gc]
+  test_k1_omur_kenar_durumunda_ana_pencere_dusunce_sekme_silinir[deleteLater]
+  test_k1_sinyal_baglantilarinda_lambda_yok_ast
+  test_k1_omur_son_referans_dusunce_silinir_gorunur_kalmaz[del_gc]
+
+== M29b [X (3)] K1 omur: tek bir baglanti functools.partial ile (self'i guclu tutar; AST lambda bekcisi gormez)
+  test_k1_omur_kenar_durumunda_ana_pencere_dusunce_sekme_silinir[del_gc]
+  test_k1_omur_kenar_durumunda_ana_pencere_dusunce_sekme_silinir[deleteLater]
+  test_k1_omur_son_referans_dusunce_silinir_gorunur_kalmaz[del_gc]
+
+== M30 [X (2)] K1 dis kapatma (O-B1): AnaPencere `kapandi` sinyaline bagli degil
+  test_k1_sekme_dis_close_kenar_durumunda_gorunure_doner[tepsi_var]
+  test_k1_sekme_dis_close_kenar_durumunda_gorunure_doner[tepsi_yok]
+
+== M30b [X (3)] K1 dis kapatma (O-B1): KenarSekmesi.closeEvent `kapandi` yaymaz
+  test_k1_sekme_dis_close_kenar_durumunda_gorunure_doner[tepsi_var]
+  test_k1_sekme_dis_close_kenar_durumunda_gorunure_doner[tepsi_yok]
+  test_k1_kapandi_sinyali_close_ile_yayilir_hide_ile_yayilmaz
+
+== M31 [X (2)] K4 (O-A1): mod tiki mandali kaldirildi -> imlec diskte kalinca panel yeniden acilir
+  test_k4_mod_tiki_sonrasi_imlec_diskte_kalsa_da_yeniden_acilmaz_ciktiktan_sonra_acilir[dugme_anlik]
+  test_k4_mod_tiki_sonrasi_imlec_diskte_kalsa_da_yeniden_acilmaz_ciktiktan_sonra_acilir[dugme_bolge]
+
+== M31b [X (1)] K4 (O-A1): mandal hideEvent'te sifirlanmiyor -> yeniden gosterilince imlec diskteyse acilmaz
+  test_k4_mod_tiki_mandali_gizlenip_gosterilince_sifirlanir
+
+== M32 [X (1)] K1 (D-A1): goster() kucultulmus pencereyi showNormal ile getirmez
+  test_k1_goster_kucultulmus_pencereyi_geri_getirir
+
+== M33 [X (4)] K4 (D-A3/D-A4): yaricap ust siniri yok (yalniz >= 1)
+  test_k4_gecersiz_parametre_valueerror[yaricap67-panel-kapsamaz]
+  test_k4_gecersiz_parametre_valueerror[yaricap2^30-overflow]
+  test_k4_gecersiz_parametre_valueerror[yaricap2^31]
 
 == M27 [X (2)] K8 (sef hipotezi [5c]): sag tik press yerine release'te yayilir
   test_k8_sag_tik_pencereyi_goster
@@ -238,4 +296,10 @@ T-012 mutant basina dusen testler (ayna kosumu)
   (dusen yok)
 
 == C-3 [.] KONTROL: _konumlan gecici degiskenle -- esdeger
+  (dusen yok)
+
+== C-4 [.] KONTROL: availableGeometryChanged.connect _kapat() oncesine alindi -- ust sinir dogrulamasiyla esdeger (D-A4 ikincil onlem olcusuz)
+  (dusen yok)
+
+== C-5 [.] KONTROL: _sekme_kapandi icindeki `not self._kapandi` kaldirildi -- goster() zaten bakar, esdeger
   (dusen yok)

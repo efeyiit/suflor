@@ -41,6 +41,14 @@ KENARI uzerinde):
 Sabitler URUN DEGERLERIDIR (paket v2 "on kosul"; `real_check.py` [0] sorar):
 `PANEL_BOYUTU = QSize(200, 132)`; `yaricap=26`, `acilma_ms=120`,
 `kapanma_ms=450`, `yoklama_ms=60` `KenarSekmesi` varsayilanlaridir.
+`PANEL_BOYUTU: Final[QSize]` -- `Final` yalniz TIP duzeyinde (yeniden atamayi
+mypy yakalar); `QSize` degistirilebilir bir Qt deger nesnesidir ve
+dondurulamaz (Tester-A D-A5: `PANEL_BOYUTU.setWidth(300)` calisir).
+KARAR: `src/ui` bu nesneyi yerinde DEGISTIRMEZ (yapisal olcu:
+`test_k2_panel_boyutu_kaynakta_degistirilmez_ast`, pozitif kontrollu);
+`KenarSekmesi` her geometri hesabinda onu okur. Disaridan yerinde
+degistirmek tanimsizdir (belgeli sinir; `known_gaps`). Degeri degistirmek
+isteyen paket surumunu degistirir.
 """
 from __future__ import annotations
 

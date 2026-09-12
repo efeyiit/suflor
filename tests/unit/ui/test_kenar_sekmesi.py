@@ -7,8 +7,10 @@ ateslemez). Sikı sayilar yalniz gercek ekranda (`real_check.py`).
 """
 from __future__ import annotations
 
+import gc
 import statistics
 import time
+import weakref
 from collections.abc import Callable, Iterator
 
 import pytest
@@ -16,7 +18,7 @@ from PySide6 import QtCore, QtGui, QtWidgets
 from PySide6.QtTest import QTest
 from pytestqt.qtbot import QtBot
 
-from src.ui.geometri import PANEL_BOYUTU, Kenar, sekme_acik_dikdortgeni, sekme_kapali_dikdortgeni, y_sinirla
+from src.ui.geometri import PANEL_BOYUTU, Kenar, sekme_acik_dikdortgeni, sekme_icinde, sekme_kapali_dikdortgeni, y_sinirla
 from src.ui.kenar_sekmesi import KenarSekmesi
 
 Qt = QtCore.Qt
@@ -105,12 +107,30 @@ def test_k2_varsayilan_sabitler_urun_degerleri(sekme: tuple[KenarSekmesi, SahteI
         lambda e: KenarSekmesi(e, acilma_ms=-1),
         lambda e: KenarSekmesi(e, kapanma_ms=-1),
         lambda e: KenarSekmesi(e, yoklama_ms=0),
+        lambda e: KenarSekmesi(e, yaricap=PANEL_BOYUTU.height() // 2 + 1),
+        lambda e: KenarSekmesi(e, yaricap=2**30),
+        lambda e: KenarSekmesi(e, yaricap=2**31),
+        lambda e: KenarSekmesi(e, acilma_ms=2**31),
+        lambda e: KenarSekmesi(e, kapanma_ms=2**31),
+        lambda e: KenarSekmesi(e, yoklama_ms=2**31),
     ],
-    ids=["yaricap0", "yaricap-3", "acilma-1", "kapanma-1", "yoklama0"],
+    ids=["yaricap0", "yaricap-3", "acilma-1", "kapanma-1", "yoklama0",
+         "yaricap67-panel-kapsamaz", "yaricap2^30-overflow", "yaricap2^31", "acilma2^31", "kapanma2^31", "yoklama2^31"],
 )
 def test_k4_gecersiz_parametre_valueerror(qtbot: QtBot, kur: Callable[[QtGui.QScreen], KenarSekmesi]) -> None:
+    """Alt VE ust sinirlar `ValueError` (Tester-A D-A3: `2*yaricap <= PANEL_BOYUTU.height()` yoksa panel
+    sekmeyi kapsamaz -> salinim; D-A4: `>= 2**30/2**31` `OverflowError` sinifi disiydi)."""
     with pytest.raises(ValueError):
         kur(_ekran())
+
+
+def test_k4_yaricap_ust_sinir_tam_degeri_kabul(qtbot: QtBot) -> None:
+    """`yaricap == PANEL_BOYUTU.height() // 2` (66) kabul: panel kapali sekmeyi tam kapsar."""
+    s = KenarSekmesi(_ekran(), yaricap=PANEL_BOYUTU.height() // 2, imlec_konumu=SahteImlec())
+    qtbot.addWidget(s)
+    g = s.ekran_dikdortgeni
+    assert s.yaricap == 66 and s.frameGeometry().size() == QtCore.QSize(66, 132)
+    assert sekme_acik_dikdortgeni(g, s.y, s.yaricap, PANEL_BOYUTU, Kenar.SAG).contains(s.frameGeometry())
 
 
 def test_k4_parametreler_kabul_ve_salt_okunur(qtbot: QtBot) -> None:
@@ -444,6 +464,110 @@ def test_k4_mod_tiki_sonrasi_kapanma_sayaci_paneli_tekrar_acmaz(qtbot: QtBot, se
     s.dugme_bolge.click()
     qtbot.wait(_ust_sinir(s, False))
     assert s.acik is False
+
+
+def _disk_icinde_dugme_noktasi(s: KenarSekmesi, dugme: QtWidgets.QPushButton) -> QtCore.QPoint:
+    """Panel acikken dugmenin kenara yakin ucu: KAPALI diskin icinde kalan gercek bir tik noktasi (Tester-A O-A1)."""
+    kapali = sekme_kapali_dikdortgeni(s.ekran_dikdortgeni, s.y, s.yaricap, s.kenar)
+    d = QtCore.QRect(dugme.mapToGlobal(QtCore.QPoint(0, 0)), dugme.size()).intersected(kapali)
+    merkez = QtCore.QPoint(kapali.right() if s.kenar is Kenar.SAG else kapali.left(), kapali.top() + s.yaricap)
+    adaylar = [
+        QtCore.QPoint(x, y)
+        for x in range(d.left(), d.right() + 1)
+        for y in range(d.top(), d.bottom() + 1)
+        if sekme_icinde(kapali, QtCore.QPoint(x, y), s.yaricap, s.kenar)
+    ]
+    assert adaylar, "dugme ile kapali disk kesismiyor (Tester-A O-A1 on kosulu)"
+    return min(adaylar, key=lambda n: (n.x() - merkez.x()) ** 2 + (n.y() - merkez.y()) ** 2)  # diske en derin nokta
+
+
+@pytest.mark.parametrize("dugme_adi", ["dugme_anlik", "dugme_bolge"])
+def test_k4_mod_tiki_sonrasi_imlec_diskte_kalsa_da_yeniden_acilmaz_ciktiktan_sonra_acilir(
+    qtbot: QtBot, sekme: tuple[KenarSekmesi, SahteImlec], dugme_adi: str
+) -> None:
+    """K4 ▲▲ (Tester-A O-A1): mod tikinda imlec kapali diskin icinde kaliyorsa (dugmenin kenara yakin ucu)
+    panel `acilma_ms` sonra YENIDEN ACILMAZ -- imlec diskten cikana kadar. Pozitif kontrol: disari -> iceri -> acilir."""
+    s, imlec = sekme
+    dugme: QtWidgets.QPushButton = getattr(s, dugme_adi)
+    _ac(qtbot, s, imlec)
+    imlec.git(_disk_icinde_dugme_noktasi(s, dugme))
+    dugme.click()
+    assert s.acik is False
+    qtbot.wait(s.acilma_ms + 3 * s.yoklama_ms)
+    assert s.acik is False and s.frameGeometry().size() == QtCore.QSize(s.yaricap, 2 * s.yaricap)
+    qtbot.wait(s.acilma_ms + 3 * s.yoklama_ms)
+    assert s.acik is False  # mandal kalici: imlec diskte kaldigi surece
+    imlec.git(UZAK)
+    qtbot.wait(2 * s.yoklama_ms)
+    assert s.acik is False
+    imlec.git(_merkez(s))
+    qtbot.waitUntil(lambda: s.acik, timeout=_ust_sinir(s, True))  # pozitif kontrol: cikis sonrasi normal acilma
+
+
+def test_k4_mod_tiki_mandali_gizlenip_gosterilince_sifirlanir(qtbot: QtBot, sekme: tuple[KenarSekmesi, SahteImlec]) -> None:
+    """Mod tiki -> `hide()` -> `show()`: yeniden gosterilen sekme taze baslar; imlec diskteyse acilir."""
+    s, imlec = sekme
+    _ac(qtbot, s, imlec)
+    imlec.git(_disk_icinde_dugme_noktasi(s, s.dugme_anlik))
+    s.dugme_anlik.click()
+    s.hide()
+    imlec.git(_merkez(s))
+    s.show()
+    qtbot.waitUntil(lambda: s.acik, timeout=_ust_sinir(s, True))
+
+
+# -- K1 ▲▲ omur ve dis close() (Tester-A Y-A1, Tester-B O-B1) -----------------------------------
+
+
+def _gorunur_ust_duzey() -> list[str]:
+    return [type(w).__name__ for w in QtWidgets.QApplication.topLevelWidgets() if w.isVisible()]
+
+
+@pytest.mark.parametrize("yol", ["del_gc", "deleteLater"])
+def test_k1_omur_son_referans_dusunce_silinir_gorunur_kalmaz(qtbot: QtBot, yol: str) -> None:
+    """Tek basina `KenarSekmesi`: son Python referansi dusunce (`del`+gc / `deleteLater`) silinir --
+    `weakref` None, gorunur ust-duzey listesinde kalmaz, yoklayici durur. Fixture/`addWidget` KULLANILMAZ
+    (guclu referans). Tester-A Y-A1: lambda baglantilari yuzunden hic silinmiyordu."""
+    imlec = SahteImlec()
+    s = KenarSekmesi(_ekran(), imlec_konumu=imlec)
+    s.show()
+    qtbot.wait(20)
+    assert "KenarSekmesi" in _gorunur_ust_duzey() and s.yokluyor is True
+    ws = weakref.ref(s)
+    if yol == "deleteLater":
+        s.deleteLater()
+    del s
+    gc.collect()
+    qtbot.wait(300)
+    try:
+        assert ws() is None, "sekme silinmedi"
+        assert "KenarSekmesi" not in _gorunur_ust_duzey()
+        n = imlec.sayac
+        qtbot.wait(3 * 60)
+        assert imlec.sayac == n  # yoklayici durdu (silinen sekme imleci okumaz)
+    finally:
+        artik = ws()
+        if artik is not None:
+            artik.hide()
+
+
+def test_k1_kapandi_sinyali_close_ile_yayilir_hide_ile_yayilmaz(qtbot: QtBot, sekme: tuple[KenarSekmesi, SahteImlec]) -> None:
+    """`close()` (dis kapatma: WM_CLOSE, `closeAllWindows`) -> `kapandi` sinyali; sekme gizli, yoklayici durur,
+    panel kapali. `hide()` (kabugun kendi yolu) `kapandi` YAYMAZ (ayirt edici)."""
+    s, imlec = sekme
+    _ac(qtbot, s, imlec)
+    sayac: list[int] = []
+    s.kapandi.connect(lambda: sayac.append(1))
+    with qtbot.waitSignal(s.kapandi, timeout=1000):
+        assert s.close() is True
+    assert sayac == [1] and s.isVisible() is False and s.yokluyor is False and s.acik is False
+    imlec.git(UZAK)
+    s.show()
+    s.hide()
+    assert sayac == [1]
+    s.show()
+    s.close()
+    assert sayac == [1, 1]
 
 
 def test_k4_gercek_tik_ile_dugme_sinyali(qtbot: QtBot, sekme: tuple[KenarSekmesi, SahteImlec]) -> None:

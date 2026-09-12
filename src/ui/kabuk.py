@@ -6,7 +6,7 @@ Cercevesiz ana pencere; sag ustte UC dugme (kullanici istegi, 11 Eylul 2026):
   ◐  Kenara al    -- masaustunde pencere gorunmez; ekran kenarinda yarim daire (`KenarSekmesi`)
 Govdede iki mod dugmesi (`dugme_anlik`, `dugme_bolge`); sekmedekiyle AYNI sinyalleri yayar.
 
-Bu docstring, gorev paketindeki (T-012 packet.md surum 2) K1/K5/K6/K7/K8
+Bu docstring, gorev paketindeki (T-012 packet.md surum 3) K1/K5/K6/K7/K8
 degismezlerinin bu modulde nasil uygulandigini belgeler. Her kararin
 yaninda onu olcen test adi vardir (`tests/unit/ui/test_kabuk.py`) ya da
 `[ÖLÇÜLMÜYOR]` damgasi. Tester `known_gaps`i OKUMAZ; garanti alani burasidir.
@@ -43,8 +43,32 @@ TAM BIR KEZ yayar; ikinci cagri / `close()` sonrasi `closeEvent` / tepsi
 Kabuk `QApplication.quit()`/`exit()` CAGIRMAZ; `src.ui.uygulama.calistir`
 `cikis_istendi -> app.quit` baglar ve `setQuitOnLastWindowClosed(False)`
 ayarlar (`test_k1_kabuk_qapplication_quit_cagirmaz`).
-Sekme EBEVEYNSIZ `Tool` penceredir (Python sahipligi: `AnaPencere` silinince
-silinir, KRT o6); `kapat()` onu acikca gizler.
+`goster()` kucultulmus (`showMinimized`, Win+D sinifi) pencereyi `showNormal()`
+ile geri getirir (Tester-A D-A1; `test_k1_goster_kucultulmus_pencereyi_geri_getirir`).
+
+▲▲ OMUR (Tester-A Y-A1): sekme EBEVEYNSIZ `Tool` penceredir ve `AnaPencere`nin
+PYTHON SAHIPLIGINDEDIR (`_sekme` guclu referansi tek sahip): `AnaPencere`nin
+son referansi dusunce (`del` + `gc.collect()`) ya da `deleteLater` ile
+silinince sekme de SILINIR -- `weakref` None, gorunur ust-duzey 0, yoklayici
+durur; `Tepsi` (C++ ebeveyn: `AnaPencere`) ve menusu de gider (OLCULDU:
+`test_k1_omur_kenar_durumunda_ana_pencere_dusunce_sekme_silinir[del_gc|deleteLater]`,
+`test_k1_omur_tepsi_son_referans_dusunce_silinir`). Kosul: bu modulde ve
+sekmede HICBIR sinyal baglantisi `self`i yakalayan lambda/closure degildir
+(bagli yontem ya da `sinyal.emit`; olculdu: ikisi de sarmalayiciyi tutmaz;
+`functools.partial` tutar, KULLANILMAZ). Pozitif kontrol (kural 10): lambda
+baglantili minimal widget `del`+gc sonrasi canli ve gorunur kalir, bagli
+yontemli toplanir (`test_k1_omur_pozitif_kontrol_lambda_baglantisi_sarmalayiciyi_tutar`);
+yapisal bekci `test_k1_sinyal_baglantilarinda_lambda_yok_ast`. Tur 1'de bu
+cumle olculmeden yazilmisti ve YANLISTI (sekme hic toplanmiyordu: zombi).
+`kapat()` sekmeyi ayrica acikca gizler.
+
+▲▲ DIS KAPATMA (Tester-B O-B1): sekme disaridan `close()` edilirse (WM_CLOSE,
+`QApplication.closeAllWindows`, sonraki ajanin cagrisi) `KenarSekmesi.kapandi`
+yayar; `AnaPencere` KENAR durumundaysa `goster()` -> (T,F,F), `durum`
+gorunur -- tepsisiz konfigurasyonda da (aksi halde (F,F,F) + `kapandi=False`
+= "ulasilamaz" denen durum dis yoldan ulasilirdi). Sekme gizliyken `close()`
+(gorunur/tepsi durumlari) durum makinesine dokunmaz
+(`test_k1_sekme_dis_close_*`). Kabugun kendi yolu `hide()`dir (`kapandi` yok).
 
 ## K5 -- tepsi yoksa kullanici kilitlenmez
 
@@ -59,14 +83,22 @@ hicbir sey (`test_k5_*`). `AnaPencere.tepsiye_al()` tepsi yoksa `kenara_al()`
 -> `durum == KENAR`, uclu (F,T,F). `bildir` bildirimler kapaliyken
 `[ÖLÇÜLMÜYOR]`; tepsi ikonuna tik sonrasi on plana gelme (foreground kilidi)
 gercek ekranda `[ÖLÇÜLMÜYOR]` (sag tik yolu `real_check` [5c] ile olculur).
-`tepsiye_al()` BALON GOSTERMEZ (prototip gosteriyordu; olculdu, `real_check`
-tur 1 [5c] ihlali): Windows bildirim balonu BASKA surecin penceresidir
-(`Windows.UI.Core.CoreWindow`), sag altta 396x153 px, ~6.2 s kalir ve `ms`
-yok sayilir; sekme alt-sag banda suruklenmisse (`y >= alt sinir - 100`) balon
-onu orter, gercek sag tik balona gider, panel acilmaz. Kabugun kendi
-bildirimi kendi sekmesini ortmemeli; `Tepsi.bildir` API'si cagiranlar icin
-kalir (`test_k5_tepsiye_al_bildirim_balonu_gostermez`, pozitif kontrollu).
-Baska uygulamalarin balonlari ayni bandi ayni sure orter `[ÖLÇÜLMÜYOR]`
+▲▲ BALON (Tester-B O-B3, paket v3 K5): ILK `tepsiye_al()` SUREC BASINA BIR KEZ
+`bildir("Suflör arka planda", "Tepsi ikonuna tıklayınca pencere geri gelir.",
+2500)` gosterir -- Windows 11 yeni tepsi ikonunu tasma alaninda gizler,
+balon olmadan kullanici hicbir sey gormuyordu. Sonraki cagrilar (ayni ornek
+ya da ikinci `AnaPencere`) gostermez; sayac sinif duzeyinde
+(`_balon_gosterildi`, testler sifirlar); tepsisiz `tepsiye_al()` (kenara duser)
+sayaci tuketmez (`test_k5_ilk_tepsiye_al_surec_basina_bir_kez_balon`,
+`test_k5_balon_surec_basina_bir_kez_ikinci_ornek_de_gostermez`,
+`test_k5_tepsi_yokken_tepsiye_al_balon_sayacini_tuketmez`; `showMessage`
+casusu, pozitif kontrollu). OLCULDU (tur 1, `real_check` [5c]): balon BASKA
+surecin penceresidir (`Windows.UI.Core.CoreWindow`), sag altta 396x153 px,
+~6.2 s kalir, `ms` yok sayilir; sekme alt-sag banda suruklenmisse orter.
+Tur-2 karari: tepsi durumunda sekme zaten gizlidir; kapi [5] sekmeyi YUKARI
+surukler (balon alanindan uzak). Kalan sinif: `tepsi -> kenar` gecisi balon
+omru icinde + sekme alt-sag bantta -- belgeli, `[ÖLÇÜLMÜYOR]`. Baska
+uygulamalarin balonlari ayni bandi ayni sure orter `[ÖLÇÜLMÜYOR]`
 (`known_gaps`; kabuk ust-band shell penceresinin ustune cikamaz).
 
 ## K6 -- modal yok, metin yok, blok yok
@@ -96,6 +128,7 @@ from __future__ import annotations
 
 from collections.abc import Callable
 from enum import StrEnum
+from typing import ClassVar
 
 from PySide6.QtCore import QObject, QPoint, Qt, Signal
 from PySide6.QtGui import QCloseEvent, QColor, QFont, QGuiApplication, QIcon, QMouseEvent, QPainter, QPixmap, QScreen
@@ -216,6 +249,7 @@ class AnaPencere(QWidget):
     anlik_cevir_istendi = Signal()
     bolge_izle_istendi = Signal()
     cikis_istendi = Signal()
+    _balon_gosterildi: ClassVar[bool] = False  # K5 ▲▲: "arka planda" balonu SUREC basina bir kez (test sifirlar)
 
     def __init__(
         self,
@@ -279,6 +313,7 @@ class AnaPencere(QWidget):
 
         self._sekme = KenarSekmesi(_ekrani_coz(ekran), kenar=kenar, imlec_konumu=imlec_konumu)
         self._sekme.pencereyi_goster.connect(self.goster)
+        self._sekme.kapandi.connect(self._sekme_kapandi)
         self._sekme.anlik_cevir.connect(self.anlik_cevir_istendi.emit)
         self._sekme.bolge_izle.connect(self.bolge_izle_istendi.emit)
 
@@ -336,18 +371,21 @@ class AnaPencere(QWidget):
 
     # -- durum gecisleri -------------------------------------------------------------------------
     def goster(self) -> None:
-        """-> gorunur (T,F,F): sekme ve tepsi ikonu gizlenir, pencere one gelir."""
+        """-> gorunur (T,F,F): sekme ve tepsi ikonu gizlenir, pencere one gelir (kucultulmusse normal boyuta)."""
         if self._kapandi:
             return
         self._sekme.hide()
         self._tepsi.gizle()
         self._durum = KabukDurumu.GORUNUR
-        self.show()
+        if self.isMinimized():
+            self.showNormal()
+        else:
+            self.show()
         self.raise_()
         self.activateWindow()
 
     def tepsiye_al(self) -> None:
-        """-> tepsi (F,F,T); tepsi yoksa `kenara_al()`; kenar durumunda kenar korunur."""
+        """-> tepsi (F,F,T); tepsi yoksa `kenara_al()`; kenar durumunda kenar korunur; ilk kez surec basina bir balon."""
         if self._kapandi or self._durum is KabukDurumu.KENAR:
             return
         if not self._tepsi.kullanilabilir:
@@ -357,6 +395,9 @@ class AnaPencere(QWidget):
         self._tepsi.goster()
         self.hide()
         self._durum = KabukDurumu.TEPSI
+        if not AnaPencere._balon_gosterildi:
+            AnaPencere._balon_gosterildi = True
+            self._tepsi.bildir("Suflör arka planda", "Tepsi ikonuna tıklayınca pencere geri gelir.", 2500)
 
     def kenara_al(self) -> None:
         """-> kenar (F,T,T) / tepsi yoksa (F,T,F): pencere gizli, sekme gorunur, tepsi ikonu da kalir."""
@@ -376,6 +417,11 @@ class AnaPencere(QWidget):
         self._tepsi.gizle()
         self.hide()
         self.cikis_istendi.emit()
+
+    def _sekme_kapandi(self) -> None:
+        """Sekme DISARIDAN `close()` edildi (WM_CLOSE, `closeAllWindows`): kenar durumundaysak gorunure don."""
+        if self._durum is KabukDurumu.KENAR and not self._kapandi:
+            self.goster()
 
     # -- olaylar ---------------------------------------------------------------------------------
     def closeEvent(self, event: QCloseEvent) -> None:

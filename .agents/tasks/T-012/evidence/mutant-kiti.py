@@ -1,4 +1,4 @@
-"""T-012 mutant ayirt-etme kiti (implementer, tur 1).
+"""T-012 mutant ayirt-etme kiti (implementer, tur 1 + tur 2).
 
     python .agents/tasks/T-012/evidence/mutant-kiti.py
 
@@ -15,12 +15,22 @@ yazilir (ayni dizin).
 
 Beklentiler:
   M01..M28  davranis mutantlari (paketin K1-K8 degismezleri; brief'teki 14
-            zorunlu mutant + ek; M26-M28 tur-1 sonu [5c] kok nedeni ve sefin iki
-            hipotezi): birim testleri YAKALAMALI.
-  C-1..C-3  davranis-esdeger degisiklikler (kontrol): KACMALI -- yanlis
+            zorunlu mutant + ek; M27-M28 tur-1 sonu [5c] sefin iki hipotezi):
+            birim testleri YAKALAMALI.
+  M26*      tur 2 (paket v3 K5 ▲▲): balon her seferinde (sayac yok) / hic /
+            ornek basina -- surec basina bir kez olcusu ayirt etmeli.
+  M29..M33  tur 2 (paket v3 ▲▲): lambda baglantilari geri kondu (Y-A1 zombi);
+            `kapandi` bagli degil / yayilmiyor (O-B1); mod tiki mandali
+            kaldirildi (O-A1); `goster()` `showNormal` yok (D-A1); `yaricap`
+            ust siniri yok (D-A3/D-A4).
+  C-1..C-5  davranis-esdeger degisiklikler (kontrol): KACMALI -- yanlis
             pozitif yok. C-1 kenara_al icinde hide/tepsi.goster sirasi;
             C-2 disk esitsizligi `**` ile; C-3 `_konumlan` icinde ayni ifade
-            gecici degiskenle.
+            gecici degiskenle; C-4 `availableGeometryChanged.connect` `_kapat()`
+            oncesine alindi (ust sinir dogrulamasiyla esdeger; D-A4 ikincil
+            onlemi davranissal olcusuz -- belgeli); C-5 `_sekme_kapandi`
+            icindeki `not self._kapandi` kosulu kaldirildi (`goster()` zaten
+            bakar).
 """
 from __future__ import annotations
 
@@ -58,11 +68,12 @@ MUTANTLAR: list[tuple[str, str, list[Ikame], bool]] = [
      [(KS, "            self._acilma.stop()\n            self._surukleme = int(event.globalPosition().y()) - self._y\n",
        "            self._surukleme = int(event.globalPosition().y()) - self._y\n")], True),
     ("M06", "K4 (O9): mod tiki paneli kapatmadan sinyal yayar",
-     [(KS, "        self._acilma.stop()\n        self._kapat()\n        sinyal.emit()\n", "        sinyal.emit()\n")], True),
+     [(KS, "        self._acilma.stop()\n        self._kapat()\n        self._cikis_bekleniyor = True\n        sinyal.emit()\n",
+       "        self._cikis_bekleniyor = True\n        sinyal.emit()\n")], True),
     ("M07", "K4: yoklayici gizliyken de calisir (init'te baslar, hide durdurmaz)",
      [(KS, "        super().hideEvent(event)\n        self._yoklayici.stop()\n", "        super().hideEvent(event)\n"),
-      (KS, "        ekran.availableGeometryChanged.connect(self._ekran_degisti)\n        self._kapat()\n",
-       "        ekran.availableGeometryChanged.connect(self._ekran_degisti)\n        self._kapat()\n        self._yoklayici.start()\n")], True),
+      (KS, "        self._kapat()\n        ekran.availableGeometryChanged.connect(self._ekran_degisti)  # en son: yarim kurulu nesne sinyale bagli kalmasin\n",
+       "        self._kapat()\n        ekran.availableGeometryChanged.connect(self._ekran_degisti)\n        self._yoklayici.start()\n")], True),
     ("M08", "K4: imlec_konumu yok sayilir, dogrudan QCursor.pos okunur",
      [(KS, "sekme_icinde(self.frameGeometry(), self._imlec_konumu(), self._yaricap, self._kenar)",
        "sekme_icinde(self.frameGeometry(), QCursor.pos(), self._yaricap, self._kenar)")], True),
@@ -79,7 +90,7 @@ MUTANTLAR: list[tuple[str, str, list[Ikame], bool]] = [
     ("M13", "K2: acik panel ekran disina tasar (sikistirma yok)",
      [(GE, "    ust = max(ekran.top(), min(ust, ekran.bottom() - panel.height() + 1))\n", "")], True),
     ("M14", "K2: availableGeometryChanged bagli degil",
-     [(KS, "        ekran.availableGeometryChanged.connect(self._ekran_degisti)\n", "")], True),
+     [(KS, "        ekran.availableGeometryChanged.connect(self._ekran_degisti)  # en son: yarim kurulu nesne sinyale bagli kalmasin\n", "")], True),
     ("M15", "K2 (D5): sol kenarda cizim aynalanmaz",
      [(KS, "        merkez_x = r if self._kenar is Kenar.SAG else 0\n", "        merkez_x = r\n")], True),
     ("M16", "K1: kapat() sekmeyi gizlemez (yoklayici calisir, sekme gorunur kalir)",
@@ -111,9 +122,33 @@ MUTANTLAR: list[tuple[str, str, list[Ikame], bool]] = [
      [(KB, "        self._kapandi = True\n        self._sekme.hide()\n", "        self._kapandi = True\n        print('kapat')\n        self._sekme.hide()\n")], True),
     ("M25", "K7 pozitif kontrol: src.capture import edildi (AST + taze surec olcusu ateslemeli)",
      [(KB, "from src.ui.geometri import Kenar\n", "from src.ui.geometri import Kenar\nimport src.capture.dpi  # noqa: F401\n")], True),
-    ("M26", "K5 ([5c] kok neden): tepsiye_al() balon gosterir (prototipteki bildir cagrisi geri geldi)",
-     [(KB, "        self.hide()\n        self._durum = KabukDurumu.TEPSI\n",
-       "        self.hide()\n        self._durum = KabukDurumu.TEPSI\n        self._tepsi.bildir('a', 'b', 2500)\n")], True),
+    ("M26", "K5 (tur 2): balon HER tepsiye_al()'da (surec basina bir kez sayaci yok)",
+     [(KB, "        if not AnaPencere._balon_gosterildi:\n            AnaPencere._balon_gosterildi = True\n            self._tepsi.bildir(",
+       "        if True:\n            self._tepsi.bildir(")], True),
+    ("M26b", "K5 (tur 2): balon HIC gosterilmez (tur-1 davranisi geri geldi)",
+     [(KB, "        if not AnaPencere._balon_gosterildi:\n            AnaPencere._balon_gosterildi = True\n            self._tepsi.bildir(",
+       "        if False:\n            self._tepsi.bildir(")], True),
+    ("M26c", "K5 (tur 2): sayac ORNEK basina (ikinci AnaPencere de balon gosterir)",
+     [(KB, "        if not AnaPencere._balon_gosterildi:\n            AnaPencere._balon_gosterildi = True\n",
+       "        if not self._balon_gosterildi:\n            self._balon_gosterildi = True\n")], True),
+    ("M29", "K1 omur (Y-A1): uc dugme baglantisi LAMBDA ile (self kapanista) -> sekme hic silinmez, zombi",
+     [(KS, "        self._dugme_anlik.clicked.connect(self._anlik_tiki)\n        self._dugme_bolge.clicked.connect(self._bolge_tiki)\n        self._dugme_goster.clicked.connect(self._goster_tiki)\n",
+       "        self._dugme_anlik.clicked.connect(lambda: self._mod_tiki(self.anlik_cevir))\n        self._dugme_bolge.clicked.connect(lambda: self._mod_tiki(self.bolge_izle))\n        self._dugme_goster.clicked.connect(lambda: self._mod_tiki(self.pencereyi_goster))\n")], True),
+    ("M29b", "K1 omur: tek bir baglanti functools.partial ile (self'i guclu tutar; AST lambda bekcisi gormez)",
+     [(KS, "        self._dugme_anlik.clicked.connect(self._anlik_tiki)\n",
+       "        import functools\n        self._dugme_anlik.clicked.connect(functools.partial(KenarSekmesi._anlik_tiki, self))\n")], True),
+    ("M30", "K1 dis kapatma (O-B1): AnaPencere `kapandi` sinyaline bagli degil",
+     [(KB, "        self._sekme.kapandi.connect(self._sekme_kapandi)\n", "")], True),
+    ("M30b", "K1 dis kapatma (O-B1): KenarSekmesi.closeEvent `kapandi` yaymaz",
+     [(KS, "        super().closeEvent(event)\n        self.kapandi.emit()\n", "        super().closeEvent(event)\n")], True),
+    ("M31", "K4 (O-A1): mod tiki mandali kaldirildi -> imlec diskte kalinca panel yeniden acilir",
+     [(KS, "        self._kapat()\n        self._cikis_bekleniyor = True\n        sinyal.emit()\n", "        self._kapat()\n        sinyal.emit()\n")], True),
+    ("M31b", "K4 (O-A1): mandal hideEvent'te sifirlanmiyor -> yeniden gosterilince imlec diskteyse acilmaz",
+     [(KS, "        self._surukleme = None\n        self._cikis_bekleniyor = False\n        self._kapat()\n", "        self._surukleme = None\n        self._kapat()\n")], True),
+    ("M32", "K1 (D-A1): goster() kucultulmus pencereyi showNormal ile getirmez",
+     [(KB, "        if self.isMinimized():\n            self.showNormal()\n        else:\n            self.show()\n", "        self.show()\n")], True),
+    ("M33", "K4 (D-A3/D-A4): yaricap ust siniri yok (yalniz >= 1)",
+     [(KS, "        if not 1 <= yaricap <= _YARICAP_AZAMI:\n", "        if yaricap < 1:\n")], True),
     ("M27", "K8 (sef hipotezi [5c]): sag tik press yerine release'te yayilir",
      [(KS, "        if event.button() == Qt.MouseButton.RightButton:\n            self.pencereyi_goster.emit()\n        elif event.button() == Qt.MouseButton.LeftButton and not self._acik:",
        "        if event.button() == Qt.MouseButton.LeftButton and not self._acik:"),
@@ -131,6 +166,12 @@ MUTANTLAR: list[tuple[str, str, list[Ikame], bool]] = [
     ("C-3", "KONTROL: _konumlan gecici degiskenle -- esdeger",
      [(KS, "        self.setGeometry(self._acik_geometri() if self._acik else self._kapali_geometri())\n",
        "        hedef = self._acik_geometri() if self._acik else self._kapali_geometri()\n        self.setGeometry(hedef)\n")], False),
+    ("C-4", "KONTROL: availableGeometryChanged.connect _kapat() oncesine alindi -- ust sinir dogrulamasiyla esdeger (D-A4 ikincil onlem olcusuz)",
+     [(KS, "        self._kapat()\n        ekran.availableGeometryChanged.connect(self._ekran_degisti)  # en son: yarim kurulu nesne sinyale bagli kalmasin\n",
+       "        ekran.availableGeometryChanged.connect(self._ekran_degisti)\n        self._kapat()\n")], False),
+    ("C-5", "KONTROL: _sekme_kapandi icindeki `not self._kapandi` kaldirildi -- goster() zaten bakar, esdeger",
+     [(KB, "        if self._durum is KabukDurumu.KENAR and not self._kapandi:\n            self.goster()\n",
+       "        if self._durum is KabukDurumu.KENAR:\n            self.goster()\n")], False),
 ]
 
 OZET = re.compile(r"(?:(\d+) failed)?(?:, )?(?:(\d+) passed)?(?:, )?(?:(\d+) error)?")

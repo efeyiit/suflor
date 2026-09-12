@@ -1,0 +1,9 @@
+T-012 tester-A sonda 01 -- omur / zombi sekme (offscreen)
+  ok     [1] AnaPencere sarmalayicisi toplandi=True
+  ok     [1] sekme silindi=True; gorunur ust-duzey=[]
+  ok     [2] deleteLater: AnaPencere toplandi=True sekme silindi=True gorunur=[]
+  ok     [3] tek basina KenarSekmesi son referans dusunce silindi=True gorunur=[]
+  bilgi  [4] kapat()+dusurme: sekme yasiyor=False gorunur=False (gizli sizinti, zombi degil)
+  ok     [5] pozitif kontrol: lambda baglantili canli kaldi=True, bagli yontemli canli kaldi=False
+
+SONDA: TEMIZ

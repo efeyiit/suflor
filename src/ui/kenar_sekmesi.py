@@ -1,16 +1,43 @@
-"""Suflör -- kenar sekmesi (`KenarSekmesi`), T-012 K2/K3/K4/K6/K8.
+"""Suflör -- kenar sekmesi (`KenarSekmesi`), T-012 K1/K2/K3/K4/K6/K8.
 
 Ekranin bir kenarinda kucuk YARIM DAIRE (kapali hal, `yaricap x 2*yaricap`);
 imlec ustune gelince `acilma_ms` sonra iki secenekli panele acilir ("Anlık
 çeviri" / "Bölge izle" + kucuk "pencereyi göster"), imlec ayrilinca
 `kapanma_ms` sonra kapanir. Dikeyde suruklenebilir; sag tik -> `pencereyi_goster`.
 
-Bu docstring, gorev paketindeki (T-012 packet.md surum 2) K2/K3/K4/K6/K8
+Bu docstring, gorev paketindeki (T-012 packet.md surum 3) K1/K2/K3/K4/K6/K8
 degismezlerinin bu modulde nasil uygulandigini belgeler. Her kararin
 yaninda onu olcen test adi vardir (`tests/unit/ui/test_kenar_sekmesi.py`)
 ya da `[ÖLÇÜLMÜYOR]` damgasi. Tester `known_gaps`i OKUMAZ; garanti alani
 burasidir. Gercek ekran davranisi (odak, sureler, gercek OS tiki)
 `.agents/tasks/T-012/real_check.py` ile ayri surecte olculur.
+
+## K1 -- omur ve dis kapatma (▲▲ tur 2: Tester-A Y-A1, Tester-B O-B1)
+
+OMUR: sekme ebeveynsiz (`Tool`) bir penceredir ve PYTHON SAHIPLIGINDEDIR: son
+Python referansi dusunce (`del` + `gc.collect()` ya da `deleteLater`) C++ nesnesi
+silinir, ekranda kalmaz, yoklayici durur (OLCULDU:
+`test_k1_omur_son_referans_dusunce_silinir_gorunur_kalmaz[del_gc|deleteLater]`:
+`weakref` None, gorunur ust-duzey listesinde yok, enjekte imlec sayaci artmaz).
+Bunun kosulu: HICBIR sinyal baglantisi `self`i yakalayan lambda/closure
+DEGILDIR -- uc panel dugmesi bagli yontemlere (`_anlik_tiki`/`_bolge_tiki`/
+`_goster_tiki`) baglidir, sayaclar bagli yontemlere (`_ac`/`_kapat`/`_yokla`).
+Lambda Qt baglantisinda `self`i tutar, gc dongusu gormez, sekme HIC silinmez
+(tur 1 boyleydi: kenar durumundaki `AnaPencere` dusurulunce ZOMBI yarim daire).
+Pozitif kontrol: lambda baglantili minimal widget canli kalir, bagli yontemli
+toplanir (`test_k1_omur_pozitif_kontrol_lambda_baglantisi_sarmalayiciyi_tutar`,
+`test_kabuk.py`); yapisal bekci: `src/ui`de `.connect(lambda ...)` yok
+(`test_k1_sinyal_baglantilarinda_lambda_yok_ast`). `functools.partial` de
+`self`i guclu tutar -- KULLANILMAZ. `availableGeometryChanged.connect` yapicinin
+SON satiridir: yapici tasarsa yarim kurulu nesne ekran sinyaline bagli kalmaz
+(Tester-A D-A4; ust sinir dogrulamasi zaten en basta).
+DIS KAPATMA: `close()` (WM_CLOSE, `QApplication.closeAllWindows`, sonraki
+ajanin `sekme.close()` cagrisi) `closeEvent` -> `kapandi` sinyali; pencere
+gizlenir (`hideEvent`: yoklayici durur, panel kapanir). Kabugun kendi yolu
+`hide()`dir ve `kapandi` YAYMAZ (ayirt edici:
+`test_k1_kapandi_sinyali_close_ile_yayilir_hide_ile_yayilmaz`). `AnaPencere`
+kenar durumunda `kapandi` -> `goster()` (`test_kabuk.py`
+`test_k1_sekme_dis_close_kenar_durumunda_gorunure_doner`).
 
 ## K2 -- geometri saf modulden; kenara bitisik; `availableGeometry`
 
@@ -50,10 +77,15 @@ ustunde sekme gorunmez `[ÖLÇÜLMÜYOR]` (KRT k5 Z2; `known_gaps`).
 Kabuk (shell) ust-band pencereleri de sekmenin USTUNDEDIR: Windows bildirim
 balonu (`Windows.UI.Core.CoreWindow`, sag altta 396x153 px, ~6.2 s) alt-sag
 banda suruklenmis sekmeyi orter; o surede gercek tik balona gider, hover
-panel acmaz (OLCULDU: `real_check` tur-1 [5c] ihlali, kabugun KENDI balonu;
-`AnaPencere.tepsiye_al()` artik balon gostermez). Baska uygulamalarin
-balonlari / Baslat / bildirim merkezi icin ayni sinif `[ÖLÇÜLMÜYOR]`
-(`known_gaps`; `WindowStaysOnTopHint` shell bandinin ustune cikamaz).
+panel acmaz (OLCULDU: `real_check` tur-1 [5c] ihlali, kabugun KENDI balonu).
+Tur 2 karari (paket v3, K5 ▲▲): `AnaPencere.tepsiye_al()` balonu SUREC BASINA
+BIR KEZ gosterir (kullanici ilk kez kaybolan pencereyi bulabilsin); kapi [5]
+sekmeyi YUKARI surukler (balon alanindan uzak). Tepsi durumunda sekme zaten
+GIZLIDIR; balon yalniz `tepsi -> kenar` gecisi balon omru (~6 s) icinde
+yapilirsa ve sekme alt-sag banda suruklenmisse orter -- belgeli, `[ÖLÇÜLMÜYOR]`.
+Baska uygulamalarin balonlari / Baslat / bildirim merkezi icin ayni sinif
+`[ÖLÇÜLMÜYOR]` (`known_gaps`; `WindowStaysOnTopHint` shell bandinin ustune
+cikamaz).
 
 ## K4 -- yoklama tabanli zamanlama, enjekte imlec, surukleme, mod tiki
 
@@ -81,8 +113,17 @@ surukleme baslatmaz.
 MOD TIKI (▲ O9): `dugme_anlik`/`dugme_bolge`/`dugme_goster` tiklaninca ONCE
 panel kapanir (`acik=False`, kapali geometri uygulanir), SONRA sinyal yayilir
 -- Snapshot karesine panel metni girmez
-(`test_k4_mod_tiki_once_panel_kapanir_sonra_sinyal`). Gizlenirken
-(`hideEvent`) panel kapanir: yeniden gosterilince kapali gelir.
+(`test_k4_mod_tiki_once_panel_kapanir_sonra_sinyal`). ▲▲ MANDAL (Tester-A
+O-A1): dugmelerin kenara yakin ucu KAPALI diskin icindedir; tik oradaysa
+imlec disk icinde kalir ve panel `acilma_ms` sonra yeniden acilirdi
+(ertelenmis Snapshot karesine girer). Tik sonrasi tek atimlik mandal
+(`_cikis_bekleniyor`): imlec kapali diskten BIR KEZ cikana kadar acilma sayaci
+baslamaz; ciktiktan sonra normal
+(`test_k4_mod_tiki_sonrasi_imlec_diskte_kalsa_da_yeniden_acilmaz_ciktiktan_sonra_acilir`,
+iki dugme). Gizlenirken (`hideEvent`) panel kapanir, surukleme ve mandal
+sifirlanir: yeniden gosterilince kapali ve taze gelir
+(`test_k4_mod_tiki_mandali_gizlenip_gosterilince_sifirlanir`). Sag tik
+`_mod_tiki`den gecmez (mandal yok; kabuk sekmeyi zaten gizler).
 Sinirlar: birim testte ust sinir gevsek (`acilma_ms + 2*yoklama_ms + 300`,
 CI titremesi KRT O2) + deterministik alt sinir (`acilma_ms // 2` sonra hala
 kapali); siki sayilar `real_check` [4] (gercek ekran 129-153 / 476-478 ms).
@@ -103,9 +144,13 @@ stilini cizer). 100 kare medyani offscreen 0.04 / 0.21 ms, gercek ekran
 `toolTip` ve `accessibleName`i dolu (`test_k8_*`). Sag tik (kapali ya da
 acik) `pencereyi_goster` yayar.
 
-Parametre dogrulama (paket sessiz; bir adim otesi): `yaricap >= 1`,
-`acilma_ms >= 0`, `kapanma_ms >= 0`, `yoklama_ms >= 1`; aksi `ValueError`
-yapimda (`test_k4_gecersiz_parametre_valueerror`).
+Parametre dogrulama (paket sessiz; bir adim otesi): `1 <= yaricap <= 66`
+(`PANEL_BOYUTU.height() // 2`: acik panel kapali sekmeyi KAPSAMALI, aksi
+halde imlec disk icinde-panel disinda kalip salinir -- Tester-A D-A3),
+`0 <= acilma_ms/kapanma_ms <= 2**31-1`, `1 <= yoklama_ms <= 2**31-1` (QTimer
+C++ int; otesi `OverflowError` olurdu -- D-A4); aksi `ValueError` yapimda,
+hicbir Qt nesnesi yaratilmadan (`test_k4_gecersiz_parametre_valueerror`,
+`test_k4_yaricap_ust_sinir_tam_degeri_kabul`).
 """
 from __future__ import annotations
 
@@ -113,6 +158,7 @@ from collections.abc import Callable
 
 from PySide6.QtCore import QPoint, QPointF, QRect, Qt, QTimer, Signal, SignalInstance
 from PySide6.QtGui import (
+    QCloseEvent,
     QColor,
     QCursor,
     QFont,
@@ -140,6 +186,8 @@ _SEKME_BAYRAKLARI = (
     | Qt.WindowType.WindowStaysOnTopHint
     | Qt.WindowType.WindowDoesNotAcceptFocus
 )
+_YARICAP_AZAMI = PANEL_BOYUTU.height() // 2  # 66: `2*yaricap <= panel.h` -> acik panel kapali sekmeyi kapsar (K2)
+_MS_AZAMI = 2**31 - 1  # QTimer araligi C++ int; otesi OverflowError olurdu
 _PANEL_STILI = (
     f"QFrame{{background:{_YUZEY}; border:1px solid {_CIZGI}; border-radius:10px;}}"
     f"QPushButton{{background:#1e2630; color:{_YAZI}; border:1px solid {_CIZGI}; border-radius:6px;"
@@ -157,6 +205,7 @@ class KenarSekmesi(QWidget):
     anlik_cevir = Signal()
     bolge_izle = Signal()
     pencereyi_goster = Signal()
+    kapandi = Signal()  # dis `close()` (WM_CLOSE, closeAllWindows); kabugun `hide()` yolu YAYMAZ
 
     def __init__(
         self,
@@ -169,12 +218,12 @@ class KenarSekmesi(QWidget):
         yoklama_ms: int = 60,
         imlec_konumu: Callable[[], QPoint] | None = None,
     ) -> None:
-        if yaricap < 1:
-            raise ValueError(f"yaricap >= 1 olmali: {yaricap}")
-        if acilma_ms < 0 or kapanma_ms < 0:
-            raise ValueError(f"acilma_ms/kapanma_ms >= 0 olmali: {acilma_ms}/{kapanma_ms}")
-        if yoklama_ms < 1:
-            raise ValueError(f"yoklama_ms >= 1 olmali: {yoklama_ms}")
+        if not 1 <= yaricap <= _YARICAP_AZAMI:
+            raise ValueError(f"1 <= yaricap <= {_YARICAP_AZAMI} olmali (panel sekmeyi kapsamali): {yaricap}")
+        if not (0 <= acilma_ms <= _MS_AZAMI and 0 <= kapanma_ms <= _MS_AZAMI):
+            raise ValueError(f"0 <= acilma_ms/kapanma_ms <= {_MS_AZAMI} olmali: {acilma_ms}/{kapanma_ms}")
+        if not 1 <= yoklama_ms <= _MS_AZAMI:
+            raise ValueError(f"1 <= yoklama_ms <= {_MS_AZAMI} olmali: {yoklama_ms}")
         super().__init__(None, _SEKME_BAYRAKLARI)
         self.setAttribute(Qt.WidgetAttribute.WA_TranslucentBackground)
         self.setAttribute(Qt.WidgetAttribute.WA_ShowWithoutActivating)
@@ -190,6 +239,7 @@ class KenarSekmesi(QWidget):
         self._imlec_konumu: Callable[[], QPoint] = imlec_konumu if imlec_konumu is not None else QCursor.pos
         self._acik = False
         self._surukleme: int | None = None
+        self._cikis_bekleniyor = False  # mod tiki mandali: imlec diskten cikana kadar yeniden acilma yok (K4 ▲▲)
         g = self._ekran_dikdortgeni
         self._y = y_sinirla(g, g.top() + g.height() // 2 - yaricap, yaricap)
 
@@ -219,9 +269,10 @@ class KenarSekmesi(QWidget):
         duzen.addWidget(self._dugme_bolge)
         for dugme in (self._dugme_goster, self._dugme_anlik, self._dugme_bolge):
             dugme.setFocusPolicy(Qt.FocusPolicy.NoFocus)
-        self._dugme_anlik.clicked.connect(lambda: self._mod_tiki(self.anlik_cevir))
-        self._dugme_bolge.clicked.connect(lambda: self._mod_tiki(self.bolge_izle))
-        self._dugme_goster.clicked.connect(lambda: self._mod_tiki(self.pencereyi_goster))
+        # K1 omur: BAGLI YONTEM -- lambda/closure `self`i Qt baglantisinda tutar, sekme hic silinmez (Tester-A Y-A1)
+        self._dugme_anlik.clicked.connect(self._anlik_tiki)
+        self._dugme_bolge.clicked.connect(self._bolge_tiki)
+        self._dugme_goster.clicked.connect(self._goster_tiki)
         self._panel.hide()
 
         self._acilma = QTimer(self)
@@ -235,8 +286,8 @@ class KenarSekmesi(QWidget):
         self._yoklayici = QTimer(self)
         self._yoklayici.setInterval(yoklama_ms)
         self._yoklayici.timeout.connect(self._yokla)
-        ekran.availableGeometryChanged.connect(self._ekran_degisti)
         self._kapat()
+        ekran.availableGeometryChanged.connect(self._ekran_degisti)  # en son: yarim kurulu nesne sinyale bagli kalmasin
 
     # -- ozellikler ------------------------------------------------------------------------------
     @property
@@ -341,6 +392,10 @@ class KenarSekmesi(QWidget):
         if self._surukleme is not None:
             return
         icinde = sekme_icinde(self.frameGeometry(), self._imlec_konumu(), self._yaricap, self._kenar)
+        if self._cikis_bekleniyor:
+            if icinde:
+                return  # mod tiki sonrasi imlec hala kapali diskte: sayac baslamaz
+            self._cikis_bekleniyor = False
         if icinde:
             self._kapanma.stop()
             if not self._acik and not self._acilma.isActive():
@@ -353,7 +408,17 @@ class KenarSekmesi(QWidget):
     def _mod_tiki(self, sinyal: SignalInstance) -> None:
         self._acilma.stop()
         self._kapat()
+        self._cikis_bekleniyor = True
         sinyal.emit()
+
+    def _anlik_tiki(self) -> None:
+        self._mod_tiki(self.anlik_cevir)
+
+    def _bolge_tiki(self) -> None:
+        self._mod_tiki(self.bolge_izle)
+
+    def _goster_tiki(self) -> None:
+        self._mod_tiki(self.pencereyi_goster)
 
     # -- olaylar ---------------------------------------------------------------------------------
     def showEvent(self, event: QShowEvent) -> None:
@@ -365,7 +430,12 @@ class KenarSekmesi(QWidget):
         self._yoklayici.stop()
         self._acilma.stop()
         self._surukleme = None
+        self._cikis_bekleniyor = False
         self._kapat()
+
+    def closeEvent(self, event: QCloseEvent) -> None:
+        super().closeEvent(event)
+        self.kapandi.emit()
 
     def paintEvent(self, event: QPaintEvent) -> None:
         if self._acik:

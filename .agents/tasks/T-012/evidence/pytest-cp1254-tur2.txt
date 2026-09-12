@@ -1,0 +1,9 @@
+$ cmd /c cp1254.cmd  (chcp 1254; PYTHONIOENCODING ve PYTHONUTF8 bos; python -c encoding satiri; python -m pytest tests/unit/ui -q -p no:cacheprovider)
+Active code page: 1254
+sys.stdout.encoding=cp1254 locale=cp1254
+........................................................................ [ 33%]
+........................................................................ [ 66%]
+........................................................................ [100%]
+216 passed in 17.84s
+
+[exit 0]

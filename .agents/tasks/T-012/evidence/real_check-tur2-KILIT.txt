@@ -1,0 +1,11 @@
+T-012 tur 2 -- kapi (real_check v3) kosulamadi: OTURUM KILITLI
+zaman: 2026-09-13 00:00
+on plan pencere sinifi: Windows.UI.Core.CoreWindow  surec: LockApp.exe  (pid 49092)
+LogonUI.exe calisiyor: True
+
+Kapi [3] ve [5] GERCEK OS fare girdisi (mouse_event) ve on plan (GetForegroundWindow) ister;
+kilit ekraninda girdi LockApp'e gider, sahne on plana alinamaz -> olcum gecersiz olur (Tester-B tur-1 ilk kosumu).
+Karar: kapi bu turda implementer tarafindan KOSULMADI; kilit acilinca sef `evidence/real_check-on-plan-sarici.py` ile kosar.
+Offscreen testler, mypy, kapsam, tam takim ve mutant kiti kilitten etkilenmez (hepsi kosuldu).
+
+son kontrol 2026-09-13 00:10: on plan hala LockApp.exe, LogonUI.exe calisiyor -> kapi bu oturumda kosulmadi.

@@ -8,11 +8,14 @@ disk testi (kose disarida) ve acik panel dikdortgeni.
 """
 from __future__ import annotations
 
+import ast
 import itertools
+from pathlib import Path
 
 import pytest
 from PySide6.QtCore import QPoint, QRect, QSize
 
+import src.ui
 from src.ui.geometri import (
     PANEL_BOYUTU,
     Kenar,
@@ -22,6 +25,7 @@ from src.ui.geometri import (
     y_sinirla,
 )
 
+UI_DIZINI = Path(src.ui.__file__).resolve().parent
 YARICAP = 26
 EKRANLAR: dict[str, QRect] = {
     "birincil_2560x1392": QRect(0, 0, 2560, 1392),
@@ -45,6 +49,34 @@ def test_k2_kenar_strenum_degerleri() -> None:
 
 def test_k2_panel_boyutu_urun_degeri() -> None:
     assert PANEL_BOYUTU == QSize(200, 132)
+
+
+_QSIZE_DEGISTIRICILER = {"setWidth", "setHeight", "scale", "transpose", "setSize", "__iadd__", "__isub__", "__imul__", "__itruediv__"}
+
+
+def _panel_boyutu_degistirmeleri(kaynak: str) -> list[int]:
+    """`PANEL_BOYUTU.<degistirici>(...)` cagrilari ve `PANEL_BOYUTU` uzerine artirmali atamalar (satir no)."""
+    agac = ast.parse(kaynak)
+    satirlar: list[int] = []
+    for d in ast.walk(agac):
+        if (isinstance(d, ast.Call) and isinstance(d.func, ast.Attribute) and d.func.attr in _QSIZE_DEGISTIRICILER
+                and isinstance(d.func.value, ast.Name) and d.func.value.id == "PANEL_BOYUTU"):
+            satirlar.append(d.lineno)
+        elif isinstance(d, ast.AugAssign) and isinstance(d.target, ast.Name) and d.target.id == "PANEL_BOYUTU":
+            satirlar.append(d.lineno)
+    return satirlar
+
+
+def test_k2_panel_boyutu_kaynakta_degistirilmez_ast() -> None:
+    """Tester-A D-A5: `Final[QSize]` yalniz tip duzeyinde; `QSize` degistirilebilir deger nesnesidir (Qt'de
+    dondurulamaz). Karar: `src/ui` `PANEL_BOYUTU`yu YERINDE DEGISTIRMEZ (yapisal olcu, pozitif kontrollu);
+    dis degistirme tanimsiz -- docstring. Bu test eski kodda da yesildir (disiplin bekcisi, TDD kirmizisi degil)."""
+    for dosya in ("geometri.py", "kenar_sekmesi.py", "kabuk.py"):
+        assert _panel_boyutu_degistirmeleri((UI_DIZINI / dosya).read_text(encoding="utf-8")) == [], dosya
+    assert _panel_boyutu_degistirmeleri("PANEL_BOYUTU.setWidth(300)\n") == [1]
+    assert _panel_boyutu_degistirmeleri("PANEL_BOYUTU += QSize(1, 1)\n") == [1]
+    assert _panel_boyutu_degistirmeleri("x = QSize(PANEL_BOYUTU); x.setWidth(300)\n") == []
+    assert _panel_boyutu_degistirmeleri("PANEL_BOYUTU.width()\n") == []
 
 
 # -- y_sinirla ---------------------------------------------------------------------------------

@@ -1,0 +1,51 @@
+T-012 mutant kiti -- ayna: <gecici dizin>/t012_ayna
+TEMEL (mutantsiz): failed=0 passed=215 error=0
+ad    sonuc    beklenen   aciklama
+M01   X (4)    YAKALA     K1: closeEvent ignore edilir (kapat cagrilmaz) -> Alt+F4/WM_CLOSE zombi
+M02   X (3)    YAKALA     K1: kapat() idempotent degil (kapandi bayragi yok) -> cikis_istendi ikinci kez
+M03   X (9)    YAKALA     K1: goster() tepsi ikonunu gizlemez -> gorunur uclusu (T,F,T)
+M04   X (3)    YAKALA     K5: tepsi yokken tepsiye_al() kenara dusmez -> pencere gizli, ikon yok, sekme yok (kilit)
+M05   X (2)    YAKALA     K4 (Y2): surukleme sirasinda yoklayici acilma sayacini baslatir
+M05b  X (1)    YAKALA     K4 (Y2): basinca calisan acilma sayaci durdurulmaz
+M06   X (7)    YAKALA     K4 (O9): mod tiki paneli kapatmadan sinyal yayar
+M07   X (9)    YAKALA     K4: yoklayici gizliyken de calisir (init'te baslar, hide durdurmaz)
+M08   X (26)   YAKALA     K4: imlec_konumu yok sayilir, dogrudan QCursor.pos okunur
+M09   X (5)    YAKALA     K2 (D1): disk yerine dikdortgen ici (saydam kose 'icinde')
+M10   X (20)   YAKALA     K2: sol kenar x yanlis (+1)
+M11   X (40)   YAKALA     K2: y sinirlanmaz
+M12   X (1)    YAKALA     K3: WindowDoesNotAcceptFocus bayragi eksik
+M13   X (26)   YAKALA     K2: acik panel ekran disina tasar (sikistirma yok)
+M14   X (1)    YAKALA     K2: availableGeometryChanged bagli degil
+M15   X (2)    YAKALA     K2 (D5): sol kenarda cizim aynalanmaz
+M16   X (3)    YAKALA     K1: kapat() sekmeyi gizlemez (yoklayici calisir, sekme gorunur kalir)
+M17   X (5)    YAKALA     K5: tepsi yokken de ikon.show() cagrilir ve gorunur() = isVisible (dogal yanlis uygulama; offscreen'de True)
+M17b  X (1)    YAKALA     K5: yalniz goster() kosulu kaldirildi (gorunur() hala kullanilabilir ile AND)
+M18   X (3)    YAKALA     K5: her activated sebebi (Context dahil) pencereyi gosterir
+M19   X (1)    YAKALA     K4: icerideyken kapanma sayaci durdurulmaz (titremede kapanir)
+M20   X (1)    YAKALA     K1 (Y1): calistir setQuitOnLastWindowClosed(False) ayarlamaz
+M21   X (1)    YAKALA     K1 (Y1): calistir cikis_istendi -> app.quit baglamaz
+M22   X (1)    YAKALA     K1: kenar -> tepsi gecisi acilir (kenar korunmaz)
+M23   X (1)    YAKALA     K1: kapat() sonrasi goster() diriltir
+M24   X (1)    YAKALA     K6 pozitif kontrol: kaynaga print eklendi (AST olcusu ateslemeli)
+M25   X (2)    YAKALA     K7 pozitif kontrol: src.capture import edildi (AST + taze surec olcusu ateslemeli)
+M26   X (2)    YAKALA     K5 (tur 2): balon HER tepsiye_al()'da (surec basina bir kez sayaci yok)
+M26b  X (3)    YAKALA     K5 (tur 2): balon HIC gosterilmez (tur-1 davranisi geri geldi)
+M26c  X (1)    YAKALA     K5 (tur 2): sayac ORNEK basina (ikinci AnaPencere de balon gosterir)
+M29   X (4)    YAKALA     K1 omur (Y-A1): uc dugme baglantisi LAMBDA ile (self kapanista) -> sekme hic silinmez, zombi
+M29b  X (3)    YAKALA     K1 omur: tek bir baglanti functools.partial ile (self'i guclu tutar; AST lambda bekcisi gormez)
+M30   X (2)    YAKALA     K1 dis kapatma (O-B1): AnaPencere `kapandi` sinyaline bagli degil
+M30b  X (3)    YAKALA     K1 dis kapatma (O-B1): KenarSekmesi.closeEvent `kapandi` yaymaz
+M31   X (2)    YAKALA     K4 (O-A1): mod tiki mandali kaldirildi -> imlec diskte kalinca panel yeniden acilir
+M31b  X (1)    YAKALA     K4 (O-A1): mandal hideEvent'te sifirlanmiyor -> yeniden gosterilince imlec diskteyse acilmaz
+M32   X (1)    YAKALA     K1 (D-A1): goster() kucultulmus pencereyi showNormal ile getirmez
+M33   X (4)    YAKALA     K4 (D-A3/D-A4): yaricap ust siniri yok (yalniz >= 1)
+M27   X (2)    YAKALA     K8 (sef hipotezi [5c]): sag tik press yerine release'te yayilir
+M28   X (4)    YAKALA     K4 (sef hipotezi [5c]): birakinca surukleme bayragi temizlenmez (takili kalir) -> yoklayici hic acmaz
+C-1   .        KACSIN     KONTROL: kenara_al icinde hide() ve tepsi.goster() sirasi degisti -- esdeger
+C-2   .        KACSIN     KONTROL: disk esitsizligi `**` ile yazildi -- esdeger
+C-3   .        KACSIN     KONTROL: _konumlan gecici degiskenle -- esdeger
+C-4   .        KACSIN     KONTROL: availableGeometryChanged.connect _kapat() oncesine alindi -- ust sinir dogrulamasiyla esdeger (D-A4 ikincil onlem olcusuz)
+C-5   .        KACSIN     KONTROL: _sekme_kapandi icindeki `not self._kapandi` kaldirildi -- goster() zaten bakar, esdeger
+
+40 davranis mutanti + 5 kontrol; beklenti tutmayan: 0 []
+dusen test adlari: mutant-ayirt-etme-hangi-testler.txt

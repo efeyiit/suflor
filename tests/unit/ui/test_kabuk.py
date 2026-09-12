@@ -4,10 +4,15 @@ Durum uclusu = (pencere gorunur, sekme gorunur, tepsi ikonu gorunur):
   gorunur (T,F,F) · tepsi (F,F,T) · kenar (F,T,T) · kenar (tepsi yok) (F,T,F)
 `kapat()` sonrasi (F,F,F) ve `cikis_istendi` tam bir kez. Fixture teardown'da
 `kapat()` cagirir (sekme ebeveynsiz `Tool` pencere -- KRT O6 sira kirliligi).
+Omur testleri (`test_k1_omur_*`) fixture ve `qtbot.addWidget` KULLANMAZ (ikisi de
+guclu referans tutar); `weakref` + `gc.collect()` + olay dongusu ile olcer ve
+basarisizlikta artigi kendisi gizler.
 """
 from __future__ import annotations
 
 import ast
+import gc
+import weakref
 from collections.abc import Callable, Iterator
 from pathlib import Path
 
@@ -159,6 +164,24 @@ def test_k1_gorunur_yollari_hepsi_ayni_uclu(pencere: AnaPencere) -> None:
         assert pencere.durum is KabukDurumu.GORUNUR and uclu(pencere) == GORUNUR, i
 
 
+def test_k1_panel_acikken_dugme_goster_pencereyi_getirir(qtbot: QtBot) -> None:
+    """Gercekci yol (Tester-B test kalitesi notu): kenar durumunda imlec sekmeye gelir, panel ACILIR,
+    paneldeki `dugme_goster` tiklanir -> (T,F,F), sekme gizli ve kapali, yoklayici durur."""
+    imlec = SahteImlec()
+    p = _yeni(qtbot, imlec_konumu=imlec)
+    p.show()
+    p.kenara_al()
+    s = p.sekme
+    fg = s.frameGeometry()
+    imlec.nokta = QtCore.QPoint(fg.right() - 3, fg.center().y())
+    qtbot.waitUntil(lambda: s.acik, timeout=s.acilma_ms + 2 * s.yoklama_ms + 300)
+    assert s.dugme_goster.isVisible()
+    _tikla(s.dugme_goster, SOL_DUGME)
+    assert p.durum is KabukDurumu.GORUNUR and uclu(p) == GORUNUR
+    assert s.acik is False and s.yokluyor is False
+    p.kapat()
+
+
 def test_k1_tepsiye_al_iki_kez_idempotent(pencere: AnaPencere) -> None:
     pencere.tepsiye_al()
     pencere.tepsiye_al()
@@ -264,6 +287,154 @@ def test_k1_kabuk_qapplication_quit_cagirmaz(qtbot: QtBot, qapp: QtWidgets.QAppl
     assert "quit" not in adlar and "exit" not in adlar
 
 
+# -- K1 ▲▲ omur: AnaPencere dusurulunce sekme ve tepsi silinir (Tester-A Y-A1) --------------------
+
+
+@pytest.mark.parametrize("yol", ["del_gc", "deleteLater"])
+def test_k1_omur_kenar_durumunda_ana_pencere_dusunce_sekme_silinir(qtbot: QtBot, qapp: QtWidgets.QApplication, yol: str) -> None:
+    """Docstring K1 omur cumlesi: `AnaPencere` Python sahipligindedir; son referans dusunce (`del`+gc) ya da
+    `deleteLater` ile sekme SILINIR (weakref None), gorunur ust-duzey 0, yoklayici durur. Tester-A Y-A1:
+    lambda baglantili sekme hic toplanmiyor, ekranda zombi yarim daire kaliyordu."""
+    eski = qapp.quitOnLastWindowClosed()
+    qapp.setQuitOnLastWindowClosed(False)
+    try:
+        p = AnaPencere(tepsi_kullanilabilir=True, imlec_konumu=SahteImlec())
+        p.show()
+        p.kenara_al()
+        qtbot.wait(20)
+        assert uclu(p) == KENAR and p.sekme.yokluyor is True and "KenarSekmesi" in _gorunur_ust_duzey()
+        wp, ws = weakref.ref(p), weakref.ref(p.sekme)
+        wt = weakref.ref(p.tepsi)
+        if yol == "deleteLater":
+            p.deleteLater()
+        del p
+        gc.collect()
+        qtbot.wait(300)
+        try:
+            assert wp() is None, "AnaPencere sarmalayicisi toplanmadi"
+            assert ws() is None, "sekme silinmedi (zombi yarim daire)"
+            assert wt() is None, "tepsi silinmedi"
+            assert _gorunur_ust_duzey() == []
+        finally:
+            artik = ws()
+            if artik is not None:
+                artik.hide()  # basarisizlikta artigi gizle: sonraki testlerin 'gorunur ust-duzey' olcusu kirlenmesin
+    finally:
+        qapp.setQuitOnLastWindowClosed(eski)
+
+
+def test_k1_omur_pozitif_kontrol_lambda_baglantisi_sarmalayiciyi_tutar(qtbot: QtBot) -> None:
+    """Olcu ateslenebilir (kural 10): ayni kalipta minimal `Tool` widget -- `clicked.connect(lambda: ...)`
+    olan `del`+gc sonrasi CANLI kalir (gorunur), `clicked.connect(self._tik)` olan toplanir."""
+
+    class Lambdali(QtWidgets.QWidget):
+        def __init__(self) -> None:
+            super().__init__(None, Qt.WindowType.Tool)
+            self.b = QtWidgets.QPushButton("x", self)
+            self.b.clicked.connect(lambda: self._tik())
+
+        def _tik(self) -> None:
+            pass
+
+    class BagliYontem(QtWidgets.QWidget):
+        def __init__(self) -> None:
+            super().__init__(None, Qt.WindowType.Tool)
+            self.b = QtWidgets.QPushButton("x", self)
+            self.b.clicked.connect(self._tik)
+
+        def _tik(self) -> None:
+            pass
+
+    sonuc: dict[str, bool] = {}
+    for K in (BagliYontem, Lambdali):
+        w = K()
+        w.show()
+        qtbot.wait(10)
+        r = weakref.ref(w)
+        del w
+        gc.collect()
+        qtbot.wait(50)
+        sonuc[K.__name__] = r() is not None
+        canli = r()
+        if canli is not None:
+            assert canli.isVisible()
+            canli.hide()
+            canli.deleteLater()  # C++ silinince baglanti kopar, kapanis serbest kalir
+            qtbot.wait(20)
+    assert sonuc == {"BagliYontem": False, "Lambdali": True}
+    assert _gorunur_ust_duzey() == []
+
+
+def test_k1_omur_tepsi_son_referans_dusunce_silinir(qtbot: QtBot) -> None:
+    """`Tepsi` (ebeveynsiz) son referans dusunce toplanir; menu (`QMenu`, ebeveynsiz) onunla gider."""
+    t = Tepsi(QtGui.QIcon(), None, kullanilabilir=True)
+    t.goster()
+    wt, wm = weakref.ref(t), weakref.ref(t.menu)
+    del t
+    gc.collect()
+    qtbot.wait(100)
+    assert wt() is None and wm() is None
+
+
+def test_k1_sinyal_baglantilarinda_lambda_yok_ast() -> None:
+    """Yapisal (K1 ▲▲): `src/ui` kaynaginda hicbir `.connect(...)` cagrisinin argumani lambda degildir
+    (kapanis `self`i Qt baglantisinda tutar -- Y-A1 mekanizmasi). Pozitif kontrol: lambda'li snippet yakalanir."""
+
+    def lambda_baglantilari(kaynak: str) -> list[int]:
+        agac = ast.parse(kaynak)
+        return [
+            d.lineno for d in ast.walk(agac)
+            if isinstance(d, ast.Call) and isinstance(d.func, ast.Attribute) and d.func.attr == "connect"
+            and any(isinstance(a, ast.Lambda) for a in d.args)
+        ]
+
+    for dosya in ("kabuk.py", "kenar_sekmesi.py", "uygulama.py"):
+        assert lambda_baglantilari((UI_DIZINI / dosya).read_text(encoding="utf-8")) == [], dosya
+    assert lambda_baglantilari("b.clicked.connect(lambda: self._x())\n") == [1]
+    assert lambda_baglantilari("b.clicked.connect(self._x)\n") == []
+
+
+# -- K1 ▲▲ dis close(): sekme disaridan kapatilirsa kabuk gorunure doner (Tester-B O-B1) ---------
+
+
+@pytest.mark.parametrize("tepsi_var", [True, False], ids=["tepsi_var", "tepsi_yok"])
+def test_k1_sekme_dis_close_kenar_durumunda_gorunure_doner(qtbot: QtBot, tepsi_var: bool) -> None:
+    """`sekme.close()` (Qt `closeAllWindows`, WM_CLOSE, sonraki ajanin cagrisi) -> `kapandi` -> `goster()`:
+    `durum == gorunur`, uclu (T,F,F). Tepsisiz konfigurasyonda da (aksi halde (F,F,F) = ulasilamaz olmali)."""
+    p = _yeni(qtbot, tepsi_kullanilabilir=tepsi_var)
+    p.show()
+    p.kenara_al()
+    assert uclu(p) == (KENAR if tepsi_var else KENAR_TEPSI_YOK)
+    assert p.sekme.close() is True
+    assert p.durum is KabukDurumu.GORUNUR and uclu(p) == GORUNUR
+    assert p.kapandi is False and p.sekme.yokluyor is False and p.sekme.acik is False
+    p.kapat()
+
+
+def test_k1_sekme_dis_close_gorunur_ve_tepsi_durumunda_durum_degismez(pencere: AnaPencere) -> None:
+    """Sekme gizliyken `close()` durum makinesine dokunmaz: `gorunur` kalir; `tepsi` kalir (F,F,T)."""
+    pencere.sekme.close()
+    durum_gorunur = pencere.durum
+    assert durum_gorunur is KabukDurumu.GORUNUR and uclu(pencere) == GORUNUR
+    pencere.tepsiye_al()
+    pencere.sekme.close()
+    durum_tepsi = pencere.durum
+    assert durum_tepsi is KabukDurumu.TEPSI and uclu(pencere) == TEPSI
+
+
+def test_k1_goster_kucultulmus_pencereyi_geri_getirir(qtbot: QtBot, pencere: AnaPencere) -> None:
+    """Tester-A D-A1: `showMinimized()` (Win+D sinifi) -> `tepsiye_al()` -> `goster()` pencereyi NORMAL getirir."""
+    pencere.showMinimized()
+    assert pencere.isMinimized() is True
+    pencere.tepsiye_al()
+    pencere.goster()
+    assert pencere.isMinimized() is False and uclu(pencere) == GORUNUR and pencere.durum is KabukDurumu.GORUNUR
+    pencere.showMinimized()
+    pencere.kenara_al()
+    pencere.goster()
+    assert pencere.isMinimized() is False and uclu(pencere) == GORUNUR
+
+
 # -- K5 tepsi ------------------------------------------------------------------------------------
 
 
@@ -363,19 +534,62 @@ def test_k5_tepsi_ikonu_ve_ipucu(pencere: AnaPencere) -> None:
     assert not pencere.windowIcon().isNull()
 
 
-def test_k5_tepsiye_al_bildirim_balonu_gostermez(pencere: AnaPencere, monkeypatch: pytest.MonkeyPatch) -> None:
-    """real_check [5c] kok nedeni (tur 1): `tepsiye_al()` balonu (Windows bildirimi, baska surecin penceresi,
-    sag altta 396x153 px, ~6.2 s; `ms` yok sayilir) sekmenin alt-sag konumunu ortuyor, gercek sag tik balona
-    gidiyordu (`evidence/olcum-5c-balon.txt`). Karar: `tepsiye_al()` balon GOSTERMEZ; `Tepsi.bildir` API'si kalir."""
+def _balon_casusu(p: AnaPencere, monkeypatch: pytest.MonkeyPatch) -> list[tuple[object, ...]]:
     cagri: list[tuple[object, ...]] = []
-    monkeypatch.setattr(pencere.tepsi.ikon, "showMessage", lambda *a, **k: cagri.append(a))
+    monkeypatch.setattr(p.tepsi.ikon, "showMessage", lambda *a, **k: cagri.append(a))
+    return cagri
+
+
+def test_k5_ilk_tepsiye_al_surec_basina_bir_kez_balon(pencere: AnaPencere, monkeypatch: pytest.MonkeyPatch) -> None:
+    """K5 ▲▲ (Tester-B O-B3): ILK `tepsiye_al()` surec basina BIR KEZ `bildir("Suflör arka planda", ..., 2500)`;
+    sonraki cagrilar (ayni ornek) gostermez. Tur-1 [5c] (balon sag alt bandi ~6 s orter) kapida cozuldu:
+    surukleme artik YUKARI. Sayac surec duzeyinde -> test onu sifirlar."""
+    monkeypatch.setattr(AnaPencere, "_balon_gosterildi", False)
+    cagri = _balon_casusu(pencere, monkeypatch)
     pencere.tepsiye_al()
-    assert uclu(pencere) == TEPSI and cagri == []
+    assert uclu(pencere) == TEPSI and len(cagri) == 1
+    baslik, metin, _ikon, ms = cagri[0]
+    assert baslik == "Suflör arka planda" and metin == "Tepsi ikonuna tıklayınca pencere geri gelir." and ms == 2500
     pencere.goster()
     pencere.tepsiye_al()
-    assert cagri == []
-    pencere.tepsi.bildir("a", "b", 10)  # pozitif kontrol: casus ateslenebilir (kural 10)
-    assert len(cagri) == 1
+    pencere.goster()
+    pencere.tepsiye_al()
+    assert len(cagri) == 1  # x3 -> 1
+    pencere.tepsi.bildir("a", "b", 10)  # pozitif kontrol: casus hala ateslenebilir (kural 10)
+    assert len(cagri) == 2
+
+
+def test_k5_balon_surec_basina_bir_kez_ikinci_ornek_de_gostermez(qtbot: QtBot, monkeypatch: pytest.MonkeyPatch) -> None:
+    """Sayac ornek basina DEGIL surec basina: ikinci `AnaPencere` ilk `tepsiye_al()`inde balon gostermez
+    (ornek basina sayan uygulama burada 2 verirdi)."""
+    monkeypatch.setattr(AnaPencere, "_balon_gosterildi", False)
+    p1 = _yeni(qtbot)
+    p2 = _yeni(qtbot)
+    p1.show()
+    p2.show()
+    c1, c2 = _balon_casusu(p1, monkeypatch), _balon_casusu(p2, monkeypatch)
+    p1.tepsiye_al()
+    p2.tepsiye_al()
+    assert (len(c1), len(c2)) == (1, 0)
+    p1.kapat()
+    p2.kapat()
+
+
+def test_k5_tepsi_yokken_tepsiye_al_balon_sayacini_tuketmez(qtbot: QtBot, monkeypatch: pytest.MonkeyPatch) -> None:
+    """Tepsisiz `tepsiye_al()` kenara duser, balon yok; sayac tukenmez -- sonra tepsili bir ornek ilk balonu gosterir."""
+    monkeypatch.setattr(AnaPencere, "_balon_gosterildi", False)
+    yok = _yeni(qtbot, tepsi_kullanilabilir=False)
+    yok.show()
+    c_yok = _balon_casusu(yok, monkeypatch)
+    yok.tepsiye_al()
+    assert uclu(yok) == KENAR_TEPSI_YOK and c_yok == []
+    var = _yeni(qtbot)
+    var.show()
+    c_var = _balon_casusu(var, monkeypatch)
+    var.tepsiye_al()
+    assert len(c_var) == 1
+    yok.kapat()
+    var.kapat()
 
 
 # -- K6 / K7 AST: modal yok, metin yok, blok yok, pipeline importu yok ---------------------------

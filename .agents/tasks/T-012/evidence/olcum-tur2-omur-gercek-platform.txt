@@ -1,0 +1,7 @@
+T-012 tur 2 omur -- platform=windows (gercek ekran; fare/on plan gerekmez)
+  ok     [1] del+gc: onceden hwnd canli=True; sonra AnaPencere toplandi=True sekme silindi=True tepsi silindi=True sekme hwnd hala var=False gorunur ust-duzey=[]
+  ok     [2] deleteLater: onceden hwnd canli=True; sonra AnaPencere toplandi=True sekme silindi=True tepsi silindi=True sekme hwnd hala var=False gorunur ust-duzey=[]
+  ok     [3] tek basina KenarSekmesi: silindi=True hwnd hala var=False gorunur=[]
+  ok     [4] pozitif kontrol (hwnd yasiyor mu): lambda baglantili=True bagli yontemli=False
+
+OMUR GERCEK PLATFORM: TEMIZ

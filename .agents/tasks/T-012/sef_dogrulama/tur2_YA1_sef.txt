@@ -1,0 +1,1 @@
+SEF TUR 2 Y-A1: sekme toplandi= True | gorunur ust-duzey= [] (bos beklenir)

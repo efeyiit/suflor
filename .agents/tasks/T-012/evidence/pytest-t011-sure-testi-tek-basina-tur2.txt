@@ -1,0 +1,5 @@
+$ python -m pytest tests/unit/translate/test_sozluk.py::test_k5_sure_8000_hit_gom_60ms_alti -q -p no:cacheprovider  (x3, tek basina; tam takim kosum 2de 60.8 ms > 60 ile dusmustu -- T-011 yuk-hassas sure testi)
+1 passed in 0.54s
+1 passed in 0.54s
+1 passed in 0.54s
+[exit 0]
