@@ -570,6 +570,42 @@ def test_k1_kapandi_sinyali_close_ile_yayilir_hide_ile_yayilmaz(qtbot: QtBot, se
     assert sayac == [1, 1]
 
 
+@pytest.mark.parametrize("yol", ["close", "closeAllWindows"])
+def test_k2_panel_acikken_close_sonrasi_yeniden_gosterilince_kapali_geometri(
+    qtbot: QtBot, sekme: tuple[KenarSekmesi, SahteImlec], yol: str
+) -> None:
+    """▲▲ tur 3 (Tester-A O-A2): panel ACIKKEN dis kapatma (`close()` / `QApplication.closeAllWindows()`) Qt6
+    `QWindow::close` akisindan gecer; `hideEvent -> _kapat() -> setGeometry(r x 2r)` uygulanir ama close SONRASI
+    olay dongusunde islenen gecikmis geometri olayi widget'i 200x132'ye geri yazar (on olcum: `close()` hemen
+    sonrasi 26x52, bir tur sonra 200x132; urunde kullanicinin sonraki eylemi her zaman en az bir tur sonradir).
+    Yeniden `show()` edilen KAPALI sekme `(yaricap, 2*yaricap)` ve ayni konumdadir
+    (`showEvent -> _konumlan()`); saydam kosede (disk disi) hover panel ACMAZ (bayat 200x132 olsaydi `sekme_icinde`
+    boyuta bakip panel sanar, duz `contains` ile acardi). Pozitif kontrol: `hide()` yolu
+    `test_k4_acikken_gizlenirse_kapali_olarak_geri_gelir` (zaten r x 2r)."""
+    s, imlec = sekme
+    kapali = s.frameGeometry()
+    assert kapali.size() == QtCore.QSize(s.yaricap, 2 * s.yaricap)
+    _ac(qtbot, s, imlec)
+    assert s.frameGeometry().size() == PANEL_BOYUTU
+    imlec.git(UZAK)
+    if yol == "close":
+        assert s.close() is True
+    else:
+        QtWidgets.QApplication.closeAllWindows()
+    assert s.isVisible() is False and s.acik is False and s.yokluyor is False
+    qtbot.wait(20)  # bir olay dongusu turu: bayat 200x132 close SONRASI gecikmis (posted) geometri olayiyla gelir (on olcum)
+    s.show()
+    assert s.acik is False
+    assert s.frameGeometry() == kapali, "kapali sekme yeniden gosterilince bayat panel geometrisinde (200x132)"
+    kose = QtCore.QPoint(kapali.left() + 5, kapali.top() + 5)
+    assert sekme_icinde(kapali, kose, s.yaricap, s.kenar) is False  # on kosul: saydam kose kapali diskin disinda
+    imlec.git(kose)
+    qtbot.wait(s.acilma_ms + 3 * s.yoklama_ms)
+    assert s.acik is False, "saydam kosede hover panel acti (bayat geometri)"
+    imlec.git(_merkez(s))
+    qtbot.waitUntil(lambda: s.acik, timeout=_ust_sinir(s, True))  # pozitif kontrol: diskte hala acilir
+
+
 def test_k4_gercek_tik_ile_dugme_sinyali(qtbot: QtBot, sekme: tuple[KenarSekmesi, SahteImlec]) -> None:
     s, imlec = sekme
     _ac(qtbot, s, imlec)

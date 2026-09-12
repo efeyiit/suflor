@@ -61,6 +61,24 @@ yontemli toplanir (`test_k1_omur_pozitif_kontrol_lambda_baglantisi_sarmalayiciyi
 yapisal bekci `test_k1_sinyal_baglantilarinda_lambda_yok_ast`. Tur 1'de bu
 cumle olculmeden yazilmisti ve YANLISTI (sekme hic toplanmiyordu: zombi).
 `kapat()` sekmeyi ayrica acikca gizler.
+▲▲ tur 3 (Tester-B O-B5 / Tester-A D-A9): `deleteLater()` cagrilip Python
+referansi TUTULURKEN (Qt'de yaygin desen `self.pencere.deleteLater()`) C++
+`AnaPencere` (tepsi + ikon ile) olur ama `_sekme` sarmalayicisi `__dict__`te
+yasardi -> ZOMBI yarim daire (gorunur, yokluyor, hover panel acar, sag tik
+alicisiz, tepsi ikonu yok, donus yolu yok); tur-2 olcusu `deleteLater` sonrasi
+`del p` de yaptigi icin bu siniftan ayrismiyordu. Duzeltme: `self.destroyed ->
+self._sekme.deleteLater` (alici sekme; bagli yontem, `self` yakalanmaz) ve
+`Tepsi.destroyed -> menu.deleteLater` (ebeveynsiz `QMenu` ust-duzeyde
+kalmasin). OLCULDU: sekme ve menu C++ duzeyinde silinir (`shiboken6.isValid`
+False -- sarmalayici `__dict__`te durdugu icin weakref None OLMAZ; referans
+birakilinca None), gorunur ust-duzey 0, yoklayici durur; `del`+gc /
+`deleteLater`+`del` / `kapat()`+`del` yollarinda cift silme yok
+(`test_k1_omur_kenar_durumunda_ana_pencere_dusunce_sekme_silinir[deleteLater_referans_tutulur]`).
+C++ oldukten sonra tutulan sarmalayicida `goster()/kapat()` `RuntimeError`
+verir (silinmis QObject; PySide standardi) -- kotu kullanim, `[ÖLÇÜLMÜYOR]`.
+Dis `sekme.deleteLater()` (paketin yolu `close()`dur) kabugu kirar: `kapandi`
+yayilmaz, sonraki `goster()/kapat()` `RuntimeError` (Tester-A D-A11) --
+`known_gaps`, `[ÖLÇÜLMÜYOR]`.
 
 ▲▲ DIS KAPATMA (Tester-B O-B1): sekme disaridan `close()` edilirse (WM_CLOSE,
 `QApplication.closeAllWindows`, sonraki ajanin cagrisi) `KenarSekmesi.kapandi`
@@ -92,7 +110,11 @@ ya da ikinci `AnaPencere`) gostermez; sayac sinif duzeyinde
 sayaci tuketmez (`test_k5_ilk_tepsiye_al_surec_basina_bir_kez_balon`,
 `test_k5_balon_surec_basina_bir_kez_ikinci_ornek_de_gostermez`,
 `test_k5_tepsi_yokken_tepsiye_al_balon_sayacini_tuketmez`; `showMessage`
-casusu, pozitif kontrollu). OLCULDU (tur 1, `real_check` [5c]): balon BASKA
+casusu, pozitif kontrollu). ▲▲ tur 3 (Tester-B D-B12): balona TIK da
+pencereyi getirir (`QSystemTrayIcon.messageClicked -> goster_istendi ->
+goster()`; `test_k5_balona_tik_pencereyi_getirir` -- balon baska surecin
+penceresi oldugundan tik `messageClicked.emit()` ile temsil edilir).
+OLCULDU (tur 1, `real_check` [5c]): balon BASKA
 surecin penceresidir (`Windows.UI.Core.CoreWindow`), sag altta 396x153 px,
 ~6.2 s kalir, `ms` yok sayilir; sekme alt-sag banda suruklenmisse orter.
 Tur-2 karari: tepsi durumunda sekme zaten gizlidir; kapi [5] sekmeyi YUKARI
@@ -202,6 +224,8 @@ class Tepsi(QObject):
         self._menu.addAction("Çıkış").triggered.connect(self.cikis_istendi.emit)
         self._ikon.setContextMenu(self._menu)
         self._ikon.activated.connect(self._tiklandi)
+        self._ikon.messageClicked.connect(self.goster_istendi.emit)  # D-B12: balona tik da pencereyi getirir
+        self.destroyed.connect(self._menu.deleteLater)  # O-B5: C++ Tepsi olunce ebeveynsiz menu de gitsin (sarmalayici tutulsa da)
 
     @property
     def kullanilabilir(self) -> bool:
@@ -322,6 +346,9 @@ class AnaPencere(QWidget):
         self._dugme_kenar.clicked.connect(self.kenara_al)
         self._dugme_anlik.clicked.connect(self.anlik_cevir_istendi.emit)
         self._dugme_bolge.clicked.connect(self.bolge_izle_istendi.emit)
+        # O-B5 / D-A9: `deleteLater()` + tutulan Python referansi -> C++ AnaPencere olur, `_sekme` sarmalayicisi
+        # `__dict__`te yasar (zombi yarim daire). Alici sekme (bagli yontem, `self` yakalanmaz): C++ olunce sekme de silinir.
+        self.destroyed.connect(self._sekme.deleteLater)
 
     @staticmethod
     def _ust_dugme(metin: str, ad: str, ipucu: str) -> QPushButton:

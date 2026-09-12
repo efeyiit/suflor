@@ -1,0 +1,8 @@
+$ python .agents/tasks/T-012/tester_A/sonda_a_02b_duzeltme_onerisi.py  (Tester-A duzeltme onerisi sondasi, DUZELTME SONRASI: taban KenarSekmesi artik 'ok' vermeli)
+KenarSekmesi   close            yeniden show boyut=26x52 ok
+KenarSekmesi   closeAllWindows  yeniden show boyut=26x52 ok
+Duzeltilmis    close            yeniden show boyut=26x52 ok
+Duzeltilmis    closeAllWindows  yeniden show boyut=26x52 ok
+DuzeltilmisB   close            yeniden show boyut=26x52 ok
+DuzeltilmisB   closeAllWindows  yeniden show boyut=26x52 ok
+[exit 0]

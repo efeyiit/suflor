@@ -1,0 +1,11 @@
+$ python .agents/tasks/T-012/tester_B/olcum_ob5_zombi_ve_duzeltme.py  (Tester-B O-B5 sondasi, dokunulmadan, DUZELTME SONRASI: duzeltme=False satiri artik urun kodunun kendi baglantisiyla temiz olmali)
+duzeltme=False: sekme canli=False gorunur=False yoklayici okuyor=False sag tik emit=0 hata=None hover panel acildi=None
+duzeltme=True: sekme canli=False gorunur=False yoklayici okuyor=False sag tik emit=0 hata=None hover panel acildi=None
+[exit 0]
+
+$ python .agents/tasks/T-012/tester_B/olcum_ob5_duzeltme_uc_yol.py  (uc yol: cokme / cift silme yok -- sonda kendi de destroyed->deleteLater baglar, urun baglantisiyla IKI kez: cift deleteLater guvenli)
+del_gc: sekme sarmalayici canli=False cpp gecerli=False gorunur ust-duzey=[]
+deleteLater_del: sekme sarmalayici canli=False cpp gecerli=False gorunur ust-duzey=[]
+kapat_sonra_del: sekme sarmalayici canli=False cpp gecerli=False gorunur ust-duzey=[]
+OK cokme yok
+[exit 0]

@@ -1,0 +1,7 @@
+$ python -m pytest tests/unit/ui -q -p no:cacheprovider  (tur 3: 220 test = 216 + 4 yeni (O-A2 x3: sekme close|closeAllWindows + kabuk yolu; D-B12 balona tik); omur testinin deleteLater varyanti referans tutacak sekilde AYRISTIRILDI (ad: deleteLater_referans_tutulur); sefin 2 bariyer testi dahil)
+........................................................................ [ 32%]
+........................................................................ [ 65%]
+........................................................................ [ 98%]
+....                                                                     [100%]
+220 passed in 20.62s
+[exit 0]

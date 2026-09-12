@@ -1,0 +1,11 @@
+$ python .agents/tasks/T-012/evidence/olcum-tur3-omur-ve-geometri-gercek-platform.py  (GERCEK windows platformu, oturum kilitli ama fare/on plan gerekmez: Win32 IsWindow / GetWindowRect)
+T-012 tur 3 omur + geometri -- platform=windows (gercek ekran; fare/on plan gerekmez)
+  ok     [1] deleteLater + referans tutulur: onceden hwnd canli=True; sonra C++ AnaPencere olu=True sekme C++ olu=True (weakref None=False) menu C++ olu=True sekme hwnd hala var=False gorunur ust-duzey=[] ust-duzey=[] yoklayici okuyor=False
+  ok     [1b] referans birakilinca: AnaPencere=True sekme=True tepsi=True menu=True (hepsi None beklenir)
+  ok     [2] AnaPencere: panel acildi=True (win (250, 165)); close -> durum gorunur=True; kenara_al sonrasi Qt 26x52 (beklenen 26x52) Win32 (33, 65) (beklenen (33, 65)); saydam kose disk disi=True hover panel acti=False
+  ok     [3] tek basina close: panel acildi=True; yeniden show Qt 26x52 Win32 (33, 65) (beklenen (33, 65))
+  ok     [3] tek basina closeAllWindows: panel acildi=True; yeniden show Qt 26x52 Win32 (33, 65) (beklenen (33, 65))
+  ok     [4] pozitif kontrol (sekme hwnd yasiyor mu): destroyed->deleteLater baglantisiz=True baglantili=False
+
+TUR 3 GERCEK PLATFORM: TEMIZ
+[exit 0]

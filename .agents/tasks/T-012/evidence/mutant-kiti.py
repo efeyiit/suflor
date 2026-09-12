@@ -1,4 +1,4 @@
-"""T-012 mutant ayirt-etme kiti (implementer, tur 1 + tur 2).
+"""T-012 mutant ayirt-etme kiti (implementer, tur 1 + tur 2 + tur 3).
 
     python .agents/tasks/T-012/evidence/mutant-kiti.py
 
@@ -23,6 +23,10 @@ Beklentiler:
             `kapandi` bagli degil / yayilmiyor (O-B1); mod tiki mandali
             kaldirildi (O-A1); `goster()` `showNormal` yok (D-A1); `yaricap`
             ust siniri yok (D-A3/D-A4).
+  M34..M36  tur 3: `destroyed -> sekme.deleteLater` yok (O-B5/D-A9 zombi,
+            referans tutulurken), `Tepsi.destroyed -> menu.deleteLater` yok,
+            `showEvent -> _konumlan()` yok (O-A2 bayat 200x132),
+            `messageClicked` bagli degil (D-B12).
   C-1..C-5  davranis-esdeger degisiklikler (kontrol): KACMALI -- yanlis
             pozitif yok. C-1 kenara_al icinde hide/tepsi.goster sirasi;
             C-2 disk esitsizligi `**` ile; C-3 `_konumlan` icinde ayni ifade
@@ -157,6 +161,15 @@ MUTANTLAR: list[tuple[str, str, list[Ikame], bool]] = [
     ("M28", "K4 (sef hipotezi [5c]): birakinca surukleme bayragi temizlenmez (takili kalir) -> yoklayici hic acmaz",
      [(KS, "    def mouseReleaseEvent(self, event: QMouseEvent) -> None:\n        self._surukleme = None\n",
        "    def mouseReleaseEvent(self, event: QMouseEvent) -> None:\n")], True),
+    ("M34", "K1 omur tur 3 (O-B5/D-A9): AnaPencere.destroyed -> sekme.deleteLater baglantisi YOK -> deleteLater + tutulan referans = zombi sekme",
+     [(KB, "        self.destroyed.connect(self._sekme.deleteLater)\n", "")], True),
+    ("M34b", "K1 omur tur 3 (O-B5): Tepsi.destroyed -> menu.deleteLater baglantisi YOK -> ebeveynsiz QMenu ust-duzeyde kalir",
+     [(KB, "        self.destroyed.connect(self._menu.deleteLater)  # O-B5: C++ Tepsi olunce ebeveynsiz menu de gitsin (sarmalayici tutulsa da)\n", "")], True),
+    ("M35", "K2/K3 tur 3 (O-A2): showEvent geometriyi yeniden uygulamaz -> panel acikken close sonrasi kapali sekme 200x132",
+     [(KS, "        self._konumlan()  # O-A2: dis close() sonrasi bayat 200x132 pencere; geometri her gosterimde durumdan yeniden uygulanir\n        super().showEvent(event)\n",
+       "        super().showEvent(event)\n")], True),
+    ("M36", "K5 tur 3 (D-B12): balona tik (messageClicked) pencereyi getirmez",
+     [(KB, "        self._ikon.messageClicked.connect(self.goster_istendi.emit)  # D-B12: balona tik da pencereyi getirir\n", "")], True),
     # --- kontroller: davranis-esdeger ---
     ("C-1", "KONTROL: kenara_al icinde hide() ve tepsi.goster() sirasi degisti -- esdeger",
      [(KB, "        self._tepsi.goster()\n        self.hide()\n        self._sekme.show()\n",

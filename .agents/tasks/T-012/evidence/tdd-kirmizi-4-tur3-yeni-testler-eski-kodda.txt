@@ -1,0 +1,54 @@
+$ python -m pytest tests/unit/ui -q -p no:cacheprovider -rfE --tb=line -k '<tur-3 yeni/ayristirilmis testler>'  (TDD KIRMIZI 4: tur-3 testleri TUR-2 KODUNDA -- duzeltme oncesi; beklenen: deleteLater_referans_tutulur, O-A2 x3, balona tik DUSER; del_gc GECER)
+.FFFFF                                                                   [100%]
+================================== FAILURES ===================================
+E   AssertionError: sekme C++ nesnesi yasiyor (zombi yarim daire: gorunur, yokluyor, tepsi ikonu yok)
+    assert False
+     +  where False = _cpp_olu(<weakref at 0x0000027FBCBB21B0; to 'KenarSekmesi' at 0x0000027FBCF22B40>)
+---------------------------- Captured Qt messages -----------------------------
+QtWarningMsg: This plugin does not support propagateSizeHints()
+QtWarningMsg: This plugin does not support raise()
+<depo>\tests\unit\ui\test_kabuk.py:334: AssertionError: sekme C++ nesnesi yasiyor (zombi yarim daire: gorunur, yokluyor, tepsi ikonu yok)
+E   AssertionError: kapali sekme yeniden gosterilince bayat panel geometrisinde
+    assert PySide6.QtCore.QRect(774, 374, 200, 132) == PySide6.QtCore.QRect(774, 374, 26, 52)
+     +  where PySide6.QtCore.QRect(774, 374, 200, 132) = <built-in method frameGeometry of KenarSekmesi object at 0x0000027FBCF36B80>()
+     +    where <built-in method frameGeometry of KenarSekmesi object at 0x0000027FBCF36B80> = <src.ui.kenar_sekmesi.KenarSekmesi(0x27fbc230aa0) at 0x0000027FBCF36B80>.frameGeometry
+---------------------------- Captured Qt messages -----------------------------
+QtWarningMsg: This plugin does not support propagateSizeHints()
+QtWarningMsg: This plugin does not support raise()
+QtWarningMsg: This plugin does not support raise()
+QtWarningMsg: This plugin does not support raise()
+QtWarningMsg: This plugin does not support raise()
+<depo>\tests\unit\ui\test_kabuk.py:479: AssertionError: kapali sekme yeniden gosterilince bayat panel geometrisinde
+E   assert ([] == [1]
+      
+      Right contains one more item: 1
+      Use -v to get more diff)
+---------------------------- Captured Qt messages -----------------------------
+QtWarningMsg: This plugin does not support propagateSizeHints()
+<depo>\tests\unit\ui\test_kabuk.py:651: assert ([] == [1]
+E   AssertionError: kapali sekme yeniden gosterilince bayat panel geometrisinde (200x132)
+    assert PySide6.QtCore.QRect(774, 374, 200, 132) == PySide6.QtCore.QRect(774, 374, 26, 52)
+     +  where PySide6.QtCore.QRect(774, 374, 200, 132) = <built-in method frameGeometry of KenarSekmesi object at 0x0000027FBC6C1EC0>()
+     +    where <built-in method frameGeometry of KenarSekmesi object at 0x0000027FBC6C1EC0> = <src.ui.kenar_sekmesi.KenarSekmesi(0x27fbc40f660) at 0x0000027FBC6C1EC0>.frameGeometry
+---------------------------- Captured Qt messages -----------------------------
+QtWarningMsg: This plugin does not support raise()
+QtWarningMsg: This plugin does not support raise()
+QtWarningMsg: This plugin does not support raise()
+<depo>\tests\unit\ui\test_kenar_sekmesi.py:599: AssertionError: kapali sekme yeniden gosterilince bayat panel geometrisinde (200x132)
+E   AssertionError: kapali sekme yeniden gosterilince bayat panel geometrisinde (200x132)
+    assert PySide6.QtCore.QRect(774, 374, 200, 132) == PySide6.QtCore.QRect(774, 374, 26, 52)
+     +  where PySide6.QtCore.QRect(774, 374, 200, 132) = <built-in method frameGeometry of KenarSekmesi object at 0x0000027FBCF82BC0>()
+     +    where <built-in method frameGeometry of KenarSekmesi object at 0x0000027FBCF82BC0> = <src.ui.kenar_sekmesi.KenarSekmesi(0x27fbc40e8e0) at 0x0000027FBCF82BC0>.frameGeometry
+---------------------------- Captured Qt messages -----------------------------
+QtWarningMsg: This plugin does not support raise()
+QtWarningMsg: This plugin does not support raise()
+QtWarningMsg: This plugin does not support raise()
+<depo>\tests\unit\ui\test_kenar_sekmesi.py:599: AssertionError: kapali sekme yeniden gosterilince bayat panel geometrisinde (200x132)
+=========================== short test summary info ===========================
+FAILED tests/unit/ui/test_kabuk.py::test_k1_omur_kenar_durumunda_ana_pencere_dusunce_sekme_silinir[deleteLater_referans_tutulur]
+FAILED tests/unit/ui/test_kabuk.py::test_k1_sekme_dis_close_panel_acikken_kenara_al_kapali_geometri_taze
+FAILED tests/unit/ui/test_kabuk.py::test_k5_balona_tik_pencereyi_getirir - as...
+FAILED tests/unit/ui/test_kenar_sekmesi.py::test_k2_panel_acikken_close_sonrasi_yeniden_gosterilince_kapali_geometri[close]
+FAILED tests/unit/ui/test_kenar_sekmesi.py::test_k2_panel_acikken_close_sonrasi_yeniden_gosterilince_kapali_geometri[closeAllWindows]
+5 failed, 1 passed, 214 deselected in 1.67s
+[exit 1]

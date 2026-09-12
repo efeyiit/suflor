@@ -1,0 +1,8 @@
+Success: no issues found in 13 source files
+mypy exit=0
+Required test coverage of 95% reached. Total coverage: 99.62%
+220 passed in 20.98s
+2117 passed in 32.66s
+=== tester sondalari (sef) ===
+SONDA: TEMIZ
+duzeltme=False: sekme canli=False gorunur=False yoklayici okuyor=False sag tik emit=0 hata=None hover panel acildi=None

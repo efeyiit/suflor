@@ -1,0 +1,6 @@
+$ python -m mypy --strict --explicit-package-bases tests/unit/ui/test_geometri.py tests/unit/ui/test_kenar_sekmesi.py tests/unit/ui/test_kabuk.py tests/unit/ui/test_uygulama.py  (4 test dosyasi; shiboken6.isValid importu dahil)
+Success: no issues found in 4 source files
+[exit 0]
+$ python -m mypy --strict --explicit-package-bases src/ui tests/unit/ui  (13 dosya: modul + testler + sefin conftest/bariyer)
+Success: no issues found in 13 source files
+[exit 0]

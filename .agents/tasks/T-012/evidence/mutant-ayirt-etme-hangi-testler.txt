@@ -11,15 +11,18 @@ T-012 mutant basina dusen testler (ayna kosumu)
   test_k1_close_sonra_kapat_ikinci_sinyal_yok
   test_k1_kapat_sonra_close_ikinci_sinyal_yok
 
-== M03 [X (9)] K1: goster() tepsi ikonunu gizlemez -> gorunur uclusu (T,F,T)
+== M03 [X (12)] K1: goster() tepsi ikonunu gizlemez -> gorunur uclusu (T,F,T)
   test_k1_tepsi_to_gorunur
   test_k1_kenar_to_gorunur_tepsi_ikonu_da_gizlenir
   test_k1_gorunur_yollari_hepsi_ayni_uclu
+  test_k1_panel_acikken_dugme_goster_pencereyi_getirir
   test_k1_kenara_al_iki_kez_idempotent
   test_k1_sekme_dis_close_kenar_durumunda_gorunure_doner[tepsi_var]
+  test_k1_sekme_dis_close_panel_acikken_kenara_al_kapali_geometri_taze
   test_k1_goster_kucultulmus_pencereyi_geri_getirir
   test_k5_ikona_tik_goster[Trigger]
   test_k5_ikona_tik_goster[DoubleClick]
+  test_k5_balona_tik_pencereyi_getirir
   test_k8_surukleme_sonrasi_sag_tik_pencereyi_getirir
 
 == M04 [X (3)] K5: tepsi yokken tepsiye_al() kenara dusmez -> pencere gizli, ikon yok, sekme yok (kilit)
@@ -43,8 +46,9 @@ T-012 mutant basina dusen testler (ayna kosumu)
   test_k4_gercek_tik_ile_dugme_sinyali
   test_k8_panelde_dugme_goster
 
-== M07 [X (9)] K4: yoklayici gizliyken de calisir (init'te baslar, hide durdurmaz)
+== M07 [X (12)] K4: yoklayici gizliyken de calisir (init'te baslar, hide durdurmaz)
   test_k1_kenar_to_gorunur_tepsi_ikonu_da_gizlenir
+  test_k1_panel_acikken_dugme_goster_pencereyi_getirir
   test_k1_kapat_gorunur_durumundan
   test_k1_kapat_her_durumdan[tepsi]
   test_k1_kapat_her_durumdan[kenar]
@@ -53,8 +57,12 @@ T-012 mutant basina dusen testler (ayna kosumu)
   test_k4_imlec_konumu_sekmeye_enjekte_edilir
   test_k4_yoklayici_yalniz_gorunurken
   test_k1_kapandi_sinyali_close_ile_yayilir_hide_ile_yayilmaz
+  test_k2_panel_acikken_close_sonrasi_yeniden_gosterilince_kapali_geometri[close]
+  test_k2_panel_acikken_close_sonrasi_yeniden_gosterilince_kapali_geometri[closeAllWindows]
 
-== M08 [X (26)] K4: imlec_konumu yok sayilir, dogrudan QCursor.pos okunur
+== M08 [X (30)] K4: imlec_konumu yok sayilir, dogrudan QCursor.pos okunur
+  test_k1_panel_acikken_dugme_goster_pencereyi_getirir
+  test_k1_sekme_dis_close_panel_acikken_kenara_al_kapali_geometri_taze
   test_k4_imlec_konumu_sekmeye_enjekte_edilir
   test_k3_kapali_ve_acik_boyutlar
   test_k2_kenar_degisince_yeniden_konumlanir
@@ -77,19 +85,24 @@ T-012 mutant basina dusen testler (ayna kosumu)
   test_k4_mod_tiki_sonrasi_imlec_diskte_kalsa_da_yeniden_acilmaz_ciktiktan_sonra_acilir[dugme_bolge]
   test_k4_mod_tiki_mandali_gizlenip_gosterilince_sifirlanir
   test_k1_kapandi_sinyali_close_ile_yayilir_hide_ile_yayilmaz
+  test_k2_panel_acikken_close_sonrasi_yeniden_gosterilince_kapali_geometri[close]
+  test_k2_panel_acikken_close_sonrasi_yeniden_gosterilince_kapali_geometri[closeAllWindows]
   test_k4_gercek_tik_ile_dugme_sinyali
   test_k8_sag_tik_acikken_de_pencereyi_goster
   test_k8_panelde_dugme_goster
   test_k6_paint_100_kare_medyani_kapali_ve_acik
 
-== M09 [X (5)] K2 (D1): disk yerine dikdortgen ici (saydam kose 'icinde')
+== M09 [X (8)] K2 (D1): disk yerine dikdortgen ici (saydam kose 'icinde')
   test_k2_sekme_icinde_kapali_merkez_icerde_kose_disarida[sag]
   test_k2_sekme_icinde_kapali_merkez_icerde_kose_disarida[sol]
   test_k2_sekme_icinde_kapali_disk_kenar_ustunde_merkezli
   test_k2_sekme_icinde_kapali_yarim_daire_alani_dikdortgenden_kucuk
+  test_k1_sekme_dis_close_panel_acikken_kenara_al_kapali_geometri_taze
   test_k4_saydam_kosede_acilmaz_merkezde_acilir
+  test_k2_panel_acikken_close_sonrasi_yeniden_gosterilince_kapali_geometri[close]
+  test_k2_panel_acikken_close_sonrasi_yeniden_gosterilince_kapali_geometri[closeAllWindows]
 
-== M10 [X (20)] K2: sol kenar x yanlis (+1)
+== M10 [X (21)] K2: sol kenar x yanlis (+1)
   test_k2_izgara_kapali_ekran_icinde_ve_kenara_bitisik[birincil_2560x1392-sol-y-1000]
   test_k2_izgara_kapali_ekran_icinde_ve_kenara_bitisik[birincil_2560x1392-sol-y0]
   test_k2_izgara_kapali_ekran_icinde_ve_kenara_bitisik[birincil_2560x1392-sol-y400]
@@ -110,6 +123,7 @@ T-012 mutant basina dusen testler (ayna kosumu)
   test_k2_kenar_parametresi_sekmeye_gecer
   test_k2_sol_kenar_yapicidan
   test_k2_kenar_degisince_yeniden_konumlanir
+  test_k2_acik_panel_ekran_icinde_ust_ve_alt_sinirda
 
 == M11 [X (40)] K2: y sinirlanmaz
   test_k2_y_sinirla_araligi[birincil_2560x1392]
@@ -223,8 +237,9 @@ T-012 mutant basina dusen testler (ayna kosumu)
 == M22 [X (1)] K1: kenar -> tepsi gecisi acilir (kenar korunmaz)
   test_k1_kenar_to_tepsi_yolu_yok
 
-== M23 [X (1)] K1: kapat() sonrasi goster() diriltir
+== M23 [X (2)] K1: kapat() sonrasi goster() diriltir
   test_k1_kapat_sonrasi_dirilme_yok
+  test_k4_iceri_disari_iceri_titremesi_acik_kalir
 
 == M24 [X (1)] K6 pozitif kontrol: kaynaga print eklendi (AST olcusu ateslemeli)
   test_k6_k7_kaynak_yasak_ad_ve_import_icermez[kabuk.py]
@@ -244,24 +259,22 @@ T-012 mutant basina dusen testler (ayna kosumu)
 == M26c [X (1)] K5 (tur 2): sayac ORNEK basina (ikinci AnaPencere de balon gosterir)
   test_k5_balon_surec_basina_bir_kez_ikinci_ornek_de_gostermez
 
-== M29 [X (4)] K1 omur (Y-A1): uc dugme baglantisi LAMBDA ile (self kapanista) -> sekme hic silinmez, zombi
-  test_k1_omur_kenar_durumunda_ana_pencere_dusunce_sekme_silinir[del_gc]
-  test_k1_omur_kenar_durumunda_ana_pencere_dusunce_sekme_silinir[deleteLater]
+== M29 [X (2)] K1 omur (Y-A1): uc dugme baglantisi LAMBDA ile (self kapanista) -> sekme hic silinmez, zombi
   test_k1_sinyal_baglantilarinda_lambda_yok_ast
   test_k1_omur_son_referans_dusunce_silinir_gorunur_kalmaz[del_gc]
 
-== M29b [X (3)] K1 omur: tek bir baglanti functools.partial ile (self'i guclu tutar; AST lambda bekcisi gormez)
-  test_k1_omur_kenar_durumunda_ana_pencere_dusunce_sekme_silinir[del_gc]
-  test_k1_omur_kenar_durumunda_ana_pencere_dusunce_sekme_silinir[deleteLater]
+== M29b [X (1)] K1 omur: tek bir baglanti functools.partial ile (self'i guclu tutar; AST lambda bekcisi gormez)
   test_k1_omur_son_referans_dusunce_silinir_gorunur_kalmaz[del_gc]
 
-== M30 [X (2)] K1 dis kapatma (O-B1): AnaPencere `kapandi` sinyaline bagli degil
+== M30 [X (3)] K1 dis kapatma (O-B1): AnaPencere `kapandi` sinyaline bagli degil
   test_k1_sekme_dis_close_kenar_durumunda_gorunure_doner[tepsi_var]
   test_k1_sekme_dis_close_kenar_durumunda_gorunure_doner[tepsi_yok]
+  test_k1_sekme_dis_close_panel_acikken_kenara_al_kapali_geometri_taze
 
-== M30b [X (3)] K1 dis kapatma (O-B1): KenarSekmesi.closeEvent `kapandi` yaymaz
+== M30b [X (4)] K1 dis kapatma (O-B1): KenarSekmesi.closeEvent `kapandi` yaymaz
   test_k1_sekme_dis_close_kenar_durumunda_gorunure_doner[tepsi_var]
   test_k1_sekme_dis_close_kenar_durumunda_gorunure_doner[tepsi_yok]
+  test_k1_sekme_dis_close_panel_acikken_kenara_al_kapali_geometri_taze
   test_k1_kapandi_sinyali_close_ile_yayilir_hide_ile_yayilmaz
 
 == M31 [X (2)] K4 (O-A1): mod tiki mandali kaldirildi -> imlec diskte kalinca panel yeniden acilir
@@ -288,6 +301,20 @@ T-012 mutant basina dusen testler (ayna kosumu)
   test_k4_surukleme_sirasinda_sayac_baslamaz
   test_k4_surukleme_calisan_acilma_sayacini_durdurur
   test_k4_surukleme_y_tasir_ve_sinira_kilitlenir
+
+== M34 [X (1)] K1 omur tur 3 (O-B5/D-A9): AnaPencere.destroyed -> sekme.deleteLater baglantisi YOK -> deleteLater + tutulan referans = zombi sekme
+  test_k1_omur_kenar_durumunda_ana_pencere_dusunce_sekme_silinir[deleteLater_referans_tutulur]
+
+== M34b [X (1)] K1 omur tur 3 (O-B5): Tepsi.destroyed -> menu.deleteLater baglantisi YOK -> ebeveynsiz QMenu ust-duzeyde kalir
+  test_k1_omur_kenar_durumunda_ana_pencere_dusunce_sekme_silinir[deleteLater_referans_tutulur]
+
+== M35 [X (3)] K2/K3 tur 3 (O-A2): showEvent geometriyi yeniden uygulamaz -> panel acikken close sonrasi kapali sekme 200x132
+  test_k1_sekme_dis_close_panel_acikken_kenara_al_kapali_geometri_taze
+  test_k2_panel_acikken_close_sonrasi_yeniden_gosterilince_kapali_geometri[close]
+  test_k2_panel_acikken_close_sonrasi_yeniden_gosterilince_kapali_geometri[closeAllWindows]
+
+== M36 [X (1)] K5 tur 3 (D-B12): balona tik (messageClicked) pencereyi getirmez
+  test_k5_balona_tik_pencereyi_getirir
 
 == C-1 [.] KONTROL: kenara_al icinde hide() ve tepsi.goster() sirasi degisti -- esdeger
   (dusen yok)

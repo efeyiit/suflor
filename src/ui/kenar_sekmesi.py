@@ -30,7 +30,13 @@ toplanir (`test_k1_omur_pozitif_kontrol_lambda_baglantisi_sarmalayiciyi_tutar`,
 (`test_k1_sinyal_baglantilarinda_lambda_yok_ast`). `functools.partial` de
 `self`i guclu tutar -- KULLANILMAZ. `availableGeometryChanged.connect` yapicinin
 SON satiridir: yapici tasarsa yarim kurulu nesne ekran sinyaline bagli kalmaz
-(Tester-A D-A4; ust sinir dogrulamasi zaten en basta).
+(Tester-A D-A4; ust sinir dogrulamasi zaten en basta). ▲▲ tur 3: `AnaPencere`
+`deleteLater()` ile silinip Python referansi TUTULURKEN (sekme sarmalayicisi
+`__dict__`te yasar, weakref None olmaz) C++ sekme `AnaPencere.destroyed ->
+sekme.deleteLater` ile silinir (`test_kabuk.py` `test_k1_omur_..._silinir[deleteLater_referans_tutulur]`;
+Tester-B O-B5 / Tester-A D-A9). Tek basina `KenarSekmesi` icin `deleteLater`
+yolu lambda'li kodda da toplaniyordu (C++ silinince baglanti kopar) -- o
+varyant zayif olcudur, `del`+gc ayristirir.
 DIS KAPATMA: `close()` (WM_CLOSE, `QApplication.closeAllWindows`, sonraki
 ajanin `sekme.close()` cagrisi) `closeEvent` -> `kapandi` sinyali; pencere
 gizlenir (`hideEvent`: yoklayici durur, panel kapanir). Kabugun kendi yolu
@@ -38,6 +44,21 @@ gizlenir (`hideEvent`: yoklayici durur, panel kapanir). Kabugun kendi yolu
 `test_k1_kapandi_sinyali_close_ile_yayilir_hide_ile_yayilmaz`). `AnaPencere`
 kenar durumunda `kapandi` -> `goster()` (`test_kabuk.py`
 `test_k1_sekme_dis_close_kenar_durumunda_gorunure_doner`).
+▲▲ tur 3 (Tester-A O-A2): panel ACIKKEN `close()` Qt6 `QWindow::close`
+akisindan gecer; `hideEvent`teki kapali geometri uygulanir ama close SONRASI
+olay dongusunde islenen gecikmis geometri olayi widget'i panel boyutuna
+(200x132) geri yazar (on olcum: `close()` hemen sonrasi r x 2r, bir tur sonra
+200x132). Bu yuzden GOSTERILIRKEN geometri durumdan yeniden uygulanir
+(`showEvent -> _konumlan()`): yeniden `show()` edilen kapali sekme r x 2r ve
+ayni konumda, saydam kosede hover panel acmaz
+(`test_k2_panel_acikken_close_sonrasi_yeniden_gosterilince_kapali_geometri[close|closeAllWindows]`,
+`test_kabuk.py` `test_k1_sekme_dis_close_panel_acikken_kenara_al_kapali_geometri_taze`).
+`close()` Qt platform penceresini YIKAR; yeniden `show()` yeni bir yerel
+pencere (hwnd) yaratir -- hwnd onbellekleyen cagiran icin not (Tester-B D-B14).
+`kapandi` dinleyicisi ayni cagri icinde sekmeyi yeniden gosterirse (orn.
+`kenara_al()`) Qt close akisi onu hemen gizler: uclu (F,F,T) + durum kenar
+(tablo disi, Tester-A D-A10) -- yeniden giris, `goster()` toparlar; dinleyici
+sekmeyi ancak bir sonraki olay dongusu turunda gostermelidir `[ÖLÇÜLMÜYOR]`.
 
 ## K2 -- geometri saf modulden; kenara bitisik; `availableGeometry`
 
@@ -422,6 +443,7 @@ class KenarSekmesi(QWidget):
 
     # -- olaylar ---------------------------------------------------------------------------------
     def showEvent(self, event: QShowEvent) -> None:
+        self._konumlan()  # O-A2: dis close() sonrasi bayat 200x132 pencere; geometri her gosterimde durumdan yeniden uygulanir
         super().showEvent(event)
         self._yoklayici.start()
 
