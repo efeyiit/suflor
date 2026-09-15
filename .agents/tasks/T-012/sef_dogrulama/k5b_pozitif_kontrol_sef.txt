@@ -1,0 +1,10 @@
+[sarici] deneme 1: fare bosta bekleme 6.0 s; sarici on planda=True
+  on plan baslangic=sahne (sahne beklenir)
+  T1 show() sonrasi on plan=sahne activeWindow=QLabel
+  T1 NoFocus+SWA sekmeye gercek tik: basildi=True on plan sonra=sahne (sahne kalmali) activeWindow=QLabel
+  T2 odak-alan varyant show() sonrasi on plan=sahne activeWindow=QLabel (show() ile ayrismiyorsa [3] yapisal)
+  T2 odak-alan sekmeye gercek tik: basildi=True on plan sonra=sekme_odakAlan (sekme_odakAlan beklenir: pozitif kontrol) activeWindow=S
+  T3 NoFocus sekmede panel dugmesine gercek tik: basildi=True clicked=1 on plan sonra=sahne (sahne kalmali, clicked=1)
+yazildi: k5b_tik_odak.txt
+
+[sarici] real_check rc=0

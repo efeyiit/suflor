@@ -1,6 +1,6 @@
 {
-  "faz": "dalga 2",
-  "guncelleme": "T-011 KABUL (2 tur). Sirada T-012 UI kabugu (istek + on olcum var, paket yok); T-013 hedef tarafi duzeltme adayi.",
+  "faz": "dalga 3",
+  "guncelleme": "T-012 KABUL (3 tur). Sirada: Snapshot modu (T-013 adayi) / HotkeyService / hedef tarafi duzeltme; kullanici secer.",
   "paralellik_tavani": 4,
   "kilitlenme_esigi": 3,
   "tasima": "alt-ajan",
@@ -181,10 +181,10 @@
         "T-007",
         "T-011"
       ],
-      "durum": "istek-alindi",
-      "tur": 0,
-      "status": "istek-alindi",
-      "not": "kullanici istegi 11 Eylul 2026: .agents/tasks/T-012/istek.md; paket yok"
+      "durum": "kabul",
+      "tur": 3,
+      "status": "kabul",
+      "not": "KABUL 15 Eylul 2026: paket v3, kapi v3 18/18 (gercek OS girdisi), 220 test, A+B onay; acik: kisayollar (HotkeyService), Snapshot modu"
     }
   ],
   "sozlesmeler_donduruldu": true,
