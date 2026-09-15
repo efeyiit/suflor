@@ -1,0 +1,14 @@
+T-013 ON OLCUM -- global kisayol (RegisterHotKey + Qt native event filter), gercek Windows
+
+U7 Ctrl+Alt+T kayit=True (False ise baska uygulama tutuyor, hata=0)
+U7 Ctrl+Alt+R kayit=True (False ise baska uygulama tutuyor, hata=0)
+U1 Ctrl+Alt+T sentetik: WM_HOTKEY olay sayisi=1 id=[1] gecikme=1.9 ms
+U2a ayni kombinasyon ikinci kayit: ok=False GetLastError=1409 (1409 = ERROR_HOTKEY_ALREADY_REGISTERED beklenir)
+U2b baska surec Ctrl+Alt+Y tutarken (1): bizim kayit ok=False GetLastError=1409
+U2c diger surec olunce ayni kombinasyon: ok=True
+U3 tum pencereler gizliyken Ctrl+Alt+R: olay=1 id=[2]
+U6 tus 700 ms basili (MOD_NOREPEAT): olay sayisi=1 (1 beklenir)
+U6b NOREPEAT olmadan 700 ms basili: olay sayisi=1 (>1 beklenir: tekrar) kayit=True
+U5 filtre icinde istisna: uygulama yasiyor=True olay kaydedildi=1 (istisna Qt tarafinda yutuldu mu: stderr'e bak)
+U4 UnregisterHotKey sonrasi Ctrl+Alt+T: olay=0 (0 beklenir)
+U4b yeniden kayit ok=True, olay=1
