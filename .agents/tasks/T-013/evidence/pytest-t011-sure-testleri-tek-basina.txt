@@ -1,0 +1,5 @@
+$ python -m pytest tests/unit/translate/test_sozluk.py -q -p no:cacheprovider -k sure  (T-011 sure testleri tek basina: tam takimda dusen ikisi (kosum 1: 51.2/69.0 ms, kosum 2: 69.7 ms) yalniz kosunca gecer; T-013 src/ui disina dokunmaz; makinede arka plan yuku var)
+.....                                                                    [100%]
+5 passed, 448 deselected in 0.92s
+
+[exit 0]

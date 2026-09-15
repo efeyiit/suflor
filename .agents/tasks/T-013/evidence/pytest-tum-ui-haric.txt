@@ -1,0 +1,140 @@
+$ python -m pytest tests -q -p no:cacheprovider --ignore=tests/unit/ui  (tam takim, tests/unit/ui HARIC -- T-013 testleri olmadan da ayni T-011 sure sinifi)
+........................................................................ [  3%]
+........................................................................ [  7%]
+........................................................................ [ 11%]
+........................................................................ [ 15%]
+........................................................................ [ 18%]
+........................................................................ [ 22%]
+........................................................................ [ 26%]
+........................................................................ [ 30%]
+........................................................................ [ 34%]
+........................................................................ [ 37%]
+........................................................................ [ 41%]
+........................................................................ [ 45%]
+........................................................................ [ 49%]
+........................................................................ [ 53%]
+........................................................................ [ 56%]
+........................................................................ [ 60%]
+........................................................................ [ 64%]
+........................................................................ [ 68%]
+........................................................................ [ 72%]
+........................................................................ [ 75%]
+........................................................................ [ 79%]
+........................................................................ [ 83%]
+.................................FFF.................................... [ 87%]
+........................................................................ [ 91%]
+........................................................................ [ 94%]
+........................................................................ [ 98%]
+.......FF................                                                [100%]
+================================== FAILURES ===================================
+_____________ test_k5_sure_1000_segment_50_terim_medyan_50ms_alti _____________
+
+tmp_path = WindowsPath('<gecici dizin>/pytest-of-<kullanici>/pytest-2849/test_k5_sure_1000_segment_50_t0')
+
+    def test_k5_sure_1000_segment_50_terim_medyan_50ms_alti(tmp_path: Path) -> None:
+        """K5 butcesi: 1000 segment x 50 terim, lookup_segments + gom, 5 kosum medyani < 50 ms (K5 metni)."""
+        s = store(tmp_path, _elli_terim())
+        assert len(s) == 50
+        segs = tuple(seg("長老マルクスが水車小屋で待っています。") for _ in range(1000))
+        sureler: list[float] = []
+        for _ in range(5):
+            t0 = time.perf_counter()
+            hits = s.lookup_segments(segs)
+            out = terimleri_gom(segs, hits)
+            sureler.append((time.perf_counter() - t0) * 1000)
+        assert len(hits) == 3000 and out[999].text == "İhtiyarMarcusがDeğirmenで待っています。"
+        medyan = statistics.median(sureler)
+>       assert medyan < 50 * _izleyici_payi(), f"medyan {medyan:.1f} ms (izleyici payi x{_izleyici_payi():.0f}); {sureler}"
+E       AssertionError: medyan 59.0 ms (izleyici payi x1); [68.66639999861945, 47.14079999757814, 61.77340000067488, 59.02399999831687, 50.32589999973425]
+E       assert 59.02399999831687 < (50 * 1.0)
+E        +  where 1.0 = _izleyici_payi()
+
+tests\unit\translate\test_sozluk.py:860: AssertionError
+___________ test_k5_sure_kapi_yolu_lookup_ve_replace_ile_50ms_alti ____________
+
+tmp_path = WindowsPath('<gecici dizin>/pytest-of-<kullanici>/pytest-2849/test_k5_sure_kapi_yolu_lookup_0')
+
+    def test_k5_sure_kapi_yolu_lookup_ve_replace_ile_50ms_alti(tmp_path: Path) -> None:
+        """`real_check` #7'nin yolu: segment basina `lookup` + `dataclasses.replace` + `terimleri_gom`, fixture terimleri."""
+        s = fixture_store(tmp_path)
+        segs = tuple(seg("長老マルクスが水車小屋で待っています。") for _ in range(1000))
+        sureler: list[float] = []
+        for _ in range(5):
+            t0 = time.perf_counter()
+            hits = tuple(dataclasses.replace(h, segment_index=i) for i, sg in enumerate(segs) for h in s.lookup(sg.text, sg.placeholders))
+            terimleri_gom(segs, hits)
+            sureler.append((time.perf_counter() - t0) * 1000)
+        assert len(hits) == 3000
+        medyan = statistics.median(sureler)
+>       assert medyan < 50 * _izleyici_payi(), f"medyan {medyan:.1f} ms (izleyici payi x{_izleyici_payi():.0f}); {sureler}"
+E       AssertionError: medyan 70.0 ms (izleyici payi x1); [73.61540000056266, 70.01200000013341, 45.11160000038217, 70.8188999997219, 64.30990000080783]
+E       assert 70.01200000013341 < (50 * 1.0)
+E        +  where 1.0 = _izleyici_payi()
+
+tests\unit\translate\test_sozluk.py:875: AssertionError
+______________ test_k5_terim_sayisiyla_dogrusal_degil_tek_gecis _______________
+
+tmp_path = WindowsPath('<gecici dizin>/pytest-of-<kullanici>/pytest-2849/test_k5_terim_sayisiyla_dogrus0')
+
+    def test_k5_terim_sayisiyla_dogrusal_degil_tek_gecis(tmp_path: Path) -> None:
+        """500 terimli sozlukte de 1000 segment ayni butcede: terim-basi tarama degil tek gecis (trie)."""
+        s = store(tmp_path, [*FIXTURE_V2, *((f"terim{i:03d}", f"Hedef{i:03d}") for i in range(489))])
+        assert len(s) == 500
+        segs = tuple(seg("長老マルクスが水車小屋で待っています。") for _ in range(1000))
+        sureler: list[float] = []
+        for _ in range(5):
+            t0 = time.perf_counter()
+            hits = s.lookup_segments(segs)
+            terimleri_gom(segs, hits)
+            sureler.append((time.perf_counter() - t0) * 1000)
+        assert len(hits) == 3000
+        medyan = statistics.median(sureler)
+>       assert medyan < 50 * _izleyici_payi(), f"medyan {medyan:.1f} ms (izleyici payi x{_izleyici_payi():.0f}); {sureler}"
+E       AssertionError: medyan 68.2 ms (izleyici payi x1); [72.37460000033025, 56.788599998981226, 68.20030000017141, 84.42320000176551, 65.43249999958789]
+E       assert 68.20030000017141 < (50 * 1.0)
+E        +  where 1.0 = _izleyici_payi()
+
+tests\unit\translate\test_sozluk.py:891: AssertionError
+__________________ test_k5_sure_8000_uyeli_zincir_60ms_alti ___________________
+
+tmp_path = WindowsPath('<gecici dizin>/pytest-of-<kullanici>/pytest-2849/test_k5_sure_8000_uyeli_zincir0')
+
+    def test_k5_sure_8000_uyeli_zincir_60ms_alti(tmp_path: Path) -> None:
+        """Zincir arama da hit sayisinda dogrusal: 8000 bitisik uye (gecerli) ve 8000 uyeli basarisiz zincir (`x` ile) < 60 ms."""
+        s = fixture_v3_store(tmp_path)
+        gecerli = "Marcus" * 8000
+        olu = "Marcus" * 8000 + "x"
+        assert len(s.lookup(gecerli)) == 8000 and s.lookup(olu) == []
+        m1 = _medyan_ms(lambda: s.lookup(gecerli))
+        m2 = _medyan_ms(lambda: s.lookup(olu))
+>       assert m1 < 60 * _izleyici_payi() and m2 < 60 * _izleyici_payi(), f"gecerli {m1:.1f} ms, olu {m2:.1f} ms"
+E       AssertionError: gecerli 74.2 ms, olu 67.2 ms
+E       assert (74.24929999979213 < (60 * 1.0))
+E        +  where 1.0 = _izleyici_payi()
+
+tests\unit\translate\test_sozluk.py:1724: AssertionError
+_____________________ test_k5_sure_8000_hit_gom_60ms_alti _____________________
+
+tmp_path = WindowsPath('<gecici dizin>/pytest-of-<kullanici>/pytest-2849/test_k5_sure_8000_hit_gom_60ms0')
+
+    def test_k5_sure_8000_hit_gom_60ms_alti(tmp_path: Path) -> None:
+        s = fixture_v3_store(tmp_path)
+        segs = (seg("Marcus " * 8000, placeholders=("{0}",)),)
+        hits = s.lookup_segments(segs)
+        assert len(hits) == 8000
+        medyan = _medyan_ms(lambda: terimleri_gom(segs, hits))
+>       assert medyan < 60 * _izleyici_payi(), f"medyan {medyan:.1f} ms"
+E       AssertionError: medyan 62.1 ms
+E       assert 62.13189999834867 < (60 * 1.0)
+E        +  where 1.0 = _izleyici_payi()
+
+tests\unit\translate\test_sozluk.py:1733: AssertionError
+=========================== short test summary info ===========================
+FAILED tests/unit/translate/test_sozluk.py::test_k5_sure_1000_segment_50_terim_medyan_50ms_alti
+FAILED tests/unit/translate/test_sozluk.py::test_k5_sure_kapi_yolu_lookup_ve_replace_ile_50ms_alti
+FAILED tests/unit/translate/test_sozluk.py::test_k5_terim_sayisiyla_dogrusal_degil_tek_gecis
+FAILED tests/unit/translate/test_sozluk.py::test_k5_sure_8000_uyeli_zincir_60ms_alti
+FAILED tests/unit/translate/test_sozluk.py::test_k5_sure_8000_hit_gom_60ms_alti
+5 failed, 1892 passed in 14.85s
+
+[exit 1]

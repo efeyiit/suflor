@@ -1,0 +1,19 @@
+$ python -m pytest tests/unit/ui/test_uygulama.py tests/unit/ui/test_kabuk.py -q -p no:cacheprovider --tb=line -rfE  (TDD KIRMIZI 2: kisayol.py var; uygulama.py/kabuk.py henuz T-013 API'siz -> test_uygulama toplama hatasi + test_kabuk yeni testleri duser)
+
+=================================== ERRORS ====================================
+_______________ ERROR collecting tests/unit/ui/test_uygulama.py _______________
+ImportError while importing test module '<depo>\tests\unit\ui\test_uygulama.py'.
+Hint: make sure your test modules/packages have valid Python names.
+Traceback:
+..\..\..\AppData\Local\Programs\Python\Python312\Lib\importlib\__init__.py:90: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests\unit\ui\test_uygulama.py:30: in <module>
+    from src.ui.uygulama import VARSAYILAN_KISAYOLLAR, calistir
+E   ImportError: cannot import name 'VARSAYILAN_KISAYOLLAR' from 'src.ui.uygulama' (<depo>\src\ui\uygulama.py)
+=========================== short test summary info ===========================
+ERROR tests/unit/ui/test_uygulama.py
+!!!!!!!!!!!!!!!!!!! Interrupted: 1 error during collection !!!!!!!!!!!!!!!!!!!!
+1 error in 0.28s
+
+[exit 2]

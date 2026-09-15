@@ -422,7 +422,7 @@ def test_k1_sinyal_baglantilarinda_lambda_yok_ast() -> None:
             and any(isinstance(a, ast.Lambda) for a in d.args)
         ]
 
-    for dosya in ("kabuk.py", "kenar_sekmesi.py", "uygulama.py"):
+    for dosya in ("kabuk.py", "kenar_sekmesi.py", "uygulama.py", "kisayol.py"):
         assert lambda_baglantilari((UI_DIZINI / dosya).read_text(encoding="utf-8")) == [], dosya
     assert lambda_baglantilari("b.clicked.connect(lambda: self._x())\n") == [1]
     assert lambda_baglantilari("b.clicked.connect(self._x)\n") == []
@@ -692,7 +692,7 @@ def _ihlaller(kaynak: str, *, exec_serbest: bool = False) -> list[str]:
     return bulgular
 
 
-@pytest.mark.parametrize("dosya", ["__init__.py", "__main__.py", "uygulama.py", "kabuk.py", "kenar_sekmesi.py", "geometri.py"])
+@pytest.mark.parametrize("dosya", ["__init__.py", "__main__.py", "uygulama.py", "kabuk.py", "kenar_sekmesi.py", "geometri.py", "kisayol.py"])
 def test_k6_k7_kaynak_yasak_ad_ve_import_icermez(dosya: str) -> None:
     kaynak = (UI_DIZINI / dosya).read_text(encoding="utf-8")
     assert _ihlaller(kaynak, exec_serbest=dosya == "uygulama.py") == []
@@ -717,7 +717,7 @@ def test_k7_src_ui_pipeline_modullerini_yuklemez_taze_surec() -> None:
     import sys
 
     kod = (
-        "import sys; import src.ui.kabuk, src.ui.uygulama, src.ui.kenar_sekmesi, src.ui.geometri; "
+        "import sys; import src.ui.kabuk, src.ui.uygulama, src.ui.kenar_sekmesi, src.ui.geometri, src.ui.kisayol; "
         "print(sorted(m for m in sys.modules if m.startswith(('src.capture', 'src.ocr', 'src.translate'))))"
     )
     ortam = dict(os.environ, QT_QPA_PLATFORM="offscreen")
@@ -848,3 +848,92 @@ def test_k4_imlec_konumu_sekmeye_enjekte_edilir(qtbot: QtBot) -> None:
     qtbot.wait(3 * p.sekme.yoklama_ms)
     assert imlec.sayac == n  # sekme gizli: yoklama yok
     p.kapat()
+
+
+# -- T-013 K5: durum satiri, kisayol etiketleri, kisayol_tetiklendi -------------------------------
+
+KISAYOL_YOK = "(kısayol yok)"
+
+
+def test_t013_k5_durum_goster_ve_durum_metni(pencere: AnaPencere) -> None:
+    assert pencere.durum_metni() == ""
+    pencere.durum_goster("Ctrl+Alt+D kaydedilemedi: başka bir uygulama kullanıyor.")
+    assert pencere.durum_metni() == "Ctrl+Alt+D kaydedilemedi: başka bir uygulama kullanıyor."
+    pencere.durum_goster("")
+    assert pencere.durum_metni() == ""
+
+
+def test_t013_k5_durum_satiri_uzun_metin_sarilir_pencere_genislemez(pencere: AnaPencere, qtbot: QtBot) -> None:
+    genislik = pencere.width()
+    pencere.durum_goster("Ctrl+Alt+D kaydedilemedi: başka bir uygulama kullanıyor. Pencere düğmeleri ve tepsi menüsü çalışmaya devam eder.")
+    qtbot.wait(20)
+    assert pencere.width() == genislik
+
+
+def test_t013_k5_baslangic_etiketleri_kisayol_yok(pencere: AnaPencere) -> None:
+    """Kayitli kisayol yokken dugmeler yalan soylemez: sabit 'Ctrl+Alt+T/R' YOK, '(kısayol yok)' var."""
+    for d in (pencere.dugme_anlik, pencere.dugme_bolge):
+        assert KISAYOL_YOK in d.text() and "Ctrl+Alt" not in d.text() and KISAYOL_YOK in d.toolTip()
+    assert "Anlık çeviri" in pencere.dugme_anlik.text() and "Bölge izle" in pencere.dugme_bolge.text()
+    assert KISAYOL_YOK in pencere.tepsi.ikon.toolTip() and "Suflör" in pencere.tepsi.ikon.toolTip()
+
+
+def test_t013_k5_kisayol_etiketleri_dugme_ipucu_ve_tepsi(pencere: AnaPencere) -> None:
+    pencere.kisayol_etiketleri({"anlik_cevir": "Ctrl+Alt+D", "bolge_izle": "Ctrl+Alt+R"})
+    assert "Ctrl+Alt+D" in pencere.dugme_anlik.text() and "Ctrl+Alt+R" in pencere.dugme_bolge.text()
+    assert "Ctrl+Alt+D" in pencere.dugme_anlik.toolTip() and "Ctrl+Alt+R" in pencere.dugme_bolge.toolTip()
+    assert KISAYOL_YOK not in pencere.dugme_anlik.text() and KISAYOL_YOK not in pencere.dugme_bolge.text()
+    ipucu = pencere.tepsi.ikon.toolTip()
+    assert "Ctrl+Alt+D" in ipucu and "Ctrl+Alt+R" in ipucu and "Suflör" in ipucu
+    assert pencere.dugme_anlik.accessibleName() == "Anlık çeviri" and pencere.dugme_bolge.accessibleName() == "Bölge izle"
+
+
+def test_t013_k5_kisayol_etiketleri_eksik_ya_da_bos_kisayol_yok(pencere: AnaPencere) -> None:
+    pencere.kisayol_etiketleri({"anlik_cevir": "Ctrl+Alt+D", "bolge_izle": "Ctrl+Alt+R"})
+    pencere.kisayol_etiketleri({"bolge_izle": "Ctrl+Alt+R"})
+    assert KISAYOL_YOK in pencere.dugme_anlik.text() and "Ctrl+Alt+D" not in pencere.dugme_anlik.text()
+    assert "Ctrl+Alt+R" in pencere.dugme_bolge.text()
+    pencere.kisayol_etiketleri({"anlik_cevir": "", "bolge_izle": "Ctrl+Alt+R"})
+    assert KISAYOL_YOK in pencere.dugme_anlik.text()
+    pencere.kisayol_etiketleri({})
+    assert KISAYOL_YOK in pencere.dugme_anlik.text() and KISAYOL_YOK in pencere.dugme_bolge.text()
+    assert KISAYOL_YOK in pencere.tepsi.ikon.toolTip()
+
+
+def test_t013_k5_kisayol_etiketleri_bilinmeyen_ad_yok_sayilir(pencere: AnaPencere) -> None:
+    pencere.kisayol_etiketleri({"anlik_cevir": "Ctrl+Alt+D", "bolge_izle": "Ctrl+Alt+R", "ekstra": "Ctrl+Alt+E"})
+    assert "Ctrl+Alt+E" not in pencere.dugme_anlik.text() + pencere.dugme_bolge.text() + pencere.tepsi.ikon.toolTip()
+    assert "Ctrl+Alt+D" in pencere.dugme_anlik.text()
+
+
+def test_t013_k5_kisayol_etiketleri_yeniden_cagri_eski_metni_biriktirmez(pencere: AnaPencere) -> None:
+    for _ in range(3):
+        pencere.kisayol_etiketleri({"anlik_cevir": "Ctrl+Alt+D", "bolge_izle": "Ctrl+Alt+R"})
+    assert pencere.dugme_anlik.text().count("Ctrl+Alt+D") == 1
+    assert pencere.tepsi.ikon.toolTip().count("Ctrl+Alt+R") == 1
+
+
+@pytest.mark.parametrize("durum", ["gorunur", "tepsi", "kenar"])
+def test_t013_k4_kisayol_tetiklendi_sinyal_yayar_durum_degismez(pencere: AnaPencere, durum: str) -> None:
+    anlik: list[int] = []
+    bolge: list[int] = []
+    pencere.anlik_cevir_istendi.connect(lambda: anlik.append(1))
+    pencere.bolge_izle_istendi.connect(lambda: bolge.append(1))
+    {"gorunur": pencere.goster, "tepsi": pencere.tepsiye_al, "kenar": pencere.kenara_al}[durum]()
+    d0, u0 = pencere.durum, uclu(pencere)
+    pencere.kisayol_tetiklendi("anlik_cevir")
+    pencere.kisayol_tetiklendi("bolge_izle")
+    pencere.kisayol_tetiklendi("bolge_izle")
+    pencere.kisayol_tetiklendi("bilinmeyen")
+    pencere.kisayol_tetiklendi("")
+    assert anlik == [1] and bolge == [1, 1]
+    assert pencere.durum is d0 and uclu(pencere) == u0
+
+
+def test_t013_k4_kisayol_tetiklendi_kapat_sonrasi_da_sinyal_yayar_dirilme_yok(pencere: AnaPencere, cikis: list[int]) -> None:
+    sayac: list[int] = []
+    pencere.anlik_cevir_istendi.connect(lambda: sayac.append(1))
+    pencere.kapat()
+    pencere.kisayol_tetiklendi("anlik_cevir")
+    assert sayac == [1] and uclu(pencere) == KAPALI and cikis == [1]
+

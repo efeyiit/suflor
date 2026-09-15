@@ -1,0 +1,4 @@
+$ python -m mypy --strict --explicit-package-bases src/ui  (7 dosya: src/ui + kisayol.py)
+Success: no issues found in 7 source files
+
+[exit 0]

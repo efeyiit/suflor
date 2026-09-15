@@ -1,0 +1,4 @@
+$ python -m mypy --strict --explicit-package-bases src/ui tests/unit/ui/test_kisayol.py tests/unit/ui/test_uygulama.py tests/unit/ui/test_kabuk.py  (3 T-013 test dosyasi + src/ui birlikte)
+Success: no issues found in 10 source files
+
+[exit 0]

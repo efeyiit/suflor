@@ -1,0 +1,235 @@
+T-013 mutant basina dusen testler (ayna kosumu)
+
+== M01 [X (2)] K1: MOD_NOREPEAT kaldirildi (basili tutunca tekrar)
+  test_k1_kaydet_ok_cagri_dizisi_ve_norepeat
+  test_k4_varsayilan_kisayollar_ctrl_alt_d_ve_r_norepeat
+
+== M02 [X (5)] K1 (O4): kimlik sayaci ORNEK basina (iki servis ayni id)
+  test_k1_ayni_ad_yeniden_kaydet_once_kaldir_sonra_kaydet
+  test_k1_kimlik_surec_genelinde_benzersiz_iki_servis
+  test_k1_kimlik_sayaci_ust_sinirda_sarar_ve_canli_kimligi_atlar
+  test_k1_kimlik_ust_siniri_0xbfff
+  test_k2_filtre_sirasi_eski_servis_yeni_servisin_olayini_yutmaz
+
+== M03 [X (5)] K1 (Y3): destroyed alicisi self'in bagli yontemi (PySide6 6.11'de kosmaz)
+  test_k1_yikim_kayitlar_kaldirilir_filtre_sokulur[del_gc]
+  test_k1_yikim_kayitlar_kaldirilir_filtre_sokulur[deleteLater]
+  test_k1_yikim_ebeveyn_silinince_cocuk_servis_temizler
+  test_k1_yikim_hepsini_kaldir_sonrasi_cift_kaldirma_yok
+  test_k1_kaynakta_destroyed_alicisi_self_yontemi_degil_ast
+
+== M03b [X (5)] K1 (Y3): destroyed partial'i self'i yakalar (del+gc toplamaz; filtre sokulmez)
+  test_k1_yikim_kayitlar_kaldirilir_filtre_sokulur[del_gc]
+  test_k1_yikim_kayitlar_kaldirilir_filtre_sokulur[deleteLater]
+  test_k1_yikim_ebeveyn_silinince_cocuk_servis_temizler
+  test_k1_yikim_hepsini_kaldir_sonrasi_cift_kaldirma_yok
+  test_k1_kaynakta_destroyed_alicisi_self_yontemi_degil_ast
+
+== M04 [X (1)] K2 (O7): eventType denetimi yok
+  test_k2_yanlis_event_type_false_mesaja_dokunmaz
+
+== M05 [X (3)] K2: bilinmeyen kimlik True doner (eski servis yeni servisin olayini yutar)
+  test_k2_bilinmeyen_kimlik_false_sinyal_yok
+  test_k2_kaldirilan_kimlik_artik_bilinmiyor
+  test_k2_filtre_sirasi_eski_servis_yeni_servisin_olayini_yutmaz
+
+== M06 [X (3)] K3 (Y2): AltGr sorgusu yok
+  test_k1_ayni_ad_gecersiz_yeni_kombinasyon_eski_kayit_korunur
+  test_k3_altgr_cakismasi_ctrl_alt_shiftsiz
+  test_k5_altgr_cakismasi_metni
+
+== M06b [X (1)] K3 (Y2): AltGr Shift'li kombinasyonda da sorulur
+  test_k3_altgr_shiftli_ve_ctrl_altsiz_sorulmaz
+
+== M07 [X (8)] K3 (O3): tek degistirici kabul
+  test_k3_dilbilgisi_tablosu['Ctrl+D']
+  test_k3_dilbilgisi_tablosu['Alt+D']
+  test_k3_dilbilgisi_tablosu['Shift+T']
+  test_k3_dilbilgisi_tablosu['Shift+Space']
+  test_k3_dilbilgisi_tablosu['Ctrl+C']
+  test_k3_dilbilgisi_tablosu['Alt+Enter']
+  test_k3_dilbilgisi_tablosu['Ctrl+Tab']
+  test_k3_kaydet_gecersiz_ve_bozuk_metin_gecersiz_win32_cagrilmaz
+
+== M08 [X (2)] K3 (O3): Win kabul
+  test_k3_dilbilgisi_tablosu['Win+Shift+S']
+  test_k3_dilbilgisi_tablosu['Ctrl+Alt+Win+D']
+
+== M09 [X (6)] K3 (O3): kara liste yok
+  test_k3_dilbilgisi_tablosu['Alt+F4']
+  test_k3_dilbilgisi_tablosu['Ctrl+Alt+Delete']
+  test_k3_dilbilgisi_tablosu['Ctrl+Alt+Del']
+  test_k3_dilbilgisi_tablosu['Alt+Ctrl+Delete']
+  test_k3_dilbilgisi_tablosu['Ctrl+Shift+Esc']
+  test_k3_dilbilgisi_tablosu['Shift+Ctrl+Escape']
+
+== M10 [X (3)] K1/K5: 1409 -> OK (cakisma gizlenir)
+  test_k1_1409_cakisma_kayitlida_yok
+  test_k5_cakisma_durum_satiri_ve_etiketler
+  test_k5_iki_cakisma_ikisi_de_anilir
+
+== M11 [X (5)] K5: durum metni bos (cakisma bildirilmez)
+  test_k5_cakisma_durum_satiri_ve_etiketler
+  test_k5_altgr_cakismasi_metni
+  test_k5_gecersiz_kombinasyon_metni
+  test_k5_win32_hata_kodu_metni
+  test_k5_iki_cakisma_ikisi_de_anilir
+
+== M12 [X (4)] K5: etiketler guncellenmiyor (dugmeler '(kısayol yok)' kalir)
+  test_k4_ozel_kisayollar_ve_bilinmeyen_ad_kaydedilir_ama_sinyal_yok
+  test_k5_cakisma_durum_satiri_ve_etiketler
+  test_k5_altgr_cakismasi_metni
+  test_k5_gecersiz_kombinasyon_metni
+
+== M12b [X (4)] K5: etiketler kaydedilemeyeni de gosterir (istenen tablo, kayitli degil)
+  test_k5_cakisma_durum_satiri_ve_etiketler
+  test_k5_altgr_cakismasi_metni
+  test_k5_gecersiz_kombinasyon_metni
+  test_k5_iki_cakisma_ikisi_de_anilir
+
+== M13 [X (2)] K6: thread kontrolu yok
+  test_k6_baska_threadden_kaydet_runtimeerror_win32_cagrilmaz
+  test_k6_baska_threadden_kaldir_ve_hepsini_kaldir_runtimeerror
+
+== M14 [X (2)] Y1: gercek_win32 kemeri yok (ortam degiskeni denetlenmez)
+  test_k2_gercek_win32_yasak_degiskeni_varken_runtimeerror
+  test_k4_kisayol_servisi_verilmezse_gercek_servis_kurulur_kemer_ateslenir
+
+== M14b [X (4)] Y1: fn eksikse RuntimeError yok (sessizce None)
+  test_k2_gercek_win32_false_fn_eksikse_runtimeerror[kayit_fn]
+  test_k2_gercek_win32_false_fn_eksikse_runtimeerror[kaldir_fn]
+  test_k2_gercek_win32_false_fn_eksikse_runtimeerror[hata_kodu_fn]
+  test_k2_gercek_win32_false_fn_eksikse_runtimeerror[altgr_karakteri_fn]
+
+== M15 [X (4)] K1/K2: yikimda filtre sokulmuyor
+  test_k1_yikim_kayitlar_kaldirilir_filtre_sokulur[del_gc]
+  test_k1_yikim_kayitlar_kaldirilir_filtre_sokulur[deleteLater]
+  test_k1_yikim_ebeveyn_silinince_cocuk_servis_temizler
+  test_k1_yikim_hepsini_kaldir_sonrasi_cift_kaldirma_yok
+
+== M16 [X (2)] K1: ayni ad yeniden kayitta eski kaldirilmiyor
+  test_k1_ayni_ad_yeniden_kaydet_once_kaldir_sonra_kaydet
+  test_k1_ayni_ad_ayni_kombinasyon_yeniden_kaydet
+
+== M17 [X (1)] K1: servis ici ayni kombinasyon denetimi yok (Win32'ye gider)
+  test_k1_ayni_kombinasyon_baska_ad_servis_ici_cakisma_win32_cagrilmaz
+
+== M18 [X (4)] K4: tetiklendi -> kisayol_tetiklendi bagli degil
+  test_k4_tetiklendi_ad_tablosuyla_sinyal_durum_degismez[gorunur]
+  test_k4_tetiklendi_ad_tablosuyla_sinyal_durum_degismez[tepsi]
+  test_k4_tetiklendi_ad_tablosuyla_sinyal_durum_degismez[kenar]
+  test_k5_cakisma_diger_kisayol_calisir
+
+== M19 [X (1)] K1/K4: cikis_istendi -> hepsini_kaldir bagli degil
+  test_k4_cikis_istendi_hepsini_kaldirir
+
+== M20 [X (3)] Y2: varsayilan Ctrl+Alt+T (TR-Q'da AltGr ₺)
+  test_k4_varsayilan_kisayollar_ctrl_alt_d_ve_r_norepeat
+  test_k5_cakisma_durum_satiri_ve_etiketler
+  test_k5_iki_cakisma_ikisi_de_anilir
+
+== M21 [X (7)] K4: bilinmeyen ad anlik sinyali yayar
+  test_t013_k4_kisayol_tetiklendi_sinyal_yayar_durum_degismez[gorunur]
+  test_t013_k4_kisayol_tetiklendi_sinyal_yayar_durum_degismez[tepsi]
+  test_t013_k4_kisayol_tetiklendi_sinyal_yayar_durum_degismez[kenar]
+  test_k4_tetiklendi_ad_tablosuyla_sinyal_durum_degismez[gorunur]
+  test_k4_tetiklendi_ad_tablosuyla_sinyal_durum_degismez[tepsi]
+  test_k4_tetiklendi_ad_tablosuyla_sinyal_durum_degismez[kenar]
+  test_k4_ozel_kisayollar_ve_bilinmeyen_ad_kaydedilir_ama_sinyal_yok
+
+== M22 [X (2)] K3/K5: bozuk metin kaydet'ten ValueError olarak cikar (GECERSIZ degil)
+  test_k1_ayni_ad_gecersiz_yeni_kombinasyon_eski_kayit_korunur
+  test_k3_kaydet_gecersiz_ve_bozuk_metin_gecersiz_win32_cagrilmaz
+
+== M23 [X (2)] K3: F12 kabul
+  test_k3_dilbilgisi_tablosu['Ctrl+Alt+F12']
+  test_k3_kaydet_gecersiz_ve_bozuk_metin_gecersiz_win32_cagrilmaz
+
+== M24 [X (49)] K1: kaldir(bilinmeyen) KeyError (sessiz degil)
+  test_k1_kaydet_ok_cagri_dizisi_ve_norepeat
+  test_k1_1409_cakisma_kayitlida_yok
+  test_k1_diger_hata_kodu_hata
+  test_k1_ayni_ad_yeniden_kaydet_once_kaldir_sonra_kaydet
+  test_k1_ayni_ad_ayni_kombinasyon_yeniden_kaydet
+  test_k1_ayni_ad_gecersiz_yeni_kombinasyon_eski_kayit_korunur
+  test_k1_ayni_kombinasyon_baska_ad_servis_ici_cakisma_win32_cagrilmaz
+  test_k1_kaldir_bilinmeyen_sessiz
+  test_k1_kaldir_kayitli_win32_ve_tablo
+  test_k1_hepsini_kaldir_idempotent
+  test_k1_kayitli_kopya_disaridan_mutasyon_servisi_etkilemez
+  test_k1_kimlik_surec_genelinde_benzersiz_iki_servis
+  test_k1_kimlik_sayaci_ust_sinirda_sarar_ve_canli_kimligi_atlar
+  test_k1_kimlik_ust_siniri_0xbfff
+  test_k1_yikim_kayitlar_kaldirilir_filtre_sokulur[del_gc]
+  test_k1_yikim_kayitlar_kaldirilir_filtre_sokulur[deleteLater]
+  test_k1_yikim_ebeveyn_silinince_cocuk_servis_temizler
+  test_k1_yikim_hepsini_kaldir_sonrasi_cift_kaldirma_yok
+  test_k2_bilinen_kimlik_sinyal_ve_true
+  test_k2_iki_kayit_dogru_ad
+  test_k2_bilinmeyen_kimlik_false_sinyal_yok
+  test_k2_kaldirilan_kimlik_artik_bilinmiyor
+  test_k2_wm_hotkey_disi_false
+  test_k2_yanlis_event_type_false_mesaja_dokunmaz
+  test_k2_filtre_bir_kez_kurulur_ve_ayni_nesne
+  test_k2_filtre_sirasi_eski_servis_yeni_servisin_olayini_yutmaz
+  test_k2_gercek_win32_false_fnler_verilince_kurulur_pozitif_kontrol
+  test_k3_kayitli_kanonik_metin
+  test_k3_altgr_cakismasi_ctrl_alt_shiftsiz
+  test_k3_altgr_shiftli_ve_ctrl_altsiz_sorulmaz
+  test_k6_baska_threadden_kaydet_runtimeerror_win32_cagrilmaz
+  test_k6_baska_threadden_kaldir_ve_hepsini_kaldir_runtimeerror
+  test_calistir_uygulamayi_kurar_ve_calistiriciyi_cagirir
+  test_calistir_cikis_istendi_quit_baglar_gercek_exec
+  test_calistir_varsayilan_kenar_sag
+  test_k4_varsayilan_kisayollar_ctrl_alt_d_ve_r_norepeat
+  test_k4_tetiklendi_ad_tablosuyla_sinyal_durum_degismez[gorunur]
+  test_k4_tetiklendi_ad_tablosuyla_sinyal_durum_degismez[tepsi]
+  test_k4_tetiklendi_ad_tablosuyla_sinyal_durum_degismez[kenar]
+  test_k4_ozel_kisayollar_ve_bilinmeyen_ad_kaydedilir_ama_sinyal_yok
+  test_k4_cikis_istendi_hepsini_kaldirir
+  test_k4_kisayol_servisi_verilmezse_yapici_argumanlari
+  test_k4_calistir_sonrasi_pencere_toplanabilir_baglanti_pencereyi_tutmaz
+  test_k5_cakisma_durum_satiri_ve_etiketler
+  test_k5_altgr_cakismasi_metni
+  test_k5_gecersiz_kombinasyon_metni
+  test_k5_win32_hata_kodu_metni
+  test_k5_iki_cakisma_ikisi_de_anilir
+  test_k5_cakisma_diger_kisayol_calisir
+
+== M25 [X (4)] K1: hata kodu okunmuyor (1409 HATA olur)
+  test_k1_1409_cakisma_kayitlida_yok
+  test_k1_diger_hata_kodu_hata
+  test_k5_cakisma_durum_satiri_ve_etiketler
+  test_k5_win32_hata_kodu_metni
+
+== M26 [X (1)] K5 kabuk: bos etiket '(kısayol yok)' olmaz
+  test_t013_k5_kisayol_etiketleri_eksik_ya_da_bos_kisayol_yok
+
+== M27 [X (1)] K6 pozitif kontrol: kaynaga print eklendi (AST olcusu ateslemeli)
+  test_k6_k7_kaynak_yasak_ad_ve_import_icermez[kisayol.py]
+
+== M28 [X (4)] K3: bos parca kabul ('Ctrl+' gecer)
+  test_k3_dilbilgisi_tablosu['+D']
+  test_k3_dilbilgisi_tablosu['Ctrl++D']
+  test_k3_dilbilgisi_tablosu['Ctrl+Alt++D']
+  test_k3_dilbilgisi_tablosu['Ctrl+ +D']
+
+== M29 [X (1)] K1 (O4): kimlik 0xBFFF'te sarmiyor (uygulama araligi disina cikar)
+  test_k1_kimlik_ust_siniri_0xbfff
+
+== M30 [X (3)] K1 (Y3): yikim temizleyicisi kaldir_fn cagirmiyor (kayitlar Windows'ta kalir)
+  test_k1_yikim_kayitlar_kaldirilir_filtre_sokulur[del_gc]
+  test_k1_yikim_kayitlar_kaldirilir_filtre_sokulur[deleteLater]
+  test_k1_yikim_ebeveyn_silinince_cocuk_servis_temizler
+
+== C-1 [.] KONTROL: >= 2 degistirici kurali acik kume ile yazildi -- esdeger
+  (dusen yok)
+
+== C-2 [.] KONTROL: yikim dongusu tuple ile -- esdeger
+  (dusen yok)
+
+== C-3 [.] KONTROL: servis ici cakisma denetimi kume ile -- esdeger
+  (dusen yok)
+
+== C-4 [.] KONTROL: uygulama sorun listesi f-string yerine birlestirme -- esdeger
+  (dusen yok)

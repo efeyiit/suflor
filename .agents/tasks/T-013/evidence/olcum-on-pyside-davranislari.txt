@@ -1,0 +1,28 @@
+o1 destroyed -> partial(serbest, 'partial') cagrildi: [('partial', 0)]  (('partial', n): n = PySide'in gecirdigi ek arguman sayisi)
+o2 QByteArray == bytes: True; bytes(QByteArray) == bytes: True; bytes(b'..') gecer: True; farkli: False
+o3 installNativeEventFilter sonrasi Python referansi dusuruldu: sarmalayici canli=False; removeNativeEventFilter + gc sonrasi canli=False
+o4 filtre weakref(servis) tutarken servis del+gc: sarmalayici None=True; destroyed partial kostu=[('partial', 0)]; filtre weakref cagrisi None=True
+o5 duzen=0000041F
+o5 Ctrl+Alt+Space: n=0 karakter='' (kontrol karakteri=False)
+o5 Ctrl+Alt+Tab: n=0 karakter='' (kontrol karakteri=False)
+o5 Ctrl+Alt+Enter: n=0 karakter='' (kontrol karakteri=False)
+o5 Ctrl+Alt+Esc: n=0 karakter='' (kontrol karakteri=False)
+o5 Ctrl+Alt+Backspace: n=0 karakter='' (kontrol karakteri=False)
+o5 Ctrl+Alt+Delete: n=0 karakter='' (kontrol karakteri=False)
+o5 Ctrl+Alt+Insert: n=0 karakter='' (kontrol karakteri=False)
+o5 Ctrl+Alt+Home: n=0 karakter='' (kontrol karakteri=False)
+o5 Ctrl+Alt+End: n=0 karakter='' (kontrol karakteri=False)
+o5 Ctrl+Alt+PageUp: n=0 karakter='' (kontrol karakteri=False)
+o5 Ctrl+Alt+PageDown: n=0 karakter='' (kontrol karakteri=False)
+o5 Ctrl+Alt+Left: n=0 karakter='' (kontrol karakteri=False)
+o5 Ctrl+Alt+Up: n=0 karakter='' (kontrol karakteri=False)
+o5 Ctrl+Alt+Right: n=0 karakter='' (kontrol karakteri=False)
+o5 Ctrl+Alt+Down: n=0 karakter='' (kontrol karakteri=False)
+o5 Ctrl+Alt+F1: n=0 karakter='' (kontrol karakteri=False)
+o5 Ctrl+Alt+F11: n=0 karakter='' (kontrol karakteri=False)
+o5 Ctrl+Alt+D: n=0 karakter='' (kontrol karakteri=False)
+o5 Ctrl+Alt+R: n=0 karakter='' (kontrol karakteri=False)
+o5 Ctrl+Alt+T: n=1 karakter='\u20ba' (kontrol karakteri=False)
+o5 Ctrl+Alt+6: n=0 karakter='' (kontrol karakteri=False)
+o5 Ctrl+Alt+2: n=1 karakter='\xa3' (kontrol karakteri=False)
+o6 ana thread currentThread() is app.thread(): True; python thread: False

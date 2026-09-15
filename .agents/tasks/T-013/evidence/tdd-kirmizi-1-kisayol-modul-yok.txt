@@ -1,0 +1,19 @@
+$ python -m pytest tests/unit/ui/test_kisayol.py -q -p no:cacheprovider --tb=line  (TDD KIRMIZI 1: src/ui/kisayol.py henuz yok -> toplama hatasi)
+
+=================================== ERRORS ====================================
+_______________ ERROR collecting tests/unit/ui/test_kisayol.py ________________
+ImportError while importing test module '<depo>\tests\unit\ui\test_kisayol.py'.
+Hint: make sure your test modules/packages have valid Python names.
+Traceback:
+..\..\..\AppData\Local\Programs\Python\Python312\Lib\importlib\__init__.py:90: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests\unit\ui\test_kisayol.py:27: in <module>
+    from src.ui import kisayol
+E   ImportError: cannot import name 'kisayol' from 'src.ui' (<depo>\src\ui\__init__.py)
+=========================== short test summary info ===========================
+ERROR tests/unit/ui/test_kisayol.py
+!!!!!!!!!!!!!!!!!!! Interrupted: 1 error during collection !!!!!!!!!!!!!!!!!!!!
+1 error in 0.14s
+
+[exit 2]

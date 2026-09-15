@@ -1,0 +1,47 @@
+$ python .agents/tasks/T-013/evidence/mutant-kiti.py  (ayna agaci; 34 davranis mutanti + 4 kontrol; M28 icin dilbilgisi tablosuna sinif ayrimi eklendikten sonra)
+T-013 mutant kiti -- ayna: <gecici dizin>/t013_ayna
+TEMEL (mutantsiz): failed=0 passed=379 error=0
+ad    sonuc    beklenen   aciklama
+M01   X (2)    YAKALA     K1: MOD_NOREPEAT kaldirildi (basili tutunca tekrar)
+M02   X (5)    YAKALA     K1 (O4): kimlik sayaci ORNEK basina (iki servis ayni id)
+M03   X (5)    YAKALA     K1 (Y3): destroyed alicisi self'in bagli yontemi (PySide6 6.11'de kosmaz)
+M03b  X (5)    YAKALA     K1 (Y3): destroyed partial'i self'i yakalar (del+gc toplamaz; filtre sokulmez)
+M04   X (1)    YAKALA     K2 (O7): eventType denetimi yok
+M05   X (3)    YAKALA     K2: bilinmeyen kimlik True doner (eski servis yeni servisin olayini yutar)
+M06   X (3)    YAKALA     K3 (Y2): AltGr sorgusu yok
+M06b  X (1)    YAKALA     K3 (Y2): AltGr Shift'li kombinasyonda da sorulur
+M07   X (8)    YAKALA     K3 (O3): tek degistirici kabul
+M08   X (2)    YAKALA     K3 (O3): Win kabul
+M09   X (6)    YAKALA     K3 (O3): kara liste yok
+M10   X (3)    YAKALA     K1/K5: 1409 -> OK (cakisma gizlenir)
+M11   X (5)    YAKALA     K5: durum metni bos (cakisma bildirilmez)
+M12   X (4)    YAKALA     K5: etiketler guncellenmiyor (dugmeler '(k?sayol yok)' kalir)
+M12b  X (4)    YAKALA     K5: etiketler kaydedilemeyeni de gosterir (istenen tablo, kayitli degil)
+M13   X (2)    YAKALA     K6: thread kontrolu yok
+M14   X (2)    YAKALA     Y1: gercek_win32 kemeri yok (ortam degiskeni denetlenmez)
+M14b  X (4)    YAKALA     Y1: fn eksikse RuntimeError yok (sessizce None)
+M15   X (4)    YAKALA     K1/K2: yikimda filtre sokulmuyor
+M16   X (2)    YAKALA     K1: ayni ad yeniden kayitta eski kaldirilmiyor
+M17   X (1)    YAKALA     K1: servis ici ayni kombinasyon denetimi yok (Win32'ye gider)
+M18   X (4)    YAKALA     K4: tetiklendi -> kisayol_tetiklendi bagli degil
+M19   X (1)    YAKALA     K1/K4: cikis_istendi -> hepsini_kaldir bagli degil
+M20   X (3)    YAKALA     Y2: varsayilan Ctrl+Alt+T (TR-Q'da AltGr ?)
+M21   X (7)    YAKALA     K4: bilinmeyen ad anlik sinyali yayar
+M22   X (2)    YAKALA     K3/K5: bozuk metin kaydet'ten ValueError olarak cikar (GECERSIZ degil)
+M23   X (2)    YAKALA     K3: F12 kabul
+M24   X (49)   YAKALA     K1: kaldir(bilinmeyen) KeyError (sessiz degil)
+M25   X (4)    YAKALA     K1: hata kodu okunmuyor (1409 HATA olur)
+M26   X (1)    YAKALA     K5 kabuk: bos etiket '(k?sayol yok)' olmaz
+M27   X (1)    YAKALA     K6 pozitif kontrol: kaynaga print eklendi (AST olcusu ateslemeli)
+M28   X (4)    YAKALA     K3: bos parca kabul ('Ctrl+' gecer)
+M29   X (1)    YAKALA     K1 (O4): kimlik 0xBFFF'te sarmiyor (uygulama araligi disina cikar)
+M30   X (3)    YAKALA     K1 (Y3): yikim temizleyicisi kaldir_fn cagirmiyor (kayitlar Windows'ta kalir)
+C-1   .        KACSIN     KONTROL: >= 2 degistirici kurali acik kume ile yazildi -- esdeger
+C-2   .        KACSIN     KONTROL: yikim dongusu tuple ile -- esdeger
+C-3   .        KACSIN     KONTROL: servis ici cakisma denetimi kume ile -- esdeger
+C-4   .        KACSIN     KONTROL: uygulama sorun listesi f-string yerine birlestirme -- esdeger
+
+34 davranis mutanti + 4 kontrol; beklenti tutmayan: 0 []
+dusen test adlari: mutant-ayirt-etme-hangi-testler.txt
+
+[exit 0]

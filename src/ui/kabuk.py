@@ -136,8 +136,26 @@ yol yok). Hicbir kullanici metni loglanmaz.
 `sys.modules` olcusu). Pencere dugmeleri ve sekme dugmeleri ayni sinyalleri
 yayar (`anlik_cevir_istendi`, `bolge_izle_istendi`); dinleyicisiz calisir;
 mod sinyali durumu DEGISTIRMEZ (kenar durumunda sekme kapali kalir, pencere
-gelmez -- baglayan taraf karar verir). Global kisayollar (`Ctrl+Alt+T/R`)
-ve yatay/monitorler arasi tasima bu paketin DISINDA (`known_gaps`).
+gelmez -- baglayan taraf karar verir). Yatay/monitorler arasi tasima paket
+DISINDA (`known_gaps`). Global kisayollar T-013 ile geldi (asagida).
+
+## T-013 K4/K5 -- kisayol -> sinyal; cakisma gorunur, kisayollar gorunur, modal yok
+
+`kisayol_tetiklendi(ad)`: `src.ui.uygulama.calistir`in `KisayolServisi.tetiklendi`
+icin bagladigi BAGLI YONTEM (lambda/partial degil: Y-A1 sinifi, pencere
+toplanabilir kalir -- `test_k4_calistir_sonrasi_pencere_toplanabilir_*`).
+Ad tablosu `{"anlik_cevir": anlik_cevir_istendi, "bolge_izle": bolge_izle_istendi}`;
+bilinmeyen ad YOK SAYILIR; sinyal durumu DEGISTIRMEZ (uc durumda da yalniz
+sinyal; alici karar verir -- `kapat()` sonrasi da yayar, diriltmez)
+(`test_t013_k4_kisayol_tetiklendi_*`). `durum_goster(metin)` / `durum_metni()`:
+durum satiri (`QLabel`, sarilir; pencere genislemez) -- kisayol
+kaydedilemeyince `calistir` buraya yazar, `QMessageBox` YOK
+(`test_t013_k5_durum_*`). `kisayol_etiketleri(etiketler)`: mod dugmelerinin
+metni/ipucu ve tepsi ipucu KAYITLI kombinasyonu gosterir; eksik ya da bos
+deger `"(kısayol yok)"` (baslangic durumu da budur -- sabit "Ctrl+Alt+T/R"
+yazisi yalan olurdu, KRT O8); bilinmeyen ad yok sayilir; yeniden cagri
+biriktirmez (`test_t013_k5_kisayol_etiketleri_*`,
+`test_t013_k5_baslangic_etiketleri_kisayol_yok`).
 
 ## K8 -- cercevesiz pencere suruklenebilir, dugmeler erisilebilir
 
@@ -148,7 +166,7 @@ baslamaz (`test_k8_*`). Uc dugmenin `accessibleName`i {"Kapat", "Tepsiye al",
 """
 from __future__ import annotations
 
-from collections.abc import Callable
+from collections.abc import Callable, Mapping
 from enum import StrEnum
 from typing import ClassVar
 
@@ -167,6 +185,11 @@ _CIZGI = "#2a3138"
 _YAZI = "#d8e2ee"
 _VURGU = "#5ec6ff"
 _BASLIK_SERIDI_PX = 44
+_KISAYOL_YOK = "(kısayol yok)"
+_MOD_DUGMELERI = (  # ad, simge, baslik, aciklama, ipucu govdesi
+    ("anlik_cevir", "⚡", "Anlık çeviri", "Ekranı dondur, blokları seç, çevir", "Anlık çeviri (Snapshot modu)"),
+    ("bolge_izle", "▭", "Bölge izle", "Dikdörtgen çiz, sürekli çevir", "Bölge izle (Region-watch modu)"),
+)
 _PENCERE_STILI = (
     f"QWidget{{background:{_ARKA}; color:{_YAZI}; font-family:'Segoe UI';}}"
     f"QPushButton#mod{{background:{_YUZEY}; border:1px solid {_CIZGI}; border-radius:10px; padding:18px;"
@@ -305,18 +328,17 @@ class AnaPencere(QWidget):
         for dugme in (self._dugme_kenar, self._dugme_tepsi, self._dugme_kapat):
             ust.addWidget(dugme)
 
-        self._dugme_anlik = QPushButton("⚡  Anlık çeviri\nEkranı dondur, blokları seç, çevir")
+        self._dugme_anlik = QPushButton()
         self._dugme_anlik.setObjectName("mod")
         self._dugme_anlik.setAccessibleName("Anlık çeviri")
-        self._dugme_anlik.setToolTip("Anlık çeviri (Snapshot modu)")
-        self._dugme_bolge = QPushButton("▭  Bölge izle\nDikdörtgen çiz, sürekli çevir")
+        self._dugme_bolge = QPushButton()
         self._dugme_bolge.setObjectName("mod")
         self._dugme_bolge.setAccessibleName("Bölge izle")
-        self._dugme_bolge.setToolTip("Bölge izle (Region-watch modu)")
         notu = QLabel("Çevrimdışı · yerel OCR + yerel çeviri · hiçbir metin diske ya da ağa gitmez")
         notu.setObjectName("not")
         self._durum_satiri = QLabel("")
         self._durum_satiri.setObjectName("not")
+        self._durum_satiri.setWordWrap(True)
         govde = QVBoxLayout()
         govde.setContentsMargins(18, 10, 18, 14)
         govde.setSpacing(10)
@@ -334,6 +356,7 @@ class AnaPencere(QWidget):
         self._tepsi.goster_istendi.connect(self.goster)
         self._tepsi.kenara_al_istendi.connect(self.kenara_al)
         self._tepsi.cikis_istendi.connect(self.kapat)
+        self.kisayol_etiketleri({})  # T-013 K5: kayitli kisayol yok -> "(kısayol yok)"; sabit yazi yalan olurdu
 
         self._sekme = KenarSekmesi(_ekrani_coz(ekran), kenar=kenar, imlec_konumu=imlec_konumu)
         self._sekme.pencereyi_goster.connect(self.goster)
@@ -395,6 +418,31 @@ class AnaPencere(QWidget):
     @property
     def dugme_bolge(self) -> QPushButton:
         return self._dugme_bolge
+
+    # -- T-013: kisayol -> sinyal, durum satiri, etiketler ---------------------------------------
+    def kisayol_tetiklendi(self, ad: str) -> None:
+        """`KisayolServisi.tetiklendi(ad)` alicisi (bagli yontem): ad tablosuyla mod sinyali; bilinmeyen ad yok sayilir."""
+        sinyal = {"anlik_cevir": self.anlik_cevir_istendi, "bolge_izle": self.bolge_izle_istendi}.get(ad)
+        if sinyal is not None:
+            sinyal.emit()
+
+    def durum_goster(self, metin: str) -> None:
+        """Durum satirina yaz (modal yok, K6)."""
+        self._durum_satiri.setText(metin)
+
+    def durum_metni(self) -> str:
+        return self._durum_satiri.text()
+
+    def kisayol_etiketleri(self, etiketler: Mapping[str, str]) -> None:
+        """Mod dugmeleri + ipuclari + tepsi ipucu KAYITLI kombinasyonu gosterir; eksik/bos -> "(kısayol yok)"."""
+        dugmeler = {"anlik_cevir": self._dugme_anlik, "bolge_izle": self._dugme_bolge}
+        tepsi_parcalari: list[str] = []
+        for ad, simge, baslik, aciklama, ipucu in _MOD_DUGMELERI:
+            etiket = etiketler.get(ad) or _KISAYOL_YOK
+            dugmeler[ad].setText(f"{simge}  {baslik}  ·  {etiket}\n{aciklama}")
+            dugmeler[ad].setToolTip(f"{ipucu} — {etiket}")
+            tepsi_parcalari.append(f"{baslik.lower()}: {etiket}")
+        self._tepsi.ikon.setToolTip("Suflör — " + " · ".join(tepsi_parcalari))
 
     # -- durum gecisleri -------------------------------------------------------------------------
     def goster(self) -> None:

@@ -1,0 +1,6 @@
+$ python .agents/tasks/T-013/evidence/demo-ekran-goruntusu.py  (gercek windows platformu, gercek servis; iki PNG)
+kabuk_kisayollar.png: yazildi=True anlik='?  Anl?k ?eviri  ?  Ctrl+Alt+D' bolge='?  B?lge izle  ?  Ctrl+Alt+R' durum_satiri_bos=True
+baska surec Ctrl+Alt+D tutuyor: kayit=1
+kabuk_kisayol_cakisma.png: yazildi=True anlik='?  Anl?k ?eviri  ?  (k?sayol yok)' bolge='?  B?lge izle  ?  Ctrl+Alt+R' durum_satiri_bos=False
+
+[exit 0]

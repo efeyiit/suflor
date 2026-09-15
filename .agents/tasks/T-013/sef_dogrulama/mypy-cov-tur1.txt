@@ -1,0 +1,4 @@
+Success: no issues found in 15 source files
+mypy exit=0
+Required test coverage of 95% reached. Total coverage: 99.74%
+379 passed in 22.65s

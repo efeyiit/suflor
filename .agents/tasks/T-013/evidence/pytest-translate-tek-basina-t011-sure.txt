@@ -1,0 +1,52 @@
+$ python -m pytest tests/unit/translate -q -p no:cacheprovider  (YALNIZ tests/unit/translate, UI testleri hic kosmadan: ayni T-011 sure testleri dusuyor -> T-013'ten bagimsiz, makine yuku)
+........................................................................ [ 10%]
+........................................................................ [ 20%]
+........................................................................ [ 30%]
+........................................................................ [ 40%]
+........................................................................ [ 50%]
+........................................................................ [ 60%]
+........................................................................ [ 70%]
+........................................................................ [ 80%]
+........................................................................ [ 91%]
+.............................................FF.................         [100%]
+================================== FAILURES ===================================
+_________________ test_k5_sure_8000_hit_tek_segment_60ms_alti _________________
+
+tmp_path = WindowsPath('<gecici dizin>/pytest-of-<kullanici>/pytest-2848/test_k5_sure_8000_hit_tek_segm0')
+
+    def test_k5_sure_8000_hit_tek_segment_60ms_alti(tmp_path: Path) -> None:
+        """K5 v3: 8000 hit'lik tek segment (bosluklu) < 60 ms -- tur 1'de kabul listesi dogrusal taraniyordu (472 ms)."""
+        s = fixture_v3_store(tmp_path)
+        metin = "Marcus " * 8000
+        assert len(s.lookup(metin)) == 8000
+        medyan = _medyan_ms(lambda: s.lookup(metin))
+>       assert medyan < 60 * _izleyici_payi(), f"medyan {medyan:.1f} ms (izleyici payi x{_izleyici_payi():.0f})"
+E       AssertionError: medyan 66.5 ms (izleyici payi x1)
+E       assert 66.475999999966 < (60 * 1.0)
+E        +  where 1.0 = _izleyici_payi()
+
+tests\unit\translate\test_sozluk.py:1713: AssertionError
+__________________ test_k5_sure_8000_uyeli_zincir_60ms_alti ___________________
+
+tmp_path = WindowsPath('<gecici dizin>/pytest-of-<kullanici>/pytest-2848/test_k5_sure_8000_uyeli_zincir0')
+
+    def test_k5_sure_8000_uyeli_zincir_60ms_alti(tmp_path: Path) -> None:
+        """Zincir arama da hit sayisinda dogrusal: 8000 bitisik uye (gecerli) ve 8000 uyeli basarisiz zincir (`x` ile) < 60 ms."""
+        s = fixture_v3_store(tmp_path)
+        gecerli = "Marcus" * 8000
+        olu = "Marcus" * 8000 + "x"
+        assert len(s.lookup(gecerli)) == 8000 and s.lookup(olu) == []
+        m1 = _medyan_ms(lambda: s.lookup(gecerli))
+        m2 = _medyan_ms(lambda: s.lookup(olu))
+>       assert m1 < 60 * _izleyici_payi() and m2 < 60 * _izleyici_payi(), f"gecerli {m1:.1f} ms, olu {m2:.1f} ms"
+E       AssertionError: gecerli 64.9 ms, olu 53.0 ms
+E       assert (64.90370000028634 < (60 * 1.0))
+E        +  where 1.0 = _izleyici_payi()
+
+tests\unit\translate\test_sozluk.py:1724: AssertionError
+=========================== short test summary info ===========================
+FAILED tests/unit/translate/test_sozluk.py::test_k5_sure_8000_hit_tek_segment_60ms_alti
+FAILED tests/unit/translate/test_sozluk.py::test_k5_sure_8000_uyeli_zincir_60ms_alti
+2 failed, 710 passed in 5.79s
+
+[exit 1]

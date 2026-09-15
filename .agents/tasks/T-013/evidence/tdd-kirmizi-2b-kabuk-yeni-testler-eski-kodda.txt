@@ -1,0 +1,67 @@
+$ python -m pytest tests/unit/ui/test_kabuk.py -q -p no:cacheprovider --tb=line -rfE  (TDD KIRMIZI 2b: kabuk.py T-013 API'siz -> yeni K5/K4 testleri duser, T-012 testleri gecer)
+........................................................................ [ 85%]
+.FFFFFFFFFFF                                                             [100%]
+================================== FAILURES ===================================
+E   AttributeError: 'AnaPencere' object has no attribute 'durum_metni'
+---------------------------- Captured Qt messages -----------------------------
+QtWarningMsg: This plugin does not support propagateSizeHints()
+<depo>\tests\unit\ui\test_kabuk.py:859: AttributeError: 'AnaPencere' object has no attribute 'durum_metni'
+E   AttributeError: 'AnaPencere' object has no attribute 'durum_goster'
+---------------------------- Captured Qt messages -----------------------------
+QtWarningMsg: This plugin does not support propagateSizeHints()
+<depo>\tests\unit\ui\test_kabuk.py:868: AttributeError: 'AnaPencere' object has no attribute 'durum_goster'
+E   assert ('(kısayol yok)' in '⚡  Anlık çeviri\nEkranı dondur, blokları seç, çevir')
+     +  where '⚡  Anlık çeviri\nEkranı dondur, blokları seç, çevir' = <built-in method text of PySide6.QtWidgets.QPushButton object at 0x0000025C366D4200>()
+     +    where <built-in method text of PySide6.QtWidgets.QPushButton object at 0x0000025C366D4200> = <PySide6.QtWidgets.QPushButton(0x25c33aa7260, name="mod") at 0x0000025C366D4200>.text
+---------------------------- Captured Qt messages -----------------------------
+QtWarningMsg: This plugin does not support propagateSizeHints()
+<depo>\tests\unit\ui\test_kabuk.py:876: assert ('(kısayol yok)' in '⚡  Anlık çeviri\nEkranı dondur, blokları seç, çevir')
+E   AttributeError: 'AnaPencere' object has no attribute 'kisayol_etiketleri'
+---------------------------- Captured Qt messages -----------------------------
+QtWarningMsg: This plugin does not support propagateSizeHints()
+<depo>\tests\unit\ui\test_kabuk.py:882: AttributeError: 'AnaPencere' object has no attribute 'kisayol_etiketleri'
+E   AttributeError: 'AnaPencere' object has no attribute 'kisayol_etiketleri'
+---------------------------- Captured Qt messages -----------------------------
+QtWarningMsg: This plugin does not support propagateSizeHints()
+<depo>\tests\unit\ui\test_kabuk.py:892: AttributeError: 'AnaPencere' object has no attribute 'kisayol_etiketleri'
+E   AttributeError: 'AnaPencere' object has no attribute 'kisayol_etiketleri'
+---------------------------- Captured Qt messages -----------------------------
+QtWarningMsg: This plugin does not support propagateSizeHints()
+<depo>\tests\unit\ui\test_kabuk.py:904: AttributeError: 'AnaPencere' object has no attribute 'kisayol_etiketleri'
+E   AttributeError: 'AnaPencere' object has no attribute 'kisayol_etiketleri'
+---------------------------- Captured Qt messages -----------------------------
+QtWarningMsg: This plugin does not support propagateSizeHints()
+<depo>\tests\unit\ui\test_kabuk.py:911: AttributeError: 'AnaPencere' object has no attribute 'kisayol_etiketleri'
+E   AttributeError: 'AnaPencere' object has no attribute 'kisayol_tetiklendi'
+---------------------------- Captured Qt messages -----------------------------
+QtWarningMsg: This plugin does not support propagateSizeHints()
+QtWarningMsg: This plugin does not support raise()
+<depo>\tests\unit\ui\test_kabuk.py:924: AttributeError: 'AnaPencere' object has no attribute 'kisayol_tetiklendi'
+E   AttributeError: 'AnaPencere' object has no attribute 'kisayol_tetiklendi'
+---------------------------- Captured Qt messages -----------------------------
+QtWarningMsg: This plugin does not support propagateSizeHints()
+<depo>\tests\unit\ui\test_kabuk.py:924: AttributeError: 'AnaPencere' object has no attribute 'kisayol_tetiklendi'
+E   AttributeError: 'AnaPencere' object has no attribute 'kisayol_tetiklendi'
+---------------------------- Captured Qt messages -----------------------------
+QtWarningMsg: This plugin does not support propagateSizeHints()
+QtWarningMsg: This plugin does not support raise()
+<depo>\tests\unit\ui\test_kabuk.py:924: AttributeError: 'AnaPencere' object has no attribute 'kisayol_tetiklendi'
+E   AttributeError: 'AnaPencere' object has no attribute 'kisayol_tetiklendi'
+---------------------------- Captured Qt messages -----------------------------
+QtWarningMsg: This plugin does not support propagateSizeHints()
+<depo>\tests\unit\ui\test_kabuk.py:937: AttributeError: 'AnaPencere' object has no attribute 'kisayol_tetiklendi'
+=========================== short test summary info ===========================
+FAILED tests/unit/ui/test_kabuk.py::test_t013_k5_durum_goster_ve_durum_metni
+FAILED tests/unit/ui/test_kabuk.py::test_t013_k5_durum_satiri_uzun_metin_sarilir_pencere_genislemez
+FAILED tests/unit/ui/test_kabuk.py::test_t013_k5_baslangic_etiketleri_kisayol_yok
+FAILED tests/unit/ui/test_kabuk.py::test_t013_k5_kisayol_etiketleri_dugme_ipucu_ve_tepsi
+FAILED tests/unit/ui/test_kabuk.py::test_t013_k5_kisayol_etiketleri_eksik_ya_da_bos_kisayol_yok
+FAILED tests/unit/ui/test_kabuk.py::test_t013_k5_kisayol_etiketleri_bilinmeyen_ad_yok_sayilir
+FAILED tests/unit/ui/test_kabuk.py::test_t013_k5_kisayol_etiketleri_yeniden_cagri_eski_metni_biriktirmez
+FAILED tests/unit/ui/test_kabuk.py::test_t013_k4_kisayol_tetiklendi_sinyal_yayar_durum_degismez[gorunur]
+FAILED tests/unit/ui/test_kabuk.py::test_t013_k4_kisayol_tetiklendi_sinyal_yayar_durum_degismez[tepsi]
+FAILED tests/unit/ui/test_kabuk.py::test_t013_k4_kisayol_tetiklendi_sinyal_yayar_durum_degismez[kenar]
+FAILED tests/unit/ui/test_kabuk.py::test_t013_k4_kisayol_tetiklendi_kapat_sonrasi_da_sinyal_yayar_dirilme_yok
+11 failed, 73 passed in 3.31s
+
+[exit 1]

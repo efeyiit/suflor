@@ -1,0 +1,8 @@
+$ python .agents/tasks/T-013/evidence/olcum-filtre-gecikme-offscreen.py  (offscreen, sahte Win32, gercek MSG yapisi)
+g1 bilinen kimlik -> tetiklendi: n=1000 sinyal=1000 (beklenen 1000) medyan=1.1 us max=13.8 us
+g2 bilinmeyen kimlik -> False: n=1000 sinyal=0 (beklenen 0) medyan=0.5 us max=1.5 us
+g3 yanlis eventType -> False (mesaja dokunmaz): n=1000 sinyal=0 (beklenen 0) medyan=0.3 us max=49.2 us
+g4 eski servis, yeni servisin kimligi -> False: n=1000 sinyal=0 (beklenen 0) medyan=0.5 us max=2.8 us
+dagitici=QAbstractEventDispatcher platform=offscreen kayit_fn cagrisi=2 (sahte; gercek RegisterHotKey YOK)
+
+[exit 0]
