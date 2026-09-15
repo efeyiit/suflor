@@ -1,0 +1,8 @@
+platform=windows cpu=32
+p1 [1a] gecikme yuksuz: n=30/30 medyan=4.3 max=10.6 ms  >20 ms: 0  kayip: 0
+p1 [1a] gecikme CPU yuku (mesgul surecler): n=30/30 medyan=1.8 max=2.7 ms  >20 ms: 0  kayip: 0
+p1 [1a] gecikme surec ici 3 thread (GIL): n=30/30 medyan=202.4 max=313.7 ms  >20 ms: 30  kayip: 0
+p2 ayni filtre 2x install -> WM_HOTKEY cagri sayisi=1 (1: Qt tekilliyor / 2: iki kez)
+p2 iki filtre (ilk kurulan True donuyor): ilk=0 ikinci=1  -> hangisi gordu? (calistir x2: ESKI servisin filtresi bilinmeyen id'de True donerse YENI servis olayi ALAMAZ)
+p2 ilk False donunce: ilk=0 ikinci=1
+p3 filtre referansi dusurulmus alt surec: cikis=0 (sagkaldi) stdout='P3 alt surec sagkaldi (cokme yok)' stderr_son=''

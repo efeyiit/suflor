@@ -1,0 +1,39 @@
+platform=windows klavye duzeni=0000041F (0000041F = Turkce Q)
+g1 rezerve kombinasyonlar (yalniz kayit, ates YOK):
+   Win+L: kayit=False err=1409
+   Win+Tab: kayit=False err=1409
+   Win+D: kayit=False err=1409
+   Win+E: kayit=False err=1409
+   Win+R: kayit=False err=1409
+   Win+T: kayit=False err=1409
+   Win+X: kayit=False err=1409
+   Win+Space: kayit=False err=1409
+   Win+G: kayit=False err=1409
+   Win+Shift+S: kayit=False err=1409
+   Win+1: kayit=False err=1409
+   Ctrl+Alt+Del: kayit=False err=1409
+   Ctrl+Shift+Esc: kayit=False err=1409
+   Alt+Tab: kayit=False err=1409
+   Alt+F4: kayit=False err=1409
+   Alt+Esc: kayit=True err=0
+   Ctrl+Esc: kayit=False err=1409
+   Alt+Space: kayit=True err=0
+   Ctrl+Alt+F12: kayit=True err=0
+   Alt+PrintScreen: kayit=False err=1409
+   Shift+T: kayit=True err=0
+   Shift+Space: kayit=True err=0
+   Ctrl+C: kayit=True err=0
+   Ctrl+Alt+T: kayit=True err=0
+g2 Alt+Tab kayit=False: ates -> olay=0 (1 ise gorev degistirici BIZE geldi, Windows'a gitmedi) on plan degisti=True
+g3 pozitif kontrol (kayitsiz) Shift+T -> QLineEdit metni='T' (on planda=True; 'T' beklenir)
+g3 Shift+T kayitli=True: olay=1 QLineEdit metni='' (kisayol harfi YUTAR: buyuk T yazilamaz)
+g4 ToUnicodeEx T: duz='t' (n=1) Ctrl+Alt(AltGr)='\u20ba' (n=1)  R: AltGr='' (n=0)  Q: AltGr='@' (n=1)
+g4 pozitif kontrol (kayitsiz) AltGr+T -> QLineEdit metni='U+20BA' (Turk lirasi beklenir; ASCII disi ise 'U+20BA' yazilir)
+g4 Ctrl+Alt+T kayitli=True: AltGr+T (yalniz VK_RMENU) -> olay=1 QLineEdit metni=''
+g4 Ctrl+Alt+T kayitli: LCtrl+RMenu+T (donanim AltGr dizisi) -> olay=1 QLineEdit metni=''
+g4 VK_RMENU basiliyken GetAsyncKeyState(VK_CONTROL) basili=True LCONTROL=True (duzenin AltGr bayragi Ctrl sentezliyor mu)
+g4 Ctrl+Alt+R kayitli=True: AltGr+R -> olay=1 QLineEdit metni=''
+g5 id=60 Ctrl+Alt+T kayit=True; id=60 Ctrl+Alt+Y kayit=True err=0; ates T,Y -> olaylar=[60, 60]
+g5 UnregisterHotKey(60) x1=True -> ates T,Y -> olaylar=[]
+g5 UnregisterHotKey(60) x2=False -> ates T,Y -> olaylar=[]
+g5 UnregisterHotKey(60) x3=False err=1419

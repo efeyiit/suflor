@@ -1,0 +1,3 @@
+offscreen 300 ms timer pompasi sirasinda filtreye gelen mesaj: None (None: hicbir native mesaj filtreye ugramadi)
+dogrudan cagri: adres=0 ->
+alt surec cikis kodu=3221225477 (COKME: erisim ihlali 0xC0000005) stderr_son=''

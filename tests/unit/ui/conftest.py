@@ -14,3 +14,7 @@ from __future__ import annotations
 import os
 
 os.environ.setdefault("QT_QPA_PLATFORM", "offscreen")
+# T-013 Y1 emniyet kemeri: offscreen'de de Win32 dagitici calisir ve RegisterHotKey GERCEK kayit yapar
+# (KRT olctu: paralel pytest 1409). Birim testler asla gercek kisayol kaydetmez; servis bu degiskeni gorunce
+# `gercek_win32=True` kurulumunu RuntimeError ile reddeder. `real_check.py` ayri surec, degisken yok.
+os.environ.setdefault("SUFLOR_GERCEK_KISAYOL_YASAK", "1")

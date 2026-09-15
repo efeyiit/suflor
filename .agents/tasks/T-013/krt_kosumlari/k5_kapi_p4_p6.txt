@@ -1,0 +1,9 @@
+platform=windows cpu=32
+p4a ebeveyn.deleteLater + processEvents dongusu: destroyed isleyicisi kostu=False olay=1; sendPostedEvents(DeferredDelete) sonrasi kostu=False olay=1 (real_check bekle() deleteLater'i ISLEMEZ mi?)
+p4b ebeveyn.deleteLater + ic ice QEventLoop.exec (qtbot.wait): destroyed isleyicisi kostu=False olay=1 (0 beklenir) servis C++ gecerli=False
+p4c ebeveynsiz servis del+gc: destroyed isleyicisi kostu=False olay=1 (0 beklenir) sarmalayici weakref None=True
+p4d ebeveyn del+gc (cocuk servis): destroyed isleyicisi kostu=False olay=1 (0 beklenir) servis C++ gecerli=False
+p4e QWidget ebeveyn deleteLater + ic ice loop: kostu=False olay=1 Ctrl+Alt+T yeniden alinabiliyor=False
+p5 kayit YOKKEN sentetik Ctrl+Alt+T on plandaki pencereye ulasir: on planda=True QLineEdit metni='\u20ba' (bos: Ctrl+Alt+T karakter uretmez ama tus olayi gitti; kapi [4a] sonrasi tuslar TERMINALE/EDITORE gider)
+p5 kayit yokken Qt KeyPress(T) sayisi=0 (1: tus pencereye ulasti)
+p6 baska threadden RegisterHotKey(NULL): kayit=True err=0; ana thread filtresine WM_HOTKEY=0 (0: olay o threadin kuyrugunda kayboldu -> K6 'yalniz ana thread' GEREKLI); UnregisterHotKey ayni threadden=True

@@ -1,0 +1,10 @@
+  kurulum: Ctrl+Alt+T kayit=True Ctrl+Alt+R kayit=True pencere hwnd=10881866
+  adim1 on plan class=Qt6112QWindowIcon (bizim pencere mi=True); Ctrl+Alt+R gonderiliyor
+  adim2 (1 s sonra) bolge_izle_istendi=1 gorunur SecimKatmani=1 sekme gizli=True on plan katman=True (class=Qt6112QWindowToolSaveBits)
+  adim3 (5 s) Esc gonderiliyor
+  adim4 Esc sonrasi: iptal=1 gorunur katman=0 (0 beklenir; Esc katmana ulasmadiysa katman ACIK KALIR)
+  adim5 tepsi durumu=tepsi on plan class=Chrome_WidgetWin_1; Ctrl+Alt+T gonderiliyor
+  adim6 Ctrl+Alt+T sonrasi: anlik_cevir_istendi=1 durum=gorunur pencere gorunur=True on plan bizim pencere=True (class=Qt6112QWindowIcon) -- demo goster() cagiriyor; foreground kilidi?
+  adim8 tepsideyken Ctrl+Alt+R: bolge_izle_istendi=2 katman=1 durum=tepsi on plan katman=True
+  son: WM_HOTKEY toplam=3; kapat()
+exec donus=0

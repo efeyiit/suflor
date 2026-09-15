@@ -1,0 +1,6 @@
+platform=windows LL kanca=ok
+r1 keybd_event tek DOWN + 700 ms + UP: NOREPEAT olay=1  NOREPEAT'siz olay=1  (LL kancada T DOWN sayisi: 1/1 -> donanim tekrari YOK, kapi [5] ayristiramaz)
+r2 keybd_event: T DOWN x5 (UP yok): NOREPEAT olay=1 (1 beklenir)  NOREPEAT'siz olay=5 (5 beklenir)
+r2 SendInput vk: T DOWN x5 (UP yok): NOREPEAT olay=1 (1 beklenir)  NOREPEAT'siz olay=5 (5 beklenir)
+r2 SendInput SCANCODE: T DOWN x5 (UP yok): NOREPEAT olay=1 (1 beklenir)  NOREPEAT'siz olay=5 (5 beklenir)
+r4 LL kanca T olaylari (msg, vk, flags): [('0x100', 84, 16), ('0x100', 84, 16), ('0x100', 84, 16), ('0x101', 84, 144)]

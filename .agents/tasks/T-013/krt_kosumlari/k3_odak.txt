@@ -1,0 +1,13 @@
+kurulum: platform=windows Ctrl+Alt+T kayit=True bizim IL=orta
+f1 tam ekran topmost baska surec on planda=True (on plan class=Qt6112QWindowIcon pid=46636 oyun pid=46636): Ctrl+Alt+T -> olay=1 (1 beklenir)
+f1 kisayol sonrasi on plan hala oyun=True
+f2 on plan class=TaskManagerWindow IL=yuksek (yuksek beklenir): keybd_event Ctrl+Alt+T -> olay=0; SendInput eklenen=6/6 err=0 -> olay=0
+f2 taskmgr'a WM_CLOSE PostMessage=False err=5
+f2 sonra on plan class=Chrome_WidgetWin_1 (taskmgr hala acik olabilir; elle kapatilir)
+f3 menu penceresi on planda=True class=KrtMenuPencere
+f3 pozitif kontrol yalniz Alt bas/birak: GUI flags=0x4 INMENUMODE=True (True beklenir)
+f3 Esc sonrasi INMENUMODE=False
+f3 Ctrl+Alt+T (kayitli): olay=1 INMENUMODE=False on plan degisti=False
+f3 Alt+T (kayitli=True): olay=1 INMENUMODE=False on plan degisti=False
+f3 Alt+T (kayitsiz): olay=0 INMENUMODE=False
+f3 Ctrl+Alt+T (kayitsiz): INMENUMODE=False

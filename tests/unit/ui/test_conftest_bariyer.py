@@ -14,3 +14,7 @@ def test_qapp_offscreen_ekran_veriyor(qapp: QtWidgets.QApplication) -> None:
     ekran = QtGui.QGuiApplication.primaryScreen()
     assert ekran is not None and ekran.availableGeometry().width() > 0
     assert qapp.platformName() == "offscreen"
+
+
+def test_gercek_kisayol_yasagi_ayarli() -> None:
+    assert os.environ.get("SUFLOR_GERCEK_KISAYOL_YASAK") == "1"

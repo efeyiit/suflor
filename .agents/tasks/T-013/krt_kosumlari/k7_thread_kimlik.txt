@@ -1,0 +1,3 @@
+ana thread: currentThread() is app.thread() -> True; == -> True; id esit=True
+python thread: is -> False; == -> False; QThread.isMainThread() -> False
+ana thread QThread.isMainThread() -> True

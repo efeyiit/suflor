@@ -1,0 +1,9 @@
+o1 platform=offscreen dispatcher=QEventDispatcherWin32
+o2 offscreen RegisterHotKey(NULL, Ctrl+Alt+T) ok=True err=0
+o2 offscreen keybd_event Ctrl+Alt+T -> WM_HOTKEY olay=1 id=[1] gecikme=1.5 ms
+o3 biz Ctrl+Alt+T tutarken ikinci offscreen surec: cocuk offscreen kayit ok=0 err=1409
+o4 pytest-A: PYTEST pid=18600 platform=offscreen kayit=True err=0
+o4 pytest-A: PYTEST pid=18600 WM_HOTKEY=1
+o4 pytest-A: 1 passed in 2.84s
+o4 pytest-B: PYTEST pid=44188 platform=offscreen kayit=False err=1409
+o4 pytest-B: 1 passed in 0.01s

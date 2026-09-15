@@ -1,0 +1,1 @@
+QMenu.exec acikken Ctrl+Alt+T -> WM_HOTKEY=1 gecikme=2.5 ms (menu hala acik miydi: kapanis 600 ms'de)

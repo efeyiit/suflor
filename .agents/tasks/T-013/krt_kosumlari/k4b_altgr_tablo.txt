@@ -1,0 +1,8 @@
+duzen=0000041F
+AltGr+<tus> dolu olanlar (Ctrl+Alt+<tus> kisayolu bunlari CALAR): A='\xe6'  E='\u20ac'  I='i'  Q='@'  S='\xdf'  T='\u20ba'  0='}'  1='>'  2='\xa3'  3='#'  4='$'  5='\xbd'  7='{'  8='['  9=']'
+AltGr+Shift+<tus> dolu olanlar: A='\xc6'  I='\u0130'
+Win+<harf/rakam> kayit EDILEBILEN (bos) olanlar: ['J', 'Y']
+Win+F1..F12 kayit edilebilen: ['F2', 'F3', 'F4', 'F5', 'F6', 'F7', 'F8', 'F9', 'F10', 'F12']
+Ctrl+<harf> kayit EDILEMEYEN: yok -> 26 harfin hepsi kaydedilebilir (sistem geneli calinir)
+Alt+<harf> kayit EDILEMEYEN: ['P:1409', 'R:1409', 'Z:1409']
+Shift+<harf> kayit EDILEMEYEN: yok -> 26 harfin hepsi kaydedilebilir (sistem geneli calinir)
