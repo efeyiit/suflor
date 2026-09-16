@@ -1,6 +1,6 @@
 """Suflor -- Anlik ceviri (Snapshot) akisi, T-014.
 
-Tasarim 5.4 Mod 1:  kare -> OCR -> satir birlestir -> [kullanici secer] -> normalize -> sozluk -> ceviri.
+Tasarim 5.4 Mod 1:  kare -> OCR -> satir birlestir -> [kullanici secer] -> secimi birlestir -> sozluk -> ceviri.
 Bu modul UI cizmez; UI (`src/ui/anlik_pencere.py`) sinyalleri dinler. Butun agir is (OCR, ceviri)
 `AnlikAkisi`nin kendi `QThread`inde kosar; UI thread'i yalnizca sinyal alir (K1).
 
@@ -8,19 +8,21 @@ Bu modul UI cizmez; UI (`src/ui/anlik_pencere.py`) sinyalleri dinler. Butun agir
 
 K1 UI thread bloklanmaz: `oku(kare)` ve `cevir(bloklar)` hemen doner; is `_Isci` nesnesinde, ayri thread'de.
    `oku`/`cevir` yalniz sinyal kuyruklar (QueuedConnection). Olcu: cagri suresi < 5 ms, sonuc sonra gelir.
-K2 Sira korumasi (tasarim 5.5 `seq`): her `oku` yeni bir `seq` alir; eski bir okumanin sonucu `bloklar_hazir`
-   olarak YAYILMAZ (dusurulur). `cevir` de o anki `seq` ile etiketlenir; `iptal()` sonrasi gelen sonuc
-   dusurulur. Olcu: yavas sahte OCR + ikinci `oku` -> yalniz ikincinin bloklari gelir.
+K2 Sira korumasi (tasarim 5.5 `seq`): her `oku` ve her `cevir` yeni bir `seq` alir; eski bir okumanin ya da
+   onceki bir cevirinin sonucu YAYILMAZ (dusurulur) -- T-017: secim degisince yeniden ceviri, eski ceviri gec
+   gelse bile ekrana basilmaz. `iptal()` sonrasi gelen sonuc dusurulur. Olcu: yavas sahte OCR + ikinci `oku` -> yalniz ikincinin bloklari gelir.
 K3 Zincir: `oku` -> `recognize(kare, preset)` -> `satirlari_birlestir` -> `bloklar_hazir(list[TextBlock])`.
    `cevir(bloklar)` -> IKINCI GECIS: secilen bloklarin birlesik kutusu (+kenar payi) son kareden kirpilir ve
    yeniden `recognize` edilir (olculdu: tam kare tespiti kutulari gevsek veriyor -- 2560 px kare icin dedektor
    kucultuyor; gevsek kutular normalizer'in konusmaci satirini paragrafa yapistirmasina yol aciyordu; kirpilmis
-   gecis bolge yakalamayla ayni siki kutulari verir) -> `satirlari_birlestir` -> `normalize(..., preset)`
+   gecis bolge yakalamayla ayni siki kutulari verir) -> `satirlari_birlestir` -> `secimi_birlestir`
+   (T-017: secim = metin; satirlar okuma sirasinda TEK segmente birlesir, yalniz buyuk dikey bosluk ve
+   konusmaci satiri boler -- gercek oyunda satir satir ceviri metnin butunlugunu bozuyordu; `normalize` yerine)
    -> sozluk varsa `lookup_segments` + `terimleri_gom` -> `translate(TranslationRequest(gomulu, kaynak_dili, "tr"))`
    -> `duzeltici` varsa ciktida `HedefDuzeltici.duzelt` (T-015: "Elder Marcus" -> "İhtiyar Marcus")
    -> `ceviri_hazir(segmentler, ceviriler)`; segment `bbox`leri KARE koordinatinda (UI yerlesim icin bunu kullanir).
    Kare yoksa (`oku` yapilmadan `cevir`) ikinci gecis atlanir, verilen bloklar kullanilir.
-   `ceviri_hazir`daki segmentler GOMULU DEGIL, normalize ciktisi (UI kaynak metni kullaniciya gosterir);
+   `ceviri_hazir`daki segmentler GOMULU DEGIL, birlestirme ciktisi (UI kaynak metni kullaniciya gosterir);
    gomme yalniz modele giden istekte. Bos secim -> `ceviri_hazir([], [])` hemen (model cagrilmaz).
 K4 Hata: `TranslatorError` (OcrError, ModelMissingError, ProviderUnavailable, ...) -> `hata(sinif_adi)`;
    metin, kare ya da ceviri ASLA sinyal disina/loga cikmaz (PROTOKOL 7). Baska istisna da `hata` olur
@@ -41,7 +43,7 @@ from PySide6.QtCore import QObject, Qt, QThread, Signal, Slot
 from src.contracts.errors import TranslatorError
 from src.contracts.interfaces import OcrEngine, TranslationProvider
 from src.contracts.models import Frame, OcrPreset, Rect, Segment, TextBlock, TranslationRequest
-from src.ocr.normalizer import normalize
+from src.pipeline.secim import secimi_birlestir
 from src.ocr.satir_birlestirici import satirlari_birlestir
 from src.translate.hedef_duzeltici import HedefDuzeltici
 from src.translate.sozluk import GlossaryStore, terimleri_gom
@@ -118,13 +120,13 @@ def ikinci_gecis(ocr: OcrEngine, kare: Frame, bloklar: Sequence[TextBlock], pres
 def cevir_yap(cevirici: TranslationProvider, sozluk: GlossaryStore | None, bloklar: Sequence[TextBlock],
               kaynak_dili: str, preset: OcrPreset, *, ocr: OcrEngine | None = None, kare: Frame | None = None,
               duzeltici: HedefDuzeltici | None = None) -> tuple[list[Segment], list[str]]:
-    """K3 ceviri zinciri (saf): [ikinci gecis] -> normalize -> sozluk gomme (yalniz modele) -> translate -> [duzelt].
+    """K3 ceviri zinciri (saf): [ikinci gecis] -> secimi_birlestir -> sozluk gomme (yalniz modele) -> translate -> [duzelt].
 
     `ocr` ve `kare` verilirse secim kirpigi yeniden okunur (siki kutular). Bos secim -> ([], []).
     """
     if ocr is not None and kare is not None:
         bloklar = ikinci_gecis(ocr, kare, bloklar, preset)
-    segmentler = normalize(list(bloklar), preset)
+    segmentler = secimi_birlestir(list(bloklar))
     if not segmentler:
         return [], []
     gomulu: Sequence[Segment] = segmentler
@@ -186,7 +188,8 @@ class AnlikAkisi(QObject):
         return self._seq
 
     def cevir(self, bloklar: Sequence[TextBlock]) -> None:
-        """Secilen bloklari cevir; sonuc su anki seq ile etiketli gelir. `oku` yapilmadan da cagrilabilir."""
+        """Secilen bloklari cevir; yeni seq alir (onceki ucustaki ceviri dusurulur). `oku` yapilmadan da cagrilabilir."""
+        self._seq += 1
         self._cevir_istegi.emit(self._seq, list(bloklar))
 
     def iptal(self) -> None:

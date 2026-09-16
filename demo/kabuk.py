@@ -13,8 +13,8 @@ Sağ üstteki üç düğme (kullanıcı isteği, 11 Eylül 2026):
 Kısayollar (tepsideyken/kenardayken de): Ctrl+Alt+D anlık çeviri · Ctrl+Alt+R bölge izle.
 
 Anlık çeviri (Snapshot): imlecin bulunduğu monitör DONAR (yakalanan kare tam ekran), OCR metin bloklarını
-çerçeveler, tıkla/sürükle ile seç, Enter → seçilenler Türkçe'ye çevrilir ve blokların altına yazılır;
-Esc kapatır. OCR + çeviri arka plan thread'inde (UI donmaz). Modeller açılışta arka planda yüklenir.
+çerçeveler; tıkla/sürükle ile seç → seçim KENDİLİĞİNDEN tek bir metin olarak Türkçe'ye çevrilir (satır satır
+değil — T-017), yanına yazılır; sağ tık / Enter beklemeden çevirir; seçimi değiştirince yeniden çevrilir; Esc kapatır. OCR + çeviri arka plan thread'inde (UI donmaz). Modeller açılışta arka planda yüklenir.
 Bölge izle: dikdörtgen çiz → canlı bölge görünümü (T-005; OCR/çeviri için demo/canli_cevir.py).
 
 Model: models/nllb-200-distilled-600M-ct2-int8/ (yoksa durum satırında ModelMissingError; kabuk çalışır).

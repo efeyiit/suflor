@@ -16,9 +16,9 @@ from pytestqt.qtbot import QtBot
 from src.contracts.errors import OcrError, ProviderUnavailable
 from src.contracts.interfaces import FakeOcrEngine, FakeProvider, OcrEngine
 from src.contracts.models import Frame, OcrPreset, Rect, TextBlock, TranslationRequest, TranslationResult
-from src.ocr.normalizer import normalize
 from src.ocr.satir_birlestirici import satirlari_birlestir
 from src.pipeline.anlik import AnlikAkisi
+from src.pipeline.secim import secimi_birlestir
 from src.translate.sozluk import GlossaryStore
 
 
@@ -86,14 +86,14 @@ def test_k3_oku_bloklar_hazir_satirlari_birlestirilmis(qtbot: QtBot, akis: Calla
     assert len(bloklar) == 2 and bloklar[0].text == "Marcus waits"
 
 
-def test_k3_cevir_ceviri_hazir_normalize_segmentleri_ve_ceviriler(qtbot: QtBot, akis: Callable[..., AnlikAkisi]) -> None:
+def test_k3_cevir_ceviri_hazir_birlestirilmis_segmentler_ve_ceviriler(qtbot: QtBot, akis: Callable[..., AnlikAkisi]) -> None:
     saglayici = FakeProvider(translations={"Marcus waits by the mill.": "Marcus degirmenin yaninda bekliyor."})
     a = akis(saglayici=saglayici)
     secim = satirlari_birlestir(BLOKLAR)
     with qtbot.waitSignal(a.ceviri_hazir, timeout=3000) as sinyal:
         a.cevir(secim)
     segmentler, ceviriler = sinyal.args
-    assert segmentler == normalize(secim, OcrPreset.DIALOGUE)
+    assert segmentler == secimi_birlestir(secim)
     assert len(segmentler) == len(ceviriler) == 1
     assert ceviriler[0] == "Marcus degirmenin yaninda bekliyor."
     assert saglayici.requests[0].source_lang == "eng_Latn" and saglayici.requests[0].target_lang == "tr"
@@ -110,6 +110,38 @@ def test_k3_sozluk_varsa_modele_gomulu_gider_uiya_orijinal_doner(qtbot: QtBot, a
     istek: TranslationRequest = saglayici.requests[0]
     assert "Degirmen" in istek.segments[0].text and "mill" not in istek.segments[0].text   # modele gomulu
     assert "mill" in segmentler[0].text and "Degirmen" not in segmentler[0].text          # UI'ya orijinal
+
+
+def test_t017_cok_satirli_secim_TEK_segment_olarak_modele_gider(qtbot: QtBot, akis: Callable[..., AnlikAkisi]) -> None:
+    """Kullanici geri bildirimi: satir satir ceviri metnin butunlugunu bozuyordu. Secim = tek metin."""
+    satirlar = [blok("방앗간을 지나 동쪽 길로", 40, 500, 420, 30), blok("가면 오래된 사당이 있어.", 40, 536, 440, 30),
+                blok("거기서 만나자.", 40, 572, 260, 30)]
+    saglayici = FakeProvider()
+    a = akis(saglayici=saglayici, kaynak="kor_Hang")
+    with qtbot.waitSignal(a.ceviri_hazir, timeout=3000) as sinyal:
+        a.cevir(satirlar)
+    segmentler, ceviriler = sinyal.args
+    assert len(segmentler) == len(ceviriler) == 1
+    assert segmentler[0].text == "방앗간을 지나 동쪽 길로 가면 오래된 사당이 있어. 거기서 만나자."
+    assert len(saglayici.requests) == 1 and len(saglayici.requests[0].segments) == 1   # modele tek parca
+
+
+def test_t017_ikinci_cevir_ilkinin_gec_sonucunu_dusurur(qtbot: QtBot, akis: Callable[..., AnlikAkisi]) -> None:
+    """Secim degisince yeni ceviri; eski (yavas) ceviri gec gelse bile yayilmaz."""
+    class IlkiYavas(FakeProvider):
+        def translate(self, request: TranslationRequest) -> TranslationResult:
+            if len(self.requests) == 0:
+                time.sleep(0.3)
+            return super().translate(request)
+
+    a = akis(saglayici=IlkiYavas())
+    gelen: list[object] = []
+    a.ceviri_hazir.connect(lambda seg, cev: gelen.append(list(cev)))
+    a.cevir([blok("eski", 0, 0)])
+    a.cevir([blok("yeni", 0, 0)])
+    qtbot.waitUntil(lambda: bool(gelen), timeout=3000)
+    qtbot.wait(300)
+    assert gelen == [["[tr] yeni"]]
 
 
 def test_k3_bos_secim_model_cagrilmaz_bos_sonuc(qtbot: QtBot, akis: Callable[..., AnlikAkisi]) -> None:

@@ -1,0 +1,36 @@
+--- KR satir adimi 2.0 x punto
+[KR] tam kare 5 satir; govde secimi 4 satir; ikinci gecis 4 satir; h=[45, 41, 42, 39] bosluk=[29, 31, 31]
+[KR] ESKI normalize: 1 segment, uzunluklar [102]
+[KR] YENI secimi_birlestir: 1 segment, uzunluklar [102]
+[KR] yeni metin tum satirlari iceriyor: True
+[KR] yeni metin ~ beklenen govde (sira dahil) benzerlik 1.000 (> 0.9 = sira dogru)
+--- KR satir adimi 2.4 x punto
+[KR] tam kare 5 satir; govde secimi 4 satir; ikinci gecis 4 satir; h=[44, 41, 42, 41] bosluk=[43, 45, 44]
+[KR] ESKI normalize: 4 segment, uzunluklar [28, 29, 32, 10]
+[KR] YENI secimi_birlestir: 1 segment, uzunluklar [102]
+[KR] yeni metin tum satirlari iceriyor: True
+[KR] yeni metin ~ beklenen govde (sira dahil) benzerlik 1.000 (> 0.9 = sira dogru)
+--- KR satir adimi 2.8 x punto
+[KR] tam kare 5 satir; govde secimi 4 satir; ikinci gecis 4 satir; h=[43, 43, 43, 41] bosluk=[57, 57, 58]
+[KR] ESKI normalize: 4 segment, uzunluklar [28, 29, 32, 10]
+[KR] YENI secimi_birlestir: 1 segment, uzunluklar [102]
+[KR] yeni metin tum satirlari iceriyor: True
+[KR] yeni metin ~ beklenen govde (sira dahil) benzerlik 1.000 (> 0.9 = sira dogru)
+--- JP satir adimi 2.0 x punto
+[JP] tam kare 5 satir; govde secimi 4 satir; ikinci gecis 6 satir; h=[33, 32, 41, 30, 30, 35] bosluk=[39, 36, -35, -30, 39]
+[JP] ESKI normalize: 6 segment, uzunluklar [24, 24, 18, 10, 2, 10]
+[JP] YENI secimi_birlestir: 1 segment, uzunluklar [88]
+[JP] yeni metin tum satirlari iceriyor: True
+[JP] yeni metin ~ beklenen govde (sira dahil) benzerlik 0.977 (> 0.9 = sira dogru)
+--- JP satir adimi 2.4 x punto
+[JP] tam kare 5 satir; govde secimi 4 satir; ikinci gecis 7 satir; h=[31, 30, 31, 37, 30, 29, 37] bosluk=[-30, 55, 52, -33, -29, 53]
+[JP] ESKI normalize: 7 segment, uzunluklar [16, 7, 24, 18, 10, 2, 10]
+[JP] YENI secimi_birlestir: 1 segment, uzunluklar [87]
+[JP] yeni metin tum satirlari iceriyor: True
+[JP] yeni metin ~ beklenen govde (sira dahil) benzerlik 0.983 (> 0.9 = sira dogru)
+--- JP satir adimi 2.8 x punto
+[JP] tam kare 5 satir; govde secimi 4 satir; ikinci gecis 7 satir; h=[31, 30, 32, 37, 31, 30, 34] bosluk=[-30, 69, 65, -33, -31, 68]
+[JP] ESKI normalize: 7 segment, uzunluklar [16, 7, 24, 18, 10, 2, 10]
+[JP] YENI secimi_birlestir: 1 segment, uzunluklar [87]
+[JP] yeni metin tum satirlari iceriyor: True
+[JP] yeni metin ~ beklenen govde (sira dahil) benzerlik 0.983 (> 0.9 = sira dogru)

@@ -11,12 +11,15 @@ cagiran).
 K1 Geometri: pencere verilen `QScreen.geometry()` ile birebir (tam ekran, cerçevesiz, ustte); kare
    ekranin mantiksal boyutuna olceklenir (dpr 1.0'da 1:1). Blok kutulari kare pikselinden pencere
    koordinatina `_pencereye(rect)` ile cevrilir (kare.rect ofseti + olcek).
-K2 Durumlar: `okunuyor` -> (`bloklari_goster`) `secim` -> (Enter) `cevriliyor` -> (`ceviriyi_goster`) `sonuc`;
-   `hata_goster` her durumda durum satirina sinif adini yazar, pencere Esc ile kapanabilir kalir.
-   Blok gelmeden Enter hicbir sey yapmaz; `secim`de bos secimle Enter durum satirina ipucu yazar, sinyal yok.
+K2 Durumlar: `okunuyor` -> (`bloklari_goster`) `secim` -> (secim/Enter/sag tik) `cevriliyor` -> (`ceviriyi_goster`)
+   `sonuc` -> (secim degisir) `cevriliyor` ... ; `hata_goster` durum satirina sinif adini yazar, `cevriliyor`u
+   `secim`e dondurur. Blok gelmeden Enter hicbir sey yapmaz; bos secimle Enter ipucu yazar, sinyal yok.
 K3 Secim: tik (hareket < 4 px) tiklanan blogu ACAR/KAPAR; surukleme dikdortgeni kesisen bloklari EKLER;
-   Ctrl+A hepsini secer; secim sirasi = blok listesindeki sira (`secili_bloklar()`); Enter `cevir_istendi`
-   (list[TextBlock]) yayar ve `cevriliyor`a gecer (ikinci Enter sinyal uretmez).
+   Ctrl+A hepsini secer; secim sirasi = blok listesindeki sira (`secili_bloklar()`).
+   T-017 (kullanici: "Enter yerine daha pratik bir sey"): her secim degisikliginden `OTOMATIK_CEVIRI_MS` sonra
+   `cevir_istendi` KENDILIGINDEN yayilir (art arda tiklar tek istekte toplanir); SAG TIK ve Enter beklemeden
+   yayar. Secim `sonuc`/`cevriliyor` durumunda da duzenlenebilir: degisiklik yeni ceviri ister, eski sonuclar
+   silinir (akis eski ceviriyi seq ile dusurur). Secim bosalirsa sinyal yok, sonuclar temizlenir.
 K4 Sonuc: `ceviriyi_goster(segmentler, ceviriler)` -> her segment icin Turkce metin, segmentin `bbox`unun
    (kare koordinati; normalizer kaynak bloklarin birlesimini verir) ALTINA (yer yoksa ustune) yarim saydam
    kutuda yazilir; `sonuclar()` -> list[tuple[str, str]] (kaynak, ceviri). Ctrl+C
@@ -32,7 +35,7 @@ from __future__ import annotations
 
 from collections.abc import Sequence
 
-from PySide6.QtCore import QPoint, QRect, QRectF, Qt, Signal
+from PySide6.QtCore import QPoint, QRect, QRectF, Qt, QTimer, Signal
 from PySide6.QtGui import QColor, QFont, QGuiApplication, QImage, QKeyEvent, QMouseEvent, QPainter, QPaintEvent, QPen, QPixmap, QScreen
 from PySide6.QtWidgets import QWidget
 
@@ -46,7 +49,8 @@ _SECILI = QColor(255, 214, 102)
 _SONUC_ARKA = QColor(13, 17, 22, 225)
 _SONUC_YAZI = QColor(230, 245, 234)
 _DURUM_ARKA = QColor(22, 27, 33, 230)
-_IPUCU = "Tıkla / sürükle: seç   ·   Enter: çevir   ·   Ctrl+A: hepsi   ·   Ctrl+C: kopyala   ·   Esc: kapat"
+_IPUCU = "Tıkla / sürükle: seç → kendiliğinden çevirir   ·   Sağ tık / Enter: hemen çevir   ·   Ctrl+A: hepsi   ·   Ctrl+C: kopyala   ·   Esc: kapat"
+OTOMATIK_CEVIRI_MS = 350
 
 
 class AnlikDurumu:
@@ -86,6 +90,10 @@ class AnlikPencere(QWidget):
         self._basla: QPoint | None = None
         self._surukle: QPoint | None = None
         self._iptal_yayildi = False
+        self._otomatik = QTimer(self)
+        self._otomatik.setSingleShot(True)
+        self._otomatik.setInterval(OTOMATIK_CEVIRI_MS)
+        self._otomatik.timeout.connect(self._cevir)
 
     # -- disa acik durum -----------------------------------------------------------------------
     @property
@@ -111,17 +119,17 @@ class AnlikPencere(QWidget):
 
     # -- pipeline'dan gelenler ---------------------------------------------------------------------
     def bloklari_goster(self, bloklar: Sequence[TextBlock]) -> None:
-        if self._durum in (AnlikDurumu.CEVRILIYOR, AnlikDurumu.SONUC):
+        if self._durum in (AnlikDurumu.CEVRILIYOR, AnlikDurumu.SONUC) or self._secili:
             return   # gec gelen okuma sonucu; secim yapilmis, dokunma
         self._bloklar = list(bloklar)
         self._secili.clear()
         self._durum = AnlikDurumu.SECIM
-        self._durum_metni = f"{len(self._bloklar)} metin bloğu bulundu — seçip Enter'a bas" if self._bloklar else "metin bulunamadı — Esc ile kapat"
+        self._durum_metni = f"{len(self._bloklar)} metin bloğu bulundu — tıkla ya da sürükle, kendiliğinden çevrilir" if self._bloklar else "metin bulunamadı — Esc ile kapat"
         self.update()
 
     def ceviriyi_goster(self, segmentler: Sequence[Segment], ceviriler: Sequence[str]) -> None:
-        if self._durum != AnlikDurumu.CEVRILIYOR:
-            return
+        if self._durum != AnlikDurumu.CEVRILIYOR or self._otomatik.isActive():
+            return   # beklenmeyen ya da secim degisti (yeni istek yolda): eski sonucu basma
         self._sonuclar = []
         for seg, cev in zip(segmentler, ceviriler):
             # yerlesim: segmentin kendi bbox'u (kare koordinatinda; normalizer kaynak bloklarin birlesimini verir).
@@ -150,9 +158,14 @@ class AnlikPencere(QWidget):
 
     # -- etkilesim ---------------------------------------------------------------------------------
     def mousePressEvent(self, e: QMouseEvent) -> None:
-        if e.button() == Qt.MouseButton.LeftButton and self._durum == AnlikDurumu.SECIM:
+        if self._durum == AnlikDurumu.OKUNUYOR:
+            return
+        if e.button() == Qt.MouseButton.LeftButton:
             self._basla = e.position().toPoint()
             self._surukle = None
+        elif e.button() == Qt.MouseButton.RightButton:
+            self._otomatik.stop()
+            self._cevir()
 
     def mouseMoveEvent(self, e: QMouseEvent) -> None:
         if self._basla is not None:
@@ -163,6 +176,7 @@ class AnlikPencere(QWidget):
         if self._basla is None or e.button() != Qt.MouseButton.LeftButton:
             return
         son = e.position().toPoint()
+        onceki = set(self._secili)
         if (son - self._basla).manhattanLength() < TIK_ESIGI_PX:
             i = self._blok_indeksi(son)
             if i is not None:
@@ -173,6 +187,21 @@ class AnlikPencere(QWidget):
                 if kutu.intersects(self._pencereye(b.bbox)):
                     self._secili.add(i)
         self._basla = self._surukle = None
+        if self._secili != onceki:
+            self._secim_degisti()
+        self.update()
+
+    def _secim_degisti(self) -> None:
+        """T-017: secim degisti -> eski sonuclar silinir, otomatik ceviri sayaci (yeniden) baslar."""
+        self._sonuclar = []
+        if self._secili:
+            self._durum = AnlikDurumu.SECIM
+            self._durum_metni = f"{len(self._secili)} blok seçili — çevriliyor…"
+            self._otomatik.start()
+        else:
+            self._otomatik.stop()
+            self._durum = AnlikDurumu.SECIM
+            self._durum_metni = "seçim boş — bir blok tıkla"
         self.update()
 
     def keyPressEvent(self, e: QKeyEvent) -> None:
@@ -180,9 +209,12 @@ class AnlikPencere(QWidget):
         if k == Qt.Key.Key_Escape:
             self.close()
         elif k in (Qt.Key.Key_Return, Qt.Key.Key_Enter):
+            self._otomatik.stop()
             self._cevir()
-        elif k == Qt.Key.Key_A and mods & Qt.KeyboardModifier.ControlModifier and self._durum == AnlikDurumu.SECIM:
-            self._secili = set(range(len(self._bloklar)))
+        elif k == Qt.Key.Key_A and mods & Qt.KeyboardModifier.ControlModifier and self._durum != AnlikDurumu.OKUNUYOR:
+            if self._secili != set(range(len(self._bloklar))):
+                self._secili = set(range(len(self._bloklar)))
+                self._secim_degisti()
             self.update()
         elif k == Qt.Key.Key_C and mods & Qt.KeyboardModifier.ControlModifier and self._sonuclar:
             QGuiApplication.clipboard().setText("\n".join(c for _, c, _ in self._sonuclar))
@@ -192,12 +224,15 @@ class AnlikPencere(QWidget):
             super().keyPressEvent(e)
 
     def _cevir(self) -> None:
-        if self._durum != AnlikDurumu.SECIM:
+        if self._durum == AnlikDurumu.OKUNUYOR:
             return
+        self._otomatik.stop()
         if not self._secili:
             self._durum_metni = "önce en az bir blok seç (tıkla ya da sürükle)"
             self.update()
             return
+        if self._durum in (AnlikDurumu.CEVRILIYOR, AnlikDurumu.SONUC) and self._son_secim == self.secili_bloklar():
+            return   # ayni secim icin istek zaten yolda ya da sonucu ekranda
         self._son_secim = self.secili_bloklar()
         self._durum = AnlikDurumu.CEVRILIYOR
         self._durum_metni = "çevriliyor…"
@@ -205,6 +240,7 @@ class AnlikPencere(QWidget):
         self.cevir_istendi.emit(list(self._son_secim))
 
     def closeEvent(self, e: object) -> None:
+        self._otomatik.stop()
         if not self._iptal_yayildi:
             self._iptal_yayildi = True
             self.iptal.emit()

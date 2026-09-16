@@ -1,4 +1,4 @@
-"""T-014 -- AnlikPencere K1-K7 (offscreen; kare sentetik, pipeline yok)."""
+"""T-014 -- AnlikPencere K1-K7 + T-017 otomatik ceviri (offscreen; kare sentetik, pipeline yok)."""
 from __future__ import annotations
 
 import time
@@ -13,7 +13,7 @@ from PySide6.QtWidgets import QApplication
 from pytestqt.qtbot import QtBot
 
 from src.contracts.models import Frame, Rect, Segment, TextBlock
-from src.ui.anlik_pencere import TIK_ESIGI_PX, AnlikDurumu, AnlikPencere
+from src.ui.anlik_pencere import OTOMATIK_CEVIRI_MS, TIK_ESIGI_PX, AnlikDurumu, AnlikPencere
 
 
 def kare(w: int = 800, h: int = 600, x: int = 0, y: int = 0) -> Frame:
@@ -128,26 +128,100 @@ def test_k3_kisa_surukleme_tik_sayilir(pencere: AnlikPencere) -> None:
     assert pencere.secili_indeksler() == [0]
 
 
-def test_k3_ctrl_a_hepsi_ve_enter_secimi_yayar_ikinci_enter_yaymaz(pencere: AnlikPencere, qtbot: QtBot) -> None:
+def test_k3_ctrl_a_hepsi_ve_enter_hemen_yayar_ikinci_enter_yaymaz(pencere: AnlikPencere, qtbot: QtBot) -> None:
     pencere.bloklari_goster(BLOKLAR)
-    QTest.keyClick(pencere, Qt.Key.Key_A, Qt.KeyboardModifier.ControlModifier)
-    assert pencere.secili_indeksler() == [0, 1, 2]
-    with qtbot.waitSignal(pencere.cevir_istendi, timeout=1000) as s:
-        QTest.keyClick(pencere, Qt.Key.Key_Return)
-    assert s.args[0] == BLOKLAR and pencere.durum == AnlikDurumu.CEVRILIYOR
     gelen: list[object] = []
     pencere.cevir_istendi.connect(gelen.append)
+    QTest.keyClick(pencere, Qt.Key.Key_A, Qt.KeyboardModifier.ControlModifier)
+    assert pencere.secili_indeksler() == [0, 1, 2] and gelen == []   # sayac basladi, henuz yaymadi
+    QTest.keyClick(pencere, Qt.Key.Key_Return)   # T-017: Enter sayaci beklemez
+    assert gelen == [BLOKLAR] and pencere.durum == AnlikDurumu.CEVRILIYOR
     QTest.keyClick(pencere, Qt.Key.Key_Return)
-    QTest.mouseClick(pencere, Qt.MouseButton.LeftButton, pos=merkez(pencere, BLOKLAR[0]))   # cevriliyor'da tik etkisiz
-    assert gelen == [] and pencere.secili_indeksler() == [0, 1, 2]
+    qtbot.wait(OTOMATIK_CEVIRI_MS + 150)
+    assert gelen == [BLOKLAR]   # ayni secim icin ikinci istek yok (Enter de sayac da)
+
+
+# ---------------------------------------------------------------- K3/T-017 otomatik ceviri
+def test_t017_secim_kendiliginden_cevirir_art_arda_tiklar_tek_istek(pencere: AnlikPencere, qtbot: QtBot) -> None:
+    pencere.bloklari_goster(BLOKLAR)
+    gelen: list[object] = []
+    pencere.cevir_istendi.connect(gelen.append)
+    QTest.mouseClick(pencere, Qt.MouseButton.LeftButton, pos=merkez(pencere, BLOKLAR[0]))
+    QTest.mouseClick(pencere, Qt.MouseButton.LeftButton, pos=merkez(pencere, BLOKLAR[1]))
+    assert gelen == [] and pencere.durum == AnlikDurumu.SECIM and "çevriliyor" in pencere.durum_metni
+    qtbot.waitUntil(lambda: bool(gelen), timeout=2000)
+    qtbot.wait(OTOMATIK_CEVIRI_MS + 150)
+    assert gelen == [[BLOKLAR[0], BLOKLAR[1]]] and pencere.durum == AnlikDurumu.CEVRILIYOR
+
+
+def test_t017_sag_tik_beklemeden_cevirir(pencere: AnlikPencere, qtbot: QtBot) -> None:
+    pencere.bloklari_goster(BLOKLAR)
+    gelen: list[object] = []
+    pencere.cevir_istendi.connect(gelen.append)
+    QTest.mouseClick(pencere, Qt.MouseButton.LeftButton, pos=merkez(pencere, BLOKLAR[2]))
+    QTest.mouseClick(pencere, Qt.MouseButton.RightButton, pos=QPoint(10, 10))
+    assert gelen == [[BLOKLAR[2]]] and pencere.durum == AnlikDurumu.CEVRILIYOR
+    qtbot.wait(OTOMATIK_CEVIRI_MS + 150)
+    assert len(gelen) == 1   # sayac iptal edildi, ikinci istek yok
+
+
+def test_t017_secim_bosalirsa_sinyal_yok_sonuc_temiz(pencere: AnlikPencere, qtbot: QtBot) -> None:
+    pencere.bloklari_goster(BLOKLAR)
+    gelen: list[object] = []
+    pencere.cevir_istendi.connect(gelen.append)
+    m = merkez(pencere, BLOKLAR[0])
+    QTest.mouseClick(pencere, Qt.MouseButton.LeftButton, pos=m)
+    QTest.mouseClick(pencere, Qt.MouseButton.LeftButton, pos=m)   # ac/kapa -> bos
+    qtbot.wait(OTOMATIK_CEVIRI_MS + 150)
+    assert gelen == [] and pencere.secili_indeksler() == [] and "boş" in pencere.durum_metni
+
+
+def test_t017_sonuctan_sonra_secim_degisir_eski_sonuc_silinir_yeniden_cevirir(pencere: AnlikPencere, qtbot: QtBot) -> None:
+    secime_gec(pencere, qtbot, [0])
+    pencere.ceviriyi_goster([Segment(text="bir", bbox=BLOKLAR[0].bbox, source_blocks=(0,))], ["one"])
+    assert pencere.durum == AnlikDurumu.SONUC and pencere.sonuclar() == [("bir", "one")]
+    with qtbot.waitSignal(pencere.cevir_istendi, timeout=2000) as s:
+        QTest.mouseClick(pencere, Qt.MouseButton.LeftButton, pos=merkez(pencere, BLOKLAR[1]))
+        assert pencere.sonuclar() == [] and pencere.durum == AnlikDurumu.SECIM
+    assert s.args[0] == [BLOKLAR[0], BLOKLAR[1]] and pencere.durum == AnlikDurumu.CEVRILIYOR
+
+
+def test_t017_secim_degisince_gec_gelen_eski_ceviri_basilmaz(pencere: AnlikPencere, qtbot: QtBot) -> None:
+    secime_gec(pencere, qtbot, [0])
+    QTest.mouseClick(pencere, Qt.MouseButton.LeftButton, pos=merkez(pencere, BLOKLAR[1]))   # yeni istek sayacta
+    pencere.ceviriyi_goster([Segment(text="bir", bbox=BLOKLAR[0].bbox, source_blocks=(0,))], ["ESKI"])
+    assert pencere.sonuclar() == [] and pencere.durum == AnlikDurumu.SECIM
+    qtbot.waitUntil(lambda: pencere.durum == AnlikDurumu.CEVRILIYOR, timeout=2000)
+    pencere.ceviriyi_goster([Segment(text="bir iki", bbox=Rect(100, 100, 120, 124), source_blocks=(0, 1))], ["YENI"])
+    assert pencere.sonuclar() == [("bir iki", "YENI")]
+
+
+def test_t017_surukleme_sonuc_durumunda_da_secer(pencere: AnlikPencere, qtbot: QtBot) -> None:
+    secime_gec(pencere, qtbot, [0])
+    pencere.ceviriyi_goster([Segment(text="bir", bbox=BLOKLAR[0].bbox, source_blocks=(0,))], ["one"])
+    with qtbot.waitSignal(pencere.cevir_istendi, timeout=2000) as s:
+        QTest.mousePress(pencere, Qt.MouseButton.LeftButton, pos=QPoint(50, 180))
+        QTest.mouseMove(pencere, QPoint(600, 400))
+        QTest.mouseRelease(pencere, Qt.MouseButton.LeftButton, pos=QPoint(600, 400))
+    assert s.args[0] == BLOKLAR   # 0 (onceden) + 1, 2 (surukleme)
+
+
+def test_t017_kapanis_sayaci_durdurur(pencere: AnlikPencere, qtbot: QtBot) -> None:
+    pencere.bloklari_goster(BLOKLAR)
+    gelen: list[object] = []
+    pencere.cevir_istendi.connect(gelen.append)
+    QTest.mouseClick(pencere, Qt.MouseButton.LeftButton, pos=merkez(pencere, BLOKLAR[0]))
+    pencere.close()
+    qtbot.wait(OTOMATIK_CEVIRI_MS + 150)
+    assert gelen == []
 
 
 # ---------------------------------------------------------------- K4 sonuc
 def secime_gec(p: AnlikPencere, qtbot: QtBot, indeksler: list[int]) -> None:
     p.bloklari_goster(BLOKLAR)
-    for i in indeksler:
-        QTest.mouseClick(p, Qt.MouseButton.LeftButton, pos=merkez(p, BLOKLAR[i]))
-    with qtbot.waitSignal(p.cevir_istendi, timeout=1000):
+    with qtbot.waitSignal(p.cevir_istendi, timeout=2000):   # sayac ya da Enter -- hangisi once
+        for i in indeksler:
+            QTest.mouseClick(p, Qt.MouseButton.LeftButton, pos=merkez(p, BLOKLAR[i]))
         QTest.keyClick(p, Qt.Key.Key_Return)
 
 
@@ -200,11 +274,11 @@ def test_k5_close_iptal_yayar(pencere: AnlikPencere, qtbot: QtBot) -> None:
 def test_k6_paint_tum_durumlarda_cokmez_ve_hizli(pencere: AnlikPencere, qtbot: QtBot) -> None:
     pencere.grab()
     pencere.bloklari_goster(BLOKLAR)
-    QTest.mousePress(pencere, Qt.MouseButton.LeftButton, pos=QPoint(50, 50))
-    QTest.mouseMove(pencere, QPoint(300, 300))
-    pencere.grab()   # surukleme dikdortgeni ciziliyor
-    QTest.mouseRelease(pencere, Qt.MouseButton.LeftButton, pos=QPoint(300, 300))
-    with qtbot.waitSignal(pencere.cevir_istendi, timeout=1000):
+    with qtbot.waitSignal(pencere.cevir_istendi, timeout=2000):
+        QTest.mousePress(pencere, Qt.MouseButton.LeftButton, pos=QPoint(50, 50))
+        QTest.mouseMove(pencere, QPoint(300, 300))
+        pencere.grab()   # surukleme dikdortgeni ciziliyor
+        QTest.mouseRelease(pencere, Qt.MouseButton.LeftButton, pos=QPoint(300, 300))
         QTest.keyClick(pencere, Qt.Key.Key_Return)
     pencere.ceviriyi_goster([Segment(text="bir", bbox=BLOKLAR[0].bbox, source_blocks=(0,))], ["cok uzun bir ceviri metni " * 8])
     sureler = []

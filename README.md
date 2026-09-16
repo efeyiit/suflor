@@ -14,7 +14,8 @@ Oyun için tasarlandı, her uygulamada çalışır. Ücretsiz ve offline.
 ## İki mod
 
 **1 · Snapshot Modu** — Kısayola bas, ekran donar. Tespit edilen metin blokları
-çerçevelenir, istediklerini seçersin, seçilenler görsel bağlamıyla birlikte çevrilir.
+çerçevelenir; tıkla ya da sürükleyerek seçersin, seçim **tek bir metin olarak** kendiliğinden
+çevrilir (satır satır değil — cümle bütünlüğü korunur). Sağ tık / Enter beklemeden çevirir.
 
 **2 · Bölge İzleme Modu** — Ekranda bir dikdörtgen çiz. O alanda çıkan her yazı
 otomatik ve sürekli çevrilir; çeviri bölgeye yapışık yarı-şeffaf bir şeritte akar.
