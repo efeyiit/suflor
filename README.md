@@ -69,7 +69,7 @@ oyun FPS düşüşü ≤ %3.
 ```bash
 pip install -r requirements-dev.txt
 python -m pytest tests -q            # tam takım (model gerekmez)
-python demo/kabuk.py                 # UI kabuğu: üç düğme, tepsi, kenar sekmesi
+Suflor.bat                           # uygulamayı aç (çift tık da olur; konsol açılmaz) — ya da: python demo/kabuk.py
 python demo/canli_cevir.py korean    # ekrandan yakala → OCR → sözlük → Türkçe (model gerekir)
 ```
 

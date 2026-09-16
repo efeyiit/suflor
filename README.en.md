@@ -75,7 +75,7 @@ Targets: end-to-end ≤ 160 ms on cache hit / ≤ 320 ms on cache miss in Mode 2
 ```bash
 pip install -r requirements-dev.txt
 python -m pytest tests -q            # full suite (no models needed)
-python demo/kabuk.py                 # UI shell: three buttons, tray, edge tab
+Suflor.bat                           # launch the app (double-click works; no console) — or: python demo/kabuk.py
 python demo/canli_cevir.py korean    # capture screen → OCR → glossary → Turkish (needs the model)
 ```
 
