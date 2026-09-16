@@ -36,6 +36,7 @@ from src.ocr.normalizer import normalize  # noqa: E402
 from src.ocr.satir_birlestirici import satirlari_birlestir  # noqa: E402
 from src.ocr.rapid_engine import OcrLanguage, RapidOcrEngine  # noqa: E402
 from src.translate.local_nmt import LocalNmtProvider  # noqa: E402
+from src.translate.hedef_duzeltici import HedefDuzeltici  # noqa: E402
 from src.translate.sozluk import GlossaryStore, terimleri_gom  # noqa: E402
 
 YENILEME_MS = 100
@@ -56,10 +57,11 @@ class GosterimCevirici:
     motor gömülü metni görür. Dönüş: (gömülü segmentler, çeviriler, gömülen hedef terimler).
     """
 
-    def __init__(self, kaynak_kodu: str, sozluk: GlossaryStore | None = None) -> None:
+    def __init__(self, kaynak_kodu: str, sozluk: GlossaryStore | None = None, duzeltici: HedefDuzeltici | None = None) -> None:
         self._saglayici = LocalNmtProvider(model_dir=MODEL_DIZINI, threads=8)
         self._kaynak = kaynak_kodu
         self._sozluk = sozluk
+        self._duzeltici = duzeltici or HedefDuzeltici()
 
     def cevir(self, segmentler: list[Segment]) -> tuple[list[Segment], list[str], list[str]]:
         if not segmentler:
@@ -70,7 +72,8 @@ class GosterimCevirici:
             gomulu = list(terimleri_gom(segmentler, hits))
             terimler = [h.target_term for h in hits if h.target_term != h.source_term]  # kimlik cipasi sayilmaz
         istek = TranslationRequest(segments=tuple(gomulu), source_lang=self._kaynak, target_lang="tr")
-        return gomulu, list(self._saglayici.translate(istek).translations), terimler
+        ceviriler = self._duzeltici.hepsini_duzelt(list(self._saglayici.translate(istek).translations))  # T-015
+        return gomulu, ceviriler, terimler
 
 class CeviriIsi(QtCore.QObject):
     bitti = QtCore.Signal(object, object, object, object, float, float)  # bloklar, gömülü segmentler, çeviriler, terimler, ocr_ms, cev_ms
@@ -222,7 +225,8 @@ def main() -> int:
     uygulama = QtWidgets.QApplication(sys.argv)
     servis = CaptureService(MssBackend())
     motor = RapidOcrEngine(language=dil, threads=8, allow_download=True)
-    cevirici = GosterimCevirici(NLLB_KODU[dil], sozluk)
+    duzeltici = HedefDuzeltici.dosyadan(Path(sozluk_arg)) if sozluk_arg != "-" else HedefDuzeltici()
+    cevirici = GosterimCevirici(NLLB_KODU[dil], sozluk, duzeltici)
     birlesim = union_bbox(servis.monitors)
     pencereler: list[QtWidgets.QWidget] = []
 

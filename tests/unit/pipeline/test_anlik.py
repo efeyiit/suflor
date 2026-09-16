@@ -337,3 +337,17 @@ def test_k3_cevir_oku_sonrasi_ikinci_gecis_yapar(qtbot: QtBot, akis: Callable[..
         a.cevir(satirlari_birlestir(BLOKLAR))
     assert ocr.call_count == 2 and ocr.calls[1][0].rect.w < 800       # kirpik kare, tam kare degil
     assert s.args[0][0].text == "ikinci gecis"                          # normalize ikinci gecisin bloklarini kullandi
+
+
+def test_k3_duzeltici_ciktiya_uygulanir(qtbot: QtBot) -> None:
+    from src.translate.hedef_duzeltici import HedefDuzeltici
+
+    saglayici = FakeProvider(translations={"Marcus waits by the mill.": "Elder Marks bekliyor."})
+    a = AnlikAkisi(FakeOcrEngine([BLOKLAR]), saglayici, None, kaynak_dili="eng_Latn",
+                   duzeltici=HedefDuzeltici({"Elder": "İhtiyar", "Marks": "Marcus"}))
+    try:
+        with qtbot.waitSignal(a.ceviri_hazir, timeout=3000) as s:
+            a.cevir(satirlari_birlestir(BLOKLAR))
+        assert s.args[1] == ["İhtiyar Marcus bekliyor."]
+    finally:
+        a.kapat()

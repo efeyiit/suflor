@@ -1,0 +1,8 @@
+T-015 real_check -- hedef tarafi duzeltme, gercek NMT
+  ok     [1a] pozitif kontrol: duzeltme ONCESI sizinti 1/10 segment (>= 1)
+  ok     [1b] duzeltme SONRASI sizinti 0/10 (0)
+  ok     [2] duzeltme disinda kelime farki olan cikti: 0 (0)
+  ok     [3] bilesik cumlede duzeltici degisiklik yapmadi=True (sizinti varsa duzeltir: False)
+  ok     [4] 1000 ceviri x 6 kural: en kucuk 1.8 ms (< 20)
+
+REAL_CHECK: TEMIZ

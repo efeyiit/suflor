@@ -38,6 +38,7 @@ from src.contracts.models import Rect  # noqa: E402
 from src.ocr.rapid_engine import OcrLanguage  # noqa: E402
 from src.pipeline.anlik import AnlikAkisi  # noqa: E402
 from src.pipeline.motorlar import MotorDeposu, gercek_fabrikalar  # noqa: E402
+from src.translate.hedef_duzeltici import HedefDuzeltici  # noqa: E402
 from src.ui.anlik_pencere import AnlikPencere  # noqa: E402
 from src.ui.geometri import Kenar  # noqa: E402
 from src.ui.kabuk import AnaPencere, KabukDurumu  # noqa: E402
@@ -59,6 +60,7 @@ def _fiziksel_imlec() -> tuple[int, int]:
 def _bagla(app: QtWidgets.QApplication, pencere: AnaPencere, dil: OcrLanguage) -> int:
     servis = CaptureService(MssBackend())
     depo = MotorDeposu(gercek_fabrikalar(dil, MODEL_DIZINI, SOZLUK if SOZLUK.exists() else None))
+    duzeltici = HedefDuzeltici.dosyadan(SOZLUK) if SOZLUK.exists() else HedefDuzeltici()   # T-015: çıktıda unvan/ad düzeltme
     pencereler: list[QtWidgets.QWidget] = []
     acik_katman: list[SecimKatmani] = []
     acik_anlik: list[tuple[AnlikPencere, AnlikAkisi]] = []
@@ -88,7 +90,7 @@ def _bagla(app: QtWidgets.QApplication, pencere: AnaPencere, dil: OcrLanguage) -
         sekme_gizlendi = pencere.sekme.isVisible()
         if sekme_gizlendi:
             pencere.sekme.hide()
-        akis = AnlikAkisi(depo.ocr, depo.cevirici, depo.sozluk, kaynak_dili=NLLB_KODU[dil])
+        akis = AnlikAkisi(depo.ocr, depo.cevirici, depo.sozluk, kaynak_dili=NLLB_KODU[dil], duzeltici=duzeltici)
         anlik = AnlikPencere(ekran, kare)
         akis.bloklar_hazir.connect(anlik.bloklari_goster)
         akis.ceviri_hazir.connect(anlik.ceviriyi_goster)

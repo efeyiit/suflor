@@ -17,6 +17,7 @@ K3 Zincir: `oku` -> `recognize(kare, preset)` -> `satirlari_birlestir` -> `blokl
    kucultuyor; gevsek kutular normalizer'in konusmaci satirini paragrafa yapistirmasina yol aciyordu; kirpilmis
    gecis bolge yakalamayla ayni siki kutulari verir) -> `satirlari_birlestir` -> `normalize(..., preset)`
    -> sozluk varsa `lookup_segments` + `terimleri_gom` -> `translate(TranslationRequest(gomulu, kaynak_dili, "tr"))`
+   -> `duzeltici` varsa ciktida `HedefDuzeltici.duzelt` (T-015: "Elder Marcus" -> "İhtiyar Marcus")
    -> `ceviri_hazir(segmentler, ceviriler)`; segment `bbox`leri KARE koordinatinda (UI yerlesim icin bunu kullanir).
    Kare yoksa (`oku` yapilmadan `cevir`) ikinci gecis atlanir, verilen bloklar kullanilir.
    `ceviri_hazir`daki segmentler GOMULU DEGIL, normalize ciktisi (UI kaynak metni kullaniciya gosterir);
@@ -42,6 +43,7 @@ from src.contracts.interfaces import OcrEngine, TranslationProvider
 from src.contracts.models import Frame, OcrPreset, Rect, Segment, TextBlock, TranslationRequest
 from src.ocr.normalizer import normalize
 from src.ocr.satir_birlestirici import satirlari_birlestir
+from src.translate.hedef_duzeltici import HedefDuzeltici
 from src.translate.sozluk import GlossaryStore, terimleri_gom
 
 __all__ = ["AnlikAkisi", "cevir_yap", "ikinci_gecis", "oku_yap"]
@@ -57,10 +59,10 @@ class _Isci(QObject):
     hata = Signal(int, str)               # seq, istisna sinif adi
 
     def __init__(self, ocr: OcrEngine, cevirici: TranslationProvider, sozluk: GlossaryStore | None,
-                 kaynak_dili: str, preset: OcrPreset) -> None:
+                 kaynak_dili: str, preset: OcrPreset, duzeltici: HedefDuzeltici | None = None) -> None:
         super().__init__()
         self._ocr, self._cevirici, self._sozluk = ocr, cevirici, sozluk
-        self._kaynak_dili, self._preset = kaynak_dili, preset
+        self._kaynak_dili, self._preset, self._duzeltici = kaynak_dili, preset, duzeltici
         self._son_kare: Frame | None = None
 
     @Slot(int, object)
@@ -77,7 +79,7 @@ class _Isci(QObject):
     def cevir(self, seq: int, bloklar: Sequence[TextBlock]) -> None:
         try:
             segmentler, ceviriler = cevir_yap(self._cevirici, self._sozluk, bloklar, self._kaynak_dili, self._preset,
-                                              ocr=self._ocr, kare=self._son_kare)
+                                              ocr=self._ocr, kare=self._son_kare, duzeltici=self._duzeltici)
         except Exception as e:  # noqa: BLE001
             self.hata.emit(seq, type(e).__name__)
             return
@@ -114,8 +116,9 @@ def ikinci_gecis(ocr: OcrEngine, kare: Frame, bloklar: Sequence[TextBlock], pres
 
 
 def cevir_yap(cevirici: TranslationProvider, sozluk: GlossaryStore | None, bloklar: Sequence[TextBlock],
-              kaynak_dili: str, preset: OcrPreset, *, ocr: OcrEngine | None = None, kare: Frame | None = None) -> tuple[list[Segment], list[str]]:
-    """K3 ceviri zinciri (saf): [ikinci gecis] -> normalize -> sozluk gomme (yalniz modele) -> translate.
+              kaynak_dili: str, preset: OcrPreset, *, ocr: OcrEngine | None = None, kare: Frame | None = None,
+              duzeltici: HedefDuzeltici | None = None) -> tuple[list[Segment], list[str]]:
+    """K3 ceviri zinciri (saf): [ikinci gecis] -> normalize -> sozluk gomme (yalniz modele) -> translate -> [duzelt].
 
     `ocr` ve `kare` verilirse secim kirpigi yeniden okunur (siki kutular). Bos secim -> ([], []).
     """
@@ -129,7 +132,10 @@ def cevir_yap(cevirici: TranslationProvider, sozluk: GlossaryStore | None, blokl
         gomulu = terimleri_gom(segmentler, sozluk.lookup_segments(segmentler))
     istek = TranslationRequest(segments=tuple(gomulu), source_lang=kaynak_dili, target_lang="tr")
     sonuc = cevirici.translate(istek)
-    return list(segmentler), list(sonuc.translations)
+    ceviriler = list(sonuc.translations)
+    if duzeltici is not None:
+        ceviriler = duzeltici.hepsini_duzelt(ceviriler)
+    return list(segmentler), ceviriler
 
 
 class AnlikAkisi(QObject):
@@ -146,13 +152,14 @@ class AnlikAkisi(QObject):
     _cevir_istegi = Signal(int, object)
 
     def __init__(self, ocr: OcrEngine, cevirici: TranslationProvider, sozluk: GlossaryStore | None, *,
-                 kaynak_dili: str, preset: OcrPreset = OcrPreset.DIALOGUE, ebeveyn: QObject | None = None) -> None:
+                 kaynak_dili: str, preset: OcrPreset = OcrPreset.DIALOGUE, duzeltici: HedefDuzeltici | None = None,
+                 ebeveyn: QObject | None = None) -> None:
         super().__init__(ebeveyn)
         self._seq = 0
         self._iptal_edilen = -1
         self._kapandi = False
         self._thread = QThread(self)
-        self._isci = _Isci(ocr, cevirici, sozluk, kaynak_dili, preset)
+        self._isci = _Isci(ocr, cevirici, sozluk, kaynak_dili, preset, duzeltici)
         self._isci.moveToThread(self._thread)
         self._oku_istegi.connect(self._isci.oku, Qt.ConnectionType.QueuedConnection)
         self._cevir_istegi.connect(self._isci.cevir, Qt.ConnectionType.QueuedConnection)
