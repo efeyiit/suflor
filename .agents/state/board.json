@@ -1,6 +1,6 @@
 {
   "faz": "dalga 3",
-  "guncelleme": "T-013 KABUL. Ajan sistemi birakildi; sef tek elden devam ediyor. Sirada: Snapshot (anlik ceviri) modu.",
+  "guncelleme": "T-014 KABUL: Snapshot modu uctan uca. Sirada: hedef tarafi duzeltme / ayarlar / paketleme.",
   "paralellik_tavani": 4,
   "kilitlenme_esigi": 3,
   "tasima": "tek-el (16 Eylul 2026'dan itibaren: sef uygular+olcer+test eder; ajan turlari yok, kapilar kalir)",
@@ -201,6 +201,26 @@
       "tur": 1,
       "status": "kabul",
       "not": "KABUL 16 Eylul 2026: kapi 12/12, 379 UI testi; tester turu yarida kesildi (kullanici ajan sistemini birakti)"
+    },
+    {
+      "id": "T-014",
+      "baslik": "Anlik ceviri (Snapshot) modu: kare -> OCR -> secim -> ceviri; AnlikAkisi + AnlikPencere + MotorDeposu",
+      "dalga": 3,
+      "seviye": "B",
+      "owns": [
+        "src/pipeline/anlik.py",
+        "src/pipeline/motorlar.py",
+        "src/ui/anlik_pencere.py"
+      ],
+      "depends_on": [
+        "T-012",
+        "T-013",
+        "T-011"
+      ],
+      "durum": "kabul",
+      "tur": 1,
+      "status": "kabul",
+      "not": "KABUL 16 Eylul 2026 (tek el): kapi KR/JP 10/10, 46 test; ikinci gecis OCR (gevsek tam-kare kutulari)"
     }
   ],
   "sozlesmeler_donduruldu": true,

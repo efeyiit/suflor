@@ -1,0 +1,17 @@
+T-014 ON OLCUM -- Snapshot modu, gercek OCR/NMT, sentetik 2560x1440 kare
+
+A1 capture_full(0): 36.6 ms, kare 2560x1440, dtype=uint8 shape=(1440, 2560, 3)
+A2 KR tam kare olcek 1.0: OCR 469 ms, 51 blok -> 12 satir (ust fixture 4 satir; fixture 4 satir)
+A3 KR 1280x720 kucultme olcek 1.0: OCR 403 ms, 51 blok -> 12 satir
+A2 KR tam kare olcek 0.6: OCR 550 ms, 51 blok -> 12 satir (ust fixture 4 satir; fixture 4 satir)
+A3 KR 1280x720 kucultme olcek 0.6: OCR 377 ms, 44 blok -> 12 satir
+A2 KR tam kare olcek 0.4: OCR 523 ms, 43 blok -> 12 satir (ust fixture 4 satir; fixture 4 satir)
+A3 KR 1280x720 kucultme olcek 0.4: OCR 285 ms, 13 blok -> 12 satir
+A2 JP tam kare olcek 1.0: OCR 418 ms, 12 blok -> 12 satir (ust fixture 4 satir; fixture 4 satir)
+A3 JP 1280x720 kucultme olcek 1.0: OCR 818 ms, 12 blok -> 12 satir
+A2 JP tam kare olcek 0.6: OCR 393 ms, 12 blok -> 12 satir (ust fixture 4 satir; fixture 4 satir)
+A3 JP 1280x720 kucultme olcek 0.6: OCR 650 ms, 13 blok -> 12 satir
+A2 JP tam kare olcek 0.4: OCR 363 ms, 13 blok -> 12 satir (ust fixture 4 satir; fixture 4 satir)
+A3 JP 1280x720 kucultme olcek 0.4: OCR 504 ms, 12 blok -> 12 satir
+A4 secili 4 blok -> 1 segment, 4 sozluk hit; ceviri soguk 1488 ms, sicak 441 ms, 1 ceviri
+A5 2560x1440 BGR -> QImage.copy -> QPixmap: 8.3 ms (UI thread; < 16 ms hedef)
