@@ -1,6 +1,8 @@
 """Suflör — uygulama gösterimi: ürün kabuğu (T-012) + kısayollar (T-013) + Anlık çeviri (T-014) + Bölge izle (T-005).
 
 Çalıştır:  python demo/kabuk.py [japan|korean|chinese|english] [sag|sol]
+           (argüman verilmezse %APPDATA%/Suflor/ayarlar.json — ⚙ düğmesiyle düzenlenir; dil/sözlük değişince
+            motorlar arka planda yeniden yüklenir)
 
 Sağ üstteki üç düğme (kullanıcı isteği, 11 Eylül 2026):
   ✕  Kapat        — uygulama tamamen kapanır (tepside kalıntı yok)
@@ -37,6 +39,7 @@ from src.contracts.errors import TranslatorError  # noqa: E402
 from src.contracts.models import Rect  # noqa: E402
 from src.ocr.rapid_engine import OcrLanguage  # noqa: E402
 from src.pipeline.anlik import AnlikAkisi  # noqa: E402
+from src.ayarlar import Ayarlar, AyarlarDeposu  # noqa: E402
 from src.pipeline.motorlar import MotorDeposu, gercek_fabrikalar  # noqa: E402
 from src.translate.hedef_duzeltici import HedefDuzeltici  # noqa: E402
 from src.ui.anlik_pencere import AnlikPencere  # noqa: E402
@@ -57,24 +60,49 @@ def _fiziksel_imlec() -> tuple[int, int]:
     return int(p.x), int(p.y)
 
 
-def _bagla(app: QtWidgets.QApplication, pencere: AnaPencere, dil: OcrLanguage) -> int:
+def _bagla(app: QtWidgets.QApplication, pencere: AnaPencere, dil: OcrLanguage, sozluk_yolu: Path | None) -> int:
     servis = CaptureService(MssBackend())
-    depo = MotorDeposu(gercek_fabrikalar(dil, MODEL_DIZINI, SOZLUK if SOZLUK.exists() else None))
-    duzeltici = HedefDuzeltici.dosyadan(SOZLUK) if SOZLUK.exists() else HedefDuzeltici()   # T-015: çıktıda unvan/ad düzeltme
     pencereler: list[QtWidgets.QWidget] = []
     acik_katman: list[SecimKatmani] = []
     acik_anlik: list[tuple[AnlikPencere, AnlikAkisi]] = []
+    motor: dict[str, object] = {}   # depo, duzeltici, dil -- ayar degisince yeniden kurulur
 
-    pencere.durum_goster("modeller yükleniyor…")
-    depo.hazir.connect(lambda: pencere.durum_goster(""))
-    depo.hata.connect(lambda sinif: pencere.durum_goster(f"model yüklenemedi: {sinif} — models/ dizinini kontrol et"))
-    depo.baslat()
+    def motorlari_kur(yeni_dil: OcrLanguage, yeni_sozluk: Path | None) -> None:
+        eski = motor.get("depo")
+        if isinstance(eski, MotorDeposu):
+            eski.kapat()
+        sozluk = yeni_sozluk if yeni_sozluk is not None and yeni_sozluk.exists() else None
+        depo = MotorDeposu(gercek_fabrikalar(yeni_dil, MODEL_DIZINI, sozluk))
+        motor["depo"], motor["dil"] = depo, yeni_dil
+        motor["duzeltici"] = HedefDuzeltici.dosyadan(sozluk) if sozluk is not None else HedefDuzeltici()   # T-015
+        pencere.durum_goster("modeller yükleniyor…")
+        depo.hazir.connect(lambda: pencere.durum_goster(""))
+        depo.hata.connect(lambda sinif: pencere.durum_goster(f"model yüklenemedi: {sinif} — models/ dizinini kontrol et"))
+        depo.baslat()
+
+    motorlari_kur(dil, sozluk_yolu)
+
+    def ayarlar_degisti(a: object) -> None:
+        if isinstance(a, Ayarlar):
+            yol = Path(a.sozluk_yolu) if a.sozluk_yolu else None
+            if OcrLanguage(a.dil) != motor["dil"] or yol != sozluk_kutusu[0]:
+                sozluk_kutusu[0] = yol
+                motorlari_kur(OcrLanguage(a.dil), yol)
+
+    sozluk_kutusu: list[Path | None] = [sozluk_yolu]
+    pencere.ayarlar_degisti.connect(ayarlar_degisti)
 
     # -- Anlık çeviri (Snapshot) ---------------------------------------------------------------
     def anlik_cevir() -> None:
         if acik_anlik and acik_anlik[0][0].isVisible():
             return   # zaten açık
         acik_anlik.clear()
+        depo = motor["depo"]
+        assert isinstance(depo, MotorDeposu)
+        duzeltici = motor["duzeltici"]
+        assert isinstance(duzeltici, HedefDuzeltici)
+        dil = motor["dil"]
+        assert isinstance(dil, OcrLanguage)
         if not depo.hazir_mi:
             pencere.durum_goster("modeller henüz yüklenmedi — birkaç saniye sonra tekrar dene")
             return
@@ -147,7 +175,9 @@ def _bagla(app: QtWidgets.QApplication, pencere: AnaPencere, dil: OcrLanguage) -
             w.close()
         for anlik, _ in acik_anlik:
             anlik.close()
-        depo.kapat()
+        depo = motor.get("depo")
+        if isinstance(depo, MotorDeposu):
+            depo.kapat()
 
     pencere.anlik_cevir_istendi.connect(anlik_cevir)
     pencere.bolge_izle_istendi.connect(bolge_izle)
@@ -157,9 +187,12 @@ def _bagla(app: QtWidgets.QApplication, pencere: AnaPencere, dil: OcrLanguage) -
 
 def main() -> int:
     args = [a.lower() for a in sys.argv[1:]]
-    dil = next((OcrLanguage(a) for a in args if a in {d.value for d in OcrLanguage}), OcrLanguage.KOREAN)
-    kenar = Kenar.SOL if "sol" in args else Kenar.SAG
-    return calistir(sys.argv, kenar=kenar, calistirici=lambda app, p: _bagla(app, p, dil))
+    depo = AyarlarDeposu()                      # %APPDATA%/Suflor/ayarlar.json
+    ayarlar = depo.yukle().ayarlar
+    dil = next((OcrLanguage(a) for a in args if a in {d.value for d in OcrLanguage}), OcrLanguage(ayarlar.dil))
+    kenar = Kenar.SOL if "sol" in args else (Kenar.SAG if "sag" in args else Kenar(ayarlar.kenar))
+    sozluk_yolu = Path(ayarlar.sozluk_yolu) if ayarlar.sozluk_yolu else (SOZLUK if SOZLUK.exists() else None)
+    return calistir(sys.argv, kenar=kenar, calistirici=lambda app, p: _bagla(app, p, dil, sozluk_yolu), ayarlar_deposu=depo)
 
 
 if __name__ == "__main__":

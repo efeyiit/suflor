@@ -296,6 +296,8 @@ class AnaPencere(QWidget):
     anlik_cevir_istendi = Signal()
     bolge_izle_istendi = Signal()
     cikis_istendi = Signal()
+    ayarlar_istendi = Signal()          # T-016: ⚙ dugmesi; paneli `uygulama.calistir` acar
+    ayarlar_degisti = Signal(object)    # T-016: kaydedilen `Ayarlar`; pipeline baglayicisi dinler (dil/sozluk)
     _balon_gosterildi: ClassVar[bool] = False  # K5 ▲▲: "arka planda" balonu SUREC basina bir kez (test sifirlar)
 
     def __init__(
@@ -317,6 +319,7 @@ class AnaPencere(QWidget):
 
         baslik = QLabel("Suflör")
         baslik.setObjectName("baslik")
+        self._dugme_ayarlar = self._ust_dugme("⚙", "Ayarlar", "Ayarlar — dil, kısayollar, sözlük dosyası, kenar")
         self._dugme_kenar = self._ust_dugme("◐", "Kenara al", "Kenara al — masaüstünde görünmez, ekran kenarında yarım daire")
         self._dugme_tepsi = self._ust_dugme("▾", "Tepsiye al", "Tepsiye al — arka planda çalışır, tepsi ikonuna tık geri getirir")
         self._dugme_kapat = self._ust_dugme("✕", "Kapat", "Kapat — uygulama tamamen kapanır")
@@ -325,7 +328,7 @@ class AnaPencere(QWidget):
         ust.setContentsMargins(14, 8, 8, 0)
         ust.addWidget(baslik)
         ust.addStretch(1)
-        for dugme in (self._dugme_kenar, self._dugme_tepsi, self._dugme_kapat):
+        for dugme in (self._dugme_ayarlar, self._dugme_kenar, self._dugme_tepsi, self._dugme_kapat):
             ust.addWidget(dugme)
 
         self._dugme_anlik = QPushButton()
@@ -365,6 +368,7 @@ class AnaPencere(QWidget):
         self._sekme.bolge_izle.connect(self.bolge_izle_istendi.emit)
 
         self._dugme_kapat.clicked.connect(self.kapat)
+        self._dugme_ayarlar.clicked.connect(self.ayarlar_istendi.emit)
         self._dugme_tepsi.clicked.connect(self.tepsiye_al)
         self._dugme_kenar.clicked.connect(self.kenara_al)
         self._dugme_anlik.clicked.connect(self.anlik_cevir_istendi.emit)
@@ -410,6 +414,10 @@ class AnaPencere(QWidget):
     @property
     def dugme_kenar(self) -> QPushButton:
         return self._dugme_kenar
+
+    @property
+    def dugme_ayarlar(self) -> QPushButton:
+        return self._dugme_ayarlar
 
     @property
     def dugme_anlik(self) -> QPushButton:

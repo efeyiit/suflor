@@ -383,3 +383,95 @@ def test_k5_kayit_sonucu_sebep_tablosu_tum_uyeler() -> None:
     assert uygulama.kayit_sebebi(KayitSonucu.GECERSIZ, 0) == "geçersiz kombinasyon"
     assert "87" in uygulama.kayit_sebebi(KayitSonucu.HATA, 87)
     assert uygulama.kayit_sebebi(KayitSonucu.OK, 0) == ""
+
+
+# ===========================================================================
+# T-016 -- ayarlar deposu ile calistir: yukleme, ⚙ paneli, kaydet -> canli uygulama, ayarlar_degisti
+# ===========================================================================
+from pathlib import Path  # noqa: E402
+
+from src.ayarlar import Ayarlar, AyarlarDeposu  # noqa: E402
+from src.ui.ayarlar_paneli import AyarlarPaneli  # noqa: E402
+
+
+def _kur_ayarli(servis: KisayolServisi, depo: AyarlarDeposu) -> AnaPencere:
+    kutu: list[AnaPencere] = []
+
+    def calistirici(app: QtWidgets.QApplication, pencere: AnaPencere) -> int:
+        kutu.append(pencere)
+        return 0
+
+    calistir(["suflor"], calistirici=calistirici, kisayol_servisi=servis, ayarlar_deposu=depo)
+    return kutu[0]
+
+
+def test_t016_ayarlar_dosyadan_kenar_kisayol_baslangic(sahte: SahteWin32, servis: KisayolServisi, quit_korumasi: None, tmp_path: Path, qtbot: QtBot) -> None:
+    depo = AyarlarDeposu(tmp_path / "a.json")
+    depo.kaydet(Ayarlar(kisayol_anlik="Ctrl+Alt+X", kisayol_bolge="Ctrl+Shift+Y", kenar="sol", baslangic="tepsi"))
+    p = _kur_ayarli(servis, depo)
+    try:
+        assert servis.kayitli() == {"anlik_cevir": "Ctrl+Alt+X", "bolge_izle": "Ctrl+Shift+Y"}
+        assert p.sekme.kenar is Kenar.SOL
+        beklenen = KabukDurumu.TEPSI if QtWidgets.QSystemTrayIcon.isSystemTrayAvailable() else KabukDurumu.KENAR   # K5: tepsi yoksa kenara duser
+        assert p.durum == beklenen and not p.isVisible()
+        assert p.durum_metni() == ""
+    finally:
+        p.kapat()
+
+
+def test_t016_dosya_yoksa_varsayilanlar_ve_bozuk_alan_durum_satirinda(sahte: SahteWin32, servis: KisayolServisi, quit_korumasi: None, tmp_path: Path) -> None:
+    yol = tmp_path / "a.json"
+    yol.write_text('{"kenar": "ust", "kisayol_anlik": "Ctrl+Alt+D"}', encoding="utf-8")
+    p = _kur_ayarli(servis, AyarlarDeposu(yol))
+    try:
+        assert p.sekme.kenar is Kenar.SAG and "kenar" in p.durum_metni()
+        assert servis.kayitli() == dict(VARSAYILAN_KISAYOLLAR)
+    finally:
+        p.kapat()
+
+
+def test_t016_panel_acilir_kaydet_canli_uygular_ve_sinyal(sahte: SahteWin32, servis: KisayolServisi, quit_korumasi: None, tmp_path: Path, qtbot: QtBot) -> None:
+    depo = AyarlarDeposu(tmp_path / "a.json")
+    p = _kur_ayarli(servis, depo)
+    try:
+        gelen: list[object] = []
+        p.ayarlar_degisti.connect(gelen.append)
+        p.dugme_ayarlar.click()
+        qtbot.wait(20)
+        panel = next(w for w in QtWidgets.QApplication.topLevelWidgets() if isinstance(w, AyarlarPaneli) and w.isVisible())
+        p.dugme_ayarlar.click()   # ikinci tik yeni panel acmaz
+        qtbot.wait(20)
+        assert sum(1 for w in QtWidgets.QApplication.topLevelWidgets() if isinstance(w, AyarlarPaneli) and w.isVisible()) == 1
+        panel.kisayol_anlik.setText("Ctrl+Shift+F7")
+        panel.kenar_sol.setChecked(True)
+        panel.dil.setCurrentIndex(panel.dil.findData("japan"))
+        panel.kaydet_dugmesi.click()
+        qtbot.waitUntil(lambda: not panel.isVisible(), timeout=1000)
+        assert len(gelen) == 1 and isinstance(gelen[0], Ayarlar) and gelen[0].dil == "japan"
+        assert depo.yukle().ayarlar.kisayol_anlik == "Ctrl+Shift+F7"                 # dosyaya yazildi
+        assert servis.kayitli()["anlik_cevir"] == "Ctrl+Shift+F7"                    # kisayol canli
+        assert p.sekme.kenar is Kenar.SOL                                             # kenar canli
+        assert "Ctrl+Shift+F7" in p.dugme_anlik.text()                                # etiket canli
+        # eski kayitlar kaldirildi (D ve R id'leri), yenileri var
+        assert len(sahte.kaldirmalar) >= 2
+    finally:
+        p.kapat()
+
+
+def test_t016_kaydetme_hatasi_durum_satirinda_ayar_degismez(sahte: SahteWin32, servis: KisayolServisi, quit_korumasi: None, tmp_path: Path, qtbot: QtBot, monkeypatch: pytest.MonkeyPatch) -> None:
+    depo = AyarlarDeposu(tmp_path / "a.json")
+    p = _kur_ayarli(servis, depo)
+    try:
+        def patlar(_a: Ayarlar) -> None:
+            raise OSError("disk")
+
+        monkeypatch.setattr(depo, "kaydet", patlar)
+        gelen: list[object] = []
+        p.ayarlar_degisti.connect(gelen.append)
+        p.dugme_ayarlar.click(); qtbot.wait(20)
+        panel = next(w for w in QtWidgets.QApplication.topLevelWidgets() if isinstance(w, AyarlarPaneli) and w.isVisible())
+        panel.kenar_sol.setChecked(True)
+        panel.kaydet_dugmesi.click(); qtbot.wait(20)
+        assert "kaydedilemedi" in p.durum_metni() and gelen == [] and p.sekme.kenar is Kenar.SAG
+    finally:
+        p.kapat()

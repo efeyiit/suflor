@@ -1,6 +1,6 @@
 {
   "faz": "dalga 3",
-  "guncelleme": "T-014 KABUL: Snapshot modu uctan uca. Sirada: hedef tarafi duzeltme / ayarlar / paketleme.",
+  "guncelleme": "T-015, T-016 KABUL. Sirada: paketleme (tek exe) / model yonetimi (indirme + checksum) / TM.",
   "paralellik_tavani": 4,
   "kilitlenme_esigi": 3,
   "tasima": "tek-el (16 Eylul 2026'dan itibaren: sef uygular+olcer+test eder; ajan turlari yok, kapilar kalir)",
@@ -221,6 +221,39 @@
       "tur": 1,
       "status": "kabul",
       "not": "KABUL 16 Eylul 2026 (tek el): kapi KR/JP 10/10, 46 test; ikinci gecis OCR (gevsek tam-kare kutulari)"
+    },
+    {
+      "id": "T-015",
+      "baslik": "Hedef tarafi duzeltme: ceviri ciktisinda kelime sinirli unvan/ad ikamesi",
+      "dalga": 3,
+      "seviye": "B",
+      "owns": [
+        "src/translate/hedef_duzeltici.py"
+      ],
+      "depends_on": [
+        "T-014"
+      ],
+      "durum": "kabul",
+      "tur": 1,
+      "status": "kabul",
+      "not": "KABUL 16 Eylul 2026 (tek el): gercek NMT kapisi 5/5, 27 test"
+    },
+    {
+      "id": "T-016",
+      "baslik": "Ayarlar: dil, kisayollar, sozluk dosyasi, kenar, acilis; %APPDATA%/Suflor/ayarlar.json + panel",
+      "dalga": 3,
+      "seviye": "B",
+      "owns": [
+        "src/ayarlar/**",
+        "src/ui/ayarlar_paneli.py"
+      ],
+      "depends_on": [
+        "T-014"
+      ],
+      "durum": "kabul",
+      "tur": 1,
+      "status": "kabul",
+      "not": "KABUL 16 Eylul 2026 (tek el): 33 test; PySide ebeveyn-cocuk Python referansi yigin bozulmasi bulundu ve giderildi"
     }
   ],
   "sozlesmeler_donduruldu": true,
