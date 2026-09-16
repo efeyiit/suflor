@@ -1,0 +1,2 @@
+2026-09-15 17:00:14
+korluk kaldirildi: kendi testlerim (test_mercek_b.py 185+1 xfail), sonda_1 (TEMIZ) ve sonda_2 bolum A (TEMIZ) bittikten sonra; delivery.md / evidence / sef_dogrulama / implementer testleri bu andan sonra yalniz test kalitesi ve kapi denetimi icin acildi. tester_A* acilmadi. sonda_2 bolum B (kara kutu demo) Tester-A'nin paralel kosumu Suflor pencerelerini kapattigi icin (demo 2.6 s'de WM_CLOSE aliyor) ertelendi; Tester-A bitince yeniden kosuldu.

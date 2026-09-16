@@ -1,0 +1,27 @@
+  ortam: platform=windows duzen=0000041F on kosul D bos=True R bos=True tepsi var=True
+-- Bolum A (surec ici, demo _bagla + urun servisi)
+  ok     A4 anlik dugme='\u26a1  Anl\u0131k \xe7eviri  \xb7  Ctrl+Alt+D' bolge dugme='\u25ad  B\xf6lge izle  \xb7  Ctrl+Alt+R'
+  ok     A4 tepsi ipucu='Sufl\xf6r \u2014 anl\u0131k \xe7eviri: Ctrl+Alt+D \xb7 b\xf6lge izle: Ctrl+Alt+R' durum satiri=''
+  A1 on plan bizim pencere=True (Qt6112QWindowIcon); Ctrl+Alt+R
+  ok     A1 Ctrl+Alt+R -> bolge_izle_istendi=1 katman=1 on plan katman=True sekme gizli=True
+  ok     A1 Esc -> iptal=1 katman=0 durum=gorunur
+  ok     A2 tepsi: durum=tepsi gorunur=False tepsi ikonu=True on plan class=Chrome_WidgetWin_1 bizim=False
+  IHLAL  A2 tepsideyken Ctrl+Alt+R -> bolge=3 katman=2 on plan katman=True durum=tepsi
+  IHLAL  A2 Esc -> iptal=3 katman=0 durum=tepsi pencere gorunur=False
+  ok     A2 tepsideyken Ctrl+Alt+D -> anlik=1 durum=gorunur gorunur=True on plan bizim=True (Qt6112QWindowIcon) tepsi ikonu=False
+  ok     A3 kenar: durum=kenar sekme gorunur=True pencere gorunur=False
+  IHLAL  A3 kenardayken Ctrl+Alt+D -> anlik=2 durum=gorunur gorunur=True sekme gizli=True on plan bizim=False
+  ok     A5 exec donus=0; D bos=True R bos=True
+-- Bolum B (kara kutu: python demo/kabuk.py) tepsi dugme merkezi (fiziksel)=(451, 21) pencere (mantiksal)=(520, 340) dpr=1.0
+  ok     B0 demo surec pid=43808 ana pencere bulundu=True gorunur pencereler=[('Qt6112QWindowIcon', 'Sufl\xf6r')]
+  ok     B0 D bos=False R bos=False (demo tutuyor -> False/False)
+  ok     B1 Ctrl+Alt+R -> gorunur pencere 1 -> 2; yeni=['Qt6112QWindowToolSaveBits']; on plan yeni pencerede=True
+  ok     B1 Esc -> gorunur pencere 1 (1)
+  ok     B2 tepsi dugmesi (PostMessage) -> ana pencere gizli=True gorunur pencereler=[]
+  ok     B3 tepsideyken Ctrl+Alt+R -> gorunur 0 -> 1 on plan yeni=True (Qt6112QWindowToolSaveBits)
+  ok     B3 Esc -> gorunur 0 (0); ana gizli=True
+  IHLAL  B3 tepsideyken Ctrl+Alt+D -> ana gorunur=True on plan ana=False (TopLevelWindowForOverflowXamlIsland)
+  ok     B4 WM_CLOSE -> surec cikis=0; D bos=True R bos=True
+  B4 demo stderr 0 karakter
+
+SONDA_2: 4 IHLAL

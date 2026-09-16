@@ -1,9 +1,9 @@
 {
   "faz": "dalga 3",
-  "guncelleme": "T-012 KABUL (3 tur). Sirada: Snapshot modu (T-013 adayi) / HotkeyService / hedef tarafi duzeltme; kullanici secer.",
+  "guncelleme": "T-013 KABUL. Ajan sistemi birakildi; sef tek elden devam ediyor. Sirada: Snapshot (anlik ceviri) modu.",
   "paralellik_tavani": 4,
   "kilitlenme_esigi": 3,
-  "tasima": "alt-ajan",
+  "tasima": "tek-el (16 Eylul 2026'dan itibaren: sef uygular+olcer+test eder; ajan turlari yok, kapilar kalir)",
   "gorevler": [
     {
       "id": "T-001",
@@ -185,6 +185,22 @@
       "tur": 3,
       "status": "kabul",
       "not": "KABUL 15 Eylul 2026: paket v3, kapi v3 18/18 (gercek OS girdisi), 220 test, A+B onay; acik: kisayollar (HotkeyService), Snapshot modu"
+    },
+    {
+      "id": "T-013",
+      "baslik": "KisayolServisi: global kisayollar (Ctrl+Alt+D anlik, Ctrl+Alt+R bolge)",
+      "dalga": 3,
+      "seviye": "B",
+      "owns": [
+        "src/ui/kisayol.py"
+      ],
+      "depends_on": [
+        "T-012"
+      ],
+      "durum": "kabul",
+      "tur": 1,
+      "status": "kabul",
+      "not": "KABUL 16 Eylul 2026: kapi 12/12, 379 UI testi; tester turu yarida kesildi (kullanici ajan sistemini birakti)"
     }
   ],
   "sozlesmeler_donduruldu": true,

@@ -1,0 +1,7 @@
+.x...................................................................... [ 38%]
+........................................................................ [ 77%]
+...........................................                              [100%]
+=========================== short test summary info ===========================
+XFAIL .agents/tasks/T-013/tester_B/test_mercek_b.py::TestA_KotuKullanim::test_a1b_servis_ici_cakisma_eski_kaydi_korumali_docstring_lafzi - BULGU: docstring 'Win32 CAGRILMAZ' / 'gecersiz yeni kombinasyon eski kaydi bozmaz' -- servis ici CAKISMA yolunda eski kayit KAYBOLUYOR
+186 passed, 1 xfailed in 0.51s
+exit=0

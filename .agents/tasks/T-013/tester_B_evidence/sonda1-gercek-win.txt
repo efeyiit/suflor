@@ -1,0 +1,80 @@
+  ortam: platform=windows duzen=0000041F (0000041F=TR-Q) YASAK=None
+  on kosul Ctrl+Alt+D bos=True err=0
+  on kosul Ctrl+Alt+R bos=True err=0
+  on kosul Ctrl+Alt+X bos=True err=0
+  yakalayici on planda=True
+  ok     S1 kaydet(Ctrl+Alt+D)=ok son_hata=0 kayitli={'anlik_cevir': 'Ctrl+Alt+D'}
+  ok     S1 10 basis -> 10 sinyal; gecikme medyan=0.9 ms max=2.4 ms
+  S2 yalniz VK_RMENU + D -> tetiklendi +1 (AltGr+D Snapshot'i acar; D AltGr'de bos -> metin kaybi yok) QLineEdit='' menu modu=False
+  S2 LCtrl+RMenu+D (donanim AltGr) -> tetiklendi +1 (AltGr+D Snapshot'i acar; D AltGr'de bos -> metin kaybi yok) QLineEdit='' menu modu=False
+  ok     S4 Ctrl+D -> tetiklendi +0 (0) QLineEdit='' menu modu=False
+  ok     S4 Alt+D -> tetiklendi +0 (0) QLineEdit='' menu modu=False
+  ok     S4 Shift+D -> tetiklendi +0 (0) QLineEdit='' menu modu=False
+  ok     S4 Ctrl+Alt+Shift+D -> tetiklendi +0 (0) QLineEdit='' menu modu=False
+  ok     S4 pozitif kontrol Ctrl+Alt+D -> +1 (1)
+  ok     S3 kaydet(Ctrl+Alt+R)=ok
+  ok     S3 Ctrl+Alt+Shift+R -> tetiklendi +0 (0) QLineEdit=''
+  ok     S3 pozitif kontrol Ctrl+Alt+R -> +1 (1) ad=bolge_izle
+  ok     S5 iki servis: s2.kaydet(R)=ok; D -> s1 +1 s2 1; R -> s2 ['bolge_izle']
+  ok     S5 s2.hepsini_kaldir sonrasi R -> s1 +0 s2 +0 (0/0); s1 kayitli={'anlik_cevir': 'Ctrl+Alt+D'}
+  ok     S6 baska surec R tutarken kaydet(R)=cakisma son_hata_kodu=1409 kayitli={'anlik_cevir': 'Ctrl+Alt+D'}
+  ok     S6 R basisi bize gelmedi +0 (0); D hala calisiyor:
+  ok     S6 D -> +1 (1)
+  ok     S6 surec olunce kaydet(R)=ok son_hata=0
+  ok     S6 hepsini_kaldir -> D bos=True R bos=True
+  ok     S7 cocuk sys.exit(0): kayit=ok cocuk yasarken D bos=False err=1409; cikis kodu=0; sonra D bos=True
+  ok     S7 cocuk os._exit(0): kayit=ok cocuk yasarken D bos=False err=1409; cikis kodu=0; sonra D bos=True
+  ok     S7 cocuk app.quit+exec donus: kayit=ok cocuk yasarken D bos=False err=1409; cikis kodu=0; sonra D bos=True
+  ok     S7 cocuk raise (islenmemis istisna): kayit=ok cocuk yasarken D bos=False err=1409; cikis kodu=1; sonra D bos=True
+  S8 Ctrl+Alt+Tab           dilbilgisi=GECERLI    Windows kayit=False err=1409
+  S8 Alt+Shift+Tab          dilbilgisi=GECERLI    Windows kayit=False err=1409
+  S8 Ctrl+Shift+Tab         dilbilgisi=GECERLI    Windows kayit=True err=0
+  S8 Ctrl+Alt+Shift+Tab     dilbilgisi=GECERLI    Windows kayit=False err=1409
+  S8 Ctrl+Alt+Shift+Delete  dilbilgisi=GECERLI    Windows kayit=True err=0
+  S8 Ctrl+Alt+Shift+Esc     dilbilgisi=GECERLI    Windows kayit=True err=0
+  S8 Ctrl+Alt+Esc           dilbilgisi=GECERLI    Windows kayit=True err=0
+  S8 Alt+Shift+Esc          dilbilgisi=GECERLI    Windows kayit=True err=0
+  S8 Ctrl+F4                dilbilgisi=GECERLI    Windows kayit=True err=0
+  S8 Shift+F10              dilbilgisi=GECERLI    Windows kayit=True err=0
+  S8 Ctrl+Alt+Enter         dilbilgisi=GECERLI    Windows kayit=True err=0
+  S8 Alt+Shift+Enter        dilbilgisi=GECERLI    Windows kayit=True err=0
+  S8 Ctrl+Shift+Enter       dilbilgisi=GECERLI    Windows kayit=True err=0
+  S8 Ctrl+Alt+Space         dilbilgisi=GECERLI    Windows kayit=False err=1409
+  S8 Ctrl+Shift+Space       dilbilgisi=GECERLI    Windows kayit=True err=0
+  S8 Ctrl+Alt+Backspace     dilbilgisi=GECERLI    Windows kayit=True err=0
+  S8 Ctrl+Alt+Left          dilbilgisi=GECERLI    Windows kayit=True err=0
+  S8 Ctrl+Alt+Up            dilbilgisi=GECERLI    Windows kayit=True err=0
+  S8 Ctrl+Alt+Right         dilbilgisi=GECERLI    Windows kayit=True err=0
+  S8 Ctrl+Alt+Down          dilbilgisi=GECERLI    Windows kayit=True err=0
+  S8 Ctrl+Alt+Home          dilbilgisi=GECERLI    Windows kayit=True err=0
+  S8 Ctrl+Alt+End           dilbilgisi=GECERLI    Windows kayit=True err=0
+  S8 Ctrl+Alt+Insert        dilbilgisi=GECERLI    Windows kayit=True err=0
+  S8 Alt+Shift+F4           dilbilgisi=GECERLI    Windows kayit=True err=0
+  S8 Ctrl+Alt+F4            dilbilgisi=GECERLI    Windows kayit=True err=0
+  S8 Alt+F1                 dilbilgisi=GECERLI    Windows kayit=True err=0
+  S8 Ctrl+F1                dilbilgisi=GECERLI    Windows kayit=True err=0
+  S8 Ctrl+F5                dilbilgisi=GECERLI    Windows kayit=True err=0
+  S8 Ctrl+Tab               dilbilgisi=GECERSIZ(GecersizKombinasyon) Windows kayit=True err=0  (alinabiliyorsa GECERSIZ karari sistem genelinde yutmayi ONLER)
+  S8 Shift+Tab              dilbilgisi=GECERSIZ(GecersizKombinasyon) Windows kayit=True err=0  (alinabiliyorsa GECERSIZ karari sistem genelinde yutmayi ONLER)
+  S8 Alt+Enter              dilbilgisi=GECERSIZ(GecersizKombinasyon) Windows kayit=True err=0  (alinabiliyorsa GECERSIZ karari sistem genelinde yutmayi ONLER)
+  S8 Ctrl+Enter             dilbilgisi=GECERSIZ(GecersizKombinasyon) Windows kayit=True err=0  (alinabiliyorsa GECERSIZ karari sistem genelinde yutmayi ONLER)
+  S8 Alt+Left               dilbilgisi=GECERSIZ(GecersizKombinasyon) Windows kayit=True err=0  (alinabiliyorsa GECERSIZ karari sistem genelinde yutmayi ONLER)
+  S8 Ctrl+Backspace         dilbilgisi=GECERSIZ(GecersizKombinasyon) Windows kayit=True err=0  (alinabiliyorsa GECERSIZ karari sistem genelinde yutmayi ONLER)
+  S8b servis kaydet(Ctrl+Shift+Tab)=ok; ates -> tetiklendi=['x'] (1 ise sistem genelinde sekme gezintisi YUTULUR: dilbilgisi izin veriyor)
+  S8b servis kaydet(Ctrl+Alt+Tab)=cakisma (ates yok: kalici gorev degistirici)
+  S9 VkKeyScanW(U+20BA)=(vk=0x54 shift=6) (0x54, 6 beklenir: T, Ctrl+Alt); referans AltGr tablosu 22 tus
+  ok     S9 altgr_karakteri x 62 tablo tusu <-> VkKeyScanW: uyumsuz=[] dolu=["0='}'", "1='>'", "2='\xa3'", "3='#'", "4='$'", "5='\xbd'", "7='{'", "8='['", "9=']'", "A='\xe6'", "E='\u20ac'", "I='i'", "Q='@'", "S='\xdf'", "T='\u20ba'"]
+  ok     S9 pozitif kontrol: altgr_karakteri(T)='\u20ba' D='' R='' Q='@'
+  ok     S9 gercek kaydet(Ctrl+Alt+T)=altgr_cakisma; T Windows'ta bos=True (Win32 cagrilmadi)
+  ok     S9 gercek kaydet(Ctrl+Alt+Shift+T)=ok (Shift'li: AltGr sorulmaz)
+  S9b baska thread: [('\u20ba', '', 69141535)] ana thread hkl=0x41f041f (tek duzen: ayni; cok duzenli [OLCULMUYOR])
+  ok     S10 ebeveyn.deleteLater + gercek exec: kayit=ok once D bos=False sonra D bos=True
+  ok     S10 servis.deleteLater + referans tutulur + gercek exec: sonra D bos=True
+  ok     S11 dinleyici istisnasi: 2 basis -> 2 cagri, surec yasiyor, stderr'de traceback=True (504 karakter)
+  ok     S12 ikinci calistir durum satiri='Ctrl+Alt+D kaydedilemedi: ba\u015fka bir uygulama kullan\u0131yor; Ctrl+Alt+R kaydedilemedi: ba\u015fka bir uygulama kullan\u0131yor. Pencere d\xfc\u011fmeleri ve tepsi men\xfcs\xfc \xe7al\u0131\u015fmaya devam eder.' anlik dugme kisayol yok=True
+  ok     S12 gercek platformda p1 genislik=520 p2 (iki cakisma metni) genislik=520 (520)
+  ok     S12 p1.kapat() sonrasi D bos=True R bos=True
+  ok     S12 ucuncu calistir durum satiri='' anlik dugme='\u26a1  Anl\u0131k \xe7eviri  \xb7  Ctrl+Alt+D'
+  ok     S12 hepsi kapali: D bos=True R bos=True
+
+SONDA_1: TEMIZ

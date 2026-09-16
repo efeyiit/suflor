@@ -1,0 +1,16 @@
+T-013 real_check v2 -- global kisayollar, gercek Windows
+  ok     [1a] Ctrl+Alt+D -> anlik_cevir_istendi 1 (1), gecikme 1.0 ms (< 20)
+  ok     [1b] Ctrl+Alt+R -> bolge_izle_istendi 1 (1)
+  ok     [2] tepsi durumunda Ctrl+Alt+D -> +1 (1), durum=tepsi (tepsi)
+  ok     [2] kenar durumunda Ctrl+Alt+D -> +1 (1), durum=kenar (kenar)
+  ok     [7] RAPOR on plan degisti=False menu modu once/sonra=False/False
+  ok     [5] 5 DOWN: NOREPEAT'li 1 (1) / NOREPEAT'siz gecici kayit 5 (>= 2, pozitif kontrol; kayit=True)
+  ok     [6] 20 hizli Ctrl+Alt+R -> 20 sinyal (20)
+  ok     [8] altgr: T karakter var=True (TR-Q'da evet) D bos=True; kaydet(Ctrl+Alt+T)=altgr_cakisma (beklenen altgr_cakisma)
+  ok     [4a] kapat() sonrasi Ctrl+Alt+D -> +0 (0)
+  ok     [4b] kapat() sonrasi ayni kombinasyon yeniden alinabiliyor=True
+  ok     [9] del+gc sonrasi Ctrl+Alt+D yeniden alinabiliyor=True (kayit=ok)
+  ok     [3] baska surec D tutarken: durum satiri D'yi anar=True R calisiyor=1 D gelmiyor=True etiket 'kisayol yok'=True
+
+REAL_CHECK: TEMIZ
+exit=0

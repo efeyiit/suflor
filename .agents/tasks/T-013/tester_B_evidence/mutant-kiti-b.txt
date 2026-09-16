@@ -1,0 +1,46 @@
+ayna: <gecici dizin>/t013_ayna_b_tsaria43
+TEMEL implementer: failed=0 passed=379 | tester-B: failed=0 passed=186 (1 xfail beklenir, failed sayilmaz)
+ad    impl      tester-B  beklenen  aciklama
+MB1   .         X (2)     KACSIN    K1: servis ici cakisma denetimi ESKI kaydi kaldirmadan once (ayni ad haric) -- a1 bulgusunun duzeltmesi; davranis iyilesir
+MB2   .         X (1)     ?         K1: basarisiz kayitta kimlik canli kumesinden dusurulmuyor (kimlik sizintisi)
+MB3   X (1)     X (1)     ?         K1: basarili kayitta son_hata_kodu sifirlanmiyor (onceki 1409 kalir)
+MB4   .         X (1)     ?         K1 (Y3): yikim temizleyicisi canli kimlikleri serbest birakmiyor
+MB5   X (5)     X (4)     YAKALA    K5 kabuk: tepsi ipucu guncellenmiyor
+MB6   X (2)     X (1)     YAKALA    K4: tetiklendi baglantisi pencereyi yakalayan lambda (Y-A1 zombi sinifi)
+MB7   X (2)     X (2)     YAKALA    K1/K4: cikis_istendi yalniz anlik_cevir'i kaldirir
+MB8   X (2)     X (10)    YAKALA    K2: bilinen kimlikte sinyal yayilir ama False doner (olay yutulmaz)
+MB9   X (1)     X (1)     YAKALA    K3: Ctrl+Alt+Shift+<tus> AltGr sorgusuna GIRER (Shift'li kombinasyon ALTGR_CAKISMA olur)
+MB10  X (2)     X (1)     YAKALA    K5: sebep metni 'ayarlardan degistirin' ekler (paket yasagi)
+MB11  X (2)     X (2)     YAKALA    K1: kaldir() filtre tablosundan silmiyor (kaldirilan kimlik hala sinyal yayar)
+MB12  X (1)     .         YAKALA    Y1: calistir servisi EBEVEYNSIZ kurar (yerel degisken dusunce kayitlar kalkar)
+CB-1  .         .         KACSIN    KONTROL (esdeger): kimlik tablosu guncelleme sirasi degisti
+
+dusen testler:
+  MB1 impl: 
+  MB1 tester-B: test_a1_ayni_ad_baska_adin_kombinasyonuna_yeniden_kayit_eski_kayit_kaybolur, test_a1b_servis_ici_cakisma_eski_kaydi_korumali_docstring_lafzi
+  MB2 impl: 
+  MB2 tester-B: test_b2h_basarisiz_kaydin_kimligi_yeniden_kullanilabilir
+  MB3 impl: test_k1_1409_cakisma_kayitlida_yok
+  MB3 tester-B: test_b2c_1409_cakisma_kayitlida_yok_son_hata_1409
+  MB4 impl: 
+  MB4 tester-B: test_a6f_yikim_canli_kimlikleri_serbest_birakir
+  MB5 impl: test_t013_k5_baslangic_etiketleri_kisayol_yok, test_t013_k5_kisayol_etiketleri_dugme_ipucu_ve_tepsi, test_t013_k5_kisayol_etiketleri_eksik_ya_da_bos_kisayol_yok, test_t013_k5_kisayol_etiketleri_yeniden_cagri_eski_metni_biriktirmez, test_k5_cakisma_durum_satiri_ve_etiketler
+  MB5 tester-B: test_c1_baslangic_etiketleri_kisayol_yok_sabit_ctrl_alt_t_yok, test_c2_calistir_sonrasi_dugmeler_ve_tepsi_ipucu_kayitli_kombinasyonu_gosterir, test_c3_cakismada_yalniz_o_dugme_kisayol_yok_tepsi_ipucu_da, test_c4_kisayol_etiketleri_bos_dict_bilinmeyen_ad_yeniden_cagri_biriktirmez
+  MB6 impl: test_k1_sinyal_baglantilarinda_lambda_yok_ast, test_k4_calistir_sonrasi_pencere_toplanabilir_baglanti_pencereyi_tutmaz
+  MB6 tester-B: test_b7c_calistir_baglantisi_lambda_degil_pencere_toplanabilir
+  MB7 impl: test_k1_sinyal_baglantilarinda_lambda_yok_ast, test_k4_cikis_istendi_hepsini_kaldirir
+  MB7 tester-B: test_a7_calistir_iki_kez_ilk_pencere_acikken_ikincisi_cakisma_kapatinca_alinir, test_b7b_cikis_istendi_hepsini_kaldirir_ve_cikis_kodu
+  MB8 impl: test_k2_bilinen_kimlik_sinyal_ve_true, test_k2_filtre_sirasi_eski_servis_yeni_servisin_olayini_yutmaz
+  MB8 tester-B: test_a3_kisayollar_ayni_kombinasyon_iki_ada_ikincisi_cakisma_ilki_calisir, test_a4_bilinmeyen_ad_kaydedilir_ama_gorunmez_ve_alicisiz, test_a5_dinleyici_istisna_atarsa_filtre_true_doner_sonraki_olaylar_gelir_stderr_metin, test_a6b_ebeveynli_servis_python_referansi_dusunce_kayit_ve_sinyal_yasar, test_b3_bilinen_kimlik_sinyal_ve_true, test_b3d_event_type_bytes_ve_qbytearray_ikisi_de_calisir, test_b3f
+  MB9 impl: test_k3_altgr_shiftli_ve_ctrl_altsiz_sorulmaz
+  MB9 tester-B: test_b5b_shiftli_ve_ctrl_altsiz_kombinasyonda_altgr_sorulmaz
+  MB10 impl: test_k5_cakisma_durum_satiri_ve_etiketler, test_k5_kayit_sonucu_sebep_tablosu_tum_uyeler
+  MB10 tester-B: test_b6_cakisma_metni_literal_ve_ayarlardan_yok
+  MB11 impl: test_k1_yikim_hepsini_kaldir_sonrasi_cift_kaldirma_yok, test_k2_kaldirilan_kimlik_artik_bilinmiyor
+  MB11 tester-B: test_a6e_hepsini_kaldir_sonrasi_yikim_cift_kaldirma_yapmaz, test_b3e_kaldirilan_kimlik_artik_bilinmiyor
+  MB12 impl: test_k4_kisayol_servisi_verilmezse_yapici_argumanlari
+  MB12 tester-B: 
+  CB-1 impl: 
+  CB-1 tester-B: 
+
+beklenti tutmayan: 0 []

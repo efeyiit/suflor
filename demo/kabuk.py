@@ -38,11 +38,19 @@ def _bagla(app: QtWidgets.QApplication, pencere: AnaPencere) -> int:
     servis = CaptureService(MssBackend())
     pencereler: list[QtWidgets.QWidget] = []
 
+    acik_katman: list[SecimKatmani] = []
+
     def bolge_izle() -> None:
+        # T-013 Tester-B sonda A2: kisayol secim katmani acikken tekrar basilinca ikinci katman aciliyordu -> tek katman
+        if acik_katman and acik_katman[0].isVisible():
+            acik_katman[0].activateWindow()
+            return
+        acik_katman.clear()
         birlesim = union_bbox(servis.monitors)
         if birlesim is None:
             return
         katman = SecimKatmani(birlesim)
+        acik_katman.append(katman)
         # Tester-B O-B2: secim sirasinda imlec sekmeye gelirse panel katmanin ustune cikiyordu -> secim boyunca sekme gizli
         sekme_gizlendi = pencere.sekme.isVisible()
         if sekme_gizlendi:

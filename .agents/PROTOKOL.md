@@ -296,3 +296,13 @@ Her görev paketine kopyalanır.
 Hakem: `packet.md` + kod + tüm `evidence/` + implementer ile tester'ın gerekçelerini okur. `ruling.md` yazar: kim haklı, neden, ne yapılacak. Kararı bağlayıcıdır ve tur sayacı sıfırlanır.
 
 Hakem "görev tanımı hatalı" derse görev şefe geri döner ve `packet.md` yeniden yazılır.
+
+---
+
+## Not — 16 Eylül 2026: çok-ajanlı sistem bırakıldı
+
+Kullanıcı kararı: "bu sistemi bırakıyoruz, sen halletmeye devam et." T-013'ten sonra görevler **tek elden** yürür:
+şef ölçer (`olgular.txt`), yazar, test eder, gerçek-model/gerçek-ekran kapısını (`real_check.py`) koşar, kararı
+yazar. Kırmızı takım ve kör tester turları **yok**. Korunan disiplin: ölçüm-önce, kapı, mutant ayırt etme,
+delillerde göreli yol, metin loglama yasağı, §4.6'nın 10 kuralı (özellikle 8 ve 10). Bu belgenin geri kalanı
+T-001–T-013 kayıtlarının bağlamı olarak kalır.
