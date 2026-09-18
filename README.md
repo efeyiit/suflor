@@ -90,6 +90,7 @@ modelleri ilk çalıştırmada indirilir. `Suflor.bat` çalışan ürün kabuğu
 | | |
 |---|---|
 | **Tasarım dokümanı (Markdown)** | [`docs/superpowers/specs/2026-09-09-suflor-design.md`](docs/superpowers/specs/2026-09-09-suflor-design.md) |
+| **Kullanıcı test rehberi** | [`docs/KULLANICI_TEST_REHBERI.md`](docs/KULLANICI_TEST_REHBERI.md) |
 | **Tasarım dokümanı (PDF, 28 sayfa)** | [`docs/superpowers/specs/2026-09-09-suflor-design.pdf`](docs/superpowers/specs/2026-09-09-suflor-design.pdf) |
 | **Ajan iletişim ağı — karşılaştırma (Markdown)** | [`docs/superpowers/specs/2026-09-09-ajan-iletisim-agi-karsilastirma.md`](docs/superpowers/specs/2026-09-09-ajan-iletisim-agi-karsilastirma.md) |
 | **Ajan iletişim ağı — karşılaştırma (PDF, 8 sayfa)** | [`docs/superpowers/specs/2026-09-09-ajan-iletisim-agi-karsilastirma.pdf`](docs/superpowers/specs/2026-09-09-ajan-iletisim-agi-karsilastirma.pdf) |
