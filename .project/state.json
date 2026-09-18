@@ -1,0 +1,726 @@
+{
+  "schema_version": 3,
+  "revision": 0,
+  "project": {
+    "id": "suflor-v1",
+    "name": "Suflör v1",
+    "goal": "Windows oyuncularına oyun akışını kesmeden doğru, bağlamlı ve yerel Türkçe ekran çevirisi sunan Suflör v1'i GitHub Releases üzerinden dağıtılabilir hale getirmek.",
+    "audience": "Türkçe yaması olmayan oyunları oynayan Windows kullanıcıları",
+    "scope": [
+      "Snapshot ve Bölge İzleme modlarının doğrulanması",
+      "Bağlamlı yerel çeviri kalitesinin Blue Prince üzerinde değerlendirilmesi",
+      "Ekran yakalama gizliliği, yerleşim ve gecikme ölçümlerinin kanıtlanması",
+      "Temiz Windows ortamında çalışan v1 paketinin ve GitHub dağıtım hazırlığının tamamlanması"
+    ],
+    "out_of_scope": [
+      "v2 yerinde kaplama",
+      "Exclusive fullscreen için injection veya hook",
+      "Kendi çeviri modelini ince ayarlama",
+      "macOS, Linux, mobil ve konsol desteği"
+    ],
+    "constraints": [
+      "Doğru çeviri hızdan önce gelir",
+      "Varsayılan yol ücretsiz, yerel ve çevrimdışıdır",
+      "OCR metni, çeviri ve ekran görüntüsü çevrimdışı yolda diske veya ağa yazılmaz",
+      "Modal hata penceresi açılmaz ve oyun süreci kesilmez",
+      "Oyun sürecine injection, DLL enjeksiyonu, API hook veya bellek okuma yapılmaz"
+    ],
+    "open_questions": [
+      "Blue Prince değerlendirme örneklerinin sayısı ve kesin geçme eşiği nedir?",
+      "GitHub sürümünde hangi paket seçenekleri sunulacak: taşınabilir paket, kurucu veya ikisi?",
+      "Uygulama kodu için hangi lisans seçilecek?",
+      "İlk sürüm kod imzasız mı yayımlanacak, yoksa sertifika beklenecek mi?",
+      "İngilizce dışındaki kaynak diller v1'de hangi kararlılık seviyesinde ilan edilecek?"
+    ]
+  },
+  "ontology": {
+    "object_types": [
+      {
+        "id": "product",
+        "label": "Ürün",
+        "properties": {
+          "amac": {
+            "type": "string",
+            "required": true,
+            "enum": null
+          }
+        }
+      },
+      {
+        "id": "artifact",
+        "label": "Somut çıktı",
+        "properties": {
+          "aciklama": {
+            "type": "string",
+            "required": true,
+            "enum": null
+          },
+          "surum": {
+            "type": "string",
+            "required": false,
+            "enum": null
+          },
+          "dosya": {
+            "type": "file",
+            "required": false,
+            "enum": null
+          }
+        }
+      },
+      {
+        "id": "criterion",
+        "label": "Başarı ölçütü",
+        "immutable": true,
+        "properties": {
+          "tanim": {
+            "type": "string",
+            "required": true,
+            "enum": null
+          },
+          "kategori": {
+            "type": "string",
+            "required": true,
+            "enum": [
+              "quality",
+              "performance",
+              "privacy",
+              "usability",
+              "engineering",
+              "distribution"
+            ]
+          },
+          "hedef": {
+            "type": "string",
+            "required": true,
+            "enum": null
+          },
+          "surum": {
+            "type": "string",
+            "required": true,
+            "enum": null
+          }
+        }
+      },
+      {
+        "id": "verification_run",
+        "label": "Doğrulama koşumu",
+        "immutable": true,
+        "properties": {
+          "yontem": {
+            "type": "string",
+            "required": true,
+            "enum": null
+          },
+          "sonuc": {
+            "type": "string",
+            "required": true,
+            "enum": [
+              "pass",
+              "fail"
+            ]
+          },
+          "ozet": {
+            "type": "string",
+            "required": true,
+            "enum": null
+          },
+          "kaynak_commit": {
+            "type": "string",
+            "required": true,
+            "enum": null
+          },
+          "tarih": {
+            "type": "string",
+            "required": true,
+            "enum": null
+          }
+        }
+      },
+      {
+        "id": "evaluation",
+        "label": "Değerlendirme",
+        "properties": {
+          "karar": {
+            "type": "string",
+            "required": true,
+            "enum": [
+              "pending",
+              "pass",
+              "fail",
+              "needs_review"
+            ]
+          },
+          "ozet": {
+            "type": "string",
+            "required": true,
+            "enum": null
+          }
+        }
+      },
+      {
+        "id": "release_policy",
+        "label": "Dağıtım kararı",
+        "properties": {
+          "uygulama_lisansi": {
+            "type": "string",
+            "required": true,
+            "enum": null
+          },
+          "paket_secenekleri": {
+            "type": "string",
+            "required": true,
+            "enum": null
+          },
+          "kod_imzasi": {
+            "type": "string",
+            "required": true,
+            "enum": null
+          }
+        }
+      },
+      {
+        "id": "release_assessment",
+        "label": "Sürüm hazır olma değerlendirmesi",
+        "properties": {
+          "durum": {
+            "type": "string",
+            "required": true,
+            "enum": [
+              "pending",
+              "ready",
+              "not_ready"
+            ]
+          },
+          "ozet": {
+            "type": "string",
+            "required": true,
+            "enum": null
+          }
+        }
+      }
+    ],
+    "relation_types": [
+      {
+        "id": "evaluates",
+        "label": "ölçütü değerlendirir",
+        "from_type": "evaluation",
+        "to_type": "criterion",
+        "from_min": 1,
+        "from_max": null,
+        "to_min": 0,
+        "to_max": null,
+        "impact": "reverse"
+      },
+      {
+        "id": "based_on_run",
+        "label": "koşuma dayanır",
+        "from_type": "evaluation",
+        "to_type": "verification_run",
+        "from_min": 0,
+        "from_max": null,
+        "to_min": 0,
+        "to_max": null,
+        "impact": "reverse"
+      },
+      {
+        "id": "contributes_to",
+        "label": "sürüm kararına katkı verir",
+        "from_type": "evaluation",
+        "to_type": "release_assessment",
+        "from_min": 0,
+        "from_max": 1,
+        "to_min": 1,
+        "to_max": null,
+        "impact": "forward"
+      }
+    ]
+  },
+  "objects": [
+    {
+      "id": "suflor",
+      "type": "product",
+      "label": "Suflör",
+      "properties": {
+        "amac": "Oyun ekranındaki metni güvenli biçimde yakalayıp bağlamlı Türkçeye çevirmek."
+      }
+    },
+    {
+      "id": "current-build",
+      "type": "artifact",
+      "label": "Ana dal geliştirme sürümü",
+      "properties": {
+        "aciklama": "Yakalama gizliliği, yapışık şerit ve Qwen3 kalite motorunu içeren doğrulanmış ana dal.",
+        "surum": "cc5cb155eeca631858158ec1d5bc98d599da1c0a"
+      }
+    },
+    {
+      "id": "test-guide",
+      "type": "artifact",
+      "label": "Kullanıcı test rehberi",
+      "properties": {
+        "aciklama": "Snapshot, Bölge İzleme ve kalite modeli için uygulanabilir kullanıcı adımları.",
+        "surum": "cc5cb15",
+        "dosya": "docs/KULLANICI_TEST_REHBERI.md"
+      }
+    },
+    {
+      "id": "windows-package",
+      "type": "artifact",
+      "label": "Windows v1 dağıtım paketi",
+      "properties": {
+        "aciklama": "Temiz Windows ortamında sınanacak, modellerden ayrı dağıtım çıktısı."
+      }
+    },
+    {
+      "id": "c-quality-v1",
+      "type": "criterion",
+      "label": "Bağlamsal çeviri doğruluğu v1",
+      "properties": {
+        "tanim": "Çeviri anlamı ve mantıksal ilişkileri korur; ipucu, sayı ve zorunlu oyun terimlerini bozmaz; açıklanamayan kaynak dil kalıntısı bırakmaz.",
+        "kategori": "quality",
+        "hedef": "Blue Prince gerçek oyun örnekleri kullanıcı tarafından incelenir; kesin örnek sayısı ve geçme eşiği açık sorudur.",
+        "surum": "v1"
+      }
+    },
+    {
+      "id": "c-latency-v1",
+      "type": "criterion",
+      "label": "Bölge İzleme gecikmesi v1",
+      "properties": {
+        "tanim": "Bölge İzleme değişen metni kullanıcıyı bekletmeden işler ve durağan metni yeniden çevirmez.",
+        "kategori": "performance",
+        "hedef": "Cache isabeti en çok 160 ms; cache ıskası en çok 320 ms; oyun FPS düşüşü en çok yüzde 3.",
+        "surum": "v1"
+      }
+    },
+    {
+      "id": "c-capture-privacy-v1",
+      "type": "criterion",
+      "label": "Yakalama gizliliği v1",
+      "properties": {
+        "tanim": "Snapshot ve Bölge İzleme karelerinde hiçbir Suflör penceresi görünmez.",
+        "kategori": "privacy",
+        "hedef": "Windows koruması ve geri dönüş yolu gerçek oyun ekranında doğrulanır.",
+        "surum": "v1"
+      }
+    },
+    {
+      "id": "c-overlay-usability-v1",
+      "type": "criterion",
+      "label": "Bölge şeridi kullanılabilirliği v1",
+      "properties": {
+        "tanim": "Çeviri seçilen alanın üstüne veya gerekirse altına yapışır; metni örtmez; kontroller yalnız gerektiğinde görünür.",
+        "kategori": "usability",
+        "hedef": "Blue Prince içinde gerçek kullanıcı akışında yerleşim, hover, duraklatma, yeniden seçim ve kapatma doğrulanır.",
+        "surum": "v1"
+      }
+    },
+    {
+      "id": "c-engineering-v1",
+      "type": "criterion",
+      "label": "Otomatik doğrulama sağlığı v1",
+      "properties": {
+        "tanim": "Ana dalın test ve katı tip denetimi temizdir.",
+        "kategori": "engineering",
+        "hedef": "Tüm pytest testleri geçer ve mypy strict hata vermez.",
+        "surum": "v1"
+      }
+    },
+    {
+      "id": "c-distribution-v1",
+      "type": "criterion",
+      "label": "Windows dağıtım hazır olma v1",
+      "properties": {
+        "tanim": "Kullanıcı geliştirme ortamı kurmadan Suflör'ü indirip açabilir; üçüncü taraf lisansları ve model indirme yolu pakette bulunur.",
+        "kategori": "distribution",
+        "hedef": "Temiz Windows ortamında açılış ve iki mod duman testi geçer; uygulama paketi modeller hariç en çok 150 MB olur.",
+        "surum": "v1"
+      }
+    },
+    {
+      "id": "run-auto-cc5cb15",
+      "type": "verification_run",
+      "label": "cc5cb15 tam otomatik doğrulama",
+      "properties": {
+        "yontem": "pytest -q ve mypy --strict --explicit-package-bases src",
+        "sonuc": "pass",
+        "ozet": "2497 pytest testi geçti; 45 kaynak dosyasında mypy hatası yok.",
+        "kaynak_commit": "cc5cb155eeca631858158ec1d5bc98d599da1c0a",
+        "tarih": "2026-09-18"
+      }
+    },
+    {
+      "id": "run-quality-sample-cc5cb15",
+      "type": "verification_run",
+      "label": "cc5cb15 gerçek yerel model örneği",
+      "properties": {
+        "yontem": "Qwen3 4B yerel sağlayıcıyla iki segment, sözlük ve çeviri hafızası içeren örnek koşum",
+        "sonuc": "pass",
+        "ozet": "İlk çalışma 3,36 saniye, sıcak çalışma 0,33 saniye; Plan yeniden devrede, Batı Kapısı ve Ön Oda üretildi.",
+        "kaynak_commit": "cc5cb155eeca631858158ec1d5bc98d599da1c0a",
+        "tarih": "2026-09-18"
+      }
+    },
+    {
+      "id": "eval-automation-cc5cb15",
+      "type": "evaluation",
+      "label": "cc5cb15 otomatik değerlendirmesi",
+      "properties": {
+        "karar": "pass",
+        "ozet": "Kayıtlı ana dal koşumunda bütün testler ve tip denetimi geçti."
+      }
+    },
+    {
+      "id": "eval-quality-sample-cc5cb15",
+      "type": "evaluation",
+      "label": "cc5cb15 yerel kalite örneği değerlendirmesi",
+      "properties": {
+        "karar": "needs_review",
+        "ozet": "Örnek bağlam ve zorunlu terimleri kullandı; tek sentetik koşum Blue Prince kalite ve uçtan uca gecikme ölçütlerini kapatmaz."
+      }
+    },
+    {
+      "id": "eval-blue-prince-v1",
+      "type": "evaluation",
+      "label": "Blue Prince gerçek oyun değerlendirmesi",
+      "properties": {
+        "karar": "pending",
+        "ozet": "Gerçek oyun testi henüz yapılmadı."
+      }
+    },
+    {
+      "id": "release-policy-v1",
+      "type": "release_policy",
+      "label": "v1 dağıtım tercihleri",
+      "properties": {
+        "uygulama_lisansi": "pending",
+        "paket_secenekleri": "pending",
+        "kod_imzasi": "pending"
+      }
+    },
+    {
+      "id": "eval-package-v1",
+      "type": "evaluation",
+      "label": "Windows paket değerlendirmesi",
+      "properties": {
+        "karar": "pending",
+        "ozet": "Temiz Windows paketi henüz üretilip sınanmadı."
+      }
+    },
+    {
+      "id": "v1-readiness",
+      "type": "release_assessment",
+      "label": "Suflör v1 hazır olma değerlendirmesi",
+      "properties": {
+        "durum": "pending",
+        "ozet": "Otomatik testler temiz; Blue Prince gerçek oyun ve Windows paket kapıları açık."
+      }
+    }
+  ],
+  "relations": [
+    {
+      "id": "eval-auto-engineering",
+      "type": "evaluates",
+      "from": "eval-automation-cc5cb15",
+      "to": "c-engineering-v1"
+    },
+    {
+      "id": "eval-auto-run",
+      "type": "based_on_run",
+      "from": "eval-automation-cc5cb15",
+      "to": "run-auto-cc5cb15"
+    },
+    {
+      "id": "eval-sample-quality",
+      "type": "evaluates",
+      "from": "eval-quality-sample-cc5cb15",
+      "to": "c-quality-v1"
+    },
+    {
+      "id": "eval-sample-latency",
+      "type": "evaluates",
+      "from": "eval-quality-sample-cc5cb15",
+      "to": "c-latency-v1"
+    },
+    {
+      "id": "eval-sample-run",
+      "type": "based_on_run",
+      "from": "eval-quality-sample-cc5cb15",
+      "to": "run-quality-sample-cc5cb15"
+    },
+    {
+      "id": "eval-bp-quality",
+      "type": "evaluates",
+      "from": "eval-blue-prince-v1",
+      "to": "c-quality-v1"
+    },
+    {
+      "id": "eval-bp-latency",
+      "type": "evaluates",
+      "from": "eval-blue-prince-v1",
+      "to": "c-latency-v1"
+    },
+    {
+      "id": "eval-bp-privacy",
+      "type": "evaluates",
+      "from": "eval-blue-prince-v1",
+      "to": "c-capture-privacy-v1"
+    },
+    {
+      "id": "eval-bp-usability",
+      "type": "evaluates",
+      "from": "eval-blue-prince-v1",
+      "to": "c-overlay-usability-v1"
+    },
+    {
+      "id": "eval-package-distribution",
+      "type": "evaluates",
+      "from": "eval-package-v1",
+      "to": "c-distribution-v1"
+    },
+    {
+      "id": "auto-to-readiness",
+      "type": "contributes_to",
+      "from": "eval-automation-cc5cb15",
+      "to": "v1-readiness"
+    },
+    {
+      "id": "sample-to-readiness",
+      "type": "contributes_to",
+      "from": "eval-quality-sample-cc5cb15",
+      "to": "v1-readiness"
+    },
+    {
+      "id": "bp-to-readiness",
+      "type": "contributes_to",
+      "from": "eval-blue-prince-v1",
+      "to": "v1-readiness"
+    },
+    {
+      "id": "package-to-readiness",
+      "type": "contributes_to",
+      "from": "eval-package-v1",
+      "to": "v1-readiness"
+    }
+  ],
+  "tasks": [
+    {
+      "id": "T-BLUE-PRINCE",
+      "title": "Blue Prince gerçek oyun kalite ve kullanım kapısını çalıştır",
+      "status": "todo",
+      "object_ids": [
+        "current-build",
+        "test-guide",
+        "c-quality-v1",
+        "c-latency-v1",
+        "c-capture-privacy-v1",
+        "c-overlay-usability-v1",
+        "eval-blue-prince-v1"
+      ],
+      "input_ids": [
+        "current-build",
+        "test-guide",
+        "c-quality-v1",
+        "c-latency-v1",
+        "c-capture-privacy-v1",
+        "c-overlay-usability-v1"
+      ],
+      "output_ids": [
+        "eval-blue-prince-v1"
+      ],
+      "depends_on": [],
+      "decision_ids": [
+        "D-V1",
+        "D-QUALITY",
+        "D-BLUE-PRINCE"
+      ],
+      "acceptance": [
+        "Blue Prince içinden diyalog, menü ve belge/bulmaca örnekleri Snapshot ve Bölge İzleme ile gerçekten denenmiş; kaynak, çeviri, beklenen anlam ve karar kayıtlıdır.",
+        "Anlam, mantıksal ilişki, ipucu, sayı ve zorunlu terim korunumu her örnek için incelenmiş; kaynak dilde kalan açıklanamayan ifade görünürdür.",
+        "İlk ve sıcak çeviri gecikmeleri ölçülmüş; tekrar eden metnin yeniden çevrilmediği gözlenmiştir.",
+        "Suflör penceresinin yakalamada görünmediği ve şerit yerleşimi ile hover kontrollerinin oyun içinde çalıştığı doğrulanmıştır.",
+        "Sonuç kullanıcı gözlemi ile otomatik ölçümü ayıran bir rapora bağlanmıştır."
+      ],
+      "evidence": [],
+      "input_snapshot": null,
+      "generation": 0,
+      "review_reasons": []
+    },
+    {
+      "id": "T-RELEASE-POLICY",
+      "title": "v1 lisans, paket seçenekleri ve kod imzası kararlarını kapat",
+      "status": "todo",
+      "object_ids": [
+        "suflor",
+        "release-policy-v1"
+      ],
+      "input_ids": [
+        "suflor"
+      ],
+      "output_ids": [
+        "release-policy-v1"
+      ],
+      "depends_on": [],
+      "decision_ids": [
+        "D-V1",
+        "D-GITHUB"
+      ],
+      "acceptance": [
+        "Uygulama kodu lisansı kullanıcı kararı olarak kaydedilmiştir.",
+        "GitHub Releases üzerinde sunulacak paket seçenekleri kullanıcı kararı olarak kaydedilmiştir.",
+        "İlk sürümde kod imzası kullanılıp kullanılmayacağı ve SmartScreen etkisi kaydedilmiştir."
+      ],
+      "evidence": [],
+      "input_snapshot": null,
+      "generation": 0,
+      "review_reasons": []
+    },
+    {
+      "id": "T-PACKAGE",
+      "title": "Temiz Windows v1 paketini üret ve doğrula",
+      "status": "todo",
+      "object_ids": [
+        "current-build",
+        "release-policy-v1",
+        "c-distribution-v1",
+        "windows-package",
+        "eval-package-v1"
+      ],
+      "input_ids": [
+        "current-build",
+        "release-policy-v1",
+        "c-distribution-v1"
+      ],
+      "output_ids": [
+        "windows-package",
+        "eval-package-v1"
+      ],
+      "depends_on": [],
+      "decision_ids": [
+        "D-V1",
+        "D-GITHUB",
+        "D-OFFLINE"
+      ],
+      "acceptance": [
+        "Seçilen paket türleri temiz Windows ortamında geliştirme Python'u olmadan açılmıştır.",
+        "Snapshot ve Bölge İzleme duman testleri paketli uygulamada geçmiştir.",
+        "Model indirme, SHA-256 doğrulama, yarıda kesilme ve yeniden deneme akışları sınanmıştır.",
+        "Üçüncü taraf lisansları pakete eklenmiş ve modeller hariç uygulama boyutu en çok 150 MB olarak ölçülmüştür.",
+        "Paket dosyaları ve test raporu kanıta bağlanmıştır."
+      ],
+      "evidence": [],
+      "input_snapshot": null,
+      "generation": 0,
+      "review_reasons": []
+    },
+    {
+      "id": "T-V1-READINESS",
+      "title": "v1 GitHub dağıtım hazır olma kararını kanıtlarla ver",
+      "status": "todo",
+      "object_ids": [
+        "eval-automation-cc5cb15",
+        "eval-quality-sample-cc5cb15",
+        "eval-blue-prince-v1",
+        "eval-package-v1",
+        "v1-readiness"
+      ],
+      "input_ids": [
+        "eval-automation-cc5cb15",
+        "eval-quality-sample-cc5cb15",
+        "eval-blue-prince-v1",
+        "eval-package-v1"
+      ],
+      "output_ids": [
+        "v1-readiness"
+      ],
+      "depends_on": [],
+      "decision_ids": [
+        "D-V1",
+        "D-GITHUB",
+        "D-QUALITY"
+      ],
+      "acceptance": [
+        "Otomatik, gerçek oyun ve paket değerlendirmeleri güncel girdilere dayanarak birlikte incelenmiştir.",
+        "Geçmeyen veya açık kalan her ölçüt sürüm notunda görünürdür; hazır kararı yalnız tüm zorunlu kapılar karşılandığında verilir.",
+        "GitHub sürüm notu, doğrulanmış özellikleri ve bilinen sınırları teknik olmayan dille açıklar."
+      ],
+      "evidence": [],
+      "input_snapshot": null,
+      "generation": 0,
+      "review_reasons": []
+    }
+  ],
+  "decisions": [
+    {
+      "id": "D-V1",
+      "topic": "scope",
+      "statement": "Daraltılmış beta yerine tasarım belgesindeki bütün v1 kapsamını hedefle.",
+      "status": "accepted",
+      "rationale": "Kullanıcı bütün v1'i istedi.",
+      "source": "18 Eylül 2026 kullanıcı kararı; Depo knowledge/suflor-v1-hedef-ve-dagitim-kararlari-2026-09-18.md.",
+      "supersedes": null,
+      "accepted_by": "user"
+    },
+    {
+      "id": "D-GITHUB",
+      "topic": "distribution",
+      "statement": "İlk dağıtımı GitHub Releases üzerinden yap ve kullanıcıya uygun çalışma seçenekleri sun.",
+      "status": "accepted",
+      "rationale": "Kullanıcının seçtiği ilk dağıtım kanalı GitHub'dır.",
+      "source": "18 Eylül 2026 kullanıcı kararı; Depo knowledge/suflor-v1-hedef-ve-dagitim-kararlari-2026-09-18.md.",
+      "supersedes": null,
+      "accepted_by": "user"
+    },
+    {
+      "id": "D-QUALITY",
+      "topic": "priority",
+      "statement": "Doğru çeviriyi hızdan önce tut; hız için anlam ve mantık doğruluğunu düşürme.",
+      "status": "accepted",
+      "rationale": "Çeviri doğruluğu ürünün birincil ölçütüdür.",
+      "source": "18 Eylül 2026 kullanıcı kararı ve son çeviri kalite geri bildirimi.",
+      "supersedes": null,
+      "accepted_by": "user"
+    },
+    {
+      "id": "D-BLUE-PRINCE",
+      "topic": "first-game-gate",
+      "statement": "İlk gerçek oyun doğrulamasını Blue Prince üzerinde yap.",
+      "status": "accepted",
+      "rationale": "Kullanıcı Blue Prince'i ilk deneme oyunu olarak seçti; kaynak dili İngilizcedir.",
+      "source": "18 Eylül 2026 kullanıcı kararı; Depo knowledge/suflor-v1-hedef-ve-dagitim-kararlari-2026-09-18.md.",
+      "supersedes": null,
+      "accepted_by": "user"
+    },
+    {
+      "id": "D-OFFLINE",
+      "topic": "privacy-cost",
+      "statement": "Varsayılan çeviri yolunu ücretsiz, yerel ve çevrimdışı tut; bulutu yalnız isteğe bağlı yap.",
+      "status": "accepted",
+      "rationale": "Ürün tasarımının maliyet ve gizlilik duruşudur.",
+      "source": "Suflör v1 tasarım belgesi ve kullanıcı tarafından sürdürülen ürün kapsamı.",
+      "supersedes": null,
+      "accepted_by": "user"
+    },
+    {
+      "id": "D-ORVANT-WORK-PACKAGE",
+      "topic": "orvant-first-package",
+      "statement": "Orvant'ın ilk izlenebilir iş paketini Blue Prince gerçek oyun kapısı, dağıtım kararları, Windows paketi ve v1 hazır olma incelemesiyle sınırla.",
+      "status": "accepted",
+      "rationale": "Mevcut otomatik teslimat tamamlandı; kalan v1 riskleri gerçek oyun ve dağıtım kanıtlarında yoğunlaşıyor.",
+      "source": "Ajanın mevcut README, tasarım belgesi, görev panosu ve doğrulanmış cc5cb15 teslimatına dayalı proje uyarlaması; yeni kullanıcı tercihi sayılmaz.",
+      "supersedes": null,
+      "accepted_by": "agent"
+    },
+    {
+      "id": "D-PACKAGE-FORMAT",
+      "topic": "package-format",
+      "statement": "GitHub Releases üzerinde taşınabilir paket ve kurucu seçeneklerini birlikte sun.",
+      "status": "proposed",
+      "rationale": "Teknik kullanıcı ile çift tıklayıp kurmak isteyen kullanıcıya ayrı yollar sağlar.",
+      "source": "Ajan önerisi; kullanıcı seçenek sunulmasını istedi ancak kesin paket türlerini henüz seçmedi.",
+      "supersedes": null,
+      "accepted_by": null
+    }
+  ],
+  "history": []
+}
