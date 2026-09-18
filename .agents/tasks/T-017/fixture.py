@@ -13,7 +13,8 @@ from PIL import Image, ImageDraw, ImageFont
 
 from src.contracts.models import Frame, Rect
 
-FONTLAR = {"KR": "C:/Windows/Fonts/malgun.ttf", "JP": "C:/Windows/Fonts/YuGothR.ttc"}
+FONTLAR = {"KR": "C:/Windows/Fonts/malgun.ttf", "JP": "C:/Windows/Fonts/YuGothR.ttc", "ZH": "C:/Windows/Fonts/msyh.ttc",
+           "EN": "C:/Windows/Fonts/segoeui.ttf"}
 METIN = {
     "KR": ("엘더 마르쿠스", ["방앗간을 지나 동쪽 길로 가면 오래된 사당이 있어.",
                            "거기서 해가 지기 전에 만나자. 늦으면 문이 닫히니까",
@@ -23,6 +24,14 @@ METIN = {
                           "日が沈む前にそこで会おう。遅れると門が閉まるから、",
                           "急いだほうがいい。ああ、それと灯りを忘れずに持ってきてくれ。",
                           "夜道は危ないからな。"]),
+    "ZH": ("长老马库斯", ["经过磨坊沿着东边的路走，就会看到一座古老的祠堂。",
+                        "日落之前我们在那里见面。要是晚了，大门就会关上，",
+                        "所以你最好快点。对了，别忘了带上灯笼。",
+                        "夜路很危险。"]),
+    "EN": ("Elder Marcus", ["Past the mill, take the east road and you will find an old shrine.",
+                           "Meet me there before sundown. If you are late the gate closes,",
+                           "so you had better hurry. Oh, and be sure to bring a lantern.",
+                           "The night road is dangerous."]),
 }
 
 
@@ -62,6 +71,6 @@ def sentetik_kare(dil: str, w: int, h: int, *, konum: tuple[int, int] = (80, 120
 if __name__ == "__main__":
     cikti = Path(__file__).resolve().parent / "sef_dogrulama"
     cikti.mkdir(exist_ok=True)
-    for dil in ("KR", "JP"):
+    for dil in ("KR", "JP", "ZH", "EN"):
         panel(dil)[0].save(cikti / f"fixture_{dil}.png")
     print("fixture yazildi")

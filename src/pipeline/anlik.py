@@ -18,8 +18,10 @@ K3 Zincir: `oku` -> `recognize(kare, preset)` -> `satirlari_birlestir` -> `blokl
    gecis bolge yakalamayla ayni siki kutulari verir) -> `satirlari_birlestir` -> `secimi_birlestir`
    (T-017: secim = metin; satirlar okuma sirasinda TEK segmente birlesir, yalniz buyuk dikey bosluk ve
    konusmaci satiri boler -- gercek oyunda satir satir ceviri metnin butunlugunu bozuyordu; `normalize` yerine)
-   -> sozluk varsa `lookup_segments` + `terimleri_gom` -> `translate(TranslationRequest(gomulu, kaynak_dili, "tr"))`
+   -> sozluk varsa `lookup_segments` + `terimleri_gom` -> ceviri hafizasinda kesin eslesenleri dogrudan kullan,
+   benzer kayitlari `tm_examples` olarak istege ekle -> kalanlari `translate(TranslationRequest(...))`
    -> `duzeltici` varsa ciktida `HedefDuzeltici.duzelt` (T-015: "Elder Marcus" -> "İhtiyar Marcus")
+   -> yeni cevirileri yerel hafizaya ekle
    -> `ceviri_hazir(segmentler, ceviriler)`; segment `bbox`leri KARE koordinatinda (UI yerlesim icin bunu kullanir).
    Kare yoksa (`oku` yapilmadan `cevir`) ikinci gecis atlanir, verilen bloklar kullanilir.
    `ceviri_hazir`daki segmentler GOMULU DEGIL, birlestirme ciktisi (UI kaynak metni kullaniciya gosterir);
@@ -28,7 +30,11 @@ K4 Hata: `TranslatorError` (OcrError, ModelMissingError, ProviderUnavailable, ..
    metin, kare ya da ceviri ASLA sinyal disina/loga cikmaz (PROTOKOL 7). Baska istisna da `hata` olur
    (sinif adi), thread yasamaya devam eder (bir hata akisi oldurmez).
 K5 Kapanis: `kapat()` thread'i durdurur ve bekler (<= 2000 ms); ikinci `kapat()` sessiz. Nesne silinirken de.
-K6 Motorlar enjekte: `OcrEngine`, `TranslationProvider`, `GlossaryStore | None`; akis dosya/ag bilmez.
+K6 Motorlar enjekte: `OcrEngine`, `TranslationProvider`, `GlossaryStore | None`, `TranslationMemory | None`; akis ag bilmez.
+K7 (T-018) `dil_secici` verilirse `oku` sonrasinda isci thread'inde `dil_secici.sec(kare, bloklar, preset)` cagrilir:
+   dil degistiyse iscinin OCR motoru ve NLLB kaynak dili DEGISIR (sonraki `cevir`/ikinci gecis yeni motorla) ve
+   `bloklar_hazir` kazananin bloklariyla yayilir; her durumda `dil_algilandi(dil_degeri, belirsiz)` yayilir
+   (`bloklar_hazir`dan ONCE, ayni seq korumasi). Secici hatasi `hata` olur. `dil_secici` yoksa hicbir sey degismez.
 
 Thread notu: `_Isci` motorlari kendi thread'inde cagirir; RapidOCR/CTranslate2 inference GIL'i birakir
 (tasarim 5.5). Motor nesneleri akisa verilmeden once UI thread'inde kurulmus olabilir -- kullanim tek
@@ -43,8 +49,10 @@ from PySide6.QtCore import QObject, Qt, QThread, Signal, Slot
 from src.contracts.errors import TranslatorError
 from src.contracts.interfaces import OcrEngine, TranslationProvider
 from src.contracts.models import Frame, OcrPreset, Rect, Segment, TextBlock, TranslationRequest
+from src.pipeline.dil_secici import DilSecici
 from src.pipeline.secim import secimi_birlestir
 from src.ocr.satir_birlestirici import satirlari_birlestir
+from src.store.translation_memory import TranslationMemory
 from src.translate.hedef_duzeltici import HedefDuzeltici
 from src.translate.sozluk import GlossaryStore, terimleri_gom
 
@@ -59,12 +67,16 @@ class _Isci(QObject):
     okundu = Signal(int, object)          # seq, list[TextBlock]
     cevrildi = Signal(int, object, object)  # seq, list[Segment], list[str]
     hata = Signal(int, str)               # seq, istisna sinif adi
+    dil = Signal(int, str, bool)          # seq, OcrLanguage degeri, belirsiz (T-018 K7)
 
     def __init__(self, ocr: OcrEngine, cevirici: TranslationProvider, sozluk: GlossaryStore | None,
-                 kaynak_dili: str, preset: OcrPreset, duzeltici: HedefDuzeltici | None = None) -> None:
+                 kaynak_dili: str, preset: OcrPreset, duzeltici: HedefDuzeltici | None = None,
+                 dil_secici: DilSecici | None = None, hafiza: TranslationMemory | None = None) -> None:
         super().__init__()
         self._ocr, self._cevirici, self._sozluk = ocr, cevirici, sozluk
         self._kaynak_dili, self._preset, self._duzeltici = kaynak_dili, preset, duzeltici
+        self._dil_secici = dil_secici
+        self._hafiza = hafiza
         self._son_kare: Frame | None = None
 
     @Slot(int, object)
@@ -72,6 +84,11 @@ class _Isci(QObject):
         self._son_kare = kare
         try:
             bloklar = oku_yap(self._ocr, kare, self._preset)
+            if self._dil_secici is not None:
+                secim = self._dil_secici.sec(kare, bloklar, self._preset)
+                if secim.degisti:
+                    self._ocr, self._kaynak_dili, bloklar = secim.ocr, secim.kaynak_dili, secim.bloklar
+                self.dil.emit(seq, secim.dil.value, secim.belirsiz)
         except Exception as e:  # noqa: BLE001 -- K4: her istisna sinif adiyla sinyal, thread yasar
             self.hata.emit(seq, type(e).__name__)
             return
@@ -81,7 +98,8 @@ class _Isci(QObject):
     def cevir(self, seq: int, bloklar: Sequence[TextBlock]) -> None:
         try:
             segmentler, ceviriler = cevir_yap(self._cevirici, self._sozluk, bloklar, self._kaynak_dili, self._preset,
-                                              ocr=self._ocr, kare=self._son_kare, duzeltici=self._duzeltici)
+                                              ocr=self._ocr, kare=self._son_kare, duzeltici=self._duzeltici,
+                                              hafiza=self._hafiza)
         except Exception as e:  # noqa: BLE001
             self.hata.emit(seq, type(e).__name__)
             return
@@ -119,8 +137,9 @@ def ikinci_gecis(ocr: OcrEngine, kare: Frame, bloklar: Sequence[TextBlock], pres
 
 def cevir_yap(cevirici: TranslationProvider, sozluk: GlossaryStore | None, bloklar: Sequence[TextBlock],
               kaynak_dili: str, preset: OcrPreset, *, ocr: OcrEngine | None = None, kare: Frame | None = None,
-              duzeltici: HedefDuzeltici | None = None) -> tuple[list[Segment], list[str]]:
-    """K3 ceviri zinciri (saf): [ikinci gecis] -> secimi_birlestir -> sozluk gomme (yalniz modele) -> translate -> [duzelt].
+              duzeltici: HedefDuzeltici | None = None,
+              hafiza: TranslationMemory | None = None) -> tuple[list[Segment], list[str]]:
+    """K3 ceviri zinciri: [ikinci gecis] -> birlestir -> sozluk -> hafiza -> translate -> [duzelt] -> hafizaya ekle.
 
     `ocr` ve `kare` verilirse secim kirpigi yeniden okunur (siki kutular). Bos secim -> ([], []).
     """
@@ -132,11 +151,34 @@ def cevir_yap(cevirici: TranslationProvider, sozluk: GlossaryStore | None, blokl
     gomulu: Sequence[Segment] = segmentler
     if sozluk is not None:
         gomulu = terimleri_gom(segmentler, sozluk.lookup_segments(segmentler))
-    istek = TranslationRequest(segments=tuple(gomulu), source_lang=kaynak_dili, target_lang="tr")
-    sonuc = cevirici.translate(istek)
-    ceviriler = list(sonuc.translations)
+    ceviriler = [""] * len(segmentler)
+    eksik: list[int] = []
+    ornekler = []
+    for i, segment in enumerate(segmentler):
+        eslesme = hafiza.exact(segment.text, kaynak_dili) if hafiza is not None else None
+        if eslesme is None:
+            eksik.append(i)
+            if hafiza is not None:
+                ornekler.extend(hafiza.find_similar(segment.text, kaynak_dili))
+        else:
+            ceviriler[i] = eslesme.target
+    if eksik:
+        # Birden cok segment ayni benzer kaydi bulursa modele bir kez aktar.
+        benzersiz = {(p.source, p.target): p for p in ornekler}
+        istek = TranslationRequest(
+            segments=tuple(gomulu[i] for i in eksik),
+            source_lang=kaynak_dili,
+            target_lang="tr",
+            tm_examples=tuple(benzersiz.values()),
+        )
+        sonuc = cevirici.translate(istek)
+        for i, ceviri in zip(eksik, sonuc.translations, strict=True):
+            ceviriler[i] = ceviri
     if duzeltici is not None:
         ceviriler = duzeltici.hepsini_duzelt(ceviriler)
+    if hafiza is not None:
+        for i in eksik:
+            hafiza.add(segmentler[i].text, ceviriler[i], kaynak_dili)
     return list(segmentler), ceviriler
 
 
@@ -150,24 +192,27 @@ class AnlikAkisi(QObject):
     bloklar_hazir = Signal(object)          # list[TextBlock]
     ceviri_hazir = Signal(object, object)   # list[Segment], list[str]
     hata = Signal(str)                      # istisna sinif adi (metin yok)
+    dil_algilandi = Signal(str, bool)       # OcrLanguage degeri, belirsiz (T-018 K7; yalniz dil_secici varsa)
     _oku_istegi = Signal(int, object)
     _cevir_istegi = Signal(int, object)
 
     def __init__(self, ocr: OcrEngine, cevirici: TranslationProvider, sozluk: GlossaryStore | None, *,
                  kaynak_dili: str, preset: OcrPreset = OcrPreset.DIALOGUE, duzeltici: HedefDuzeltici | None = None,
+                 dil_secici: DilSecici | None = None, hafiza: TranslationMemory | None = None,
                  ebeveyn: QObject | None = None) -> None:
         super().__init__(ebeveyn)
         self._seq = 0
         self._iptal_edilen = -1
         self._kapandi = False
         self._thread = QThread(self)
-        self._isci = _Isci(ocr, cevirici, sozluk, kaynak_dili, preset, duzeltici)
+        self._isci = _Isci(ocr, cevirici, sozluk, kaynak_dili, preset, duzeltici, dil_secici, hafiza)
         self._isci.moveToThread(self._thread)
         self._oku_istegi.connect(self._isci.oku, Qt.ConnectionType.QueuedConnection)
         self._cevir_istegi.connect(self._isci.cevir, Qt.ConnectionType.QueuedConnection)
         self._isci.okundu.connect(self._okundu, Qt.ConnectionType.QueuedConnection)
         self._isci.cevrildi.connect(self._cevrildi, Qt.ConnectionType.QueuedConnection)
         self._isci.hata.connect(self._hata, Qt.ConnectionType.QueuedConnection)
+        self._isci.dil.connect(self._dil, Qt.ConnectionType.QueuedConnection)
         self._thread.start()
         self.destroyed.connect(_thread_durdur_fabrikasi(self._thread))
 
@@ -223,6 +268,11 @@ class AnlikAkisi(QObject):
     def _hata(self, seq: int, sinif: str) -> None:
         if self._guncel(seq):
             self.hata.emit(sinif)
+
+    @Slot(int, str, bool)
+    def _dil(self, seq: int, dil: str, belirsiz: bool) -> None:
+        if self._guncel(seq):
+            self.dil_algilandi.emit(dil, belirsiz)
 
 
 def _thread_durdur_fabrikasi(thread: QThread) -> object:

@@ -289,3 +289,13 @@ def test_k6_paint_tum_durumlarda_cokmez_ve_hizli(pencere: AnlikPencere, qtbot: Q
 
 def test_k7_odak_alir(pencere: AnlikPencere) -> None:
     assert pencere.focusPolicy() == Qt.FocusPolicy.StrongFocus
+
+
+# ---------------------------------------------------------------- K8 (T-018) dil rozeti
+def test_k8_dil_rozeti_ad_ve_belirsiz(pencere: AnlikPencere) -> None:
+    assert pencere.dil_metni == ""
+    pencere.dil_goster("japan", False)
+    assert pencere.dil_metni == "Japonca" and pencere.durum == AnlikDurumu.OKUNUYOR
+    pencere.dil_goster("korean", True)
+    assert pencere.dil_metni.startswith("Korece?") and "Ayarlar" in pencere.dil_metni
+    pencere.grab()   # rozet ciziliyor, cokmuyor

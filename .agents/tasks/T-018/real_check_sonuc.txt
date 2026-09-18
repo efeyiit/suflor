@@ -1,0 +1,14 @@
+T-018 real_check -- otomatik dil algilama (gercek OCR x4 + NMT)
+  ok     [1] 3 modelin isitilmasi 1446 ms (arka plan, UI'yi bloklamaz)
+  ok     [2] panel KR, mevcut korean: secilen korean (dogru=True), denenen 1, ilk okuma 566 ms + secim 0 ms, puanlar {'ko': 0.98}
+  ok     [2] panel JP, mevcut korean: secilen japan (dogru=True), denenen 3, ilk okuma 562 ms + secim 2185 ms, puanlar {'ko': 0.06, 'ja': 1.0, 'ch': 0.86}
+  ok     [2] panel JP, mevcut japan: secilen japan (dogru=True), denenen 1, ilk okuma 465 ms + secim 0 ms, puanlar {'ja': 0.99}
+  ok     [2] panel ZH, mevcut japan: secilen chinese (dogru=True), denenen 3, ilk okuma 617 ms + secim 1103 ms, puanlar {'ja': 0.8, 'ko': 0.0, 'ch': 1.0}
+  ok     [2] panel EN, mevcut chinese: secilen english (dogru=True), denenen 4, ilk okuma 825 ms + secim 2507 ms, puanlar {'ch': 0.0, 'ko': 0.0, 'ja': 0.0, 'en': 0.99}
+  ok     [2] panel KR, mevcut english: secilen korean (dogru=True), denenen 2, ilk okuma 804 ms + secim 454 ms, puanlar {'en': 0.49, 'ko': 1.0}
+  ok     [2t] 6/6 dogru
+  ok     [3] bos kare: belirsiz=True degisti=False mevcut korundu=True
+  ok     [4a] olaylar ['dil:japan:False', 'bloklar'] (dil once, bloklar sonra), bloklar kana iceriyor=True, rozet='Japonca', 1088 ms
+  ok     [4b] ceviri: 1 sonuc, Turkce (kana yok, kaynaktan farkli)=True, 2291 ms
+  ok     [5] ikinci Snapshot: ['dil:japan:False'], [5] blok, 446 ms (< 1500, tek OCR)
+REAL_CHECK: TEMIZ

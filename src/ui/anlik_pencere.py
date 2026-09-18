@@ -11,6 +11,8 @@ cagiran).
 K1 Geometri: pencere verilen `QScreen.geometry()` ile birebir (tam ekran, cerçevesiz, ustte); kare
    ekranin mantiksal boyutuna olceklenir (dpr 1.0'da 1:1). Blok kutulari kare pikselinden pencere
    koordinatina `_pencereye(rect)` ile cevrilir (kare.rect ofseti + olcek).
+K8 (T-018) `dil_goster(dil_degeri, belirsiz)`: durum seridinin solunda dil rozeti ("Japonca" ya da belirsizse
+   "Korece?" + ipucu); durum degistirmez. Rozet yoksa (kabuk sabit dil) cizilmez.
 K2 Durumlar: `okunuyor` -> (`bloklari_goster`) `secim` -> (secim/Enter/sag tik) `cevriliyor` -> (`ceviriyi_goster`)
    `sonuc` -> (secim degisir) `cevriliyor` ... ; `hata_goster` durum satirina sinif adini yazar, `cevriliyor`u
    `secim`e dondurur. Blok gelmeden Enter hicbir sey yapmaz; bos secimle Enter ipucu yazar, sinyal yok.
@@ -51,6 +53,8 @@ _SONUC_YAZI = QColor(230, 245, 234)
 _DURUM_ARKA = QColor(22, 27, 33, 230)
 _IPUCU = "Tıkla / sürükle: seç → kendiliğinden çevirir   ·   Sağ tık / Enter: hemen çevir   ·   Ctrl+A: hepsi   ·   Ctrl+C: kopyala   ·   Esc: kapat"
 OTOMATIK_CEVIRI_MS = 350
+_DIL_ADLARI = {"korean": "Korece", "japan": "Japonca", "chinese": "Çince", "english": "İngilizce"}
+_ROZET_ARKA = QColor(245, 200, 90, 230)
 
 
 class AnlikDurumu:
@@ -94,6 +98,7 @@ class AnlikPencere(QWidget):
         self._otomatik.setSingleShot(True)
         self._otomatik.setInterval(OTOMATIK_CEVIRI_MS)
         self._otomatik.timeout.connect(self._cevir)
+        self._dil_metni = ""
 
     # -- disa acik durum -----------------------------------------------------------------------
     @property
@@ -138,6 +143,15 @@ class AnlikPencere(QWidget):
         self._durum = AnlikDurumu.SONUC
         self._durum_metni = f"{len(self._sonuclar)} çeviri — Ctrl+C kopyala · Esc kapat" if self._sonuclar else "çevrilecek metin yok"
         self.update()
+
+    def dil_goster(self, dil: str, belirsiz: bool) -> None:
+        ad = _DIL_ADLARI.get(dil, dil)
+        self._dil_metni = f"{ad}? (emin değil — ⚙ Ayarlar'dan seç)" if belirsiz else ad
+        self.update()
+
+    @property
+    def dil_metni(self) -> str:
+        return self._dil_metni
 
     def hata_goster(self, sinif: str) -> None:
         self._durum_metni = f"hata: {sinif} — Esc ile kapat"
@@ -308,6 +322,12 @@ class AnlikPencere(QWidget):
         serit = QRectF((self.width() - dw) / 2, 14, dw, 32)
         p.setPen(Qt.PenStyle.NoPen); p.setBrush(_DURUM_ARKA); p.drawRoundedRect(serit, 8, 8)
         p.setPen(QColor(207, 227, 245)); p.drawText(serit, int(Qt.AlignmentFlag.AlignCenter), durum)
+        if self._dil_metni:
+            rozet = f"  {self._dil_metni}  "
+            rw = p.fontMetrics().horizontalAdvance(rozet) + 12
+            rk = QRectF(serit.left() - rw - 10, 14, rw, 32)
+            p.setPen(Qt.PenStyle.NoPen); p.setBrush(_ROZET_ARKA); p.drawRoundedRect(rk, 8, 8)
+            p.setPen(QColor(12, 16, 22)); p.drawText(rk, int(Qt.AlignmentFlag.AlignCenter), rozet)
         p.setFont(QFont("Segoe UI", 9))
         iw = p.fontMetrics().horizontalAdvance(_IPUCU) + 24
         alt = QRectF((self.width() - iw) / 2, self.height() - 40, iw, 26)

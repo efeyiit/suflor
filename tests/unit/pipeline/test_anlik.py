@@ -17,7 +17,9 @@ from src.contracts.errors import OcrError, ProviderUnavailable
 from src.contracts.interfaces import FakeOcrEngine, FakeProvider, OcrEngine
 from src.contracts.models import Frame, OcrPreset, Rect, TextBlock, TranslationRequest, TranslationResult
 from src.ocr.satir_birlestirici import satirlari_birlestir
+from src.ocr.rapid_engine import OcrLanguage
 from src.pipeline.anlik import AnlikAkisi
+from src.pipeline.dil_secici import DilSecici
 from src.pipeline.secim import secimi_birlestir
 from src.translate.sozluk import GlossaryStore
 
@@ -110,6 +112,55 @@ def test_k3_sozluk_varsa_modele_gomulu_gider_uiya_orijinal_doner(qtbot: QtBot, a
     istek: TranslationRequest = saglayici.requests[0]
     assert "Degirmen" in istek.segments[0].text and "mill" not in istek.segments[0].text   # modele gomulu
     assert "mill" in segmentler[0].text and "Degirmen" not in segmentler[0].text          # UI'ya orijinal
+
+
+def test_t020_ceviri_hafizasi_kesin_eslesmede_modeli_atlar_ve_kalici_yazar(tmp_path: Path) -> None:
+    from src.pipeline.anlik import cevir_yap
+    from src.store.translation_memory import TranslationMemory
+
+    hafiza = TranslationMemory(tmp_path / "db.sqlite")
+    try:
+        saglayici = FakeProvider(translations={"Open the west door.": "Batı kapısını aç."})
+        secim = [blok("Open the west door.", 0, 0, 200, 20)]
+        _, ilk = cevir_yap(saglayici, None, secim, "eng_Latn", OcrPreset.DIALOGUE, hafiza=hafiza)
+        assert ilk == ["Batı kapısını aç."] and saglayici.call_count == 1
+        _, ikinci = cevir_yap(saglayici, None, secim, "eng_Latn", OcrPreset.DIALOGUE, hafiza=hafiza)
+        assert ikinci == ilk and saglayici.call_count == 1
+    finally:
+        hafiza.close()
+
+
+def test_t020_benzer_hafiza_ornegi_istege_eklenir(tmp_path: Path) -> None:
+    from src.pipeline.anlik import cevir_yap
+    from src.store.translation_memory import TranslationMemory
+
+    hafiza = TranslationMemory(tmp_path / "db.sqlite")
+    try:
+        hafiza.add("Open the western door before midnight", "Gece yarısından önce batı kapısını aç", "eng_Latn")
+        saglayici = FakeProvider()
+        cevir_yap(saglayici, None, [blok("Open the west door before midnight", 0, 0, 260, 20)],
+                   "eng_Latn", OcrPreset.DIALOGUE, hafiza=hafiza)
+        assert saglayici.requests[0].tm_examples
+        assert saglayici.requests[0].tm_examples[0].target.startswith("Gece yarısından")
+    finally:
+        hafiza.close()
+
+
+def test_t020_kismi_kesin_eslesmede_yalniz_eksik_segment_modele_gider(tmp_path: Path) -> None:
+    from src.pipeline.anlik import cevir_yap
+    from src.store.translation_memory import TranslationMemory
+
+    hafiza = TranslationMemory(tmp_path / "db.sqlite")
+    try:
+        hafiza.add("First clue", "İlk ipucu", "eng_Latn")
+        saglayici = FakeProvider(translations={"Second clue": "İkinci ipucu"})
+        bloklar = [blok("First clue", 0, 0, 100, 20), blok("Second clue", 0, 100, 100, 20)]
+        _, ceviriler = cevir_yap(saglayici, None, bloklar, "eng_Latn", OcrPreset.DIALOGUE, hafiza=hafiza)
+        assert ceviriler == ["İlk ipucu", "İkinci ipucu"]
+        assert [s.text for s in saglayici.requests[0].segments] == ["Second clue"]
+        assert hafiza.exact("Second clue", "eng_Latn").target == "İkinci ipucu"  # type: ignore[union-attr]
+    finally:
+        hafiza.close()
 
 
 def test_t017_cok_satirli_secim_TEK_segment_olarak_modele_gider(qtbot: QtBot, akis: Callable[..., AnlikAkisi]) -> None:
@@ -383,3 +434,74 @@ def test_k3_duzeltici_ciktiya_uygulanir(qtbot: QtBot) -> None:
         assert s.args[1] == ["İhtiyar Marcus bekliyor."]
     finally:
         a.kapat()
+
+
+# ---------------------------------------------------------------- K7 (T-018) dil secici
+_NLLB = {OcrLanguage.KOREAN: "kor_Hang", OcrLanguage.JAPAN: "jpn_Jpan", OcrLanguage.CHINESE: "zho_Hans", OcrLanguage.ENGLISH: "eng_Latn"}
+_JP = [blok("水車小屋を過ぎて東の道を行くと、古い祠がある。", 10, 10, 400), blok("日が沈む前にそこで会おう。", 10, 40, 300)]
+
+
+def _secici(motorlar: dict[OcrLanguage, OcrEngine], baslangic: OcrLanguage) -> DilSecici:
+    return DilSecici(lambda d: motorlar[d], _NLLB, baslangic=baslangic)
+
+
+def test_k7_dil_degisince_motor_ve_kaynak_dili_degisir_bloklar_kazanandan(qtbot: QtBot) -> None:
+    """Ayar Korece, oyun Japonca: KR motoru cop verir -> JP secilir; bloklar JP'den; ceviri jpn_Jpan ile; ikinci gecis JP motoruyla."""
+    def dusuk(metin: str) -> TextBlock:
+        return TextBlock(text=metin, bbox=Rect(0, 0, 100, 20), confidence=0.5)
+    kr_cop = FakeOcrEngine([[dusuk("가")]])
+    jp = FakeOcrEngine([_JP]); zh = FakeOcrEngine([[dusuk("水車小屋過")]]); en = FakeOcrEngine([[dusuk("ab")]])
+    secici = _secici({OcrLanguage.KOREAN: kr_cop, OcrLanguage.JAPAN: jp, OcrLanguage.CHINESE: zh, OcrLanguage.ENGLISH: en}, OcrLanguage.KOREAN)
+    saglayici = FakeProvider()
+    a = AnlikAkisi(kr_cop, saglayici, None, kaynak_dili="kor_Hang", dil_secici=secici)
+    diller: list[tuple[str, bool]] = []
+    a.dil_algilandi.connect(lambda d, b: diller.append((d, b)))
+    with qtbot.waitSignal(a.bloklar_hazir, timeout=3000) as s:
+        a.oku(kare())
+    assert diller == [("japan", False)] and [b.text for b in s.args[0]] == [b.text for b in _JP]
+    assert secici.mevcut is OcrLanguage.JAPAN
+    with qtbot.waitSignal(a.ceviri_hazir, timeout=3000):
+        a.cevir(s.args[0])
+    assert saglayici.requests[0].source_lang == "jpn_Jpan"
+    # Dil algilama: JP serit + JP tam kare; ceviri: secim kirpigiyle ikinci gecis.
+    assert jp.call_count == 3 and kr_cop.call_count == 1
+    a.kapat()
+
+
+def test_k7_mevcut_eminse_sinyal_gelir_baska_motor_yok(qtbot: QtBot) -> None:
+    kr = FakeOcrEngine([[blok("방앗간을 지나 동쪽 길로 가면 오래된 사당이 있어.", 10, 10, 400)]])
+    kurulan: list[OcrLanguage] = []
+
+    def fabrika(d: OcrLanguage) -> OcrEngine:
+        kurulan.append(d); return kr
+    secici = DilSecici(fabrika, _NLLB, baslangic=OcrLanguage.KOREAN)
+    a = AnlikAkisi(kr, FakeProvider(), None, kaynak_dili="kor_Hang", dil_secici=secici)
+    diller: list[tuple[str, bool]] = []
+    a.dil_algilandi.connect(lambda d, b: diller.append((d, b)))
+    with qtbot.waitSignal(a.bloklar_hazir, timeout=3000):
+        a.oku(kare())
+    assert diller == [("korean", False)] and kurulan == [OcrLanguage.KOREAN] and kr.call_count == 1
+    a.kapat()
+
+
+def test_k7_secici_yoksa_sinyal_yok(qtbot: QtBot, akis: Callable[..., AnlikAkisi]) -> None:
+    a = akis()
+    diller: list[object] = []
+    a.dil_algilandi.connect(diller.append)
+    with qtbot.waitSignal(a.bloklar_hazir, timeout=3000):
+        a.oku(kare())
+    assert diller == []
+
+
+def test_k7_secici_hatasi_hata_sinyali(qtbot: QtBot) -> None:
+    class Bozuk(OcrEngine):
+        def recognize(self, frame: Frame, preset: OcrPreset) -> list[TextBlock]:
+            raise RuntimeError("bug")
+
+    kr = FakeOcrEngine([[blok("가", 0, 0, 20)]])
+    secici = DilSecici(lambda d: kr if d is OcrLanguage.KOREAN else Bozuk(), _NLLB, baslangic=OcrLanguage.KOREAN)
+    a = AnlikAkisi(kr, FakeProvider(), None, kaynak_dili="kor_Hang", dil_secici=secici)
+    with qtbot.waitSignal(a.hata, timeout=3000) as h:
+        a.oku(kare())
+    assert h.args == ["RuntimeError"]
+    a.kapat()

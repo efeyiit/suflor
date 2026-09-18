@@ -42,6 +42,12 @@ def tamam(m: str) -> None:
     print(f"  ok     {m}")
 
 
+def test_ekrani() -> QtGui.QScreen:
+    """Kullanicinin calistigi birincil ekrana dokunma: birincil olmayan ekran varsa onu kullan (kullanici istegi)."""
+    birincil = QtGui.QGuiApplication.primaryScreen()
+    return next((s for s in QtGui.QGuiApplication.screens() if s is not birincil), birincil)
+
+
 def bekle(ms: int) -> None:
     son = time.perf_counter() + ms / 1000
     while time.perf_counter() < son:
@@ -68,7 +74,7 @@ def main() -> int:
 
     app = QtWidgets.QApplication(sys.argv)
     CIKTI.mkdir(exist_ok=True)
-    ekran = QtGui.QGuiApplication.primaryScreen(); g = ekran.geometry(); dpr = ekran.devicePixelRatio()
+    ekran = test_ekrani(); g = ekran.geometry(); dpr = ekran.devicePixelRatio()
     w, h = int(g.width() * dpr), int(g.height() * dpr)
     kare, panel, govde = sentetik_kare(dil_fx, w, h, adim_orani=2.4)
 

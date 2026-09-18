@@ -8,8 +8,9 @@ Oyun için tasarlandı, her uygulamada çalışır. Ücretsiz ve offline.
 ---
 
 > [!NOTE]
-> **Durum: tasarım aşaması.** Henüz kod yok. Bu depo şu an yalnızca tasarım
-> dokümanını barındırıyor. Uygulama planı çıkarıldıktan sonra geliştirme başlayacak.
+> **Durum: geliştirme sürümü.** Snapshot ve Bölge İzleme modları çalışan masaüstü
+> uygulamasına bağlıdır. Tek dosyalı Windows paketi, model yöneticisi, çeviri hafızası
+> için gelişmiş yönetim ve son kalite/doğrulama çalışmaları v1 için devam etmektedir.
 
 ## İki mod
 
@@ -17,9 +18,9 @@ Oyun için tasarlandı, her uygulamada çalışır. Ücretsiz ve offline.
 çerçevelenir; tıkla ya da sürükleyerek seçersin, seçim **tek bir metin olarak** kendiliğinden
 çevrilir (satır satır değil — cümle bütünlüğü korunur). Sağ tık / Enter beklemeden çevirir.
 
-**2 · Bölge İzleme Modu** — Ekranda bir dikdörtgen çiz. O alanda çıkan her yazı
-otomatik ve sürekli çevrilir; çeviri bölgeye yapışık yarı-şeffaf bir şeritte akar.
-Şeridi koparıp ikinci monitöre atabilirsin.
+**2 · Bölge İzleme Modu** — Ekranda bir dikdörtgen çiz. Alan kararlı biçimde
+değiştiğinde metin otomatik okunur ve çevrilir. Üstte kalan kompakt şerit duraklatma,
+kaynak metni gösterme, alanı değiştirme ve kapatma kontrollerini doğrudan sunar.
 
 ## Üç temel duruş
 
@@ -34,6 +35,10 @@ sıfır olmalı; bu bir kısıt değil, bilinçli mimari duruş.
 
 **Hiçbir hata akışı durdurmaz.** Kalıcı hatalar durum çubuğunda tek satır olarak
 görünür. Oyun oynayan birinin ekranına modal dialog atmak affedilemez.
+
+**Tutarlı çeviri hafızası.** Üretilen çeviriler yalnızca kullanıcının bilgisayarındaki
+SQLite veritabanına kaydedilir. Aynı metin tekrar görünürse önceki Türkçe karşılık doğrudan
+kullanılır; benzer metinler sonraki motorlar için bağlam örneği olur.
 
 ## Çeviri zekâsı: dört katman
 
@@ -50,8 +55,10 @@ hissettiren şey oyun başına sözlük ve çeviri hafızasıdır, ve maliyeti s
 
 ## Oyun tarafı
 
-- **Oyun profilleri** — oyun başına bölge, dil, motor, sözlük, üslup ve OCR ön ayarı.
-  Aktif pencerenin exe adına göre otomatik önerilir, `.json` olarak paylaşılabilir.
+- **Evrensel çekirdek** — her oyun için elle profil hazırlamak gerekmez. Davranış;
+  diyalog, altyazı, menü ve belge gibi içerik türlerine göre uyarlanır.
+- **İsteğe bağlı oyun bağlamı** — kullanıcı isterse yerel sözlük ve oyun dosyalarından
+  çıkarılan bağlamı ekleyebilir; iki mod bunlar olmadan da çalışır.
 - **Metin türü ön ayarları** — diyalog kutusu, menü, tooltip, altyazı; her biri farklı
   blok gruplama ve debounce davranışı gerektirir.
 - **Exclusive fullscreen** — overlay bu modda görünmez (Windows kısıtı). Uygulama bunu
@@ -68,15 +75,15 @@ oyun FPS düşüşü ≤ %3.
 ## Kurulum ve çalıştırma
 
 ```bash
-pip install -r requirements-dev.txt
-python -m pytest tests -q            # tam takım (model gerekmez)
+python -m venv .venv
+.venv\Scripts\pip install -r requirements-dev.txt
+.venv\Scripts\python -m pytest tests -q  # tam takım (model gerekmez)
 Suflor.bat                           # uygulamayı aç (çift tık da olur; konsol açılmaz) — ya da: python demo/kabuk.py
-python demo/canli_cevir.py korean    # ekrandan yakala → OCR → sözlük → Türkçe (model gerekir)
 ```
 
 Çeviri modeli (`models/nllb-200-distilled-600M-ct2-int8/`, ~650 MB) depoya dahil değildir; JP/KR OCR
-modelleri ilk çalıştırmada indirilir. `demo/` altındaki gösterimler kabul edilen bileşenleri
-uçtan uca gösterir; `.agents/tasks/` altında her bileşenin ölçümleri, paketleri ve kararları vardır.
+modelleri ilk çalıştırmada indirilir. `Suflor.bat` çalışan ürün kabuğunu açar;
+`.agents/tasks/` altında bileşen ölçümleri ve kararları bulunur.
 
 ## Dokümantasyon
 

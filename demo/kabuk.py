@@ -1,4 +1,4 @@
-"""Suflör — uygulama gösterimi: ürün kabuğu (T-012) + kısayollar (T-013) + Anlık çeviri (T-014) + Bölge izle (T-005).
+"""Suflör — ürün kabuğu: kısayollar, Anlık Çeviri ve otomatik Bölge İzleme.
 
 Çalıştır:  python demo/kabuk.py [japan|korean|chinese|english] [sag|sol]
            (argüman verilmezse %APPDATA%/Suflor/ayarlar.json — ⚙ düğmesiyle düzenlenir; dil/sözlük değişince
@@ -15,7 +15,13 @@ Kısayollar (tepsideyken/kenardayken de): Ctrl+Alt+D anlık çeviri · Ctrl+Alt+
 Anlık çeviri (Snapshot): imlecin bulunduğu monitör DONAR (yakalanan kare tam ekran), OCR metin bloklarını
 çerçeveler; tıkla/sürükle ile seç → seçim KENDİLİĞİNDEN tek bir metin olarak Türkçe'ye çevrilir (satır satır
 değil — T-017), yanına yazılır; sağ tık / Enter beklemeden çevirir; seçimi değiştirince yeniden çevrilir; Esc kapatır. OCR + çeviri arka plan thread'inde (UI donmaz). Modeller açılışta arka planda yüklenir.
-Bölge izle: dikdörtgen çiz → canlı bölge görünümü (T-005; OCR/çeviri için demo/canli_cevir.py).
+Bölge izle: dikdörtgen çiz → alan değişince otomatik OCR ve Türkçe çeviri. Üstte kalan kompakt şeritte
+çeviri görünür; kaynak metin isteğe bağlı açılır; duraklatma, alanı değiştirme ve kapatma doğrudan erişilebilir.
+
+Dil (T-018): Ayarlar'da "Otomatik" (varsayılan) ise OCR modeli oyundan ALGILANIR — ilk Snapshot'ta mevcut dilin
+(son algılanan / Korece) okuması güvenliyse başka model denenmez; değilse diğer üç model sırayla denenir, kazanan
+oturum boyunca kalır (sonraki Snapshot tek okuma). Diğer modeller açılıştan sonra arka planda ısıtılır. Snapshot
+penceresinde dil rozeti; emin değilse "Korece? (⚙ Ayarlar'dan seç)". Sabit dil seçilirse algılama yok.
 
 Model: models/nllb-200-distilled-600M-ct2-int8/ (yoksa durum satırında ModelMissingError; kabuk çalışır).
 Hiçbir OCR/çeviri metni konsola/diske yazılmaz.
@@ -24,25 +30,30 @@ Hiçbir OCR/çeviri metni konsola/diske yazılmaz.
 from __future__ import annotations
 
 import ctypes
+import sqlite3
 import sys
+import threading
 from ctypes import wintypes
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
-from PySide6 import QtGui, QtWidgets  # noqa: E402
+from PySide6 import QtCore, QtGui, QtWidgets  # noqa: E402
 
-from demo.bolge_izle import IzlemePenceresi, SecimKatmani  # noqa: E402
+from demo.bolge_izle import SecimKatmani  # noqa: E402
 from src.capture.monitors import union_bbox  # noqa: E402
 from src.capture.service import CaptureService, MssBackend  # noqa: E402
 from src.contracts.errors import TranslatorError  # noqa: E402
 from src.contracts.models import Rect  # noqa: E402
 from src.ocr.rapid_engine import OcrLanguage  # noqa: E402
 from src.pipeline.anlik import AnlikAkisi  # noqa: E402
+from src.pipeline.dil_secici import DilSecici  # noqa: E402
 from src.ayarlar import Ayarlar, AyarlarDeposu  # noqa: E402
 from src.pipeline.motorlar import MotorDeposu, gercek_fabrikalar  # noqa: E402
+from src.store.translation_memory import TranslationMemory  # noqa: E402
 from src.translate.hedef_duzeltici import HedefDuzeltici  # noqa: E402
 from src.ui.anlik_pencere import AnlikPencere  # noqa: E402
+from src.ui.bolge_pencere import BolgePenceresi  # noqa: E402
 from src.ui.geometri import Kenar  # noqa: E402
 from src.ui.kabuk import AnaPencere, KabukDurumu  # noqa: E402
 from src.ui.uygulama import calistir  # noqa: E402
@@ -51,6 +62,8 @@ KOK = Path(__file__).resolve().parent.parent
 MODEL_DIZINI = KOK / "models" / "nllb-200-distilled-600M-ct2-int8"
 SOZLUK = KOK / "demo" / "sozluk_ornek.json"
 NLLB_KODU = {OcrLanguage.JAPAN: "jpn_Jpan", OcrLanguage.KOREAN: "kor_Hang", OcrLanguage.CHINESE: "zho_Hans", OcrLanguage.ENGLISH: "eng_Latn"}
+DIL_ADI = {OcrLanguage.JAPAN: "Japonca", OcrLanguage.KOREAN: "Korece", OcrLanguage.CHINESE: "Çince", OcrLanguage.ENGLISH: "İngilizce"}
+OTOMATIK_BASLANGIC = OcrLanguage.KOREAN   # algilama "auto"da ilk denenen dil (son algilanan oturum boyunca hatirlanir)
 
 
 def _fiziksel_imlec() -> tuple[int, int]:
@@ -60,23 +73,52 @@ def _fiziksel_imlec() -> tuple[int, int]:
     return int(p.x), int(p.y)
 
 
-def _bagla(app: QtWidgets.QApplication, pencere: AnaPencere, dil: OcrLanguage, sozluk_yolu: Path | None) -> int:
+def _bagla(app: QtWidgets.QApplication, pencere: AnaPencere, dil: OcrLanguage | None, sozluk_yolu: Path | None) -> int:
+    """`dil=None` -> otomatik algilama (T-018)."""
     servis = CaptureService(MssBackend())
+    try:
+        hafiza: TranslationMemory | None = TranslationMemory()
+    except (OSError, sqlite3.Error):
+        hafiza = None
+        pencere.durum_goster("çeviri hafızası açılamadı — uygulama hafızasız devam ediyor")
     pencereler: list[QtWidgets.QWidget] = []
     acik_katman: list[SecimKatmani] = []
     acik_anlik: list[tuple[AnlikPencere, AnlikAkisi]] = []
-    motor: dict[str, object] = {}   # depo, duzeltici, dil -- ayar degisince yeniden kurulur
+    acik_bolge: list[BolgePenceresi] = []
+    motor: dict[str, object] = {}   # depo, duzeltici, dil, secici -- ayar degisince yeniden kurulur
 
-    def motorlari_kur(yeni_dil: OcrLanguage, yeni_sozluk: Path | None) -> None:
+    def ocr_fabrikasi(d: OcrLanguage) -> object:
+        from src.ocr.rapid_engine import RapidOcrEngine
+        return RapidOcrEngine(language=d, threads=8, allow_download=True)
+
+    def motorlari_kur(yeni_dil: OcrLanguage | None, yeni_sozluk: Path | None) -> None:
         eski = motor.get("depo")
         if isinstance(eski, MotorDeposu):
             eski.kapat()
         sozluk = yeni_sozluk if yeni_sozluk is not None and yeni_sozluk.exists() else None
-        depo = MotorDeposu(gercek_fabrikalar(yeni_dil, MODEL_DIZINI, sozluk))
+        if yeni_dil is None:
+            onceki = motor.get("secici")
+            baslangic = onceki.mevcut if isinstance(onceki, DilSecici) else OTOMATIK_BASLANGIC
+            secici = DilSecici(ocr_fabrikasi, NLLB_KODU, baslangic=baslangic)   # type: ignore[arg-type]
+            motor["secici"] = secici
+            ocr_f, cev_f, soz_f = gercek_fabrikalar(baslangic, MODEL_DIZINI, sozluk)
+            fabrikalar = (lambda: secici.motor(secici.mevcut), cev_f, soz_f)   # depo OCR'i = secicinin motoru (tek kopya)
+        else:
+            motor.pop("secici", None)
+            fabrikalar = gercek_fabrikalar(yeni_dil, MODEL_DIZINI, sozluk)
+        depo = MotorDeposu(fabrikalar)
         motor["depo"], motor["dil"] = depo, yeni_dil
         motor["duzeltici"] = HedefDuzeltici.dosyadan(sozluk) if sozluk is not None else HedefDuzeltici()   # T-015
         pencere.durum_goster("modeller yükleniyor…")
-        depo.hazir.connect(lambda: pencere.durum_goster(""))
+
+        def hazir() -> None:
+            pencere.durum_goster("")
+            secici = motor.get("secici")
+            if isinstance(secici, DilSecici) and motor.get("depo") is depo:
+                digerleri = [d for d in OcrLanguage if d is not secici.mevcut]
+                threading.Thread(target=secici.isit, args=(digerleri,), daemon=True, name="suflor-dil-isitma").start()
+
+        depo.hazir.connect(hazir)
         depo.hata.connect(lambda sinif: pencere.durum_goster(f"model yüklenemedi: {sinif} — models/ dizinini kontrol et"))
         depo.baslat()
 
@@ -85,15 +127,20 @@ def _bagla(app: QtWidgets.QApplication, pencere: AnaPencere, dil: OcrLanguage, s
     def ayarlar_degisti(a: object) -> None:
         if isinstance(a, Ayarlar):
             yol = Path(a.sozluk_yolu) if a.sozluk_yolu else None
-            if OcrLanguage(a.dil) != motor["dil"] or yol != sozluk_kutusu[0]:
+            yeni_dil = None if a.dil == "auto" else OcrLanguage(a.dil)
+            if yeni_dil != motor["dil"] or yol != sozluk_kutusu[0]:
                 sozluk_kutusu[0] = yol
-                motorlari_kur(OcrLanguage(a.dil), yol)
+                motorlari_kur(yeni_dil, yol)
 
     sozluk_kutusu: list[Path | None] = [sozluk_yolu]
     pencere.ayarlar_degisti.connect(ayarlar_degisti)
 
     # -- Anlık çeviri (Snapshot) ---------------------------------------------------------------
     def anlik_cevir() -> None:
+        if acik_bolge and acik_bolge[0].isVisible():
+            pencere.durum_goster("Bölge izleme açık — önce onu kapat veya duraklat")
+            acik_bolge[0].activateWindow()
+            return
         if acik_anlik and acik_anlik[0][0].isVisible():
             return   # zaten açık
         acik_anlik.clear()
@@ -101,7 +148,8 @@ def _bagla(app: QtWidgets.QApplication, pencere: AnaPencere, dil: OcrLanguage, s
         assert isinstance(depo, MotorDeposu)
         duzeltici = motor["duzeltici"]
         assert isinstance(duzeltici, HedefDuzeltici)
-        dil = motor["dil"]
+        secici = motor.get("secici")
+        dil = secici.mevcut if isinstance(secici, DilSecici) else motor["dil"]
         assert isinstance(dil, OcrLanguage)
         if not depo.hazir_mi:
             pencere.durum_goster("modeller henüz yüklenmedi — birkaç saniye sonra tekrar dene")
@@ -118,8 +166,17 @@ def _bagla(app: QtWidgets.QApplication, pencere: AnaPencere, dil: OcrLanguage, s
         sekme_gizlendi = pencere.sekme.isVisible()
         if sekme_gizlendi:
             pencere.sekme.hide()
-        akis = AnlikAkisi(depo.ocr, depo.cevirici, depo.sozluk, kaynak_dili=NLLB_KODU[dil], duzeltici=duzeltici)
+        akis = AnlikAkisi(secici.motor(dil) if isinstance(secici, DilSecici) else depo.ocr, depo.cevirici, depo.sozluk,
+                          kaynak_dili=NLLB_KODU[dil], duzeltici=duzeltici,
+                          dil_secici=secici if isinstance(secici, DilSecici) else None, hafiza=hafiza)
         anlik = AnlikPencere(ekran, kare)
+        akis.dil_algilandi.connect(anlik.dil_goster)
+
+        def dil_bildir(kod: str, belirsiz: bool) -> None:
+            ad = DIL_ADI.get(OcrLanguage(kod), kod)
+            pencere.durum_goster(f"dil: {ad}" + (" (emin değil — ⚙ Ayarlar'dan seç)" if belirsiz else " (algılandı)"))
+
+        akis.dil_algilandi.connect(dil_bildir)
         akis.bloklar_hazir.connect(anlik.bloklari_goster)
         akis.ceviri_hazir.connect(anlik.ceviriyi_goster)
         akis.hata.connect(anlik.hata_goster)
@@ -140,10 +197,23 @@ def _bagla(app: QtWidgets.QApplication, pencere: AnaPencere, dil: OcrLanguage, s
 
     # -- Bölge izle ----------------------------------------------------------------------------
     def bolge_izle() -> None:
+        if acik_anlik and acik_anlik[0][0].isVisible():
+            pencere.durum_goster("Anlık çeviri açık — önce onu kapat")
+            acik_anlik[0][0].activateWindow()
+            return
+        if acik_bolge and acik_bolge[0].isVisible():
+            acik_bolge[0].activateWindow()
+            return
+        acik_bolge.clear()
         if acik_katman and acik_katman[0].isVisible():
             acik_katman[0].activateWindow()
             return
         acik_katman.clear()
+        depo = motor["depo"]
+        assert isinstance(depo, MotorDeposu)
+        if not depo.hazir_mi:
+            pencere.durum_goster("modeller henüz yüklenmedi — birkaç saniye sonra tekrar dene")
+            return
         birlesim = union_bbox(servis.monitors)
         if birlesim is None:
             return
@@ -158,8 +228,34 @@ def _bagla(app: QtWidgets.QApplication, pencere: AnaPencere, dil: OcrLanguage, s
                 pencere.sekme.show()
 
         def secildi(bolge: Rect) -> None:
-            izleme = IzlemePenceresi(servis, bolge)
-            izleme.resize(max(420, min(900, bolge.w)), max(220, min(560, bolge.h + 40)))
+            duzeltici = motor["duzeltici"]
+            assert isinstance(duzeltici, HedefDuzeltici)
+            secici = motor.get("secici")
+            dil = secici.mevcut if isinstance(secici, DilSecici) else motor["dil"]
+            assert isinstance(dil, OcrLanguage)
+            akis = AnlikAkisi(
+                secici.motor(dil) if isinstance(secici, DilSecici) else depo.ocr,
+                depo.cevirici,
+                depo.sozluk,
+                kaynak_dili=NLLB_KODU[dil],
+                duzeltici=duzeltici,
+                dil_secici=secici if isinstance(secici, DilSecici) else None,
+                hafiza=hafiza,
+            )
+            izleme = BolgePenceresi(servis, bolge, akis)
+            acik_bolge.append(izleme)
+
+            def yeniden_sec() -> None:
+                QtCore.QTimer.singleShot(0, bolge_izle)
+
+            izleme.yeniden_sec_istendi.connect(yeniden_sec)
+            izleme.kapatildi.connect(lambda: acik_bolge.clear())
+            akis.dil_algilandi.connect(
+                lambda kod, belirsiz: pencere.durum_goster(
+                    f"bölge izleme · dil: {DIL_ADI.get(OcrLanguage(kod), kod)}"
+                    + (" (emin değil)" if belirsiz else "")
+                )
+            )
             izleme.show()
             pencereler.append(izleme)
             bitti()
@@ -175,9 +271,13 @@ def _bagla(app: QtWidgets.QApplication, pencere: AnaPencere, dil: OcrLanguage, s
             w.close()
         for anlik, _ in acik_anlik:
             anlik.close()
+        for bolge in acik_bolge:
+            bolge.close()
         depo = motor.get("depo")
         if isinstance(depo, MotorDeposu):
             depo.kapat()
+        if hafiza is not None:
+            hafiza.close()
 
     pencere.anlik_cevir_istendi.connect(anlik_cevir)
     pencere.bolge_izle_istendi.connect(bolge_izle)
@@ -189,7 +289,8 @@ def main() -> int:
     args = [a.lower() for a in sys.argv[1:]]
     depo = AyarlarDeposu()                      # %APPDATA%/Suflor/ayarlar.json
     ayarlar = depo.yukle().ayarlar
-    dil = next((OcrLanguage(a) for a in args if a in {d.value for d in OcrLanguage}), OcrLanguage(ayarlar.dil))
+    dil: OcrLanguage | None = next((OcrLanguage(a) for a in args if a in {d.value for d in OcrLanguage}),
+                                   None if ayarlar.dil == "auto" else OcrLanguage(ayarlar.dil))
     kenar = Kenar.SOL if "sol" in args else (Kenar.SAG if "sag" in args else Kenar(ayarlar.kenar))
     sozluk_yolu = Path(ayarlar.sozluk_yolu) if ayarlar.sozluk_yolu else (SOZLUK if SOZLUK.exists() else None)
     return calistir(sys.argv, kenar=kenar, calistirici=lambda app, p: _bagla(app, p, dil, sozluk_yolu), ayarlar_deposu=depo)

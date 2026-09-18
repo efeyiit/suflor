@@ -8,8 +8,9 @@ Built for games, works anywhere. Free and offline.
 ---
 
 > [!NOTE]
-> **Status: design phase.** No code yet. This repository currently holds the design
-> document only. Development starts once the implementation plan is written.
+> **Status: development build.** Snapshot and Region Watch are connected to the
+> desktop app. The Windows package, model manager, translation-memory controls,
+> and final quality validation are still in progress for v1.
 
 ## Two modes
 
@@ -17,10 +18,9 @@ Built for games, works anywhere. Free and offline.
 get outlined, you pick the ones you want, and the selection is translated together
 with its visual context.
 
-**2 · Region Watch Mode** — Draw a rectangle on screen. Every piece of text that
-appears inside it is translated automatically and continuously; the translation flows
-into a semi-transparent strip attached to the region. You can detach the strip and
-move it to a second monitor.
+**2 · Region Watch Mode** — Draw a rectangle on screen. When the area settles after
+a change, its text is read and translated automatically. A compact always-on-top strip
+provides pause, source-text, reselect, and close controls.
 
 ## Three core stances
 
@@ -36,6 +36,10 @@ architectural stance.
 
 **No error stops the pipeline.** Persistent failures show as a single line in the
 status bar. Throwing a modal dialog at someone who is mid-game is unforgivable.
+
+**Consistent translation memory.** Generated translations are stored only in a local
+SQLite database. Repeated text reuses its previous Turkish translation, while similar
+text becomes context for providers that support translation-memory examples.
 
 ## Translation intelligence: four layers
 
@@ -53,9 +57,10 @@ but code.
 
 ## The game side
 
-- **Game profiles** — per-game regions, languages, engine, glossary, style profile and
-  OCR preset. Suggested automatically from the active window's executable name, and
-  shareable as `.json`.
+- **Universal core** — users do not need to prepare a profile for every game. Behavior
+  adapts to content types such as dialogue, subtitles, menus, and documents.
+- **Optional game context** — users may add a local glossary or context extracted from
+  game files; both modes work without either.
 - **Text-type presets** — dialogue box, menu, tooltip, subtitle; each needs different
   block-grouping and debounce behavior.
 - **Exclusive fullscreen** — overlays are invisible in this mode (a Windows
@@ -73,15 +78,15 @@ Targets: end-to-end ≤ 160 ms on cache hit / ≤ 320 ms on cache miss in Mode 2
 ## Install and run
 
 ```bash
-pip install -r requirements-dev.txt
-python -m pytest tests -q            # full suite (no models needed)
+python -m venv .venv
+.venv\Scripts\pip install -r requirements-dev.txt
+.venv\Scripts\python -m pytest tests -q  # full suite (no models needed)
 Suflor.bat                           # launch the app (double-click works; no console) — or: python demo/kabuk.py
-python demo/canli_cevir.py korean    # capture screen → OCR → glossary → Turkish (needs the model)
 ```
 
 The translation model (`models/nllb-200-distilled-600M-ct2-int8/`, ~650 MB) is not in the repo; JP/KR
-OCR models download on first run. `demo/` shows accepted components end to end; `.agents/tasks/`
-holds each component's measurements, packets and decisions.
+OCR models download on first run. `Suflor.bat` opens the working product shell;
+`.agents/tasks/` holds component measurements and decisions.
 
 ## Documentation
 

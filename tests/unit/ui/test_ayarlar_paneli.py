@@ -93,3 +93,11 @@ def test_k4_modal_yok_ast() -> None:
 def test_k4_tool_penceresi(qtbot: QtBot) -> None:
     p = panel(qtbot)
     assert bool(p.windowFlags() & Qt.WindowType.Tool) and not p.isModal()
+
+
+def test_t018_otomatik_dil_secenegi_ilk_sirada_ve_gidis_donus(qtbot: QtBot) -> None:
+    p = panel(qtbot, Ayarlar(dil="auto"))
+    assert p.dil.currentData() == "auto" and p.dil.itemData(0) == "auto" and "Otomatik" in p.dil.itemText(0)
+    assert p.ayarlar().dil == "auto" and p.ayarlar().dogrula() == []
+    p.dil.setCurrentIndex(p.dil.findData("japan"))
+    assert p.ayarlar().dil == "japan"

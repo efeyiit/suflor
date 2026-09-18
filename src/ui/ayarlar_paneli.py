@@ -28,7 +28,7 @@ from src.ayarlar import Ayarlar
 
 __all__ = ["AyarlarPaneli"]
 
-_DILLER = [("korean", "Korece"), ("japan", "Japonca"), ("chinese", "Çince"), ("english", "İngilizce")]
+_DILLER = [("auto", "Otomatik (oyundan algıla)"), ("korean", "Korece"), ("japan", "Japonca"), ("chinese", "Çince"), ("english", "İngilizce")]
 _BASLANGIC = [("gorunur", "Pencere açık"), ("tepsi", "Tepside"), ("kenar", "Kenarda (yarım daire)")]
 _STIL = (
     "QWidget{background:#0d1116; color:#d8e2ee; font-family:'Segoe UI'; font-size:13px;}"

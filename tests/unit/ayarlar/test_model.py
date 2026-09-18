@@ -15,10 +15,11 @@ from src.ayarlar import Ayarlar, AyarlarDeposu, varsayilan_ayar_yolu
 def test_k1_varsayilanlar_ve_dondurulmus() -> None:
     a = Ayarlar()
     assert (a.dil, a.kisayol_anlik, a.kisayol_bolge, a.sozluk_yolu, a.kenar, a.baslangic, a.surum) == \
-        ("korean", "Ctrl+Alt+D", "Ctrl+Alt+R", None, "sag", "gorunur", 1)
+        ("auto", "Ctrl+Alt+D", "Ctrl+Alt+R", None, "sag", "gorunur", 1)   # T-018: varsayilan dil = algila
     with pytest.raises(dataclasses.FrozenInstanceError):
         a.dil = "japan"  # type: ignore[misc]
-    assert a.ile(dil="japan").dil == "japan" and a.dil == "korean"
+    assert a.ile(dil="japan").dil == "japan" and a.dil == "auto"
+    assert Ayarlar(dil="korean").dogrula() == [] and Ayarlar(dil="auto").dogrula() == []
     assert a.dogrula() == []
 
 

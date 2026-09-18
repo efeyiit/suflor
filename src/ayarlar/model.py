@@ -5,7 +5,7 @@ UTF-8, insan tarafindan duzenlenebilir. Depoya girmez (`.gitignore` `settings.js
 
 ## Sozlesme (K1-K5, olcu: tests/unit/ayarlar/test_model.py)
 
-K1 Model: `Ayarlar` dondurulmus dataclass; alanlar ve varsayilanlar: `dil="korean"` (OcrLanguage degeri),
+K1 Model: `Ayarlar` dondurulmus dataclass; alanlar ve varsayilanlar: `dil="auto"` (T-018: algila; ya da OcrLanguage degeri),
    `kisayol_anlik="Ctrl+Alt+D"`, `kisayol_bolge="Ctrl+Alt+R"`, `sozluk_yolu=None` (str ya da None),
    `kenar="sag"` (`sag`|`sol`), `baslangic="gorunur"` (`gorunur`|`tepsi`|`kenar`), `surum=1`.
 K2 Dogrulama (`dogrula() -> list[str]`, alan adiyla mesaj): `dil` gecerli OcrLanguage degeri; kisayollar
@@ -33,14 +33,14 @@ from typing import Any
 __all__ = ["AYARLAR_DOSYASI_ADI", "Ayarlar", "AyarlarDeposu", "varsayilan_ayar_yolu"]
 
 AYARLAR_DOSYASI_ADI = "ayarlar.json"
-_DILLER = ("japan", "korean", "chinese", "english")
+_DILLER = ("auto", "japan", "korean", "chinese", "english")   # T-018: auto = oyun dilini algila
 _KENARLAR = ("sag", "sol")
 _BASLANGICLAR = ("gorunur", "tepsi", "kenar")
 
 
 @dataclass(frozen=True)
 class Ayarlar:
-    dil: str = "korean"
+    dil: str = "auto"
     kisayol_anlik: str = "Ctrl+Alt+D"
     kisayol_bolge: str = "Ctrl+Alt+R"
     sozluk_yolu: str | None = None

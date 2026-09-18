@@ -1,6 +1,6 @@
 {
   "faz": "dalga 3",
-  "guncelleme": "T-015, T-016 KABUL. Sirada: paketleme (tek exe) / model yonetimi (indirme + checksum) / TM.",
+  "guncelleme": "T-018, T-019, T-020 KABUL. Iki mod urun kabugunda; kalici ceviri hafizasi etkin. Sirada: Blue Prince gercek oyun kapisi, paketleme ve model yonetimi.",
   "paralellik_tavani": 4,
   "kilitlenme_esigi": 3,
   "tasima": "tek-el (16 Eylul 2026'dan itibaren: sef uygular+olcer+test eder; ajan turlari yok, kapilar kalir)",
@@ -254,6 +254,64 @@
       "tur": 1,
       "status": "kabul",
       "not": "KABUL 16 Eylul 2026 (tek el): 33 test; PySide ebeveyn-cocuk Python referansi yigin bozulmasi bulundu ve giderildi"
+    },
+    {
+      "id": "T-018",
+      "baslik": "Otomatik OCR dili secimi: KR/JP/ZH/EN, oturum boyunca kazanan dili koruma",
+      "dalga": 3,
+      "seviye": "B",
+      "owns": [
+        "src/ocr/dil_algila.py",
+        "src/pipeline/dil_secici.py"
+      ],
+      "depends_on": [
+        "T-006",
+        "T-014"
+      ],
+      "durum": "kabul",
+      "tur": 1,
+      "status": "kabul",
+      "not": "KABUL 18 Eylul 2026 (tek el): gercek model kapisi temiz; eski cagri sayisi testleri tam-kare kazanan okumasiyla uyumlu hale getirildi; tam takim T-019 ile 2432."
+    },
+    {
+      "id": "T-019",
+      "baslik": "Bolge Izleme urun modu: degisim -> OCR -> otomatik Turkce ceviri seridi",
+      "dalga": 3,
+      "seviye": "B",
+      "owns": [
+        "src/ui/bolge_pencere.py",
+        "demo/kabuk.py",
+        "tests/unit/ui/test_bolge_pencere.py"
+      ],
+      "depends_on": [
+        "T-002",
+        "T-005",
+        "T-014",
+        "T-018"
+      ],
+      "durum": "kabul",
+      "tur": 1,
+      "status": "kabul",
+      "not": "KABUL 18 Eylul 2026 (tek el): 4 yeni UI testi, 48 hedef testi, 2432 tam takim, mypy temiz. Blue Prince gercek oyun gecikme/yerlesim kapisi acik."
+    },
+    {
+      "id": "T-020",
+      "baslik": "Yerel ceviri hafizasi: kesin tekrar kullanimi ve trigram benzer ornekleri",
+      "dalga": 3,
+      "seviye": "B",
+      "owns": [
+        "src/store/translation_memory.py",
+        "src/pipeline/anlik.py",
+        "tests/unit/store/test_translation_memory.py"
+      ],
+      "depends_on": [
+        "T-014",
+        "T-019"
+      ],
+      "durum": "kabul",
+      "tur": 1,
+      "status": "kabul",
+      "not": "KABUL 18 Eylul 2026 (tek el): 2441 tam takim; mypy temiz; 50 bin kayitta benzer arama medyan 16.00 ms. Kesin eslesme modeli atliyor; benzer kayitlar tm_examples ile aktariliyor."
     }
   ],
   "sozlesmeler_donduruldu": true,
