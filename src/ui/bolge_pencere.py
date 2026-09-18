@@ -15,6 +15,7 @@ from src.capture.service import CaptureService
 from src.contracts.errors import CaptureError
 from src.contracts.models import Frame, Rect, Segment, TextBlock
 from src.pipeline.anlik import AnlikAkisi
+from src.ui.bolge_geometrisi import SERIT_YUKSEKLIK, serit_dikdortgeni
 
 __all__ = ["BolgePenceresi"]
 
@@ -42,6 +43,7 @@ class BolgePenceresi(QtWidgets.QWidget):
         *,
         dedektor: ChangeDetector | None = None,
         yenileme_ms: int = YENILEME_MS,
+        ekran_siniri: Rect | None = None,
         otomatik_baslat: bool = True,
     ) -> None:
         super().__init__()
@@ -53,25 +55,26 @@ class BolgePenceresi(QtWidgets.QWidget):
         self._duraklatildi = False
         self._bekleyen: Frame | None = None
         self._kapandi = False
+        self._ekran_siniri = ekran_siniri or self._bolgenin_ekrani(bolge)
 
         self.setWindowTitle("Suflör — Bölge İzleme")
         self.setWindowFlags(
-            QtCore.Qt.WindowType.Window
+            QtCore.Qt.WindowType.FramelessWindowHint
             | QtCore.Qt.WindowType.WindowStaysOnTopHint
             | QtCore.Qt.WindowType.Tool
         )
-        self.setMinimumSize(420, 138)
-        self.resize(680, 190)
-        self.setStyleSheet("background:#10151c; color:#edf4fb;")
+        self.setAttribute(QtCore.Qt.WidgetAttribute.WA_TranslucentBackground)
+        self.setAttribute(QtCore.Qt.WidgetAttribute.WA_ShowWithoutActivating)
+        self.setStyleSheet("background:transparent; color:#edf4fb;")
 
         self._ceviri = QtWidgets.QLabel("Seçilen alan okunuyor…")
         self._ceviri.setObjectName("ceviri")
         self._ceviri.setWordWrap(True)
         self._ceviri.setTextInteractionFlags(QtCore.Qt.TextInteractionFlag.TextSelectableByMouse)
-        self._ceviri.setAlignment(QtCore.Qt.AlignmentFlag.AlignTop | QtCore.Qt.AlignmentFlag.AlignLeft)
+        self._ceviri.setAlignment(QtCore.Qt.AlignmentFlag.AlignVCenter | QtCore.Qt.AlignmentFlag.AlignLeft)
         self._ceviri.setStyleSheet(
-            "QLabel#ceviri { background:#151d27; border:1px solid #2d4052; border-radius:8px;"
-            " padding:12px; font:600 16px 'Segoe UI'; }"
+            "QLabel#ceviri { background:transparent; border:none; padding:10px 12px;"
+            " font:600 16px 'Segoe UI'; }"
         )
 
         self._kaynak = QtWidgets.QLabel()
@@ -79,8 +82,8 @@ class BolgePenceresi(QtWidgets.QWidget):
         self._kaynak.setWordWrap(True)
         self._kaynak.setTextInteractionFlags(QtCore.Qt.TextInteractionFlag.TextSelectableByMouse)
         self._kaynak.setStyleSheet(
-            "QLabel#kaynak { color:#aebdcb; background:#0d1218; border-radius:6px;"
-            " padding:8px; font:12px 'Segoe UI'; }"
+            "QLabel#kaynak { color:#aebdcb; background:#0d1218; border-radius:5px;"
+            " padding:6px 10px; font:12px 'Segoe UI'; }"
         )
         self._kaynak.hide()
 
@@ -89,35 +92,54 @@ class BolgePenceresi(QtWidgets.QWidget):
         self._dil = QtWidgets.QLabel("Dil: otomatik")
         self._dil.setStyleSheet("color:#8fd3ff; padding:2px 6px; font-weight:600;")
 
-        self._duraklat = QtWidgets.QPushButton("Duraklat")
+        self._duraklat = QtWidgets.QPushButton("Ⅱ")
         self._duraklat.setAccessibleName("Bölge izlemeyi duraklat")
-        self._kaynak_dugmesi = QtWidgets.QPushButton("Kaynağı göster")
+        self._duraklat.setToolTip("Duraklat")
+        self._kaynak_dugmesi = QtWidgets.QPushButton("Kaynak")
         self._kaynak_dugmesi.setAccessibleName("Kaynak metni göster veya gizle")
-        self._yeniden_sec = QtWidgets.QPushButton("Alanı değiştir")
+        self._kaynak_dugmesi.setToolTip("Kaynak metni göster")
+        self._yeniden_sec = QtWidgets.QPushButton("↗")
         self._yeniden_sec.setAccessibleName("İzlenen alanı yeniden seç")
-        self._kapat = QtWidgets.QPushButton("Kapat")
+        self._yeniden_sec.setToolTip("Alanı değiştir")
+        self._kapat = QtWidgets.QPushButton("×")
         self._kapat.setAccessibleName("Bölge izlemeyi kapat")
+        self._kapat.setToolTip("Kapat")
         for dugme in (self._duraklat, self._kaynak_dugmesi, self._yeniden_sec, self._kapat):
             dugme.setCursor(QtCore.Qt.CursorShape.PointingHandCursor)
+            dugme.setFocusPolicy(QtCore.Qt.FocusPolicy.NoFocus)
             dugme.setStyleSheet(
                 "QPushButton { background:#243241; border:1px solid #3b5064; border-radius:5px;"
-                " padding:5px 9px; } QPushButton:hover { background:#30455a; }"
+                " padding:3px 7px; min-height:20px; } QPushButton:hover { background:#30455a; }"
             )
 
-        ust = QtWidgets.QHBoxLayout()
-        ust.addWidget(self._durum, 1)
-        ust.addWidget(self._dil)
-        ust.addWidget(self._duraklat)
-        ust.addWidget(self._kaynak_dugmesi)
-        ust.addWidget(self._yeniden_sec)
-        ust.addWidget(self._kapat)
+        self._araclar = QtWidgets.QFrame()
+        arac_duzeni = QtWidgets.QHBoxLayout(self._araclar)
+        arac_duzeni.setContentsMargins(8, 2, 8, 6)
+        arac_duzeni.setSpacing(5)
+        arac_duzeni.addWidget(self._durum, 1)
+        arac_duzeni.addWidget(self._dil)
+        arac_duzeni.addWidget(self._duraklat)
+        arac_duzeni.addWidget(self._kaynak_dugmesi)
+        arac_duzeni.addWidget(self._yeniden_sec)
+        arac_duzeni.addWidget(self._kapat)
+        self._araclar.hide()
+
+        self._govde = QtWidgets.QFrame()
+        self._govde.setObjectName("govde")
+        self._govde.setStyleSheet(
+            "QFrame#govde { background:rgba(16,21,28,238); border:1px solid #3b5064; border-radius:10px; }"
+        )
+        govde_duzeni = QtWidgets.QVBoxLayout(self._govde)
+        govde_duzeni.setContentsMargins(0, 0, 0, 0)
+        govde_duzeni.setSpacing(0)
+        govde_duzeni.addWidget(self._ceviri, 1)
+        govde_duzeni.addWidget(self._kaynak)
+        govde_duzeni.addWidget(self._araclar)
 
         duzen = QtWidgets.QVBoxLayout(self)
-        duzen.setContentsMargins(8, 8, 8, 8)
-        duzen.setSpacing(6)
-        duzen.addLayout(ust)
-        duzen.addWidget(self._ceviri, 1)
-        duzen.addWidget(self._kaynak)
+        duzen.setContentsMargins(0, 0, 0, 0)
+        duzen.addWidget(self._govde)
+        self._konumlan()
 
         self._duraklat.clicked.connect(self.duraklat_devam_et)
         self._kaynak_dugmesi.clicked.connect(self.kaynagi_degistir)
@@ -141,6 +163,24 @@ class BolgePenceresi(QtWidgets.QWidget):
     @property
     def mesgul(self) -> bool:
         return self._mesgul
+
+    @property
+    def araclar_gorunur(self) -> bool:
+        return not self._araclar.isHidden()
+
+    @staticmethod
+    def _bolgenin_ekrani(bolge: Rect) -> Rect:
+        merkez = QtCore.QPoint(bolge.x + bolge.w // 2, bolge.y + bolge.h // 2)
+        ekran = QtGui.QGuiApplication.screenAt(merkez) or QtGui.QGuiApplication.primaryScreen()
+        if ekran is None:
+            return Rect(bolge.x, bolge.y, max(bolge.w, 1), max(bolge.h, SERIT_YUKSEKLIK))
+        g = ekran.availableGeometry()
+        return Rect(g.x(), g.y(), g.width(), g.height(), bolge.monitor_index, bolge.dpi_scale)
+
+    def _konumlan(self) -> None:
+        yukseklik = 190 if not self._kaynak.isHidden() else SERIT_YUKSEKLIK
+        g = serit_dikdortgeni(self._bolge, self._ekran_siniri, yukseklik=yukseklik)
+        self.setGeometry(g.x, g.y, g.w, g.h)
 
     @QtCore.Slot()
     def _tik(self) -> None:
@@ -221,7 +261,7 @@ class BolgePenceresi(QtWidgets.QWidget):
             self._durum.setText("Duraklatıldı")
         else:
             self._zamanlayici.start()
-            self._duraklat.setText("Duraklat")
+            self._duraklat.setText("Ⅱ")
             self._duraklat.setAccessibleName("Bölge izlemeyi duraklat")
             self._durum.setText("Alan izleniyor")
             if self._bekleyen is not None and not self._mesgul:
@@ -233,11 +273,25 @@ class BolgePenceresi(QtWidgets.QWidget):
         gorunecek = self._kaynak.isHidden()
         self._kaynak.setVisible(gorunecek)
         self._kaynak_dugmesi.setText("Kaynağı gizle" if gorunecek else "Kaynağı göster")
+        self._konumlan()
 
     @QtCore.Slot()
     def _yeniden_sec_tiklandi(self) -> None:
         self.yeniden_sec_istendi.emit()
         self.close()
+
+    def enterEvent(self, event: QtGui.QEnterEvent) -> None:
+        self._araclar.show()
+        super().enterEvent(event)
+
+    def leaveEvent(self, event: QtCore.QEvent) -> None:
+        if self._kaynak.isHidden():
+            self._araclar.hide()
+        super().leaveEvent(event)
+
+    def showEvent(self, event: QtGui.QShowEvent) -> None:
+        self._konumlan()
+        super().showEvent(event)
 
     def closeEvent(self, event: QtGui.QCloseEvent) -> None:
         if not self._kapandi:
@@ -247,4 +301,3 @@ class BolgePenceresi(QtWidgets.QWidget):
             self._akis.kapat()
             self.kapatildi.emit()
         super().closeEvent(event)
-

@@ -2,7 +2,7 @@
 from __future__ import annotations
 
 import numpy as np
-from PySide6 import QtCore
+from PySide6 import QtCore, QtWidgets
 from pytestqt.qtbot import QtBot
 
 from src.capture.change_detector import ChangeDetector
@@ -70,6 +70,40 @@ def test_degisen_alani_okur_ve_ceviriyi_gosterir(qtbot: QtBot) -> None:
     assert pencere._ceviri.text() == "Batı kapısını aç."
     assert pencere._kaynak.text() == "Open the west door."
     assert not pencere.mesgul and pencere._durum.text() == "Alan izleniyor"
+
+
+def test_pencere_bolgeye_yapisik_cercevesiz_saydam_serittir(qtbot: QtBot) -> None:
+    akis = SahteAkis()
+    pencere = BolgePenceresi(
+        SahteServis([kare(1)]),
+        Rect(100, 300, 500, 100),
+        akis,
+        ekran_siniri=Rect(0, 0, 1920, 1080),
+        otomatik_baslat=False,
+    )  # type: ignore[arg-type]
+    qtbot.addWidget(pencere)
+    pencere.show()
+
+    assert pencere.geometry() == QtCore.QRect(100, 180, 500, 112)
+    assert pencere.windowFlags() & QtCore.Qt.WindowType.FramelessWindowHint
+    assert pencere.windowFlags() & QtCore.Qt.WindowType.WindowStaysOnTopHint
+    assert pencere.testAttribute(QtCore.Qt.WidgetAttribute.WA_TranslucentBackground)
+    assert pencere._ceviri.isVisible()
+    assert not pencere.araclar_gorunur
+
+
+def test_araclar_yalniz_fare_uzerindeyken_gorunur(qtbot: QtBot) -> None:
+    pencere = BolgePenceresi(
+        SahteServis([kare(1)]), Rect(100, 300, 500, 100), SahteAkis(),
+        ekran_siniri=Rect(0, 0, 1920, 1080), otomatik_baslat=False,
+    )  # type: ignore[arg-type]
+    qtbot.addWidget(pencere)
+    pencere.show()
+
+    QtWidgets.QApplication.sendEvent(pencere, QtCore.QEvent(QtCore.QEvent.Type.Enter))
+    assert pencere.araclar_gorunur and pencere._ceviri.isVisible()
+    QtWidgets.QApplication.sendEvent(pencere, QtCore.QEvent(QtCore.QEvent.Type.Leave))
+    assert not pencere.araclar_gorunur and pencere._ceviri.isVisible()
 
 
 def test_is_sururken_yalniz_en_son_degisen_kare_bekler(qtbot: QtBot) -> None:
