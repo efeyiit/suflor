@@ -8,7 +8,8 @@ from pytestqt.qtbot import QtBot
 
 from src.contracts.errors import ModelMissingError
 from src.contracts.interfaces import FakeOcrEngine, FakeProvider
-from src.pipeline.motorlar import MotorDeposu
+from src.pipeline.motorlar import MotorDeposu, gercek_fabrikalar
+from src.translate.fallback import QualityFallbackProvider
 
 
 def yavas_ocr() -> FakeOcrEngine:
@@ -55,3 +56,15 @@ def test_kapat_saglayiciyi_kapatir(qtbot: QtBot) -> None:
         d.baslat()
     d.kapat()
     assert kapandi == [1]
+
+
+def test_gercek_fabrika_kalite_dosyalari_varsa_quality_first_saglayici_kurar(tmp_path: object) -> None:
+    from pathlib import Path
+
+    kok = Path(str(tmp_path))
+    exe, kalite, nllb = kok / "llama-server.exe", kok / "quality.gguf", kok / "nllb"
+    exe.write_bytes(b"exe"); kalite.write_bytes(b"gguf"); nllb.mkdir()
+    _, ceviri, _ = gercek_fabrikalar("english", nllb, None, kalite_yollari=(exe, kalite))
+    saglayici = ceviri()
+    assert isinstance(saglayici, QualityFallbackProvider)
+    saglayici.close()

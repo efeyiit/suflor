@@ -35,6 +35,7 @@ htmlcov/
 # --- Suflor: yerel calisma verisi (asla commit edilmez) ---
 # Indirilen model agirliklari - buyuk, ModelManager tarafindan cekilir
 models/
+runtime/
 *.onnx
 *.gguf
 *.bin

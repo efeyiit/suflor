@@ -17,12 +17,18 @@ from PySide6.QtCore import QObject, QThread, Signal
 from src.contracts.interfaces import OcrEngine, TranslationProvider
 from src.translate.sozluk import GlossaryStore
 
-__all__ = ["MotorDeposu", "MotorFabrikalari"]
+__all__ = ["MotorDeposu", "MotorFabrikalari", "gercek_fabrikalar"]
 
 MotorFabrikalari = tuple[Callable[[], OcrEngine], Callable[[], TranslationProvider], Callable[[], GlossaryStore | None]]
 
 
-def gercek_fabrikalar(ocr_dili: object, model_dizini: Path, sozluk_yolu: Path | None, threads: int = 8) -> MotorFabrikalari:
+def gercek_fabrikalar(
+    ocr_dili: object,
+    model_dizini: Path,
+    sozluk_yolu: Path | None,
+    threads: int = 8,
+    kalite_yollari: tuple[Path, Path] | None = None,
+) -> MotorFabrikalari:
     """Gercek motor fabrikalari (import'lar gecikmeli: pipeline testleri OCR/NMT kutuphanelerini yuklemez)."""
     def ocr() -> OcrEngine:
         from src.ocr.rapid_engine import OcrLanguage, RapidOcrEngine
@@ -30,7 +36,14 @@ def gercek_fabrikalar(ocr_dili: object, model_dizini: Path, sozluk_yolu: Path | 
 
     def cevirici() -> TranslationProvider:
         from src.translate.local_nmt import LocalNmtProvider
-        return LocalNmtProvider(model_dir=model_dizini, threads=threads)
+        nmt = LocalNmtProvider(model_dir=model_dizini, threads=threads)
+        if kalite_yollari is None or not all(yol.is_file() for yol in kalite_yollari):
+            return nmt
+        from src.translate.fallback import QualityFallbackProvider
+        from src.translate.llama_local import LlamaLocalProvider
+        from src.translate.llama_server import LlamaServer
+        executable, model = kalite_yollari
+        return QualityFallbackProvider(LlamaLocalProvider(LlamaServer(executable, model)), nmt)
 
     def sozluk() -> GlossaryStore | None:
         return GlossaryStore(sozluk_yolu) if sozluk_yolu is not None else None

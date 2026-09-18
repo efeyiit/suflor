@@ -51,6 +51,7 @@ from src.pipeline.anlik import AnlikAkisi  # noqa: E402
 from src.pipeline.dil_secici import DilSecici  # noqa: E402
 from src.ayarlar import Ayarlar, AyarlarDeposu  # noqa: E402
 from src.pipeline.motorlar import MotorDeposu, gercek_fabrikalar  # noqa: E402
+from src.model_yonetimi.kalite_modeli import KaliteModeliYoneticisi  # noqa: E402
 from src.store.translation_memory import TranslationMemory  # noqa: E402
 from src.translate.hedef_duzeltici import HedefDuzeltici  # noqa: E402
 from src.ui.anlik_pencere import AnlikPencere  # noqa: E402
@@ -62,6 +63,7 @@ from src.ui.yakalama_gizliligi import YakalamaGizliligi  # noqa: E402
 
 KOK = Path(__file__).resolve().parent.parent
 MODEL_DIZINI = KOK / "models" / "nllb-200-distilled-600M-ct2-int8"
+KALITE_YONETICISI = KaliteModeliYoneticisi(KOK / "models", KOK / "runtime")
 SOZLUK = KOK / "demo" / "sozluk_ornek.json"
 NLLB_KODU = {OcrLanguage.JAPAN: "jpn_Jpan", OcrLanguage.KOREAN: "kor_Hang", OcrLanguage.CHINESE: "zho_Hans", OcrLanguage.ENGLISH: "eng_Latn"}
 DIL_ADI = {OcrLanguage.JAPAN: "Japonca", OcrLanguage.KOREAN: "Korece", OcrLanguage.CHINESE: "Çince", OcrLanguage.ENGLISH: "İngilizce"}
@@ -110,16 +112,24 @@ def _bagla(app: QtWidgets.QApplication, pencere: AnaPencere, dil: OcrLanguage | 
         if isinstance(eski, MotorDeposu):
             eski.kapat()
         sozluk = yeni_sozluk if yeni_sozluk is not None and yeni_sozluk.exists() else None
+        kalite_yollari = (
+            (KALITE_YONETICISI.executable_path, KALITE_YONETICISI.model_path)
+            if KALITE_YONETICISI.hazir_mi else None
+        )
         if yeni_dil is None:
             onceki = motor.get("secici")
             baslangic = onceki.mevcut if isinstance(onceki, DilSecici) else OTOMATIK_BASLANGIC
             secici = DilSecici(ocr_fabrikasi, NLLB_KODU, baslangic=baslangic)   # type: ignore[arg-type]
             motor["secici"] = secici
-            ocr_f, cev_f, soz_f = gercek_fabrikalar(baslangic, MODEL_DIZINI, sozluk)
+            ocr_f, cev_f, soz_f = gercek_fabrikalar(
+                baslangic, MODEL_DIZINI, sozluk, kalite_yollari=kalite_yollari
+            )
             fabrikalar = (lambda: secici.motor(secici.mevcut), cev_f, soz_f)   # depo OCR'i = secicinin motoru (tek kopya)
         else:
             motor.pop("secici", None)
-            fabrikalar = gercek_fabrikalar(yeni_dil, MODEL_DIZINI, sozluk)
+            fabrikalar = gercek_fabrikalar(
+                yeni_dil, MODEL_DIZINI, sozluk, kalite_yollari=kalite_yollari
+            )
         depo = MotorDeposu(fabrikalar)
         motor["depo"], motor["dil"] = depo, yeni_dil
         motor["duzeltici"] = HedefDuzeltici.dosyadan(sozluk) if sozluk is not None else HedefDuzeltici()   # T-015
