@@ -47,12 +47,24 @@ def test_baglam_sozluk_hafiza_stil_konusmaci_ve_butun_segmentleri_tasir() -> Non
     assert sonuc.translations == ("Batı kapısını aç.",)
     assert sonuc.provider_id == "local-llama-qwen3-4b" and sonuc.detected_lang == "eng_Latn"
     sistem, kullanici, azami = sohbet.cagrilar[0]
-    veri = json.loads(kullanici)
+    kurallar, json_istegi = kullanici.split("GİRDİ JSON:\n", 1)
+    veri = json.loads(json_istegi)
     assert "yalnızca" in sistem.casefold() and azami >= 128
+    assert "West Door => Batı Kapısı" in kurallar
+    assert "'West Door' yazmak YASAKTIR" in kurallar
+    assert "'Batı Kapısı' ifadesini içerirse geçerlidir" in kurallar
     assert veri["style"] == "Blue Prince: doğal, kısa oyun Türkçesi; oda adlarını koru."
     assert veri["glossary"] == [{"source": "West Door", "target": "Batı Kapısı", "note": "özel oda adı"}]
     assert veri["translation_memory"][0]["target"] == "Doğu kapısını aç."
-    assert veri["segments"] == [{"id": 0, "speaker": "Simon", "text": "Open the west door."}]
+    assert veri["segments"] == [{"id": 0, "speaker": "Simon", "text": "Open the ⟦Batı Kapısı⟧."}]
+
+
+def test_modelin_biraktigi_terim_isaretlerini_sonuctan_temizler() -> None:
+    sohbet = SahteSohbet('{"translations":["⟦Batı Kapısı⟧nı aç."]}')
+
+    sonuc = LlamaLocalProvider(sohbet).translate(istek())
+
+    assert sonuc.translations == ("Batı Kapısını aç.",)
 
 
 def test_coklu_segment_json_dizisiyle_birebir_hizalanir() -> None:
@@ -102,4 +114,3 @@ def test_close_sohbet_istemcisini_bir_kez_kapatir() -> None:
     saglayici.close()
     saglayici.close()
     assert sohbet.kapandi == 1
-

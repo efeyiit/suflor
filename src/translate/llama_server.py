@@ -90,8 +90,8 @@ class LlamaServer:
     ) -> None:
         if startup_attempts < 1 or request_timeout <= 0:
             raise ValueError("startup_attempts >= 1 ve request_timeout > 0 olmalı")
-        self._executable = Path(executable)
-        self._model = Path(model)
+        self._executable = Path(executable).resolve()
+        self._model = Path(model).resolve()
         self._port = int(port if port is not None else _bos_port())
         self._process_start = process_start or _windows_process_baslat
         self._transport = transport or _StdlibTransport()
@@ -136,6 +136,7 @@ class LlamaServer:
             "temperature": 0,
             "seed": 0,
             "max_tokens": int(max_tokens),
+            "chat_template_kwargs": {"enable_thinking": False},
             "response_format": {"type": "json_object"},
         }
         try:

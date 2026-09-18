@@ -81,9 +81,13 @@ def test_yonetici_runtime_ve_modeli_dogrulayip_hazir_yapar(tmp_path: Path) -> No
     runtime_spec, model_spec = tanim("runtime.zip", runtime), tanim("model.gguf", model)
     veriler = {runtime_spec.url: runtime, model_spec.url: model}
     ilerleme: list[tuple[int, int]] = []
+    bagimliliklar = tmp_path / "deps"
+    bagimliliklar.mkdir()
+    for ad in ("msvcp140.dll", "vcruntime140.dll", "vcruntime140_1.dll"):
+        (bagimliliklar / ad).write_bytes(ad.encode())
     yonetici = KaliteModeliYoneticisi(
         tmp_path / "models", tmp_path / "runtime", model_spec=model_spec, runtime_spec=runtime_spec,
-        opener=lambda url: io.BytesIO(veriler[url]),
+        opener=lambda url: io.BytesIO(veriler[url]), dependency_dirs=(bagimliliklar,),
     )
 
     assert not yonetici.hazir_mi
@@ -92,6 +96,9 @@ def test_yonetici_runtime_ve_modeli_dogrulayip_hazir_yapar(tmp_path: Path) -> No
     assert yonetici.hazir_mi
     assert yonetici.model_path.read_bytes() == model
     assert yonetici.executable_path.read_bytes() == b"runner"
+    assert (yonetici.executable_path.parent / "msvcp140.dll").is_file()
+    assert (yonetici.executable_path.parent / "vcruntime140.dll").is_file()
+    assert (yonetici.executable_path.parent / "vcruntime140_1.dll").is_file()
     assert ilerleme[-1] == (len(runtime) + len(model), len(runtime) + len(model))
 
 

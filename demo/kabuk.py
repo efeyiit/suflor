@@ -52,6 +52,7 @@ from src.pipeline.dil_secici import DilSecici  # noqa: E402
 from src.ayarlar import Ayarlar, AyarlarDeposu  # noqa: E402
 from src.pipeline.motorlar import MotorDeposu, gercek_fabrikalar  # noqa: E402
 from src.model_yonetimi.kalite_modeli import KaliteModeliYoneticisi  # noqa: E402
+from src.model_yonetimi.indirici import KaliteModeliIndirici  # noqa: E402
 from src.store.translation_memory import TranslationMemory  # noqa: E402
 from src.translate.hedef_duzeltici import HedefDuzeltici  # noqa: E402
 from src.ui.anlik_pencere import AnlikPencere  # noqa: E402
@@ -102,6 +103,7 @@ def _bagla(app: QtWidgets.QApplication, pencere: AnaPencere, dil: OcrLanguage | 
     acik_anlik: list[tuple[AnlikPencere, AnlikAkisi]] = []
     acik_bolge: list[BolgePenceresi] = []
     motor: dict[str, object] = {}   # depo, duzeltici, dil, secici -- ayar degisince yeniden kurulur
+    sozluk_kutusu: list[Path | None] = [sozluk_yolu]
 
     def ocr_fabrikasi(d: OcrLanguage) -> object:
         from src.ocr.rapid_engine import RapidOcrEngine
@@ -146,6 +148,32 @@ def _bagla(app: QtWidgets.QApplication, pencere: AnaPencere, dil: OcrLanguage | 
         depo.hata.connect(lambda sinif: pencere.durum_goster(f"model yüklenemedi: {sinif} — models/ dizinini kontrol et"))
         depo.baslat()
 
+    indirici = KaliteModeliIndirici(KALITE_YONETICISI.indir, pencere)
+
+    def kalite_ilerleme(yapilan: object, toplam: object) -> None:
+        pencere.kalite_modeli_durumu("indiriliyor", int(yapilan), int(toplam))
+
+    def kalite_hazir() -> None:
+        pencere.kalite_modeli_durumu("hazir")
+        mevcut_dil = motor.get("dil")
+        motorlari_kur(mevcut_dil if isinstance(mevcut_dil, OcrLanguage) else None, sozluk_kutusu[0])
+
+    def kalite_hata(_sinif: str) -> None:
+        pencere.kalite_modeli_durumu("hata")
+
+    def kalite_indir() -> None:
+        if KALITE_YONETICISI.hazir_mi:
+            kalite_hazir()
+            return
+        pencere.kalite_modeli_durumu("indiriliyor", 0, KALITE_YONETICISI.toplam_boyut)
+        indirici.baslat()
+
+    indirici.ilerleme.connect(kalite_ilerleme)
+    indirici.hazir.connect(kalite_hazir)
+    indirici.hata.connect(kalite_hata)
+    pencere.kalite_modeli_indir_istendi.connect(kalite_indir)
+    pencere.kalite_modeli_durumu("hazir" if KALITE_YONETICISI.hazir_mi else "eksik")
+
     motorlari_kur(dil, sozluk_yolu)
 
     def ayarlar_degisti(a: object) -> None:
@@ -156,7 +184,6 @@ def _bagla(app: QtWidgets.QApplication, pencere: AnaPencere, dil: OcrLanguage | 
                 sozluk_kutusu[0] = yol
                 motorlari_kur(yeni_dil, yol)
 
-    sozluk_kutusu: list[Path | None] = [sozluk_yolu]
     pencere.ayarlar_degisti.connect(ayarlar_degisti)
 
     # -- Anlık çeviri (Snapshot) ---------------------------------------------------------------

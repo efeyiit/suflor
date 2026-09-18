@@ -128,6 +128,34 @@ def test_k1_baslangic_gorunur(pencere: AnaPencere) -> None:
     assert isinstance(pencere.sekme, KenarSekmesi) and isinstance(pencere.tepsi, Tepsi)
 
 
+def test_kalite_modeli_eksik_indiriliyor_hazir_ve_hata_durumlari(pencere: AnaPencere) -> None:
+    istekler: list[bool] = []
+    pencere.kalite_modeli_indir_istendi.connect(lambda: istekler.append(True))
+
+    pencere.kalite_modeli_durumu("eksik")
+    assert pencere.dugme_kalite.isVisible() and pencere.dugme_kalite.isEnabled()
+    assert "2,5 GB" in pencere.dugme_kalite.text()
+    pencere.dugme_kalite.click()
+    assert istekler == [True]
+
+    pencere.kalite_modeli_durumu("indiriliyor", 1_250_000_000, 2_500_000_000)
+    assert not pencere.dugme_kalite.isEnabled() and pencere.kalite_ilerleme.isVisible()
+    assert 49 <= pencere.kalite_ilerleme.value() <= 51
+
+    pencere.kalite_modeli_durumu("hazir")
+    assert not pencere.dugme_kalite.isVisible() and not pencere.kalite_ilerleme.isVisible()
+    assert pencere.kalite_durum_metni() == "Bağlamlı çeviri hazır"
+
+    pencere.kalite_modeli_durumu("hata")
+    assert pencere.dugme_kalite.isVisible() and pencere.dugme_kalite.isEnabled()
+    assert "Tekrar dene" in pencere.dugme_kalite.text()
+
+
+def test_kalite_modeli_bilinmeyen_durum_reddedilir(pencere: AnaPencere) -> None:
+    with pytest.raises(ValueError):
+        pencere.kalite_modeli_durumu("bilinmeyen")
+
+
 def test_k1_gorunur_to_tepsi(pencere: AnaPencere) -> None:
     pencere.tepsiye_al()
     assert pencere.durum is KabukDurumu.TEPSI and uclu(pencere) == TEPSI
@@ -936,4 +964,3 @@ def test_t013_k4_kisayol_tetiklendi_kapat_sonrasi_da_sinyal_yayar_dirilme_yok(pe
     pencere.kapat()
     pencere.kisayol_tetiklendi("anlik_cevir")
     assert sayac == [1] and uclu(pencere) == KAPALI and cikis == [1]
-

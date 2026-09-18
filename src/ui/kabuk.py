@@ -172,7 +172,7 @@ from typing import ClassVar
 
 from PySide6.QtCore import QObject, QPoint, Qt, Signal
 from PySide6.QtGui import QCloseEvent, QColor, QFont, QGuiApplication, QIcon, QMouseEvent, QPainter, QPixmap, QScreen
-from PySide6.QtWidgets import QHBoxLayout, QLabel, QMenu, QPushButton, QSystemTrayIcon, QVBoxLayout, QWidget
+from PySide6.QtWidgets import QHBoxLayout, QLabel, QMenu, QProgressBar, QPushButton, QSystemTrayIcon, QVBoxLayout, QWidget
 
 from src.ui.geometri import Kenar
 from src.ui.kenar_sekmesi import KenarSekmesi
@@ -195,6 +195,10 @@ _PENCERE_STILI = (
     f"QPushButton#mod{{background:{_YUZEY}; border:1px solid {_CIZGI}; border-radius:10px; padding:18px;"
     f" font-size:15px; text-align:left;}}"
     f"QPushButton#mod:hover{{border-color:{_VURGU};}}"
+    f"QPushButton#kalite{{background:#182533; border:1px solid #35516b; border-radius:7px; padding:8px 12px; text-align:left;}}"
+    f"QPushButton#kalite:hover{{border-color:{_VURGU};}}"
+    "QProgressBar#kaliteIlerleme{background:#111820; border:1px solid #2a3a49; border-radius:4px; height:8px; text-align:center;}"
+    f"QProgressBar#kaliteIlerleme::chunk{{background:{_VURGU}; border-radius:3px;}}"
     f"QPushButton#ust{{background:transparent; border:none; color:#9fb3c8; font-size:15px; min-width:36px; min-height:28px;}}"
     f"QPushButton#ust:hover{{background:#222a33; color:{_YAZI};}}"
     f"QPushButton#kapat{{background:transparent; border:none; color:#9fb3c8; font-size:15px; min-width:36px; min-height:28px;}}"
@@ -298,6 +302,7 @@ class AnaPencere(QWidget):
     cikis_istendi = Signal()
     ayarlar_istendi = Signal()          # T-016: ⚙ dugmesi; paneli `uygulama.calistir` acar
     ayarlar_degisti = Signal(object)    # T-016: kaydedilen `Ayarlar`; pipeline baglayicisi dinler (dil/sozluk)
+    kalite_modeli_indir_istendi = Signal()
     _balon_gosterildi: ClassVar[bool] = False  # K5 ▲▲: "arka planda" balonu SUREC basina bir kez (test sifirlar)
 
     def __init__(
@@ -342,11 +347,28 @@ class AnaPencere(QWidget):
         self._durum_satiri = QLabel("")
         self._durum_satiri.setObjectName("not")
         self._durum_satiri.setWordWrap(True)
+        self._kalite_durum = QLabel("")
+        self._kalite_durum.setObjectName("not")
+        self._kalite_durum.setWordWrap(True)
+        self._kalite_durum.hide()
+        self._dugme_kalite = QPushButton("Kalite modelini indir · 2,5 GB")
+        self._dugme_kalite.setObjectName("kalite")
+        self._dugme_kalite.setAccessibleName("Bağlamlı çeviri kalite modelini indir")
+        self._dugme_kalite.setToolTip("Ücretsiz yerel model; oyun metni bilgisayarından çıkmaz")
+        self._dugme_kalite.hide()
+        self._kalite_ilerleme = QProgressBar()
+        self._kalite_ilerleme.setObjectName("kaliteIlerleme")
+        self._kalite_ilerleme.setRange(0, 100)
+        self._kalite_ilerleme.setTextVisible(False)
+        self._kalite_ilerleme.hide()
         govde = QVBoxLayout()
         govde.setContentsMargins(18, 10, 18, 14)
         govde.setSpacing(10)
         govde.addWidget(self._dugme_anlik)
         govde.addWidget(self._dugme_bolge)
+        govde.addWidget(self._kalite_durum)
+        govde.addWidget(self._dugme_kalite)
+        govde.addWidget(self._kalite_ilerleme)
         govde.addStretch(1)
         govde.addWidget(notu)
         govde.addWidget(self._durum_satiri)
@@ -373,6 +395,7 @@ class AnaPencere(QWidget):
         self._dugme_kenar.clicked.connect(self.kenara_al)
         self._dugme_anlik.clicked.connect(self.anlik_cevir_istendi.emit)
         self._dugme_bolge.clicked.connect(self.bolge_izle_istendi.emit)
+        self._dugme_kalite.clicked.connect(self.kalite_modeli_indir_istendi.emit)
         # O-B5 / D-A9: `deleteLater()` + tutulan Python referansi -> C++ AnaPencere olur, `_sekme` sarmalayicisi
         # `__dict__`te yasar (zombi yarim daire). Alici sekme (bagli yontem, `self` yakalanmaz): C++ olunce sekme de silinir.
         self.destroyed.connect(self._sekme.deleteLater)
@@ -427,6 +450,14 @@ class AnaPencere(QWidget):
     def dugme_bolge(self) -> QPushButton:
         return self._dugme_bolge
 
+    @property
+    def dugme_kalite(self) -> QPushButton:
+        return self._dugme_kalite
+
+    @property
+    def kalite_ilerleme(self) -> QProgressBar:
+        return self._kalite_ilerleme
+
     # -- T-013: kisayol -> sinyal, durum satiri, etiketler ---------------------------------------
     def kisayol_tetiklendi(self, ad: str) -> None:
         """`KisayolServisi.tetiklendi(ad)` alicisi (bagli yontem): ad tablosuyla mod sinyali; bilinmeyen ad yok sayilir."""
@@ -440,6 +471,42 @@ class AnaPencere(QWidget):
 
     def durum_metni(self) -> str:
         return self._durum_satiri.text()
+
+    def kalite_durum_metni(self) -> str:
+        return self._kalite_durum.text()
+
+    def kalite_modeli_durumu(self, durum: str, yapilan: int = 0, toplam: int = 0) -> None:
+        """Kalite modelinin nonmodal kurulum durumunu ana pencerede gösterir."""
+        if durum == "eksik":
+            self._kalite_durum.setText("Daha doğru ve bağlamlı çeviri için ücretsiz yerel kalite modeli")
+            self._kalite_durum.show()
+            self._dugme_kalite.setText("Kalite modelini indir · 2,5 GB")
+            self._dugme_kalite.setEnabled(True)
+            self._dugme_kalite.show()
+            self._kalite_ilerleme.hide()
+        elif durum == "indiriliyor":
+            oran = 0 if toplam <= 0 else min(100, max(0, int(yapilan * 100 / toplam)))
+            self._kalite_durum.setText(f"Kalite modeli indiriliyor · %{oran}")
+            self._kalite_durum.show()
+            self._dugme_kalite.setText("İndiriliyor…")
+            self._dugme_kalite.setEnabled(False)
+            self._dugme_kalite.show()
+            self._kalite_ilerleme.setValue(oran)
+            self._kalite_ilerleme.show()
+        elif durum == "hazir":
+            self._kalite_durum.setText("Bağlamlı çeviri hazır")
+            self._kalite_durum.show()
+            self._dugme_kalite.hide()
+            self._kalite_ilerleme.hide()
+        elif durum == "hata":
+            self._kalite_durum.setText("Kalite modeli indirilemedi; hızlı çeviri çalışmaya devam ediyor")
+            self._kalite_durum.show()
+            self._dugme_kalite.setText("Tekrar dene · 2,5 GB")
+            self._dugme_kalite.setEnabled(True)
+            self._dugme_kalite.show()
+            self._kalite_ilerleme.hide()
+        else:
+            raise ValueError(f"bilinmeyen kalite modeli durumu: {durum}")
 
     def kisayol_etiketleri(self, etiketler: Mapping[str, str]) -> None:
         """Mod dugmeleri + ipuclari + tepsi ipucu KAYITLI kombinasyonu gosterir; eksik/bos -> "(kısayol yok)"."""

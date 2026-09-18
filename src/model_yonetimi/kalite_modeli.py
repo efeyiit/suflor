@@ -2,11 +2,13 @@
 from __future__ import annotations
 
 import hashlib
+import importlib.util
 import shutil
 import stat
+import sys
 import urllib.request
 import zipfile
-from collections.abc import Callable
+from collections.abc import Callable, Sequence
 from dataclasses import dataclass
 from enum import StrEnum
 from pathlib import Path
@@ -41,6 +43,8 @@ RUNTIME_DOSYASI = DosyaTanimi(
 
 Progress = Callable[[int, int], None]
 Opener = Callable[[str], BinaryIO]
+
+_CRT_DOSYALARI = ("msvcp140.dll", "vcruntime140.dll", "vcruntime140_1.dll")
 
 
 class KaliteModeliDurumu(StrEnum):
@@ -113,6 +117,34 @@ def _guvenli_cikar(arsiv: Path, hedef: Path) -> None:
         raise ProviderUnavailable(f"çalıştırıcı arşivi açılamadı: {type(e).__name__}") from e
 
 
+def _varsayilan_bagimlilik_dizinleri() -> tuple[Path, ...]:
+    """Paketli ve geliştirme kurulumlarında MSVC çalışma kitaplıklarını bulur."""
+    adaylar: list[Path] = []
+    pyside = importlib.util.find_spec("PySide6")
+    if pyside is not None and pyside.origin:
+        adaylar.append(Path(pyside.origin).resolve().parent)
+    adaylar.append(Path(sys.executable).resolve().parent)
+    paket_koku = getattr(sys, "_MEIPASS", None)
+    if paket_koku:
+        adaylar.append(Path(paket_koku).resolve())
+    return tuple(dict.fromkeys(adaylar))
+
+
+def _crt_yerlestir(hedef_dizin: Path, kaynak_dizinler: Sequence[Path]) -> None:
+    """llama.cpp için gereken MSVC DLL'lerini çalıştırıcının yanına kopyalar."""
+    if not hedef_dizin.is_dir():
+        return
+    for ad in _CRT_DOSYALARI:
+        hedef = hedef_dizin / ad
+        if hedef.is_file():
+            continue
+        for kaynak_dizin in kaynak_dizinler:
+            kaynak = Path(kaynak_dizin) / ad
+            if kaynak.is_file():
+                shutil.copy2(kaynak, hedef)
+                break
+
+
 class KaliteModeliYoneticisi:
     def __init__(
         self,
@@ -122,12 +154,16 @@ class KaliteModeliYoneticisi:
         model_spec: DosyaTanimi = MODEL_DOSYASI,
         runtime_spec: DosyaTanimi = RUNTIME_DOSYASI,
         opener: Opener = _url_ac,
+        dependency_dirs: Sequence[Path] | None = None,
     ) -> None:
         self._model_spec = model_spec
         self._runtime_spec = runtime_spec
         self._opener = opener
         self._model_dir = Path(model_root) / "qwen3-4b"
         self._runtime_dir = Path(runtime_root) / "llama-b10964-vulkan"
+        self._dependency_dirs = tuple(dependency_dirs) if dependency_dirs is not None else _varsayilan_bagimlilik_dizinleri()
+        if self.executable_path.is_file():
+            _crt_yerlestir(self._runtime_dir, self._dependency_dirs)
 
     @property
     def model_path(self) -> Path:
@@ -141,6 +177,7 @@ class KaliteModeliYoneticisi:
     def hazir_mi(self) -> bool:
         return (
             self.executable_path.is_file()
+            and all((self._runtime_dir / ad).is_file() for ad in _CRT_DOSYALARI)
             and self.model_path.is_file()
             and self.model_path.stat().st_size == self._model_spec.size
         )
@@ -168,9 +205,14 @@ class KaliteModeliYoneticisi:
             arsiv.unlink(missing_ok=True)
             if not self.executable_path.is_file():
                 raise ProviderUnavailable("çalıştırıcı arşivinde llama-server.exe bulunamadı")
+            _crt_yerlestir(self._runtime_dir, self._dependency_dirs)
             yapilan += self._runtime_spec.size
         else:
+            _crt_yerlestir(self._runtime_dir, self._dependency_dirs)
             yapilan += self._runtime_spec.size
+
+        if not all((self._runtime_dir / ad).is_file() for ad in _CRT_DOSYALARI):
+            raise ProviderUnavailable("llama.cpp için gereken Microsoft çalışma kitaplıkları bulunamadı")
 
         if not (self.model_path.is_file() and self.model_path.stat().st_size == self._model_spec.size):
             _dogrulanmis_indir(

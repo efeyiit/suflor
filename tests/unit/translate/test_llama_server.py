@@ -93,7 +93,25 @@ def test_tembel_baslatir_loopback_sagligi_bekler_ve_chat_istegi_gonderir(tmp_pat
     url, veri, _ = tasima.postlar[0]
     assert url == "http://127.0.0.1:18457/v1/chat/completions"
     assert veri["temperature"] == 0 and veri["max_tokens"] == 321
+    assert veri["chat_template_kwargs"] == {"enable_thinking": False}
     assert veri["messages"] == [{"role": "system", "content": "sistem"}, {"role": "user", "content": "kullanıcı"}]
+
+
+def test_goreli_dosya_yollari_surec_dizini_degisince_bozulmaz(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    exe, model = dosyalar(tmp_path)
+    monkeypatch.chdir(tmp_path)
+    komutlar: list[list[str]] = []
+    sunucu = LlamaServer(
+        Path(exe.name), Path(model.name), port=18458,
+        process_start=lambda komut: komutlar.append(komut) or SahteSurec(), transport=SahteTasima(),
+    )
+
+    sunucu.complete("s", "u", 10)
+
+    assert komutlar[0][0] == str(exe.resolve())
+    assert komutlar[0][2] == str(model.resolve())
 
 
 def test_eksik_dosya_model_hatasi_surec_baslamaz(tmp_path: Path) -> None:

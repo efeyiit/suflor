@@ -7,6 +7,7 @@ bağlamını deterministik bir JSON isteğine çevirir ve ``ChatClient`` üzerin
 from __future__ import annotations
 
 import json
+import re
 import time
 from typing import Protocol
 
@@ -21,7 +22,9 @@ _SISTEM = (
     "Sen deneyimli bir oyun yerelleştirme çevirmenisin. Kaynak metni bağlam, konuşmacı, "
     "zorunlu terimler ve önceki çeviri örnekleriyle birlikte doğal Türkçeye çevir. Anlamı, "
     "mantıksal ilişkileri, özel adları, değişkenleri ve satır sırasını koru. Her giriş segmenti "
-    "için tam bir çeviri üret. Yalnızca şu biçimde geçerli JSON döndür: "
+    "için tamamen Türkçe, tam bir çeviri üret; çeviri alanlarında İngilizce cümle bırakma. "
+    "⟦ ve ⟧ arasındaki Türkçe terimleri aynen koru, yalnızca gereken Türkçe ekleri dışına ekle. "
+    "Yalnızca şu biçimde geçerli JSON döndür: "
     '{"translations":["..."]}. Açıklama, Markdown veya ek anahtar yazma.'
 )
 
@@ -32,6 +35,17 @@ class ChatClient(Protocol):
 
 
 def _kullanici_istegi(request: TranslationRequest) -> str:
+    terimler = sorted(request.glossary_hits, key=lambda hit: len(hit.source_term), reverse=True)
+
+    def terimleri_yerlestir(metin: str) -> str:
+        sonuc = metin
+        for hit in terimler:
+            kaynak = " ".join(hit.source_term.split())
+            hedef = " ".join(hit.target_term.split())
+            if kaynak:
+                sonuc = re.sub(re.escape(kaynak), lambda _eslesme: f"⟦{hedef}⟧", sonuc, flags=re.IGNORECASE)
+        return sonuc
+
     veri: dict[str, object] = {
         "source_language": request.source_lang or "auto",
         "target_language": request.target_lang,
@@ -45,11 +59,30 @@ def _kullanici_istegi(request: TranslationRequest) -> str:
             for pair in request.tm_examples
         ],
         "segments": [
-            {"id": i, "speaker": segment.speaker, "text": segment.text}
+            {"id": i, "speaker": segment.speaker, "text": terimleri_yerlestir(segment.text)}
             for i, segment in enumerate(request.segments)
         ],
     }
-    return json.dumps(veri, ensure_ascii=False, separators=(",", ":"))
+    kurallar = ""
+    if request.glossary_hits:
+        eslemeler = "\n".join(
+            f"- {' '.join(hit.source_term.split())} => {' '.join(hit.target_term.split())}"
+            for hit in request.glossary_hits
+        )
+        yasaklar = " ".join(
+            f"Çıktıda '{' '.join(hit.source_term.split())}' yazmak YASAKTIR."
+            for hit in request.glossary_hits
+        )
+        zorunlular = " ".join(
+            f"Çıktı ancak '{' '.join(hit.target_term.split())}' ifadesini içerirse geçerlidir."
+            for hit in request.glossary_hits
+        )
+        kurallar = (
+            "ZORUNLU TERİM KURALLARI (kaynakta geçen her terim hedefte tam karşılığıyla kullanılmalı):\n"
+            f"{eslemeler}\n{yasaklar} {zorunlular} "
+            "Ekleri Türkçe dilbilgisine göre hedef terime ekle.\n\n"
+        )
+    return f"{kurallar}GİRDİ JSON:\n{json.dumps(veri, ensure_ascii=False, separators=(',', ':'))}"
 
 
 def _cevirileri_coz(ham: str, beklenen: int) -> tuple[str, ...]:
@@ -64,7 +97,7 @@ def _cevirileri_coz(ham: str, beklenen: int) -> tuple[str, ...]:
     ceviriler = veri.get("translations")
     if not isinstance(ceviriler, list) or len(ceviriler) != beklenen or not all(isinstance(x, str) for x in ceviriler):
         raise ProviderUnavailable("kalite motoru segmentlerle hizalı çeviri döndürmedi")
-    return tuple(ceviriler)
+    return tuple(ceviri.replace("⟦", "").replace("⟧", "") for ceviri in ceviriler)
 
 
 class LlamaLocalProvider(TranslationProvider):
@@ -110,4 +143,3 @@ class LlamaLocalProvider(TranslationProvider):
             return
         self._kapali = True
         self._client.close()
-

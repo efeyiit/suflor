@@ -12,6 +12,16 @@ oyunu **pencereli** veya **kenarlıksız tam ekran** çalıştır. Windows'un ex
 4. Durum satırında model hatası görünürse `models/nllb-200-distilled-600M-ct2-int8` klasörünün
    bulunduğunu kontrol et.
 
+### Bağlamlı kalite modelini hazırla
+
+1. Ana pencerede **Kalite modelini indir · 2,5 GB** düğmesi görünüyorsa bir kez tıkla.
+2. İlerleme çubuğu tamamlanana kadar uygulamayı açık bırak. Bu sırada hızlı çeviriyi kullanabilirsin.
+3. **Bağlamlı çeviri hazır** yazısını gör.
+
+İndirme yarıda kesilirse düğme **Tekrar dene** durumuna gelir; tamamlanan geçerli dosya bozulmaz.
+İndirilen model yerel çalışır ve oyun metni bilgisayarından çıkmaz. Kalite motorunun ilk çevirisi modeli
+hazırladığı için birkaç saniye sürebilir; aynı oturumdaki sonraki kısa çeviriler belirgin biçimde hızlanmalıdır.
+
 ## 2. Otomatik dil seçimini test et
 
 1. Dişli düğmesinden Ayarlar'ı aç.
@@ -42,6 +52,8 @@ Beklenen sonuç:
 - Birden çok satır tek bir bütün metin olarak çevrilmeli.
 - Enter'a basmak zorunlu olmamalı.
 - Kaynak metin ile çeviri anlam bakımından aynı olmalı; özel adlar gereksiz yere değişmemeli.
+- Aynı seçimdeki birden çok cümle birbirinin bağlamıyla çevrilmeli.
+- Sözlükteki oyun terimleri Türkçe karşılıklarıyla kullanılmalı; kaynak dilde bırakılmamalı.
 
 ## 4. Bölge İzleme modunu test et
 

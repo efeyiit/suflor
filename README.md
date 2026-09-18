@@ -9,8 +9,9 @@ Oyun için tasarlandı, her uygulamada çalışır. Ücretsiz ve offline.
 
 > [!NOTE]
 > **Durum: geliştirme sürümü.** Snapshot ve Bölge İzleme modları çalışan masaüstü
-> uygulamasına bağlıdır. Tek dosyalı Windows paketi, model yöneticisi, çeviri hafızası
-> için gelişmiş yönetim ve son kalite/doğrulama çalışmaları v1 için devam etmektedir.
+> uygulamasına bağlıdır. Bağlamlı kalite modeli uygulama içinden doğrulanarak indirilebilir.
+> Tek dosyalı Windows paketi, çeviri hafızası için gelişmiş yönetim ve son oyun
+> doğrulamaları v1 için devam etmektedir.
 
 ## İki mod
 
@@ -51,7 +52,7 @@ kullanılır; benzer metinler sonraki motorlar için bağlam örneği olur.
 |---|---|---|
 | **0** | Oyuna özel terim sözlüğü + çeviri hafızası (TM) | v1 |
 | **1** | Yerel NMT (CTranslate2, int8) — hızlı, Mod 2 varsayılanı | v1 |
-| **2** | Yerel küçük LLM (4B) — bağlamlı, Mod 1 varsayılanı | geliştirme sürümünde sıradaki teslimat |
+| **2** | Yerel Qwen3 4B — bağlam, sözlük ve çeviri hafızası kullanan kalite motoru | geliştirme sürümünde hazır |
 | **3** | Oyun diyaloguna ince ayarlanmış kendi modeli (QLoRA) | yol haritası |
 | — | Bulut sağlayıcılar (Gemini / DeepL / diğer) | v1, opsiyonel |
 
@@ -86,8 +87,10 @@ python -m venv .venv
 Suflor.bat                           # uygulamayı aç (çift tık da olur; konsol açılmaz) — ya da: python demo/kabuk.py
 ```
 
-Çeviri modeli (`models/nllb-200-distilled-600M-ct2-int8/`, ~650 MB) depoya dahil değildir; JP/KR OCR
-modelleri ilk çalıştırmada indirilir. `Suflor.bat` çalışan ürün kabuğunu açar;
+Hızlı çeviri modeli (`models/nllb-200-distilled-600M-ct2-int8/`, ~650 MB) depoya dahil değildir; JP/KR OCR
+modelleri ilk çalıştırmada indirilir. Ana penceredeki **Kalite modelini indir** düğmesi yaklaşık 2,5 GB'lık
+Qwen3 modelini ve doğrulanmış llama.cpp çalıştırıcısını arka planda indirir. Boyut ve SHA-256 doğrulanmadan
+dosyalar kullanılmaz; işlem sırasında hızlı çeviri çalışmaya devam eder. `Suflor.bat` çalışan ürün kabuğunu açar;
 `.agents/tasks/` altında bileşen ölçümleri ve kararları bulunur.
 
 ## Dokümantasyon
