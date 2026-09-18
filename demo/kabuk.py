@@ -34,6 +34,7 @@ import sqlite3
 import sys
 import threading
 from ctypes import wintypes
+from collections.abc import Sequence
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
@@ -44,7 +45,7 @@ from demo.bolge_izle import SecimKatmani  # noqa: E402
 from src.capture.monitors import union_bbox  # noqa: E402
 from src.capture.service import CaptureService, MssBackend  # noqa: E402
 from src.contracts.errors import TranslatorError  # noqa: E402
-from src.contracts.models import Rect  # noqa: E402
+from src.contracts.models import Frame, Rect  # noqa: E402
 from src.ocr.rapid_engine import OcrLanguage  # noqa: E402
 from src.pipeline.anlik import AnlikAkisi  # noqa: E402
 from src.pipeline.dil_secici import DilSecici  # noqa: E402
@@ -57,6 +58,7 @@ from src.ui.bolge_pencere import BolgePenceresi  # noqa: E402
 from src.ui.geometri import Kenar  # noqa: E402
 from src.ui.kabuk import AnaPencere, KabukDurumu  # noqa: E402
 from src.ui.uygulama import calistir  # noqa: E402
+from src.ui.yakalama_gizliligi import YakalamaGizliligi  # noqa: E402
 
 KOK = Path(__file__).resolve().parent.parent
 MODEL_DIZINI = KOK / "models" / "nllb-200-distilled-600M-ct2-int8"
@@ -64,6 +66,16 @@ SOZLUK = KOK / "demo" / "sozluk_ornek.json"
 NLLB_KODU = {OcrLanguage.JAPAN: "jpn_Jpan", OcrLanguage.KOREAN: "kor_Hang", OcrLanguage.CHINESE: "zho_Hans", OcrLanguage.ENGLISH: "eng_Latn"}
 DIL_ADI = {OcrLanguage.JAPAN: "Japonca", OcrLanguage.KOREAN: "Korece", OcrLanguage.CHINESE: "Çince", OcrLanguage.ENGLISH: "İngilizce"}
 OTOMATIK_BASLANGIC = OcrLanguage.KOREAN   # algilama "auto"da ilk denenen dil (son algilanan oturum boyunca hatirlanir)
+
+
+def _guvenli_tam_yakala(
+    servis: CaptureService,
+    monitor_index: int,
+    gizlilik: YakalamaGizliligi,
+    pencereler: Sequence[QtWidgets.QWidget],
+) -> Frame:
+    """Tam ekran yakalamayi Suflor pencereleri disarida kalacak sekilde yapar."""
+    return gizlilik.yakala(lambda: servis.capture_full(monitor_index), pencereler)
 
 
 def _fiziksel_imlec() -> tuple[int, int]:
@@ -76,6 +88,8 @@ def _fiziksel_imlec() -> tuple[int, int]:
 def _bagla(app: QtWidgets.QApplication, pencere: AnaPencere, dil: OcrLanguage | None, sozluk_yolu: Path | None) -> int:
     """`dil=None` -> otomatik algilama (T-018)."""
     servis = CaptureService(MssBackend())
+    gizlilik = YakalamaGizliligi()
+    gizlilik.uygulamaya_kur(app)
     try:
         hafiza: TranslationMemory | None = TranslationMemory()
     except (OSError, sqlite3.Error):
@@ -159,7 +173,7 @@ def _bagla(app: QtWidgets.QApplication, pencere: AnaPencere, dil: OcrLanguage | 
         idx = next((i for i, m in enumerate(monitorler) if m.x <= fx < m.x + m.w and m.y <= fy < m.y + m.h), 0)
         ekran = QtGui.QGuiApplication.screenAt(QtGui.QCursor.pos()) or QtGui.QGuiApplication.primaryScreen()
         try:
-            kare = servis.capture_full(idx)
+            kare = _guvenli_tam_yakala(servis, idx, gizlilik, app.topLevelWidgets())
         except TranslatorError as hata:
             pencere.durum_goster(f"yakalama hatası: {type(hata).__name__}")
             return
