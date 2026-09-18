@@ -19,8 +19,13 @@ Oyun için tasarlandı, her uygulamada çalışır. Ücretsiz ve offline.
 çevrilir (satır satır değil — cümle bütünlüğü korunur). Sağ tık / Enter beklemeden çevirir.
 
 **2 · Bölge İzleme Modu** — Ekranda bir dikdörtgen çiz. Alan kararlı biçimde
-değiştiğinde metin otomatik okunur ve çevrilir. Üstte kalan kompakt şerit duraklatma,
-kaynak metni gösterme, alanı değiştirme ve kapatma kontrollerini doğrudan sunar.
+değiştiğinde metin otomatik okunur ve çevrilir. Yarı saydam çeviri şeridi seçilen
+alanın hemen üstüne, yer yoksa altına yapışır. Normalde yalnızca çeviri görünür;
+duraklatma, kaynak, yeniden seçim ve kapatma kontrolleri fare üzerine gelince açılır.
+
+Suflör pencereleri Windows ekran yakalamasından hariç tutulur. Windows bu özelliği
+sağlamazsa uygulama pencereleri yalnızca yakalama anında gizlenip geri getirilir.
+Donmuş Snapshot görüntüsünde ve Bölge İzleme karesinde Suflör arayüzü yer almaz.
 
 ## Üç temel duruş
 
@@ -46,7 +51,7 @@ kullanılır; benzer metinler sonraki motorlar için bağlam örneği olur.
 |---|---|---|
 | **0** | Oyuna özel terim sözlüğü + çeviri hafızası (TM) | v1 |
 | **1** | Yerel NMT (CTranslate2, int8) — hızlı, Mod 2 varsayılanı | v1 |
-| **2** | Yerel küçük LLM (4B, vision) — bağlamlı, Mod 1 varsayılanı | v1 |
+| **2** | Yerel küçük LLM (4B) — bağlamlı, Mod 1 varsayılanı | geliştirme sürümünde sıradaki teslimat |
 | **3** | Oyun diyaloguna ince ayarlanmış kendi modeli (QLoRA) | yol haritası |
 | — | Bulut sağlayıcılar (Gemini / DeepL / diğer) | v1, opsiyonel |
 

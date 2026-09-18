@@ -25,6 +25,7 @@ Beklenen sonuç:
 - Dil rozeti **İngilizce** göstermeli.
 - Seçilen metin Türkçeye çevrilmeli.
 - Uygulama veya oyun donmamalı.
+- Yeni bir oturumda İngilizce ilk denendiği için diğer dillere göre ek arama beklenmemeli.
 - Dil kesin belirlenemezse rozetin yanında `?` görünmeli; uygulama kapanmamalı.
 
 ## 3. Anlık Çeviri modunu test et
@@ -37,6 +38,7 @@ Beklenen sonuç:
 
 Beklenen sonuç:
 
+- Donmuş oyun görüntüsünde Suflör ana penceresi, kenar sekmesi veya ayarlar penceresi görünmemeli.
 - Birden çok satır tek bir bütün metin olarak çevrilmeli.
 - Enter'a basmak zorunlu olmamalı.
 - Kaynak metin ile çeviri anlam bakımından aynı olmalı; özel adlar gereksiz yere değişmemeli.
@@ -50,14 +52,20 @@ Beklenen sonuç:
 Beklenen sonuç:
 
 - İlk görüntü ve sonraki kararlı metin değişiklikleri otomatik çevrilmeli.
-- Üstte kalan şeritte Türkçe çeviri görünmeli.
+- Türkçe çeviri seçtiğin alanın hemen üstündeki ince şeritte görünmeli. Üstte yer yoksa şerit alanın altında açılmalı.
+- Normal durumda yalnızca çeviri görünmeli; fareyi şeridin üzerine getirince kontroller açılmalı.
+- Suflör şeridi izlenen oyun alanının ekran görüntüsüne girmemeli.
 - **Kaynağı göster** düğmesi özgün metni açıp kapatmalı.
 - **Duraklat** seçiliyken yeni metin işlenmemeli; **Devam et** sonrasında izleme sürmeli.
 - **Alanı değiştir** yeni bir dikdörtgen seçtirmeli.
 - **Kapat** bütün Bölge İzleme işini durdurmalı.
+- Aynı yazı ekranda kalırken yeniden yükleniyor veya çevriliyor göstergesi çıkmamalı.
 
 Hızlı değişen animasyon sırasında yarım yazının çevrilmemesi beklenir; uygulama görüntünün kararlı hale
 gelmesini bekler.
+
+Ekran yakalama korumasının Windows tarafından kullanılamadığı bir sistemde Suflör pencereleri yakalama
+anında çok kısa süreliğine gizlenip geri gelebilir. Sonuç görüntüsünde yine görünmemeleri gerekir.
 
 ## 5. Çeviri hafızasını test et
 
@@ -82,4 +90,3 @@ Beklenen sonuç:
 4. Oyun pencereli, kenarlıksız tam ekran veya exclusive fullscreen mıydı?
 
 Metin veya ekran görüntüsü özel bilgi taşıyorsa paylaşma; aynı sorunu örnek bir metinle yeniden üretmek yeterlidir.
-
