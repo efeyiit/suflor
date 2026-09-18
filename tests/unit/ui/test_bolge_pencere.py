@@ -120,6 +120,22 @@ def test_is_sururken_yalniz_en_son_degisen_kare_bekler(qtbot: QtBot) -> None:
     assert [k.seq for k in akis.okunan] == [1, 2]
 
 
+def test_ayni_ocr_metni_bosluk_ve_buyukluk_farkiyla_ikinci_kez_cevirmez(qtbot: QtBot) -> None:
+    akis = SahteAkis()
+    pencere = BolgePenceresi(SahteServis([kare(1)]), Rect(10, 20, 220, 80), akis, otomatik_baslat=False)  # type: ignore[arg-type]
+    qtbot.addWidget(pencere)
+    ilk = TextBlock("Open   the west door.", Rect(15, 25, 180, 20), 0.98)
+    pencere._bloklar_hazir([ilk])
+    akis.ceviri_hazir.emit([Segment(ilk.text, ilk.bbox)], ["Batı kapısını aç."])
+
+    ayni = TextBlock("  OPEN the west door.  ", Rect(15, 25, 180, 20), 0.99)
+    pencere._mesgul = True
+    pencere._bloklar_hazir([ayni])
+
+    assert akis.cevrilen == [[ilk]]
+    assert not pencere.mesgul and pencere._ceviri.text() == "Batı kapısını aç."
+
+
 def test_duraklat_kaynak_ve_dil_kontrolleri(qtbot: QtBot) -> None:
     akis = SahteAkis()
     pencere = BolgePenceresi(SahteServis([kare(1)]), Rect(10, 20, 220, 80), akis, otomatik_baslat=False)  # type: ignore[arg-type]

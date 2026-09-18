@@ -55,6 +55,7 @@ class BolgePenceresi(QtWidgets.QWidget):
         self._duraklatildi = False
         self._bekleyen: Frame | None = None
         self._kapandi = False
+        self._son_cevrilen_kaynak: str | None = None
         self._ekran_siniri = ekran_siniri or self._bolgenin_ekrani(bolge)
 
         self.setWindowTitle("Suflör — Bölge İzleme")
@@ -215,7 +216,11 @@ class BolgePenceresi(QtWidgets.QWidget):
             self._ceviri.setText("Bu alanda okunabilir metin bulunamadı.")
             self._tamamla("Metin bekleniyor")
             return
-        self._kaynak.setText("\n".join(b.text.strip() for b in liste if b.text.strip()))
+        kaynak = "\n".join(b.text.strip() for b in liste if b.text.strip())
+        self._kaynak.setText(kaynak)
+        if self._metin_anahtari(kaynak) == self._son_cevrilen_kaynak:
+            self._tamamla("Alan izleniyor")
+            return
         self._durum.setText("Türkçeye çevriliyor…")
         self._akis.cevir(liste)
 
@@ -226,9 +231,14 @@ class BolgePenceresi(QtWidgets.QWidget):
         kaynak = "\n".join(s.text.strip() for s in segmentler if s.text.strip())
         if kaynak:
             self._kaynak.setText(kaynak)
+            self._son_cevrilen_kaynak = self._metin_anahtari(kaynak)
         sonuc = "\n".join(c.strip() for c in ceviriler if c.strip())
         self._ceviri.setText(sonuc or "Çeviri üretilemedi.")
         self._tamamla("Alan izleniyor")
+
+    @staticmethod
+    def _metin_anahtari(metin: str) -> str:
+        return " ".join(metin.split()).casefold()
 
     @QtCore.Slot(str)
     def _hata(self, sinif: str) -> None:

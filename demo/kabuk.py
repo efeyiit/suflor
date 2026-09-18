@@ -19,7 +19,7 @@ Bölge izle: dikdörtgen çiz → alan değişince otomatik OCR ve Türkçe çev
 çeviri görünür; kaynak metin isteğe bağlı açılır; duraklatma, alanı değiştirme ve kapatma doğrudan erişilebilir.
 
 Dil (T-018): Ayarlar'da "Otomatik" (varsayılan) ise OCR modeli oyundan ALGILANIR — ilk Snapshot'ta mevcut dilin
-(son algılanan / Korece) okuması güvenliyse başka model denenmez; değilse diğer üç model sırayla denenir, kazanan
+(son algılanan / İngilizce) okuması güvenliyse başka model denenmez; değilse diğer üç model sırayla denenir, kazanan
 oturum boyunca kalır (sonraki Snapshot tek okuma). Diğer modeller açılıştan sonra arka planda ısıtılır. Snapshot
 penceresinde dil rozeti; emin değilse "Korece? (⚙ Ayarlar'dan seç)". Sabit dil seçilirse algılama yok.
 
@@ -65,7 +65,7 @@ MODEL_DIZINI = KOK / "models" / "nllb-200-distilled-600M-ct2-int8"
 SOZLUK = KOK / "demo" / "sozluk_ornek.json"
 NLLB_KODU = {OcrLanguage.JAPAN: "jpn_Jpan", OcrLanguage.KOREAN: "kor_Hang", OcrLanguage.CHINESE: "zho_Hans", OcrLanguage.ENGLISH: "eng_Latn"}
 DIL_ADI = {OcrLanguage.JAPAN: "Japonca", OcrLanguage.KOREAN: "Korece", OcrLanguage.CHINESE: "Çince", OcrLanguage.ENGLISH: "İngilizce"}
-OTOMATIK_BASLANGIC = OcrLanguage.KOREAN   # algilama "auto"da ilk denenen dil (son algilanan oturum boyunca hatirlanir)
+OTOMATIK_BASLANGIC = OcrLanguage.ENGLISH  # ilk kurulumda en yaygin oyun dili; kazanan oturum boyunca hatirlanir
 
 
 def _guvenli_tam_yakala(
